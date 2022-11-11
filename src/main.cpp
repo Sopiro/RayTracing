@@ -74,10 +74,12 @@ HittableList TestScene()
     auto material_center = std::make_shared<Lambertian>(Color{ 0.1, 0.2, 0.5 });
     auto material_left = std::make_shared<Dielectric>(1.5);
     auto material_right = std::make_shared<Metal>(Color{ 0.8, 0.6, 0.2 }, 0.0);
+    auto checkerTexture = std::make_shared<CheckerTexture>(Color{ 0.2, 0.3, 0.1 }, Color{ 0.9, 0.9, 0.9 });
+    auto checker = std::make_shared<Lambertian>(checkerTexture);
 
     auto light = std::make_shared<DiffuseLight>(Vec3{ 3.0 });
 
-    world.add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, material_ground));
+    world.add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
     world.add(std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center));
     world.add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
     world.add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
@@ -123,40 +125,40 @@ HittableList CornellBox()
     return objects;
 }
 
-Color ComputeRayColor(const Ray& r, const Hittable& world, int32 depth)
+Color ComputeRayColor(const Ray& r, const Hittable& world, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
     {
-        return Vec3{ 0.0f };
+        return Color{ 0.0f };
     }
 
     HitRecord rec;
-    if (world.Hit(r, 0.00001, infinity, rec))
+    if (world.Hit(r, 0.00001, infinity, rec) == false)
     {
-        Ray scattered;
-        Color attenuation;
-        Color emitted = rec.mat->Emitted(0, 0, rec.p);
-
-        if (rec.mat->Scatter(r, rec, attenuation, scattered) == false)
-        {
-            return emitted;
-        }
-
-        return emitted + attenuation * ComputeRayColor(scattered, world, depth - 1);
+        return sky_color;
     }
+
+    Ray scattered;
+    Color attenuation;
+    Color emitted = rec.mat->Emitted(rec.uv, rec.p);
+
+    if (rec.mat->Scatter(r, rec, attenuation, scattered) == false)
+    {
+        return emitted;
+    }
+
+    return emitted + attenuation * ComputeRayColor(scattered, world, sky_color, depth - 1);
 
     // Vec3 unit_direction = r.dir.Normalized();
     // double t = 0.5 * (unit_direction.y + 1.0);
 
     // return Lerp(Color{ 1.0, 1.0, 1.0 }, Color{ 0.5, 0.7, 1.0 }, t);
-
-    return Color{ 0.0 };
 }
 
 int main()
 {
-    constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr double aspect_ratio = 16.0 / 9.0;
+    constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
@@ -164,27 +166,28 @@ int main()
 
     Bitmap bitmap{ width, height };
 
-    // HittableList world = TestScene();
+    Color sky_color{ 0.7, 0.8, 1.0 };
+    HittableList world = TestScene();
 
-    // Vec3 lookfrom(0, 1, 1);
-    // Vec3 lookat(0, 0.5, 0);
-    // Vec3 vup(0, 1, 0);
-    // auto dist_to_focus = (lookfrom - lookat).Length();
-    // auto aperture = 0.0;
-    // double vFov = 71;
-
-    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
-
-    HittableList world = CornellBox();
-
-    Vec3 lookfrom(0.5, 0.5, 2.4);
-    Vec3 lookat(0.5, 0.5, 0.0);
+    Vec3 lookfrom(0, 1, 1);
+    Vec3 lookat(0, 0.5, 0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
-    double vFov = 40;
+    double vFov = 71;
 
-    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
+    // HittableList world = CornellBox();
+
+    // Vec3 lookfrom(0.5, 0.5, 2.4);
+    // Vec3 lookat(0.5, 0.5, 0.0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 40;
+
+    // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     auto t0 = std::chrono::system_clock::now();
 
@@ -209,7 +212,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += ComputeRayColor(r, world, max_depth);
+                samples += ComputeRayColor(r, world, sky_color, max_depth);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2.

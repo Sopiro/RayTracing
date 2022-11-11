@@ -13,6 +13,7 @@
 #include "types.h"
 
 typedef Vec3 Color;
+typedef Vec2 UV;
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {

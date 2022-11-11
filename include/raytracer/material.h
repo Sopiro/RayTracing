@@ -10,7 +10,7 @@ class Material
 {
 public:
     virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const = 0;
-    virtual Color Emitted(double u, double v, const Vec3& p) const
+    virtual Color Emitted(const UV& uv, const Vec3& p) const
     {
         return Color(0, 0, 0);
     }
@@ -20,6 +20,10 @@ class Lambertian : public Material
 {
 public:
     Lambertian(const Color& a)
+        : albedo{ std::make_shared<SolidColor>(a) }
+    {
+    }
+    Lambertian(std::shared_ptr<Texture> a)
         : albedo{ a }
     {
     }
@@ -27,7 +31,7 @@ public:
     virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 public:
-    Color albedo;
+    std::shared_ptr<Texture> albedo;
 };
 
 class Metal : public Material
@@ -86,9 +90,9 @@ public:
         return false;
     }
 
-    virtual Color Emitted(double u, double v, const Vec3& p) const override
+    virtual Color Emitted(const UV& uv, const Vec3& p) const override
     {
-        return emit->value(u, v, p);
+        return emit->Value(uv, p);
     }
 
 public:
