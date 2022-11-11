@@ -4,6 +4,7 @@
 #include "raytracer/bitmap.h"
 #include "raytracer/camera.h"
 #include "raytracer/common.h"
+#include "raytracer/constant_medium.h"
 #include "raytracer/hittable_list.h"
 #include "raytracer/material.h"
 #include "raytracer/ray.h"
@@ -80,7 +81,7 @@ HittableList TestScene()
     auto light = std::make_shared<DiffuseLight>(Vec3{ 3.0 });
 
     world.add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
-    world.add(std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center));
+    // world.add(std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center));
     world.add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
     world.add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
     world.add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.0 }, 0.5, material_right));
@@ -88,6 +89,12 @@ HittableList TestScene()
     world.add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
     world.add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
     world.add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
+
+    auto smoke = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center);
+    world.add(std::make_shared<ConstantDensityMedium>(smoke, 2.0, Color(0.0)));
+
+    auto fog = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 3.0, material_center);
+    world.add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
 
     return world;
 }
@@ -160,7 +167,7 @@ int main()
     constexpr double aspect_ratio = 16.0 / 9.0;
     constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 200;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 50;
 

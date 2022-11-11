@@ -53,3 +53,11 @@ bool Dielectric::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuati
 
     return true;
 }
+
+bool Isotropic::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
+{
+    scattered = Ray{ rec.p, RandomInUnitSphere() };
+    attenuation = albedo->Value(rec.uv, rec.p);
+
+    return true;
+}
