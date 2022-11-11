@@ -38,11 +38,11 @@ private:
     }
 };
 
-bool Sphere::Hit(const Ray& r, double t_min, double t_max, HitRecord& rec) const
+bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
-    Vec3 oc = r.origin - center;
-    double a = r.dir.Length2();
-    double half_b = Dot(oc, r.dir);
+    Vec3 oc = ray.origin - center;
+    double a = ray.dir.Length2();
+    double half_b = Dot(oc, ray.dir);
     double c = oc.Length2() - radius * radius;
 
     double discriminant = half_b * half_b - a * c;
@@ -65,9 +65,9 @@ bool Sphere::Hit(const Ray& r, double t_min, double t_max, HitRecord& rec) const
 
     rec.mat = material;
     rec.t = root;
-    rec.p = r.At(rec.t);
+    rec.p = ray.At(rec.t);
     Vec3 outward_normal = (rec.p - center) / radius;
-    rec.SetFaceNormal(r, outward_normal);
+    rec.SetFaceNormal(ray, outward_normal);
     GetUV(outward_normal, rec.uv);
 
     return true;

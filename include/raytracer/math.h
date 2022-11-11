@@ -256,18 +256,15 @@ struct Vec3
         return x * x + y * y + z * z;
     }
 
-    void Normalize()
+    precision Normalize()
     {
         precision length = Length();
-        if (length < FLT_EPSILON)
-        {
-            return;
-        }
-
-        precision invLength = 1.0f / length;
+        precision invLength = (precision)1.0 / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
+
+        return length;
     }
 
     Vec3 Normalized() const

@@ -9,6 +9,7 @@
 #include "raytracer/material.h"
 #include "raytracer/ray.h"
 #include "raytracer/sphere.h"
+#include "raytracer/triangle.h"
 
 #include <omp.h>
 
@@ -132,7 +133,37 @@ HittableList CornellBox()
     return objects;
 }
 
-Color ComputeRayColor(const Ray& r, const Hittable& world, const Color& sky_color, int32 depth)
+HittableList TriangleTest()
+{
+    HittableList objects;
+
+    auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
+    auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
+    auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
+    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
+    auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
+    auto black = std::make_shared<Lambertian>(Color(0.0));
+    auto glass = std::make_shared<Dielectric>(1.5);
+    auto metal = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.0);
+    auto light = std::make_shared<DiffuseLight>(Color(12.0));
+    auto absorb = std::make_shared<DiffuseLight>(Color(0.0));
+    auto checkerTexture = std::make_shared<CheckerTexture>(Color{ 0.2, 0.3, 0.1 }, Color{ 0.9, 0.9, 0.9 });
+    auto checker = std::make_shared<Lambertian>(checkerTexture);
+
+    objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
+    objects.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
+
+    objects.Add(std::make_shared<Triangle>(Vec3{ -0.5, 0.0, -1.0 }, Vec3{ 0.5, 0.0, -1.0 }, Vec3{ 0.0, 1.0, -1.0 }, red));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, gray));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, metal));
+    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, blue));
+    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
+
+    return objects;
+}
+
+Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
     {
@@ -140,7 +171,7 @@ Color ComputeRayColor(const Ray& r, const Hittable& world, const Color& sky_colo
     }
 
     HitRecord rec;
-    if (world.Hit(r, 0.00001, infinity, rec) == false)
+    if (world.Hit(ray, 0.00001, infinity, rec) == false)
     {
         return sky_color;
     }
@@ -149,7 +180,7 @@ Color ComputeRayColor(const Ray& r, const Hittable& world, const Color& sky_colo
     Color attenuation;
     Color emitted = rec.mat->Emitted(rec.uv, rec.p);
 
-    if (rec.mat->Scatter(r, rec, attenuation, scattered) == false)
+    if (rec.mat->Scatter(ray, rec, attenuation, scattered) == false)
     {
         return emitted;
     }
@@ -165,25 +196,25 @@ Color ComputeRayColor(const Ray& r, const Hittable& world, const Color& sky_colo
 int main()
 {
     constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr int32 width = 640;
+    constexpr int32 width = 1920;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 200;
+    constexpr int32 samples_per_pixel = 1000;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 50;
 
     Bitmap bitmap{ width, height };
 
-    Color sky_color{ 0.7, 0.8, 1.0 };
-    HittableList world = TestScene();
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // HittableList world = TestScene();
 
-    Vec3 lookfrom(0, 1, 1);
-    Vec3 lookat(0, 0.5, 0);
-    Vec3 vup(0, 1, 0);
-    auto dist_to_focus = (lookfrom - lookat).Length();
-    auto aperture = 0.0;
-    double vFov = 71;
+    // Vec3 lookfrom(0, 1, 1);
+    // Vec3 lookat(0, 0.5, 0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 71;
 
-    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     // HittableList world = CornellBox();
 
@@ -195,6 +226,18 @@ int main()
     // double vFov = 40;
 
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+
+    Color sky_color{ 0.05 };
+    HittableList world = TriangleTest();
+
+    Vec3 lookfrom(0, 1, 1);
+    Vec3 lookat(0, 0.5, 0);
+    Vec3 vup(0, 1, 0);
+    auto dist_to_focus = (lookfrom - lookat).Length();
+    auto aperture = 0.0;
+    double vFov = 71;
+
+    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     auto t0 = std::chrono::system_clock::now();
 

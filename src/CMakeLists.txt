@@ -11,6 +11,7 @@ set(HEADER_FILES
     ../include/raytracer/sphere.h
     ../include/raytracer/texture.h
     ../include/raytracer/types.h
+    ../include/raytracer/triangle.h
 )
 set(SOURCE_FILES
     main.cpp
