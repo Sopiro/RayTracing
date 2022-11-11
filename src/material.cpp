@@ -1,7 +1,7 @@
 #include "raytracer/material.h"
 #include "raytracer/hittable.h"
 
-bool Lambertian::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
+bool Lambertian::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
     Vec3 scatter_direction = rec.normal + RandomUnitVector();
 
@@ -17,23 +17,23 @@ bool Lambertian::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuati
     return true;
 }
 
-bool Metal::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
+bool Metal::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
-    Vec3 reflected = Reflect(r_in.dir.Normalized(), rec.normal);
+    Vec3 reflected = Reflect(ray_in.dir.Normalized(), rec.normal);
     scattered = Ray{ rec.p, reflected + fuzziness * RandomInUnitSphere() };
     attenuation = albedo;
 
     return Dot(scattered.dir, rec.normal) > 0;
 }
 
-bool Dielectric::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
+bool Dielectric::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
     attenuation = Color{ 1.0, 1.0, 1.0 };
     double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
 
-    Vec3 unit_direction = r_in.dir.Normalized();
+    Vec3 unit_direction = ray_in.dir.Normalized();
 
-    double cos_theta = fmin(Dot(-unit_direction, rec.normal), 1.0);
+    double cos_theta = Min(Dot(-unit_direction, rec.normal), 1.0);
     double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
     // Total Internal Reflection
@@ -54,7 +54,7 @@ bool Dielectric::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuati
     return true;
 }
 
-bool Isotropic::Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
+bool Isotropic::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
     scattered = Ray{ rec.p, RandomInUnitSphere() };
     attenuation = albedo->Value(rec.uv, rec.p);

@@ -11,11 +11,9 @@ public:
 class SolidColor : public Texture
 {
 public:
-    SolidColor()
-    {
-    }
-    SolidColor(Color c)
-        : color_value(c)
+    SolidColor() = default;
+    SolidColor(Color _color)
+        : color(_color)
     {
     }
 
@@ -26,11 +24,11 @@ public:
 
     virtual Color Value(const UV& uv, const Vec3& p) const override
     {
-        return color_value;
+        return color;
     }
 
 private:
-    Color color_value;
+    Color color;
 };
 
 class CheckerTexture : public Texture

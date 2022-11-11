@@ -8,12 +8,12 @@ class Sphere : public Hittable
 {
 public:
     Sphere() = default;
-    Sphere(Vec3 c, double r, std::shared_ptr<Material> m)
-        : center{ c }
-        , radius{ r }
-        , material{ m } {};
+    Sphere(Vec3 _center, double _radius, std::shared_ptr<Material> _material)
+        : center{ _center }
+        , radius{ _radius }
+        , material{ _material } {};
 
-    virtual bool Hit(const Ray& r, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
 
 public:
     Vec3 center;

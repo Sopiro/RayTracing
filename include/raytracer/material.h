@@ -9,7 +9,7 @@ struct HitRecord;
 class Material
 {
 public:
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const = 0;
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const = 0;
     virtual Color Emitted(const UV& uv, const Vec3& p) const
     {
         return Color(0, 0, 0);
@@ -19,16 +19,16 @@ public:
 class Lambertian : public Material
 {
 public:
-    Lambertian(const Color& a)
-        : albedo{ std::make_shared<SolidColor>(a) }
+    Lambertian(const Color& _albedo)
+        : albedo{ std::make_shared<SolidColor>(_albedo) }
     {
     }
-    Lambertian(std::shared_ptr<Texture> a)
-        : albedo{ a }
+    Lambertian(std::shared_ptr<Texture> _albedo)
+        : albedo{ _albedo }
     {
     }
 
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 public:
     std::shared_ptr<Texture> albedo;
@@ -37,13 +37,13 @@ public:
 class Metal : public Material
 {
 public:
-    Metal(const Color& a, double f)
-        : albedo{ a }
-        , fuzziness{ f }
+    Metal(const Color& _albedo, double _fuzziness)
+        : albedo{ _albedo }
+        , fuzziness{ _fuzziness }
     {
     }
 
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 public:
     Color albedo;
@@ -60,7 +60,7 @@ public:
     {
     }
 
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 private:
     static double Reflectance(double cosine, double ref_idx)
@@ -85,7 +85,7 @@ public:
     {
     }
 
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
     {
         return false;
     }
@@ -111,7 +111,7 @@ public:
     {
     }
 
-    virtual bool Scatter(const Ray& r_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 public:
     std::shared_ptr<Texture> albedo;

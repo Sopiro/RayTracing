@@ -1,10 +1,16 @@
 set(HEADER_FILES
     ../include/raytracer/common.h
-    ../include/raytracer/math.h
-    ../include/raytracer/types.h
-    ../include/raytracer/camera.h
     ../include/raytracer/bitmap.h
+    ../include/raytracer/camera.h
+    ../include/raytracer/constant_medium.h
+    ../include/raytracer/hittable_list.h
+    ../include/raytracer/hittable.h
+    ../include/raytracer/material.h
+    ../include/raytracer/math.h
     ../include/raytracer/ray.h
+    ../include/raytracer/sphere.h
+    ../include/raytracer/texture.h
+    ../include/raytracer/types.h
 )
 set(SOURCE_FILES
     main.cpp

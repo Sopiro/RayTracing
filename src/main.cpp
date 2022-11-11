@@ -17,7 +17,7 @@ HittableList RandomScene()
     HittableList world;
 
     auto ground_material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
-    world.add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
+    world.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
     for (int a = -11; a < 11; a++)
     {
@@ -35,7 +35,7 @@ HittableList RandomScene()
                     // diffuse
                     auto albedo = Color::Random() * Color::Random();
                     sphere_material = std::make_shared<Lambertian>(albedo);
-                    world.add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
                 else if (choose_mat < 0.95)
                 {
@@ -43,26 +43,26 @@ HittableList RandomScene()
                     auto albedo = Color::Random(0.5, 1);
                     auto fuzz = Rand(0, 0.5);
                     sphere_material = std::make_shared<Metal>(albedo, fuzz);
-                    world.add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
                 else
                 {
                     // glass
                     sphere_material = std::make_shared<Dielectric>(1.5);
-                    world.add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
             }
         }
     }
 
     auto material1 = std::make_shared<Dielectric>(1.5);
-    world.add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0, material1));
+    world.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0, material1));
 
     auto material2 = std::make_shared<Lambertian>(Color(0.4, 0.2, 0.1));
-    world.add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
+    world.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
 
     auto material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
-    world.add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
+    world.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 
     return world;
 }
@@ -80,21 +80,21 @@ HittableList TestScene()
 
     auto light = std::make_shared<DiffuseLight>(Vec3{ 3.0 });
 
-    world.add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
+    world.Add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
     // world.add(std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center));
-    world.add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
-    world.add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
-    world.add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.0 }, 0.5, material_right));
+    world.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
+    world.Add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
+    world.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.0 }, 0.5, material_right));
 
-    world.add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
-    world.add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
-    world.add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
+    world.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
+    world.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
+    world.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
 
     auto smoke = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center);
-    world.add(std::make_shared<ConstantDensityMedium>(smoke, 2.0, Color(0.0)));
+    world.Add(std::make_shared<ConstantDensityMedium>(smoke, 2.0, Color(0.0)));
 
     auto fog = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 3.0, material_center);
-    world.add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
+    world.Add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
 
     return world;
 }
@@ -116,17 +116,17 @@ HittableList CornellBox()
     double g = 1;
     double m = g / 2.0;
 
-    objects.add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));        // left
-    objects.add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));       // right
-    objects.add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));        // front
-    objects.add(std::make_shared<Sphere>(Vec3{ m, m, r + 2.41 }, r, absorb)); // back
-    objects.add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));        // bottom
-    objects.add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));     // top
+    objects.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));        // left
+    objects.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));       // right
+    objects.Add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));        // front
+    objects.Add(std::make_shared<Sphere>(Vec3{ m, m, r + 2.41 }, r, absorb)); // back
+    objects.Add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));        // bottom
+    objects.Add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));     // top
 
-    objects.add(std::make_shared<Sphere>(Vec3{ m, 10.0, m }, 9.003, light)); // light
+    objects.Add(std::make_shared<Sphere>(Vec3{ m, 10.0, m }, 9.003, light)); // light
 
-    objects.add(std::make_shared<Sphere>(Vec3{ 0.8, 0.13, 0.5 }, 0.13, glass));
-    objects.add(std::make_shared<Sphere>(Vec3{ 0.3, 0.18, 0.8 }, 0.18, metal));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 0.8, 0.13, 0.5 }, 0.13, glass));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 0.3, 0.18, 0.8 }, 0.18, metal));
     // objects.add(std::make_shared<Sphere>(Vec3{ 0.3, 0.2, 0.7 }, -0.19, glass));
 
     return objects;
