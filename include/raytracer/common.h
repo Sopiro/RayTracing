@@ -1,6 +1,8 @@
 #pragma once
 
+#include <assert.h>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <memory>

@@ -63,6 +63,11 @@ struct Vec2
         y = _y;
     }
 
+    precision operator[](uint32 i) const
+    {
+        return (&x)[i];
+    }
+
     precision& operator[](uint32 i)
     {
         return (&x)[i];
@@ -194,6 +199,11 @@ struct Vec3
         x = _x;
         y = _y;
         z = _z;
+    }
+
+    precision operator[](uint32 i) const
+    {
+        return (&x)[i];
     }
 
     precision& operator[](uint32 i)

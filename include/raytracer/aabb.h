@@ -1,9 +1,15 @@
 #pragma once
 
 #include "common.h"
+#include "ray.h"
 
-struct AABB
+class AABB
 {
+public:
+    AABB() = default;
+
+    bool Hit(const Ray& r, double t_min, double t_max) const;
+
     Vec3 min;
     Vec3 max;
 };
@@ -62,4 +68,30 @@ inline bool ContainsAABB(const AABB& container, const AABB& testee)
         && container.max.x >= testee.max.x
         && container.max.y >= testee.max.y;
     // clang-format on
+}
+
+inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
+{
+    for (uint32 axis = 0; axis < 3; ++axis)
+    {
+        double invD = 1.0f / r.dir[axis];
+
+        double t0 = (min[axis] - r.origin[axis]) * invD;
+        double t1 = (max[axis] - r.origin[axis]) * invD;
+
+        if (invD < 0.0)
+        {
+            std::swap(t0, t1);
+        }
+
+        t_min = t0 > t_min ? t0 : t_min;
+        t_max = t1 < t_max ? t1 : t_max;
+
+        if (t_max <= t_min)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

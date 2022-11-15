@@ -1,3 +1,7 @@
+#if defined(_WIN32) && defined(_DEBUG)
+#include <crtdbg.h>
+#endif
+
 #define STBI_MSC_SECURE_CRT
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
@@ -13,10 +17,8 @@
 
 #include <omp.h>
 
-HittableList RandomScene()
+void RandomScene(HittableList& world)
 {
-    HittableList world;
-
     auto ground_material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
     world.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
@@ -64,14 +66,10 @@ HittableList RandomScene()
 
     auto material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
     world.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
-
-    return world;
 }
 
-HittableList TestScene()
+void TestScene(HittableList& world)
 {
-    HittableList world;
-
     auto material_ground = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto material_center = std::make_shared<Lambertian>(Color{ 0.1, 0.2, 0.5 });
     auto material_left = std::make_shared<Dielectric>(1.5);
@@ -96,14 +94,10 @@ HittableList TestScene()
 
     auto fog = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 3.0, material_center);
     world.Add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
-
-    return world;
 }
 
-HittableList CornellBox()
+void CornellBox(HittableList& objects)
 {
-    HittableList objects;
-
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
     auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
     auto black = std::make_shared<Lambertian>(Color(0.0));
@@ -129,14 +123,10 @@ HittableList CornellBox()
     objects.Add(std::make_shared<Sphere>(Vec3{ 0.8, 0.13, 0.5 }, 0.13, glass));
     objects.Add(std::make_shared<Sphere>(Vec3{ 0.3, 0.18, 0.8 }, 0.18, metal));
     // objects.add(std::make_shared<Sphere>(Vec3{ 0.3, 0.2, 0.7 }, -0.19, glass));
-
-    return objects;
 }
 
-HittableList TriangleTest()
+void TriangleTest(HittableList& objects)
 {
-    HittableList objects;
-
     auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
     auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
@@ -159,14 +149,10 @@ HittableList TriangleTest()
     objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, metal));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, blue));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
-
-    return objects;
 }
 
-HittableList BVHTest()
+void BVHTest(HittableList& objects)
 {
-    HittableList objects;
-
     auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
     auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
@@ -196,8 +182,6 @@ HittableList BVHTest()
             objects.Add(std::make_shared<Sphere>(pos, r, green));
         }
     }
-
-    return objects;
 }
 
 Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_color, int32 depth)
@@ -232,6 +216,11 @@ Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_co
 
 int main()
 {
+#if defined(_WIN32) && defined(_DEBUG)
+    // Enable memory-leak reports
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     constexpr double aspect_ratio = 16.0 / 9.0;
     constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
@@ -240,6 +229,7 @@ int main()
     const int max_depth = 50;
 
     Bitmap bitmap{ width, height };
+    HittableList world;
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
     // HittableList world = TestScene();
@@ -253,7 +243,8 @@ int main()
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
-    // HittableList world = CornellBox();
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // CornellBox(world);
 
     // Vec3 lookfrom(0.5, 0.5, 2.4);
     // Vec3 lookat(0.5, 0.5, 0.0);
@@ -277,9 +268,9 @@ int main()
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     Color sky_color{ 0.7, 0.8, 1.0 };
-    HittableList world = BVHTest();
+    BVHTest(world);
 
-    Vec3 lookfrom(0, 0, 3);
+    Vec3 lookfrom(0, 0, 5);
     Vec3 lookat(0, 0, 0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
@@ -288,6 +279,7 @@ int main()
 
     Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
+    world.BuildBVH();
     auto t0 = std::chrono::system_clock::now();
 
     double chunk = height / omp_get_max_threads();
