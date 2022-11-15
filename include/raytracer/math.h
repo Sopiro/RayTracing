@@ -15,6 +15,7 @@
 
 constexpr precision pi = (precision)(3.1415926535897932385);
 constexpr precision infinity = std::numeric_limits<precision>::infinity();
+constexpr precision epsilon = std::numeric_limits<precision>::epsilon();
 
 inline precision DegToRad(precision degrees)
 {

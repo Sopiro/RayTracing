@@ -19,6 +19,10 @@ set(SOURCE_FILES
     main.cpp
     material.cpp
     bvh.cpp
+    hittable_list.cpp
+    sphere.cpp
+    triangle.cpp
+    constant_medium.cpp
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "src" FILES ${SOURCE_FILES})

@@ -6,7 +6,7 @@ bool Lambertian::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenua
     Vec3 scatter_direction = rec.normal + RandomUnitVector();
 
     // Catch degenerate scatter direction
-    if (scatter_direction.Length2() < DBL_EPSILON * DBL_EPSILON)
+    if (scatter_direction.Length2() < epsilon * epsilon)
     {
         scatter_direction = rec.normal;
     }

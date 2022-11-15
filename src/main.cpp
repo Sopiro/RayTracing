@@ -2,20 +2,7 @@
 #include <crtdbg.h>
 #endif
 
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-
-#include "raytracer/bitmap.h"
-#include "raytracer/camera.h"
-#include "raytracer/common.h"
-#include "raytracer/constant_medium.h"
-#include "raytracer/hittable_list.h"
-#include "raytracer/material.h"
-#include "raytracer/ray.h"
-#include "raytracer/sphere.h"
-#include "raytracer/triangle.h"
-
-#include <omp.h>
+#include "raytracer/raytracer.h"
 
 void RandomScene(HittableList& world)
 {

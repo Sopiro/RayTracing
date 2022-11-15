@@ -414,6 +414,22 @@ void BVH::Rotate(int32 node)
     }
 }
 
+void BVH::Reset()
+{
+    nodeID = 0;
+    root = nullNode;
+    nodeCount = 0;
+    memset(nodes, 0, nodeCapacity * sizeof(Node));
+
+    // Build a linked list for the free list.
+    for (int32 i = 0; i < nodeCapacity - 1; ++i)
+    {
+        nodes[i].next = i + 1;
+    }
+    nodes[nodeCapacity - 1].next = nullNode;
+    freeList = 0;
+}
+
 void BVH::ReBuild()
 {
     int32* leaves = (int32*)malloc(nodeCount * sizeof(Node));
@@ -524,4 +540,64 @@ double BVH::ComputeCost() const
     }
 
     return cost;
+}
+
+void BVH::RayCast(const Ray& r,
+                  double t_min,
+                  double t_max,
+                  const std::function<double(const Ray&, double, double, Hittable*)>& callback) const
+{
+    Vec3 p1 = r.At(t_min);
+    Vec3 p2 = r.At(t_max);
+    double t = t_max;
+
+    AABB rayAABB;
+    rayAABB.min = Min(p1, p2);
+    rayAABB.max = Max(p1, p2);
+
+    GrowableArray<int32, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() > 0)
+    {
+        int32 nodeID = stack.Pop();
+        if (nodeID == nullNode)
+        {
+            continue;
+        }
+
+        const Node* node = nodes + nodeID;
+        if (TestOverlapAABB(node->aabb, rayAABB) == false)
+        {
+            continue;
+        }
+
+        if (node->aabb.Hit(r, t_min, t) == false)
+        {
+            continue;
+        }
+
+        if (node->isLeaf)
+        {
+            double value = callback(r, t_min, t, node->body);
+            if (value <= t_min)
+            {
+                return;
+            }
+            else
+            {
+                // Update ray AABB
+                t = value;
+                Vec3 newEnd = r.At(t);
+
+                rayAABB.min = Min(p1, newEnd);
+                rayAABB.max = Max(p1, newEnd);
+            }
+        }
+        else
+        {
+            stack.Emplace(node->child1);
+            stack.Emplace(node->child2);
+        }
+    }
 }
