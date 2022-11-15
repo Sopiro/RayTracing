@@ -4,6 +4,8 @@
 #include "common.h"
 #include "hittable.h"
 
+#define USE_BVH 1
+
 class HittableList : public Hittable
 {
 public:
@@ -20,19 +22,21 @@ public:
 
     void Add(std::shared_ptr<Hittable> object)
     {
+#if USE_BVH
         Hittable* raw = object.get();
         AABB aabb;
         raw->GetAABB(aabb);
 
-        bvh.Add(raw, aabb);
+        bvh.Insert(raw, aabb);
+#endif
         objects.push_back(object);
     }
 
-    void BuildBVH()
+    void ReBuildBVH()
     {
         if (bvh.IsBuilt() == false)
         {
-            bvh.Build();
+            bvh.ReBuild();
         }
     }
 
@@ -46,6 +50,7 @@ public:
 
 bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
+#if USE_BVH
     assert(bvh.IsBuilt());
 
     bool hit_closest = false;
@@ -65,6 +70,23 @@ bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& re
     });
 
     return hit_closest;
+#else
+    HitRecord tmp;
+    bool hit = false;
+    double closest = t_max;
+
+    for (const auto& object : objects)
+    {
+        if (object->Hit(ray, t_min, closest, tmp))
+        {
+            hit = true;
+            closest = tmp.t;
+            rec = tmp;
+        }
+    }
+
+    return hit;
+#endif
 }
 
 bool HittableList::GetAABB(AABB& outAABB) const

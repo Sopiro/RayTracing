@@ -256,7 +256,7 @@ int main()
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     // Color sky_color{ 0.05 };
-    // HittableList world = TriangleTest();
+    // TriangleTest(world);
 
     // Vec3 lookfrom(0, 1, 1);
     // Vec3 lookat(0, 0.5, 0);
@@ -279,7 +279,6 @@ int main()
 
     Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
-    world.BuildBVH();
     auto t0 = std::chrono::system_clock::now();
 
     double chunk = height / omp_get_max_threads();

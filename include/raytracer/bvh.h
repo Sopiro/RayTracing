@@ -43,8 +43,11 @@ public:
     BVH(BVH&&) noexcept = delete;
     BVH& operator=(BVH&&) noexcept = delete;
 
+    int32 Insert(Hittable* body, const AABB& aabb);
+    void Remove(Hittable* body);
+    void Rotate(int32 node);
     int32 Add(Hittable* object, const AABB& aabb);
-    void Build();
+    void ReBuild();
     double ComputeCost() const;
 
     bool IsBuilt() const;
@@ -52,7 +55,7 @@ public:
     void RayCast(const Ray& r,
                  double t_min,
                  double t_max,
-                 const std::function<double(const Ray& r, double t_min, double t_max, Hittable*)>& callback) const;
+                 const std::function<double(const Ray&, double, double, Hittable*)>& callback) const;
 
 private:
     uint32 nodeID = 0;
@@ -77,7 +80,7 @@ inline bool BVH::IsBuilt() const
 inline void BVH::RayCast(const Ray& r,
                          double t_min,
                          double t_max,
-                         const std::function<double(const Ray& r, double t_min, double t_max, Hittable*)>& callback) const
+                         const std::function<double(const Ray&, double, double, Hittable*)>& callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);

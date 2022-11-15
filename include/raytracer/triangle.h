@@ -86,10 +86,12 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     return true;
 }
 
+static constexpr Vec3 min_offset{ DBL_EPSILON };
+
 bool Triangle::GetAABB(AABB& outAABB) const
 {
-    outAABB.min = Min(Min(v0, v1), v2);
-    outAABB.max = Max(Max(v0, v1), v2);
+    outAABB.min = Min(Min(v0, v1), v2) - min_offset;
+    outAABB.max = Max(Max(v0, v1), v2) + min_offset;
 
     return true;
 }
