@@ -12,10 +12,13 @@ set(HEADER_FILES
     ../include/raytracer/texture.h
     ../include/raytracer/types.h
     ../include/raytracer/triangle.h
+    ../include/raytracer/aabb.h
+    ../include/raytracer/bvh.h
 )
 set(SOURCE_FILES
     main.cpp
     material.cpp
+    bvh.cpp
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "src" FILES ${SOURCE_FILES})

@@ -22,6 +22,7 @@ public:
     }
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool GetAABB(AABB& outAABB) const override;
 
     std::vector<std::shared_ptr<Hittable>> objects;
 };
@@ -43,4 +44,29 @@ bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& re
     }
 
     return hit;
+}
+
+bool HittableList::GetAABB(AABB& outAABB) const
+{
+    if (objects.empty())
+    {
+        return false;
+    }
+
+    objects[0]->GetAABB(outAABB);
+
+    AABB temp;
+    for (int32 i = 1; i < objects.size(); ++i)
+    {
+        const auto& object = objects[i];
+
+        if (object->GetAABB(temp) == false)
+        {
+            return false;
+        }
+
+        outAABB = Union(outAABB, temp);
+    }
+
+    return true;
 }

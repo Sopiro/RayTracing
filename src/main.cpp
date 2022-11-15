@@ -163,6 +163,43 @@ HittableList TriangleTest()
     return objects;
 }
 
+HittableList BVHTest()
+{
+    HittableList objects;
+
+    auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
+    auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
+    auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
+    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
+    auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
+    auto black = std::make_shared<Lambertian>(Color(0.0));
+    auto glass = std::make_shared<Dielectric>(1.5);
+    auto metal = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.0);
+    auto light = std::make_shared<DiffuseLight>(Color(12.0));
+    auto absorb = std::make_shared<DiffuseLight>(Color(0.0));
+    auto checkerTexture = std::make_shared<CheckerTexture>(Color{ 0.2, 0.3, 0.1 }, Color{ 0.9, 0.9, 0.9 });
+    auto checker = std::make_shared<Lambertian>(checkerTexture);
+
+    double n = 30.0;
+    double w = 5.0;
+    double r = 0.1;
+
+    for (int32 y = 0; y < n; ++y)
+    {
+        for (int32 x = 0; x < n; ++x)
+        {
+            Vec3 pos;
+            pos.x = x / n * w - w / 2.0;
+            pos.y = y / n * w - w / 2.0;
+            pos.z = -1;
+
+            objects.Add(std::make_shared<Sphere>(pos, r, green));
+        }
+    }
+
+    return objects;
+}
+
 Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
@@ -196,9 +233,9 @@ Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_co
 int main()
 {
     constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr int32 width = 1920;
+    constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 1000;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 50;
 
@@ -227,11 +264,23 @@ int main()
 
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
-    Color sky_color{ 0.05 };
-    HittableList world = TriangleTest();
+    // Color sky_color{ 0.05 };
+    // HittableList world = TriangleTest();
 
-    Vec3 lookfrom(0, 1, 1);
-    Vec3 lookat(0, 0.5, 0);
+    // Vec3 lookfrom(0, 1, 1);
+    // Vec3 lookat(0, 0.5, 0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 71;
+
+    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
+    Color sky_color{ 0.7, 0.8, 1.0 };
+    HittableList world = BVHTest();
+
+    Vec3 lookfrom(0, 0, 3);
+    Vec3 lookat(0, 0, 0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;

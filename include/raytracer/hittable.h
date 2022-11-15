@@ -1,5 +1,6 @@
 #pragma once
 
+#include "aabb.h"
 #include "common.h"
 #include "ray.h"
 
@@ -26,4 +27,5 @@ class Hittable
 {
 public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
+    virtual bool GetAABB(AABB& outAABB) const = 0;
 };

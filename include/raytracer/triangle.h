@@ -23,6 +23,7 @@ public:
     };
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool GetAABB(AABB& outAABB) const override;
 
 public:
     Vec3 v0, v1, v2;
@@ -81,6 +82,14 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     rec.p = ray.At(rec.t);
     rec.SetFaceNormal(ray, normal);
     rec.uv.Set(u, v);
+
+    return true;
+}
+
+bool Triangle::GetAABB(AABB& outAABB) const
+{
+    outAABB.min = Min(Min(v0, v1), v2);
+    outAABB.max = Max(Max(v0, v1), v2);
 
     return true;
 }

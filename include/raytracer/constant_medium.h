@@ -22,6 +22,7 @@ public:
     }
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool GetAABB(AABB& outAABB) const override;
 
 public:
     std::shared_ptr<Hittable> boundary;
@@ -82,4 +83,9 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     rec.mat = phase_function;
 
     return true;
+}
+
+bool ConstantDensityMedium::GetAABB(AABB& outAABB) const
+{
+    return boundary->GetAABB(outAABB);
 }

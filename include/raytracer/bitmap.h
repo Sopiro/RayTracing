@@ -22,7 +22,7 @@ public:
         pixels[(x + (height - y - 1) * width) * COLOR_CHANNEL + 2] = static_cast<int32>(Clamp(color.z, 0.0, 0.999) * 256.0);
     }
 
-    void WriteToFile(char const* filename)
+    void WriteToFile(char const* filename) const
     {
         stbi_write_png(filename, width, height, COLOR_CHANNEL, pixels, width * COLOR_CHANNEL);
     }

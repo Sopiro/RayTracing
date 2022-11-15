@@ -502,20 +502,30 @@ inline T Min(T a, T b)
     return a < b ? a : b;
 }
 
-inline Vec2 Min(const Vec2& a, const Vec2& b)
-{
-    return Vec2(Min(a.x, b.x), Min(a.y, b.y));
-}
-
 template <typename T>
 inline T Max(T a, T b)
 {
     return a > b ? a : b;
 }
 
+inline Vec2 Min(const Vec2& a, const Vec2& b)
+{
+    return Vec2(Min(a.x, b.x), Min(a.y, b.y));
+}
+
 inline Vec2 Max(const Vec2& a, const Vec2& b)
 {
     return Vec2(Max(a.x, b.x), Max(a.y, b.y));
+}
+
+inline Vec3 Min(const Vec3& a, const Vec3& b)
+{
+    return Vec3(Min(a.x, b.x), Min(a.y, b.y), Min(a.z, b.z));
+}
+
+inline Vec3 Max(const Vec3& a, const Vec3& b)
+{
+    return Vec3(Max(a.x, b.x), Max(a.y, b.y), Max(a.z, b.z));
 }
 
 template <typename T>

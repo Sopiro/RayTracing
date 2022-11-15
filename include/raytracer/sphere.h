@@ -14,6 +14,7 @@ public:
         , material{ _material } {};
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool GetAABB(AABB& outAABB) const override;
 
 public:
     Vec3 center;
@@ -69,6 +70,14 @@ bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) con
     Vec3 outward_normal = (rec.p - center) / radius;
     rec.SetFaceNormal(ray, outward_normal);
     GetUV(outward_normal, rec.uv);
+
+    return true;
+}
+
+inline bool Sphere::GetAABB(AABB& outAABB) const
+{
+    outAABB.min = center - Vec3{ radius };
+    outAABB.max = center + Vec3{ radius };
 
     return true;
 }
