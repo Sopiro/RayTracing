@@ -131,8 +131,18 @@ void TriangleTest(HittableList& objects)
     objects.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
     objects.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
 
-    objects.Add(std::make_shared<Triangle>(Vec3{ -0.5, 0.0, -1.0 }, Vec3{ 0.5, 0.0, -1.0 }, Vec3{ 0.0, 1.0, -1.0 }, red));
-    objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, gray));
+    Transform t(0, 0, -1, Quat(pi / 4, Vec3(0, 0, 1)));
+
+    Vec3 v0 = t * Vec3{ -0.5, 0.0, 0.0 };
+    Vec3 v1 = t * Vec3{ 0.5, 0.0, 0.0 };
+    Vec3 v2 = t * Vec3{ 0.0, 1.0, 0.0 };
+
+    objects.Add(std::make_shared<Triangle>(v0, v1, v2, red));
+
+    double p = 5.0;
+    double y = -0.5;
+    objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
+    objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
     objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, metal));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, blue));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
@@ -242,23 +252,12 @@ int main()
 
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
-    // Color sky_color{ 0.05 };
-    // TriangleTest(world);
+    // Color sky_color{ 0.2 };
+    Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
+    TriangleTest(world);
 
-    // Vec3 lookfrom(0, 1, 1);
-    // Vec3 lookat(0, 0.5, 0);
-    // Vec3 vup(0, 1, 0);
-    // auto dist_to_focus = (lookfrom - lookat).Length();
-    // auto aperture = 0.0;
-    // double vFov = 71;
-
-    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
-
-    Color sky_color{ 0.7, 0.8, 1.0 };
-    BVHTest(world);
-
-    Vec3 lookfrom(0, 0, 5);
-    Vec3 lookat(0, 0, 0);
+    Vec3 lookfrom(0, 1, 1);
+    Vec3 lookat(0, 0.5, 0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
@@ -266,9 +265,21 @@ int main()
 
     Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // BVHTest(world);
+
+    // Vec3 lookfrom(0, 0, 5);
+    // Vec3 lookat(0, 0, 0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 71;
+
+    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
     auto t0 = std::chrono::system_clock::now();
 
-    double chunk = height / omp_get_max_threads();
+    double chunk = double(height) / omp_get_max_threads();
 
 #pragma omp parallel for
     for (int32 y = 0; y < height; ++y)
@@ -292,9 +303,9 @@ int main()
                 samples += ComputeRayColor(r, world, sky_color, max_depth);
             }
 
-            // Divide the color by the number of samples and gamma-correct for gamma=2.2.
-            Vec3 color =
-                Vec3{ pow(samples.x * scale, 1.0 / 2.2), pow(samples.y * scale, 1.0 / 2.2), pow(samples.z * scale, 1.0 / 2.2) };
+            // Divide the color by the number of samples and gamma-correct for gamma=2.2
+            Color color =
+                Color{ pow(samples.x * scale, 1.0 / 2.2), pow(samples.y * scale, 1.0 / 2.2), pow(samples.z * scale, 1.0 / 2.2) };
             bitmap.Set(x, y, color);
         }
     }

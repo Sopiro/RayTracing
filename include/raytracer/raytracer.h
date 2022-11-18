@@ -8,6 +8,7 @@
 #include "material.h"
 #include "ray.h"
 #include "sphere.h"
+#include "transform.h"
 #include "triangle.h"
 
 #include <omp.h>

@@ -34,7 +34,7 @@ public:
     bool one_sided;
 };
 
-static constexpr Vec3 epsilon_offset{ epsilon };
+static constexpr Vec3 epsilon_offset{ epsilon * 10.0 };
 
 inline bool Triangle::GetAABB(AABB& outAABB) const
 {

@@ -14,6 +14,7 @@ set(HEADER_FILES
     ../include/raytracer/triangle.h
     ../include/raytracer/aabb.h
     ../include/raytracer/bvh.h
+    ../include/raytracer/transform.h
 )
 set(SOURCE_FILES
     main.cpp
@@ -23,6 +24,7 @@ set(SOURCE_FILES
     sphere.cpp
     triangle.cpp
     constant_medium.cpp
+    math.cpp
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "src" FILES ${SOURCE_FILES})

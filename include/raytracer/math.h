@@ -13,13 +13,14 @@
 
 #define precision double
 
-constexpr precision pi = (precision)(3.1415926535897932385);
+constexpr precision pi = precision(3.14159265358979323846);
+constexpr precision piDiv2 = precision(3.14159265358979323846 / 2.0);
 constexpr precision infinity = std::numeric_limits<precision>::infinity();
 constexpr precision epsilon = std::numeric_limits<precision>::epsilon();
 
 inline precision DegToRad(precision degrees)
 {
-    return (precision)(degrees * pi / 180.0);
+    return precision(degrees * pi / 180.0);
 }
 
 inline precision Rand()
@@ -54,8 +55,8 @@ struct Vec2
 
     void SetZero()
     {
-        x = (precision)0.0;
-        y = (precision)0.0;
+        x = precision(0.0);
+        y = precision(0.0);
     }
 
     void Set(precision _x, precision _y)
@@ -111,12 +112,12 @@ struct Vec2
 
     void operator/=(precision s)
     {
-        operator*=((precision)1.0 / s);
+        operator*=(1.0 / s);
     }
 
     precision Length() const
     {
-        return (precision)sqrt(x * x + y * y);
+        return sqrt(x * x + y * y);
     }
 
     precision Length2() const
@@ -128,7 +129,7 @@ struct Vec2
     precision Normalize()
     {
         precision length = Length();
-        precision invLength = (precision)1.0 / length;
+        precision invLength = precision(1.0) / length;
         x *= invLength;
         y *= invLength;
 
@@ -138,7 +139,7 @@ struct Vec2
     // Optimized to not check length == 0
     Vec2 Normalized() const
     {
-        precision invLength = (precision)1.0 / Length();
+        precision invLength = precision(1.0) / Length();
 
         return Vec2{ x * invLength, y * invLength };
     }
@@ -254,12 +255,12 @@ struct Vec3
 
     void operator/=(precision s)
     {
-        operator*=((precision)1.0 / s);
+        operator*=(precision(1.0) / s);
     }
 
     precision Length() const
     {
-        return (precision)sqrt(x * x + y * y + z * z);
+        return sqrt(x * x + y * y + z * z);
     }
 
     precision Length2() const
@@ -270,7 +271,7 @@ struct Vec3
     precision Normalize()
     {
         precision length = Length();
-        precision invLength = (precision)1.0 / length;
+        precision invLength = precision(1.0) / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -281,12 +282,12 @@ struct Vec3
     Vec3 Normalized() const
     {
         precision length = Length();
-        if (length < FLT_EPSILON)
+        if (length < epsilon)
         {
-            return Vec3{ (precision)0.0, (precision)0.0, (precision)0.0 };
+            return Vec3{ precision(0.0), precision(0.0), precision(0.0) };
         }
 
-        precision invLength = (precision)1.0 / length;
+        precision invLength = precision(1.0) / length;
 
         return Vec3{ x * invLength, y * invLength, z * invLength };
     }
@@ -314,10 +315,406 @@ struct Vec4
     {
     }
 
+    void SetZero()
+    {
+        x = precision(0.0);
+        y = precision(0.0);
+        z = precision(0.0);
+        w = precision(0.0);
+    }
+
+    void Set(precision _x, precision _y, precision _z, precision _w)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
+        w = _w;
+    }
+
+    precision operator[](uint32 i) const
+    {
+        return (&x)[i];
+    }
+
     precision& operator[](uint32 i)
     {
         return (&x)[i];
     }
+
+    precision Length() const
+    {
+        return sqrt(x * x + y * y + z * z + w * w);
+    }
+
+    precision Length2() const
+    {
+        return x * x + y * y + z * z + w * w;
+    }
+
+    precision Normalize()
+    {
+        precision length = Length();
+        precision invLength = precision(1.0) / length;
+        x *= invLength;
+        y *= invLength;
+        z *= invLength;
+        w *= invLength;
+
+        return length;
+    }
+};
+
+struct Quat;
+
+// Column major matrices
+
+struct Mat2
+{
+    Vec2 ex, ey;
+
+    Mat2() = default;
+
+    Mat2(precision v)
+    {
+        // clang-format off
+        ex.x = v;       ey.x = 0.0f;
+        ex.y = 0.0f;    ey.y = v;
+        // clang-format on
+    }
+
+    constexpr Mat2(const Vec2& c1, const Vec2& c2)
+        : ex{ c1 }
+        , ey{ c2 }
+    {
+    }
+
+    Vec2& operator[](uint32 i)
+    {
+        return (&ex)[i];
+    }
+
+    void SetIdentity()
+    {
+        // clang-format off
+        ex.x = 1.0f;    ey.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 1.0f;
+        // clang-format on
+    }
+
+    void SetZero()
+    {
+        // clang-format off
+        ex.x = 0.0f;    ey.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 0.0f;
+        // clang-format on
+    }
+
+    Mat2 GetTranspose()
+    {
+        Mat2 t;
+
+        // clang-format off
+        t.ex.x = ex.x;    t.ey.x = ex.y;
+        t.ex.y = ey.x;    t.ey.y = ey.y;
+        // clang-format on
+
+        return t;
+    }
+
+    Mat2 GetInverse() const
+    {
+        Mat2 t;
+
+        precision det = ex.x * ey.y - ey.x * ex.y;
+        if (det != 0.0f)
+        {
+            det = 1.0f / det;
+        }
+
+        t.ex.x = det * ey.y;
+        t.ey.x = -det * ey.x;
+        t.ex.y = -det * ex.y;
+        t.ey.y = det * ex.x;
+
+        return t;
+    }
+
+    precision GetDeterminant() const
+    {
+        return ex.x * ey.y - ey.x * ex.y;
+    }
+};
+
+struct Mat3
+{
+    Vec3 ex, ey, ez;
+
+    Mat3() = default;
+
+    Mat3(precision v)
+    {
+        // clang-format off
+        ex.x = v;       ey.x = 0.0f;    ez.x = 0.0f;
+        ex.y = 0.0f;    ey.y = v;       ez.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = v;
+        // clang-format on
+    }
+
+    constexpr Mat3(const Vec3& c1, const Vec3& c2, const Vec3& c3)
+        : ex{ c1 }
+        , ey{ c2 }
+        , ez{ c3 }
+    {
+    }
+
+    Mat3(const Quat& q);
+
+    Vec3& operator[](uint32 i)
+    {
+        return (&ex)[i];
+    }
+
+    void SetIdentity()
+    {
+        // clang-format off
+        ex.x = 1.0f;    ey.x = 0.0f;    ez.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 1.0f;    ez.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 1.0f;
+        // clang-format on
+    }
+
+    void SetZero()
+    {
+        // clang-format off
+        ex.x = 0.0f;    ey.x = 0.0f;    ez.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 0.0f;    ez.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 0.0f;
+        // clang-format on
+    }
+
+    Mat3 GetTranspose()
+    {
+        Mat3 t;
+
+        // clang-format off
+        t.ex.x = ex.x;    t.ey.x = ex.y;    t.ez.x = ex.z;
+        t.ex.y = ey.x;    t.ey.y = ey.y;    t.ez.y = ey.z;
+        t.ex.z = ez.x;    t.ey.z = ez.y;    t.ez.z = ez.z;
+        // clang-format on
+
+        return t;
+    }
+
+    Mat3 GetInverse() const;
+    Mat3 Scale(precision x, precision y);
+    Mat3 Rotate(precision z);
+    Mat3 Translate(precision x, precision y);
+    Mat3 Translate(const Vec2& v);
+};
+
+struct Mat4
+{
+    Vec4 ex, ey, ez, ew;
+
+    Mat4() = default;
+
+    Mat4(precision _v)
+    {
+        // clang-format off
+        ex.x = _v;      ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
+        ex.y = 0.0f;    ey.y = _v;      ez.y = 0.0f;    ew.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = _v;      ew.z = 0.0f;
+        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = _v;
+        // clang-format on
+    }
+
+    constexpr Mat4(const Vec4& c1, const Vec4& c2, const Vec4& c3, const Vec4& c4)
+        : ex{ c1 }
+        , ey{ c2 }
+        , ez{ c3 }
+        , ew{ c4 }
+    {
+    }
+
+    Vec4& operator[](uint32 i)
+    {
+        return (&ex)[i];
+    }
+
+    void SetIdentity()
+    {
+        // clang-format off
+        ex.x = 1.0f;    ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 1.0f;    ez.y = 0.0f;    ew.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 1.0f;    ew.z = 0.0f;
+        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = 1.0f;
+        // clang-format on
+    }
+
+    void SetZero()
+    {
+        // clang-format off
+        ex.x = 0.0f;    ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
+        ex.y = 0.0f;    ey.y = 0.0f;    ez.y = 0.0f;    ew.y = 0.0f;
+        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 0.0f;    ew.z = 0.0f;
+        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = 0.0f;
+        // clang-format on
+    }
+
+    Mat4 GetTranspose()
+    {
+        Mat4 t;
+
+        // clang-format off
+        t.ex.x = ex.x;    t.ey.x = ex.y;    t.ez.x = ex.z;    t.ew.x = ex.w;
+        t.ex.y = ey.x;    t.ey.y = ey.y;    t.ez.y = ey.z;    t.ew.y = ey.w;
+        t.ex.z = ez.x;    t.ey.z = ez.y;    t.ez.z = ez.z;    t.ew.z = ez.w;
+        t.ex.w = ew.x;    t.ey.w = ew.y;    t.ez.w = ew.z;    t.ew.w = ew.w;
+        // clang-format on
+
+        return t;
+    }
+
+    Mat4 GetInverse();
+    Mat4 Scale(precision x, precision y, precision z);
+    Mat4 Rotate(precision x, precision y, precision z);
+    Mat4 Translate(precision x, precision y, precision z);
+    Mat4 Translate(const Vec3& v);
+};
+
+struct Quat
+{
+    Quat() = default;
+
+    Quat(precision _x, precision _y, precision _z, precision _w)
+        : x{ _x }
+        , y{ _y }
+        , z{ _z }
+        , w{ _w }
+    {
+    }
+
+    Quat(precision _w)
+        : x{ precision(0.0) }
+        , y{ precision(0.0) }
+        , z{ precision(0.0) }
+        , w{ _w }
+    {
+    }
+
+    Quat(const Mat3& m);
+
+    Quat(const Vec3& dir, const Vec3& up);
+
+    // Axis must be normalized
+    Quat(precision angle, const Vec3& unitAxis)
+    {
+        precision halfAngle = angle * precision(0.5);
+
+        precision s = sin(halfAngle);
+        x = unitAxis.x * s;
+        y = unitAxis.y * s;
+        z = unitAxis.z * s;
+        w = cos(halfAngle);
+    }
+
+    Quat operator-()
+    {
+        return Quat{ -x, -y, -z, -w };
+    }
+
+    Quat operator*(precision s) const
+    {
+        return Quat{ x * s, y * s, z * s, w * s };
+    }
+
+    bool IsIdentity() const
+    {
+        return x == precision(0.0) && y == precision(0.0) && z == precision(0.0) && w == precision(1.0);
+    }
+
+    // Magnitude
+    precision Length() const
+    {
+        return sqrt(x * x + y * y + z * z + w * w);
+    }
+
+    precision Length2() const
+    {
+        return x * x + y * y + z * z + w * w;
+    }
+
+    precision Normalize()
+    {
+        precision length = Length();
+        precision invLength = precision(1.0) / length;
+        x *= invLength;
+        y *= invLength;
+        z *= invLength;
+        w *= invLength;
+
+        return length;
+    }
+
+    Quat Normalized() const
+    {
+        precision length = Length();
+        if (length < epsilon)
+        {
+            return Quat{ precision(0.0), precision(0.0), precision(0.0), precision(0.0) };
+        }
+
+        precision invLength = precision(1.0) / length;
+
+        return Quat{ x * invLength, y * invLength, z * invLength, w * invLength };
+    }
+
+    Quat GetConjugate() const
+    {
+        return Quat{ -x, -y, -z, w };
+    }
+
+    Vec3 GetImaginaryPart() const
+    {
+        return Vec3{ x, y, z };
+    }
+
+    // Optimized qvq'
+    Vec3 Rotate(const Vec3& v) const
+    {
+        precision vx = precision(2.0) * v.x;
+        precision vy = precision(2.0) * v.y;
+        precision vz = precision(2.0) * v.z;
+        precision w2 = w * w - precision(0.5);
+
+        precision dot2 = (x * vx + y * vy + z * vz);
+
+        return Vec3((vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
+                    (vz * w2 + (x * vy - y * vx) * w + z * dot2));
+    }
+
+    Vec3 RotateInv(const Vec3& v) const
+    {
+        precision vx = precision(2.0) * v.x;
+        precision vy = precision(2.0) * v.y;
+        precision vz = precision(2.0) * v.z;
+        precision w2 = w * w - precision(0.5);
+
+        precision dot2 = (x * vx + y * vy + z * vz);
+
+        return Vec3((vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
+                    (vz * w2 - (x * vy - y * vx) * w + z * dot2));
+    }
+
+    void SetIdentity()
+    {
+        x = precision(0.0);
+        y = precision(0.0);
+        z = precision(0.0);
+        w = precision(1.0);
+    }
+
+    precision x, y, z, w;
 };
 
 inline precision Dot(const Vec2& a, const Vec2& b)
@@ -471,6 +868,8 @@ inline precision Dist2(const Vec3& a, const Vec3& b)
 
 // Vec3 functions end
 
+// Vec4 functions begin
+
 inline precision Dot(const Vec4& a, const Vec4& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
@@ -495,6 +894,221 @@ inline bool operator!=(const Vec4& a, const Vec4& b)
 {
     return a.x != b.x || a.y != b.y || a.z != b.z || a.w != b.w;
 }
+
+// Vec4 functions end
+
+// Quat functions begin
+
+inline bool operator==(const Quat& a, const Quat& b)
+{
+    return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
+}
+
+inline precision Dot(const Quat& a, const Quat& b)
+{
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+// Quaternion multiplication
+inline Quat operator*(const Quat& a, const Quat& b)
+{
+    // clang-format off
+    return Quat(a.w * b.x + b.w * a.x + a.y * b.z - b.y * a.z,
+                a.w * b.y + b.w * a.y + a.z * b.x - b.z * a.x,
+                a.w * b.z + b.w * a.z + a.x * b.y - b.x * a.y,
+                a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z);
+    // clang-format on
+}
+
+inline Quat operator+(const Quat& a, const Quat& b)
+{
+    return Quat(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+
+inline Quat operator-(const Quat& a, const Quat& b)
+{
+    return Quat(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+
+// Compute angle between two quaternions
+inline precision Angle(const Quat& a, const Quat& b)
+{
+    return acos(Dot(a, b)) * precision(2.0);
+}
+
+// Quat functions end
+
+// Mat2 functions begin
+
+inline Mat2 operator+(const Mat2& a, const Mat2& b)
+{
+    return Mat2{ a.ex + b.ex, a.ey + b.ey };
+}
+
+// M * V
+inline Vec2 Mul(const Mat2& m, const Vec2& v)
+{
+    return Vec2{
+        m.ex.x * v.x + m.ey.x * v.y,
+        m.ex.y * v.x + m.ey.y * v.y,
+    };
+}
+
+inline Vec2 operator*(const Mat2& m, const Vec2& v)
+{
+    return Vec2{
+        m.ex.x * v.x + m.ey.x * v.y,
+        m.ex.y * v.x + m.ey.y * v.y,
+    };
+}
+
+// M^T * V
+inline Vec2 MulT(const Mat2& m, const Vec2& v)
+{
+    return Vec2{ Dot(m.ex, v), Dot(m.ey, v) };
+}
+
+// A * B
+inline Mat2 Mul(const Mat2& a, const Mat2& b)
+{
+    return Mat2{ a * b.ex, a * b.ey };
+}
+
+inline Mat2 operator*(const Mat2& a, const Mat2& b)
+{
+    return Mat2{ a * b.ex, a * b.ey };
+}
+
+// A^T * B
+inline Mat2 MulT(const Mat2& a, const Mat2& b)
+{
+    Vec2 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex) };
+    Vec2 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey) };
+
+    return Mat2{ c1, c2 };
+}
+
+// Mat2 functions end
+
+// Mat3 functions begin
+
+// M * V
+inline Vec3 Mul(const Mat3& m, const Vec3& v)
+{
+    return Vec3{
+        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z,
+        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z,
+        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z,
+    };
+}
+
+inline Vec3 operator*(const Mat3& m, const Vec3& v)
+{
+    return Vec3{
+        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z,
+        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z,
+        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z,
+    };
+}
+
+// M^T * V
+inline Vec3 MulT(const Mat3& m, const Vec3& v)
+{
+    return Vec3{ Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v) };
+}
+
+// A * B
+inline Mat3 Mul(const Mat3& a, const Mat3& b)
+{
+    return Mat3{ a * b.ex, a * b.ey, a * b.ez };
+}
+
+inline Mat3 operator*(const Mat3& a, const Mat3& b)
+{
+    return Mat3{ a * b.ex, a * b.ey, a * b.ez };
+}
+
+// A^T * B
+inline Mat3 MulT(const Mat3& a, const Mat3& b)
+{
+    Vec3 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex) };
+    Vec3 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey) };
+    Vec3 c3{ Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez) };
+
+    return Mat3{ c1, c2, c3 };
+}
+
+// Mat3 functions end
+
+// Mat4 functions begin
+
+// M * V
+inline Vec4 Mul(const Mat4& m, const Vec4& v)
+{
+    return Vec4{
+        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z + m.ew.x * v.w,
+        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z + m.ew.y * v.w,
+        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z + m.ew.z * v.w,
+        m.ex.w * v.x + m.ey.w * v.y + m.ez.w * v.z + m.ew.w * v.w,
+    };
+}
+
+inline Vec4 operator*(const Mat4& m, const Vec4& v)
+{
+    return Vec4{
+        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z + m.ew.x * v.w,
+        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z + m.ew.y * v.w,
+        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z + m.ew.z * v.w,
+        m.ex.w * v.x + m.ey.w * v.y + m.ez.w * v.z + m.ew.w * v.w,
+    };
+}
+
+// M^T * V
+inline Vec4 MulT(const Mat4& m, const Vec4& v)
+{
+    return Vec4{ Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v), Dot(m.ew, v) };
+}
+
+// A * B
+inline Mat4 Mul(const Mat4& a, const Mat4& b)
+{
+    return Mat4{ a * b.ex, a * b.ey, a * b.ez, a * b.ew };
+}
+
+inline Mat4 operator*(const Mat4& a, const Mat4& b)
+{
+    return Mat4{ a * b.ex, a * b.ey, a * b.ez, a * b.ew };
+}
+
+// A^T * B
+inline Mat4 MulT(const Mat4& a, const Mat4& b)
+{
+    Vec4 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex), Dot(a.ew, b.ex) };
+    Vec4 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey), Dot(a.ew, b.ey) };
+    Vec4 c3{ Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez), Dot(a.ew, b.ez) };
+    Vec4 c4{ Dot(a.ex, b.ew), Dot(a.ey, b.ew), Dot(a.ez, b.ew), Dot(a.ew, b.ew) };
+
+    return Mat4{ c1, c2, c3, c4 };
+}
+
+inline Mat4 Orth(precision left, precision right, precision bottom, precision top, precision zNear, precision zFar)
+{
+    Mat4 t{ 1.0f };
+
+    // Scale
+    t.ex.x = 2.0f / (right - left);
+    t.ey.y = 2.0f / (top - bottom);
+    t.ez.z = 2.0f / (zFar - zNear);
+
+    // Translation
+    t.ew.x = -(right + left) / (right - left);
+    t.ew.y = -(top + bottom) / (top - bottom);
+    t.ew.z = -(zFar + zNear) / (zFar - zNear);
+
+    return t;
+}
+
+// Mat4 functions end
 
 template <typename T>
 inline T Abs(T a)
