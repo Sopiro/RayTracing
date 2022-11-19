@@ -18,6 +18,22 @@ constexpr precision piDiv2 = precision(3.14159265358979323846 / 2.0);
 constexpr precision infinity = std::numeric_limits<precision>::infinity();
 constexpr precision epsilon = std::numeric_limits<precision>::epsilon();
 
+enum Identity
+{
+    identity
+};
+
+inline precision Prand()
+{
+    static std::minstd_rand prng;
+    return precision(prng()) / std::minstd_rand::max();
+}
+
+inline precision Prand(precision min, precision max)
+{
+    return min + (max - min) * Prand();
+}
+
 inline precision DegToRad(precision degrees)
 {
     return precision(degrees * pi / 180.0);
@@ -374,6 +390,11 @@ struct Mat2
 
     Mat2() = default;
 
+    Mat2(Identity)
+        : Mat2(precision(1.0))
+    {
+    }
+
     Mat2(precision v)
     {
         // clang-format off
@@ -451,6 +472,11 @@ struct Mat3
 
     Mat3() = default;
 
+    Mat3(Identity)
+        : Mat3(precision(1.0))
+    {
+    }
+
     Mat3(precision v)
     {
         // clang-format off
@@ -517,6 +543,11 @@ struct Mat4
     Vec4 ex, ey, ez, ew;
 
     Mat4() = default;
+
+    Mat4(Identity)
+        : Mat4(precision(1.0))
+    {
+    }
 
     Mat4(precision _v)
     {
@@ -585,6 +616,11 @@ struct Mat4
 struct Quat
 {
     Quat() = default;
+
+    Quat(Identity)
+        : Quat(precision(1.0))
+    {
+    }
 
     Quat(precision _x, precision _y, precision _z, precision _w)
         : x{ _x }

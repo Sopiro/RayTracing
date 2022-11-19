@@ -9,6 +9,12 @@ struct Transform
 
     Transform() = default;
 
+    Transform(Identity)
+        : p{ precision(0.0) }
+        , q{ identity }
+    {
+    }
+
     Transform(const Vec3& position)
         : p{ position }
         , q{ precision(1.0) }

@@ -164,7 +164,8 @@ void BVHTest(HittableList& objects)
     auto checker = std::make_shared<Lambertian>(checkerTexture);
 
     double n = 30.0;
-    double w = 5.0;
+    double w = 7.0;
+    double h = w * 9.0 / 16.0;
     double r = 0.1;
 
     for (int32 y = 0; y < n; ++y)
@@ -172,8 +173,11 @@ void BVHTest(HittableList& objects)
         for (int32 x = 0; x < n; ++x)
         {
             Vec3 pos;
-            pos.x = x / n * w - w / 2.0;
-            pos.y = y / n * w - w / 2.0;
+            // pos.x = x / n * w - w / 2.0;
+            // pos.y = y / n * w - w / 2.0;
+
+            pos.x = Prand(-w, w);
+            pos.y = Prand(-h, h);
             pos.z = -1;
 
             objects.Add(std::make_shared<Sphere>(pos, r, green));
@@ -253,29 +257,29 @@ int main()
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     // Color sky_color{ 0.2 };
-    Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
-    TriangleTest(world);
+    // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
+    // TriangleTest(world);
 
-    Vec3 lookfrom(0, 1, 1);
-    Vec3 lookat(0, 0.5, 0);
-    Vec3 vup(0, 1, 0);
-    auto dist_to_focus = (lookfrom - lookat).Length();
-    auto aperture = 0.0;
-    double vFov = 71;
-
-    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
-
-    // Color sky_color{ 0.7, 0.8, 1.0 };
-    // BVHTest(world);
-
-    // Vec3 lookfrom(0, 0, 5);
-    // Vec3 lookat(0, 0, 0);
+    // Vec3 lookfrom(0, 1, 1);
+    // Vec3 lookat(0, 0.5, 0);
     // Vec3 vup(0, 1, 0);
     // auto dist_to_focus = (lookfrom - lookat).Length();
     // auto aperture = 0.0;
     // double vFov = 71;
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
+    Color sky_color{ 0.7, 0.8, 1.0 };
+    BVHTest(world);
+
+    Vec3 lookfrom(0, 0, 5);
+    Vec3 lookat(0, 0, 0);
+    Vec3 vup(0, 1, 0);
+    auto dist_to_focus = (lookfrom - lookat).Length();
+    auto aperture = 0.0;
+    double vFov = 71;
+
+    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     auto t0 = std::chrono::system_clock::now();
 
