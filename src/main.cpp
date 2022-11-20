@@ -285,6 +285,8 @@ int main()
 
     double chunk = double(height) / omp_get_max_threads();
 
+    std::cout << Assimp::Math::aiPi<double>() << std::endl;
+
 #pragma omp parallel for
     for (int32 y = 0; y < height; ++y)
     {

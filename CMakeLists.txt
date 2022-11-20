@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -10,9 +10,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
-set(DEP_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/install)
-set(DEP_INCLUDE_DIR ${DEP_INSTALL_DIR}/include)
-set(DEP_LIB_DIR ${DEP_INSTALL_DIR}/lib)
 
 if(MSVC)
     # default startup project for Visual Studio
@@ -22,4 +19,12 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+option(ASSIMP_BUILD_TESTS OFF)
+option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+
+if(WIN32)
+    option(ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR OFF)
+endif()
+
+add_subdirectory(extern/assimp)
 add_subdirectory(src)

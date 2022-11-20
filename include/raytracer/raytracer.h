@@ -12,3 +12,5 @@
 #include "triangle.h"
 
 #include <omp.h>
+
+#include <assimp/Importer.hpp>
