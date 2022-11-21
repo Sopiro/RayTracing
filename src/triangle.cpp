@@ -5,9 +5,9 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
 {
     Vec3 d = ray.dir;
     double l = d.Normalize();
-    Vec3 pvec = Cross(d, v0v2);
+    Vec3 pvec = Cross(d, e2);
 
-    double det = Dot(v0v1, pvec);
+    double det = Dot(e1, pvec);
 
     bool backface = det < epsilon;
     if (one_sided && backface)
@@ -23,21 +23,21 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
 
     double invDet = 1.0 / det;
 
-    Vec3 tvec = ray.origin - v0;
+    Vec3 tvec = ray.origin - v0.position;
     double u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
         return false;
     }
 
-    Vec3 qvec = Cross(tvec, v0v1);
+    Vec3 qvec = Cross(tvec, e1);
     double v = Dot(d, qvec) * invDet;
     if (v < 0.0 || u + v > 1.0)
     {
         return false;
     }
 
-    double t = Dot(v0v2, qvec) * invDet / l;
+    double t = Dot(e2, qvec) * invDet / l;
     if (t < t_min || t > t_max)
     {
         return false;
@@ -46,8 +46,10 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     rec.mat = material;
     rec.t = t;
     rec.p = ray.At(rec.t);
+    Vec3 normal = GetNormal(u, v, 1.0 - u - v);
     rec.SetFaceNormal(ray, normal);
-    rec.uv.Set(u, v);
+    Vec2 tex = GetTexCoord(u, v, 1.0 - u - v);
+    rec.uv = tex;
 
     return true;
 }

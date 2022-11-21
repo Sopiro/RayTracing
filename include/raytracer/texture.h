@@ -2,8 +2,6 @@
 
 #include "common.h"
 
-#include <stb/stb_image.h>
-
 class Texture
 {
 public:

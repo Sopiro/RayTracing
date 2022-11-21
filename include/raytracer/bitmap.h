@@ -2,8 +2,6 @@
 
 #include "common.h"
 
-#include <stb/stb_image_write.h>
-
 #define COLOR_CHANNEL (3)
 
 class Bitmap

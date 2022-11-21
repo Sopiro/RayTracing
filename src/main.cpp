@@ -129,23 +129,30 @@ void TriangleTest(HittableList& objects)
 
     auto earth_texture = std::make_shared<ImageTexture>("res/earthmap.jpg");
     auto earth_mat = std::make_shared<Lambertian>(earth_texture);
+    auto whitted_texture = std::make_shared<ImageTexture>("res/Whitted_1979.jpg");
+    auto whitted_mat = std::make_shared<Lambertian>(whitted_texture);
 
     objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
     objects.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
     objects.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
 
-    Transform t(0, 0, -1, Quat(pi / 4, Vec3(0, 0, 1)));
+    // Transform t(0, 0, -1, Quat(pi / 4, Vec3(0, 0, 1)));
+    Transform t(0, 0, -1, Quat(0.0, Vec3(0, 0, 1)));
 
-    Vec3 v0 = t * Vec3{ -0.5, 0.0, 0.0 };
-    Vec3 v1 = t * Vec3{ 0.5, 0.0, 0.0 };
-    Vec3 v2 = t * Vec3{ 0.0, 1.0, 0.0 };
+    Vec3 p0 = t * Vec3{ -0.5, 0.0, 0.0 };
+    Vec3 p1 = t * Vec3{ 0.5, 0.0, 0.0 };
+    Vec3 p2 = t * Vec3{ 0.0, 1.0, 0.0 };
 
-    objects.Add(std::make_shared<Triangle>(v0, v1, v2, red));
+    Vertex v0{ p0, Vec3{ 0, 0, 1 }, Vec2{ 0.0, 0.0 } };
+    Vertex v1{ p1, Vec3{ 0, 0, 1 }, Vec2{ 1.0, 0.0 } };
+    Vertex v2{ p2, Vec3{ 0, 0, 1 }, Vec2{ 0.5, 1.0 } };
+
+    objects.Add(std::make_shared<Triangle>(v0, v1, v2, whitted_mat));
 
     double p = 5.0;
     double y = -0.5;
-    objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
-    objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
+    // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
+    // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
     objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, earth_mat));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, earth_mat));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));

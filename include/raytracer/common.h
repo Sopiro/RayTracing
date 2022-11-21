@@ -11,6 +11,9 @@
 #include <thread>
 #include <vector>
 
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
+
 #include "math.h"
 #include "types.h"
 

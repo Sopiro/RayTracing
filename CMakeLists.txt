@@ -19,12 +19,5 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-option(ASSIMP_BUILD_TESTS OFF)
-option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
-
-if(WIN32)
-    option(ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR OFF)
-endif()
-
-add_subdirectory(extern/assimp)
+add_subdirectory(extern)
 add_subdirectory(src)
