@@ -127,6 +127,9 @@ void TriangleTest(HittableList& objects)
     auto checkerTexture = std::make_shared<CheckerTexture>(Color{ 0.2, 0.3, 0.1 }, Color{ 0.9, 0.9, 0.9 });
     auto checker = std::make_shared<Lambertian>(checkerTexture);
 
+    auto earth_texture = std::make_shared<ImageTexture>("res/earthmap.jpg");
+    auto earth_mat = std::make_shared<Lambertian>(earth_texture);
+
     objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
     objects.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
     objects.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
@@ -143,8 +146,8 @@ void TriangleTest(HittableList& objects)
     double y = -0.5;
     objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
     objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
-    objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, metal));
-    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, blue));
+    objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, earth_mat));
+    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, earth_mat));
     objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
 }
 
@@ -257,23 +260,11 @@ int main()
     // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     // Color sky_color{ 0.2 };
-    // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
-    // TriangleTest(world);
+    Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
+    TriangleTest(world);
 
-    // Vec3 lookfrom(0, 1, 1);
-    // Vec3 lookat(0, 0.5, 0);
-    // Vec3 vup(0, 1, 0);
-    // auto dist_to_focus = (lookfrom - lookat).Length();
-    // auto aperture = 0.0;
-    // double vFov = 71;
-
-    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
-
-    Color sky_color{ 0.7, 0.8, 1.0 };
-    BVHTest(world);
-
-    Vec3 lookfrom(0, 0, 5);
-    Vec3 lookat(0, 0, 0);
+    Vec3 lookfrom(0, 1, 1);
+    Vec3 lookat(0, 0.5, 0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
@@ -281,11 +272,34 @@ int main()
 
     Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // BVHTest(world);
+
+    // Vec3 lookfrom(0, 0, 5);
+    // Vec3 lookat(0, 0, 0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 71;
+
+    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
     auto t0 = std::chrono::system_clock::now();
 
     double chunk = double(height) / omp_get_max_threads();
 
-    std::cout << Assimp::Math::aiPi<double>() << std::endl;
+    // std::cout << Assimp::Math::aiPi<double>() << std::endl;
+
+    // Assimp::Importer importer;
+    // const aiScene* scene = importer.ReadFile("../res/cube.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+
+    // if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    // {
+    //     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    //     return 0;
+    // }
+
+    // std::cout << scene->mMeshes[0]->mNumVertices << std::endl;
 
 #pragma omp parallel for
     for (int32 y = 0; y < height; ++y)

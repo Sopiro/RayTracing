@@ -1,8 +1,13 @@
 #pragma once
 
+#define STBI_MSC_SECURE_CRT
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
+#include "common.h"
+
 #include "bitmap.h"
 #include "camera.h"
-#include "common.h"
 #include "constant_medium.h"
 #include "hittable_list.h"
 #include "material.h"
@@ -14,3 +19,5 @@
 #include <omp.h>
 
 #include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>

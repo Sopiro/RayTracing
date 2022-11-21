@@ -2,9 +2,7 @@
 
 #include "common.h"
 
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
+#include <stb/stb_image_write.h>
 
 #define COLOR_CHANNEL (3)
 
@@ -27,7 +25,8 @@ public:
 
     void WriteToFile(char const* filename) const
     {
-        stbi_write_png(filename, width, height, COLOR_CHANNEL, pixels, width * COLOR_CHANNEL);
+        // stbi_write_png(filename, width, height, COLOR_CHANNEL, pixels, width * COLOR_CHANNEL);
+        stbi_write_jpg(filename, width, height, COLOR_CHANNEL, pixels, 100);
     }
 
     ~Bitmap()
