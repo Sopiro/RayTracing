@@ -4,10 +4,10 @@
 
 #include "raytracer/raytracer.h"
 
-void RandomScene(HittableList& world)
+void RandomScene(Scene& scene)
 {
     auto ground_material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
-    world.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
+    scene.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
     for (int a = -11; a < 11; a++)
     {
@@ -25,7 +25,7 @@ void RandomScene(HittableList& world)
                     // diffuse
                     auto albedo = Color::Random() * Color::Random();
                     sphere_material = std::make_shared<Lambertian>(albedo);
-                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
                 else if (choose_mat < 0.95)
                 {
@@ -33,29 +33,29 @@ void RandomScene(HittableList& world)
                     auto albedo = Color::Random(0.5, 1);
                     auto fuzz = Rand(0, 0.5);
                     sphere_material = std::make_shared<Metal>(albedo, fuzz);
-                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
                 else
                 {
                     // glass
                     sphere_material = std::make_shared<Dielectric>(1.5);
-                    world.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
             }
         }
     }
 
     auto material1 = std::make_shared<Dielectric>(1.5);
-    world.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0, material1));
+    scene.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0, material1));
 
     auto material2 = std::make_shared<Lambertian>(Color(0.4, 0.2, 0.1));
-    world.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
+    scene.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
 
     auto material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
-    world.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
+    scene.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 }
 
-void TestScene(HittableList& world)
+void TestScene(Scene& scene)
 {
     auto material_ground = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto material_center = std::make_shared<Lambertian>(Color{ 0.1, 0.2, 0.5 });
@@ -66,24 +66,24 @@ void TestScene(HittableList& world)
 
     auto light = std::make_shared<DiffuseLight>(Vec3{ 3.0 });
 
-    world.Add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 0.0, -100.5, -1.0 }, 100.0, checker));
     // world.add(std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center));
-    world.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
-    world.Add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
-    world.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.0 }, 0.5, material_right));
+    scene.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -1.0 }, 0.5, material_left));
+    scene.Add(std::make_shared<Sphere>(Vec3(-1.0, 0.0, -1.0), -0.45, material_left));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.0 }, 0.5, material_right));
 
-    world.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
-    world.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
-    world.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
 
     auto smoke = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 0.5, material_center);
-    world.Add(std::make_shared<ConstantDensityMedium>(smoke, 2.0, Color(0.0)));
+    scene.Add(std::make_shared<ConstantDensityMedium>(smoke, 2.0, Color(0.0)));
 
     auto fog = std::make_shared<Sphere>(Vec3{ 0.0, 0.0, -1.0 }, 3.0, material_center);
-    world.Add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
+    scene.Add(std::make_shared<ConstantDensityMedium>(fog, 0.05, Color(1.0)));
 }
 
-void CornellBox(HittableList& objects)
+void CornellBox(Scene& scene)
 {
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
     auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
@@ -98,21 +98,21 @@ void CornellBox(HittableList& objects)
     double g = 1;
     double m = g / 2.0;
 
-    objects.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));        // left
-    objects.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));       // right
-    objects.Add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));        // front
-    objects.Add(std::make_shared<Sphere>(Vec3{ m, m, r + 2.41 }, r, absorb)); // back
-    objects.Add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));        // bottom
-    objects.Add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));     // top
+    scene.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));        // left
+    scene.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));       // right
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));        // front
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, r + 2.41 }, r, absorb)); // back
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));        // bottom
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));     // top
 
-    objects.Add(std::make_shared<Sphere>(Vec3{ m, 10.0, m }, 9.003, light)); // light
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, 10.0, m }, 9.003, light)); // light
 
-    objects.Add(std::make_shared<Sphere>(Vec3{ 0.8, 0.13, 0.5 }, 0.13, glass));
-    objects.Add(std::make_shared<Sphere>(Vec3{ 0.3, 0.18, 0.8 }, 0.18, metal));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 0.8, 0.13, 0.5 }, 0.13, glass));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 0.3, 0.18, 0.8 }, 0.18, metal));
     // objects.add(std::make_shared<Sphere>(Vec3{ 0.3, 0.2, 0.7 }, -0.19, glass));
 }
 
-void TriangleTest(HittableList& objects)
+void TriangleTest(Scene& scene)
 {
     auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
@@ -129,12 +129,12 @@ void TriangleTest(HittableList& objects)
 
     auto earth_texture = std::make_shared<ImageTexture>("res/earthmap.jpg");
     auto earth_mat = std::make_shared<Lambertian>(earth_texture);
-    auto whitted_texture = std::make_shared<ImageTexture>("res/Whitted_1979.jpg");
+    auto whitted_texture = std::make_shared<ImageTexture>("res/wakdu.jpg");
     auto whitted_mat = std::make_shared<Lambertian>(whitted_texture);
 
-    objects.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
-    objects.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
-    objects.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 0.0, 2.0, 0.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 5.0, 2.0, -5.0 }, 0.5, light));
+    scene.Add(std::make_shared<Sphere>(Vec3{ -5.0, 2.0, -5.0 }, 0.5, light));
 
     // Transform t(0, 0, -1, Quat(pi / 4, Vec3(0, 0, 1)));
     Transform t(0, 0, -1, Quat(0.0, Vec3(0, 0, 1)));
@@ -147,18 +147,18 @@ void TriangleTest(HittableList& objects)
     Vertex v1{ p1, Vec3{ 0, 0, 1 }, Vec2{ 1.0, 0.0 } };
     Vertex v2{ p2, Vec3{ 0, 0, 1 }, Vec2{ 0.5, 1.0 } };
 
-    objects.Add(std::make_shared<Triangle>(v0, v1, v2, whitted_mat));
+    scene.Add(std::make_shared<Triangle>(v0, v1, v2, whitted_mat));
 
     double p = 5.0;
     double y = -0.5;
     // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
     // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
-    objects.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, earth_mat));
-    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, earth_mat));
-    objects.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
+    scene.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, earth_mat));
+    scene.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.3, earth_mat));
+    scene.Add(std::make_shared<Sphere>(Vec3{ -1.0, 0.0, -0.5 }, 0.5, glass));
 }
 
-void BVHTest(HittableList& objects)
+void BVHTest(Scene& scene)
 {
     auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
@@ -190,20 +190,20 @@ void BVHTest(HittableList& objects)
             pos.y = Prand(-h, h);
             pos.z = -1;
 
-            objects.Add(std::make_shared<Sphere>(pos, r, green));
+            scene.Add(std::make_shared<Sphere>(pos, r, green));
         }
     }
 }
 
-Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_color, int32 depth)
+Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
     {
-        return Color{ 0.0f };
+        return Color{ 0.0 };
     }
 
     HitRecord rec;
-    if (world.Hit(ray, 0.00001, infinity, rec) == false)
+    if (scene.Hit(ray, 0.00001, infinity, rec) == false)
     {
         return sky_color;
     }
@@ -217,7 +217,7 @@ Color ComputeRayColor(const Ray& ray, const Hittable& world, const Color& sky_co
         return emitted;
     }
 
-    return emitted + attenuation * ComputeRayColor(scattered, world, sky_color, depth - 1);
+    return emitted + attenuation * ComputeRayColor(scattered, scene, sky_color, depth - 1);
 
     // Vec3 unit_direction = r.dir.Normalized();
     // double t = 0.5 * (unit_direction.y + 1.0);
@@ -240,7 +240,7 @@ int main()
     const int max_depth = 50;
 
     Bitmap bitmap{ width, height };
-    HittableList world;
+    Scene scene;
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
     // HittableList world = TestScene();
@@ -268,7 +268,7 @@ int main()
 
     // Color sky_color{ 0.2 };
     Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
-    TriangleTest(world);
+    TriangleTest(scene);
 
     Vec3 lookfrom(0, 1, 1);
     Vec3 lookat(0, 0.5, 0);
@@ -295,10 +295,8 @@ int main()
 
     double chunk = double(height) / omp_get_max_threads();
 
-    // std::cout << Assimp::Math::aiPi<double>() << std::endl;
-
     // Assimp::Importer importer;
-    // const aiScene* scene = importer.ReadFile("../res/cube.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
+    // const aiScene* scene = importer.ReadFile("res/cube.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
 
     // if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     // {
@@ -306,7 +304,8 @@ int main()
     //     return 0;
     // }
 
-    // std::cout << scene->mMeshes[0]->mNumVertices << std::endl;
+    // std::cout << scene->mMeshes[0]->mNumFaces << std::endl;
+    // return 0;
 
 #pragma omp parallel for
     for (int32 y = 0; y < height; ++y)
@@ -327,7 +326,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += ComputeRayColor(r, world, sky_color, max_depth);
+                samples += ComputeRayColor(r, scene, sky_color, max_depth);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2

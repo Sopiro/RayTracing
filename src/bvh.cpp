@@ -106,7 +106,7 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
     double bestCost = SAH(Union(nodes[root].aabb, aabb));
 
     GrowableArray<std::pair<int32, double>, 256> stack;
-    stack.Emplace(root, 0.0f);
+    stack.Emplace(root, 0.0);
 
     while (stack.Count() != 0)
     {
@@ -352,7 +352,7 @@ void BVH::Rotate(int32 node)
     }
 
     // Rotate only if it reduce the suface area
-    if (costDiffs[bestDiffIndex] < 0.0f)
+    if (costDiffs[bestDiffIndex] < 0.0)
     {
         // printf("Tree rotation occurred: %d\n", bestDiffIndex);
 

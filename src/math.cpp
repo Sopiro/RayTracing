@@ -33,7 +33,7 @@ Mat3 Mat3::GetInverse() const
 
     if (det != 0)
     {
-        det = 1.0f / det;
+        det = precision(1.0) / det;
     }
 
     t.ex.x = (ey.y * ez.z - ey.z * ez.y) * det;
@@ -51,7 +51,7 @@ Mat3 Mat3::GetInverse() const
 
 Mat3 Mat3::Scale(precision x, precision y)
 {
-    Mat3 t{ 1.0f };
+    Mat3 t{ precision(1.0) };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -77,7 +77,7 @@ Mat3 Mat3::Rotate(precision z)
 
 Mat3 Mat3::Translate(precision x, precision y)
 {
-    Mat3 t{ 1.0f };
+    Mat3 t{ precision(1.0) };
 
     t.ez.x = x;
     t.ez.y = y;
@@ -87,7 +87,7 @@ Mat3 Mat3::Translate(precision x, precision y)
 
 Mat3 Mat3::Translate(const Vec2& v)
 {
-    Mat3 t{ 1.0f };
+    Mat3 t{ precision(1.0) };
 
     t.ez.x = v.x;
     t.ez.y = v.y;
@@ -97,7 +97,7 @@ Mat3 Mat3::Translate(const Vec2& v)
 
 Mat4 Mat4::Scale(precision x, precision y, precision z)
 {
-    Mat4 t{ 1.0f };
+    Mat4 t{ precision(1.0) };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -142,7 +142,7 @@ Mat4 Mat4::Rotate(precision x, precision y, precision z)
 
 Mat4 Mat4::Translate(precision x, precision y, precision z)
 {
-    Mat4 t{ 1.0f };
+    Mat4 t{ precision(1.0) };
 
     t.ew.x = x;
     t.ew.y = y;
@@ -153,7 +153,7 @@ Mat4 Mat4::Translate(precision x, precision y, precision z)
 
 Mat4 Mat4::Translate(const Vec3& v)
 {
-    Mat4 t{ 1.0f };
+    Mat4 t{ precision(1.0) };
 
     t.ew.x = v.x;
     t.ew.y = v.y;
@@ -188,7 +188,7 @@ Mat4 Mat4::GetInverse()
 
     if (det != 0.0f)
     {
-        det = 1.0f / det;
+        det = precision(1.0) / det;
     }
 
     Mat4 t;

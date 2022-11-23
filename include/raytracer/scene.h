@@ -6,11 +6,11 @@
 
 #define USE_BVH 1
 
-class HittableList : public Hittable
+class Scene : public Hittable
 {
 public:
-    HittableList() = default;
-    HittableList(std::shared_ptr<Hittable> object)
+    Scene() = default;
+    Scene(std::shared_ptr<Hittable> object)
     {
         Add(object);
     }
@@ -27,7 +27,7 @@ public:
     BVH bvh;
 };
 
-inline void HittableList::Add(std::shared_ptr<Hittable> object)
+inline void Scene::Add(std::shared_ptr<Hittable> object)
 {
 #if USE_BVH
     Hittable* raw = object.get();
@@ -39,13 +39,13 @@ inline void HittableList::Add(std::shared_ptr<Hittable> object)
     objects.push_back(object);
 }
 
-inline void HittableList::Clear()
+inline void Scene::Clear()
 {
     bvh.Reset();
     objects.clear();
 }
 
-inline void HittableList::ReBuildBVH()
+inline void Scene::ReBuildBVH()
 {
     bvh.ReBuild();
 }

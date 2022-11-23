@@ -201,15 +201,15 @@ struct Vec3
     Vec3(const Vec2& _v)
         : x{ _v.x }
         , y{ _v.y }
-        , z{ 0.0f }
+        , z{ precision(0.0) }
     {
     }
 
     void SetZero()
     {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
+        x = precision(0.0);
+        y = precision(0.0);
+        z = precision(0.0);
     }
 
     void Set(precision _x, precision _y, precision _z)
@@ -398,8 +398,8 @@ struct Mat2
     Mat2(precision v)
     {
         // clang-format off
-        ex.x = v;       ey.x = 0.0f;
-        ex.y = 0.0f;    ey.y = v;
+        ex.x = v;       ey.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = v;
         // clang-format on
     }
 
@@ -417,16 +417,16 @@ struct Mat2
     void SetIdentity()
     {
         // clang-format off
-        ex.x = 1.0f;    ey.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 1.0f;
+        ex.x = precision(1.0);    ey.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = 0.0f;    ey.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 0.0f;
+        ex.x = precision(0.0);    ey.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(0.0);
         // clang-format on
     }
 
@@ -447,9 +447,9 @@ struct Mat2
         Mat2 t;
 
         precision det = ex.x * ey.y - ey.x * ex.y;
-        if (det != 0.0f)
+        if (det != precision(0.0))
         {
-            det = 1.0f / det;
+            det = precision(1.0) / det;
         }
 
         t.ex.x = det * ey.y;
@@ -480,9 +480,9 @@ struct Mat3
     Mat3(precision v)
     {
         // clang-format off
-        ex.x = v;       ey.x = 0.0f;    ez.x = 0.0f;
-        ex.y = 0.0f;    ey.y = v;       ez.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = v;
+        ex.x = v;       ey.x = precision(0.0);    ez.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = v;       ez.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = v;
         // clang-format on
     }
 
@@ -503,18 +503,18 @@ struct Mat3
     void SetIdentity()
     {
         // clang-format off
-        ex.x = 1.0f;    ey.x = 0.0f;    ez.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 1.0f;    ez.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 1.0f;
+        ex.x = precision(1.0);    ey.x = precision(0.0);    ez.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(1.0);    ez.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = 0.0f;    ey.x = 0.0f;    ez.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 0.0f;    ez.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 0.0f;
+        ex.x = precision(0.0);    ey.x = precision(0.0);    ez.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(0.0);    ez.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(0.0);
         // clang-format on
     }
 
@@ -552,10 +552,10 @@ struct Mat4
     Mat4(precision _v)
     {
         // clang-format off
-        ex.x = _v;      ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
-        ex.y = 0.0f;    ey.y = _v;      ez.y = 0.0f;    ew.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = _v;      ew.z = 0.0f;
-        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = _v;
+        ex.x = _v;      ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = _v;      ez.y = precision(0.0);    ew.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = _v;      ew.z = precision(0.0);
+        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = _v;
         // clang-format on
     }
 
@@ -575,20 +575,20 @@ struct Mat4
     void SetIdentity()
     {
         // clang-format off
-        ex.x = 1.0f;    ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 1.0f;    ez.y = 0.0f;    ew.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 1.0f;    ew.z = 0.0f;
-        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = 1.0f;
+        ex.x = precision(1.0);    ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(1.0);    ez.y = precision(0.0);    ew.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(1.0);    ew.z = precision(0.0);
+        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = precision(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = 0.0f;    ey.x = 0.0f;    ez.x = 0.0f;    ew.x = 0.0f;
-        ex.y = 0.0f;    ey.y = 0.0f;    ez.y = 0.0f;    ew.y = 0.0f;
-        ex.z = 0.0f;    ey.z = 0.0f;    ez.z = 0.0f;    ew.z = 0.0f;
-        ex.w = 0.0f;    ey.w = 0.0f;    ez.w = 0.0f;    ew.w = 0.0f;
+        ex.x = precision(0.0);    ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
+        ex.y = precision(0.0);    ey.y = precision(0.0);    ez.y = precision(0.0);    ew.y = precision(0.0);
+        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(0.0);    ew.z = precision(0.0);
+        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = precision(0.0);
         // clang-format on
     }
 
@@ -800,7 +800,7 @@ inline Vec2 operator*(const Vec2& a, const Vec2& b)
 
 inline Vec2 operator/(const Vec2& v, precision s)
 {
-    return v * (1.0f / s);
+    return v * (precision(1.0) / s);
 }
 
 inline bool operator==(const Vec2& a, const Vec2& b)
@@ -879,7 +879,7 @@ inline Vec3 operator*(const Vec3& a, const Vec3& b)
 
 inline Vec3 operator/(const Vec3& v, precision s)
 {
-    return v * (1.0f / s);
+    return v * (precision(1.0) / s);
 }
 
 inline bool operator==(const Vec3& a, const Vec3& b)
@@ -1129,12 +1129,12 @@ inline Mat4 MulT(const Mat4& a, const Mat4& b)
 
 inline Mat4 Orth(precision left, precision right, precision bottom, precision top, precision zNear, precision zFar)
 {
-    Mat4 t{ 1.0f };
+    Mat4 t{ precision(1.0) };
 
     // Scale
-    t.ex.x = 2.0f / (right - left);
-    t.ey.y = 2.0f / (top - bottom);
-    t.ez.z = 2.0f / (zFar - zNear);
+    t.ex.x = precision(2.0) / (right - left);
+    t.ey.y = precision(2.0) / (top - bottom);
+    t.ez.z = precision(2.0) / (zFar - zNear);
 
     // Translation
     t.ew.x = -(right + left) / (right - left);
@@ -1203,13 +1203,13 @@ inline Vec2 Clamp(const Vec2& a, const Vec2& _min, const Vec2& _max)
 template <typename T>
 inline T Lerp(const T& a, const T& b, precision t)
 {
-    return a * (1.0f - t) + b * t;
+    return a * (precision(1.0) - t) + b * t;
 }
 
 template <typename T>
 inline T Slerp(const T& start, const T& end, precision percent)
 {
-    precision dot = Clamp(Dot(start, end), -1.0f, 1.0f);
+    precision dot = Clamp(Dot(start, end), -precision(1.0), precision(1.0));
     precision angle = acosf(dot) * percent;
 
     T rv = end - start * dot;

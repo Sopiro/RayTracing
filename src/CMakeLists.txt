@@ -3,7 +3,7 @@ set(HEADER_FILES
     ../include/raytracer/bitmap.h
     ../include/raytracer/camera.h
     ../include/raytracer/constant_medium.h
-    ../include/raytracer/hittable_list.h
+    ../include/raytracer/scene.h
     ../include/raytracer/hittable.h
     ../include/raytracer/material.h
     ../include/raytracer/math.h
@@ -20,7 +20,7 @@ set(SOURCE_FILES
     main.cpp
     material.cpp
     bvh.cpp
-    hittable_list.cpp
+    scene.cpp
     sphere.cpp
     triangle.cpp
     constant_medium.cpp

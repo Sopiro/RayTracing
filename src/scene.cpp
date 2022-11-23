@@ -1,8 +1,8 @@
 #pragma once
 
-#include "raytracer/hittable_list.h"
+#include "raytracer/scene.h"
 
-bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
 #if USE_BVH
     bool hit_closest = false;
@@ -41,7 +41,7 @@ bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& re
 #endif
 }
 
-bool HittableList::GetAABB(AABB& outAABB) const
+bool Scene::GetAABB(AABB& outAABB) const
 {
     if (objects.empty())
     {
