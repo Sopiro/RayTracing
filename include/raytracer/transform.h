@@ -10,19 +10,19 @@ struct Transform
     Transform() = default;
 
     Transform(Identity)
-        : p{ precision(0.0) }
+        : p{ Real(0.0) }
         , q{ identity }
     {
     }
 
     Transform(const Vec3& position)
         : p{ position }
-        , q{ precision(1.0) }
+        , q{ Real(1.0) }
     {
     }
 
     Transform(const Quat& orientation)
-        : p{ precision(0.0) }
+        : p{ Real(0.0) }
         , q{ orientation }
     {
     }
@@ -33,7 +33,7 @@ struct Transform
     {
     }
 
-    Transform(precision x, precision y, precision z, const Quat& orientation = Quat{ 1.0 })
+    Transform(Real x, Real y, Real z, const Quat& orientation = Quat{ 1.0 })
         : p{ x, y, z }
         , q{ orientation }
     {

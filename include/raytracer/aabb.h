@@ -18,7 +18,7 @@ inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
 {
     for (uint32 axis = 0; axis < 3; ++axis)
     {
-        double invD = precision(1.0) / r.dir[axis];
+        double invD = Real(1.0) / r.dir[axis];
 
         double t0 = (min[axis] - r.origin[axis]) * invD;
         double t1 = (max[axis] - r.origin[axis]) * invD;

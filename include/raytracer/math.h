@@ -11,59 +11,61 @@
 
 #include "types.h"
 
-#define precision double
+#define Real double
 
-constexpr precision pi = precision(3.14159265358979323846);
-constexpr precision piDiv2 = precision(3.14159265358979323846 / 2.0);
-constexpr precision infinity = std::numeric_limits<precision>::infinity();
-constexpr precision epsilon = std::numeric_limits<precision>::epsilon();
+constexpr Real pi = Real(3.14159265358979323846);
+constexpr Real piDiv2 = Real(3.14159265358979323846 / 2.0);
+constexpr Real infinity = std::numeric_limits<Real>::infinity();
+constexpr Real epsilon = std::numeric_limits<Real>::epsilon();
 
 enum Identity
 {
     identity
 };
 
-inline precision Prand()
+inline Real Prand()
 {
-    static std::minstd_rand prng;
-    return precision(prng()) / std::minstd_rand::max();
+    static thread_local std::minstd_rand prng;
+
+    return Real(prng()) / std::minstd_rand::max();
 }
 
-inline precision Prand(precision min, precision max)
+inline Real Prand(Real min, Real max)
 {
     return min + (max - min) * Prand();
 }
 
-inline precision DegToRad(precision degrees)
+inline Real DegToRad(Real degrees)
 {
-    return precision(degrees * pi / 180.0);
+    return Real(degrees * pi / 180.0);
 }
 
-inline precision Rand()
+inline Real Rand()
 {
-    static std::uniform_real_distribution<precision> distribution(0.0, 1.0);
-    static std::mt19937 generator;
+    static thread_local std::uniform_real_distribution<Real> distribution(0.0, 1.0);
+    static thread_local std::mt19937 generator;
+
     return distribution(generator);
 }
 
-inline precision Rand(precision min, precision max)
+inline Real Rand(Real min, Real max)
 {
     return min + (max - min) * Rand();
 }
 
 struct Vec2
 {
-    precision x, y;
+    Real x, y;
 
     Vec2() = default;
 
-    constexpr Vec2(precision _v)
+    constexpr Vec2(Real _v)
         : x{ _v }
         , y{ _v }
     {
     }
 
-    constexpr Vec2(precision _x, precision _y)
+    constexpr Vec2(Real _x, Real _y)
         : x{ _x }
         , y{ _y }
     {
@@ -71,22 +73,22 @@ struct Vec2
 
     void SetZero()
     {
-        x = precision(0.0);
-        y = precision(0.0);
+        x = Real(0.0);
+        y = Real(0.0);
     }
 
-    void Set(precision _x, precision _y)
+    void Set(Real _x, Real _y)
     {
         x = _x;
         y = _y;
     }
 
-    precision operator[](uint32 i) const
+    Real operator[](uint32 i) const
     {
         return (&x)[i];
     }
 
-    precision& operator[](uint32 i)
+    Real& operator[](uint32 i)
     {
         return (&x)[i];
     }
@@ -108,44 +110,44 @@ struct Vec2
         y -= v.y;
     }
 
-    void operator+=(precision s)
+    void operator+=(Real s)
     {
         x += s;
         y += s;
     }
 
-    void operator-=(precision s)
+    void operator-=(Real s)
     {
         x -= s;
         y -= s;
     }
 
-    void operator*=(precision s)
+    void operator*=(Real s)
     {
         x *= s;
         y *= s;
     }
 
-    void operator/=(precision s)
+    void operator/=(Real s)
     {
         operator*=(1.0 / s);
     }
 
-    precision Length() const
+    Real Length() const
     {
         return sqrt(x * x + y * y);
     }
 
-    precision Length2() const
+    Real Length2() const
     {
         return x * x + y * y;
     }
 
     // Optimized to not check length == 0
-    precision Normalize()
+    Real Normalize()
     {
-        precision length = Length();
-        precision invLength = precision(1.0) / length;
+        Real length = Length();
+        Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
 
@@ -155,7 +157,7 @@ struct Vec2
     // Optimized to not check length == 0
     Vec2 Normalized() const
     {
-        precision invLength = precision(1.0) / Length();
+        Real invLength = Real(1.0) / Length();
 
         return Vec2{ x * invLength, y * invLength };
     }
@@ -170,7 +172,7 @@ struct Vec2
 
 struct Vec3
 {
-    precision x, y, z;
+    Real x, y, z;
 
     Vec3() = default;
 
@@ -179,19 +181,19 @@ struct Vec3
         return Vec3{ Rand(), Rand(), Rand() };
     }
 
-    inline static Vec3 Random(precision min, precision max)
+    inline static Vec3 Random(Real min, Real max)
     {
         return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
     }
 
-    constexpr Vec3(precision _v)
+    constexpr Vec3(Real _v)
         : x{ _v }
         , y{ _v }
         , z{ _v }
     {
     }
 
-    constexpr Vec3(precision _x, precision _y, precision _z)
+    constexpr Vec3(Real _x, Real _y, Real _z)
         : x{ _x }
         , y{ _y }
         , z{ _z }
@@ -201,30 +203,30 @@ struct Vec3
     Vec3(const Vec2& _v)
         : x{ _v.x }
         , y{ _v.y }
-        , z{ precision(0.0) }
+        , z{ Real(0.0) }
     {
     }
 
     void SetZero()
     {
-        x = precision(0.0);
-        y = precision(0.0);
-        z = precision(0.0);
+        x = Real(0.0);
+        y = Real(0.0);
+        z = Real(0.0);
     }
 
-    void Set(precision _x, precision _y, precision _z)
+    void Set(Real _x, Real _y, Real _z)
     {
         x = _x;
         y = _y;
         z = _z;
     }
 
-    precision operator[](uint32 i) const
+    Real operator[](uint32 i) const
     {
         return (&x)[i];
     }
 
-    precision& operator[](uint32 i)
+    Real& operator[](uint32 i)
     {
         return (&x)[i];
     }
@@ -248,46 +250,46 @@ struct Vec3
         z -= v.z;
     }
 
-    void operator+=(precision s)
+    void operator+=(Real s)
     {
         x += s;
         y += s;
         z += s;
     }
 
-    void operator-=(precision s)
+    void operator-=(Real s)
     {
         x -= s;
         y -= s;
         z -= s;
     }
 
-    void operator*=(precision s)
+    void operator*=(Real s)
     {
         x *= s;
         y *= s;
         z *= s;
     }
 
-    void operator/=(precision s)
+    void operator/=(Real s)
     {
-        operator*=(precision(1.0) / s);
+        operator*=(Real(1.0) / s);
     }
 
-    precision Length() const
+    Real Length() const
     {
         return sqrt(x * x + y * y + z * z);
     }
 
-    precision Length2() const
+    Real Length2() const
     {
         return x * x + y * y + z * z;
     }
 
-    precision Normalize()
+    Real Normalize()
     {
-        precision length = Length();
-        precision invLength = precision(1.0) / length;
+        Real length = Length();
+        Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -297,13 +299,13 @@ struct Vec3
 
     Vec3 Normalized() const
     {
-        precision length = Length();
+        Real length = Length();
         if (length < epsilon)
         {
-            return Vec3{ precision(0.0), precision(0.0), precision(0.0) };
+            return Vec3{ Real(0.0), Real(0.0), Real(0.0) };
         }
 
-        precision invLength = precision(1.0) / length;
+        Real invLength = Real(1.0) / length;
 
         return Vec3{ x * invLength, y * invLength, z * invLength };
     }
@@ -311,11 +313,11 @@ struct Vec3
 
 struct Vec4
 {
-    precision x, y, z, w;
+    Real x, y, z, w;
 
     Vec4() = default;
 
-    constexpr Vec4(precision _v, precision _w)
+    constexpr Vec4(Real _v, Real _w)
         : x{ _v }
         , y{ _v }
         , z{ _v }
@@ -323,7 +325,7 @@ struct Vec4
     {
     }
 
-    constexpr Vec4(precision _x, precision _y, precision _z, precision _w)
+    constexpr Vec4(Real _x, Real _y, Real _z, Real _w)
         : x{ _x }
         , y{ _y }
         , z{ _z }
@@ -333,13 +335,13 @@ struct Vec4
 
     void SetZero()
     {
-        x = precision(0.0);
-        y = precision(0.0);
-        z = precision(0.0);
-        w = precision(0.0);
+        x = Real(0.0);
+        y = Real(0.0);
+        z = Real(0.0);
+        w = Real(0.0);
     }
 
-    void Set(precision _x, precision _y, precision _z, precision _w)
+    void Set(Real _x, Real _y, Real _z, Real _w)
     {
         x = _x;
         y = _y;
@@ -347,30 +349,30 @@ struct Vec4
         w = _w;
     }
 
-    precision operator[](uint32 i) const
+    Real operator[](uint32 i) const
     {
         return (&x)[i];
     }
 
-    precision& operator[](uint32 i)
+    Real& operator[](uint32 i)
     {
         return (&x)[i];
     }
 
-    precision Length() const
+    Real Length() const
     {
         return sqrt(x * x + y * y + z * z + w * w);
     }
 
-    precision Length2() const
+    Real Length2() const
     {
         return x * x + y * y + z * z + w * w;
     }
 
-    precision Normalize()
+    Real Normalize()
     {
-        precision length = Length();
-        precision invLength = precision(1.0) / length;
+        Real length = Length();
+        Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -391,15 +393,15 @@ struct Mat2
     Mat2() = default;
 
     Mat2(Identity)
-        : Mat2(precision(1.0))
+        : Mat2(Real(1.0))
     {
     }
 
-    Mat2(precision v)
+    Mat2(Real v)
     {
         // clang-format off
-        ex.x = v;       ey.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = v;
+        ex.x = v;       ey.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = v;
         // clang-format on
     }
 
@@ -417,16 +419,16 @@ struct Mat2
     void SetIdentity()
     {
         // clang-format off
-        ex.x = precision(1.0);    ey.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(1.0);
+        ex.x = Real(1.0);    ey.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = precision(0.0);    ey.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(0.0);
+        ex.x = Real(0.0);    ey.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(0.0);
         // clang-format on
     }
 
@@ -446,10 +448,10 @@ struct Mat2
     {
         Mat2 t;
 
-        precision det = ex.x * ey.y - ey.x * ex.y;
-        if (det != precision(0.0))
+        Real det = ex.x * ey.y - ey.x * ex.y;
+        if (det != Real(0.0))
         {
-            det = precision(1.0) / det;
+            det = Real(1.0) / det;
         }
 
         t.ex.x = det * ey.y;
@@ -460,7 +462,7 @@ struct Mat2
         return t;
     }
 
-    precision GetDeterminant() const
+    Real GetDeterminant() const
     {
         return ex.x * ey.y - ey.x * ex.y;
     }
@@ -473,16 +475,16 @@ struct Mat3
     Mat3() = default;
 
     Mat3(Identity)
-        : Mat3(precision(1.0))
+        : Mat3(Real(1.0))
     {
     }
 
-    Mat3(precision v)
+    Mat3(Real v)
     {
         // clang-format off
-        ex.x = v;       ey.x = precision(0.0);    ez.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = v;       ez.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = v;
+        ex.x = v;       ey.x = Real(0.0);    ez.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = v;       ez.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = v;
         // clang-format on
     }
 
@@ -503,18 +505,18 @@ struct Mat3
     void SetIdentity()
     {
         // clang-format off
-        ex.x = precision(1.0);    ey.x = precision(0.0);    ez.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(1.0);    ez.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(1.0);
+        ex.x = Real(1.0);    ey.x = Real(0.0);    ez.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(1.0);    ez.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = Real(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = precision(0.0);    ey.x = precision(0.0);    ez.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(0.0);    ez.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(0.0);
+        ex.x = Real(0.0);    ey.x = Real(0.0);    ez.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(0.0);    ez.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = Real(0.0);
         // clang-format on
     }
 
@@ -532,9 +534,9 @@ struct Mat3
     }
 
     Mat3 GetInverse() const;
-    Mat3 Scale(precision x, precision y);
-    Mat3 Rotate(precision z);
-    Mat3 Translate(precision x, precision y);
+    Mat3 Scale(Real x, Real y);
+    Mat3 Rotate(Real z);
+    Mat3 Translate(Real x, Real y);
     Mat3 Translate(const Vec2& v);
 };
 
@@ -545,17 +547,17 @@ struct Mat4
     Mat4() = default;
 
     Mat4(Identity)
-        : Mat4(precision(1.0))
+        : Mat4(Real(1.0))
     {
     }
 
-    Mat4(precision _v)
+    Mat4(Real _v)
     {
         // clang-format off
-        ex.x = _v;      ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = _v;      ez.y = precision(0.0);    ew.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = _v;      ew.z = precision(0.0);
-        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = _v;
+        ex.x = _v;      ey.x = Real(0.0);    ez.x = Real(0.0);    ew.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = _v;      ez.y = Real(0.0);    ew.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = _v;      ew.z = Real(0.0);
+        ex.w = Real(0.0);    ey.w = Real(0.0);    ez.w = Real(0.0);    ew.w = _v;
         // clang-format on
     }
 
@@ -575,20 +577,20 @@ struct Mat4
     void SetIdentity()
     {
         // clang-format off
-        ex.x = precision(1.0);    ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(1.0);    ez.y = precision(0.0);    ew.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(1.0);    ew.z = precision(0.0);
-        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = precision(1.0);
+        ex.x = Real(1.0);    ey.x = Real(0.0);    ez.x = Real(0.0);    ew.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(1.0);    ez.y = Real(0.0);    ew.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = Real(1.0);    ew.z = Real(0.0);
+        ex.w = Real(0.0);    ey.w = Real(0.0);    ez.w = Real(0.0);    ew.w = Real(1.0);
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = precision(0.0);    ey.x = precision(0.0);    ez.x = precision(0.0);    ew.x = precision(0.0);
-        ex.y = precision(0.0);    ey.y = precision(0.0);    ez.y = precision(0.0);    ew.y = precision(0.0);
-        ex.z = precision(0.0);    ey.z = precision(0.0);    ez.z = precision(0.0);    ew.z = precision(0.0);
-        ex.w = precision(0.0);    ey.w = precision(0.0);    ez.w = precision(0.0);    ew.w = precision(0.0);
+        ex.x = Real(0.0);    ey.x = Real(0.0);    ez.x = Real(0.0);    ew.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = Real(0.0);    ez.y = Real(0.0);    ew.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = Real(0.0);    ew.z = Real(0.0);
+        ex.w = Real(0.0);    ey.w = Real(0.0);    ez.w = Real(0.0);    ew.w = Real(0.0);
         // clang-format on
     }
 
@@ -607,9 +609,9 @@ struct Mat4
     }
 
     Mat4 GetInverse();
-    Mat4 Scale(precision x, precision y, precision z);
-    Mat4 Rotate(precision x, precision y, precision z);
-    Mat4 Translate(precision x, precision y, precision z);
+    Mat4 Scale(Real x, Real y, Real z);
+    Mat4 Rotate(Real x, Real y, Real z);
+    Mat4 Translate(Real x, Real y, Real z);
     Mat4 Translate(const Vec3& v);
 };
 
@@ -618,11 +620,11 @@ struct Quat
     Quat() = default;
 
     Quat(Identity)
-        : Quat(precision(1.0))
+        : Quat(Real(1.0))
     {
     }
 
-    Quat(precision _x, precision _y, precision _z, precision _w)
+    Quat(Real _x, Real _y, Real _z, Real _w)
         : x{ _x }
         , y{ _y }
         , z{ _z }
@@ -630,10 +632,10 @@ struct Quat
     {
     }
 
-    Quat(precision _w)
-        : x{ precision(0.0) }
-        , y{ precision(0.0) }
-        , z{ precision(0.0) }
+    Quat(Real _w)
+        : x{ Real(0.0) }
+        , y{ Real(0.0) }
+        , z{ Real(0.0) }
         , w{ _w }
     {
     }
@@ -643,11 +645,11 @@ struct Quat
     Quat(const Vec3& dir, const Vec3& up);
 
     // Axis must be normalized
-    Quat(precision angle, const Vec3& unitAxis)
+    Quat(Real angle, const Vec3& unitAxis)
     {
-        precision halfAngle = angle * precision(0.5);
+        Real halfAngle = angle * Real(0.5);
 
-        precision s = sin(halfAngle);
+        Real s = sin(halfAngle);
         x = unitAxis.x * s;
         y = unitAxis.y * s;
         z = unitAxis.z * s;
@@ -659,31 +661,31 @@ struct Quat
         return Quat{ -x, -y, -z, -w };
     }
 
-    Quat operator*(precision s) const
+    Quat operator*(Real s) const
     {
         return Quat{ x * s, y * s, z * s, w * s };
     }
 
     bool IsIdentity() const
     {
-        return x == precision(0.0) && y == precision(0.0) && z == precision(0.0) && w == precision(1.0);
+        return x == Real(0.0) && y == Real(0.0) && z == Real(0.0) && w == Real(1.0);
     }
 
     // Magnitude
-    precision Length() const
+    Real Length() const
     {
         return sqrt(x * x + y * y + z * z + w * w);
     }
 
-    precision Length2() const
+    Real Length2() const
     {
         return x * x + y * y + z * z + w * w;
     }
 
-    precision Normalize()
+    Real Normalize()
     {
-        precision length = Length();
-        precision invLength = precision(1.0) / length;
+        Real length = Length();
+        Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -694,13 +696,13 @@ struct Quat
 
     Quat Normalized() const
     {
-        precision length = Length();
+        Real length = Length();
         if (length < epsilon)
         {
-            return Quat{ precision(0.0), precision(0.0), precision(0.0), precision(0.0) };
+            return Quat{ Real(0.0), Real(0.0), Real(0.0), Real(0.0) };
         }
 
-        precision invLength = precision(1.0) / length;
+        Real invLength = Real(1.0) / length;
 
         return Quat{ x * invLength, y * invLength, z * invLength, w * invLength };
     }
@@ -718,12 +720,12 @@ struct Quat
     // Optimized qvq'
     Vec3 Rotate(const Vec3& v) const
     {
-        precision vx = precision(2.0) * v.x;
-        precision vy = precision(2.0) * v.y;
-        precision vz = precision(2.0) * v.z;
-        precision w2 = w * w - precision(0.5);
+        Real vx = Real(2.0) * v.x;
+        Real vy = Real(2.0) * v.y;
+        Real vz = Real(2.0) * v.z;
+        Real w2 = w * w - Real(0.5);
 
-        precision dot2 = (x * vx + y * vy + z * vz);
+        Real dot2 = (x * vx + y * vy + z * vz);
 
         return Vec3((vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
                     (vz * w2 + (x * vy - y * vx) * w + z * dot2));
@@ -731,12 +733,12 @@ struct Quat
 
     Vec3 RotateInv(const Vec3& v) const
     {
-        precision vx = precision(2.0) * v.x;
-        precision vy = precision(2.0) * v.y;
-        precision vz = precision(2.0) * v.z;
-        precision w2 = w * w - precision(0.5);
+        Real vx = Real(2.0) * v.x;
+        Real vy = Real(2.0) * v.y;
+        Real vz = Real(2.0) * v.z;
+        Real w2 = w * w - Real(0.5);
 
-        precision dot2 = (x * vx + y * vy + z * vz);
+        Real dot2 = (x * vx + y * vy + z * vz);
 
         return Vec3((vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
                     (vz * w2 - (x * vy - y * vx) * w + z * dot2));
@@ -744,31 +746,31 @@ struct Quat
 
     void SetIdentity()
     {
-        x = precision(0.0);
-        y = precision(0.0);
-        z = precision(0.0);
-        w = precision(1.0);
+        x = Real(0.0);
+        y = Real(0.0);
+        z = Real(0.0);
+        w = Real(1.0);
     }
 
-    precision x, y, z, w;
+    Real x, y, z, w;
 };
 
-inline precision Dot(const Vec2& a, const Vec2& b)
+inline Real Dot(const Vec2& a, const Vec2& b)
 {
     return a.x * b.x + a.y * b.y;
 }
 
-inline precision Cross(const Vec2& a, const Vec2& b)
+inline Real Cross(const Vec2& a, const Vec2& b)
 {
     return a.x * b.y - a.y * b.x;
 }
 
-inline Vec2 Cross(precision s, const Vec2& v)
+inline Vec2 Cross(Real s, const Vec2& v)
 {
     return Vec2{ -s * v.y, s * v.x };
 }
 
-inline Vec2 Cross(const Vec2& v, precision s)
+inline Vec2 Cross(const Vec2& v, Real s)
 {
     return Vec2{ s * v.y, -s * v.x };
 }
@@ -783,12 +785,12 @@ inline Vec2 operator-(const Vec2& a, const Vec2& b)
     return Vec2{ a.x - b.x, a.y - b.y };
 }
 
-inline Vec2 operator*(const Vec2& v, precision s)
+inline Vec2 operator*(const Vec2& v, Real s)
 {
     return Vec2{ v.x * s, v.y * s };
 }
 
-inline Vec2 operator*(precision s, const Vec2& v)
+inline Vec2 operator*(Real s, const Vec2& v)
 {
     return operator*(v, s);
 }
@@ -798,9 +800,9 @@ inline Vec2 operator*(const Vec2& a, const Vec2& b)
     return Vec2{ a.x * b.x, a.y * b.y };
 }
 
-inline Vec2 operator/(const Vec2& v, precision s)
+inline Vec2 operator/(const Vec2& v, Real s)
 {
-    return v * (precision(1.0) / s);
+    return v * (Real(1.0) / s);
 }
 
 inline bool operator==(const Vec2& a, const Vec2& b)
@@ -813,22 +815,22 @@ inline bool operator!=(const Vec2& a, const Vec2& b)
     return a.x != b.x || a.y != b.y;
 }
 
-inline precision Dist(const Vec2& a, const Vec2& b)
+inline Real Dist(const Vec2& a, const Vec2& b)
 {
     return (a - b).Length();
 }
 
-inline precision Dist2(const Vec2& a, const Vec2& b)
+inline Real Dist2(const Vec2& a, const Vec2& b)
 {
     return (a - b).Length2();
 }
 
-inline precision Length(const Vec2& v)
+inline Real Length(const Vec2& v)
 {
     return v.Length();
 }
 
-inline precision Length2(const Vec2& v)
+inline Real Length2(const Vec2& v)
 {
     return v.Length2();
 }
@@ -842,7 +844,7 @@ inline Vec2 Normalize(const Vec2& v)
 
 // Vec3 functions begin
 
-inline precision Dot(const Vec3& a, const Vec3& b)
+inline Real Dot(const Vec3& a, const Vec3& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -862,12 +864,12 @@ inline Vec3 operator-(const Vec3& a, const Vec3& b)
     return Vec3{ a.x - b.x, a.y - b.y, a.z - b.z };
 }
 
-inline Vec3 operator*(const Vec3& v, precision s)
+inline Vec3 operator*(const Vec3& v, Real s)
 {
     return Vec3{ v.x * s, v.y * s, v.z * s };
 }
 
-inline Vec3 operator*(precision s, const Vec3& v)
+inline Vec3 operator*(Real s, const Vec3& v)
 {
     return operator*(v, s);
 }
@@ -877,9 +879,9 @@ inline Vec3 operator*(const Vec3& a, const Vec3& b)
     return Vec3{ a.x * b.x, a.y * b.y, a.z * b.z };
 }
 
-inline Vec3 operator/(const Vec3& v, precision s)
+inline Vec3 operator/(const Vec3& v, Real s)
 {
-    return v * (precision(1.0) / s);
+    return v * (Real(1.0) / s);
 }
 
 inline bool operator==(const Vec3& a, const Vec3& b)
@@ -892,12 +894,12 @@ inline bool operator!=(const Vec3& a, const Vec3& b)
     return a.x != b.x || a.y != b.y || a.z != b.z;
 }
 
-inline precision Dist(const Vec3& a, const Vec3& b)
+inline Real Dist(const Vec3& a, const Vec3& b)
 {
     return (b - a).Length();
 }
 
-inline precision Dist2(const Vec3& a, const Vec3& b)
+inline Real Dist2(const Vec3& a, const Vec3& b)
 {
     return (b - a).Length2();
 }
@@ -906,7 +908,7 @@ inline precision Dist2(const Vec3& a, const Vec3& b)
 
 // Vec4 functions begin
 
-inline precision Dot(const Vec4& a, const Vec4& b)
+inline Real Dot(const Vec4& a, const Vec4& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
@@ -940,7 +942,7 @@ inline bool operator==(const Quat& a, const Quat& b)
     return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
 }
 
-inline precision Dot(const Quat& a, const Quat& b)
+inline Real Dot(const Quat& a, const Quat& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
@@ -967,9 +969,9 @@ inline Quat operator-(const Quat& a, const Quat& b)
 }
 
 // Compute angle between two quaternions
-inline precision Angle(const Quat& a, const Quat& b)
+inline Real Angle(const Quat& a, const Quat& b)
 {
-    return acos(Dot(a, b)) * precision(2.0);
+    return acos(Dot(a, b)) * Real(2.0);
 }
 
 // Quat functions end
@@ -1127,14 +1129,14 @@ inline Mat4 MulT(const Mat4& a, const Mat4& b)
     return Mat4{ c1, c2, c3, c4 };
 }
 
-inline Mat4 Orth(precision left, precision right, precision bottom, precision top, precision zNear, precision zFar)
+inline Mat4 Orth(Real left, Real right, Real bottom, Real top, Real zNear, Real zFar)
 {
-    Mat4 t{ precision(1.0) };
+    Mat4 t{ Real(1.0) };
 
     // Scale
-    t.ex.x = precision(2.0) / (right - left);
-    t.ey.y = precision(2.0) / (top - bottom);
-    t.ez.z = precision(2.0) / (zFar - zNear);
+    t.ex.x = Real(2.0) / (right - left);
+    t.ey.y = Real(2.0) / (top - bottom);
+    t.ez.z = Real(2.0) / (zFar - zNear);
 
     // Translation
     t.ew.x = -(right + left) / (right - left);
@@ -1201,16 +1203,16 @@ inline Vec2 Clamp(const Vec2& a, const Vec2& _min, const Vec2& _max)
 }
 
 template <typename T>
-inline T Lerp(const T& a, const T& b, precision t)
+inline T Lerp(const T& a, const T& b, Real t)
 {
-    return a * (precision(1.0) - t) + b * t;
+    return a * (Real(1.0) - t) + b * t;
 }
 
 template <typename T>
-inline T Slerp(const T& start, const T& end, precision percent)
+inline T Slerp(const T& start, const T& end, Real percent)
 {
-    precision dot = Clamp(Dot(start, end), -precision(1.0), precision(1.0));
-    precision angle = acosf(dot) * percent;
+    Real dot = Clamp(Dot(start, end), -Real(1.0), Real(1.0));
+    Real angle = acosf(dot) * percent;
 
     T rv = end - start * dot;
     rv.Normalize();
@@ -1234,31 +1236,31 @@ T Refract(const T& uv, const T& n, double etai_over_etat)
     return r_out_perp + r_out_parallel;
 }
 
-inline Vec3 PolarToCart(precision lat, precision lgt, precision r)
+inline Vec3 PolarToCart(Real lat, Real lgt, Real r)
 {
-    precision x = sin(lat) * cos(lgt);
-    precision y = sin(lat) * sin(lgt);
-    precision z = cos(lat);
+    Real x = sin(lat) * cos(lgt);
+    Real y = sin(lat) * sin(lgt);
+    Real z = cos(lat);
 
     return Vec3{ x, y, z } * r;
 }
 
 inline Vec3 RandomUnitVector()
 {
-    precision theta = 2 * pi * Rand();
-    precision phi = pi * Rand();
+    Real theta = 2 * pi * Rand();
+    Real phi = pi * Rand();
     // precision phi = acos(1.0 - 2.0 * Rand());
 
-    precision x = sin(phi) * cos(theta);
-    precision y = sin(phi) * sin(theta);
-    precision z = cos(phi);
+    Real x = sin(phi) * cos(theta);
+    Real y = sin(phi) * sin(theta);
+    Real z = cos(phi);
 
     return Vec3{ x, y, z };
 }
 
 inline Vec3 RandomInUnitSphere()
 {
-    precision r = Rand();
+    Real r = Rand();
 
     return RandomUnitVector() * r;
 }
