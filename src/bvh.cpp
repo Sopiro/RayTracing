@@ -103,21 +103,21 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
 
 #if 1
     int32 bestSibling = root;
-    double bestCost = SAH(Union(nodes[root].aabb, aabb));
+    Real bestCost = SAH(Union(nodes[root].aabb, aabb));
 
-    GrowableArray<std::pair<int32, double>, 256> stack;
+    GrowableArray<std::pair<int32, Real>, 256> stack;
     stack.Emplace(root, 0.0);
 
     while (stack.Count() != 0)
     {
         int32 current = stack.Back().first;
-        double inheritedCost = stack.Back().second;
+        Real inheritedCost = stack.Back().second;
         stack.Pop();
 
         AABB combined = Union(nodes[current].aabb, aabb);
-        double directCost = SAH(combined);
+        Real directCost = SAH(combined);
 
-        double cost = directCost + inheritedCost;
+        Real cost = directCost + inheritedCost;
         if (cost < bestCost)
         {
             bestCost = cost;
@@ -126,7 +126,7 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
 
         inheritedCost += directCost - SAH(nodes[current].aabb);
 
-        double lowerBoundCost = SAH(aabb) + inheritedCost;
+        Real lowerBoundCost = SAH(aabb) + inheritedCost;
         if (lowerBoundCost < bestCost)
         {
             if (!nodes[current].isLeaf)
@@ -145,34 +145,34 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         int32 child1 = nodes[bestSibling].child1;
         int32 child2 = nodes[bestSibling].child2;
 
-        double area = SAH(nodes[bestSibling].aabb);
+        Real area = SAH(nodes[bestSibling].aabb);
         AABB combined = Union(nodes[bestSibling].aabb, aabb);
-        double combinedArea = SAH(combined);
+        Real combinedArea = SAH(combined);
 
-        double cost = combinedArea;
-        double inheritanceCost = combinedArea - area;
+        Real cost = combinedArea;
+        Real inheritanceCost = combinedArea - area;
 
-        double cost1;
+        Real cost1;
         if (nodes[child1].isLeaf)
         {
             cost1 = SAH(Union(nodes[child1].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            double newArea = SAH(Union(nodes[child1].aabb, aabb));
-            double oldArea = SAH(nodes[child1].aabb);
+            Real newArea = SAH(Union(nodes[child1].aabb, aabb));
+            Real oldArea = SAH(nodes[child1].aabb);
             cost1 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child1
         }
 
-        double cost2;
+        Real cost2;
         if (nodes[child2].isLeaf)
         {
             cost2 = SAH(Union(nodes[child2].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            double newArea = SAH(Union(nodes[child2].aabb, aabb));
-            double oldArea = SAH(nodes[child2].aabb);
+            Real newArea = SAH(Union(nodes[child2].aabb, aabb));
+            Real oldArea = SAH(nodes[child2].aabb);
             cost2 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child2
         }
 
@@ -327,15 +327,15 @@ void BVH::Rotate(int32 node)
     }
 
     uint32 count = 2;
-    double costDiffs[4];
-    double nodeArea = SAH(nodes[node].aabb);
+    Real costDiffs[4];
+    Real nodeArea = SAH(nodes[node].aabb);
 
     costDiffs[0] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
     costDiffs[1] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
 
     if (nodes[sibling].isLeaf == false)
     {
-        double siblingArea = SAH(nodes[sibling].aabb);
+        Real siblingArea = SAH(nodes[sibling].aabb);
         costDiffs[2] = SAH(Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
         costDiffs[3] = SAH(Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb)) - siblingArea;
 
@@ -430,7 +430,7 @@ void BVH::Reset()
     freeList = 0;
 }
 
-void BVH::ReBuild()
+void BVH::Rebuild()
 {
     int32* leaves = (int32*)malloc(nodeCount * sizeof(Node));
     int32 count = 0;
@@ -460,7 +460,7 @@ void BVH::ReBuild()
 
     while (count > 1)
     {
-        double minCost = DBL_MAX;
+        Real minCost = DBL_MAX;
         int32 minI = -1;
         int32 minJ = -1;
 
@@ -474,7 +474,7 @@ void BVH::ReBuild()
                 AABB aabbJ = nodes[leaves[j]].aabb;
 
                 AABB combined = Union(aabbI, aabbJ);
-                double cost = SAH(combined);
+                Real cost = SAH(combined);
 
                 if (cost < minCost)
                 {
@@ -512,9 +512,9 @@ void BVH::ReBuild()
     free(leaves);
 }
 
-double BVH::ComputeCost() const
+Real BVH::ComputeCost() const
 {
-    double cost = 0.0;
+    Real cost = 0.0;
 
     if (root == nullNode)
     {
@@ -543,13 +543,13 @@ double BVH::ComputeCost() const
 }
 
 void BVH::RayCast(const Ray& r,
-                  double t_min,
-                  double t_max,
-                  const std::function<double(const Ray&, double, double, Hittable*)>& callback) const
+                  Real t_min,
+                  Real t_max,
+                  const std::function<Real(const Ray&, Real, Real, Hittable*)>& callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
-    double t = t_max;
+    Real t = t_max;
 
     AABB rayAABB;
     rayAABB.min = Min(p1, p2);
@@ -579,7 +579,7 @@ void BVH::RayCast(const Ray& r,
 
         if (node->isLeaf)
         {
-            double value = callback(r, t_min, t, node->body);
+            Real value = callback(r, t_min, t, node->body);
             if (value <= t_min)
             {
                 return;

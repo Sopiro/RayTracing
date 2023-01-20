@@ -1,13 +1,13 @@
 #include "raytracer/triangle.h"
 
 // Möller-Trumbore algorithm
-bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+bool Triangle::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
 {
     Vec3 d = ray.dir;
-    double l = d.Normalize();
+    Real l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
 
-    double det = Dot(e1, pvec);
+    Real det = Dot(e1, pvec);
 
     bool backface = det < epsilon;
     if (one_sided && backface)
@@ -21,23 +21,23 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
         return false;
     }
 
-    double invDet = 1.0 / det;
+    Real invDet = 1.0 / det;
 
     Vec3 tvec = ray.origin - v0.position;
-    double u = Dot(tvec, pvec) * invDet;
+    Real u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
         return false;
     }
 
     Vec3 qvec = Cross(tvec, e1);
-    double v = Dot(d, qvec) * invDet;
+    Real v = Dot(d, qvec) * invDet;
     if (v < 0.0 || u + v > 1.0)
     {
         return false;
     }
 
-    double t = Dot(e2, qvec) * invDet / l;
+    Real t = Dot(e2, qvec) * invDet / l;
     if (t < t_min || t > t_max)
     {
         return false;

@@ -1227,11 +1227,11 @@ inline T Reflect(const T& v, const T& n)
 }
 
 template <typename T>
-T Refract(const T& uv, const T& n, double etai_over_etat)
+T Refract(const T& uv, const T& n, Real etai_over_etat)
 {
-    auto cos_theta = fmin(Dot(-uv, n), 1.0);
+    auto cos_theta = fmin(Dot(-uv, n), Real(1.0));
     T r_out_perp = etai_over_etat * (uv + cos_theta * n);
-    T r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.Length2())) * n;
+    T r_out_parallel = -sqrt(fabs(Real(1.0) - r_out_perp.Length2())) * n;
 
     return r_out_perp + r_out_parallel;
 }

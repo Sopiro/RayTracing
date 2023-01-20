@@ -8,22 +8,22 @@ class AABB
 public:
     AABB() = default;
 
-    bool Hit(const Ray& r, double t_min, double t_max) const;
+    bool Hit(const Ray& r, Real t_min, Real t_max) const;
 
     Vec3 min;
     Vec3 max;
 };
 
-inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
+inline bool AABB::Hit(const Ray& r, Real t_min, Real t_max) const
 {
     for (uint32 axis = 0; axis < 3; ++axis)
     {
-        double invD = Real(1.0) / r.dir[axis];
+        Real invD = Real(1.0) / r.dir[axis];
 
-        double t0 = (min[axis] - r.origin[axis]) * invD;
-        double t1 = (max[axis] - r.origin[axis]) * invD;
+        Real t0 = (min[axis] - r.origin[axis]) * invD;
+        Real t1 = (max[axis] - r.origin[axis]) * invD;
 
-        if (invD < 0.0)
+        if (invD < Real(0.0))
         {
             std::swap(t0, t1);
         }
@@ -40,15 +40,15 @@ inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
     return true;
 }
 
-inline double Area(const AABB& aabb)
+inline Real Area(const AABB& aabb)
 {
     return (aabb.max.x - aabb.min.x) * (aabb.max.y - aabb.min.y) * (aabb.max.z - aabb.min.z);
 }
 
-inline double Perimeter(const AABB& aabb)
+inline Real Perimeter(const AABB& aabb)
 {
     Vec3 w = aabb.max - aabb.min;
-    return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
+    return Real(2.0) * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
 }
 
 inline void Fix(AABB& aabb)

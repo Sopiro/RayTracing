@@ -17,7 +17,7 @@ public:
     {
     }
 
-    SolidColor(double red, double green, double blue)
+    SolidColor(Real red, Real green, Real blue)
         : SolidColor(Color(red, green, blue))
     {
     }
@@ -52,7 +52,7 @@ public:
 
     virtual Color Value(const UV& uv, const Vec3& p) const override
     {
-        double sines = sin(10 * p.x) * sin(10 * p.y) * sin(10 * p.z);
+        Real sines = sin(10 * p.x) * sin(10 * p.y) * sin(10 * p.z);
 
         if (sines < 0)
         {
@@ -110,11 +110,11 @@ public:
         }
 
         // Clamp input texture coordinates to [0,1] x [1,0]
-        double u = Clamp(uv.x, 0.0, 1.0);
-        double v = 1.0 - Clamp(uv.y, 0.0, 1.0); // Flip V to image coordinates
+        Real u = Clamp(uv.x, Real(0.0), Real(1.0));
+        Real v = Real(1.0) - Clamp(uv.y, Real(0.0), Real(1.0)); // Flip V to image coordinates
 
-        auto i = static_cast<int>(u * width);
-        auto j = static_cast<int>(v * height);
+        int32 i = static_cast<int32>(u * width);
+        int32 j = static_cast<int32>(v * height);
 
         // Clamp integer mapping, since actual coordinates should be less than 1.0
         if (i >= width)
@@ -126,7 +126,7 @@ public:
             j = height - 1;
         }
 
-        double color_scale = 1.0 / 255.0;
+        Real color_scale = Real(1.0 / 255.0);
         uint8* pixel = data + j * bytes_per_scanline + i * bytes_per_pixel;
 
         return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };

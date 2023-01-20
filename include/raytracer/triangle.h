@@ -22,17 +22,17 @@ public:
         face_normal = Cross(e1, e2).Normalized();
     };
 
-    Vec3 GetNormal(double u, double v, double w) const
+    Vec3 GetNormal(Real u, Real v, Real w) const
     {
         return w * v0.normal + u * v1.normal + v * v2.normal;
     }
 
-    Vec2 GetTexCoord(double u, double v, double w) const
+    Vec2 GetTexCoord(Real u, Real v, Real w) const
     {
         return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
     }
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
 public:

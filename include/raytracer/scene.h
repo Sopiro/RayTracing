@@ -17,9 +17,9 @@ public:
 
     void Add(std::shared_ptr<Hittable> object);
     void Clear();
-    void ReBuildBVH();
+    void RebuildBVH();
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
     std::vector<std::shared_ptr<Hittable>> objects;
@@ -45,7 +45,7 @@ inline void Scene::Clear()
     objects.clear();
 }
 
-inline void Scene::ReBuildBVH()
+inline void Scene::RebuildBVH()
 {
-    bvh.ReBuild();
+    bvh.Rebuild();
 }

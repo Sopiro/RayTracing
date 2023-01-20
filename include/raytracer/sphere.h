@@ -8,17 +8,17 @@ class Sphere : public Hittable
 {
 public:
     Sphere() = default;
-    Sphere(Vec3 _center, double _radius, std::shared_ptr<Material> _material)
+    Sphere(Vec3 _center, Real _radius, std::shared_ptr<Material> _material)
         : center{ _center }
         , radius{ _radius }
         , material{ _material } {};
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
 public:
     Vec3 center;
-    double radius;
+    Real radius;
     std::shared_ptr<Material> material;
 
 private:
@@ -31,10 +31,10 @@ private:
         //     <0 1 0> yields <0.50 1.00>       < 0 -1  0> yields <0.50 0.00>
         //     <0 0 1> yields <0.25 0.50>       < 0  0 -1> yields <0.75 0.50>
 
-        double theta = acos(-p.y);
-        double phi = atan2(-p.z, p.x) + pi;
+        Real theta = acos(-p.y);
+        Real phi = atan2(-p.z, p.x) + pi;
 
-        uv.x = phi / (2.0 * pi);
+        uv.x = phi / (Real(2.0) * pi);
         uv.y = theta / pi;
     }
 };

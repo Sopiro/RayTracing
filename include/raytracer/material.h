@@ -12,7 +12,7 @@ public:
     virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const = 0;
     virtual Color Emitted(const UV& uv, const Vec3& p) const
     {
-        return Color(0, 0, 0);
+        return Color(Real(0.0), Real(0.0), Real(0.0));
     }
 };
 
@@ -37,7 +37,7 @@ public:
 class Metal : public Material
 {
 public:
-    Metal(const Color& _albedo, double _fuzziness)
+    Metal(const Color& _albedo, Real _fuzziness)
         : albedo{ _albedo }
         , fuzziness{ _fuzziness }
     {
@@ -47,15 +47,15 @@ public:
 
 public:
     Color albedo;
-    double fuzziness;
+    Real fuzziness;
 };
 
 class Dielectric : public Material
 {
 public:
-    double ir; // Index of Refraction
+    Real ir; // Index of Refraction
 
-    Dielectric(double index_of_refraction)
+    Dielectric(Real index_of_refraction)
         : ir{ index_of_refraction }
     {
     }
@@ -63,13 +63,13 @@ public:
     virtual bool Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const override;
 
 private:
-    static double Reflectance(double cosine, double ref_idx)
+    static Real Reflectance(Real cosine, Real ref_idx)
     {
         // Use Schlick's approximation for reflectance.
-        double r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+        Real r0 = (Real(1.0) - ref_idx) / (Real(1.0) + ref_idx);
         r0 = r0 * r0;
 
-        return r0 + (1.0 - r0) * pow((1 - cosine), 5.0);
+        return r0 + (Real(1.0) - r0) * pow((1 - cosine), Real(5.0));
     }
 };
 

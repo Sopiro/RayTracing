@@ -2,14 +2,14 @@
 
 #include "raytracer/scene.h"
 
-bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+bool Scene::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
 {
 #if USE_BVH
     bool hit_closest = false;
 
-    double t = t_max;
+    Real t = t_max;
 
-    bvh.RayCast(ray, t_min, t_max, [&](const Ray& _ray, double _t_min, double _t_max, Hittable* _object) -> double {
+    bvh.RayCast(ray, t_min, t_max, [&](const Ray& _ray, Real _t_min, Real _t_max, Hittable* _object) -> Real {
         bool hit = _object->Hit(ray, _t_min, _t_max, rec);
 
         if (hit)
@@ -25,7 +25,7 @@ bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) cons
 #else
     HitRecord tmp;
     bool hit = false;
-    double closest = t_max;
+    Real closest = t_max;
 
     for (const auto& object : objects)
     {

@@ -12,7 +12,7 @@ public:
     {
     }
 
-    Vec3 At(double t) const
+    Vec3 At(Real t) const
     {
         return origin + dir * t;
     }

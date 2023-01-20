@@ -33,7 +33,7 @@ struct Transform
     {
     }
 
-    Transform(Real x, Real y, Real z, const Quat& orientation = Quat{ 1.0 })
+    Transform(Real x, Real y, Real z, const Quat& orientation = Quat{ Real(1.0) })
         : p{ x, y, z }
         , q{ orientation }
     {

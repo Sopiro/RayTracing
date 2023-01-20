@@ -6,7 +6,7 @@
 
 #define nullNode (-1)
 
-inline double SAH(const AABB& aabb)
+inline Real SAH(const AABB& aabb)
 {
 #if 0
     return Area(aabb);
@@ -49,13 +49,13 @@ public:
     int32 Add(Hittable* object, const AABB& aabb);
     void Reset();
 
-    void ReBuild();
-    double ComputeCost() const;
+    void Rebuild();
+    Real ComputeCost() const;
 
     void RayCast(const Ray& r,
-                 double t_min,
-                 double t_max,
-                 const std::function<double(const Ray&, double, double, Hittable*)>& callback) const;
+                 Real t_min,
+                 Real t_max,
+                 const std::function<Real(const Ray&, Real, Real, Hittable*)>& callback) const;
 
 private:
     uint32 nodeID = 0;

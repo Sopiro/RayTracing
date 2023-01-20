@@ -94,16 +94,16 @@ void CornellBox(Scene& scene)
     auto light = std::make_shared<DiffuseLight>(Color(12.0));
     auto absorb = std::make_shared<DiffuseLight>(Color(0.0));
 
-    double r = 1.0e5;
-    double g = 1;
-    double m = g / 2.0;
+    Real r = 1.0e5;
+    Real g = 1;
+    Real m = g / Real(2.0);
 
-    scene.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));        // left
-    scene.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));       // right
-    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));        // front
-    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, r + 2.41 }, r, absorb)); // back
-    scene.Add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));        // bottom
-    scene.Add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));     // top
+    scene.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));              // left
+    scene.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red));             // right
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, -r }, r, white));              // front
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, m, r + Real(2.41) }, r, absorb)); // back
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, -r, m }, r, white));              // bottom
+    scene.Add(std::make_shared<Sphere>(Vec3{ m, r + g, m }, r, white));           // top
 
     scene.Add(std::make_shared<Sphere>(Vec3{ m, 10.0, m }, 9.003, light)); // light
 
@@ -149,8 +149,8 @@ void TriangleTest(Scene& scene)
 
     scene.Add(std::make_shared<Triangle>(v0, v1, v2, whitted_mat));
 
-    double p = 5.0;
-    double y = -0.5;
+    Real p = 5.0;
+    Real y = -0.5;
     // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, -p }, Vec3{ p, y, p }, gray));
     // objects.Add(std::make_shared<Triangle>(Vec3{ -p, y, -p }, Vec3{ p, y, p }, Vec3{ -p, y, p }, gray));
     scene.Add(std::make_shared<Sphere>(Vec3{ 1.0, 0.0, -1.5 }, 0.5, earth_mat));
@@ -173,10 +173,10 @@ void BVHTest(Scene& scene)
     auto checkerTexture = std::make_shared<CheckerTexture>(Color{ 0.2, 0.3, 0.1 }, Color{ 0.9, 0.9, 0.9 });
     auto checker = std::make_shared<Lambertian>(checkerTexture);
 
-    double n = 30.0;
-    double w = 7.0;
-    double h = w * 9.0 / 16.0;
-    double r = 0.1;
+    Real n = 30.0;
+    Real w = 7.0;
+    Real h = w * 9.0 / 16.0;
+    Real r = 0.1;
 
     for (int32 y = 0; y < n; ++y)
     {
@@ -220,7 +220,7 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
     return emitted + attenuation * ComputeRayColor(scattered, scene, sky_color, depth - 1);
 
     // Vec3 unit_direction = r.dir.Normalized();
-    // double t = 0.5 * (unit_direction.y + 1.0);
+    // Real t = 0.5 * (unit_direction.y + 1.0);
 
     // return Lerp(Color{ 1.0, 1.0, 1.0 }, Color{ 0.5, 0.7, 1.0 }, t);
 }
@@ -232,68 +232,68 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr int32 width = 640;
+    constexpr Real aspect_ratio = 1.0;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
-    constexpr double scale = 1.0 / samples_per_pixel;
+    constexpr Real scale = 1.0 / samples_per_pixel;
     const int max_depth = 50;
 
     Bitmap bitmap{ width, height };
     Scene scene;
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
-    // HittableList world = TestScene();
+    // TestScene(scene);
 
     // Vec3 lookfrom(0, 1, 1);
     // Vec3 lookat(0, 0.5, 0);
     // Vec3 vup(0, 1, 0);
     // auto dist_to_focus = (lookfrom - lookat).Length();
     // auto aperture = 0.0;
-    // double vFov = 71;
+    // Real vFov = 71;
+
+    // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+
+    Color sky_color{ 0.7, 0.8, 1.0 };
+    CornellBox(scene);
+
+    Vec3 lookfrom(0.5, 0.5, 2.4);
+    Vec3 lookat(0.5, 0.5, 0.0);
+    Vec3 vup(0, 1, 0);
+    auto dist_to_focus = (lookfrom - lookat).Length();
+    auto aperture = 0.0;
+    Real vFov = 40;
+
+    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+
+    // Color sky_color{ 0.2 };
+    // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
+    // TriangleTest(scene);
+
+    // Vec3 lookfrom(0, 1, 1);
+    // Vec3 lookat(0, 0.5, 0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // Real vFov = 71;
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
-    // CornellBox(world);
-
-    // Vec3 lookfrom(0.5, 0.5, 2.4);
-    // Vec3 lookat(0.5, 0.5, 0.0);
-    // Vec3 vup(0, 1, 0);
-    // auto dist_to_focus = (lookfrom - lookat).Length();
-    // auto aperture = 0.0;
-    // double vFov = 40;
-
-    // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
-
-    // Color sky_color{ 0.2 };
-    Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
-    TriangleTest(scene);
-
-    Vec3 lookfrom(0, 1, 1);
-    Vec3 lookat(0, 0.5, 0);
-    Vec3 vup(0, 1, 0);
-    auto dist_to_focus = (lookfrom - lookat).Length();
-    auto aperture = 0.0;
-    double vFov = 71;
-
-    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
-
-    // Color sky_color{ 0.7, 0.8, 1.0 };
-    // BVHTest(world);
+    // BVHTest(scene);
 
     // Vec3 lookfrom(0, 0, 5);
     // Vec3 lookat(0, 0, 0);
     // Vec3 vup(0, 1, 0);
     // auto dist_to_focus = (lookfrom - lookat).Length();
     // auto aperture = 0.0;
-    // double vFov = 71;
+    // Real vFov = 71;
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     auto t0 = std::chrono::system_clock::now();
 
-    double chunk = double(height) / omp_get_max_threads();
+    Real chunk = Real(height) / omp_get_max_threads();
 
     // Assimp::Importer importer;
     // const aiScene* scene = importer.ReadFile("res/cube.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -313,7 +313,7 @@ int main()
         // std::cout << "\rScanlines remaining: " << y << ' ' << std::flush;
         if (omp_get_thread_num() == 0)
         {
-            std::printf("\rProcessing... %.2lf%%", double(y) / (chunk - 1) * 100.0);
+            std::printf("\rProcessing... %.2lf%%", Real(y) / (chunk - 1) * 100.0);
         }
 
         for (int32 x = 0; x < width; ++x)
@@ -322,23 +322,23 @@ int main()
 
             for (int s = 0; s < samples_per_pixel; ++s)
             {
-                double u = (x + Rand()) / (width - 1);
-                double v = (y + Rand()) / (height - 1);
+                Real u = (x + Rand()) / (width - 1);
+                Real v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
                 samples += ComputeRayColor(r, scene, sky_color, max_depth);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2
-            Color color =
-                Color{ pow(samples.x * scale, 1.0 / 2.2), pow(samples.y * scale, 1.0 / 2.2), pow(samples.z * scale, 1.0 / 2.2) };
+            Real gamma = 1.0 / 2.2;
+            Color color = Color{ pow(samples.x * scale, gamma), pow(samples.y * scale, gamma), pow(samples.z * scale, gamma) };
             bitmap.Set(x, y, color);
         }
     }
 
     auto t1 = std::chrono::system_clock::now();
     std::time_t tt = std::chrono::system_clock::to_time_t(t1);
-    std::chrono::duration<double> d = t1 - t0;
+    std::chrono::duration<Real> d = t1 - t0;
 
     std::cout << "\nDone!: " << d.count() << 's' << std::endl;
 
