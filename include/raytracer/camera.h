@@ -9,15 +9,15 @@ public:
     Camera(const Vec3& look_from,
            const Vec3& look_at,
            const Vec3& up,
-           Real vfov, // vertical field-of-view in degrees
-           Real aspect_ratio,
-           Real aperture,
-           Real focus_dist)
+           double vfov, // vertical field-of-view in degrees
+           double aspect_ratio,
+           double aperture,
+           double focus_dist)
     {
-        Real theta = DegToRad(vfov);
-        Real h = tan(theta / Real(2.0));
-        Real viewport_height = Real(2.0) * h;
-        Real viewport_width = aspect_ratio * viewport_height;
+        double theta = DegToRad(vfov);
+        double h = tan(theta / 2.0);
+        double viewport_height = 2.0 * h;
+        double viewport_width = aspect_ratio * viewport_height;
 
         w = (look_from - look_at).Normalized();
         u = Cross(up, w).Normalized();
@@ -28,10 +28,10 @@ public:
         vertical = focus_dist * viewport_height * v;
         lower_left = origin - horizontal / 2.0 - vertical / 2.0 - focus_dist * w;
 
-        lens_radius = aperture / Real(2.0);
+        lens_radius = aperture / 2.0;
     }
 
-    Ray GetRay(Real s, Real t)
+    Ray GetRay(double s, double t)
     {
         Vec3 rd = lens_radius * RandomInUnitDisk();
         Vec3 offset = u * rd.x + v * rd.y;
@@ -46,5 +46,5 @@ public:
     Vec3 vertical;
     Vec3 lower_left;
     Vec3 u, v, w;
-    Real lens_radius;
+    double lens_radius;
 };

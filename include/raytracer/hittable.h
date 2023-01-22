@@ -10,7 +10,7 @@ struct HitRecord
 {
     Vec3 p;
     Vec3 normal;
-    Real t;
+    double t;
     UV uv;
     bool front_face;
 
@@ -18,7 +18,7 @@ struct HitRecord
 
     void SetFaceNormal(const Ray& ray, const Vec3& outward_normal)
     {
-        front_face = Dot(ray.dir, outward_normal) < Real(0.0);
+        front_face = Dot(ray.dir, outward_normal) < 0.0;
         normal = front_face ? outward_normal : -outward_normal;
     }
 };
@@ -26,7 +26,7 @@ struct HitRecord
 class Hittable
 {
 public:
-    virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const = 0;
+    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
     int32 node;

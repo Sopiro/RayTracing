@@ -29,12 +29,12 @@ bool Metal::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation,
 bool Dielectric::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
     attenuation = Color{ 1.0, 1.0, 1.0 };
-    Real refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
+    double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
 
     Vec3 unit_direction = ray_in.dir.Normalized();
 
-    Real cos_theta = Min(Dot(-unit_direction, rec.normal), Real(1.0));
-    Real sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+    double cos_theta = Min(Dot(-unit_direction, rec.normal), 1.0);
+    double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
     // Total Internal Reflection
     bool refractable = refraction_ratio * sin_theta < 1.0;

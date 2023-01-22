@@ -1,6 +1,6 @@
 #include "raytracer/constant_medium.h"
 
-bool ConstantDensityMedium::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
+bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
     HitRecord rec1;
     HitRecord rec2;
@@ -37,9 +37,9 @@ bool ConstantDensityMedium::Hit(const Ray& ray, Real t_min, Real t_max, HitRecor
         rec1.t = 0;
     }
 
-    Real ray_length = ray.dir.Length();
-    Real distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
-    Real hit_distance = neg_inv_density * log(Rand());
+    double ray_length = ray.dir.Length();
+    double distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
+    double hit_distance = neg_inv_density * log(Rand());
 
     if (hit_distance > distance_inside_boundary)
     {
