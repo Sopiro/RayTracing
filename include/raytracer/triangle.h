@@ -9,10 +9,15 @@ class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Vertex& v0, const Vertex& v1, const Vertex& v2, std::shared_ptr<Material> _material, bool double_sided = true)
-        : v0{ v0 }
-        , v1{ v1 }
-        , v2{ v2 }
+    Triangle(const Vertex& _v0,
+             const Vertex& _v1,
+             const Vertex& _v2,
+             std::shared_ptr<Material> _material,
+             bool double_sided = true,
+             bool reset_normal = false)
+        : v0{ _v0 }
+        , v1{ _v1 }
+        , v2{ _v2 }
         , material{ _material }
         , one_sided{ !double_sided }
     {
@@ -20,6 +25,13 @@ public:
         e2 = v2.position - v0.position;
 
         face_normal = Cross(e1, e2).Normalized();
+
+        if (reset_normal)
+        {
+            v0.normal = face_normal;
+            v1.normal = face_normal;
+            v2.normal = face_normal;
+        }
     };
 
     Vec3 GetNormal(double u, double v, double w) const

@@ -35,9 +35,14 @@ inline Real Prand(Real min, Real max)
     return min + (max - min) * Prand();
 }
 
-inline Real DegToRad(Real degrees)
+inline Real DegToRad(Real deg)
 {
-    return Real(degrees * pi / 180.0);
+    return Real(deg * pi / 180.0);
+}
+
+inline Real RadToDeg(Real rad)
+{
+    return Real(rad / pi * 180.0);
 }
 
 inline Real Rand()
