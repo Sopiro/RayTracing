@@ -57,6 +57,8 @@ public:
                  double t_max,
                  const std::function<double(const Ray&, double, double, Hittable*)>& callback) const;
 
+    bool GetAABB(AABB& outAABB) const;
+
 private:
     uint32 nodeID = 0;
 

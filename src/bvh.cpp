@@ -601,3 +601,14 @@ void BVH::RayCast(const Ray& r,
         }
     }
 }
+
+bool BVH::GetAABB(AABB& outAABB) const
+{
+    if (nodeCount == 0)
+    {
+        return false;
+    }
+
+    outAABB = nodes[root].aabb;
+    return true;
+}

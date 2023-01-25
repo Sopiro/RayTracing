@@ -43,6 +43,10 @@ bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) cons
 
 bool Scene::GetAABB(AABB& outAABB) const
 {
+#if USE_BVH
+    return bvh.GetAABB(outAABB);
+
+#else
     if (objects.empty())
     {
         return false;
@@ -64,4 +68,5 @@ bool Scene::GetAABB(AABB& outAABB) const
     }
 
     return true;
+#endif
 }

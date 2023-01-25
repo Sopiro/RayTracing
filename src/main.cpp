@@ -127,8 +127,8 @@ void WaknellBox(Scene& scene)
     double g = 1;
     double m = g / 2.0;
 
-    scene.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, green));  // left
-    scene.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, red)); // right
+    scene.Add(std::make_shared<Sphere>(Vec3{ -r, m, m }, r, red));      // left
+    scene.Add(std::make_shared<Sphere>(Vec3{ r + g, m, m }, r, green)); // right
 
     { // front
 
@@ -215,7 +215,7 @@ void WaknellBox(Scene& scene)
         Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
         Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
 
-        auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.2);
+        auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
         // auto mat = std::make_shared<Dielectric>(1.5);
         // auto mat = std::make_shared<Dielectric>(2.0);
 
@@ -366,9 +366,9 @@ int main()
 #endif
 
     constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr int32 width = 1000;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 1000;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 50;
 

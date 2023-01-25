@@ -36,6 +36,7 @@ inline void Scene::Add(std::shared_ptr<Hittable> object)
 
     bvh.Insert(raw, aabb);
 #endif
+
     objects.push_back(object);
 }
 
