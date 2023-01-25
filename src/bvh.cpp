@@ -71,18 +71,6 @@ void BVH::FreeNode(int32 node)
     --nodeCount;
 }
 
-int32 BVH::Add(Hittable* object, const AABB& aabb)
-{
-    int32 newNode = AllocateNode();
-
-    nodes[newNode].aabb = aabb;
-    nodes[newNode].isLeaf = true;
-    nodes[newNode].body = object;
-    object->node = newNode;
-
-    return newNode;
-}
-
 int32 BVH::Insert(Hittable* body, const AABB& aabb)
 {
     int32 newNode = AllocateNode();
@@ -600,6 +588,27 @@ void BVH::RayCast(const Ray& r,
             stack.Emplace(node->child2);
         }
     }
+}
+
+bool BVH::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+{
+    bool hit_closest = false;
+
+    double t = t_max;
+
+    RayCast(ray, t_min, t_max, [&](const Ray& _ray, double _t_min, double _t_max, Hittable* _object) -> double {
+        bool hit = _object->Hit(ray, _t_min, _t_max, rec);
+
+        if (hit)
+        {
+            hit_closest = true;
+            t = rec.t;
+        }
+
+        return t;
+    });
+
+    return hit_closest;
 }
 
 bool BVH::GetAABB(AABB& outAABB) const

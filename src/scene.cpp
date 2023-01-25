@@ -5,23 +5,7 @@
 bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
 #if USE_BVH
-    bool hit_closest = false;
-
-    double t = t_max;
-
-    bvh.RayCast(ray, t_min, t_max, [&](const Ray& _ray, double _t_min, double _t_max, Hittable* _object) -> double {
-        bool hit = _object->Hit(ray, _t_min, _t_max, rec);
-
-        if (hit)
-        {
-            hit_closest = true;
-            t = rec.t;
-        }
-
-        return t;
-    });
-
-    return hit_closest;
+    return bvh.Hit(ray, t_min, t_max, rec);
 #else
     HitRecord tmp;
     bool hit = false;
@@ -45,7 +29,6 @@ bool Scene::GetAABB(AABB& outAABB) const
 {
 #if USE_BVH
     return bvh.GetAABB(outAABB);
-
 #else
     if (objects.empty())
     {

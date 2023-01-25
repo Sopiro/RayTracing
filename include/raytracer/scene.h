@@ -10,10 +10,6 @@ class Scene : public Hittable
 {
 public:
     Scene() = default;
-    Scene(std::shared_ptr<Hittable> object)
-    {
-        Add(object);
-    }
 
     void Add(std::shared_ptr<Hittable> object);
     void Clear();
@@ -22,9 +18,9 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
-    std::vector<std::shared_ptr<Hittable>> objects;
-
+private:
     BVH bvh;
+    std::vector<std::shared_ptr<Hittable>> objects;
 };
 
 inline void Scene::Add(std::shared_ptr<Hittable> object)

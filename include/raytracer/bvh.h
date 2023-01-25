@@ -3,6 +3,7 @@
 #include "aabb.h"
 #include "common.h"
 #include "growable_array.h"
+#include "hittable.h"
 
 #define nullNode (-1)
 
@@ -31,7 +32,7 @@ struct Node
     int32 next;
 };
 
-class BVH
+class BVH : public Hittable
 {
 public:
     BVH();
@@ -45,19 +46,18 @@ public:
 
     int32 Insert(Hittable* body, const AABB& aabb);
     void Remove(Hittable* body);
-    void Rotate(int32 node);
-    int32 Add(Hittable* object, const AABB& aabb);
     void Reset();
 
     void Rebuild();
-    double ComputeCost() const;
+    Real ComputeCost() const;
 
     void RayCast(const Ray& r,
-                 double t_min,
-                 double t_max,
-                 const std::function<double(const Ray&, double, double, Hittable*)>& callback) const;
+                 Real t_min,
+                 Real t_max,
+                 const std::function<Real(const Ray&, Real, Real, Hittable*)>& callback) const;
 
-    bool GetAABB(AABB& outAABB) const;
+    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool GetAABB(AABB& outAABB) const override;
 
 private:
     uint32 nodeID = 0;
@@ -72,4 +72,5 @@ private:
 
     int32 AllocateNode();
     void FreeNode(int32 node);
+    void Rotate(int32 node);
 };
