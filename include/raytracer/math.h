@@ -14,7 +14,6 @@
 #define Real double
 
 constexpr Real pi = Real(3.14159265358979323846);
-constexpr Real piDiv2 = Real(3.14159265358979323846 / 2.0);
 constexpr Real infinity = std::numeric_limits<Real>::infinity();
 constexpr Real epsilon = std::numeric_limits<Real>::epsilon();
 
@@ -1223,6 +1222,12 @@ inline T Slerp(const T& start, const T& end, Real percent)
     rv.Normalize();
 
     return start * Cos(angle) + rv * Sin(angle);
+}
+
+template <typename T>
+inline T Project(const T& v, const T& n)
+{
+    return v - n * Dot(v, n);
 }
 
 template <typename T>
