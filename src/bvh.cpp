@@ -2,11 +2,11 @@
 #include "raytracer/hittable.h"
 
 BVH::BVH()
+    : nodeID{ 0 }
+    , root{ nullNode }
+    , nodeCapacity{ 32 }
+    , nodeCount{ 0 }
 {
-    nodeID = 0;
-    root = nullNode;
-    nodeCapacity = 32;
-    nodeCount = 0;
     nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
     memset(nodes, 0, nodeCapacity * sizeof(Node));
 
@@ -19,86 +19,38 @@ BVH::BVH()
     freeList = 0;
 }
 
-BVH::~BVH()
+BVH::~BVH() noexcept
 {
     free(nodes);
     root = nullNode;
     nodeCount = 0;
 }
 
-int32 BVH::AllocateNode()
+NodeProxy BVH::InsertLeaf(NodeProxy leaf)
 {
-    if (freeList == nullNode)
-    {
-        assert(nodeCount == nodeCapacity);
-
-        // Grow the node pool
-        Node* oldNodes = nodes;
-        nodeCapacity *= 2;
-        nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
-        memcpy(nodes, oldNodes, nodeCount * sizeof(Node));
-        memset(nodes + nodeCount, 0, nodeCount * sizeof(Node));
-        free(oldNodes);
-
-        // Build a linked list for the free list.
-        for (int32 i = nodeCount; i < nodeCapacity - 1; ++i)
-        {
-            nodes[i].next = i + 1;
-        }
-        nodes[nodeCapacity - 1].next = nullNode;
-        freeList = nodeCount;
-    }
-
-    int32 node = freeList;
-    freeList = nodes[node].next;
-    nodes[node].id = ++nodeID;
-    nodes[node].parent = nullNode;
-    nodes[node].child1 = nullNode;
-    nodes[node].child2 = nullNode;
-    ++nodeCount;
-
-    return node;
-}
-
-void BVH::FreeNode(int32 node)
-{
-    assert(0 <= node && node <= nodeCapacity);
-    assert(0 < nodeCount);
-
-    nodes[node].id = 0;
-    nodes[node].next = freeList;
-    freeList = node;
-    --nodeCount;
-}
-
-int32 BVH::Insert(Hittable* body, const AABB& aabb)
-{
-    int32 newNode = AllocateNode();
-
-    nodes[newNode].aabb = aabb;
-    nodes[newNode].isLeaf = true;
-    nodes[newNode].body = body;
-    nodes[newNode].parent = nullNode;
-    body->node = newNode;
+    assert(0 <= leaf && leaf < nodeCapacity);
+    assert(nodes[leaf].IsLeaf());
 
     if (root == nullNode)
     {
-        root = newNode;
-        return newNode;
+        root = leaf;
+        return leaf;
     }
+
+    AABB aabb = nodes[leaf].aabb;
 
     // Find the best sibling for the new leaf
 
 #if 1
-    int32 bestSibling = root;
+    NodeProxy bestSibling = root;
     Real bestCost = SAH(Union(nodes[root].aabb, aabb));
 
-    GrowableArray<std::pair<int32, Real>, 256> stack;
-    stack.Emplace(root, 0.0);
+    GrowableArray<std::pair<NodeProxy, Real>, 256> stack;
+    stack.Emplace(root, 0.0f);
 
     while (stack.Count() != 0)
     {
-        int32 current = stack.Back().first;
+        NodeProxy current = stack.Back().first;
         Real inheritedCost = stack.Back().second;
         stack.Pop();
 
@@ -117,7 +69,7 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         Real lowerBoundCost = SAH(aabb) + inheritedCost;
         if (lowerBoundCost < bestCost)
         {
-            if (!nodes[current].isLeaf)
+            if (nodes[current].IsLeaf() == false)
             {
                 stack.Emplace(nodes[current].child1, inheritedCost);
                 stack.Emplace(nodes[current].child2, inheritedCost);
@@ -127,11 +79,11 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
 #else
     // O(log n)
     // This method is faster when inserting a new node, but builds a slightly bad quality tree.
-    int32 bestSibling = root;
-    while (nodes[bestSibling].isLeaf == false)
+    NodeProxy bestSibling = root;
+    while (nodes[bestSibling].IsLeaf() == false)
     {
-        int32 child1 = nodes[bestSibling].child1;
-        int32 child2 = nodes[bestSibling].child2;
+        NodeProxy child1 = nodes[bestSibling].child1;
+        NodeProxy child2 = nodes[bestSibling].child2;
 
         Real area = SAH(nodes[bestSibling].aabb);
         AABB combined = Union(nodes[bestSibling].aabb, aabb);
@@ -141,7 +93,7 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         Real inheritanceCost = combinedArea - area;
 
         Real cost1;
-        if (nodes[child1].isLeaf)
+        if (nodes[child1].IsLeaf())
         {
             cost1 = SAH(Union(nodes[child1].aabb, aabb)) + inheritanceCost;
         }
@@ -153,7 +105,7 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         }
 
         Real cost2;
-        if (nodes[child2].isLeaf)
+        if (nodes[child2].IsLeaf())
         {
             cost2 = SAH(Union(nodes[child2].aabb, aabb)) + inheritanceCost;
         }
@@ -181,11 +133,10 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
 #endif
 
     // Create a new parent
-    int32 oldParent = nodes[bestSibling].parent;
-    int32 newParent = AllocateNode();
+    NodeProxy oldParent = nodes[bestSibling].parent;
+    NodeProxy newParent = AllocateNode();
     nodes[newParent].aabb = Union(aabb, nodes[bestSibling].aabb);
-    nodes[newParent].isLeaf = false;
-    nodes[newParent].body = nullptr;
+    nodes[newParent].data = nullptr;
     nodes[newParent].parent = oldParent;
 
     if (oldParent != nullNode)
@@ -200,25 +151,25 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         }
 
         nodes[newParent].child1 = bestSibling;
-        nodes[newParent].child2 = newNode;
+        nodes[newParent].child2 = leaf;
         nodes[bestSibling].parent = newParent;
-        nodes[newNode].parent = newParent;
+        nodes[leaf].parent = newParent;
     }
     else
     {
         nodes[newParent].child1 = bestSibling;
-        nodes[newParent].child2 = newNode;
+        nodes[newParent].child2 = leaf;
         nodes[bestSibling].parent = newParent;
-        nodes[newNode].parent = newParent;
+        nodes[leaf].parent = newParent;
         root = newParent;
     }
 
     // Walk back up the tree refitting ancestors' AABB and applying rotations
-    int32 ancestor = nodes[newNode].parent;
+    NodeProxy ancestor = nodes[leaf].parent;
     while (ancestor != nullNode)
     {
-        int32 child1 = nodes[ancestor].child1;
-        int32 child2 = nodes[ancestor].child2;
+        NodeProxy child1 = nodes[ancestor].child1;
+        NodeProxy child2 = nodes[ancestor].child2;
 
         nodes[ancestor].aabb = Union(nodes[child1].aabb, nodes[child2].aabb);
 
@@ -227,29 +178,25 @@ int32 BVH::Insert(Hittable* body, const AABB& aabb)
         ancestor = nodes[ancestor].parent;
     }
 
-    return newNode;
+    return leaf;
 }
 
-void BVH::Remove(Hittable* body)
+void BVH::RemoveLeaf(NodeProxy leaf)
 {
-    if (body->node == nullNode)
-    {
-        return;
-    }
+    assert(0 <= leaf && leaf < nodeCapacity);
+    assert(nodes[leaf].IsLeaf());
 
-    int32 node = body->node;
-    int32 parent = nodes[node].parent;
-    body->node = nullNode;
+    NodeProxy parent = nodes[leaf].parent;
 
     if (parent != nullNode) // node is not root
     {
-        int32 sibling = nodes[parent].child1 == node ? nodes[parent].child2 : nodes[parent].child1;
+        NodeProxy sibling = nodes[parent].child1 == leaf ? nodes[parent].child2 : nodes[parent].child1;
 
         if (nodes[parent].parent != nullNode) // sibling has grandparent
         {
             nodes[sibling].parent = nodes[parent].parent;
 
-            int32 grandParent = nodes[parent].parent;
+            NodeProxy grandParent = nodes[parent].parent;
             if (nodes[grandParent].child1 == parent)
             {
                 nodes[grandParent].child1 = sibling;
@@ -266,14 +213,13 @@ void BVH::Remove(Hittable* body)
             nodes[sibling].parent = nullNode;
         }
 
-        FreeNode(node);
         FreeNode(parent);
 
-        int32 ancestor = nodes[sibling].parent;
+        NodeProxy ancestor = nodes[sibling].parent;
         while (ancestor != nullNode)
         {
-            int32 child1 = nodes[ancestor].child1;
-            int32 child2 = nodes[ancestor].child2;
+            NodeProxy child1 = nodes[ancestor].child1;
+            NodeProxy child2 = nodes[ancestor].child2;
 
             nodes[ancestor].aabb = Union(nodes[child1].aabb, nodes[child2].aabb);
 
@@ -282,17 +228,86 @@ void BVH::Remove(Hittable* body)
     }
     else // node is root
     {
-        if (root == node)
-        {
-            root = nullNode;
-            FreeNode(node);
-        }
+        assert(root == leaf);
+
+        root = nullNode;
     }
 }
 
-void BVH::Rotate(int32 node)
+NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
 {
-    if (nodes[node].isLeaf)
+    NodeProxy newNode = AllocateNode();
+
+    // Fatten the aabb
+    nodes[newNode].aabb.max = aabb.max + aabb_margin;
+    nodes[newNode].aabb.min = aabb.min - aabb_margin;
+    nodes[newNode].data = data;
+    nodes[newNode].parent = nullNode;
+    nodes[newNode].moved = true;
+
+    InsertLeaf(newNode);
+
+    return newNode;
+}
+
+bool BVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool forceMove)
+{
+    assert(0 <= node && node < nodeCapacity);
+    assert(nodes[node].IsLeaf());
+
+    const AABB& treeAABB = nodes[node].aabb;
+    if (treeAABB.Contains(aabb) && forceMove == false)
+    {
+        return false;
+    }
+
+    Vec3 d = displacement * aabb_multiplier;
+
+    if (d.x > 0.0f)
+    {
+        aabb.max.x += d.x;
+    }
+    else
+    {
+        aabb.min.x += d.x;
+    }
+
+    if (d.y > 0.0f)
+    {
+        aabb.max.y += d.y;
+    }
+    else
+    {
+        aabb.min.y += d.y;
+    }
+
+    // Fatten the aabb
+    aabb.max += aabb_margin;
+    aabb.min -= aabb_margin;
+
+    RemoveLeaf(node);
+
+    nodes[node].aabb = aabb;
+
+    InsertLeaf(node);
+
+    nodes[node].moved = true;
+
+    return true;
+}
+
+void BVH::RemoveNode(NodeProxy node)
+{
+    assert(0 <= node && node < nodeCapacity);
+    assert(nodes[node].IsLeaf());
+
+    RemoveLeaf(node);
+    FreeNode(node);
+}
+
+void BVH::Rotate(NodeProxy node)
+{
+    if (nodes[node].IsLeaf())
     {
         return;
     }
@@ -302,9 +317,9 @@ void BVH::Rotate(int32 node)
         return;
     }
 
-    int32 parent = nodes[node].parent;
+    NodeProxy parent = nodes[node].parent;
 
-    int32 sibling;
+    NodeProxy sibling;
     if (nodes[parent].child1 == node)
     {
         sibling = nodes[parent].child2;
@@ -314,14 +329,14 @@ void BVH::Rotate(int32 node)
         sibling = nodes[parent].child1;
     }
 
-    uint32 count = 2;
+    int32 count = 2;
     Real costDiffs[4];
     Real nodeArea = SAH(nodes[node].aabb);
 
     costDiffs[0] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
     costDiffs[1] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
 
-    if (nodes[sibling].isLeaf == false)
+    if (nodes[sibling].IsLeaf() == false)
     {
         Real siblingArea = SAH(nodes[sibling].aabb);
         costDiffs[2] = SAH(Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
@@ -330,8 +345,8 @@ void BVH::Rotate(int32 node)
         count += 2;
     }
 
-    uint32 bestDiffIndex = 0;
-    for (uint32 i = 1; i < count; ++i)
+    int32 bestDiffIndex = 0;
+    for (int32 i = 1; i < count; ++i)
     {
         if (costDiffs[i] < costDiffs[bestDiffIndex])
         {
@@ -340,7 +355,7 @@ void BVH::Rotate(int32 node)
     }
 
     // Rotate only if it reduce the suface area
-    if (costDiffs[bestDiffIndex] < 0.0)
+    if (costDiffs[bestDiffIndex] < 0.0f)
     {
         // printf("Tree rotation occurred: %d\n", bestDiffIndex);
 
@@ -402,6 +417,126 @@ void BVH::Rotate(int32 node)
     }
 }
 
+void BVH::Swap(NodeProxy node1, NodeProxy node2)
+{
+    NodeProxy parent1 = nodes[node1].parent;
+    NodeProxy parent2 = nodes[node2].parent;
+
+    if (parent1 == parent2)
+    {
+        nodes[parent1].child1 = node2;
+        nodes[parent1].child2 = node1;
+        return;
+    }
+
+    if (nodes[parent1].child1 == node1)
+        nodes[parent1].child1 = node2;
+    else
+        nodes[parent1].child2 = node2;
+    nodes[node2].parent = parent1;
+
+    if (nodes[parent2].child1 == node2)
+        nodes[parent2].child1 = node1;
+    else
+        nodes[parent2].child2 = node1;
+    nodes[node1].parent = parent2;
+}
+
+void BVH::Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const
+{
+    if (root == nullNode)
+    {
+        return;
+    }
+
+    GrowableArray<NodeProxy, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() != 0)
+    {
+        NodeProxy current = stack.Pop();
+
+        if (!nodes[current].aabb.TestPoint(point))
+        {
+            continue;
+        }
+
+        if (nodes[current].IsLeaf())
+        {
+            bool proceed = callback(current, nodes[current].data);
+            if (proceed == false)
+            {
+                return;
+            }
+        }
+        else
+        {
+            stack.Emplace(nodes[current].child1);
+            stack.Emplace(nodes[current].child2);
+        }
+    }
+}
+
+void BVH::Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& callback) const
+{
+    if (root == nullNode)
+    {
+        return;
+    }
+
+    GrowableArray<NodeProxy, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() != 0)
+    {
+        NodeProxy current = stack.Pop();
+
+        if (!nodes[current].aabb.TestOverlap(aabb))
+        {
+            continue;
+        }
+
+        if (nodes[current].IsLeaf())
+        {
+            bool proceed = callback(current, nodes[current].data);
+            if (proceed == false)
+            {
+                return;
+            }
+        }
+        else
+        {
+            stack.Emplace(nodes[current].child1);
+            stack.Emplace(nodes[current].child2);
+        }
+    }
+}
+
+void BVH::Traverse(const std::function<void(const Node*)>& callback) const
+{
+    if (root == nullNode)
+    {
+        return;
+    }
+
+    GrowableArray<NodeProxy, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() != 0)
+    {
+        NodeProxy current = stack.Pop();
+
+        if (!nodes[current].IsLeaf())
+        {
+            stack.Emplace(nodes[current].child1);
+            stack.Emplace(nodes[current].child2);
+        }
+
+        const Node* node = nodes + current;
+        callback(node);
+    }
+}
+
 void BVH::Reset()
 {
     nodeID = 0;
@@ -418,9 +553,57 @@ void BVH::Reset()
     freeList = 0;
 }
 
+NodeProxy BVH::AllocateNode()
+{
+    if (freeList == nullNode)
+    {
+        assert(nodeCount == nodeCapacity);
+
+        // Grow the node pool
+        Node* oldNodes = nodes;
+        nodeCapacity *= 2;
+        nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
+        memcpy(nodes, oldNodes, nodeCount * sizeof(Node));
+        memset(nodes + nodeCount, 0, nodeCount * sizeof(Node));
+        free(oldNodes);
+
+        // Build a linked list for the free list.
+        for (int32 i = nodeCount; i < nodeCapacity - 1; ++i)
+        {
+            nodes[i].next = i + 1;
+        }
+        nodes[nodeCapacity - 1].next = nullNode;
+        freeList = nodeCount;
+    }
+
+    NodeProxy node = freeList;
+    freeList = nodes[node].next;
+    nodes[node].id = ++nodeID;
+    nodes[node].parent = nullNode;
+    nodes[node].child1 = nullNode;
+    nodes[node].child2 = nullNode;
+    nodes[node].moved = false;
+    ++nodeCount;
+
+    return node;
+}
+
+void BVH::FreeNode(NodeProxy node)
+{
+    assert(0 <= node && node <= nodeCapacity);
+    assert(0 < nodeCount);
+
+    nodes[node].id = 0;
+    nodes[node].next = freeList;
+    freeList = node;
+    --nodeCount;
+}
+
 void BVH::Rebuild()
 {
-    int32* leaves = (int32*)malloc(nodeCount * sizeof(Node));
+    // Rebuild the tree with bottom up approach
+
+    NodeProxy* leaves = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
     int32 count = 0;
 
     // Build an array of leaf node
@@ -433,7 +616,7 @@ void BVH::Rebuild()
         }
 
         // Clean the leaf
-        if (nodes[i].isLeaf)
+        if (nodes[i].IsLeaf())
         {
             nodes[i].parent = nullNode;
 
@@ -448,7 +631,7 @@ void BVH::Rebuild()
 
     while (count > 1)
     {
-        Real minCost = DBL_MAX;
+        Real minCost = infinity;
         int32 minI = -1;
         int32 minJ = -1;
 
@@ -473,13 +656,13 @@ void BVH::Rebuild()
             }
         }
 
-        int32 index1 = leaves[minI];
-        int32 index2 = leaves[minJ];
+        NodeProxy index1 = leaves[minI];
+        NodeProxy index2 = leaves[minJ];
         Node* child1 = nodes + index1;
         Node* child2 = nodes + index2;
 
         // Create a parent(internal) node
-        int32 parentIndex = AllocateNode();
+        NodeProxy parentIndex = AllocateNode();
         Node* parent = nodes + parentIndex;
 
         parent->child1 = index1;
@@ -498,36 +681,6 @@ void BVH::Rebuild()
 
     root = leaves[0];
     free(leaves);
-}
-
-Real BVH::ComputeCost() const
-{
-    Real cost = 0.0;
-
-    if (root == nullNode)
-    {
-        return cost;
-    }
-
-    GrowableArray<int32, 256> stack;
-    stack.Emplace(root);
-
-    while (stack.Count() != 0)
-    {
-        int32 current = stack.Pop();
-
-        if (!nodes[current].isLeaf)
-        {
-            stack.Emplace(nodes[current].child1);
-            stack.Emplace(nodes[current].child2);
-        }
-
-        const Node* node = nodes + current;
-
-        cost += SAH(node->aabb);
-    }
-
-    return cost;
 }
 
 void BVH::RayCast(const Ray& r,
@@ -555,7 +708,7 @@ void BVH::RayCast(const Ray& r,
         }
 
         const Node* node = nodes + nodeID;
-        if (TestOverlapAABB(node->aabb, rayAABB) == false)
+        if (node->aabb.TestOverlap(rayAABB) == false)
         {
             continue;
         }
@@ -565,9 +718,9 @@ void BVH::RayCast(const Ray& r,
             continue;
         }
 
-        if (node->isLeaf)
+        if (node->IsLeaf())
         {
-            Real value = callback(r, t_min, t, node->body);
+            Real value = callback(r, t_min, t, node->data);
             if (value <= t_min)
             {
                 return;

@@ -3,12 +3,45 @@
 #include "common.h"
 #include "ray.h"
 
-class AABB
+struct AABB
 {
-public:
     AABB() = default;
 
     bool Hit(const Ray& r, double t_min, double t_max) const;
+
+    double GetArea() const
+    {
+        return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
+    }
+
+    double GetPerimater() const
+    {
+        Vec3 w = max - min;
+        return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
+    }
+
+    bool Contains(const AABB& other) const
+    {
+        return min.x <= other.min.x && min.y <= other.min.y && max.x >= other.max.x && max.y >= other.max.y;
+    }
+
+    bool TestPoint(const Vec3& point) const
+    {
+        if (min.x > point.x || max.x < point.x) return false;
+        if (min.y > point.y || max.y < point.y) return false;
+        if (min.z > point.z || max.z < point.z) return false;
+
+        return true;
+    }
+
+    bool TestOverlap(const AABB& other) const
+    {
+        if (min.x > other.max.x || max.x < other.min.x) return false;
+        if (min.y > other.max.y || max.y < other.min.y) return false;
+        if (min.z > other.max.z || max.z < other.min.z) return false;
+
+        return true;
+    }
 
     Vec3 min;
     Vec3 max;
@@ -40,17 +73,6 @@ inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
     return true;
 }
 
-inline double Area(const AABB& aabb)
-{
-    return (aabb.max.x - aabb.min.x) * (aabb.max.y - aabb.min.y) * (aabb.max.z - aabb.min.z);
-}
-
-inline double Perimeter(const AABB& aabb)
-{
-    Vec3 w = aabb.max - aabb.min;
-    return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
-}
-
 inline void Fix(AABB& aabb)
 {
     auto a = Max(aabb.min, aabb.max);
@@ -68,30 +90,4 @@ inline AABB Union(const AABB& b1, const AABB& b2)
     Vec3 max = Max(b1.max, b2.max);
 
     return AABB{ min, max };
-}
-
-inline bool TestPointInsideAABB(const AABB& aabb, const Vec2& point)
-{
-    if (aabb.min.x > point.x || aabb.max.x < point.x) return false;
-    if (aabb.min.y > point.y || aabb.max.y < point.y) return false;
-
-    return true;
-}
-
-inline bool TestOverlapAABB(const AABB& a, const AABB& b)
-{
-    if (a.min.x > b.max.x || a.max.x < b.min.x) return false;
-    if (a.min.y > b.max.y || a.max.y < b.min.y) return false;
-
-    return true;
-}
-
-inline bool ContainsAABB(const AABB& container, const AABB& testee)
-{
-    // clang-format off
-    return container.min.x <= testee.min.x
-        && container.min.y <= testee.min.y
-        && container.max.x >= testee.max.x
-        && container.max.y >= testee.max.y;
-    // clang-format on
 }

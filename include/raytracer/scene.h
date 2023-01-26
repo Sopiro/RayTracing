@@ -30,7 +30,7 @@ inline void Scene::Add(std::shared_ptr<Hittable> object)
     AABB aabb;
     raw->GetAABB(aabb);
 
-    bvh.Insert(raw, aabb);
+    NodeProxy node = bvh.CreateNode(raw, aabb);
 #endif
 
     objects.push_back(object);

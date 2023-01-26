@@ -17,6 +17,14 @@ constexpr Real pi = Real(3.14159265358979323846);
 constexpr Real infinity = std::numeric_limits<Real>::infinity();
 constexpr Real epsilon = std::numeric_limits<Real>::epsilon();
 
+struct Vec2;
+struct Vec3;
+struct Vec4;
+struct Quat;
+struct Mat2;
+struct Mat3;
+struct Mat4;
+
 enum Identity
 {
     identity
@@ -63,7 +71,7 @@ struct Vec2
 
     Vec2() = default;
 
-    constexpr Vec2(Real _v)
+    explicit constexpr Vec2(Real _v)
         : x{ _v }
         , y{ _v }
     {
@@ -190,7 +198,7 @@ struct Vec3
         return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
     }
 
-    constexpr Vec3(Real _v)
+    explicit constexpr Vec3(Real _v)
         : x{ _v }
         , y{ _v }
         , z{ _v }
@@ -386,8 +394,6 @@ struct Vec4
     }
 };
 
-struct Quat;
-
 // Column major matrices
 
 struct Mat2
@@ -401,7 +407,7 @@ struct Mat2
     {
     }
 
-    Mat2(Real v)
+    explicit Mat2(Real v)
     {
         // clang-format off
         ex.x = v;       ey.x = Real(0.0);
@@ -483,7 +489,7 @@ struct Mat3
     {
     }
 
-    Mat3(Real v)
+    explicit Mat3(Real v)
     {
         // clang-format off
         ex.x = v;       ey.x = Real(0.0);    ez.x = Real(0.0);
@@ -555,12 +561,12 @@ struct Mat4
     {
     }
 
-    Mat4(Real _v)
+    explicit Mat4(Real _v)
     {
         // clang-format off
-        ex.x = _v;      ey.x = Real(0.0);    ez.x = Real(0.0);    ew.x = Real(0.0);
-        ex.y = Real(0.0);    ey.y = _v;      ez.y = Real(0.0);    ew.y = Real(0.0);
-        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = _v;      ew.z = Real(0.0);
+        ex.x = _v;           ey.x = Real(0.0);    ez.x = Real(0.0);    ew.x = Real(0.0);
+        ex.y = Real(0.0);    ey.y = _v;           ez.y = Real(0.0);    ew.y = Real(0.0);
+        ex.z = Real(0.0);    ey.z = Real(0.0);    ez.z = _v;           ew.z = Real(0.0);
         ex.w = Real(0.0);    ey.w = Real(0.0);    ez.w = Real(0.0);    ew.w = _v;
         // clang-format on
     }
@@ -636,7 +642,7 @@ struct Quat
     {
     }
 
-    Quat(Real _w)
+    explicit Quat(Real _w)
         : x{ Real(0.0) }
         , y{ Real(0.0) }
         , z{ Real(0.0) }
