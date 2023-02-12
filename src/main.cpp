@@ -4,6 +4,8 @@
 
 #include "raytracer/raytracer.h"
 
+using namespace spt;
+
 void RandomScene(Scene& scene)
 {
     auto ground_material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
@@ -328,6 +330,13 @@ void BVHTest(Scene& scene)
     }
 }
 
+void ModelLoading(Scene& scene)
+{
+    std::shared_ptr<Model> t = std::make_shared<Model>("res/survival_guitar_backpack/scene.gltf");
+
+    scene.Add(t);
+}
+
 Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
@@ -365,12 +374,12 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr double aspect_ratio = 16.0 / 9.0;
+    constexpr int32 width = 1000;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    const int max_depth = 50;
+    const int max_depth = 10;
 
     Bitmap bitmap{ width, height };
     Scene scene;
@@ -387,17 +396,17 @@ int main()
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
-    Color sky_color{ 0.7, 0.8, 1.0 };
-    WaknellBox(scene);
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // WaknellBox(scene);
 
-    Vec3 lookfrom(0.5, 0.5, 2.4);
-    Vec3 lookat(0.5, 0.5, 0.0);
-    Vec3 vup(0, 1, 0);
-    auto dist_to_focus = (lookfrom - lookat).Length();
-    auto aperture = 0.0;
-    double vFov = 40;
+    // Vec3 lookfrom(0.5, 0.5, 2.4);
+    // Vec3 lookat(0.5, 0.5, 0.0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 40;
 
-    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+    // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     // Color sky_color{ 0.2 };
     // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
@@ -424,21 +433,21 @@ int main()
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
+    Color sky_color{ 0.7, 0.8, 1.0 };
+    ModelLoading(scene);
+
+    Vec3 lookfrom(0.5, 0.5, 500.0);
+    Vec3 lookat(0.5, 0.5, 0.0);
+    Vec3 vup(0, 1, 0);
+    auto dist_to_focus = (lookfrom - lookat).Length();
+    auto aperture = 0.0;
+    double vFov = 70;
+
+    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+
     auto t0 = std::chrono::system_clock::now();
 
     double chunk = height / omp_get_max_threads();
-
-    // Assimp::Importer importer;
-    // const aiScene* scene = importer.ReadFile("res/cube.obj", aiProcess_Triangulate | aiProcess_FlipUVs);
-
-    // if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-    // {
-    //     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-    //     return 0;
-    // }
-
-    // std::cout << scene->mMeshes[0]->mNumFaces << std::endl;
-    // return 0;
 
 #pragma omp parallel for
     for (int32 y = 0; y < height; ++y)

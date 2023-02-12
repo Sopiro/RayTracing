@@ -4,6 +4,9 @@
 #include "hittable.h"
 #include "ray.h"
 
+namespace spt
+{
+
 class Sphere : public Hittable
 {
 public:
@@ -46,3 +49,5 @@ inline bool Sphere::GetAABB(AABB& outAABB) const
 
     return true;
 }
+
+} // namespace spt

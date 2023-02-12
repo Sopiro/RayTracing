@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+namespace spt
+{
+
 // Inspired by b2GrowableStack in box2d code
 template <typename T, int32 N>
 class GrowableArray
@@ -201,3 +204,5 @@ private:
     int32 count;
     int32 capacity;
 };
+
+} // namespace spt

@@ -1,6 +1,9 @@
 #include "raytracer/bvh.h"
 #include "raytracer/hittable.h"
 
+namespace spt
+{
+
 BVH::BVH()
     : nodeID{ 0 }
     , root{ nullNode }
@@ -774,3 +777,5 @@ bool BVH::GetAABB(AABB& outAABB) const
     outAABB = nodes[root].aabb;
     return true;
 }
+
+} // namespace spt

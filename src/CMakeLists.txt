@@ -25,6 +25,8 @@ set(SOURCE_FILES
     triangle.cpp
     constant_medium.cpp
     math.cpp
+    mesh.cpp
+    model.cpp
 )
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" PREFIX "src" FILES ${SOURCE_FILES})

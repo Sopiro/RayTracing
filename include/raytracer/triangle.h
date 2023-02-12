@@ -5,6 +5,9 @@
 #include "mesh.h"
 #include "ray.h"
 
+namespace spt
+{
+
 class Triangle : public Hittable
 {
 public:
@@ -65,3 +68,5 @@ inline bool Triangle::GetAABB(AABB& outAABB) const
 
     return true;
 }
+
+} // namespace spt

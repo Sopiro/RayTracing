@@ -4,6 +4,9 @@
 
 #define COLOR_CHANNELS (3)
 
+namespace spt
+{
+
 class Bitmap
 {
 public:
@@ -38,3 +41,5 @@ private:
 
     uint8* pixels;
 };
+
+} // namespace spt

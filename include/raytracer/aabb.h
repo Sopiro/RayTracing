@@ -3,10 +3,11 @@
 #include "common.h"
 #include "ray.h"
 
+namespace spt
+{
+
 struct AABB
 {
-    AABB() = default;
-
     bool Hit(const Ray& r, double t_min, double t_max) const;
 
     double GetArea() const
@@ -91,3 +92,5 @@ inline AABB Union(const AABB& b1, const AABB& b2)
 
     return AABB{ min, max };
 }
+
+} // namespace spt

@@ -1,5 +1,8 @@
 #include "raytracer/math.h"
 
+namespace spt
+{
+
 Mat3::Mat3(const Quat& q)
 {
     Real xx = q.x * q.x;
@@ -252,3 +255,5 @@ Quat::Quat(const Vec3& dir, const Vec3& up)
     rotation.ex = Cross(up, rotation.ez).Normalized();
     rotation.ey = Cross(rotation.ez, rotation.ex);
 }
+
+} // namespace spt

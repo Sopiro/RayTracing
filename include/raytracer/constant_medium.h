@@ -4,6 +4,9 @@
 #include "hittable.h"
 #include "material.h"
 
+namespace spt
+{
+
 class ConstantDensityMedium : public Hittable
 {
 public:
@@ -34,3 +37,5 @@ inline bool ConstantDensityMedium::GetAABB(AABB& outAABB) const
 {
     return boundary->GetAABB(outAABB);
 }
+
+} // namespace spt

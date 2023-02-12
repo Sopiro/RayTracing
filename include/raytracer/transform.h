@@ -2,6 +2,9 @@
 
 #include "math.h"
 
+namespace spt
+{
+
 struct Transform
 {
     Vec3 p; // position
@@ -101,3 +104,5 @@ inline Transform& Transform::operator*=(const Transform& other)
     *this = *this * other;
     return *this;
 }
+
+} // namespace spt

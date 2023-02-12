@@ -1,5 +1,8 @@
 #include "raytracer/triangle.h"
 
+namespace spt
+{
+
 // Möller-Trumbore algorithm
 bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
@@ -53,3 +56,5 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
 
     return true;
 }
+
+} // namespace spt

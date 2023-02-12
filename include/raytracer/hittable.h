@@ -4,7 +4,11 @@
 #include "common.h"
 #include "ray.h"
 
+namespace spt
+{
+
 class Material;
+typedef int32 NodeProxy;
 
 struct HitRecord
 {
@@ -29,5 +33,8 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    int32 node;
+protected:
+    NodeProxy node;
 };
+
+} // namespace spt

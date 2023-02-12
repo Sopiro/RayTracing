@@ -4,6 +4,9 @@
 #include "ray.h"
 #include "texture.h"
 
+namespace spt
+{
+
 struct HitRecord;
 
 class Material
@@ -116,3 +119,5 @@ public:
 public:
     std::shared_ptr<Texture> albedo;
 };
+
+} // namespace spt

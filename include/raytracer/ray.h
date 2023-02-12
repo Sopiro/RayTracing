@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+namespace spt
+{
+
 class Ray
 {
 public:
@@ -20,3 +23,5 @@ public:
     Vec3 origin;
     Vec3 dir;
 };
+
+} // namespace spt

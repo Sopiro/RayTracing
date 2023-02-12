@@ -13,6 +13,9 @@
 
 #define Real double
 
+namespace spt
+{
+
 constexpr Real pi = Real(3.14159265358979323846);
 constexpr Real infinity = std::numeric_limits<Real>::infinity();
 constexpr Real epsilon = std::numeric_limits<Real>::epsilon();
@@ -341,6 +344,14 @@ struct Vec4
         : x{ _x }
         , y{ _y }
         , z{ _z }
+        , w{ _w }
+    {
+    }
+
+    constexpr Vec4(const Vec3& _v, Real _w)
+        : x{ _v.x }
+        , z{ _v.z }
+        , y{ _v.y }
         , w{ _w }
     {
     }
@@ -1227,7 +1238,7 @@ inline T Slerp(const T& start, const T& end, Real percent)
     T rv = end - start * dot;
     rv.Normalize();
 
-    return start * Cos(angle) + rv * Sin(angle);
+    return start * cos(angle) + rv * sin(angle);
 }
 
 template <typename T>
@@ -1299,3 +1310,5 @@ inline Vec3 RandomInUnitDisk()
 {
     return Vec3{ Rand(-1.0, 1.0), Rand(-1.0, 1.0), 0.0 };
 }
+
+} // namespace spt

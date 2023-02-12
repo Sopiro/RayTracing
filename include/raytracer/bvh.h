@@ -7,6 +7,9 @@
 
 #define nullNode (-1)
 
+namespace spt
+{
+
 constexpr Vec3 aabb_margin{ Real(0.0) };
 constexpr Real aabb_multiplier = Real(1.0);
 
@@ -311,3 +314,5 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
         }
     }
 }
+
+} // namespace spt

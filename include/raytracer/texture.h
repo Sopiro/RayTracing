@@ -2,6 +2,9 @@
 
 #include "common.h"
 
+namespace spt
+{
+
 class Texture
 {
 public:
@@ -72,8 +75,6 @@ public:
 class ImageTexture : public Texture
 {
 public:
-    const static int32 bytes_per_pixel = 3;
-
     ImageTexture()
         : data{ nullptr }
         , width{ 0 }
@@ -82,15 +83,16 @@ public:
     {
     }
 
-    ImageTexture(const char* filename)
+    ImageTexture(std::string_view path, std::string _name = "diffuse")
+        : name{ _name }
     {
         int32 components_per_pixel = bytes_per_pixel;
 
-        data = stbi_load(filename, &width, &height, &components_per_pixel, components_per_pixel);
+        data = stbi_load(path.data(), &width, &height, &components_per_pixel, components_per_pixel);
 
         if (!data)
         {
-            std::cerr << "ERROR: Could not load texture image file '" << filename << "'.\n";
+            std::cerr << "ERROR: Could not load texture image file '" << path << "'.\n";
             width = height = 0;
         }
 
@@ -132,8 +134,13 @@ public:
         return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };
     }
 
+    const static int32 bytes_per_pixel = 3;
+
 private:
     uint8* data;
     int32 width, height;
     int32 bytes_per_scanline;
+    std::string name;
 };
+
+} // namespace spt

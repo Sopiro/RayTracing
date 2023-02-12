@@ -1,5 +1,8 @@
 #include "raytracer/constant_medium.h"
 
+namespace spt
+{
+
 bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
     HitRecord rec1;
@@ -54,3 +57,5 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
 
     return true;
 }
+
+} // namespace spt

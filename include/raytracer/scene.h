@@ -6,6 +6,9 @@
 
 #define USE_BVH 1
 
+namespace spt
+{
+
 class Scene : public Hittable
 {
 public:
@@ -46,3 +49,5 @@ inline void Scene::RebuildBVH()
 {
     bvh.Rebuild();
 }
+
+} // namespace spt

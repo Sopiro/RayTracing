@@ -2,6 +2,9 @@
 
 #include "raytracer/scene.h"
 
+namespace spt
+{
+
 bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
 #if USE_BVH
@@ -53,3 +56,5 @@ bool Scene::GetAABB(AABB& outAABB) const
     return true;
 #endif
 }
+
+} // namespace spt

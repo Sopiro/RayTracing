@@ -10,6 +10,7 @@
 #include "camera.h"
 #include "constant_medium.h"
 #include "material.h"
+#include "model.h"
 #include "ray.h"
 #include "scene.h"
 #include "sphere.h"
@@ -17,7 +18,3 @@
 #include "triangle.h"
 
 #include <omp.h>
-
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>

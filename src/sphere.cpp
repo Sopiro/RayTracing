@@ -1,5 +1,8 @@
 #include "raytracer/sphere.h"
 
+namespace spt
+{
+
 bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
     Vec3 oc = ray.origin - center;
@@ -34,3 +37,5 @@ bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) con
 
     return true;
 }
+
+} // namespace spt

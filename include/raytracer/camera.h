@@ -3,6 +3,9 @@
 #include "common.h"
 #include "ray.h"
 
+namespace spt
+{
+
 class Camera
 {
 public:
@@ -48,3 +51,5 @@ public:
     Vec3 u, v, w;
     double lens_radius;
 };
+
+} // namespace spt

@@ -1,6 +1,9 @@
 #include "raytracer/material.h"
 #include "raytracer/hittable.h"
 
+namespace spt
+{
+
 bool Lambertian::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 {
     Vec3 scatter_direction = rec.normal + RandomUnitVector();
@@ -61,3 +64,5 @@ bool Isotropic::Scatter(const Ray& ray_in, const HitRecord& rec, Color& attenuat
 
     return true;
 }
+
+} // namespace spt
