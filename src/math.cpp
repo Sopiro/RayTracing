@@ -1,4 +1,5 @@
 #include "raytracer/math.h"
+#include "raytracer/transform.h"
 
 namespace spt
 {
@@ -96,6 +97,11 @@ Mat3 Mat3::Translate(const Vec2& v)
     t.ez.y = v.y;
 
     return Mul(*this, t);
+}
+
+Mat4::Mat4(const Transform& t)
+    : Mat4{ Mat3{ t.q }, t.p }
+{
 }
 
 Mat4 Mat4::Scale(Real x, Real y, Real z)

@@ -27,6 +27,7 @@ struct Quat;
 struct Mat2;
 struct Mat3;
 struct Mat4;
+struct Transform;
 
 enum Identity
 {
@@ -590,6 +591,16 @@ struct Mat4
     {
     }
 
+    Mat4(const Mat3& r, const Vec3& p)
+        : ex{ r.ex, Real(0.0) }
+        , ey{ r.ey, Real(0.0) }
+        , ez{ r.ez, Real(0.0) }
+        , ew{ p, Real(1.0) }
+    {
+    }
+
+    Mat4(const Transform& t);
+
     Vec4& operator[](uint32 i)
     {
         return (&ex)[i];
@@ -771,6 +782,33 @@ struct Quat
         y = Real(0.0);
         z = Real(0.0);
         w = Real(1.0);
+    }
+
+    // Computes rotation of x-axis
+    Vec3 GetBasisX() const
+    {
+        Real x2 = x * Real(2.0);
+        Real w2 = w * Real(2.0);
+
+        return Vec3((w * w2) - Real(1.0) + x * x2, (z * w2) + y * x2, (-y * w2) + z * x2);
+    }
+
+    // Computes rotation of y-axis
+    Vec3 GetBasisY() const
+    {
+        Real y2 = y * Real(2.0);
+        Real w2 = w * Real(2.0);
+
+        return Vec3((-z * w2) + x * y2, (w * w2) - Real(1.0) + y * y2, (x * w2) + z * y2);
+    }
+
+    // Computes rotation of z-axis
+    Vec3 GetBasisZ() const
+    {
+        Real z2 = z * Real(2.0);
+        Real w2 = w * Real(2.0);
+
+        return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - Real(1.0) + z * z2);
     }
 
     Real x, y, z, w;

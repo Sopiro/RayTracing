@@ -330,11 +330,13 @@ void BVHTest(Scene& scene)
     }
 }
 
-void ModelLoading(Scene& scene)
+void Sponza(Scene& scene)
 {
-    std::shared_ptr<Model> t = std::make_shared<Model>("res/survival_guitar_backpack/scene.gltf");
+    Transform transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(90.0), Vec3{ 0.0, 1.0, 0.0 } } };
 
-    scene.Add(t);
+    std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
+
+    scene.Add(sponza);
 }
 
 Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_color, int32 depth)
@@ -375,11 +377,11 @@ int main()
 #endif
 
     constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr int32 width = 1000;
+    constexpr int32 width = 1920;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 1000;
     constexpr double scale = 1.0 / samples_per_pixel;
-    const int max_depth = 10;
+    const int max_depth = 20;
 
     Bitmap bitmap{ width, height };
     Scene scene;
@@ -434,14 +436,16 @@ int main()
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     Color sky_color{ 0.7, 0.8, 1.0 };
-    ModelLoading(scene);
+    sky_color *= 8.0;
 
-    Vec3 lookfrom(0.5, 0.5, 500.0);
-    Vec3 lookat(0.5, 0.5, 0.0);
+    Sponza(scene);
+
+    Vec3 lookfrom(0.0, 1.0, 4.5);
+    Vec3 lookat(0.0, 1.45, 0.0);
     Vec3 vup(0, 1, 0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
-    double vFov = 70;
+    double vFov = 71;
 
     Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 

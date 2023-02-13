@@ -4,9 +4,9 @@
 namespace spt
 {
 
-Model::Model(std::string_view path)
+Model::Model(std::string_view path, const Transform& transform)
 {
-    LoadModel(path);
+    LoadModel(path, transform);
 
     // std::cout << "mesh count: " << meshes.size() << std::endl;
 
@@ -111,7 +111,7 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
     }
 }
 
-void Model::LoadModel(std::string_view path)
+void Model::LoadModel(std::string_view path, const Transform& transform)
 {
     folder = path.substr(0, path.find_last_of('/'));
     folder.push_back('/');
@@ -124,7 +124,7 @@ void Model::LoadModel(std::string_view path)
         return;
     }
 
-    ProcessAssimpNode(scene->mRootNode, scene, Mat4{ identity });
+    ProcessAssimpNode(scene->mRootNode, scene, Mat4{ transform });
 }
 
 } // namespace spt
