@@ -172,7 +172,8 @@ void WaknellBox(Scene& scene)
         Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
 
         // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.2);
-        auto mat = std::make_shared<Dielectric>(2.4);
+        // auto mat = std::make_shared<Dielectric>(2.4);
+        auto mat = white;
 
         // front
         scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
@@ -217,9 +218,11 @@ void WaknellBox(Scene& scene)
         Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
         Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
 
-        auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
         // auto mat = std::make_shared<Dielectric>(1.5);
         // auto mat = std::make_shared<Dielectric>(2.0);
+        // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
+
+        auto mat = white;
 
         // front
         scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
@@ -339,6 +342,154 @@ void Sponza(Scene& scene)
     scene.Add(sponza);
 }
 
+void CornellBox2(Scene& scene)
+{
+    auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
+    auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
+    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
+    auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
+    auto wakgood_texture = std::make_shared<ImageTexture>("res/wakdu.jpg");
+    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
+
+    auto light = std::make_shared<DiffuseLight>(Color(12.0));
+
+    Vertex v0{ Vec3{ 0.0, 0.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex v1{ Vec3{ 1.0, 0.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex v2{ Vec3{ 1.0, 1.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex v3{ Vec3{ 0.0, 1.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
+
+    Vertex v4{ Vec3{ 0.0, 0.0, -1.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex v5{ Vec3{ 1.0, 0.0, -1.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex v6{ Vec3{ 1.0, 1.0, -1.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex v7{ Vec3{ 0.0, 1.0, -1.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
+
+    // front
+    scene.Add(std::make_shared<Triangle>(v4, v5, v6, wakgood_mat, true, true));
+    scene.Add(std::make_shared<Triangle>(v4, v6, v7, wakgood_mat, true, true));
+
+    // left
+    scene.Add(std::make_shared<Triangle>(v0, v4, v7, red, true, true));
+    scene.Add(std::make_shared<Triangle>(v0, v7, v3, red, true, true));
+
+    // right
+    scene.Add(std::make_shared<Triangle>(v5, v1, v2, green, true, true));
+    scene.Add(std::make_shared<Triangle>(v5, v2, v6, green, true, true));
+
+    // bottom
+    scene.Add(std::make_shared<Triangle>(v0, v1, v5, white, true, true));
+    scene.Add(std::make_shared<Triangle>(v0, v5, v4, white, true, true));
+
+    // top
+    scene.Add(std::make_shared<Triangle>(v7, v6, v2, white, true, true));
+    scene.Add(std::make_shared<Triangle>(v7, v2, v3, white, true, true));
+
+    double d = 0.37;
+
+    Vertex t0{ Vec3{ d, 0.999, -d }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex t1{ Vec3{ (1.0 - d), 0.999, -d }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex t2{ Vec3{ (1.0 - d), 0.999, -(1.0 - d) }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex t3{ Vec3{ d, 0.999, -(1.0 - d) }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
+
+    // light
+    scene.Add(std::make_shared<Triangle>(t0, t1, t2, light, true, true));
+    scene.Add(std::make_shared<Triangle>(t0, t2, t3, light, true, true));
+
+    {
+        double hx = 0.115;
+        double hy = 0.25;
+        double hz = 0.115;
+
+        Transform t(0.25, hy + 0.02, -0.6, Quat(DegToRad(20.0), Vec3(0.0, 1.0, 0.0)));
+
+        Vertex v0{ t * Vec3{ -hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+        Vertex v1{ t * Vec3{ hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+        Vertex v2{ t * Vec3{ hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+        Vertex v3{ t * Vec3{ -hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+        Vertex v4{ t * Vec3{ -hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+        Vertex v5{ t * Vec3{ hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+        Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+        Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+        // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.2);
+        // auto mat = std::make_shared<Dielectric>(2.4);
+        auto mat = white;
+
+        // front
+        scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v0, v2, v3, mat, true, true));
+
+        // right
+        scene.Add(std::make_shared<Triangle>(v1, v5, v6, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v1, v6, v2, mat, true, true));
+
+        // back
+        scene.Add(std::make_shared<Triangle>(v5, v4, v7, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v5, v7, v6, mat, true, true));
+
+        // left
+        scene.Add(std::make_shared<Triangle>(v4, v0, v3, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v4, v3, v7, mat, true, true));
+
+        // top
+        scene.Add(std::make_shared<Triangle>(v3, v2, v6, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v3, v6, v7, mat, true, true));
+
+        // bottom
+        scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
+    }
+
+    {
+        double hx = 0.12;
+        double hy = 0.12;
+        double hz = 0.12;
+
+        // Transform t(0.7, 0.2, 0.7, Quat(DegToRad(30.0), Vec3(0.0, 0.0, 1.0)) * Quat(DegToRad(30.0), Vec3(0.0, 1.0, 0.0)));
+        Transform t(0.7, hy, -0.3, Quat(DegToRad(-30.0), Vec3(0.0, 1.0, 0.0)));
+
+        Vertex v0{ t * Vec3{ -hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+        Vertex v1{ t * Vec3{ hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+        Vertex v2{ t * Vec3{ hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+        Vertex v3{ t * Vec3{ -hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+        Vertex v4{ t * Vec3{ -hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+        Vertex v5{ t * Vec3{ hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+        Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+        Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+        // auto mat = std::make_shared<Dielectric>(1.5);
+        // auto mat = std::make_shared<Dielectric>(2.0);
+        // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
+
+        auto mat = white;
+
+        // front
+        scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v0, v2, v3, mat, true, true));
+
+        // right
+        scene.Add(std::make_shared<Triangle>(v1, v5, v6, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v1, v6, v2, mat, true, true));
+
+        // back
+        scene.Add(std::make_shared<Triangle>(v5, v4, v7, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v5, v7, v6, mat, true, true));
+
+        // left
+        scene.Add(std::make_shared<Triangle>(v4, v0, v3, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v4, v3, v7, mat, true, true));
+
+        // top
+        scene.Add(std::make_shared<Triangle>(v3, v2, v6, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v3, v6, v7, mat, true, true));
+
+        // bottom
+        scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
+        scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
+    }
+}
+
 Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
@@ -353,15 +504,17 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
     }
 
     Ray scattered;
-    Color attenuation;
+    Color albedo;
     Color emitted = rec.mat->Emitted(rec.uv, rec.p);
+    double pdf;
 
-    if (rec.mat->Scatter(ray, rec, attenuation, scattered) == false)
+    if (rec.mat->Scatter(ray, rec, albedo, scattered, pdf) == false)
     {
         return emitted;
     }
 
-    return emitted + attenuation * ComputeRayColor(scattered, scene, sky_color, depth - 1);
+    return emitted +
+           albedo * rec.mat->ScatteringPDF(ray, rec, scattered) * ComputeRayColor(scattered, scene, sky_color, depth - 1) / pdf;
 
     // Vec3 unit_direction = r.dir.Normalized();
     // double t = 0.5 * (unit_direction.y + 1.0);
@@ -376,8 +529,8 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr int32 width = 1920;
+    constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 1000;
     constexpr double scale = 1.0 / samples_per_pixel;
@@ -399,16 +552,17 @@ int main()
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
-    // WaknellBox(scene);
+    Color sky_color{ 0.0, 0.0, 0.0 };
+    CornellBox2(scene);
 
-    // Vec3 lookfrom(0.5, 0.5, 2.4);
-    // Vec3 lookat(0.5, 0.5, 0.0);
-    // Vec3 vup(0, 1, 0);
-    // auto dist_to_focus = (lookfrom - lookat).Length();
-    // auto aperture = 0.0;
-    // double vFov = 40;
+    Vec3 lookfrom(0.5, 0.5, 1.25);
+    Vec3 lookat(0.5, 0.5, 0.0);
+    Vec3 vup(0, 1, 0);
+    auto dist_to_focus = (lookfrom - lookat).Length();
+    auto aperture = 0.0;
+    double vFov = 45;
 
-    // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     // Color sky_color{ 0.2 };
     // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
@@ -435,19 +589,19 @@ int main()
 
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
-    Color sky_color{ 0.7, 0.8, 1.0 };
-    sky_color *= 8.0;
+    // Color sky_color{ 0.7, 0.8, 1.0 };
+    // sky_color *= 8.0;
 
-    Sponza(scene);
+    // Sponza(scene);
 
-    Vec3 lookfrom(0.0, 1.0, 4.5);
-    Vec3 lookat(0.0, 1.45, 0.0);
-    Vec3 vup(0, 1, 0);
-    auto dist_to_focus = (lookfrom - lookat).Length();
-    auto aperture = 0.0;
-    double vFov = 71;
+    // Vec3 lookfrom(0.0, 1.0, 4.5);
+    // Vec3 lookat(0.0, 1.45, 0.0);
+    // Vec3 vup(0, 1, 0);
+    // auto dist_to_focus = (lookfrom - lookat).Length();
+    // auto aperture = 0.0;
+    // double vFov = 71;
 
-    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+    // Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
     auto t0 = std::chrono::system_clock::now();
 
