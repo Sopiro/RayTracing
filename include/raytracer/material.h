@@ -93,6 +93,7 @@ public:
         : emit(a)
     {
     }
+
     DiffuseLight(Color c)
         : emit(std::make_shared<SolidColor>(c))
     {

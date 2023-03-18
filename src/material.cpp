@@ -1,22 +1,21 @@
 #include "raytracer/material.h"
 #include "raytracer/hittable.h"
+#include "raytracer/onb.h"
 
 namespace spt
 {
 
 bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const
 {
-    Vec3 scatter_direction = in_rec.normal + RandomUnitVector();
+    ONB uvw;
+    uvw.BuildFromW(in_rec.normal);
 
-    // Catch degenerate scatter direction
-    if (scatter_direction.Length2() < epsilon * epsilon)
-    {
-        scatter_direction = in_rec.normal;
-    }
+    // lambertian scattering
+    Vec3 scatter_direction = uvw.GetLocal(RandomCosineDirection());
 
-    out_scattered = Ray{ in_rec.p, scatter_direction };
+    out_scattered = Ray{ in_rec.p, scatter_direction.Normalized() };
     out_alb = albedo->Value(in_rec.uv, in_rec.p);
-    out_pdf = Dot(in_rec.normal, in_ray.dir) / pi;
+    out_pdf = Dot(uvw.w, out_scattered.dir) / pi;
 
     return true;
 }
@@ -24,7 +23,7 @@ bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_
 double Lambertian::ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
     // Cosine density
-    return Dot(in_rec.normal, in_ray.dir) / pi;
+    return Dot(in_rec.normal, in_scattered.dir) / pi;
 }
 
 bool Metal::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const

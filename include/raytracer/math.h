@@ -99,12 +99,12 @@ struct Vec2
         y = _y;
     }
 
-    Real operator[](uint32 i) const
+    Real operator[](int32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](uint32 i)
+    Real& operator[](int32 i)
     {
         return (&x)[i];
     }
@@ -237,12 +237,12 @@ struct Vec3
         z = _z;
     }
 
-    Real operator[](uint32 i) const
+    Real operator[](int32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](uint32 i)
+    Real& operator[](int32 i)
     {
         return (&x)[i];
     }
@@ -373,12 +373,12 @@ struct Vec4
         w = _w;
     }
 
-    Real operator[](uint32 i) const
+    Real operator[](int32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](uint32 i)
+    Real& operator[](int32 i)
     {
         return (&x)[i];
     }
@@ -433,7 +433,7 @@ struct Mat2
     {
     }
 
-    Vec2& operator[](uint32 i)
+    Vec2& operator[](int32 i)
     {
         return (&ex)[i];
     }
@@ -519,7 +519,7 @@ struct Mat3
 
     Mat3(const Quat& q);
 
-    Vec3& operator[](uint32 i)
+    Vec3& operator[](int32 i)
     {
         return (&ex)[i];
     }
@@ -601,7 +601,7 @@ struct Mat4
 
     Mat4(const Transform& t);
 
-    Vec4& operator[](uint32 i)
+    Vec4& operator[](int32 i)
     {
         return (&ex)[i];
     }
@@ -941,6 +941,11 @@ inline Vec3 operator*(const Vec3& a, const Vec3& b)
 inline Vec3 operator/(const Vec3& v, Real s)
 {
     return v * (Real(1.0) / s);
+}
+
+inline Vec3 operator/(Real s, const Vec3& v)
+{
+    return (Real(1.0) / s) * v;
 }
 
 inline bool operator==(const Vec3& a, const Vec3& b)
@@ -1301,24 +1306,36 @@ T Refract(const T& uv, const T& n, Real etai_over_etat)
     return r_out_perp + r_out_parallel;
 }
 
-inline Vec3 PolarToCart(Real lat, Real lgt, Real r)
+inline Vec3 PolarToCart(Real theta, Real phi, Real r)
 {
-    Real x = sin(lat) * cos(lgt);
-    Real y = sin(lat) * sin(lgt);
-    Real z = cos(lat);
+    Real x = cos(phi) * sin(theta);
+    Real y = sin(phi) * sin(theta);
+    Real z = cos(theta);
 
     return Vec3{ x, y, z } * r;
 }
 
 inline Vec3 RandomUnitVector()
 {
-    Real theta = 2 * pi * Rand();
-    Real phi = pi * Rand();
-    // precision phi = acos(1.0 - 2.0 * Rand());
+    Real r1 = Rand();
+    Real r2 = Rand();
+    Real x = cos(2 * pi * r1) * 2 * sqrt(r2 * (1 - r2));
+    Real y = sin(2 * pi * r1) * 2 * sqrt(r2 * (1 - r2));
+    Real z = 1 - 2 * r2;
 
-    Real x = sin(phi) * cos(theta);
-    Real y = sin(phi) * sin(theta);
-    Real z = cos(phi);
+    return Vec3{ x, y, z };
+}
+
+// z > 0
+inline Vec3 RandomCosineDirection()
+{
+    Real r1 = Rand();
+    Real r2 = Rand();
+    Real z = sqrt(1 - r2);
+
+    Real phi = 2 * pi * r1;
+    Real x = cos(phi) * sqrt(r2);
+    Real y = sin(phi) * sqrt(r2);
 
     return Vec3{ x, y, z };
 }

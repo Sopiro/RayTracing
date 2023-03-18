@@ -351,7 +351,8 @@ void CornellBox2(Scene& scene)
     auto wakgood_texture = std::make_shared<ImageTexture>("res/wakdu.jpg");
     auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
 
-    auto light = std::make_shared<DiffuseLight>(Color(12.0));
+    auto light = std::make_shared<DiffuseLight>(Color(15.0));
+    auto wakgood_light = std::make_shared<DiffuseLight>(wakgood_texture);
 
     Vertex v0{ Vec3{ 0.0, 0.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
     Vertex v1{ Vec3{ 1.0, 0.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
@@ -383,12 +384,12 @@ void CornellBox2(Scene& scene)
     scene.Add(std::make_shared<Triangle>(v7, v6, v2, white, true, true));
     scene.Add(std::make_shared<Triangle>(v7, v2, v3, white, true, true));
 
-    double d = 0.37;
+    Transform t(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.25 });
 
-    Vertex t0{ Vec3{ d, 0.999, -d }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
-    Vertex t1{ Vec3{ (1.0 - d), 0.999, -d }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
-    Vertex t2{ Vec3{ (1.0 - d), 0.999, -(1.0 - d) }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
-    Vertex t3{ Vec3{ d, 0.999, -(1.0 - d) }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
+    Vertex t0{ t * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex t1{ t * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex t2{ t * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex t3{ t * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
     // light
     scene.Add(std::make_shared<Triangle>(t0, t1, t2, light, true, true));
@@ -532,7 +533,7 @@ int main()
     constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 1000;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 20;
 
