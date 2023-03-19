@@ -392,8 +392,8 @@ void CornellBox2(Scene& scene)
     Vertex t3{ t * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
     // light
-    scene.Add(std::make_shared<Triangle>(t0, t1, t2, light, true, true));
-    scene.Add(std::make_shared<Triangle>(t0, t2, t3, light, true, true));
+    scene.Add(std::make_shared<Triangle>(t0, t2, t1, light, true, true));
+    scene.Add(std::make_shared<Triangle>(t0, t3, t2, light, true, true));
 
     {
         double hx = 0.115;
@@ -506,7 +506,7 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
 
     Ray scattered;
     Color albedo;
-    Color emitted = rec.mat->Emitted(rec.uv, rec.p);
+    Color emitted = rec.mat->Emitted(ray, rec, rec.uv, rec.p);
     double pdf;
 
     if (rec.mat->Scatter(ray, rec, albedo, scattered, pdf) == false)
@@ -540,11 +540,6 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
 
     return emitted +
            albedo * rec.mat->ScatteringPDF(ray, rec, scattered) * ComputeRayColor(scattered, scene, sky_color, depth - 1) / pdf;
-
-    // Vec3 unit_direction = r.dir.Normalized();
-    // double t = 0.5 * (unit_direction.y + 1.0);
-
-    // return Lerp(Color{ 1.0, 1.0, 1.0 }, Color{ 0.5, 0.7, 1.0 }, t);
 }
 
 int main()

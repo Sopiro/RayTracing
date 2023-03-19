@@ -19,7 +19,7 @@ public:
         return 0;
     }
 
-    virtual Color Emitted(const UV& uv, const Vec3& p) const
+    virtual Color Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const
     {
         return Color(0.0, 0.0, 0.0);
     }
@@ -105,10 +105,7 @@ public:
         return false;
     }
 
-    virtual Color Emitted(const UV& uv, const Vec3& p) const override
-    {
-        return emit->Value(uv, p);
-    }
+    virtual Color Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const override;
 
 public:
     std::shared_ptr<Texture> emit;

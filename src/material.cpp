@@ -71,4 +71,16 @@ bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_a
     return true;
 }
 
+Color DiffuseLight::Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const
+{
+    if (in_rec.front_face)
+    {
+        return emit->Value(in_uv, in_p);
+    }
+    else
+    {
+        return Color{ 0.0 };
+    }
+}
+
 } // namespace spt
