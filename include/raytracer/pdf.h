@@ -12,8 +12,8 @@ class PDF
 public:
     virtual ~PDF() = default;
 
-    virtual double Value(const Vec3& direction) const = 0;
     virtual Vec3 Generate() const = 0;
+    virtual double Value(const Vec3& direction) const = 0;
 };
 
 class CosinePDF : public PDF
@@ -24,15 +24,15 @@ public:
         uvw.BuildFromW(w);
     }
 
+    virtual Vec3 Generate() const override
+    {
+        return uvw.GetLocal(RandomCosineDirection());
+    }
+
     virtual double Value(const Vec3& direction) const override
     {
         double cosine = Dot(direction.Normalized(), uvw.w);
         return (cosine <= 0.0) ? 0.0 : cosine / pi;
-    }
-
-    virtual Vec3 Generate() const override
-    {
-        return uvw.GetLocal(RandomCosineDirection());
     }
 
 public:
@@ -68,6 +68,37 @@ public:
 public:
     Vec3 origin;
     std::shared_ptr<Hittable> target;
+};
+
+class MixturePDF : public PDF
+{
+public:
+    MixturePDF(PDF* p1, PDF* p2)
+        : p1{ p1 }
+        , p2{ p2 }
+    {
+    }
+
+    virtual Vec3 Generate() const override
+    {
+        if (Rand() < 0.5)
+        {
+            return p1->Generate();
+        }
+        else
+        {
+            return p2->Generate();
+        }
+    }
+
+    virtual double Value(const Vec3& direction) const override
+    {
+        return 0.5 * p1->Value(direction) + 0.5 * p2->Value(direction);
+    }
+
+public:
+    PDF* p1;
+    PDF* p2;
 };
 
 } // namespace spt

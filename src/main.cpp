@@ -534,9 +534,12 @@ Color ComputeRayColor(
         return emitted;
     }
 
-    HittablePDF light_pdf{ lights, rec.p };
-    scattered = Ray{ rec.p, light_pdf.Generate() };
-    pdf_value = light_pdf.Value(scattered.dir);
+    HittablePDF p1{ lights, rec.p };
+    CosinePDF p2{ rec.normal };
+    MixturePDF mixed_pdf{ &p1, &p2 };
+
+    scattered = Ray{ rec.p, mixed_pdf.Generate() };
+    pdf_value = mixed_pdf.Value(scattered.dir);
 
     return emitted + albedo * rec.mat->ScatteringPDF(ray, rec, scattered) *
                          ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
