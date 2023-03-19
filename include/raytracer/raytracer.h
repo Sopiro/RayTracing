@@ -11,6 +11,7 @@
 #include "constant_medium.h"
 #include "material.h"
 #include "model.h"
+#include "pdf.h"
 #include "ray.h"
 #include "scene.h"
 #include "sphere.h"

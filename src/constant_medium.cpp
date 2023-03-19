@@ -54,6 +54,7 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     rec.normal = Vec3{ 1.0, 0.0, 0.0 }; // arbitrary
     rec.front_face = true;              // also arbitrary
     rec.mat = phase_function;
+    rec.object = this;
 
     return true;
 }

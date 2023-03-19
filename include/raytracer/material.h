@@ -14,6 +14,8 @@ class Material
 public:
     virtual bool Scatter(
         const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const = 0;
+
+    // BRDF
     virtual double ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
     {
         return 0;
@@ -21,7 +23,7 @@ public:
 
     virtual Color Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const
     {
-        return Color(0.0, 0.0, 0.0);
+        return Color{ 0.0, 0.0, 0.0 };
     }
 };
 

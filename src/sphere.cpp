@@ -28,6 +28,7 @@ bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) con
         }
     }
 
+    rec.object = this;
     rec.mat = material;
     rec.t = root;
     rec.p = ray.At(rec.t);

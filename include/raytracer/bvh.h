@@ -93,6 +93,8 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
+    virtual double PDFValue(const Vec3& v, const HitRecord& rec) const override;
+    virtual Vec3 Random(const Vec3& origin) const override;
 
 private:
     NodeProxy nodeID;
@@ -103,6 +105,8 @@ private:
     int32 nodeCapacity;
 
     NodeProxy freeList;
+
+    std::vector<NodeProxy> leaves;
 
     NodeProxy AllocateNode();
     void FreeNode(NodeProxy node);
@@ -313,6 +317,29 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
             stack.Emplace(node->child2);
         }
     }
+}
+
+inline bool BVH::GetAABB(AABB& outAABB) const
+{
+    if (nodeCount == 0)
+    {
+        return false;
+    }
+
+    outAABB = nodes[root].aabb;
+    return true;
+}
+
+inline double BVH::PDFValue(const Vec3& v, const HitRecord& rec) const
+{
+    return rec.object->PDFValue(v, rec);
+}
+
+inline Vec3 BVH::Random(const Vec3& origin) const
+{
+    int32 index = static_cast<int32>(leaves.size() * Rand());
+
+    return nodes[leaves[index]].data->Random(origin);
 }
 
 } // namespace spt

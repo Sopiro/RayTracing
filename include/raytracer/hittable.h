@@ -7,8 +7,9 @@
 namespace spt
 {
 
-class Material;
 typedef int32 NodeProxy;
+class Material;
+class Hittable;
 
 struct HitRecord
 {
@@ -19,6 +20,7 @@ struct HitRecord
     bool front_face;
 
     std::shared_ptr<Material> mat;
+    const Hittable* object;
 
     void SetFaceNormal(const Ray& ray, const Vec3& outward_normal)
     {
@@ -32,6 +34,19 @@ class Hittable
 public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
+
+    virtual double PDFValue(const Vec3& dir, const HitRecord& rec) const
+    {
+        assert(false);
+        return 0.0;
+    }
+
+    // Returns random direction toward this object
+    virtual Vec3 Random(const Vec3& origin) const
+    {
+        assert(false);
+        return Vec3{ 0, 0, 0 };
+    }
 
 protected:
     NodeProxy node;

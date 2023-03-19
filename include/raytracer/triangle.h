@@ -27,7 +27,8 @@ public:
         e1 = v1.position - v0.position;
         e2 = v2.position - v0.position;
 
-        face_normal = Cross(e1, e2).Normalized();
+        face_normal = Cross(e1, e2);
+        area = face_normal.Normalize() / 2.0;
 
         if (reset_normal)
         {
@@ -49,6 +50,8 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
+    virtual double PDFValue(const Vec3& dir, const HitRecord& rec) const override;
+    virtual Vec3 Random(const Vec3& origin) const override;
 
 public:
     Vertex v0, v1, v2;
@@ -57,6 +60,7 @@ public:
     Vec3 face_normal;
     std::shared_ptr<Material> material;
     bool one_sided;
+    double area;
 };
 
 static constexpr Vec3 epsilon_offset{ epsilon * 10.0 };
@@ -67,6 +71,24 @@ inline bool Triangle::GetAABB(AABB& outAABB) const
     outAABB.max = Max(Max(v0.position, v1.position), v2.position) + epsilon_offset;
 
     return true;
+}
+
+inline double Triangle::PDFValue(const Vec3& dir, const HitRecord& rec) const
+{
+    double distance_squared = rec.t * rec.t * dir.Length2();
+    double cosine = fabs(Dot(dir, rec.normal) / dir.Length());
+
+    return distance_squared / (cosine * area);
+}
+
+inline Vec3 Triangle::Random(const Vec3& origin) const
+{
+    double u = Rand(0.0, 0.5);
+    double v = Rand(0.0, 0.5);
+
+    Vec3 random_point = v0.position + e1 * u + e2 * v;
+
+    return random_point - origin;
 }
 
 } // namespace spt

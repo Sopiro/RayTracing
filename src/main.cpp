@@ -342,7 +342,7 @@ void Sponza(Scene& scene)
     scene.Add(sponza);
 }
 
-void CornellBox2(Scene& scene)
+std::shared_ptr<Hittable> CornellBox2(Scene& scene)
 {
     auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
     auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
@@ -384,16 +384,32 @@ void CornellBox2(Scene& scene)
     scene.Add(std::make_shared<Triangle>(v7, v6, v2, white, true, true));
     scene.Add(std::make_shared<Triangle>(v7, v2, v3, white, true, true));
 
-    Transform t(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.25 });
+    // Transform tf1(Vec3{ 0.5, 0.8, -0.5 }, Quat{ DegToRad(-30.0), Vec3{ 1.0, 0.0, 0.0 } }, Vec3{ 0.25 });
+    Transform tf1(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.25 });
+    Vertex t0{ tf1 * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex t1{ tf1 * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex t2{ tf1 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex t3{ tf1 * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
-    Vertex t0{ t * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
-    Vertex t1{ t * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
-    Vertex t2{ t * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
-    Vertex t3{ t * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
+    Transform tf2(Vec3{ 0.1, 0.999, -0.1 }, Quat{ identity }, Vec3{ 0.25 });
+    Vertex u0{ tf2 * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
+    Vertex u1{ tf2 * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
+    Vertex u2{ tf2 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
+    Vertex u3{ tf2 * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
-    // light
-    scene.Add(std::make_shared<Triangle>(t0, t2, t1, light, true, true));
-    scene.Add(std::make_shared<Triangle>(t0, t3, t2, light, true, true));
+    // lights
+    std::shared_ptr<Hittable> l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
+    std::shared_ptr<Hittable> l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
+
+    std::shared_ptr<Hittable> l3 = std::make_shared<Triangle>(u0, u2, u1, light, true, true);
+    std::shared_ptr<Hittable> l4 = std::make_shared<Triangle>(u0, u3, u2, light, true, true);
+
+    std::shared_ptr<Scene> lights = std::make_shared<Scene>();
+    lights->Add(l1);
+    lights->Add(l2);
+
+    scene.Add(l1);
+    scene.Add(l2);
 
     {
         double hx = 0.115;
@@ -489,9 +505,12 @@ void CornellBox2(Scene& scene)
         scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
         scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
     }
+
+    return lights;
 }
 
-Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_color, int32 depth)
+Color ComputeRayColor(
+    const Ray& ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 depth)
 {
     if (depth <= 0)
     {
@@ -504,42 +523,23 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
         return sky_color;
     }
 
-    Ray scattered;
-    Color albedo;
     Color emitted = rec.mat->Emitted(ray, rec, rec.uv, rec.p);
-    double pdf;
 
-    if (rec.mat->Scatter(ray, rec, albedo, scattered, pdf) == false)
+    Color albedo;
+    Ray scattered;
+    double pdf_value;
+
+    if (rec.mat->Scatter(ray, rec, albedo, scattered, pdf_value) == false)
     {
         return emitted;
     }
 
-    double h = 0.125;
+    HittablePDF light_pdf{ lights, rec.p };
+    scattered = Ray{ rec.p, light_pdf.Generate() };
+    pdf_value = light_pdf.Value(scattered.dir);
 
-    Vec3 on_light = Vec3{ 0.5 + Rand(-h, h), 0.999, -0.5 + Rand(-h, h) };
-    Vec3 to_light = on_light - rec.p;
-
-    double distance_squared = to_light.Length2();
-    to_light.Normalize();
-
-    if (Dot(to_light, rec.normal) < 0.0)
-    {
-        return emitted;
-    }
-
-    double light_area = 0.25 * 0.25;
-    double light_cosine = fabs(to_light.y);
-
-    if (light_cosine < 0.000001)
-    {
-        return emitted;
-    }
-
-    pdf = distance_squared / (light_cosine * light_area);
-    scattered = Ray{ rec.p, to_light };
-
-    return emitted +
-           albedo * rec.mat->ScatteringPDF(ray, rec, scattered) * ComputeRayColor(scattered, scene, sky_color, depth - 1) / pdf;
+    return emitted + albedo * rec.mat->ScatteringPDF(ray, rec, scattered) *
+                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
 }
 
 int main()
@@ -552,7 +552,7 @@ int main()
     constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 10;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 20;
 
@@ -573,7 +573,7 @@ int main()
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
     Color sky_color{ 0.0, 0.0, 0.0 };
-    CornellBox2(scene);
+    std::shared_ptr<Hittable> lights = CornellBox2(scene);
 
     Vec3 lookfrom(0.5, 0.5, 1.25);
     Vec3 lookat(0.5, 0.5, 0.0);
@@ -633,7 +633,7 @@ int main()
         // std::cout << "\rScanlines remaining: " << y << ' ' << std::flush;
         if (omp_get_thread_num() == 0)
         {
-            std::printf("\rProcessing... %.2lf%%", y / (chunk - 1) * 100.0);
+            std::printf("\rProcessing... %.2lf%%", y / chunk * 100.0);
         }
 
         for (int32 x = 0; x < width; ++x)
@@ -646,7 +646,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += ComputeRayColor(r, scene, sky_color, max_depth);
+                samples += ComputeRayColor(r, scene, lights, sky_color, max_depth);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2

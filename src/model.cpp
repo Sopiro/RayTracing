@@ -20,16 +20,6 @@ Model::Model(std::string_view path, const Transform& transform)
     }
 }
 
-bool Model::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
-{
-    return bvh.Hit(ray, t_min, t_max, rec);
-}
-
-bool Model::GetAABB(AABB& outAABB) const
-{
-    return bvh.GetAABB(outAABB);
-}
-
 std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<std::shared_ptr<Texture>> textures;

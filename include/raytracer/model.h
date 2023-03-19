@@ -28,4 +28,14 @@ private:
     BVH bvh;
 };
 
+inline bool Model::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+{
+    return bvh.Hit(ray, t_min, t_max, rec);
+}
+
+inline bool Model::GetAABB(AABB& outAABB) const
+{
+    return bvh.GetAABB(outAABB);
+}
+
 } // namespace spt

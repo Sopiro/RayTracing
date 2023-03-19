@@ -249,6 +249,7 @@ NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
     nodes[newNode].moved = true;
 
     InsertLeaf(newNode);
+    leaves.push_back(newNode);
 
     return newNode;
 }
@@ -305,6 +306,17 @@ void BVH::RemoveNode(NodeProxy node)
     assert(nodes[node].IsLeaf());
 
     RemoveLeaf(node);
+
+    for (int32 i = 0; i < leaves.size(); ++i)
+    {
+        if (leaves[i] == node)
+        {
+            leaves[i] = leaves.back();
+        }
+    }
+
+    leaves.pop_back();
+
     FreeNode(node);
 }
 
@@ -765,17 +777,6 @@ bool BVH::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
     });
 
     return hit_closest;
-}
-
-bool BVH::GetAABB(AABB& outAABB) const
-{
-    if (nodeCount == 0)
-    {
-        return false;
-    }
-
-    outAABB = nodes[root].aabb;
-    return true;
 }
 
 } // namespace spt
