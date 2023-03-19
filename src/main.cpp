@@ -514,6 +514,30 @@ Color ComputeRayColor(const Ray& ray, const Hittable& scene, const Color& sky_co
         return emitted;
     }
 
+    double h = 0.125;
+
+    Vec3 on_light = Vec3{ 0.5 + Rand(-h, h), 0.999, -0.5 + Rand(-h, h) };
+    Vec3 to_light = on_light - rec.p;
+
+    double distance_squared = to_light.Length2();
+    to_light.Normalize();
+
+    if (Dot(to_light, rec.normal) < 0.0)
+    {
+        return emitted;
+    }
+
+    double light_area = 0.25 * 0.25;
+    double light_cosine = fabs(to_light.y);
+
+    if (light_cosine < 0.000001)
+    {
+        return emitted;
+    }
+
+    pdf = distance_squared / (light_cosine * light_area);
+    scattered = Ray{ rec.p, to_light };
+
     return emitted +
            albedo * rec.mat->ScatteringPDF(ray, rec, scattered) * ComputeRayColor(scattered, scene, sky_color, depth - 1) / pdf;
 
@@ -533,7 +557,7 @@ int main()
     constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 10;
     constexpr double scale = 1.0 / samples_per_pixel;
     const int max_depth = 20;
 
