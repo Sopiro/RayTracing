@@ -533,12 +533,12 @@ Color ComputeRayColor(
     }
 
     HitRecord rec;
-    if (scene.Hit(ray, 0.00001, infinity, rec) == false)
+    if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
     {
         return sky_color;
     }
 
-    Color emitted = rec.mat->Emitted(ray, rec, rec.uv, rec.p);
+    Color emitted = rec.mat->Emit(ray, rec);
 
     ScatterRecord srec;
     if (rec.mat->Scatter(ray, rec, srec) == false)
@@ -551,7 +551,7 @@ Color ComputeRayColor(
         return srec.attenuation * ComputeRayColor(srec.specular_ray, scene, lights, sky_color, depth - 1);
     }
 
-#ifdef IMPORTANCE_SAMPLING
+#if IMPORTANCE_SAMPLING
     HittablePDF light_pdf{ lights, rec.p };
     MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 

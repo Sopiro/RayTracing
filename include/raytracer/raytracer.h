@@ -20,4 +20,4 @@
 
 #include <omp.h>
 
-#define IMPORTANCE_SAMPLING
+#define IMPORTANCE_SAMPLING 1

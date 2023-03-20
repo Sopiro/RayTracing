@@ -10,6 +10,11 @@ struct ONB
 {
     ONB() = default;
 
+    explicit ONB(const Vec3& normal)
+    {
+        BuildFromW(normal);
+    }
+
     Vec3& operator[](int32 i)
     {
         return (&u)[i];

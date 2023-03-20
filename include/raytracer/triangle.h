@@ -76,7 +76,7 @@ inline bool Triangle::GetAABB(AABB& outAABB) const
 inline double Triangle::PDFValue(const Vec3& origin, const Vec3& dir) const
 {
     HitRecord rec;
-    if (Hit(Ray{ origin, dir }, 0.00001, infinity, rec) == false)
+    if (Hit(Ray{ origin, dir }, ray_tolerance, infinity, rec) == false)
     {
         return 0.0;
     }

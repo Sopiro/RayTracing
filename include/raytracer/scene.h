@@ -43,13 +43,17 @@ inline void Scene::Add(std::shared_ptr<Hittable> object)
 
 inline void Scene::Clear()
 {
+#if USE_BVH
     bvh.Reset();
+#endif
     objects.clear();
 }
 
 inline void Scene::RebuildBVH()
 {
+#if USE_BVH
     bvh.Rebuild();
+#endif
 }
 
 inline double Scene::PDFValue(const Vec3& origin, const Vec3& dir) const

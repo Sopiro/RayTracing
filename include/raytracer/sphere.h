@@ -56,7 +56,7 @@ inline bool Sphere::GetAABB(AABB& outAABB) const
 inline double Sphere::PDFValue(const Vec3& origin, const Vec3& dir) const
 {
     HitRecord rec;
-    if (Hit(Ray{ origin, dir }, 0.00001, infinity, rec) == false)
+    if (Hit(Ray{ origin, dir }, ray_tolerance, infinity, rec) == false)
     {
         return 0;
     }
@@ -72,8 +72,7 @@ inline Vec3 Sphere::Random(const Vec3& origin) const
     Vec3 direction = center - origin;
     double distance_sqared = direction.Length2();
 
-    ONB uvw;
-    uvw.BuildFromW(direction);
+    ONB uvw{ direction };
 
     return uvw.GetLocal(RandomToSphere(radius, distance_sqared));
 }

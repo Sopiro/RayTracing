@@ -21,7 +21,7 @@ struct ScatterRecord
 class Material
 {
 public:
-    virtual Color Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const
+    virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const
     {
         return Color{ 0.0, 0.0, 0.0 };
     }
@@ -31,7 +31,7 @@ public:
     // BRDF
     virtual double ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
     {
-        return 0;
+        return 0.0;
     }
 };
 
@@ -111,7 +111,7 @@ public:
         return false;
     }
 
-    virtual Color Emitted(const Ray& ray_in, const HitRecord& in_rec, const UV& in_uv, const Vec3& in_p) const override;
+    virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const override;
 
 public:
     std::shared_ptr<Texture> emit;

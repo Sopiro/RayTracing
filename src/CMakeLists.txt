@@ -1,21 +1,28 @@
 set(HEADER_FILES
-    ../include/raytracer/common.h
+    ../include/raytracer/aabb.h
     ../include/raytracer/bitmap.h
+    ../include/raytracer/bvh.h
     ../include/raytracer/camera.h
+    ../include/raytracer/common.h
     ../include/raytracer/constant_medium.h
-    ../include/raytracer/scene.h
+    ../include/raytracer/growable_array.h
     ../include/raytracer/hittable.h
     ../include/raytracer/material.h
     ../include/raytracer/math.h
+    ../include/raytracer/mesh.h
+    ../include/raytracer/model.h
+    ../include/raytracer/onb.h
+    ../include/raytracer/pdf.h
     ../include/raytracer/ray.h
+    ../include/raytracer/raytracer.h
+    ../include/raytracer/scene.h
     ../include/raytracer/sphere.h
     ../include/raytracer/texture.h
-    ../include/raytracer/types.h
-    ../include/raytracer/triangle.h
-    ../include/raytracer/aabb.h
-    ../include/raytracer/bvh.h
     ../include/raytracer/transform.h
+    ../include/raytracer/triangle.h
+    ../include/raytracer/types.h
 )
+
 set(SOURCE_FILES
     main.cpp
     material.cpp

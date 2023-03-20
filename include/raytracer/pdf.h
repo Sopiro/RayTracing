@@ -21,8 +21,8 @@ class CosinePDF : public PDF
 {
 public:
     CosinePDF(const Vec3& w)
+        : uvw{ w }
     {
-        uvw.BuildFromW(w);
     }
 
     virtual Vec3 Generate() const override
@@ -88,6 +88,7 @@ public:
 
     virtual double Evaluate(const Vec3& direction) const override
     {
+        // Mixing two pdfs
         return 0.5 * p1->Evaluate(direction) + 0.5 * p2->Evaluate(direction);
     }
 

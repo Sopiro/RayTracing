@@ -25,6 +25,8 @@
 namespace spt
 {
 
+constexpr double ray_tolerance = 0.00001;
+
 typedef Vec3 Color;
 typedef Vec2 UV;
 

@@ -44,13 +44,12 @@ struct AABB
         return true;
     }
 
-    Vec3 min;
-    Vec3 max;
+    Vec3 min, max;
 };
 
 inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
 {
-    for (uint32 axis = 0; axis < 3; ++axis)
+    for (int32 axis = 0; axis < 3; ++axis)
     {
         double invD = 1.0 / r.dir[axis];
 
