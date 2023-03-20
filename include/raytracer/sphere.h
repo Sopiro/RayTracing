@@ -19,8 +19,9 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
-    virtual Vec3 Random(const Vec3& origin) const override;
+    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const override;
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const override;
+    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
 
 public:
     Vec3 center;
@@ -28,7 +29,7 @@ public:
     std::shared_ptr<Material> material;
 
 private:
-    static void GetUV(const Vec3& p, UV& uv)
+    static void GetUV(const Vec3& p, UV& out_uv)
     {
         // p: a given point on the sphere of radius one, centered at the origin.
         // u: returned value [0,1] of angle around the Y axis from X=-1.
@@ -40,8 +41,8 @@ private:
         double theta = acos(-p.y);
         double phi = atan2(-p.z, p.x) + pi;
 
-        uv.x = phi / (2.0 * pi);
-        uv.y = theta / pi;
+        out_uv.x = phi / (2.0 * pi);
+        out_uv.y = theta / pi;
     }
 };
 
@@ -53,12 +54,12 @@ inline bool Sphere::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double Sphere::PDFValue(const Vec3& origin, const Vec3& dir) const
+inline double Sphere::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
 {
     HitRecord rec;
     if (Hit(Ray{ origin, dir }, ray_tolerance, infinity, rec) == false)
     {
-        return 0;
+        return 0.0;
     }
 
     double cos_theta_max = sqrt(1.0 - radius * radius / (center - origin).Length2());
@@ -67,7 +68,15 @@ inline double Sphere::PDFValue(const Vec3& origin, const Vec3& dir) const
     return 1.0 / solid_angle;
 }
 
-inline Vec3 Sphere::Random(const Vec3& origin) const
+inline double Sphere::PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const
+{
+    double cos_theta_max = sqrt(1.0 - radius * radius / (center - origin).Length2());
+    double solid_angle = 2.0 * pi * (1.0 - cos_theta_max);
+
+    return 1.0 / solid_angle;
+}
+
+inline Vec3 Sphere::GetRandomDirection(const Vec3& origin) const
 {
     Vec3 direction = center - origin;
     double distance_sqared = direction.Length2();

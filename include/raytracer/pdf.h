@@ -52,12 +52,12 @@ public:
     // Returns random direction vector hitting this object
     virtual Vec3 Generate() const override
     {
-        return target->Random(origin);
+        return target->GetRandomDirection(origin);
     }
 
     virtual double Evaluate(const Vec3& direction) const override
     {
-        return target->PDFValue(origin, direction);
+        return target->EvaluatePDF(origin, direction);
     }
 
 public:

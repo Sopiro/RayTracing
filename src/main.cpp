@@ -552,10 +552,10 @@ Color ComputeRayColor(
     }
 
 #if IMPORTANCE_SAMPLING
-    HittablePDF light_pdf{ lights, rec.p };
+    HittablePDF light_pdf{ lights, rec.point };
     MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 
-    Ray scattered{ rec.p, mixed_pdf.Generate() };
+    Ray scattered{ rec.point, mixed_pdf.Generate() };
     double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *

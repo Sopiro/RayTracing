@@ -9,13 +9,13 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     HitRecord rec2;
 
     // Find the closest hit
-    if (!boundary->Hit(ray, -infinity, infinity, rec1))
+    if (boundary->Hit(ray, -infinity, infinity, rec1) == false)
     {
         return false;
     }
 
     // Find the farthest hit
-    if (!boundary->Hit(ray, rec1.t + 0.0001, infinity, rec2))
+    if (boundary->Hit(ray, rec1.t + 0.0001, infinity, rec2) == false)
     {
         return false;
     }
@@ -50,7 +50,7 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     }
 
     rec.t = rec1.t + hit_distance / ray_length;
-    rec.p = ray.At(rec.t);
+    rec.point = ray.At(rec.t);
     rec.normal = Vec3{ 1.0, 0.0, 0.0 }; // arbitrary
     rec.front_face = true;              // also arbitrary
     rec.mat = phase_function;

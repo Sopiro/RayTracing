@@ -9,7 +9,7 @@ namespace spt
 bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
     out_srec.is_specular = false;
-    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
+    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.point);
     out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
 
     return true;
@@ -25,7 +25,7 @@ bool Metal::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& o
 {
     Vec3 reflected = Reflect(in_ray.dir.Normalized(), in_rec.normal);
 
-    out_srec.specular_ray = Ray{ in_rec.p, reflected + fuzziness * RandomInUnitSphere() };
+    out_srec.specular_ray = Ray{ in_rec.point, reflected + fuzziness * RandomInUnitSphere() };
     out_srec.attenuation = albedo;
     out_srec.is_specular = true;
     out_srec.pdf = nullptr;
@@ -58,7 +58,7 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
     out_srec.is_specular = true;
     out_srec.pdf = nullptr;
     out_srec.attenuation = Color{ 1.0, 1.0, 1.0 };
-    out_srec.specular_ray = Ray{ in_rec.p, direction };
+    out_srec.specular_ray = Ray{ in_rec.point, direction };
 
     return true;
 }
@@ -67,8 +67,8 @@ bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecor
 {
     out_srec.is_specular = true;
     out_srec.pdf = nullptr;
-    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
-    out_srec.specular_ray = Ray{ in_rec.p, RandomInUnitSphere() };
+    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.point);
+    out_srec.specular_ray = Ray{ in_rec.point, RandomInUnitSphere() };
 
     return true;
 }
@@ -77,7 +77,7 @@ Color DiffuseLight::Emit(const Ray& in_ray, const HitRecord& in_rec) const
 {
     if (in_rec.front_face)
     {
-        return emit->Value(in_rec.uv, in_rec.p);
+        return emit->Value(in_rec.uv, in_rec.point);
     }
     else
     {

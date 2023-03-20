@@ -13,7 +13,7 @@ class Hittable;
 
 struct HitRecord
 {
-    Vec3 p;
+    Vec3 point;
     Vec3 normal;
     double t;
     UV uv;
@@ -35,14 +35,20 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const
+    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const
+    {
+        assert(false);
+        return 0.0;
+    }
+
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const
     {
         assert(false);
         return 0.0;
     }
 
     // Returns random direction toward this object
-    virtual Vec3 Random(const Vec3& origin) const
+    virtual Vec3 GetRandomDirection(const Vec3& origin) const
     {
         assert(false);
         return Vec3{ 0, 0, 0 };

@@ -93,8 +93,8 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
-    virtual Vec3 Random(const Vec3& origin) const override;
+    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const override;
+    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
 
 private:
     NodeProxy nodeID;
@@ -330,24 +330,40 @@ inline bool BVH::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double BVH::PDFValue(const Vec3& origin, const Vec3& dir) const
+inline double BVH::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
 {
-    double weight = 1.0 / leaves.size();
-    double sum = 0.0;
-
-    for (NodeProxy object : leaves)
+    struct Callback
     {
-        sum += weight * nodes[object].data->PDFValue(origin, dir);
-    }
+        HitRecord rec;
+        double sum;
+        double weight;
 
-    return sum;
+        double RayCastCallback(const Ray& ray, double t_min, double t_max, Hittable* object)
+        {
+            bool hit = object->Hit(ray, t_min, t_max, rec);
+
+            if (hit)
+            {
+                sum += weight * object->PDFValue(ray.origin, ray.dir, rec);
+            }
+
+            return t_max;
+        }
+    } callback;
+
+    callback.sum = 0.0;
+    callback.weight = 1.0 / leaves.size();
+
+    RayCast(Ray{ origin, dir }, ray_tolerance, infinity, &callback);
+
+    return callback.sum;
 }
 
-inline Vec3 BVH::Random(const Vec3& origin) const
+inline Vec3 BVH::GetRandomDirection(const Vec3& origin) const
 {
     int32 index = static_cast<int32>(leaves.size() * Rand());
 
-    return nodes[leaves[index]].data->Random(origin);
+    return nodes[leaves[index]].data->GetRandomDirection(origin);
 }
 
 } // namespace spt

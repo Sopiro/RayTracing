@@ -20,8 +20,8 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
-    virtual Vec3 Random(const Vec3& origin) const override;
+    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const override;
+    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
 
 private:
     BVH bvh;
@@ -50,14 +50,14 @@ inline void Scene::RebuildBVH()
     bvh.Rebuild();
 }
 
-inline double Scene::PDFValue(const Vec3& origin, const Vec3& dir) const
+inline double Scene::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
 {
-    return bvh.PDFValue(origin, dir);
+    return bvh.EvaluatePDF(origin, dir);
 }
 
-inline Vec3 Scene::Random(const Vec3& origin) const
+inline Vec3 Scene::GetRandomDirection(const Vec3& origin) const
 {
-    return bvh.Random(origin);
+    return bvh.GetRandomDirection(origin);
 }
 
 } // namespace spt

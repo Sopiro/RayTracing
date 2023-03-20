@@ -49,7 +49,7 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     rec.object = this;
     rec.mat = material;
     rec.t = t;
-    rec.p = ray.At(rec.t);
+    rec.point = ray.At(rec.t);
     Vec3 normal = GetNormal(u, v, 1.0 - u - v);
     rec.SetFaceNormal(ray, normal);
     Vec2 tex = GetTexCoord(u, v, 1.0 - u - v);
