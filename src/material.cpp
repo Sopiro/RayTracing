@@ -65,8 +65,10 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
 
 bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    out_srec.specular_ray = Ray{ in_rec.p, RandomInUnitSphere() };
+    out_srec.is_specular = true;
+    out_srec.pdf = nullptr;
     out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
+    out_srec.specular_ray = Ray{ in_rec.p, RandomInUnitSphere() };
 
     return true;
 }

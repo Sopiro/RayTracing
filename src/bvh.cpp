@@ -760,23 +760,34 @@ void BVH::RayCast(const Ray& r,
 
 bool BVH::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
 {
-    bool hit_closest = false;
+    struct Callback
+    {
+        HitRecord* rec;
+        bool hit_closest;
+        double t;
 
-    double t = t_max;
-
-    RayCast(ray, t_min, t_max, [&](const Ray& _ray, double _t_min, double _t_max, Hittable* _object) -> double {
-        bool hit = _object->Hit(ray, _t_min, _t_max, rec);
-
-        if (hit)
+        double RayCastCallback(const Ray& ray, double t_min, double t_max, Hittable* object)
         {
-            hit_closest = true;
-            t = rec.t;
+            bool hit = object->Hit(ray, t_min, t_max, *rec);
+
+            if (hit)
+            {
+                hit_closest = true;
+                t = rec->t;
+            }
+
+            // Keep traverse with smaller bounds
+            return t;
         }
+    } callback;
 
-        return t;
-    });
+    callback.rec = &rec;
+    callback.hit_closest = false;
+    callback.t = t_max;
 
-    return hit_closest;
+    RayCast(ray, t_min, t_max, &callback);
+
+    return callback.hit_closest;
 }
 
 } // namespace spt

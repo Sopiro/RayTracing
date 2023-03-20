@@ -602,14 +602,14 @@ int main()
     Color sky_color{ 0.0, 0.0, 0.0 };
     std::shared_ptr<Hittable> lights = CornellBox2(scene);
 
-    Vec3 lookfrom(0.5, 0.5, 1.25);
-    Vec3 lookat(0.5, 0.5, 0.0);
-    Vec3 vup(0.0, 1.0, 0.0);
+    Vec3 lookfrom{ 0.5, 0.5, 1.25 };
+    Vec3 lookat{ 0.5, 0.5, 0.0 };
+    Vec3 vup{ 0.0, 1.0, 0.0 };
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
     double vFov = 45.0;
 
-    Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
+    Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     // Color sky_color{ 0.2 };
     // Color sky_color = Color{ 0.7, 0.8, 1.0 } * 0.5;
@@ -652,9 +652,7 @@ int main()
 
     auto t0 = std::chrono::system_clock::now();
 
-    double chunk = height / omp_get_max_threads();
-
-#pragma omp parallel for schedule(dynamic)
+    // #pragma omp parallel for schedule(dynamic, 1)
     for (int32 y = 0; y < height; ++y)
     {
         // std::cout << "\rScanlines remaining: " << y << ' ' << std::flush;
@@ -663,7 +661,7 @@ int main()
             std::printf("\rScanline: %d / %d", y, height);
         }
 
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic, 1)
         for (int32 x = 0; x < width; ++x)
         {
             Color samples{ 0.0 };

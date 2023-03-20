@@ -30,30 +30,24 @@ private:
 
 inline void Scene::Add(std::shared_ptr<Hittable> object)
 {
-#if USE_BVH
     Hittable* raw = object.get();
     AABB aabb;
     raw->GetAABB(aabb);
 
     NodeProxy node = bvh.CreateNode(raw, aabb);
-#endif
 
     objects.push_back(object);
 }
 
 inline void Scene::Clear()
 {
-#if USE_BVH
     bvh.Reset();
-#endif
     objects.clear();
 }
 
 inline void Scene::RebuildBVH()
 {
-#if USE_BVH
     bvh.Rebuild();
-#endif
 }
 
 inline double Scene::PDFValue(const Vec3& origin, const Vec3& dir) const

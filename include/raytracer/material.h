@@ -28,7 +28,7 @@ public:
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const = 0;
 
-    // BRDF
+    // BRDF with cosine term and without albedo
     virtual double ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
     {
         return 0.0;
