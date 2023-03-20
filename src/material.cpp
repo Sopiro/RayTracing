@@ -1,21 +1,16 @@
 #include "raytracer/material.h"
 #include "raytracer/hittable.h"
 #include "raytracer/onb.h"
+#include "raytracer/pdf.h"
 
 namespace spt
 {
 
-bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const
+bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    ONB uvw;
-    uvw.BuildFromW(in_rec.normal);
-
-    // lambertian scattering
-    Vec3 scatter_direction = uvw.GetLocal(RandomCosineDirection());
-
-    out_scattered = Ray{ in_rec.p, scatter_direction.Normalized() };
-    out_alb = albedo->Value(in_rec.uv, in_rec.p);
-    out_pdf = Dot(uvw.w, out_scattered.dir) / pi;
+    out_srec.is_specular = false;
+    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
+    out_srec.pdf_ptr = std::make_shared<CosinePDF>(in_rec.normal);
 
     return true;
 }
@@ -26,18 +21,20 @@ double Lambertian::ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, con
     return Dot(in_rec.normal, in_scattered.dir) / pi;
 }
 
-bool Metal::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const
+bool Metal::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
     Vec3 reflected = Reflect(in_ray.dir.Normalized(), in_rec.normal);
-    out_scattered = Ray{ in_rec.p, reflected + fuzziness * RandomInUnitSphere() };
-    out_alb = albedo;
 
-    return Dot(out_scattered.dir, in_rec.normal) > 0;
+    out_srec.specular_ray = Ray{ in_rec.p, reflected + fuzziness * RandomInUnitSphere() };
+    out_srec.attenuation = albedo;
+    out_srec.is_specular = true;
+    out_srec.pdf_ptr = nullptr;
+
+    return true;
 }
 
-bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const
+bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    out_alb = Color{ 1.0, 1.0, 1.0 };
     double refraction_ratio = in_rec.front_face ? (1.0 / ir) : ir;
 
     Vec3 unit_direction = in_ray.dir.Normalized();
@@ -58,15 +55,18 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_
         direction = Refract(unit_direction, in_rec.normal, refraction_ratio);
     }
 
-    out_scattered = Ray{ in_rec.p, direction };
+    out_srec.is_specular = true;
+    out_srec.pdf_ptr = nullptr;
+    out_srec.attenuation = Color{ 1.0, 1.0, 1.0 };
+    out_srec.specular_ray = Ray{ in_rec.p, direction };
 
     return true;
 }
 
-bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, Color& out_alb, Ray& out_scattered, double& out_pdf) const
+bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    out_scattered = Ray{ in_rec.p, RandomInUnitSphere() };
-    out_alb = albedo->Value(in_rec.uv, in_rec.p);
+    out_srec.specular_ray = Ray{ in_rec.p, RandomInUnitSphere() };
+    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
 
     return true;
 }

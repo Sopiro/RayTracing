@@ -344,14 +344,14 @@ void Sponza(Scene& scene)
 
 std::shared_ptr<Hittable> CornellBox2(Scene& scene)
 {
-    auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
-    auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
+    auto red = std::make_shared<Lambertian>(Color{ .65, .05, .05 });
+    auto green = std::make_shared<Lambertian>(Color{ .12, .45, .15 });
     auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
-    auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
+    auto white = std::make_shared<Lambertian>(Color{ .73, .73, .73 });
     auto wakgood_texture = std::make_shared<ImageTexture>("res/wakdu.jpg");
     auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
 
-    auto light = std::make_shared<DiffuseLight>(Color(15.0));
+    auto light = std::make_shared<DiffuseLight>(Color{ 15.0 });
     auto wakgood_light = std::make_shared<DiffuseLight>(wakgood_texture);
 
     Vertex v0{ Vec3{ 0.0, 0.0, 0.0 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
@@ -385,7 +385,7 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     scene.Add(std::make_shared<Triangle>(v7, v2, v3, white, true, true));
 
     // Transform tf1(Vec3{ 0.5, 0.8, -0.5 }, Quat{ DegToRad(-30.0), Vec3{ 1.0, 0.0, 0.0 } }, Vec3{ 0.25 });
-    Transform tf1(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.25 });
+    Transform tf1(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.3 });
     Vertex t0{ tf1 * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
     Vertex t1{ tf1 * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
     Vertex t2{ tf1 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
@@ -411,6 +411,7 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     scene.Add(l1);
     scene.Add(l2);
 
+    // Left block
     {
         double hx = 0.115;
         double hy = 0.25;
@@ -429,8 +430,9 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
         Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
 
         // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.2);
-        // auto mat = std::make_shared<Dielectric>(2.4);
-        auto mat = white;
+        // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.0);
+        auto mat = std::make_shared<Dielectric>(2.4);
+        // auto mat = white;
 
         // front
         scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
@@ -457,6 +459,7 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
         scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
     }
 
+    // Right block
     {
         double hx = 0.12;
         double hy = 0.12;
@@ -477,9 +480,9 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
 
         // auto mat = std::make_shared<Dielectric>(1.5);
         // auto mat = std::make_shared<Dielectric>(2.0);
-        // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
+        auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
 
-        auto mat = white;
+        // auto mat = white;
 
         // front
         scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
@@ -525,24 +528,33 @@ Color ComputeRayColor(
 
     Color emitted = rec.mat->Emitted(ray, rec, rec.uv, rec.p);
 
-    Color albedo;
-    Ray scattered;
-    double pdf_value;
-
-    if (rec.mat->Scatter(ray, rec, albedo, scattered, pdf_value) == false)
+    ScatterRecord srec;
+    if (rec.mat->Scatter(ray, rec, srec) == false)
     {
         return emitted;
     }
 
-    HittablePDF p1{ lights, rec.p };
-    CosinePDF p2{ rec.normal };
-    MixturePDF mixed_pdf{ &p1, &p2 };
+    if (srec.is_specular == true)
+    {
+        return srec.attenuation * ComputeRayColor(srec.specular_ray, scene, lights, sky_color, depth - 1);
+    }
 
-    scattered = Ray{ rec.p, mixed_pdf.Generate() };
-    pdf_value = mixed_pdf.Value(scattered.dir);
+#ifdef IMPORTANCE_SAMPLING
+    HittablePDF light_pdf{ lights, rec.p };
+    MixturePDF mixed_pdf{ &light_pdf, srec.pdf_ptr.get() };
 
-    return emitted + albedo * rec.mat->ScatteringPDF(ray, rec, scattered) *
+    Ray scattered{ rec.p, mixed_pdf.Generate() };
+    double pdf_value = mixed_pdf.Evaluate(scattered.dir);
+
+    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
                          ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+#else
+    Ray scattered{ rec.p, srec.pdf_ptr->Generate() };
+    double pdf_value = srec.pdf_ptr->Evaluate(scattered.dir);
+
+    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
+                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+#endif
 }
 
 int main()
@@ -557,7 +569,7 @@ int main()
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    const int max_depth = 20;
+    const int max_depth = 10;
 
     Bitmap bitmap{ width, height };
     Scene scene;
@@ -580,10 +592,10 @@ int main()
 
     Vec3 lookfrom(0.5, 0.5, 1.25);
     Vec3 lookat(0.5, 0.5, 0.0);
-    Vec3 vup(0, 1, 0);
+    Vec3 vup(0.0, 1.0, 0.0);
     auto dist_to_focus = (lookfrom - lookat).Length();
     auto aperture = 0.0;
-    double vFov = 45;
+    double vFov = 45.0;
 
     Camera camera(lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus);
 
@@ -630,15 +642,16 @@ int main()
 
     double chunk = height / omp_get_max_threads();
 
-#pragma omp parallel for
+#pragma omp parallel for schedule(dynamic)
     for (int32 y = 0; y < height; ++y)
     {
         // std::cout << "\rScanlines remaining: " << y << ' ' << std::flush;
         if (omp_get_thread_num() == 0)
         {
-            std::printf("\rProcessing... %.2lf%%", y / chunk * 100.0);
+            std::printf("\rScanline: %d / %d", y, height);
         }
 
+#pragma omp parallel for schedule(dynamic)
         for (int32 x = 0; x < width; ++x)
         {
             Color samples{ 0.0 };

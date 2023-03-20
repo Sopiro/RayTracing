@@ -19,3 +19,5 @@
 #include "triangle.h"
 
 #include <omp.h>
+
+#define IMPORTANCE_SAMPLING

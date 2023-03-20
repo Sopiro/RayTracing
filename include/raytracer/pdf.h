@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "hittable.h"
 #include "onb.h"
 
 namespace spt
@@ -13,7 +14,7 @@ public:
     virtual ~PDF() = default;
 
     virtual Vec3 Generate() const = 0;
-    virtual double Value(const Vec3& direction) const = 0;
+    virtual double Evaluate(const Vec3& direction) const = 0;
 };
 
 class CosinePDF : public PDF
@@ -29,7 +30,7 @@ public:
         return uvw.GetLocal(RandomCosineDirection());
     }
 
-    virtual double Value(const Vec3& direction) const override
+    virtual double Evaluate(const Vec3& direction) const override
     {
         double cosine = Dot(direction.Normalized(), uvw.w);
         return (cosine <= 0.0) ? 0.0 : cosine / pi;
@@ -54,7 +55,7 @@ public:
         return target->Random(origin);
     }
 
-    virtual double Value(const Vec3& direction) const override
+    virtual double Evaluate(const Vec3& direction) const override
     {
         HitRecord rec;
         if (target->Hit(Ray{ origin, direction }, 0.00001, infinity, rec))
@@ -91,9 +92,9 @@ public:
         }
     }
 
-    virtual double Value(const Vec3& direction) const override
+    virtual double Evaluate(const Vec3& direction) const override
     {
-        return 0.5 * p1->Value(direction) + 0.5 * p2->Value(direction);
+        return 0.5 * p1->Evaluate(direction) + 0.5 * p2->Evaluate(direction);
     }
 
 public:
