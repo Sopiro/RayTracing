@@ -35,7 +35,7 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    virtual double PDFValue(const Vec3& dir, const HitRecord& rec) const
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const
     {
         assert(false);
         return 0.0;

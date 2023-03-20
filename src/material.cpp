@@ -10,7 +10,7 @@ bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
 {
     out_srec.is_specular = false;
     out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.p);
-    out_srec.pdf_ptr = std::make_shared<CosinePDF>(in_rec.normal);
+    out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
 
     return true;
 }
@@ -28,7 +28,7 @@ bool Metal::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& o
     out_srec.specular_ray = Ray{ in_rec.p, reflected + fuzziness * RandomInUnitSphere() };
     out_srec.attenuation = albedo;
     out_srec.is_specular = true;
-    out_srec.pdf_ptr = nullptr;
+    out_srec.pdf = nullptr;
 
     return true;
 }
@@ -56,7 +56,7 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
     }
 
     out_srec.is_specular = true;
-    out_srec.pdf_ptr = nullptr;
+    out_srec.pdf = nullptr;
     out_srec.attenuation = Color{ 1.0, 1.0, 1.0 };
     out_srec.specular_ray = Ray{ in_rec.p, direction };
 

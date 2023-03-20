@@ -93,7 +93,7 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& v, const HitRecord& rec) const override;
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
     virtual Vec3 Random(const Vec3& origin) const override;
 
 private:
@@ -330,9 +330,17 @@ inline bool BVH::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double BVH::PDFValue(const Vec3& v, const HitRecord& rec) const
+inline double BVH::PDFValue(const Vec3& origin, const Vec3& dir) const
 {
-    return rec.object->PDFValue(v, rec);
+    double weight = 1.0 / leaves.size();
+    double sum = 0.0;
+
+    for (NodeProxy object : leaves)
+    {
+        sum += weight * nodes[object].data->PDFValue(origin, dir);
+    }
+
+    return sum;
 }
 
 inline Vec3 BVH::Random(const Vec3& origin) const

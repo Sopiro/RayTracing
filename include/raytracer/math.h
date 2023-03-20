@@ -1326,6 +1326,19 @@ inline Vec3 RandomUnitVector()
     return Vec3{ x, y, z };
 }
 
+inline Vec3 RandomToSphere(double radius, double distance_squared)
+{
+    double r1 = Rand();
+    double r2 = Rand();
+    double z = 1.0 + r2 * (sqrt(1.0 - radius * radius / distance_squared) - 1.0);
+
+    double phi = 2.0 * pi * r1;
+    double x = cos(phi) * sqrt(1.0 - z * z);
+    double y = sin(phi) * sqrt(1.0 - z * z);
+
+    return Vec3{ x, y, z };
+}
+
 // z > 0
 inline Vec3 RandomCosineDirection()
 {

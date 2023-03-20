@@ -50,7 +50,7 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& dir, const HitRecord& rec) const override;
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
     virtual Vec3 Random(const Vec3& origin) const override;
 
 public:
@@ -73,8 +73,14 @@ inline bool Triangle::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double Triangle::PDFValue(const Vec3& dir, const HitRecord& rec) const
+inline double Triangle::PDFValue(const Vec3& origin, const Vec3& dir) const
 {
+    HitRecord rec;
+    if (Hit(Ray{ origin, dir }, 0.00001, infinity, rec) == false)
+    {
+        return 0.0;
+    }
+
     double distance_squared = rec.t * rec.t * dir.Length2();
     double cosine = fabs(Dot(dir, rec.normal) / dir.Length());
 

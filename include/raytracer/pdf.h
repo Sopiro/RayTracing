@@ -57,13 +57,7 @@ public:
 
     virtual double Evaluate(const Vec3& direction) const override
     {
-        HitRecord rec;
-        if (target->Hit(Ray{ origin, direction }, 0.00001, infinity, rec))
-        {
-            return rec.object->PDFValue(direction, rec);
-        }
-
-        return 0.0;
+        return target->PDFValue(origin, direction);
     }
 
 public:
@@ -74,15 +68,15 @@ public:
 class MixturePDF : public PDF
 {
 public:
-    MixturePDF(PDF* p1, PDF* p2)
-        : p1{ p1 }
-        , p2{ p2 }
+    MixturePDF(PDF* pdf1, PDF* pdf2)
+        : p1{ pdf1 }
+        , p2{ pdf2 }
     {
     }
 
     virtual Vec3 Generate() const override
     {
-        if (Rand() < 0.5)
+        if (Rand() > 0.5)
         {
             return p1->Generate();
         }

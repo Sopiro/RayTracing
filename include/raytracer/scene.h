@@ -20,7 +20,7 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double PDFValue(const Vec3& v, const HitRecord& rec) const override;
+    virtual double PDFValue(const Vec3& origin, const Vec3& dir) const override;
     virtual Vec3 Random(const Vec3& origin) const override;
 
 private:
@@ -52,9 +52,9 @@ inline void Scene::RebuildBVH()
     bvh.Rebuild();
 }
 
-inline double Scene::PDFValue(const Vec3& v, const HitRecord& rec) const
+inline double Scene::PDFValue(const Vec3& origin, const Vec3& dir) const
 {
-    return bvh.PDFValue(v, rec);
+    return bvh.PDFValue(origin, dir);
 }
 
 inline Vec3 Scene::Random(const Vec3& origin) const

@@ -385,7 +385,7 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     scene.Add(std::make_shared<Triangle>(v7, v2, v3, white, true, true));
 
     // Transform tf1(Vec3{ 0.5, 0.8, -0.5 }, Quat{ DegToRad(-30.0), Vec3{ 1.0, 0.0, 0.0 } }, Vec3{ 0.25 });
-    Transform tf1(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.3 });
+    Transform tf1(Vec3{ 0.5, 0.999, -0.5 }, Quat{ identity }, Vec3{ 0.25 });
     Vertex t0{ tf1 * Vec3{ -0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 0.0 } };
     Vertex t1{ tf1 * Vec3{ 0.5, 0.0, 0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 0.0 } };
     Vertex t2{ tf1 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
@@ -413,11 +413,14 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
 
     // Left block
     {
-        double hx = 0.115;
-        double hy = 0.25;
-        double hz = 0.115;
+        double hx = 0.13;
+        double hy = 0.26;
+        double hz = 0.13;
 
-        Transform t(0.25, hy + 0.02, -0.6, Quat(DegToRad(20.0), Vec3(0.0, 1.0, 0.0)));
+        // double w = 0.02;
+        double w = 0.0;
+
+        Transform t(0.3, hy + w, -0.6, Quat(DegToRad(25.0), Vec3(0.0, 1.0, 0.0)));
 
         Vertex v0{ t * Vec3{ -hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
         Vertex v1{ t * Vec3{ hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
@@ -431,8 +434,8 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
 
         // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.2);
         // auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.0);
-        auto mat = std::make_shared<Dielectric>(2.4);
-        // auto mat = white;
+        // auto mat = std::make_shared<Dielectric>(2.4);
+        auto mat = white;
 
         // front
         scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
@@ -460,53 +463,62 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     }
 
     // Right block
+    // {
+    //     double hx = 0.12;
+    //     double hy = 0.12;
+    //     double hz = 0.12;
+
+    //     // Transform t(0.7, 0.2, 0.7, Quat(DegToRad(30.0), Vec3(0.0, 0.0, 1.0)) * Quat(DegToRad(30.0), Vec3(0.0, 1.0, 0.0)));
+    //     Transform t(0.7, hy, -0.3, Quat(DegToRad(-30.0), Vec3(0.0, 1.0, 0.0)));
+
+    //     Vertex v0{ t * Vec3{ -hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+    //     Vertex v1{ t * Vec3{ hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+    //     Vertex v2{ t * Vec3{ hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+    //     Vertex v3{ t * Vec3{ -hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+    //     Vertex v4{ t * Vec3{ -hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
+    //     Vertex v5{ t * Vec3{ hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
+    //     Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
+    //     Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
+
+    //     // auto mat = std::make_shared<Dielectric>(1.5);
+    //     // auto mat = std::make_shared<Dielectric>(2.0);
+    //     auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
+
+    //     // auto mat = white;
+
+    //     // front
+    //     scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v0, v2, v3, mat, true, true));
+
+    //     // right
+    //     scene.Add(std::make_shared<Triangle>(v1, v5, v6, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v1, v6, v2, mat, true, true));
+
+    //     // back
+    //     scene.Add(std::make_shared<Triangle>(v5, v4, v7, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v5, v7, v6, mat, true, true));
+
+    //     // left
+    //     scene.Add(std::make_shared<Triangle>(v4, v0, v3, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v4, v3, v7, mat, true, true));
+
+    //     // top
+    //     scene.Add(std::make_shared<Triangle>(v3, v2, v6, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v3, v6, v7, mat, true, true));
+
+    //     // bottom
+    //     scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
+    //     scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
+    // }
+
+    // Right sphere
     {
-        double hx = 0.12;
-        double hy = 0.12;
-        double hz = 0.12;
+        auto mat = std::make_shared<Dielectric>(1.5);
+        auto sphere = std::make_shared<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
+        scene.Add(sphere);
 
-        // Transform t(0.7, 0.2, 0.7, Quat(DegToRad(30.0), Vec3(0.0, 0.0, 1.0)) * Quat(DegToRad(30.0), Vec3(0.0, 1.0, 0.0)));
-        Transform t(0.7, hy, -0.3, Quat(DegToRad(-30.0), Vec3(0.0, 1.0, 0.0)));
-
-        Vertex v0{ t * Vec3{ -hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
-        Vertex v1{ t * Vec3{ hx, -hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
-        Vertex v2{ t * Vec3{ hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
-        Vertex v3{ t * Vec3{ -hx, hy, hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
-
-        Vertex v4{ t * Vec3{ -hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 0.0 } };
-        Vertex v5{ t * Vec3{ hx, -hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 0.0 } };
-        Vertex v6{ t * Vec3{ hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 1.0, 1.0 } };
-        Vertex v7{ t * Vec3{ -hx, hy, -hz }, Vec3{ 0.0, 0.0, 1.0 }, Vec2{ 0.0, 1.0 } };
-
-        // auto mat = std::make_shared<Dielectric>(1.5);
-        // auto mat = std::make_shared<Dielectric>(2.0);
-        auto mat = std::make_shared<Metal>(Color{ 0.6, 0.6, 0.6 }, 0.1);
-
-        // auto mat = white;
-
-        // front
-        scene.Add(std::make_shared<Triangle>(v0, v1, v2, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v0, v2, v3, mat, true, true));
-
-        // right
-        scene.Add(std::make_shared<Triangle>(v1, v5, v6, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v1, v6, v2, mat, true, true));
-
-        // back
-        scene.Add(std::make_shared<Triangle>(v5, v4, v7, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v5, v7, v6, mat, true, true));
-
-        // left
-        scene.Add(std::make_shared<Triangle>(v4, v0, v3, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v4, v3, v7, mat, true, true));
-
-        // top
-        scene.Add(std::make_shared<Triangle>(v3, v2, v6, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v3, v6, v7, mat, true, true));
-
-        // bottom
-        scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
-        scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
+        lights->Add(sphere);
     }
 
     return lights;
@@ -541,7 +553,7 @@ Color ComputeRayColor(
 
 #ifdef IMPORTANCE_SAMPLING
     HittablePDF light_pdf{ lights, rec.p };
-    MixturePDF mixed_pdf{ &light_pdf, srec.pdf_ptr.get() };
+    MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 
     Ray scattered{ rec.p, mixed_pdf.Generate() };
     double pdf_value = mixed_pdf.Evaluate(scattered.dir);
@@ -549,8 +561,8 @@ Color ComputeRayColor(
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
                          ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
 #else
-    Ray scattered{ rec.p, srec.pdf_ptr->Generate() };
-    double pdf_value = srec.pdf_ptr->Evaluate(scattered.dir);
+    Ray scattered{ rec.p, srec.pdf->Generate() };
+    double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
                          ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
