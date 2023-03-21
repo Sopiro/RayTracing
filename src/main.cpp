@@ -524,49 +524,58 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     return lights;
 }
 
-Color ComputeRayColor(
-    const Ray& ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 depth)
+Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 bounce_count)
 {
-    if (depth <= 0)
-    {
-        return Color{ 0.0 };
-    }
+    Color acc{ 0.0, 0.0, 0.0 };
+    Color abso{ 1.0, 1.0, 1.0 };
 
-    HitRecord rec;
-    if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
+    for (int32 i = 0; i < bounce_count; ++i)
     {
-        return sky_color;
-    }
+        HitRecord rec;
+        if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
+        {
+            acc += sky_color * abso;
+            break;
+        }
 
-    Color emitted = rec.mat->Emit(ray, rec);
+        Color emitted = rec.mat->Emit(ray, rec);
 
-    ScatterRecord srec;
-    if (rec.mat->Scatter(ray, rec, srec) == false)
-    {
-        return emitted;
-    }
+        ScatterRecord srec;
+        if (rec.mat->Scatter(ray, rec, srec) == false)
+        {
+            acc += emitted * abso;
+            break;
+        }
 
-    if (srec.is_specular == true)
-    {
-        return srec.attenuation * ComputeRayColor(srec.specular_ray, scene, lights, sky_color, depth - 1);
-    }
+        if (srec.is_specular == true)
+        {
+            abso = abso * srec.attenuation;
+            ray = srec.specular_ray;
+            continue;
+        }
 
 #if IMPORTANCE_SAMPLING
-    HittablePDF light_pdf{ lights, rec.point };
-    MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
+        HittablePDF light_pdf{ lights, rec.point };
+        MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 
-    Ray scattered{ rec.point, mixed_pdf.Generate() };
-    double pdf_value = mixed_pdf.Evaluate(scattered.dir);
+        Ray scattered{ rec.point, mixed_pdf.Generate() };
+        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
-    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+        acc += emitted * abso;
+        abso = abso * srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
+        ray = scattered;
+
 #else
-    Ray scattered{ rec.p, srec.pdf->Generate() };
-    double pdf_value = srec.pdf->Evaluate(scattered.dir);
+        Ray scattered{ rec.point, srec.pdf->Generate() };
+        double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
-    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+        acc += emitted * abso;
+        abso = abso * srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
+        ray = scattered;
 #endif
+    }
+
+    return acc;
 }
 
 int main()
@@ -581,7 +590,7 @@ int main()
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    const int max_depth = 10;
+    const int bound_count = 10;
 
     Bitmap bitmap{ width, height };
     Scene scene;
@@ -655,7 +664,6 @@ int main()
     // #pragma omp parallel for schedule(dynamic, 1)
     for (int32 y = 0; y < height; ++y)
     {
-        // std::cout << "\rScanlines remaining: " << y << ' ' << std::flush;
         if (omp_get_thread_num() == 0)
         {
             std::printf("\rScanline: %d / %d", y, height);
@@ -666,13 +674,13 @@ int main()
         {
             Color samples{ 0.0 };
 
-            for (int s = 0; s < samples_per_pixel; ++s)
+            for (int32 s = 0; s < samples_per_pixel; ++s)
             {
                 double u = (x + Rand()) / (width - 1);
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += ComputeRayColor(r, scene, lights, sky_color, max_depth);
+                samples += PathTrace(r, scene, lights, sky_color, bound_count);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2
@@ -689,7 +697,7 @@ int main()
     std::cout << "\nDone!: " << d.count() << 's' << std::endl;
 
     std::string fileName = "render_" + std::to_string(width) + "x" + std::to_string(height) + "_s" +
-                           std::to_string(samples_per_pixel) + "_d" + std::to_string(max_depth) + "_t" +
+                           std::to_string(samples_per_pixel) + "_d" + std::to_string(bound_count) + "_t" +
                            std::to_string(d.count()) + "s.png";
 
     bitmap.WriteToFile(fileName.c_str());
