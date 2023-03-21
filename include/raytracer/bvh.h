@@ -93,7 +93,7 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const override;
+    virtual double EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
 
 private:
@@ -330,13 +330,14 @@ inline bool BVH::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double BVH::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
+inline double BVH::EvaluatePDF(const Ray& ray) const
 {
     struct Callback
     {
-        HitRecord rec;
         double sum;
         double weight;
+
+        HitRecord rec;
 
         double RayCastCallback(const Ray& ray, double t_min, double t_max, Hittable* object)
         {
@@ -344,7 +345,7 @@ inline double BVH::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
 
             if (hit)
             {
-                sum += weight * object->PDFValue(ray.origin, ray.dir, rec);
+                sum += weight * object->PDFValue(ray, rec);
             }
 
             return t_max;
@@ -354,7 +355,7 @@ inline double BVH::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
     callback.sum = 0.0;
     callback.weight = 1.0 / leaves.size();
 
-    RayCast(Ray{ origin, dir }, ray_tolerance, infinity, &callback);
+    RayCast(ray, ray_tolerance, infinity, &callback);
 
     return callback.sum;
 }

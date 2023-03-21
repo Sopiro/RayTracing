@@ -57,7 +57,7 @@ public:
 
     virtual double Evaluate(const Vec3& direction) const override
     {
-        return target->EvaluatePDF(origin, direction);
+        return target->EvaluatePDF(Ray{ origin, direction });
     }
 
 public:

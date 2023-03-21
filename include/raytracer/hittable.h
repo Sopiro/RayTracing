@@ -35,13 +35,14 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const
+    virtual double EvaluatePDF(const Ray& ray) const
     {
         assert(false);
         return 0.0;
     }
 
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const
+    // Ray must hit this object
+    virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
     {
         assert(false);
         return 0.0;

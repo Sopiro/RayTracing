@@ -19,8 +19,8 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double EvaluatePDF(const Vec3& origin, const Vec3& dir) const override;
-    virtual double PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const override;
+    virtual double EvaluatePDF(const Ray& ray) const override;
+    virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
 
 public:
@@ -54,23 +54,20 @@ inline bool Sphere::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double Sphere::EvaluatePDF(const Vec3& origin, const Vec3& dir) const
+inline double Sphere::EvaluatePDF(const Ray& ray) const
 {
     HitRecord rec;
-    if (Hit(Ray{ origin, dir }, ray_tolerance, infinity, rec) == false)
+    if (Hit(ray, ray_tolerance, infinity, rec) == false)
     {
         return 0.0;
     }
 
-    double cos_theta_max = sqrt(1.0 - radius * radius / (center - origin).Length2());
-    double solid_angle = 2.0 * pi * (1.0 - cos_theta_max);
-
-    return 1.0 / solid_angle;
+    return PDFValue(ray, rec);
 }
 
-inline double Sphere::PDFValue(const Vec3& origin, const Vec3& dir, const HitRecord& rec) const
+inline double Sphere::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
-    double cos_theta_max = sqrt(1.0 - radius * radius / (center - origin).Length2());
+    double cos_theta_max = sqrt(1.0 - radius * radius / (center - hit_ray.origin).Length2());
     double solid_angle = 2.0 * pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;
