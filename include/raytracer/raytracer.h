@@ -1,9 +1,5 @@
 #pragma once
 
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-
 #include "common.h"
 
 #include "bitmap.h"
@@ -21,3 +17,13 @@
 #include <omp.h>
 
 #define IMPORTANCE_SAMPLING 1
+
+namespace spt
+{
+
+Color ComputeRayColor(
+    const Ray& ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 depth);
+
+Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 bounce_count);
+
+} // namespace spt

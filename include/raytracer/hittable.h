@@ -20,7 +20,6 @@ struct HitRecord
     bool front_face;
 
     std::shared_ptr<Material> mat;
-    const Hittable* object;
 
     void SetFaceNormal(const Ray& ray, const Vec3& outward_normal)
     {

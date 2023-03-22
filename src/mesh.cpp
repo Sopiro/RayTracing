@@ -20,9 +20,10 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
     }
     else
     {
-        mat = std::make_shared<Lambertian>(Color(0.8, 0.8, 0.8));
+        mat = std::make_shared<Lambertian>(Color(1.0, 1.0, 1.0));
         // mat = std::make_shared<Lambertian>(Color(1.0, 0.0, 1.0));
         // mat = std::make_shared<Lambertian>(std::make_shared<ImageTexture>("res/barrel/barrel_diffuse.png"));
+        // mat = std::make_shared<Lambertian>(std::make_shared<ImageTexture>("res/wakdu.jpg"));
     }
 
     for (int32 i = 0; i < vertices.size(); ++i)
@@ -31,6 +32,7 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
 
         Vec4 vP = transform * Vec4{ v.position, 1.0 };
         Vec4 vN = transform * Vec4{ v.normal, 0.0 };
+        vN.Normalize();
 
         v.position.Set(vP.x, vP.y, vP.z);
         v.normal.Set(vN.x, vN.y, vN.z);

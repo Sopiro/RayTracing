@@ -102,6 +102,9 @@ Mat3 Mat3::Translate(const Vec2& v)
 Mat4::Mat4(const Transform& t)
     : Mat4{ Mat3{ t.q }, t.p }
 {
+    ex *= t.r.x;
+    ey *= t.r.y;
+    ez *= t.r.z;
 }
 
 Mat4 Mat4::Scale(Real x, Real y, Real z)

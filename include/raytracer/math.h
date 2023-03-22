@@ -114,22 +114,16 @@ struct Vec2
         return Vec2{ -x, -y };
     }
 
-    void operator+=(const Vec2& v)
-    {
-        x += v.x;
-        y += v.y;
-    }
-
-    void operator-=(const Vec2& v)
-    {
-        x -= v.x;
-        y -= v.y;
-    }
-
     void operator+=(Real s)
     {
         x += s;
         y += s;
+    }
+
+    void operator+=(const Vec2& v)
+    {
+        x += v.x;
+        y += v.y;
     }
 
     void operator-=(Real s)
@@ -138,10 +132,22 @@ struct Vec2
         y -= s;
     }
 
+    void operator-=(const Vec2& v)
+    {
+        x -= v.x;
+        y -= v.y;
+    }
+
     void operator*=(Real s)
     {
         x *= s;
         y *= s;
+    }
+
+    void operator*=(const Vec2& v)
+    {
+        x *= v.x;
+        y *= v.y;
     }
 
     void operator/=(Real s)
@@ -252,25 +258,18 @@ struct Vec3
         return Vec3{ -x, -y, -z };
     }
 
-    void operator+=(const Vec3& v)
-    {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-    }
-
-    void operator-=(const Vec3& v)
-    {
-        x -= v.x;
-        y -= v.y;
-        z -= v.z;
-    }
-
     void operator+=(Real s)
     {
         x += s;
         y += s;
         z += s;
+    }
+
+    void operator+=(const Vec3& v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
     }
 
     void operator-=(Real s)
@@ -280,11 +279,25 @@ struct Vec3
         z -= s;
     }
 
+    void operator-=(const Vec3& v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+    }
+
     void operator*=(Real s)
     {
         x *= s;
         y *= s;
         z *= s;
+    }
+
+    void operator*=(const Vec3& v)
+    {
+        x *= v.x;
+        y *= v.y;
+        z *= v.z;
     }
 
     void operator/=(Real s)
@@ -371,6 +384,64 @@ struct Vec4
         y = _y;
         z = _z;
         w = _w;
+    }
+
+    Vec4 operator-() const
+    {
+        return Vec4{ -x, -y, -z, -w };
+    }
+
+    void operator+=(Real s)
+    {
+        x += s;
+        y += s;
+        z += s;
+        w += s;
+    }
+
+    void operator+=(const Vec4& v)
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        w += v.w;
+    }
+
+    void operator-=(Real s)
+    {
+        x -= s;
+        y -= s;
+        z -= s;
+        w -= s;
+    }
+
+    void operator-=(const Vec4& v)
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        w -= v.w;
+    }
+
+    void operator*=(Real s)
+    {
+        x *= s;
+        y *= s;
+        z *= s;
+        w *= s;
+    }
+
+    void operator*=(const Vec4& v)
+    {
+        x *= v.x;
+        y *= v.y;
+        z *= v.z;
+        w *= v.w;
+    }
+
+    void operator/=(Real s)
+    {
+        operator*=(Real(1.0) / s);
     }
 
     Real operator[](int32 i) const

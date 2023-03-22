@@ -46,7 +46,6 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
         return false;
     }
 
-    rec.object = this;
     rec.mat = material;
     rec.t = t;
     rec.point = ray.At(rec.t);

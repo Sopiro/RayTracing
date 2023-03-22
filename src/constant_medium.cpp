@@ -15,7 +15,7 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     }
 
     // Find the farthest hit
-    if (boundary->Hit(ray, rec1.t + 0.0001, infinity, rec2) == false)
+    if (boundary->Hit(ray, rec1.t + ray_tolerance, infinity, rec2) == false)
     {
         return false;
     }
@@ -35,9 +35,9 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
         return false;
     }
 
-    if (rec1.t < 0)
+    if (rec1.t < 0.0)
     {
-        rec1.t = 0;
+        rec1.t = 0.0;
     }
 
     double ray_length = ray.dir.Length();
@@ -54,7 +54,6 @@ bool ConstantDensityMedium::Hit(const Ray& ray, double t_min, double t_max, HitR
     rec.normal = Vec3{ 1.0, 0.0, 0.0 }; // arbitrary
     rec.front_face = true;              // also arbitrary
     rec.mat = phase_function;
-    rec.object = this;
 
     return true;
 }

@@ -64,12 +64,12 @@ public:
     double area;
 };
 
-static constexpr Vec3 epsilon_offset{ epsilon * 10.0 };
+static constexpr Vec3 aabb_offset{ epsilon * 10.0 };
 
 inline bool Triangle::GetAABB(AABB& outAABB) const
 {
-    outAABB.min = Min(Min(v0.position, v1.position), v2.position) - epsilon_offset;
-    outAABB.max = Max(Max(v0.position, v1.position), v2.position) + epsilon_offset;
+    outAABB.min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
+    outAABB.max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
 
     return true;
 }

@@ -2,6 +2,10 @@
 #include <crtdbg.h>
 #endif
 
+#define STBI_MSC_SECURE_CRT
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
 #include "raytracer/raytracer.h"
 
 using namespace spt;
@@ -333,13 +337,20 @@ void BVHTest(Scene& scene)
     }
 }
 
-void Sponza(Scene& scene)
+std::shared_ptr<Hittable> Sponza(Scene& scene)
 {
     Transform transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(90.0), Vec3{ 0.0, 1.0, 0.0 } } };
 
     std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
 
     scene.Add(sponza);
+
+    auto light = std::make_shared<DiffuseLight>(Color{ 15.0 });
+    // auto mat = std::make_shared<Dielectric>(1.5);
+    auto sphere = std::make_shared<Sphere>(Vec3(0.0, 0.0, -2.0), 0.5, light);
+    scene.Add(sphere);
+
+    return sphere;
 }
 
 std::shared_ptr<Hittable> CornellBox2(Scene& scene)
@@ -398,13 +409,13 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     Vertex u3{ tf2 * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
     // lights
-    std::shared_ptr<Hittable> l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
-    std::shared_ptr<Hittable> l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
-
-    std::shared_ptr<Hittable> l3 = std::make_shared<Triangle>(u0, u2, u1, light, true, true);
-    std::shared_ptr<Hittable> l4 = std::make_shared<Triangle>(u0, u3, u2, light, true, true);
-
     std::shared_ptr<Scene> lights = std::make_shared<Scene>();
+    auto l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
+    auto l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
+
+    auto l3 = std::make_shared<Triangle>(u0, u2, u1, light, true, true);
+    auto l4 = std::make_shared<Triangle>(u0, u3, u2, light, true, true);
+
     lights->Add(l1);
     lights->Add(l2);
 
@@ -524,60 +535,6 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     return lights;
 }
 
-Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 bounce_count)
-{
-    Color acc{ 0.0, 0.0, 0.0 };
-    Color abso{ 1.0, 1.0, 1.0 };
-
-    for (int32 i = 0; i < bounce_count; ++i)
-    {
-        HitRecord rec;
-        if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
-        {
-            acc += sky_color * abso;
-            break;
-        }
-
-        Color emitted = rec.mat->Emit(ray, rec);
-
-        ScatterRecord srec;
-        if (rec.mat->Scatter(ray, rec, srec) == false)
-        {
-            acc += emitted * abso;
-            break;
-        }
-
-        if (srec.is_specular == true)
-        {
-            abso = abso * srec.attenuation;
-            ray = srec.specular_ray;
-            continue;
-        }
-
-#if IMPORTANCE_SAMPLING
-        HittablePDF light_pdf{ lights, rec.point };
-        MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
-
-        Ray scattered{ rec.point, mixed_pdf.Generate() };
-        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
-
-        acc += emitted * abso;
-        abso = abso * srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
-        ray = scattered;
-
-#else
-        Ray scattered{ rec.point, srec.pdf->Generate() };
-        double pdf_value = srec.pdf->Evaluate(scattered.dir);
-
-        acc += emitted * abso;
-        abso = abso * srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
-        ray = scattered;
-#endif
-    }
-
-    return acc;
-}
-
 int main()
 {
 #if defined(_WIN32) && defined(_DEBUG)
@@ -590,7 +547,7 @@ int main()
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    const int bound_count = 10;
+    constexpr int bounce_count = 10;
 
     Bitmap bitmap{ width, height };
     Scene scene;
@@ -646,9 +603,10 @@ int main()
     // Camera camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
 
     // Color sky_color{ 0.7, 0.8, 1.0 };
+    // Color sky_color{ 0.0, 0.0, 0.0 };
     // sky_color *= 8.0;
 
-    // Sponza(scene);
+    // std::shared_ptr<Hittable> lights = Sponza(scene);
 
     // Vec3 lookfrom(0.0, 1.0, 4.5);
     // Vec3 lookat(0.0, 1.45, 0.0);
@@ -680,7 +638,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += PathTrace(r, scene, lights, sky_color, bound_count);
+                samples += ComputeRayColor(r, scene, lights, sky_color, bounce_count);
             }
 
             // Divide the color by the number of samples and gamma-correct for gamma=2.2
@@ -697,7 +655,7 @@ int main()
     std::cout << "\nDone!: " << d.count() << 's' << std::endl;
 
     std::string fileName = "render_" + std::to_string(width) + "x" + std::to_string(height) + "_s" +
-                           std::to_string(samples_per_pixel) + "_d" + std::to_string(bound_count) + "_t" +
+                           std::to_string(samples_per_pixel) + "_d" + std::to_string(bounce_count) + "_t" +
                            std::to_string(d.count()) + "s.png";
 
     bitmap.WriteToFile(fileName.c_str());
