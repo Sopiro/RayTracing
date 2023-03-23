@@ -43,7 +43,7 @@ public:
 class HittablePDF : public PDF
 {
 public:
-    HittablePDF(std::shared_ptr<Hittable> target, const Vec3& origin)
+    HittablePDF(const Hittable* target, const Vec3& origin)
         : target{ target }
         , origin{ origin }
     {
@@ -62,7 +62,7 @@ public:
 
 public:
     Vec3 origin;
-    std::shared_ptr<Hittable> target;
+    const Hittable* target;
 };
 
 class MixturePDF : public PDF

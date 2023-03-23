@@ -9,6 +9,8 @@ namespace spt
 class Camera
 {
 public:
+    Camera() = default;
+
     Camera(const Vec3& look_from,
            const Vec3& look_at,
            const Vec3& up,

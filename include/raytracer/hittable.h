@@ -54,6 +54,10 @@ public:
         return Vec3{ 0, 0, 0 };
     }
 
+    virtual void Rebuild()
+    {
+    }
+
 protected:
     NodeProxy node;
 };

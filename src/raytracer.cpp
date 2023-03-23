@@ -5,10 +5,9 @@
 namespace spt
 {
 
-Color ComputeRayColor(
-    const Ray& ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 depth)
+Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
 {
-    if (depth <= 0)
+    if (bounce_count <= 0)
     {
         return Color{ 0.0 };
     }
@@ -16,7 +15,7 @@ Color ComputeRayColor(
     HitRecord rec;
     if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
     {
-        return sky_color;
+        return scene.GetSkyColor();
     }
 
     Color emitted = rec.mat->Emit(ray, rec);
@@ -29,11 +28,11 @@ Color ComputeRayColor(
 
     if (srec.is_specular == true)
     {
-        return srec.attenuation * ComputeRayColor(srec.specular_ray, scene, lights, sky_color, depth - 1);
+        return srec.attenuation * ComputeRayColor(scene, srec.specular_ray, bounce_count - 1);
     }
 
 #if IMPORTANCE_SAMPLING
-    HittablePDF light_pdf{ lights, rec.point };
+    HittablePDF light_pdf{ &scene.GetLights(), rec.point };
     MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 
     Ray scattered{ rec.point, mixed_pdf.Generate() };
@@ -47,17 +46,17 @@ Color ComputeRayColor(
     double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+                         ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
 #else
     Ray scattered{ rec.point + rec.normal * ray_tolerance, srec.pdf->Generate() };
     double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scattered, scene, lights, sky_color, depth - 1) / pdf_value;
+                         ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
 #endif
 }
 
-Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 bounce_count)
+Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
 {
     Color accu{ 0.0, 0.0, 0.0 };
     Color abso{ 1.0, 1.0, 1.0 };
@@ -67,7 +66,7 @@ Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& light
         HitRecord rec;
         if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
         {
-            accu += sky_color * abso;
+            accu += scene.GetSkyColor() * abso;
             break;
         }
 
@@ -88,17 +87,18 @@ Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& light
         }
 
 #if IMPORTANCE_SAMPLING
-        HittablePDF light_pdf{ lights, rec.point };
+        HittablePDF light_pdf{ &scene.GetLights(), rec.point };
         MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
 
         Ray scattered{ rec.point, mixed_pdf.Generate() };
-        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
         // Scattering rays must be directed outward from the surface
         if (Dot(scattered.dir, rec.normal) < 0.0)
         {
             scattered.dir.Negate();
         }
+
+        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
         accu += emitted * abso;
         abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;

@@ -89,12 +89,12 @@ public:
     void Traverse(T* callback) const;
 
     Real GetTreeCost() const;
-    void Rebuild();
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual void Rebuild() override;
 
 private:
     NodeProxy nodeID;

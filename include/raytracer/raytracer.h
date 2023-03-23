@@ -22,9 +22,7 @@
 namespace spt
 {
 
-Color ComputeRayColor(
-    const Ray& ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 depth);
-
-Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& lights, const Color& sky_color, int32 bounce_count);
+Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
+Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);
 
 } // namespace spt

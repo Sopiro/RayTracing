@@ -3,8 +3,8 @@
 #include "bvh.h"
 #include "common.h"
 #include "hittable.h"
-
-#define USE_BVH 1
+#include "hittable_list.h"
+#include "sphere.h"
 
 namespace spt
 {
@@ -12,52 +12,95 @@ namespace spt
 class Scene : public Hittable
 {
 public:
-    Scene() = default;
+    Scene();
 
+    void Reset();
     void Add(std::shared_ptr<Hittable> object);
-    void Clear();
-    void RebuildBVH();
+    void AddLight(std::shared_ptr<Hittable> object);
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual void Rebuild() override;
+
+    const HittableList& GetHittableList() const;
+    const HittableList& GetLights() const;
+
+    Color GetSkyColor() const;
+    void SetSkyColor(const Color& color);
 
 private:
-    BVH bvh;
-    std::vector<std::shared_ptr<Hittable>> objects;
+    Color sky_color;
+    HittableList hittables;
+    HittableList lights;
 };
+
+inline Scene::Scene()
+    : sky_color{ 0.0 }
+{
+}
+
+inline void Scene::Reset()
+{
+    hittables.Clear();
+    lights.Clear();
+    sky_color.SetZero();
+}
 
 inline void Scene::Add(std::shared_ptr<Hittable> object)
 {
-    Hittable* raw = object.get();
-    AABB aabb;
-    raw->GetAABB(aabb);
-
-    NodeProxy node = bvh.CreateNode(raw, aabb);
-
-    objects.push_back(object);
+    hittables.Add(object);
 }
 
-inline void Scene::Clear()
+inline void Scene::AddLight(std::shared_ptr<Hittable> object)
 {
-    bvh.Reset();
-    objects.clear();
+    lights.Add(object);
 }
 
-inline void Scene::RebuildBVH()
+inline void Scene::Rebuild()
 {
-    bvh.Rebuild();
+    hittables.Rebuild();
+}
+
+inline bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+{
+    return hittables.Hit(ray, t_min, t_max, rec);
+}
+
+inline bool Scene::GetAABB(AABB& outAABB) const
+{
+    return hittables.GetAABB(outAABB);
 }
 
 inline double Scene::EvaluatePDF(const Ray& ray) const
 {
-    return bvh.EvaluatePDF(ray);
+    return hittables.EvaluatePDF(ray);
 }
 
 inline Vec3 Scene::GetRandomDirection(const Vec3& origin) const
 {
-    return bvh.GetRandomDirection(origin);
+    return hittables.GetRandomDirection(origin);
+}
+
+inline const HittableList& Scene::GetHittableList() const
+{
+    return hittables;
+}
+
+inline const HittableList& Scene::GetLights() const
+{
+    return lights;
+}
+
+inline Color Scene::GetSkyColor() const
+{
+    return sky_color;
+}
+
+inline void Scene::SetSkyColor(const Color& color)
+{
+    sky_color = color;
 }
 
 } // namespace spt
