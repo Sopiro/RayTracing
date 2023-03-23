@@ -38,6 +38,12 @@ Color ComputeRayColor(
 
     Ray scattered{ rec.point, mixed_pdf.Generate() };
 
+    // Scattering rays must be directed outward from the surface
+    if (Dot(scattered.dir, rec.normal) < 0.0)
+    {
+        scattered.dir.Negate();
+    }
+
     double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
     return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
@@ -87,6 +93,12 @@ Color PathTrace(Ray ray, const Hittable& scene, std::shared_ptr<Hittable>& light
 
         Ray scattered{ rec.point, mixed_pdf.Generate() };
         double pdf_value = mixed_pdf.Evaluate(scattered.dir);
+
+        // Scattering rays must be directed outward from the surface
+        if (Dot(scattered.dir, rec.normal) < 0.0)
+        {
+            scattered.dir.Negate();
+        }
 
         accu += emitted * abso;
         abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;

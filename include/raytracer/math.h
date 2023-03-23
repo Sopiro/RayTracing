@@ -155,6 +155,12 @@ struct Vec2
         operator*=(1.0 / s);
     }
 
+    void Negate()
+    {
+        x = -x;
+        y = -y;
+    }
+
     Real Length() const
     {
         return sqrt(x * x + y * y);
@@ -305,6 +311,13 @@ struct Vec3
         operator*=(Real(1.0) / s);
     }
 
+    void Negate()
+    {
+        x = -x;
+        y = -y;
+        z = -z;
+    }
+
     Real Length() const
     {
         return sqrt(x * x + y * y + z * z);
@@ -345,6 +358,14 @@ struct Vec4
     Real x, y, z, w;
 
     Vec4() = default;
+
+    constexpr Vec4(Real v)
+        : x{ v }
+        , y{ v }
+        , z{ v }
+        , w{ v }
+    {
+    }
 
     constexpr Vec4(Real _v, Real _w)
         : x{ _v }
@@ -452,6 +473,14 @@ struct Vec4
     Real& operator[](int32 i)
     {
         return (&x)[i];
+    }
+
+    void Negate()
+    {
+        x = -x;
+        y = -y;
+        z = -z;
+        w = -w;
     }
 
     Real Length() const
@@ -1019,6 +1048,11 @@ inline Vec3 operator/(Real s, const Vec3& v)
     return (Real(1.0) / s) * v;
 }
 
+inline Vec3 operator/(const Vec3& a, const Vec3& b)
+{
+    return Vec3{ a.x / b.x, a.y / b.y, a.z / b.z };
+}
+
 inline bool operator==(const Vec3& a, const Vec3& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z;
@@ -1056,6 +1090,36 @@ inline Vec4 operator+(const Vec4& a, const Vec4& b)
 inline Vec4 operator-(const Vec4& a, const Vec4& b)
 {
     return Vec4{ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };
+}
+
+inline Vec4 operator*(const Vec4& v, Real s)
+{
+    return Vec4{ v.x * s, v.y * s, v.z * s, v.w * s };
+}
+
+inline Vec4 operator*(Real s, const Vec4& v)
+{
+    return operator*(v, s);
+}
+
+inline Vec4 operator*(const Vec4& a, const Vec4& b)
+{
+    return Vec4{ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };
+}
+
+inline Vec4 operator/(const Vec4& v, Real s)
+{
+    return v * (Real(1.0) / s);
+}
+
+inline Vec4 operator/(Real s, const Vec4& v)
+{
+    return (Real(1.0) / s) * v;
+}
+
+inline Vec4 operator/(const Vec4& a, const Vec4& b)
+{
+    return Vec4{ a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w };
 }
 
 inline bool operator==(const Vec4& a, const Vec4& b)

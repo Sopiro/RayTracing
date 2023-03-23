@@ -408,20 +408,6 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     Vertex u2{ tf2 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
     Vertex u3{ tf2 * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
-    // lights
-    std::shared_ptr<Scene> lights = std::make_shared<Scene>();
-    auto l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
-    auto l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
-
-    auto l3 = std::make_shared<Triangle>(u0, u2, u1, light, true, true);
-    auto l4 = std::make_shared<Triangle>(u0, u3, u2, light, true, true);
-
-    lights->Add(l1);
-    lights->Add(l2);
-
-    scene.Add(l1);
-    scene.Add(l2);
-
     // Left block
     {
         double hx = 0.13;
@@ -522,6 +508,23 @@ std::shared_ptr<Hittable> CornellBox2(Scene& scene)
     //     scene.Add(std::make_shared<Triangle>(v1, v0, v4, mat, true, true));
     //     scene.Add(std::make_shared<Triangle>(v1, v4, v5, mat, true, true));
     // }
+
+    // lights
+    std::shared_ptr<Scene> lights = std::make_shared<Scene>();
+
+    {
+        auto l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
+        auto l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
+
+        auto l3 = std::make_shared<Triangle>(u0, u2, u1, light, true, true);
+        auto l4 = std::make_shared<Triangle>(u0, u3, u2, light, true, true);
+
+        lights->Add(l1);
+        lights->Add(l2);
+
+        scene.Add(l1);
+        scene.Add(l2);
+    }
 
     // Right sphere
     {
@@ -638,12 +641,18 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray r = camera.GetRay(u, v);
-                samples += ComputeRayColor(r, scene, lights, sky_color, bounce_count);
+                samples += PathTrace(r, scene, lights, sky_color, bounce_count);
             }
 
-            // Divide the color by the number of samples and gamma-correct for gamma=2.2
-            double gamma = 1.0 / 2.2;
-            Color color = Color{ pow(samples.x * scale, gamma), pow(samples.y * scale, gamma), pow(samples.z * scale, gamma) };
+            Color color = samples * scale;
+            color = Tonemap_ACES(color);
+            color = GammaCorrection(color, 2.2);
+
+            // Resolve NaNs
+            if (color.x != color.x) color.x = 0.0;
+            if (color.y != color.y) color.y = 0.0;
+            if (color.z != color.z) color.z = 0.0;
+
             bitmap.Set(x, y, color);
         }
     }
