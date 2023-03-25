@@ -149,5 +149,9 @@ int main()
 
     bitmap.WriteToFile(fileName);
 
+#if _DEBUG
+    return 0;
+#else
     return system(fileName);
+#endif
 }

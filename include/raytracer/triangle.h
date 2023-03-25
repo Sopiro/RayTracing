@@ -2,11 +2,17 @@
 
 #include "common.h"
 #include "hittable.h"
-#include "mesh.h"
 #include "ray.h"
 
 namespace spt
 {
+
+struct Vertex
+{
+    Vec3 position;
+    Vec3 normal;
+    Vec2 texCoords;
+};
 
 class Triangle : public Hittable
 {

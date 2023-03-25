@@ -1,14 +1,15 @@
 #include "raytracer/model.h"
+#include "raytracer/image_texture.h"
 #include "raytracer/triangle.h"
+
+#include <filesystem>
 
 namespace spt
 {
 
-Model::Model(std::string_view path, const Transform& transform)
+Model::Model(std::string path, const Transform& transform)
 {
     LoadModel(path, transform);
-
-    // std::cout << "mesh count: " << meshes.size() << std::endl;
 
     for (int32 i = 0; i < meshes.size(); ++i)
     {
@@ -20,7 +21,7 @@ Model::Model(std::string_view path, const Transform& transform)
     }
 }
 
-std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
+std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
 {
     std::vector<std::shared_ptr<Texture>> textures;
 
@@ -29,7 +30,7 @@ std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* ma
         aiString str;
         mat->GetTexture(type, i, &str);
 
-        std::shared_ptr<Texture> texture = std::make_shared<ImageTexture>(folder + str.C_Str(), typeName);
+        std::shared_ptr<Texture> texture = ImageTexture::Create(folder + str.C_Str());
         textures.push_back(texture);
     }
 
@@ -40,13 +41,13 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
 {
     std::vector<Vertex> vertices;
     std::vector<uint32> indices;
-    std::vector<std::shared_ptr<Texture>> textures;
+    std::array<std::shared_ptr<Texture>, 5> textures;
 
-    // process meshes
+    // process vertices
     for (uint32 i = 0; i < mesh->mNumVertices; ++i)
     {
-        Vec3 position = Vec3{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
-        Vec3 normal = Vec3{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
+        Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
+        Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
         Vec2 texCoords{ 0.0f };
 
         if (mesh->HasTextureCoords(0))
@@ -69,13 +70,21 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
         }
     }
 
-    // process material
+    // process materials
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<std::shared_ptr<Texture>> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "diffuse");
+        std::vector<std::shared_ptr<Texture>> albedo_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
+        std::vector<std::shared_ptr<Texture>> normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS);
+        std::vector<std::shared_ptr<Texture>> roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS);
+        std::vector<std::shared_ptr<Texture>> metalness_maps = LoadMaterialTextures(material, aiTextureType_METALNESS);
+        std::vector<std::shared_ptr<Texture>> ao_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION);
 
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+        textures[0] = albedo_maps.empty() ? nullptr : albedo_maps[0];
+        textures[1] = normal_maps.empty() ? nullptr : normal_maps[0];
+        textures[2] = roughness_maps.empty() ? nullptr : roughness_maps[0];
+        textures[3] = metalness_maps.empty() ? nullptr : metalness_maps[0];
+        textures[4] = ao_maps.empty() ? nullptr : ao_maps[0];
     }
 
     return std::make_shared<Mesh>(vertices, indices, textures, transform);
@@ -92,8 +101,6 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
         meshes.push_back(ProcessAssimpMesh(mesh, scene, transform));
     }
 
-    // std::cout << node->mNumChildren << std::endl;
-
     // do the same for each of its children
     for (uint32 i = 0; i < node->mNumChildren; ++i)
     {
@@ -101,16 +108,20 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
     }
 }
 
-void Model::LoadModel(std::string_view path, const Transform& transform)
+static Assimp::Importer importer;
+
+void Model::LoadModel(std::string path, const Transform& transform)
 {
-    folder = path.substr(0, path.find_last_of('/'));
+    std::filesystem::path file_path(path);
+
+    folder = file_path.parent_path().string();
     folder.push_back('/');
 
     const aiScene* scene = importer.ReadFile(path.data(), aiProcessPreset_TargetRealtime_MaxQuality);
-
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        std::cout << "Assimp error:" << importer.GetErrorString() << std::endl;
+        std::cout << "Faild to load model: " << path << std::endl;
+        std::cout << "Assimp error: " << importer.GetErrorString() << std::endl;
         return;
     }
 

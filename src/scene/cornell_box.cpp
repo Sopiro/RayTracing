@@ -9,7 +9,8 @@ void CornellBox(Scene& scene)
     auto green = std::make_shared<Lambertian>(Color{ .12, .45, .15 });
     auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
     auto white = std::make_shared<Lambertian>(Color{ .73, .73, .73 });
-    auto wakgood_texture = std::make_shared<ImageTexture>("res/wakdu.jpg");
+    auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
+
     auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
 
     auto light = std::make_shared<DiffuseLight>(Color{ 15.0 });

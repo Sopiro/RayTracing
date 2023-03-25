@@ -7,6 +7,7 @@
 #include "constant_medium.h"
 #include "dielectric.h"
 #include "diffuse_light.h"
+#include "image_texture.h"
 #include "isotropic.h"
 #include "lambertian.h"
 #include "material.h"
@@ -25,7 +26,7 @@
 namespace spt
 {
 
-constexpr bool importance_sampling = true;
+constexpr bool importance_sampling = false;
 
 // Test scenes
 extern void RandomScene(Scene&);
