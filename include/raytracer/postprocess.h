@@ -5,7 +5,12 @@
 namespace spt
 {
 
-inline Vec3 GammaCorrection(const Color& color, double gamma)
+inline Vec3 ToLinear(const Color& color, double gamma = 2.2)
+{
+    return Vec3{ pow(color.x, gamma), pow(color.y, gamma), pow(color.z, gamma) };
+}
+
+inline Vec3 GammaCorrection(const Color& color, double gamma = 2.2)
 {
     double invGamma = 1.0 / gamma;
     return Vec3{ pow(color.x, invGamma), pow(color.y, invGamma), pow(color.z, invGamma) };

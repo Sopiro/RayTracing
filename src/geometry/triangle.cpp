@@ -46,12 +46,17 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
         return false;
     }
 
+    double w = 1.0 - u - v;
+
     rec.mat = mat;
     rec.t = t;
     rec.point = ray.At(rec.t);
-    Vec3 normal = GetNormal(u, v, 1.0 - u - v);
-    rec.SetFaceNormal(ray, normal);
-    Vec2 tex = GetTexCoord(u, v, 1.0 - u - v);
+
+    Vec3 normal = GetNormal(u, v, w);
+    Vec3 tangent = GetTangent(u, v, w);
+    rec.SetFaceNormal(ray, normal, tangent);
+
+    Vec2 tex = GetTexCoord(u, v, w);
     rec.uv = tex;
 
     return true;

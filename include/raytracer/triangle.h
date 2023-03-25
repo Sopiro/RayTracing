@@ -11,6 +11,7 @@ struct Vertex
 {
     Vec3 position;
     Vec3 normal;
+    Vec3 tangent;
     Vec2 texCoords;
 };
 
@@ -26,6 +27,7 @@ public:
              bool reset_normal = false);
 
     Vec3 GetNormal(double u, double v, double w) const;
+    Vec3 GetTangent(double u, double v, double w) const;
     Vec2 GetTexCoord(double u, double v, double w) const;
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
@@ -67,12 +69,24 @@ inline Triangle::Triangle(const Vertex& vertex0,
         v0.normal = face_normal;
         v1.normal = face_normal;
         v2.normal = face_normal;
+
+        Vec3 bt = Cross(face_normal, e1).Normalized();
+        Vec3 t = Cross(bt, face_normal);
+
+        v0.tangent = t;
+        v1.tangent = t;
+        v2.tangent = t;
     }
 };
 
 inline Vec3 Triangle::GetNormal(double u, double v, double w) const
 {
     return w * v0.normal + u * v1.normal + v * v2.normal;
+}
+
+inline Vec3 Triangle::GetTangent(double u, double v, double w) const
+{
+    return w * v0.tangent + u * v1.tangent + v * v2.tangent;
 }
 
 inline Vec2 Triangle::GetTexCoord(double u, double v, double w) const

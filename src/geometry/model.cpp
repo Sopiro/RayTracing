@@ -21,7 +21,7 @@ Model::Model(std::string path, const Transform& transform)
     }
 }
 
-std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type)
+std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb)
 {
     std::vector<std::shared_ptr<Texture>> textures;
 
@@ -30,7 +30,7 @@ std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* ma
         aiString str;
         mat->GetTexture(type, i, &str);
 
-        std::shared_ptr<Texture> texture = ImageTexture::Create(folder + str.C_Str());
+        std::shared_ptr<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }
 
@@ -48,6 +48,7 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
     {
         Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
+        Vec3 tangent{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
         Vec2 texCoords{ 0.0f };
 
         if (mesh->HasTextureCoords(0))
@@ -55,7 +56,7 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
             texCoords.Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
         }
 
-        vertices.emplace_back(position, normal, texCoords);
+        vertices.emplace_back(position, normal, tangent, texCoords);
     }
 
     // process indices
@@ -74,11 +75,11 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<std::shared_ptr<Texture>> albedo_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE);
-        std::vector<std::shared_ptr<Texture>> normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS);
-        std::vector<std::shared_ptr<Texture>> roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS);
-        std::vector<std::shared_ptr<Texture>> metalness_maps = LoadMaterialTextures(material, aiTextureType_METALNESS);
-        std::vector<std::shared_ptr<Texture>> ao_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION);
+        auto albedo_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
+        auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
+        auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
+        auto metalness_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
+        auto ao_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, false);
 
         textures[0] = albedo_maps.empty() ? nullptr : albedo_maps[0];
         textures[1] = normal_maps.empty() ? nullptr : normal_maps[0];

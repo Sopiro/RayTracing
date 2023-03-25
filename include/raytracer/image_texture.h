@@ -10,7 +10,7 @@ namespace spt
 class ImageTexture : public Texture
 {
 public:
-    static std::shared_ptr<ImageTexture> Create(std::string path);
+    static std::shared_ptr<ImageTexture> Create(std::string path, bool srgb = false);
 
     ~ImageTexture();
 
@@ -24,7 +24,7 @@ public:
 
 private:
     ImageTexture();
-    ImageTexture(std::string path);
+    ImageTexture(std::string path, bool srgb);
 
     const static int32 bytes_per_pixel = 3;
 
@@ -42,7 +42,7 @@ inline ImageTexture::ImageTexture()
 {
 }
 
-inline ImageTexture::ImageTexture(std::string path)
+inline ImageTexture::ImageTexture(std::string path, bool srgb)
 {
     int32 components_per_pixel = bytes_per_pixel;
 
@@ -53,6 +53,18 @@ inline ImageTexture::ImageTexture(std::string path)
         std::cerr << "ERROR: Could not load texture image file '" << path << "'.\n";
         width = 0;
         height = 0;
+    }
+    else
+    {
+        if (srgb)
+        {
+#pragma omp parallel for
+            for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
+            {
+                // Convert to linear space
+                data[i] = static_cast<uint8>(fmin(pow(data[i] / 255.0, 2.2) * 255.0, 255.0));
+            }
+        }
     }
 
     bytes_per_scanline = bytes_per_pixel * width;
@@ -66,7 +78,7 @@ inline ImageTexture::~ImageTexture()
 static int32 texture_count = 0;
 static std::unordered_map<std::string, std::shared_ptr<ImageTexture>> loaded_textures;
 
-inline std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path)
+inline std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path, bool srgb)
 {
     auto loaded = loaded_textures.find(path);
     if (loaded != loaded_textures.end())
@@ -74,7 +86,7 @@ inline std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path)
         return loaded->second;
     }
 
-    std::shared_ptr<ImageTexture> image{ new ImageTexture(path) };
+    std::shared_ptr<ImageTexture> image{ new ImageTexture(path, srgb) };
     loaded_textures.emplace(path, image);
     ++texture_count;
 

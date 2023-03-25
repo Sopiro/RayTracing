@@ -3,9 +3,8 @@
 #include "bvh.h"
 #include "common.h"
 #include "material.h"
+#include "pbr_material.h"
 #include "triangle.h"
-
-#define HOLD_VERTICES_INDICES 0
 
 namespace spt
 {
@@ -42,12 +41,12 @@ private:
 
     BVH bvh;
 
-#if HOLD_VERTICES_INDICES
+    // Don't need to hold vertices and indices after baking BVH
     std::vector<Vertex> vertices;
     std::vector<uint32> indices;
-#endif
 
     std::vector<Triangle> triangles;
+    std::shared_ptr<PBRMaterial> material;
     std::array<std::shared_ptr<Texture>, 5> textures;
 };
 

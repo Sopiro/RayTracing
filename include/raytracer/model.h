@@ -19,7 +19,7 @@ public:
     std::vector<std::shared_ptr<Mesh>> GetMeshes();
 
 private:
-    std::vector<std::shared_ptr<Texture>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type);
+    std::vector<std::shared_ptr<Texture>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb);
     std::shared_ptr<Mesh> ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform);
     void ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& parent_transform);
     void LoadModel(std::string path, const Transform& transform);
