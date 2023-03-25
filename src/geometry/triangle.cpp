@@ -46,7 +46,7 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
         return false;
     }
 
-    rec.mat = material;
+    rec.mat = mat;
     rec.t = t;
     rec.point = ray.At(rec.t);
     Vec3 normal = GetNormal(u, v, 1.0 - u - v);

@@ -27,6 +27,8 @@ public:
     const HittableList& GetHittableList() const;
     const HittableList& GetLights() const;
 
+    bool HasLights() const;
+
     Color GetSkyColor() const;
     void SetSkyColor(const Color& color);
 
@@ -91,6 +93,11 @@ inline const HittableList& Scene::GetHittableList() const
 inline const HittableList& Scene::GetLights() const
 {
     return lights;
+}
+
+inline bool Scene::HasLights() const
+{
+    return lights.GetCount() > 0;
 }
 
 inline Color Scene::GetSkyColor() const

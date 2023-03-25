@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "hittable.h"
+#include "isotropic.h"
 #include "material.h"
 
 namespace spt

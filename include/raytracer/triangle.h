@@ -12,41 +12,15 @@ class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Vertex& _v0,
-             const Vertex& _v1,
-             const Vertex& _v2,
-             std::shared_ptr<Material> _material,
+    Triangle(const Vertex& vertex0,
+             const Vertex& vertex1,
+             const Vertex& vertex2,
+             std::shared_ptr<Material> material,
              bool double_sided = true,
-             bool reset_normal = false)
-        : v0{ _v0 }
-        , v1{ _v1 }
-        , v2{ _v2 }
-        , material{ _material }
-        , one_sided{ !double_sided }
-    {
-        e1 = v1.position - v0.position;
-        e2 = v2.position - v0.position;
+             bool reset_normal = false);
 
-        face_normal = Cross(e1, e2);
-        area = face_normal.Normalize() / 2.0;
-
-        if (reset_normal)
-        {
-            v0.normal = face_normal;
-            v1.normal = face_normal;
-            v2.normal = face_normal;
-        }
-    };
-
-    Vec3 GetNormal(double u, double v, double w) const
-    {
-        return w * v0.normal + u * v1.normal + v * v2.normal;
-    }
-
-    Vec2 GetTexCoord(double u, double v, double w) const
-    {
-        return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
-    }
+    Vec3 GetNormal(double u, double v, double w) const;
+    Vec2 GetTexCoord(double u, double v, double w) const;
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
@@ -59,10 +33,46 @@ public:
     Vec3 e1, e2;
 
     Vec3 face_normal;
-    std::shared_ptr<Material> material;
     bool one_sided;
     double area;
+    std::shared_ptr<Material> mat;
 };
+
+inline Triangle::Triangle(const Vertex& vertex0,
+                          const Vertex& vertex1,
+                          const Vertex& vertex2,
+                          std::shared_ptr<Material> material,
+                          bool double_sided = true,
+                          bool reset_normal = false)
+    : v0{ vertex0 }
+    , v1{ vertex1 }
+    , v2{ vertex2 }
+    , mat{ material }
+    , one_sided{ !double_sided }
+{
+    e1 = v1.position - v0.position;
+    e2 = v2.position - v0.position;
+
+    face_normal = Cross(e1, e2);
+    area = face_normal.Normalize() / 2.0;
+
+    if (reset_normal)
+    {
+        v0.normal = face_normal;
+        v1.normal = face_normal;
+        v2.normal = face_normal;
+    }
+};
+
+inline Vec3 Triangle::GetNormal(double u, double v, double w) const
+{
+    return w * v0.normal + u * v1.normal + v * v2.normal;
+}
+
+inline Vec2 Triangle::GetTexCoord(double u, double v, double w) const
+{
+    return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
+}
 
 static constexpr Vec3 aabb_offset{ epsilon * 10.0 };
 

@@ -17,6 +17,8 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
+    std::vector<std::shared_ptr<Mesh>> GetMeshes();
+
 private:
     std::vector<std::shared_ptr<Texture>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
     std::shared_ptr<Mesh> ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform);
@@ -36,6 +38,11 @@ inline bool Model::Hit(const Ray& ray, double t_min, double t_max, HitRecord& re
 inline bool Model::GetAABB(AABB& outAABB) const
 {
     return bvh.GetAABB(outAABB);
+}
+
+inline std::vector<std::shared_ptr<Mesh>> Model::GetMeshes()
+{
+    return meshes;
 }
 
 } // namespace spt

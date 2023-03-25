@@ -31,29 +31,32 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
         return srec.attenuation * ComputeRayColor(scene, srec.specular_ray, bounce_count - 1);
     }
 
-#if IMPORTANCE_SAMPLING
-    HittablePDF light_pdf{ &scene.GetLights(), rec.point };
-    MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
-
-    Ray scattered{ rec.point, mixed_pdf.Generate() };
-
-    // Scattering rays must be directed outward from the surface
-    if (Dot(scattered.dir, rec.normal) < 0.0)
+    if (scene.HasLights() && importance_sampling)
     {
-        scattered.dir.Negate();
+        HittablePDF light_pdf{ &scene.GetLights(), rec.point };
+        MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
+
+        Ray scattered{ rec.point, mixed_pdf.Generate() };
+
+        // Scattering rays must be directed outward from the surface
+        if (Dot(scattered.dir, rec.normal) < 0.0)
+        {
+            scattered.dir.Negate();
+        }
+
+        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
+
+        return emitted + srec.attenuation * (rec.mat->ScatteringPDF(ray, rec, scattered) *
+                                             ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value);
     }
+    else
+    {
+        Ray scattered{ rec.point, srec.pdf->Generate() };
+        double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
-    double pdf_value = mixed_pdf.Evaluate(scattered.dir);
-
-    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
-#else
-    Ray scattered{ rec.point + rec.normal * ray_tolerance, srec.pdf->Generate() };
-    double pdf_value = srec.pdf->Evaluate(scattered.dir);
-
-    return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
-                         ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
-#endif
+        return emitted + srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) *
+                             ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
+    }
 }
 
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
@@ -86,32 +89,34 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             continue;
         }
 
-#if IMPORTANCE_SAMPLING
-        HittablePDF light_pdf{ &scene.GetLights(), rec.point };
-        MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
-
-        Ray scattered{ rec.point, mixed_pdf.Generate() };
-
-        // Scattering rays must be directed outward from the surface
-        if (Dot(scattered.dir, rec.normal) < 0.0)
+        if (scene.HasLights() && importance_sampling)
         {
-            scattered.dir.Negate();
+            HittablePDF light_pdf{ &scene.GetLights(), rec.point };
+            MixturePDF mixed_pdf{ &light_pdf, srec.pdf.get() };
+
+            Ray scattered{ rec.point, mixed_pdf.Generate() };
+
+            // Scattering rays must be directed outward from the surface
+            if (Dot(scattered.dir, rec.normal) < 0.0)
+            {
+                scattered.dir.Negate();
+            }
+
+            double pdf_value = mixed_pdf.Evaluate(scattered.dir);
+
+            accu += emitted * abso;
+            abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
+            ray = scattered;
         }
+        else
+        {
+            Ray scattered{ rec.point, srec.pdf->Generate() };
+            double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
-        double pdf_value = mixed_pdf.Evaluate(scattered.dir);
-
-        accu += emitted * abso;
-        abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
-        ray = scattered;
-
-#else
-        Ray scattered{ rec.point, srec.pdf->Generate() };
-        double pdf_value = srec.pdf->Evaluate(scattered.dir);
-
-        accu += emitted * abso;
-        abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
-        ray = scattered;
-#endif
+            accu += emitted * abso;
+            abso *= srec.attenuation * rec.mat->ScatteringPDF(ray, rec, scattered) / pdf_value;
+            ray = scattered;
+        }
     }
 
     return accu;

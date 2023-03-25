@@ -5,7 +5,12 @@
 #include "bitmap.h"
 #include "camera.h"
 #include "constant_medium.h"
+#include "dielectric.h"
+#include "diffuse_light.h"
+#include "isotropic.h"
+#include "lambertian.h"
 #include "material.h"
+#include "metal.h"
 #include "model.h"
 #include "pdf.h"
 #include "postprocess.h"
@@ -17,10 +22,16 @@
 
 #include <omp.h>
 
-#define IMPORTANCE_SAMPLING 1
-
 namespace spt
 {
+
+constexpr bool importance_sampling = true;
+
+// Test scenes
+extern void RandomScene(Scene&);
+extern void BVHTest(Scene&);
+extern void CornellBox(Scene&);
+extern void Sponza(Scene&);
 
 Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);

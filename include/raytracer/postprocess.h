@@ -11,14 +11,15 @@ inline Vec3 GammaCorrection(const Color& color, double gamma)
     return Vec3{ pow(color.x, invGamma), pow(color.y, invGamma), pow(color.z, invGamma) };
 }
 
-// https://www.shadertoy.com/view/WdjSW3
+// Tone mapping functions
 
-inline Vec3 Reinhard(const Vec3& hdr)
+// https://www.shadertoy.com/view/WdjSW3
+inline Vec3 Tonemap_Reinhard(const Vec3& hdr)
 {
     return hdr / (Vec3{ 1.0 } + hdr);
 }
 
-inline Vec3 Reinhard2(const Vec3& hdr)
+inline Vec3 Tonemap_Reinhard2(const Vec3& hdr)
 {
     constexpr Vec3 L_white{ 4.0 };
     return (hdr * (Vec3{ 1.0 } + hdr / (L_white * L_white))) / (Vec3{ 1.0 } + hdr);
@@ -43,7 +44,7 @@ inline Vec3 Tonemap_Unreal(const Vec3& hdr)
 }
 
 // https://www.shadertoy.com/view/llsSD2
-inline Vec3 ToneMapFilmic_Hejl2015(const Vec3& hdr, double whitePt)
+inline Vec3 Tonemap_FilmicHejl2015(const Vec3& hdr, double whitePt)
 {
     Vec4 vh = Vec4(hdr, whitePt);
     Vec4 va = 1.425 * vh + 0.05; // eval filmic curve

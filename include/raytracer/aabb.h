@@ -49,6 +49,7 @@ struct AABB
 
 inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
 {
+    // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
     for (int32 axis = 0; axis < 3; ++axis)
     {
         double invD = 1.0 / r.dir[axis];
@@ -71,17 +72,6 @@ inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
     }
 
     return true;
-}
-
-inline void Fix(AABB& aabb)
-{
-    auto a = Max(aabb.min, aabb.max);
-
-    Vec3 newMin = Min(aabb.min, aabb.max);
-    Vec3 newMax = Max(aabb.min, aabb.max);
-
-    aabb.min = newMin;
-    aabb.max = newMax;
 }
 
 inline AABB Union(const AABB& b1, const AABB& b2)

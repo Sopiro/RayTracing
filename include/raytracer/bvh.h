@@ -11,7 +11,7 @@ namespace spt
 {
 
 constexpr Vec3 aabb_margin{ Real(0.0) };
-constexpr Real aabb_multiplier = Real(1.0);
+constexpr Real aabb_multiplier{ Real(1.0) };
 
 inline Real SAH(const AABB& aabb)
 {
@@ -52,8 +52,8 @@ public:
     BVH();
     ~BVH() noexcept;
 
-    BVH(const BVH&) noexcept = delete;
-    BVH& operator=(const BVH&) noexcept = delete;
+    BVH(const BVH&) = delete;
+    BVH& operator=(const BVH&) = delete;
 
     BVH(BVH&&) noexcept = delete;
     BVH& operator=(BVH&&) noexcept = delete;

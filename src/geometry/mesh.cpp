@@ -1,4 +1,5 @@
 #include "raytracer/mesh.h"
+#include "raytracer/lambertian.h"
 #include "raytracer/triangle.h"
 
 namespace spt
