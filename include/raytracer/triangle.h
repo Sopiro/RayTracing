@@ -42,8 +42,8 @@ inline Triangle::Triangle(const Vertex& vertex0,
                           const Vertex& vertex1,
                           const Vertex& vertex2,
                           std::shared_ptr<Material> material,
-                          bool double_sided = true,
-                          bool reset_normal = false)
+                          bool double_sided,
+                          bool reset_normal)
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }
