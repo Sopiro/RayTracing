@@ -8,18 +8,20 @@ namespace spt
 class Dielectric : public Material
 {
 public:
-    double ir; // Index of Refraction
-
-    Dielectric(double index_of_refraction)
-        : ir{ index_of_refraction }
-    {
-    }
+    Dielectric(double index_of_refraction);
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
+
+    double ir; // Index of Refraction
 
 private:
     static double Reflectance(double cosine, double ref_idx);
 };
+
+inline Dielectric::Dielectric(double index_of_refraction)
+    : ir{ index_of_refraction }
+{
+}
 
 inline double Dielectric::Reflectance(double cosine, double ref_idx)
 {

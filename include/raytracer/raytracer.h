@@ -17,6 +17,7 @@
 #include "postprocess.h"
 #include "ray.h"
 #include "scene.h"
+#include "solid_color.h"
 #include "sphere.h"
 #include "transform.h"
 #include "triangle.h"

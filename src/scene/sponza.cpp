@@ -47,8 +47,8 @@ void Sponza(Scene& scene)
         Vertex t2{ tf1 * Vec3{ 0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 1.0, 1.0 } };
         Vertex t3{ tf1 * Vec3{ -0.5, 0.0, -0.5 }, Vec3{ 0.0, 0.0, 0.0 }, Vec2{ 0.0, 1.0 } };
 
-        auto l1 = std::make_shared<Triangle>(t0, t2, t1, light, true, true);
-        auto l2 = std::make_shared<Triangle>(t0, t3, t2, light, true, true);
+        auto l1 = std::make_shared<Triangle>(t0, t2, t1, light);
+        auto l2 = std::make_shared<Triangle>(t0, t3, t2, light);
 
         // scene.Add(l1);
         // scene.Add(l2);

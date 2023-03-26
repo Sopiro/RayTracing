@@ -6,26 +6,30 @@ namespace spt
 class DiffuseLight : public Material
 {
 public:
-    DiffuseLight(std::shared_ptr<Texture> a)
-        : emit(a)
-    {
-    }
+    DiffuseLight(std::shared_ptr<Texture> emission);
+    DiffuseLight(Color color);
 
-    DiffuseLight(Color c)
-        : emit(std::make_shared<SolidColor>(c))
-    {
-    }
-
-    virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override
-    {
-        return false;
-    }
-
+    virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
     virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const override;
 
 public:
     std::shared_ptr<Texture> emit;
 };
+
+inline DiffuseLight::DiffuseLight(std::shared_ptr<Texture> emission)
+    : emit(emission)
+{
+}
+
+inline DiffuseLight::DiffuseLight(Color color)
+    : emit(SolidColor::Create(color))
+{
+}
+
+inline bool DiffuseLight::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
+{
+    return false;
+}
 
 inline Color DiffuseLight::Emit(const Ray& in_ray, const HitRecord& in_rec) const
 {

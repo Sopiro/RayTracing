@@ -19,12 +19,8 @@ class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Vertex& vertex0,
-             const Vertex& vertex1,
-             const Vertex& vertex2,
-             std::shared_ptr<Material> material,
-             bool double_sided = true,
-             bool reset_normal = false);
+    Triangle(const Vec3& point0, const Vec3& point1, const Vec3& point2, std::shared_ptr<Material> material);
+    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, std::shared_ptr<Material> material);
 
     Vec3 GetNormal(double u, double v, double w) const;
     Vec3 GetTangent(double u, double v, double w) const;
@@ -46,37 +42,49 @@ public:
     std::shared_ptr<Material> mat;
 };
 
-inline Triangle::Triangle(const Vertex& vertex0,
-                          const Vertex& vertex1,
-                          const Vertex& vertex2,
-                          std::shared_ptr<Material> material,
-                          bool double_sided,
-                          bool reset_normal)
+inline Triangle::Triangle(const Vec3& p0, const Vec3& p1, const Vec3& p2, std::shared_ptr<Material> material)
+    : one_sided{ false }
+    , mat{ material }
+{
+    e1 = p1 - p0;
+    e2 = p2 - p0;
+    face_normal = Cross(e1, e2);
+    area = face_normal.Normalize() * 0.5;
+
+    // Setup vertices
+    {
+        Vec3 tangent = e1.Normalized();
+
+        v0.position = p0;
+        v1.position = p1;
+        v2.position = p2;
+
+        v0.normal = face_normal;
+        v1.normal = face_normal;
+        v2.normal = face_normal;
+
+        v0.tangent = tangent;
+        v1.tangent = tangent;
+        v2.tangent = tangent;
+
+        v0.texCoords.SetZero();
+        v1.texCoords.SetZero();
+        v2.texCoords.SetZero();
+    }
+}
+
+inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, std::shared_ptr<Material> material)
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }
+    , one_sided{ false }
     , mat{ material }
-    , one_sided{ !double_sided }
 {
     e1 = v1.position - v0.position;
     e2 = v2.position - v0.position;
 
     face_normal = Cross(e1, e2);
-    area = face_normal.Normalize() / 2.0;
-
-    if (reset_normal)
-    {
-        v0.normal = face_normal;
-        v1.normal = face_normal;
-        v2.normal = face_normal;
-
-        Vec3 bt = Cross(face_normal, e1).Normalized();
-        Vec3 t = Cross(bt, face_normal);
-
-        v0.tangent = t;
-        v1.tangent = t;
-        v2.tangent = t;
-    }
+    area = face_normal.Normalize() * 0.5;
 };
 
 inline Vec3 Triangle::GetNormal(double u, double v, double w) const

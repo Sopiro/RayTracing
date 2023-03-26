@@ -16,11 +16,11 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
 {
     material = std::make_shared<PBRMaterial>();
 
-    material->albedo = HasAlbedoTexture() ? textures[albedo] : std::make_shared<SolidColor>(1.0, 0.0, 1.0);
-    material->normal = HasNormalTexture() ? textures[normal] : std::make_shared<SolidColor>(0.5, 0.5, 1.0);
-    material->roughness = HasRoughnessTexture() ? textures[roughness] : std::make_shared<SolidColor>(0.1, 0.1, 0.1);
-    material->metalness = HasMetalnessTexture() ? textures[metalness] : std::make_shared<SolidColor>(0.0, 0.0, 0.0);
-    material->ao = HasAOTexture() ? textures[ao] : std::make_shared<SolidColor>(1.0, 1.0, 1.0);
+    material->albedo = HasAlbedoTexture() ? textures[albedo] : SolidColor::Create(1.0, 0.0, 1.0);
+    material->normal = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+    material->roughness = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.1, 0.1, 0.1);
+    material->metalness = HasMetalnessTexture() ? textures[metalness] : SolidColor::Create(0.0, 0.0, 0.0);
+    material->ao = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
 
     for (size_t i = 0; i < vertices.size(); ++i)
     {
@@ -47,7 +47,7 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
         uint32 index1 = indices[i + 1];
         uint32 index2 = indices[i + 2];
 
-        Triangle& t = triangles.emplace_back(vertices[index0], vertices[index1], vertices[index2], material, true, false);
+        Triangle& t = triangles.emplace_back(vertices[index0], vertices[index1], vertices[index2], material);
         AABB aabb;
         t.GetAABB(aabb);
         bvh.CreateNode(&t, aabb);

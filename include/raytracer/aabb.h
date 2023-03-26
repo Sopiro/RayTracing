@@ -8,44 +8,50 @@ namespace spt
 
 struct AABB
 {
+    double GetArea() const;
+    double GetPerimater() const;
+    bool Contains(const AABB& other) const;
+    bool TestPoint(const Vec3& point) const;
+    bool TestOverlap(const AABB& other) const;
+
     bool Hit(const Ray& r, double t_min, double t_max) const;
-
-    double GetArea() const
-    {
-        return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
-    }
-
-    double GetPerimater() const
-    {
-        Vec3 w = max - min;
-        return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
-    }
-
-    bool Contains(const AABB& other) const
-    {
-        return min.x <= other.min.x && min.y <= other.min.y && max.x >= other.max.x && max.y >= other.max.y;
-    }
-
-    bool TestPoint(const Vec3& point) const
-    {
-        if (min.x > point.x || max.x < point.x) return false;
-        if (min.y > point.y || max.y < point.y) return false;
-        if (min.z > point.z || max.z < point.z) return false;
-
-        return true;
-    }
-
-    bool TestOverlap(const AABB& other) const
-    {
-        if (min.x > other.max.x || max.x < other.min.x) return false;
-        if (min.y > other.max.y || max.y < other.min.y) return false;
-        if (min.z > other.max.z || max.z < other.min.z) return false;
-
-        return true;
-    }
 
     Vec3 min, max;
 };
+
+inline double AABB::GetArea() const
+{
+    return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
+}
+
+inline double AABB::GetPerimater() const
+{
+    Vec3 w = max - min;
+    return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
+}
+
+inline bool AABB::Contains(const AABB& other) const
+{
+    return min.x <= other.min.x && min.y <= other.min.y && max.x >= other.max.x && max.y >= other.max.y;
+}
+
+inline bool AABB::TestPoint(const Vec3& point) const
+{
+    if (min.x > point.x || max.x < point.x) return false;
+    if (min.y > point.y || max.y < point.y) return false;
+    if (min.z > point.z || max.z < point.z) return false;
+
+    return true;
+}
+
+inline bool AABB::TestOverlap(const AABB& other) const
+{
+    if (min.x > other.max.x || max.x < other.min.x) return false;
+    if (min.y > other.max.y || max.y < other.min.y) return false;
+    if (min.z > other.max.z || max.z < other.min.z) return false;
+
+    return true;
+}
 
 inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
 {

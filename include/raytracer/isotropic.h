@@ -8,20 +8,24 @@ namespace spt
 class Isotropic : public Material
 {
 public:
-    Isotropic(Color c)
-        : albedo(std::make_shared<SolidColor>(c))
-    {
-    }
-    Isotropic(std::shared_ptr<Texture> a)
-        : albedo(a)
-    {
-    }
+    Isotropic(const Color& color);
+    Isotropic(std::shared_ptr<Texture> albedo);
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
 
 public:
     std::shared_ptr<Texture> albedo;
 };
+
+inline Isotropic::Isotropic(const Color& c)
+    : albedo(SolidColor::Create(c))
+{
+}
+
+inline Isotropic::Isotropic(std::shared_ptr<Texture> a)
+    : albedo(a)
+{
+}
 
 inline bool Isotropic::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
