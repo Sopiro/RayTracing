@@ -48,7 +48,7 @@ private:
     std::vector<uint32> indices;
 
     std::vector<Triangle> triangles;
-    std::shared_ptr<PBRMaterial> material;
+    std::shared_ptr<Material> material;
     std::array<std::shared_ptr<Texture>, TextureType::count> textures;
 };
 

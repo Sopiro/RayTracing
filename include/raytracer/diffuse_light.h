@@ -17,12 +17,12 @@ public:
 };
 
 inline DiffuseLight::DiffuseLight(std::shared_ptr<Texture> emission)
-    : emit(emission)
+    : emit{ emission }
 {
 }
 
 inline DiffuseLight::DiffuseLight(Color color)
-    : emit(SolidColor::Create(color))
+    : emit{ SolidColor::Create(color) }
 {
 }
 

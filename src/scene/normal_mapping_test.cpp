@@ -10,7 +10,7 @@ void NormalMapping(Scene& scene)
 
     scene.Add(sponza);
 
-    scene.SetSkyColor(Color{ 0.3, 0.3, 0.3 });
+    scene.SetSkyColor(Color{ 0.7, 0.8, 0.9 });
 }
 
-}
+} // namespace spt

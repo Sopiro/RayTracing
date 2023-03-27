@@ -35,6 +35,7 @@ extern void BVHTest(Scene&);
 extern void CornellBox(Scene&);
 extern void Sponza(Scene&);
 extern void NormalMapping(Scene&);
+extern void PBRTest(Scene&);
 
 Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);

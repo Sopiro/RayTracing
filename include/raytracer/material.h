@@ -34,6 +34,12 @@ public:
     {
         return 0.0;
     }
+
+    virtual Vec3 BRDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
+    {
+        assert(false);
+        return Vec3{ 0.0 };
+    }
 };
 
 } // namespace spt

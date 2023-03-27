@@ -34,10 +34,15 @@ enum Identity
     identity
 };
 
+static thread_local std::minstd_rand prng;
+
+inline void Srand(uint32 seed)
+{
+    prng.seed(seed);
+}
+
 inline Real Prand()
 {
-    static thread_local std::minstd_rand prng;
-
     return Real(prng()) / std::minstd_rand::max();
 }
 

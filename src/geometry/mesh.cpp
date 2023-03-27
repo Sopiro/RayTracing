@@ -14,14 +14,16 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
     , textures{ std::move(_textures) }
     , transform{ _transform }
 {
-    material = std::make_shared<PBRMaterial>();
+    // material = std::make_shared<Lambertian>(textures[albedo]);
 
-    material->albedo = HasAlbedoTexture() ? textures[albedo] : SolidColor::Create(1.0, 0.0, 1.0);
-    material->normal = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
-    material->roughness = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.1, 0.1, 0.1);
-    material->metallic = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
-    material->ao = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
-    material->emissive = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
+    auto mat = std::make_shared<PBRMaterial>();
+    mat->albedo_map = HasAlbedoTexture() ? textures[albedo] : SolidColor::Create(1.0, 0.0, 1.0);
+    mat->normal_map = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+    mat->roughness_map = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.1, 0.1, 0.1);
+    mat->metallic_map = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
+    mat->ao_map = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
+    mat->emissive_map = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
+    material = mat;
 
     for (size_t i = 0; i < vertices.size(); ++i)
     {
