@@ -14,8 +14,9 @@ enum TextureType
     albedo = 0,
     normal,
     roughness,
-    metalness,
+    metallic,
     ao,
+    emissive,
     count
 };
 
@@ -24,7 +25,7 @@ class Mesh : public Hittable
 public:
     Mesh(std::vector<Vertex> vertices,
          std::vector<uint32> indices,
-         std::array<std::shared_ptr<Texture>, 5> textures,
+         std::array<std::shared_ptr<Texture>, TextureType::count> textures,
          const Mat4& transform);
 
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
@@ -33,8 +34,9 @@ public:
     bool HasAlbedoTexture() const;
     bool HasNormalTexture() const;
     bool HasRoughnessTexture() const;
-    bool HasMetalnessTexture() const;
+    bool HasMetallicTexture() const;
     bool HasAOTexture() const;
+    bool HasEmissiveTexture() const;
 
 private:
     Mat4 transform;
@@ -47,7 +49,7 @@ private:
 
     std::vector<Triangle> triangles;
     std::shared_ptr<PBRMaterial> material;
-    std::array<std::shared_ptr<Texture>, 5> textures;
+    std::array<std::shared_ptr<Texture>, TextureType::count> textures;
 };
 
 inline bool Mesh::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
@@ -75,14 +77,19 @@ inline bool Mesh::HasRoughnessTexture() const
     return textures[roughness] != nullptr;
 }
 
-inline bool Mesh::HasMetalnessTexture() const
+inline bool Mesh::HasMetallicTexture() const
 {
-    return textures[metalness] != nullptr;
+    return textures[metallic] != nullptr;
 }
 
 inline bool Mesh::HasAOTexture() const
 {
     return textures[ao] != nullptr;
+}
+
+inline bool Mesh::HasEmissiveTexture() const
+{
+    return textures[emissive] != nullptr;
 }
 
 } // namespace spt

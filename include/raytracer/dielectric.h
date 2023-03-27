@@ -25,11 +25,11 @@ inline Dielectric::Dielectric(double index_of_refraction)
 
 inline double Dielectric::Reflectance(double cosine, double ref_idx)
 {
-    // Use Schlick's approximation for reflectance.
-    double r0 = (double(1.0) - ref_idx) / (double(1.0) + ref_idx);
+    // Schlick's approximation for reflectance.
+    double r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
     r0 = r0 * r0;
 
-    return r0 + (double(1.0) - r0) * pow((1 - cosine), double(5.0));
+    return r0 + (1.0 - r0) * pow((1 - cosine), 5.0);
 }
 
 } // namespace spt

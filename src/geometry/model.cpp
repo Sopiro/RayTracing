@@ -41,7 +41,7 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
 {
     std::vector<Vertex> vertices;
     std::vector<uint32> indices;
-    std::array<std::shared_ptr<Texture>, 5> textures;
+    std::array<std::shared_ptr<Texture>, TextureType::count> textures;
 
     // process vertices
     for (uint32 i = 0; i < mesh->mNumVertices; ++i)
@@ -78,14 +78,16 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
         auto albedo_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
         auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
-        auto metalness_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
+        auto metallic_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
         auto ao_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, false);
+        auto emissive_maps = LoadMaterialTextures(material, aiTextureType_EMISSION_COLOR, false);
 
-        textures[0] = albedo_maps.empty() ? nullptr : albedo_maps[0];
-        textures[1] = normal_maps.empty() ? nullptr : normal_maps[0];
-        textures[2] = roughness_maps.empty() ? nullptr : roughness_maps[0];
-        textures[3] = metalness_maps.empty() ? nullptr : metalness_maps[0];
-        textures[4] = ao_maps.empty() ? nullptr : ao_maps[0];
+        textures[albedo] = albedo_maps.empty() ? nullptr : albedo_maps[0];
+        textures[normal] = normal_maps.empty() ? nullptr : normal_maps[0];
+        textures[roughness] = roughness_maps.empty() ? nullptr : roughness_maps[0];
+        textures[metallic] = metallic_maps.empty() ? nullptr : metallic_maps[0];
+        textures[ao] = ao_maps.empty() ? nullptr : ao_maps[0];
+        textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }
 
     return std::make_shared<Mesh>(vertices, indices, textures, transform);

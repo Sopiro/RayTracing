@@ -7,7 +7,7 @@ namespace spt
 
 Mesh::Mesh(std::vector<Vertex> _vertices,
            std::vector<uint32> _indices,
-           std::array<std::shared_ptr<Texture>, 5> _textures,
+           std::array<std::shared_ptr<Texture>, TextureType::count> _textures,
            const Mat4& _transform)
     : vertices{ std::move(_vertices) }
     , indices{ std::move(_indices) }
@@ -19,8 +19,9 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
     material->albedo = HasAlbedoTexture() ? textures[albedo] : SolidColor::Create(1.0, 0.0, 1.0);
     material->normal = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
     material->roughness = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.1, 0.1, 0.1);
-    material->metalness = HasMetalnessTexture() ? textures[metalness] : SolidColor::Create(0.0, 0.0, 0.0);
+    material->metallic = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
     material->ao = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
+    material->emissive = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
 
     for (size_t i = 0; i < vertices.size(); ++i)
     {

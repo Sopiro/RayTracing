@@ -18,8 +18,9 @@ public:
     std::shared_ptr<Texture> albedo;
     std::shared_ptr<Texture> normal;
     std::shared_ptr<Texture> roughness;
-    std::shared_ptr<Texture> metalness;
+    std::shared_ptr<Texture> metallic;
     std::shared_ptr<Texture> ao;
+    std::shared_ptr<Texture> emissive;
 };
 
 inline bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
