@@ -39,7 +39,7 @@ struct ONB
     {
         w = n.Normalized();
 
-        Vec3 a = (fabs(w.x) > 0.9) ? Vec3{ 0.0, 1.0, 0.0 } : Vec3{ 1.0, 0.0, 0.0 };
+        Vec3 a = (fabs(w.x) > 0.9) ? y_axis : x_axis;
 
         v = Cross(w, a).Normalized();
         u = Cross(w, v);

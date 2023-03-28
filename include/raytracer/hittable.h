@@ -14,14 +14,14 @@ class Hittable;
 struct HitRecord
 {
     Vec3 point;
-    Vec3 normal;
-    Vec3 tangent;
+    Vec3 normal, tangent;
     UV uv;
 
     double t;
     bool front_face;
 
-    std::shared_ptr<Material> mat;
+    const Hittable* object;
+    const Material* mat;
 
     void SetFaceNormal(const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
     {
@@ -54,7 +54,7 @@ public:
     virtual Vec3 GetRandomDirection(const Vec3& origin) const
     {
         assert(false);
-        return Vec3{ 0, 0, 0 };
+        return zero_vec3;
     }
 
     virtual void Rebuild()

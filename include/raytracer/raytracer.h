@@ -21,6 +21,7 @@
 #include "sphere.h"
 #include "transform.h"
 #include "triangle.h"
+#include "util.h"
 
 #include <omp.h>
 

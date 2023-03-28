@@ -17,10 +17,10 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    // constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr double aspect_ratio = 3.0 / 2.0;
+    constexpr double aspect_ratio = 16.0 / 9.0;
+    // constexpr double aspect_ratio = 3.0 / 2.0;
     // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 1200;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
@@ -30,7 +30,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (5)
+    switch (3)
     {
     case 0: // Random scene
     {

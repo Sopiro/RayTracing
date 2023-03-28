@@ -345,7 +345,7 @@ inline double BVH::EvaluatePDF(const Ray& ray) const
 
             if (hit)
             {
-                sum += weight * object->PDFValue(ray, rec);
+                sum += weight * rec.object->PDFValue(ray, rec);
             }
 
             return t_max;

@@ -358,6 +358,11 @@ struct Vec3
     }
 };
 
+constexpr Vec3 zero_vec3{ 0.0, 0.0, 0.0 };
+constexpr Vec3 x_axis{ 1.0, 0.0, 0.0 };
+constexpr Vec3 y_axis{ 0.0, 1.0, 0.0 };
+constexpr Vec3 z_axis{ 0.0, 0.0, 1.0 };
+
 struct Vec4
 {
     Real x, y, z, w;

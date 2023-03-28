@@ -19,8 +19,8 @@ class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Vec3& point0, const Vec3& point1, const Vec3& point2, std::shared_ptr<Material> material);
-    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, std::shared_ptr<Material> material);
+    Triangle(const Vec3& point0, const Vec3& point1, const Vec3& point2, const std::shared_ptr<Material> material);
+    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const std::shared_ptr<Material> material);
 
     Vec3 GetNormal(double u, double v, double w) const;
     Vec3 GetTangent(double u, double v, double w) const;
@@ -39,12 +39,12 @@ public:
     Vec3 face_normal;
     bool one_sided;
     double area;
-    std::shared_ptr<Material> mat;
+    std::shared_ptr<Material> material;
 };
 
-inline Triangle::Triangle(const Vec3& p0, const Vec3& p1, const Vec3& p2, std::shared_ptr<Material> material)
+inline Triangle::Triangle(const Vec3& p0, const Vec3& p1, const Vec3& p2, const std::shared_ptr<Material> material)
     : one_sided{ false }
-    , mat{ material }
+    , material{ material }
 {
     e1 = p1 - p0;
     e2 = p2 - p0;
@@ -78,7 +78,7 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
     , v1{ vertex1 }
     , v2{ vertex2 }
     , one_sided{ false }
-    , mat{ material }
+    , material{ material }
 {
     e1 = v1.position - v0.position;
     e2 = v2.position - v0.position;
