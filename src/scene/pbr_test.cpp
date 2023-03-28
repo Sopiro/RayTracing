@@ -32,30 +32,50 @@ void PBRTest(Scene& scene)
     }
 
     // Ground
+    {
+        auto mat = std::make_shared<PBRMaterial>();
+        mat->albedo_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
+        mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
+        mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
+        mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
+        mat->ao_map = SolidColor::Create(Vec3{ 0.0 });
+        mat->emissive_map = SolidColor::Create(Vec3{ 0.0 });
 
-    auto ground_mat = std::make_shared<PBRMaterial>();
-    ground_mat->albedo_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
-    ground_mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
-    ground_mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
-    ground_mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
-    ground_mat->ao_map = SolidColor::Create(Vec3{ 0.0 });
-    ground_mat->emissive_map = SolidColor::Create(Vec3{ 0.0 });
+        auto tf1 = Transform{ Vec3{ 0.5, -r, -0.5 }, Quat{ identity }, Vec3{ 100.0 } };
+        auto ground = RectXZ(tf1, mat);
 
-    auto tf1 = Transform{ Vec3{ 0.5, -r, -0.5 }, Quat{ identity }, Vec3{ 100.0 } };
-    auto ground = RectXZ(tf1, ground_mat);
+        scene.Add(ground);
+    }
 
-    scene.Add(ground);
+    // Light
+    {
+        auto tf2 = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
+        auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+        auto rect = RectYZ(tf2, light);
 
-    // Area light
-    auto tf2 = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(50.0), Vec3{ 0.0, 0.0, 1.0 } }, Vec3{ 1.5, 1.0, 4.0 } };
-    auto light = std::make_shared<DiffuseLight>(Color{ 3.0 });
+        scene.Add(rect);
+        scene.AddLight(rect);
+    }
 
-    auto rect = RectXZ(tf2, light);
+    // {
+    //     auto tf2 = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
+    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto rect = RectYZ(tf2, light);
 
-    scene.Add(rect);
-    scene.AddLight(rect);
+    //     scene.Add(rect);
+    //     scene.AddLight(rect);
+    // }
 
-    // scene.SetSkyColor(Color{ 0.5, 0.8, 0.9 } * 0.6);
+    // {
+    //     auto tf2 = Transform{ Vec3{ 0.0, 2.5, -4.0 }, Quat{ DegToRad(40), x_axis }, Vec3{ 4.0, 1.0, 1.0 } };
+    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto rect = RectXY(tf2, light);
+
+    //     scene.Add(rect);
+    //     scene.AddLight(rect);
+    // }
+
+    scene.SetSkyColor(Color{ 0.0 });
 }
 
 } // namespace spt

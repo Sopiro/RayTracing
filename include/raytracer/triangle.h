@@ -133,8 +133,14 @@ inline double Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) c
 
 inline Vec3 Triangle::GetRandomDirection(const Vec3& origin) const
 {
-    double u = Rand(0.0, 0.5);
-    double v = Rand(0.0, 0.5);
+    double u = Rand(0.0, 1.0);
+    double v = Rand(0.0, 1.0);
+
+    if (u + v > 1.0)
+    {
+        u = 1.0 - u;
+        v = 1.0 - v;
+    }
 
     Vec3 random_point = v0.position + e1 * u + e2 * v;
 

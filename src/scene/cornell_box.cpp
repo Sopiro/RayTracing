@@ -44,8 +44,8 @@ void CornellBox(Scene& scene)
         double hz = 0.13;
 
         auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-
         auto box = Box(tf, white);
+
         scene.Add(box);
     }
 
@@ -62,8 +62,8 @@ void CornellBox(Scene& scene)
     {
         auto mat = std::make_shared<Dielectric>(1.5);
         auto sphere = std::make_shared<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
-        scene.Add(sphere);
 
+        scene.Add(sphere);
         scene.AddLight(sphere);
     }
 
