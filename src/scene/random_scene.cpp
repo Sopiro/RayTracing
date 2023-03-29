@@ -55,7 +55,7 @@ void RandomScene(Scene& scene)
     auto material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
     scene.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 
-    scene.SetSkyColor(Color{ 0.7, 0.8, 1.0 });
+    scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

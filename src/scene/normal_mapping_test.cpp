@@ -10,7 +10,7 @@ void NormalMapping(Scene& scene)
 
     scene.Add(sponza);
 
-    scene.SetSkyColor(Color{ 0.7, 0.8, 0.9 });
+    scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

@@ -4,6 +4,8 @@
 #include "common.h"
 #include "hittable.h"
 #include "hittable_list.h"
+#include "image_texture.h"
+#include "solid_color.h"
 #include "sphere.h"
 
 namespace spt
@@ -29,25 +31,30 @@ public:
 
     bool HasLights() const;
 
-    Color GetSkyColor() const;
-    void SetSkyColor(const Color& color);
+    const std::shared_ptr<Texture> GetEnvironmentMap() const;
+    void SetEnvironmentMap(const std::shared_ptr<Texture> color);
+
+    Vec3 GetSkyColor(Vec3 direction) const;
 
 private:
-    Color sky_color;
     HittableList hittables;
     HittableList lights;
+
+    std::shared_ptr<Texture> environment_map;
 };
 
 inline Scene::Scene()
-    : sky_color{ 0.0 }
 {
+    // environment_map = ImageTexture::Create("res/sunflowers/sunflowers_4k.hdr", false, true);
+    // environment_map = ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true);
+
+    environment_map = SolidColor::Create(Color{ 0.7, 0.8, 0.9 });
 }
 
 inline void Scene::Reset()
 {
     hittables.Clear();
     lights.Clear();
-    sky_color.SetZero();
 }
 
 inline void Scene::Add(std::shared_ptr<Hittable> object)
@@ -100,14 +107,27 @@ inline bool Scene::HasLights() const
     return lights.GetCount() > 0;
 }
 
-inline Color Scene::GetSkyColor() const
+inline const std::shared_ptr<Texture> Scene::GetEnvironmentMap() const
 {
-    return sky_color;
+    return environment_map;
 }
 
-inline void Scene::SetSkyColor(const Color& color)
+inline void Scene::SetEnvironmentMap(const std::shared_ptr<Texture> env_map)
 {
-    sky_color = color;
+    environment_map = env_map;
+}
+
+inline Vec3 Scene::GetSkyColor(Vec3 dir) const
+{
+    dir.Normalize();
+
+    double phi = atan2(-dir.z, dir.x) + pi;
+    double theta = acos(-dir.y);
+
+    double u = phi / (2.0 * pi);
+    double v = theta / pi;
+
+    return environment_map->Value(UV{ u, v }, zero_vec3);
 }
 
 } // namespace spt

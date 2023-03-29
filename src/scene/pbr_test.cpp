@@ -75,7 +75,7 @@ void PBRTest(Scene& scene)
     //     scene.AddLight(rect);
     // }
 
-    scene.SetSkyColor(Color{ 0.0 });
+    scene.SetEnvironmentMap(SolidColor::Create({ 0.0, 0.0, 0.0 }));
 }
 
 } // namespace spt

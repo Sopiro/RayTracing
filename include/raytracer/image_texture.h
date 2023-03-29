@@ -10,9 +10,9 @@ namespace spt
 class ImageTexture : public Texture
 {
 public:
-    static std::shared_ptr<ImageTexture> Create(std::string path, bool srgb = false);
+    static std::shared_ptr<ImageTexture> Create(std::string path, bool srgb = false, bool hdr = false);
 
-    ~ImageTexture();
+    virtual ~ImageTexture();
 
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
@@ -22,13 +22,13 @@ public:
 
     virtual Color Value(const UV& uv, const Vec3& p) const override;
 
-private:
+protected:
     ImageTexture();
     ImageTexture(std::string path, bool srgb);
 
     const static int32 bytes_per_pixel = 3;
 
-    uint8* data;
+    void* data;
     int32 width, height;
     int32 bytes_per_scanline;
     std::string name;
@@ -62,7 +62,7 @@ inline ImageTexture::ImageTexture(std::string path, bool srgb)
             for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
             {
                 // Convert to linear space
-                data[i] = static_cast<uint8>(fmin(pow(data[i] / 255.0, 2.2) * 255.0, 255.0));
+                ((uint8*)data)[i] = static_cast<uint8>(fmin(pow(((uint8*)data)[i] / 255.0, 2.2) * 255.0, 255.0));
             }
         }
     }
@@ -78,28 +78,8 @@ inline ImageTexture::~ImageTexture()
 static int32 texture_count = 0;
 static std::unordered_map<std::string, std::shared_ptr<ImageTexture>> loaded_textures;
 
-inline std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path, bool srgb)
-{
-    auto loaded = loaded_textures.find(path);
-    if (loaded != loaded_textures.end())
-    {
-        return loaded->second;
-    }
-
-    std::shared_ptr<ImageTexture> image{ new ImageTexture(path, srgb) };
-    loaded_textures.emplace(path, image);
-    ++texture_count;
-
-    return image;
-}
-
 inline Color ImageTexture::Value(const UV& uv, const Vec3& p) const
 {
-    if (data == nullptr)
-    {
-        return Color{ 1.0, 0.0, 1.0 };
-    }
-
     // Clamp input texture coordinates to [0,1] x [1,0]
     double u = Clamp(uv.x, 0.0, 1.0);
     double v = 1.0 - Clamp(uv.y, 0.0, 1.0); // Flip V to image coordinates
@@ -118,7 +98,7 @@ inline Color ImageTexture::Value(const UV& uv, const Vec3& p) const
     }
 
     double color_scale = 1.0 / 255.0;
-    uint8* pixel = data + j * bytes_per_scanline + i * bytes_per_pixel;
+    uint8* pixel = (uint8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };
 }

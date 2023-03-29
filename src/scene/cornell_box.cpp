@@ -67,7 +67,7 @@ void CornellBox(Scene& scene)
         scene.AddLight(sphere);
     }
 
-    scene.SetSkyColor(Color{ 0.0, 0.0, 0.0 });
+    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 }
 
 } // namespace spt

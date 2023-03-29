@@ -38,19 +38,14 @@ void Sponza(Scene& scene)
     //     }
     // }
 
-    // Color sky_color = Color{ 0.9, 0.8, 0.8 } * 8.0;
-    Color sky_color = Color{ 0.7, 0.8, 1.0 } * 10.0;
-    // Color sky_color{ 0.0, 0.0, 0.0 };
+    // {
+    //     auto light2 = std::make_shared<DiffuseLight>(Color{ 20.0 });
+    //     auto sphere = std::make_shared<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
+    //     scene.Add(sphere);
+    //     scene.AddLight(sphere);
+    // }
 
-    scene.SetSkyColor(sky_color);
-
-    // auto sphere = std::make_shared<Sphere>(Vec3(0.0, 10.0, 0.0), 1.0, nullptr);
-    // scene.AddLight(sphere);
-
-    // auto light2 = std::make_shared<DiffuseLight>(Color{ 20.0 });
-    // auto sphere = std::make_shared<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
-    // scene.Add(sphere);
-    // scene.AddLight(sphere);
+    scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

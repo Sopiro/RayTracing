@@ -33,7 +33,7 @@ void BVHTest(Scene& scene)
         }
     }
 
-    scene.SetSkyColor(Color{ 0.7, 0.8, 1.0 });
+    scene.SetEnvironmentMap(SolidColor::Create({ 0.7, 0.8, 1.0 }));
 }
 
 } // namespace spt

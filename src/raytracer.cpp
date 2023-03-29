@@ -15,7 +15,7 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
     HitRecord rec;
     if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
     {
-        return scene.GetSkyColor();
+        return scene.GetSkyColor(ray.dir);
     }
 
     Color emitted = rec.mat->Emit(ray, rec);
@@ -67,7 +67,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         HitRecord rec;
         if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
         {
-            accu += scene.GetSkyColor() * abso;
+            accu += scene.GetSkyColor(ray.dir) * abso;
             break;
         }
 

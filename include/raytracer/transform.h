@@ -22,7 +22,7 @@ struct Transform
 
     Transform(const Vec3& position)
         : p{ position }
-        , q{ Real(1.0) }
+        , q{ identity }
         , r{ Real(1.0) }
     {
     }
