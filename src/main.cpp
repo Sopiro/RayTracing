@@ -18,9 +18,9 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    // constexpr double aspect_ratio = 3.0 / 2.0;
-    constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr double aspect_ratio = 3.0 / 2.0;
+    // constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 600;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;

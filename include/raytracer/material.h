@@ -36,7 +36,7 @@ public:
     }
 
     // BRDF with cosine term
-    virtual Vec3 BRDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
+    virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
     {
         assert(false);
         return Vec3{ 0.0 };

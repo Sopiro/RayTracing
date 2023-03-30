@@ -14,7 +14,7 @@ public:
     virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const override;
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
     virtual double ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
-    virtual Vec3 BRDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
+    virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
 
 public:
     std::shared_ptr<Texture> albedo_map;
@@ -72,7 +72,7 @@ static inline double G_Smith(double NoV, double NoL, double roughness)
     return G1_GGX_Schlick(NoV, roughness) * G1_GGX_Schlick(NoL, roughness);
 }
 
-inline Vec3 PBRMaterial::BRDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
+inline Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
     Vec3 albedo = albedo_map->Value(in_rec.uv, in_rec.point);
     double roughness = roughness_map->Value(in_rec.uv, in_rec.point).x;

@@ -25,8 +25,7 @@ void PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
             pos.z = z * zstep - ((cz - 1) * zstep / 2.0);
 
-            std::shared_ptr<Material> mat = RandomMaterial();
-
+            auto mat = RandomPBRMaterial();
             scene.Add(std::make_shared<Sphere>(pos, r, mat));
         }
     }
@@ -50,7 +49,7 @@ void PBRTest(Scene& scene)
     // Light
     {
         auto tf2 = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-        auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+        auto light = std::make_shared<DiffuseLight>(Color{ 10.0 });
         auto rect = RectYZ(tf2, light);
 
         scene.Add(rect);

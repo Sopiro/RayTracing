@@ -14,9 +14,9 @@ inline bool is_nullish(const Vec3& v)
     return (isnan(v.x) || isnan(v.y) || isnan(v.z) || isinf(v.x) || isinf(v.y) || isinf(v.z));
 }
 
-inline std::shared_ptr<Material> RandomMaterial()
+inline std::shared_ptr<PBRMaterial> RandomPBRMaterial()
 {
-    std::shared_ptr<PBRMaterial> mat = std::make_shared<PBRMaterial>();
+    auto mat = std::make_shared<PBRMaterial>();
 
     auto albedo = Vec3{ Prand(0.0, 1.0), Prand(0.0, 1.0), Prand(0.0, 1.0) } * 0.7;
     mat->albedo_map = SolidColor::Create(albedo);

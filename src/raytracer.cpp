@@ -41,7 +41,7 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
         HitRecord rec2;
         if (scene.Hit(to_sun, ray_tolerance, infinity, rec2) == false)
         {
-            rad += rec.mat->BRDF(ray, rec, to_sun) * sun->radiance;
+            rad += rec.mat->Evaluate(ray, rec, to_sun) * sun->radiance;
         }
     }
 
@@ -60,7 +60,7 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
 
         double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
-        rad += rec.mat->BRDF(ray, rec, scattered) * ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
+        rad += rec.mat->Evaluate(ray, rec, scattered) * ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
         return rad;
     }
     else
@@ -68,7 +68,7 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
         Ray scattered{ rec.point, srec.pdf->Generate() };
         double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
-        rad += rec.mat->BRDF(ray, rec, scattered) * ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
+        rad += rec.mat->Evaluate(ray, rec, scattered) * ComputeRayColor(scene, scattered, bounce_count - 1) / pdf_value;
         return rad;
     }
 }
@@ -111,7 +111,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             HitRecord rec2;
             if (scene.Hit(to_sun, ray_tolerance, infinity, rec2) == false)
             {
-                accu += rec.mat->BRDF(ray, rec, to_sun) * sun->radiance * abso;
+                accu += rec.mat->Evaluate(ray, rec, to_sun) * sun->radiance * abso;
             }
         }
 
@@ -131,7 +131,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             double pdf_value = mixed_pdf.Evaluate(scattered.dir);
 
             accu += emitted * abso;
-            abso *= rec.mat->BRDF(ray, rec, scattered) / pdf_value;
+            abso *= rec.mat->Evaluate(ray, rec, scattered) / pdf_value;
             ray = scattered;
         }
         else
@@ -140,7 +140,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             double pdf_value = srec.pdf->Evaluate(scattered.dir);
 
             accu += emitted * abso;
-            abso *= rec.mat->BRDF(ray, rec, scattered) / pdf_value;
+            abso *= rec.mat->Evaluate(ray, rec, scattered) / pdf_value;
             ray = scattered;
         }
     }
