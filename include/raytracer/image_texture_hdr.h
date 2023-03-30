@@ -23,7 +23,7 @@ inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
 {
     int32 components_per_pixel = bytes_per_pixel;
 
-    data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, components_per_pixel);
+    data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
 
     if (!data)
     {
@@ -33,14 +33,12 @@ inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
     }
     else
     {
-        if (srgb)
-        {
 #pragma omp parallel for
-            for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
-            {
-                // Convert to linear space
-                ((float*)data)[i] = static_cast<float>(pow(((float*)data)[i], 2.2));
-            }
+        for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
+        {
+            // Clamp needed
+            float value = *((float*)data + i);
+            *((float*)data + i) = Clamp(value, 0.0f, 10.0f);
         }
     }
 
@@ -66,7 +64,7 @@ inline Color ImageTextureHDR::Value(const UV& uv, const Vec3& p) const
         j = height - 1;
     }
 
-    float* pixel = (float*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
+    float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ pixel[0], pixel[1], pixel[2] };
 }

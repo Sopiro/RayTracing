@@ -26,7 +26,7 @@ protected:
     ImageTexture();
     ImageTexture(std::string path, bool srgb);
 
-    const static int32 bytes_per_pixel = 3;
+    const static int32 bytes_per_pixel = STBI_rgb;
 
     void* data;
     int32 width, height;
@@ -46,7 +46,7 @@ inline ImageTexture::ImageTexture(std::string path, bool srgb)
 {
     int32 components_per_pixel = bytes_per_pixel;
 
-    data = stbi_load(path.data(), &width, &height, &components_per_pixel, components_per_pixel);
+    data = stbi_load(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
 
     if (!data)
     {
@@ -62,7 +62,8 @@ inline ImageTexture::ImageTexture(std::string path, bool srgb)
             for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
             {
                 // Convert to linear space
-                ((uint8*)data)[i] = static_cast<uint8>(fmin(pow(((uint8*)data)[i] / 255.0, 2.2) * 255.0, 255.0));
+                uint8 value = *((uint8*)data + i);
+                *((uint8*)data + i) = static_cast<uint8>(fmin(pow(value / 255.0, 2.2) * 255.0, 255.0));
             }
         }
     }

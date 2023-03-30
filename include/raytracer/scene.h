@@ -2,6 +2,7 @@
 
 #include "bvh.h"
 #include "common.h"
+#include "directional_light.h"
 #include "hittable.h"
 #include "hittable_list.h"
 #include "image_texture.h"
@@ -27,20 +28,24 @@ public:
     virtual void Rebuild() override;
 
     const HittableList& GetHittableList() const;
-    const HittableList& GetLights() const;
 
     bool HasLights() const;
+    const HittableList& GetLights() const;
 
     const std::shared_ptr<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const std::shared_ptr<Texture> color);
-
     Vec3 GetSkyColor(Vec3 direction) const;
+
+    bool HasDirectionalLight() const;
+    const std::shared_ptr<DirectionalLight> GetDirectionalLight() const;
+    void SetDirectionalLight(const std::shared_ptr<DirectionalLight> directional_light);
 
 private:
     HittableList hittables;
     HittableList lights;
 
     std::shared_ptr<Texture> environment_map;
+    std::shared_ptr<DirectionalLight> directional_light;
 };
 
 inline Scene::Scene()
@@ -49,6 +54,7 @@ inline Scene::Scene()
     // environment_map = ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true);
 
     environment_map = SolidColor::Create(Color{ 0.7, 0.8, 0.9 });
+    directional_light = nullptr;
 }
 
 inline void Scene::Reset()
@@ -97,14 +103,14 @@ inline const HittableList& Scene::GetHittableList() const
     return hittables;
 }
 
-inline const HittableList& Scene::GetLights() const
-{
-    return lights;
-}
-
 inline bool Scene::HasLights() const
 {
     return lights.GetCount() > 0;
+}
+
+inline const HittableList& Scene::GetLights() const
+{
+    return lights;
 }
 
 inline const std::shared_ptr<Texture> Scene::GetEnvironmentMap() const
@@ -128,6 +134,21 @@ inline Vec3 Scene::GetSkyColor(Vec3 dir) const
     double v = theta / pi;
 
     return environment_map->Value(UV{ u, v }, zero_vec3);
+}
+
+inline bool Scene::HasDirectionalLight() const
+{
+    return directional_light != nullptr;
+}
+
+inline const std::shared_ptr<DirectionalLight> Scene::GetDirectionalLight() const
+{
+    return directional_light;
+}
+
+inline void Scene::SetDirectionalLight(const std::shared_ptr<DirectionalLight> dr)
+{
+    directional_light = dr;
 }
 
 } // namespace spt

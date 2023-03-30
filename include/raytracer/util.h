@@ -9,6 +9,11 @@
 namespace spt
 {
 
+inline bool is_nullish(const Vec3& v)
+{
+    return (isnan(v.x) || isnan(v.y) || isnan(v.z) || isinf(v.x) || isinf(v.y) || isinf(v.z));
+}
+
 inline std::shared_ptr<Material> RandomMaterial()
 {
     std::shared_ptr<PBRMaterial> mat = std::make_shared<PBRMaterial>();

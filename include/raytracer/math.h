@@ -1489,9 +1489,9 @@ inline Vec3 RandomCosineDirection()
 {
     Real r1 = Rand();
     Real r2 = Rand();
-    Real z = sqrt(1 - r2);
+    Real z = sqrt(1.0 - r2);
 
-    Real phi = 2 * pi * r1;
+    Real phi = 2.0 * pi * r1;
     Real x = cos(phi) * sqrt(r2);
     Real y = sin(phi) * sqrt(r2);
 

@@ -18,9 +18,9 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr double aspect_ratio = 3.0 / 2.0;
-    // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 600;
+    // constexpr double aspect_ratio = 3.0 / 2.0;
+    constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
@@ -30,7 +30,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (6)
+    switch (2)
     {
     case 0: // Random scene
     {
@@ -157,7 +157,7 @@ int main()
 #pragma omp parallel for schedule(dynamic, 1)
         for (int32 x = 0; x < width; ++x)
         {
-            Color samples{ 0.0 };
+            Color samples{ 0.0, 0.0, 0.0 };
 
             for (int32 s = 0; s < samples_per_pixel; ++s)
             {
@@ -168,14 +168,14 @@ int main()
                 samples += PathTrace(scene, ray, bounce_count);
             }
 
+            // Resolve NaNs
+            if (samples.x != samples.x) samples.x = 0.0;
+            if (samples.y != samples.y) samples.y = 0.0;
+            if (samples.z != samples.z) samples.z = 0.0;
+
             Color color = samples * scale;
             color = Tonemap_ACES(color);
             color = GammaCorrection(color, 2.2);
-
-            // Resolve NaNs
-            if (color.x != color.x) color.x = 0.0;
-            if (color.y != color.y) color.y = 0.0;
-            if (color.z != color.z) color.z = 0.0;
 
             bitmap.Set(x, y, color);
         }

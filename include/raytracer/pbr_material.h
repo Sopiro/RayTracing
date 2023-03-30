@@ -56,7 +56,7 @@ static inline double D_GGX(double NoH, double roughness)
 
     double b = (NoH2 * (alpha2 - 1.0) + 1.0);
 
-    return alpha2 / (b * b * pi);
+    return alpha2 / (b * b * pi + 0.0001);
 }
 
 static inline double G1_GGX_Schlick(double NoV, double roughness)
