@@ -68,6 +68,8 @@ void CornellBox(Scene& scene)
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
+
+    // scene.Rebuild();
 }
 
 } // namespace spt

@@ -115,7 +115,10 @@ inline void HittableList::Rebuild()
     {
         void TraverseCallback(const Node* node)
         {
-            node->data->Rebuild();
+            if (node->data)
+            {
+                node->data->Rebuild();
+            }
         }
     } callback;
 

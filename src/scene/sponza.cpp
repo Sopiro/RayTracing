@@ -5,6 +5,9 @@ namespace spt
 
 void Sponza(Scene& scene)
 {
+    // Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 0.01 } };
+    // std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza2/sponza.obj", transform);
+
     Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 1.0 } };
     std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
 
@@ -13,9 +16,9 @@ void Sponza(Scene& scene)
     auto light = std::make_shared<DiffuseLight>(Color{ 1.0 });
     // auto mat = std::make_shared<Dielectric>(1.5);
 
-    double cx = 10.0;
-    double cy = 10.0;
-    double cz = 20.0;
+    double cx = 8.0;
+    double cy = 4.0;
+    double cz = 8.0;
 
     double sx = 10.0;
     double sy = 10.0;
@@ -45,7 +48,7 @@ void Sponza(Scene& scene)
     //     scene.AddLight(sphere);
     // }
 
-    scene.SetDirectionalLight(std::make_shared<DirectionalLight>(-Vec3{ -3.0, 15.0, 0.0 }.Normalized(), Vec3{ 10.0 }));
+    scene.SetDirectionalLight(std::make_shared<DirectionalLight>(-Vec3{ -1.5, 15.0, 3.0 }.Normalized(), Vec3{ 10.0 }));
     scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
     // scene.SetEnvironmentMap(SolidColor::Create(Color{ 1.0 }));
 }

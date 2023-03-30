@@ -18,11 +18,11 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    // constexpr double aspect_ratio = 3.0 / 2.0;
-    constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr double aspect_ratio = 3.0 / 2.0;
+    // constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 600;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 10;
     constexpr double scale = 1.0 / samples_per_pixel;
     constexpr int bounce_count = 10;
     Bitmap bitmap{ width, height };
@@ -30,7 +30,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (2)
+    switch (3)
     {
     case 0: // Random scene
     {
@@ -83,8 +83,13 @@ int main()
 
         // Vec3 lookfrom(0.0, 2.5, 4.5);
         // Vec3 lookat(0.0, 1.45, 0.0);
-        Vec3 lookfrom(-1.5, 5.5, 10.0);
-        Vec3 lookat(0.0, 3.45, 0.0);
+
+        // Vec3 lookfrom(-1.5, 5.5, 10.0);
+        // Vec3 lookat(0.0, 3.45, 0.0);
+
+        Vec3 lookfrom(0.0, 0.5, 7.0);
+        Vec3 lookat(0.0, 3.0, 0.0);
+
         Vec3 vup(0, 1, 0);
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

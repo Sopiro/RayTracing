@@ -75,7 +75,7 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        auto albedo_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
+        auto albedo_maps = LoadMaterialTextures(material, aiTextureType_BASE_COLOR, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
         auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
         auto metallic_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
