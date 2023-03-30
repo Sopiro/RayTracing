@@ -12,7 +12,7 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
     double cos_theta = Min(Dot(-unit_direction, in_rec.normal), 1.0);
     double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
-    // Total Internal Reflection
+    // Check for total internal reflection
     bool refractable = refraction_ratio * sin_theta < 1.0;
     Vec3 direction;
 

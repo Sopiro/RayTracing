@@ -33,6 +33,7 @@ Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count)
         return rad;
     }
 
+    // Direct illumination by directional light
     if (scene.HasDirectionalLight())
     {
         auto sun = scene.GetDirectionalLight();
@@ -102,6 +103,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             continue;
         }
 
+        // Direct illumination by directional light
         if (scene.HasDirectionalLight())
         {
             auto sun = scene.GetDirectionalLight();

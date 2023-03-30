@@ -5,6 +5,7 @@
 namespace spt
 {
 
+// The ideal reflector
 class Metal : public Material
 {
 public:
