@@ -11,6 +11,7 @@ void NormalMapping(Scene& scene)
     scene.Add(model);
 
     scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
+    scene.SetDirectionalLight(std::make_shared<DirectionalLight>(-Vec3{ -1, 10, 0 }.Normalized(), Vec3{ 10.0 }));
 }
 
 } // namespace spt

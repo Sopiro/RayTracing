@@ -41,5 +41,6 @@ extern void EnvironmentMap(Scene&);
 
 Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);
+Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count);
 
 } // namespace spt

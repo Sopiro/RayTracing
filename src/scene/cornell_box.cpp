@@ -60,16 +60,29 @@ void CornellBox(Scene& scene)
 
     // Right sphere
     {
-        auto mat = std::make_shared<Dielectric>(1.5);
-        auto sphere = std::make_shared<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
+        // auto mat = std::make_shared<Dielectric>(1.5);
+        // auto sphere = std::make_shared<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
 
-        scene.Add(sphere);
-        scene.AddLight(sphere);
+        // scene.Add(sphere);
+        // scene.AddLight(sphere);
+    }
+
+    // Right block
+    {
+        double hx = 0.13;
+        double hy = 0.13;
+        double hz = 0.13;
+
+        auto tf = Transform{ 0.7, hy, -0.3, Quat(DegToRad(-25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
+        auto box = Box(tf, white);
+
+        scene.Add(box);
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 
     // scene.Rebuild();
+    std::cout << scene.GetLights().GetCount() << std::endl;
 }
 
 } // namespace spt

@@ -18,13 +18,14 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr double aspect_ratio = 3.0 / 2.0;
-    // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 600;
+    // constexpr double aspect_ratio = 3.0 / 2.0;
+    constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    constexpr int bounce_count = 10;
+    // constexpr int bounce_count = 20;
+    constexpr int bounce_count = INT_MAX;
     Bitmap bitmap{ width, height };
 
     Scene scene;
@@ -170,7 +171,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GetRay(u, v);
-                samples += PathTrace(scene, ray, bounce_count);
+                samples += PathTrace2(scene, ray, bounce_count);
             }
 
             // Resolve NaNs
