@@ -18,11 +18,11 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr double aspect_ratio = 3.0 / 2.0;
-    // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 600;
+    // constexpr double aspect_ratio = 3.0 / 2.0;
+    constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 500;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 200;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 20;
     constexpr int bounce_count = INT_MAX;
@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (5)
+    switch (7)
     {
     case 0: // Random scene
     {
@@ -140,6 +140,21 @@ int main()
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71.0;
+
+        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 7: // BRDF sampling test
+    {
+        BRDFSamplingTest(scene);
+
+        Vec3 lookfrom{ 0.5, 0.5, 1.25 };
+        Vec3 lookat{ 0.5, 0.5, 0.0 };
+        Vec3 vup{ 0.0, 1.0, 0.0 };
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
     }
