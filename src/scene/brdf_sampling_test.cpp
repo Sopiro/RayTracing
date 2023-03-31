@@ -49,7 +49,7 @@ void BRDFSamplingTest(Scene& scene)
     // Center sphere
     {
         auto mat = RandomPBRMaterial();
-        mat->albedo_map = SolidColor::Create(Vec3{ 1.0 });
+        mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.2 });
 

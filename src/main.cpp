@@ -18,13 +18,13 @@ int main()
 #endif
 
     // constexpr double aspect_ratio = 16.0 / 9.0;
-    // constexpr double aspect_ratio = 3.0 / 2.0;
-    constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 500;
+    constexpr double aspect_ratio = 3.0 / 2.0;
+    // constexpr double aspect_ratio = 1.0;
+    constexpr int32 width = 600;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 200;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
-    // constexpr int bounce_count = 20;
+    // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
     Bitmap bitmap{ width, height };
 

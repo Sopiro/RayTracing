@@ -16,7 +16,7 @@ public:
     virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
 
 public:
-    std::shared_ptr<Texture> albedo_map;
+    std::shared_ptr<Texture> basecolor_map;
     std::shared_ptr<Texture> normal_map;
     std::shared_ptr<Texture> roughness_map;
     std::shared_ptr<Texture> metallic_map;
@@ -27,13 +27,6 @@ public:
 inline Color PBRMaterial::Emit(const Ray& in_ray, const HitRecord& in_rec) const
 {
     return emissive_map->Value(in_rec.uv, in_rec.point);
-}
-
-inline bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
-{
-    out_srec.is_specular = false;
-    out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
-    return true;
 }
 
 } // namespace spt

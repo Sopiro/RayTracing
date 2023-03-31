@@ -11,7 +11,7 @@ namespace spt
 
 enum TextureType
 {
-    albedo = 0,
+    basecolor = 0,
     normal,
     roughness,
     metallic,
@@ -31,7 +31,7 @@ public:
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
 
-    bool HasAlbedoTexture() const;
+    bool HasBaseColorTexture() const;
     bool HasNormalTexture() const;
     bool HasRoughnessTexture() const;
     bool HasMetallicTexture() const;
@@ -62,9 +62,9 @@ inline bool Mesh::GetAABB(AABB& outAABB) const
     return bvh.GetAABB(outAABB);
 }
 
-inline bool Mesh::HasAlbedoTexture() const
+inline bool Mesh::HasBaseColorTexture() const
 {
-    return textures[albedo] != nullptr;
+    return textures[basecolor] != nullptr;
 }
 
 inline bool Mesh::HasNormalTexture() const

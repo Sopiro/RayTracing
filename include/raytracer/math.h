@@ -1451,13 +1451,14 @@ T Refract(const T& uv, const T& n, Real etai_over_etat)
     return r_out_perp + r_out_parallel;
 }
 
-inline Vec3 PolarToCart(Real theta, Real phi, Real r)
+inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
 {
-    Real x = cos(phi) * sin(theta);
-    Real y = sin(phi) * sin(theta);
+    Real sin_thetha = sin(theta);
+    Real x = cos(phi) * sin_thetha;
+    Real y = sin(phi) * sin_thetha;
     Real z = cos(theta);
 
-    return Vec3{ x, y, z } * r;
+    return Vec3{ x * r, y * r, z * r };
 }
 
 inline Vec3 RandomUnitVector()

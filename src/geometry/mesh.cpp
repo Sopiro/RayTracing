@@ -14,10 +14,10 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
     , textures{ std::move(_textures) }
     , transform{ _transform }
 {
-    // material = std::make_shared<Lambertian>(textures[albedo]);
+    // material = std::make_shared<Lambertian>(textures[basecolor]);
 
     auto mat = std::make_shared<PBRMaterial>();
-    mat->albedo_map = HasAlbedoTexture() ? textures[albedo] : SolidColor::Create(1.0, 0.0, 1.0);
+    mat->basecolor_map = HasBaseColorTexture() ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
     mat->normal_map = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
     mat->roughness_map = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.1, 0.1, 0.1);
     mat->metallic_map = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
