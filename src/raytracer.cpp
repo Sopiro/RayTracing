@@ -229,7 +229,7 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
         ray = scattered;
 
         // Russian roulette
-        if (bounce > 3)
+        if (bounce > 2)
         {
             double rr = fmax(abso.x, fmax(abso.y, abso.z));
             if (Rand() > rr)

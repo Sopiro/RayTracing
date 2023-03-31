@@ -12,7 +12,6 @@ public:
     Lambertian(std::shared_ptr<Texture> albedo);
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
-    virtual double ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
     virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
 
 public:
@@ -35,12 +34,6 @@ inline bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Scat
     out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
 
     return true;
-}
-
-inline double Lambertian::ScatteringPDF(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
-{
-    // Cosine density
-    return Dot(in_rec.normal, in_scattered.dir) / pi;
 }
 
 inline Vec3 Lambertian::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
