@@ -21,9 +21,8 @@ protected:
 
 inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
 {
-    int32 components_per_pixel = bytes_per_pixel;
-
-    data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
+    int32 components_per_pixel;
+    data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
     if (!data)
     {

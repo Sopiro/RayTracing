@@ -12,7 +12,7 @@ class Sphere : public Hittable
 {
 public:
     Sphere() = default;
-    Sphere(Vec3 center, double radius, std::shared_ptr<Material> material);
+    Sphere(const Vec3& center, double radius, std::shared_ptr<Material> material);
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
@@ -29,7 +29,7 @@ private:
     static void GetUV(const Vec3& p, UV& out_uv);
 };
 
-inline Sphere::Sphere(Vec3 _center, double _radius, std::shared_ptr<Material> _material)
+inline Sphere::Sphere(const Vec3& _center, double _radius, std::shared_ptr<Material> _material)
     : center{ _center }
     , radius{ _radius }
     , material{ _material }

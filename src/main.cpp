@@ -33,7 +33,7 @@ int main()
 
     switch (7)
     {
-    case 0: // Random scene
+    case 0: // Raytracing in one weekend final scene
     {
         RandomScene(scene);
 

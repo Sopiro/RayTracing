@@ -21,6 +21,7 @@
 #include <assimp/scene.h>
 
 #include "math.h"
+#include "math_util.h"
 #include "types.h"
 
 namespace spt

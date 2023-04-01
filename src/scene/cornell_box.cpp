@@ -49,7 +49,7 @@ void CornellBox(Scene& scene)
         scene.Add(box);
     }
 
-    // lights
+    // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
         auto l = RectXZ(tf, light);
@@ -82,7 +82,7 @@ void CornellBox(Scene& scene)
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 
     // scene.Rebuild();
-    std::cout << scene.GetLights().GetCount() << std::endl;
+    std::cout << "Lights: " << scene.GetLights().GetCount() << std::endl;
 }
 
 } // namespace spt

@@ -17,9 +17,6 @@ public:
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
 
-    ImageTexture(ImageTexture&&) noexcept = delete;
-    ImageTexture& operator=(ImageTexture&&) noexcept = delete;
-
     virtual Color Value(const UV& uv, const Vec3& p) const override;
 
 protected:
@@ -31,7 +28,6 @@ protected:
     void* data;
     int32 width, height;
     int32 bytes_per_scanline;
-    std::string name;
 };
 
 inline ImageTexture::ImageTexture()
@@ -44,9 +40,8 @@ inline ImageTexture::ImageTexture()
 
 inline ImageTexture::ImageTexture(std::string path, bool srgb)
 {
-    int32 components_per_pixel = bytes_per_pixel;
-
-    data = stbi_load(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
+    int32 components_per_pixel;
+    data = stbi_load(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
     if (!data)
     {

@@ -37,7 +37,7 @@ void BRDFSamplingTest(Scene& scene)
         scene.Add(RectXZ(tf, white));
     }
 
-    // lights
+    // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
         auto l = RectXZ(tf, light);

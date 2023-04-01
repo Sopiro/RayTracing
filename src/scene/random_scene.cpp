@@ -24,15 +24,15 @@ void RandomScene(Scene& scene)
                 if (choose_mat < 0.8)
                 {
                     // diffuse
-                    auto albedo = Color::Random() * Color::Random();
+                    auto albedo = RandVec3() * RandVec3();
                     sphere_material = std::make_shared<Lambertian>(albedo);
                     scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }
                 else if (choose_mat < 0.95)
                 {
                     // metal
-                    auto albedo = Color::Random(0.5, 1);
-                    auto fuzz = Rand(0, 0.5);
+                    auto albedo = RandVec3(0.5, 1.0);
+                    auto fuzz = Rand(0.0, 0.5);
                     sphere_material = std::make_shared<Metal>(albedo, fuzz);
                     scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
                 }

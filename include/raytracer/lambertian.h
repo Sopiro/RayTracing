@@ -22,6 +22,7 @@ inline Lambertian::Lambertian(const Color& _color)
     : albedo{ SolidColor::Create(_color) }
 {
 }
+
 inline Lambertian::Lambertian(std::shared_ptr<Texture> _albedo)
     : albedo{ _albedo }
 {

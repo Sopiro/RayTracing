@@ -5,7 +5,7 @@ namespace spt
 
 bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    double refraction_ratio = in_rec.front_face ? (1.0 / ir) : ir;
+    double refraction_ratio = in_rec.front_face ? (1.0 / ior) : ior;
 
     Vec3 unit_direction = in_ray.dir.Normalized();
 

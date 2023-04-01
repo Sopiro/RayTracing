@@ -62,6 +62,7 @@ public:
     }
 
 protected:
+    // BVH node proxy
     NodeProxy node;
 };
 

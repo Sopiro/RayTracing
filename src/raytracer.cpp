@@ -168,7 +168,7 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
         ScatterRecord srec;
         if (rec.mat->Scatter(ray, rec, srec) == false)
         {
-            if (bounce == 0 || was_specular)
+            if (bounce == 0 || was_specular == true)
             {
                 accu += emitted * abso;
             }
@@ -202,7 +202,7 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
 
         if (scene.HasLights())
         {
-            auto& lights = scene.GetLights().GetHittables();
+            auto& lights = scene.GetLights().GetObjects();
 
             for (int32 i = 0; i < lights.size(); ++i)
             {

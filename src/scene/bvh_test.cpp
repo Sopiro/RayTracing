@@ -12,10 +12,10 @@ void BVHTest(Scene& scene)
     auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
     auto black = std::make_shared<Lambertian>(Color(0.0));
 
-    double n = 30.0;
+    double n = 100.0;
     double w = 7.0;
     double h = w * 9.0 / 16.0;
-    double r = 0.1;
+    double r = 0.05;
 
     for (int32 y = 0; y < n; ++y)
     {

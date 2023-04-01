@@ -20,6 +20,7 @@ public:
         return origin + dir * t;
     }
 
+public:
     Vec3 origin;
     Vec3 dir;
 };

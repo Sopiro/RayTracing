@@ -11,7 +11,7 @@ Model::Model(std::string path, const Transform& transform)
 {
     LoadModel(path, transform);
 
-    for (int32 i = 0; i < meshes.size(); ++i)
+    for (size_t i = 0; i < meshes.size(); ++i)
     {
         Mesh* m = meshes[i].get();
         AABB aabb;

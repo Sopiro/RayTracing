@@ -23,7 +23,7 @@ public:
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
     virtual void Rebuild() override;
 
-    const std::vector<std::shared_ptr<Hittable>>& GetHittables() const;
+    const std::vector<std::shared_ptr<Hittable>>& GetObjects() const;
     size_t GetCount() const;
 
 private:
@@ -126,7 +126,7 @@ inline void HittableList::Rebuild()
     bvh.Traverse(&callback);
 }
 
-inline const std::vector<std::shared_ptr<Hittable>>& HittableList::GetHittables() const
+inline const std::vector<std::shared_ptr<Hittable>>& HittableList::GetObjects() const
 {
     return objects;
 }
