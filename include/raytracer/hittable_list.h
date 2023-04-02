@@ -21,6 +21,7 @@ public:
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual int32 GetSize() const override;
     virtual void Rebuild() override;
 
     const std::vector<std::shared_ptr<Hittable>>& GetObjects() const;
@@ -106,6 +107,11 @@ inline double HittableList::EvaluatePDF(const Ray& ray) const
 inline Vec3 HittableList::GetRandomDirection(const Vec3& origin) const
 {
     return bvh.GetRandomDirection(origin);
+}
+
+inline int32 HittableList::GetSize() const
+{
+    return bvh.GetSize();
 }
 
 inline void HittableList::Rebuild()

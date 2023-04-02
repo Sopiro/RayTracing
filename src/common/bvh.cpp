@@ -20,6 +20,8 @@ BVH::BVH()
     }
     nodes[nodeCapacity - 1].next = nullNode;
     freeList = 0;
+
+    size = 0;
 }
 
 BVH::~BVH() noexcept
@@ -251,6 +253,8 @@ NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
     InsertLeaf(newNode);
     leaves.push_back(newNode);
 
+    size += data->GetSize();
+
     return newNode;
 }
 
@@ -304,6 +308,8 @@ void BVH::RemoveNode(NodeProxy node)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
+
+    size -= nodes[node].data->GetSize();
 
     RemoveLeaf(node);
 

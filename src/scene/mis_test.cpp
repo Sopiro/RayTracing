@@ -26,25 +26,25 @@ void MISTest(Scene& scene)
         auto m1 = RandomPBRMaterial();
         m1->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m1->roughness_map = SolidColor::Create(Vec3{ 0.25 });
+        m1->roughness_map = SolidColor::Create(Vec3{ 0.16 });
 
         auto m2 = RandomPBRMaterial();
         m2->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m2->roughness_map = SolidColor::Create(Vec3{ 0.16 });
+        m2->roughness_map = SolidColor::Create(Vec3{ 0.12 });
 
         auto m3 = RandomPBRMaterial();
         m3->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m3->roughness_map = SolidColor::Create(Vec3{ 0.12 });
+        m3->roughness_map = SolidColor::Create(Vec3{ 0.08 });
 
         auto m4 = RandomPBRMaterial();
         m4->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m4->roughness_map = SolidColor::Create(Vec3{ 0.08 });
+        m4->roughness_map = SolidColor::Create(Vec3{ 0.04 });
 
         double h = 0.2;
-        double dh = 0.02;
+        double dh = 0.025;
         double w = 1.0;
 
         double a1 = DegToRad(15.0);
@@ -74,18 +74,19 @@ void MISTest(Scene& scene)
         scene.Add(RectXZ(tf, m4));
     }
 
-    std::cout << y << ", " << z << std::endl;
+    // std::cout << y << ", " << z << std::endl;
 
     // Lights
     {
-        auto light = std::make_shared<DiffuseLight>(Color{ 20.0 });
+        auto light = std::make_shared<DiffuseLight>(Color{ 3.0 });
 
         double lh = y;
+        double xg = 0.16;
 
-        auto l1 = std::make_shared<Sphere>(Vec3{ -0.125 * 3.0, y + lh, z }, 0.008, light);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -0.125, y + lh, z }, 0.016, light);
-        auto l3 = std::make_shared<Sphere>(Vec3{ 0.125, y + lh, z }, 0.032, light);
-        auto l4 = std::make_shared<Sphere>(Vec3{ 0.125 * 3.0, y + lh, z }, 0.064, light);
+        auto l1 = std::make_shared<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, 0.002, light);
+        auto l2 = std::make_shared<Sphere>(Vec3{ -xg, y + lh, z }, 0.01, light);
+        auto l3 = std::make_shared<Sphere>(Vec3{ xg, y + lh, z }, 0.05, light);
+        auto l4 = std::make_shared<Sphere>(Vec3{ xg * 3.0, y + lh, z }, 0.1, light);
 
         scene.Add(l1);
         scene.AddLight(l1);

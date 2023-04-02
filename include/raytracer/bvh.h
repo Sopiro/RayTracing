@@ -94,9 +94,12 @@ public:
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual int32 GetSize() const override;
     virtual void Rebuild() override;
 
 private:
+    int32 size;
+
     NodeProxy nodeID;
     NodeProxy root;
 
@@ -345,7 +348,7 @@ inline double BVH::EvaluatePDF(const Ray& ray) const
 
             if (hit)
             {
-                sum += weight * rec.object->PDFValue(ray, rec);
+                sum += weight * rec.object->PDFValue(ray, rec) / object->GetSize();
             }
 
             return t_max;
@@ -365,6 +368,11 @@ inline Vec3 BVH::GetRandomDirection(const Vec3& origin) const
     int32 index = static_cast<int32>(leaves.size() * Rand());
 
     return nodes[leaves[index]].data->GetRandomDirection(origin);
+}
+
+inline int32 BVH::GetSize() const
+{
+    return size;
 }
 
 } // namespace spt

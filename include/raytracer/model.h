@@ -14,6 +14,7 @@ public:
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
+    virtual int32 GetSize() const override;
 
     size_t GetMeshCount() const;
     std::vector<std::shared_ptr<Mesh>> GetMeshes();
@@ -37,6 +38,11 @@ inline bool Model::Hit(const Ray& ray, double t_min, double t_max, HitRecord& re
 inline bool Model::GetAABB(AABB& outAABB) const
 {
     return bvh.GetAABB(outAABB);
+}
+
+inline int32 Model::GetSize() const
+{
+    return bvh.GetSize();
 }
 
 inline size_t Model::GetMeshCount() const

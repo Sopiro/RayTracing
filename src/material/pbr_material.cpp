@@ -29,7 +29,7 @@ static inline double D_GGX(double NoH, double roughness)
 
     double b = (NoH2 * (alpha2 - 1.0) + 1.0);
 
-    return alpha2 / (b * b * pi + tolerance);
+    return alpha2 / (b * b * pi);
 }
 
 static inline double G1_GGX_Schlick(double NoV, double roughness)
@@ -37,7 +37,7 @@ static inline double G1_GGX_Schlick(double NoV, double roughness)
     double alpha = roughness * roughness;
     double k = alpha * 0.5;
 
-    return NoV / (NoV * (1.0 - k) + k + tolerance);
+    return NoV / (NoV * (1.0 - k) + k);
 }
 
 static inline double G_Smith(double NoV, double NoL, double roughness)
@@ -101,6 +101,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     double t = Max(spec_w / (diff_w + spec_w), 0.25);
 #endif
 
+    // out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
     out_srec.pdf = std::make_shared<GGXPDF>(in_rec.normal, in_ray.dir, alpha, t);
     out_srec.is_specular = false;
     return true;

@@ -31,6 +31,7 @@ public:
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual int32 GetSize() const override;
 
 public:
     Vertex v0, v1, v2;
@@ -89,12 +90,12 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
 
 inline Vec3 Triangle::GetNormal(double u, double v, double w) const
 {
-    return w * v0.normal + u * v1.normal + v * v2.normal;
+    return (w * v0.normal + u * v1.normal + v * v2.normal).Normalized();
 }
 
 inline Vec3 Triangle::GetTangent(double u, double v, double w) const
 {
-    return w * v0.tangent + u * v1.tangent + v * v2.tangent;
+    return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
 }
 
 inline Vec2 Triangle::GetTexCoord(double u, double v, double w) const
@@ -145,6 +146,11 @@ inline Vec3 Triangle::GetRandomDirection(const Vec3& origin) const
     Vec3 random_point = v0.position + e1 * u + e2 * v;
 
     return random_point - origin;
+}
+
+inline int32 Triangle::GetSize() const
+{
+    return 1;
 }
 
 } // namespace spt

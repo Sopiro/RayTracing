@@ -19,6 +19,7 @@ public:
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual int32 GetSize() const override;
 
 public:
     Vec3 center;
@@ -71,6 +72,11 @@ inline Vec3 Sphere::GetRandomDirection(const Vec3& origin) const
     ONB uvw{ direction };
 
     return uvw.GetLocal(RandomToSphere(radius, distance_sqared));
+}
+
+inline int32 Sphere::GetSize() const
+{
+    return 1;
 }
 
 inline void Sphere::GetUV(const Vec3& p, UV& out_uv)

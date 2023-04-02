@@ -30,6 +30,7 @@ public:
 
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
+    virtual int32 GetSize() const override;
 
     bool HasBaseColorTexture() const;
     bool HasNormalTexture() const;
@@ -60,6 +61,11 @@ inline bool Mesh::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) co
 inline bool Mesh::GetAABB(AABB& outAABB) const
 {
     return bvh.GetAABB(outAABB);
+}
+
+inline int32 Mesh::GetSize() const
+{
+    return bvh.GetSize();
 }
 
 inline bool Mesh::HasBaseColorTexture() const

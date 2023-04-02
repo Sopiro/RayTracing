@@ -22,7 +22,7 @@ int main()
     // constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 64;
+    constexpr int32 samples_per_pixel = 100;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
@@ -39,12 +39,12 @@ int main()
 
         Vec3 lookfrom(13, 2, 3);
         Vec3 lookat(0, 0, 0);
-        Vec3 vup(0, 1, 0);
+
         auto dist_to_focus = 10.0;
         auto aperture = 0.1;
         double vFov = 20;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -54,12 +54,12 @@ int main()
 
         Vec3 lookfrom(0, 0, 5);
         Vec3 lookat(0, 0, 0);
-        Vec3 vup(0, 1, 0);
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -69,12 +69,12 @@ int main()
 
         Vec3 lookfrom{ 0.5, 0.5, 1.25 };
         Vec3 lookat{ 0.5, 0.5, 0.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 45.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -91,12 +91,11 @@ int main()
         Vec3 lookfrom(0.0, 0.5, 7.0);
         Vec3 lookat(0.0, 3.0, 0.0);
 
-        Vec3 vup(0, 1, 0);
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -106,12 +105,12 @@ int main()
 
         Vec3 lookfrom{ 10, -3.0, 8. };
         Vec3 lookat = lookfrom + Vec3{ -1.0, -0.2, -1.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -121,12 +120,12 @@ int main()
 
         Vec3 lookfrom{ 0, 4.0, 5.0 };
         Vec3 lookat{ 0.0, 0.0, 0.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -136,12 +135,12 @@ int main()
 
         Vec3 lookfrom{ 0, 3.0, 5.0 };
         Vec3 lookat{ 0.0, 0.0, 0.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 71.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -151,12 +150,12 @@ int main()
 
         Vec3 lookfrom{ 0.5, 0.5, 1.25 };
         Vec3 lookat{ 0.5, 0.5, 0.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 45.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 
@@ -168,12 +167,12 @@ int main()
 
         Vec3 lookfrom{ 0.0, y, 1.0 };
         Vec3 lookat{ 0.0, y, 0.0 };
-        Vec3 vup{ 0.0, 1.0, 0.0 };
+
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 45.0;
 
-        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
 

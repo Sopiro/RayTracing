@@ -57,6 +57,12 @@ public:
         return zero_vec3;
     }
 
+    virtual int32 GetSize() const
+    {
+        assert(false);
+        return 0;
+    }
+
     virtual void Rebuild()
     {
     }
