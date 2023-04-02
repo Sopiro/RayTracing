@@ -34,7 +34,7 @@ typedef Vec2 UV;
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
-    return out << v.x << ' ' << v.y << ' ' << v.z << '\n';
+    return out << v.x << ' ' << v.y << ' ' << v.z;
 }
 
 inline std::ostream& operator<<(std::ostream& out, const Mat4& m)

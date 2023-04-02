@@ -65,10 +65,10 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     Vec3 l = in_scattered.dir.Normalized();
     Vec3 h = (v + l).Normalized();
 
-    double VoH = Clamp(Dot(v, h), 0.0, 1.0);
-    double NoH = Clamp(Dot(n, h), 0.0, 1.0);
-    double NoV = Clamp(Dot(n, v), 0.0, 1.0);
-    double NoL = Clamp(Dot(n, l), 0.0, 1.0);
+    double VoH = Max(Dot(v, h), 0.0);
+    double NoH = Max(Dot(n, h), 0.0);
+    double NoV = Max(Dot(n, v), 0.0);
+    double NoL = Max(Dot(n, l), 0.0);
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, VoH);

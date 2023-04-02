@@ -22,7 +22,7 @@ int main()
     // constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 16;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
@@ -161,7 +161,7 @@ int main()
 
     case 8: // MIS test
     {
-        MISTest(scene);
+        MISTest1(scene);
 
         double y = 0.345832;
 
@@ -171,6 +171,21 @@ int main()
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
         double vFov = 45.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 9: // MIS test (original)
+    {
+        MISTest2(scene);
+
+        Vec3 lookfrom{ 0.0, 2, 15 };
+        Vec3 lookat{ 0.0, -2, 2.5 };
+
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 28.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }

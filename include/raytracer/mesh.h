@@ -39,6 +39,9 @@ public:
     bool HasAOTexture() const;
     bool HasEmissiveTexture() const;
 
+    const std::shared_ptr<Material> GetMaterial() const;
+    void SetMaterial(const std::shared_ptr<Material> material);
+
 private:
     Mat4 transform;
 
@@ -96,6 +99,20 @@ inline bool Mesh::HasAOTexture() const
 inline bool Mesh::HasEmissiveTexture() const
 {
     return textures[emissive] != nullptr;
+}
+
+inline const std::shared_ptr<Material> Mesh::GetMaterial() const
+{
+    return material;
+}
+
+inline void Mesh::SetMaterial(const std::shared_ptr<Material> mat)
+{
+    for (int32 i = 0; i < triangles.size(); ++i)
+    {
+        triangles[i].material = mat;
+    }
+    material = mat;
 }
 
 } // namespace spt

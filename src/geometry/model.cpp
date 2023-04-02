@@ -48,9 +48,14 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
     {
         Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
-        Vec3 tangent{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
-        Vec2 texCoords{ 0.0f };
 
+        Vec3 tangent{ 1.0, 0.0, 0.0 };
+        if (mesh->HasTangentsAndBitangents())
+        {
+            tangent = Vec3{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
+        }
+
+        Vec2 texCoords{ 0.0, 0.0 };
         if (mesh->HasTextureCoords(0))
         {
             texCoords.Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
