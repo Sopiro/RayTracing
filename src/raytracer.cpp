@@ -207,20 +207,42 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
             for (int32 i = 0; i < lights.size(); ++i)
             {
                 HittablePDF light_pdf{ lights[i].get(), rec.point };
-                Ray to_light{ rec.point + rec.normal * ray_tolerance, light_pdf.Generate() };
 
-                double pdf_value = light_pdf.Evaluate(to_light.dir);
+                // Importance sample light
+                Ray to_light{ rec.point, light_pdf.Generate() };
+                double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
 
-                HitRecord rec2;
-                if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                if (light_brdf_p > 0.0 && Dot(to_light.dir, rec.normal) > 0.0)
                 {
-                    accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso / pdf_value;
+                    double light_p = light_pdf.Evaluate(to_light.dir);
+                    double light_w = PowerHeuristic(light_p, light_brdf_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                    }
+                }
+
+                // Importance sample BRDF
+                Ray scattered{ rec.point, srec.pdf->Generate() };
+                double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+
+                if (brdf_light_p > 0.0)
+                {
+                    double brdf_p = srec.pdf->Evaluate(scattered.dir);
+                    double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                    }
                 }
             }
         }
 
-        // Indirect illumination
-
+        // Sample new search direction based on BRDF
         Ray scattered{ rec.point, srec.pdf->Generate() };
         double pdf_value = srec.pdf->Evaluate(scattered.dir);
 

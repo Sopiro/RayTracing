@@ -145,7 +145,7 @@ inline Vec3 Triangle::GetRandomDirection(const Vec3& origin) const
 
     Vec3 random_point = v0.position + e1 * u + e2 * v;
 
-    return random_point - origin;
+    return (random_point - origin).Normalized();
 }
 
 inline int32 Triangle::GetSize() const
