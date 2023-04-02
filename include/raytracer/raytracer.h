@@ -39,6 +39,7 @@ extern void NormalMapping(Scene&);
 extern void PBRTest(Scene&);
 extern void EnvironmentMap(Scene&);
 extern void BRDFSamplingTest(Scene&);
+extern void MISTest(Scene&);
 
 Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);

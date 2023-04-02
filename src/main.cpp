@@ -17,12 +17,12 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    // constexpr double aspect_ratio = 16.0 / 9.0;
-    constexpr double aspect_ratio = 3.0 / 2.0;
+    constexpr double aspect_ratio = 16.0 / 9.0;
+    // constexpr double aspect_ratio = 3.0 / 2.0;
     // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 600;
+    constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 100;
+    constexpr int32 samples_per_pixel = 64;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (7)
+    switch (8)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -151,6 +151,23 @@ int main()
 
         Vec3 lookfrom{ 0.5, 0.5, 1.25 };
         Vec3 lookat{ 0.5, 0.5, 0.0 };
+        Vec3 vup{ 0.0, 1.0, 0.0 };
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 45.0;
+
+        camera = Camera{ lookfrom, lookat, vup, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 8: // MIS test
+    {
+        MISTest(scene);
+
+        double y = 0.345832;
+
+        Vec3 lookfrom{ 0.0, y, 1.0 };
+        Vec3 lookat{ 0.0, y, 0.0 };
         Vec3 vup{ 0.0, 1.0, 0.0 };
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
