@@ -202,8 +202,9 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
 
         if (scene.HasLights())
         {
-            auto& lights = scene.GetLights().GetObjects();
+            // Multiple importance sampling
 
+            auto& lights = scene.GetLights().GetObjects();
             for (int32 i = 0; i < lights.size(); ++i)
             {
                 HittablePDF light_pdf{ lights[i].get(), rec.point };

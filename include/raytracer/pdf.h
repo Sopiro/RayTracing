@@ -52,7 +52,7 @@ public:
     ONB uvw;
 };
 
-extern double D_GGX(double NoH, double roughness);
+extern double D_GGX(double NoH, double alpha2);
 
 class GGXPDF : public PDF
 {
@@ -63,7 +63,7 @@ public:
     GGXPDF(const Vec3& n, const Vec3& wi, double roughness, double t)
         : uvw{ n.Normalized() }
         , wi{ -wi.Normalized() }
-        , alpha{ roughness }
+        , alpha2{ roughness * roughness }
         , t{ t }
     {
     }
@@ -73,7 +73,7 @@ public:
         if (Rand() < t)
         {
             double u = Rand();
-            double theta = acos(sqrt((1.0 - u) / ((alpha * alpha - 1.0) * u + 1.0)));
+            double theta = acos(sqrt((1.0 - u) / ((alpha2 - 1.0) * u + 1.0)));
             double phi = 2.0 * pi * Rand();
 
             double sin_thetha = sin(theta);
@@ -84,13 +84,11 @@ public:
             // sampled half vector
             Vec3 h{ x, y, Abs(z) };
             Vec3 wo = Reflect(-wi, uvw.GetLocal(h));
-            return wo.Normalized();
+            return wo;
         }
         else
         {
             Vec3 random_cosine = RandomCosineDirection();
-            random_cosine.z = Abs(random_cosine.z);
-
             return uvw.GetLocal(random_cosine);
         }
     }
@@ -99,9 +97,9 @@ public:
     {
         Vec3 h = (wi + wo).Normalized();
         double NoH = Dot(uvw.w, h);
-        double spec_w = D_GGX(NoH, alpha) * NoH / (4.0 * Max(Dot(wo, h), 0.00001));
+        double spec_w = D_GGX(NoH, alpha2) * NoH / (4.0 * Max(Dot(wo, h), epsilon));
 
-        double cosine = Dot(wo.Normalized(), uvw.w);
+        double cosine = Dot(wo, uvw.w);
         double diff_w = cosine / pi;
 
         return (1.0 - t) * diff_w + t * spec_w;
@@ -110,7 +108,7 @@ public:
 public:
     ONB uvw;
     Vec3 wi;
-    double alpha;
+    double alpha2;
     double t;
 };
 

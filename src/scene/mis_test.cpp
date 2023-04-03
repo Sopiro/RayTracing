@@ -24,24 +24,24 @@ void MISTest1(Scene& scene)
     // plates
     {
         auto m1 = RandomPBRMaterial();
-        m1->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
+        m1->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m1->roughness_map = SolidColor::Create(Vec3{ 0.16 });
+        m1->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
         auto m2 = RandomPBRMaterial();
-        m2->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
+        m2->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m2->roughness_map = SolidColor::Create(Vec3{ 0.12 });
+        m2->roughness_map = SolidColor::Create(Vec3{ 0.05 });
 
         auto m3 = RandomPBRMaterial();
-        m3->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
+        m3->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m3->roughness_map = SolidColor::Create(Vec3{ 0.08 });
+        m3->roughness_map = SolidColor::Create(Vec3{ 0.02 });
 
         auto m4 = RandomPBRMaterial();
-        m4->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
+        m4->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        m4->roughness_map = SolidColor::Create(Vec3{ 0.04 });
+        m4->roughness_map = SolidColor::Create(Vec3{ 0.005 });
 
         double h = 0.2;
         double dh = 0.025;
@@ -78,15 +78,19 @@ void MISTest1(Scene& scene)
 
     // Lights
     {
-        auto light = std::make_shared<DiffuseLight>(Color{ 3.0 });
+        auto light1 = std::make_shared<DiffuseLight>(Color{ 3000.0 });
+        auto light2 = std::make_shared<DiffuseLight>(Color{ 300.0 });
+        auto light3 = std::make_shared<DiffuseLight>(Color{ 30.0 });
+        auto light4 = std::make_shared<DiffuseLight>(Color{ 3.0 });
 
         double lh = y;
         double xg = 0.16;
 
-        auto l1 = std::make_shared<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, 0.002, light);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -xg, y + lh, z }, 0.01, light);
-        auto l3 = std::make_shared<Sphere>(Vec3{ xg, y + lh, z }, 0.05, light);
-        auto l4 = std::make_shared<Sphere>(Vec3{ xg * 3.0, y + lh, z }, 0.1, light);
+        double r = 0.1;
+        auto l1 = std::make_shared<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, r / 27.0, light1);
+        auto l2 = std::make_shared<Sphere>(Vec3{ -xg, y + lh, z }, r / 9.0, light2);
+        auto l3 = std::make_shared<Sphere>(Vec3{ xg, y + lh, z }, r / 3.0, light3);
+        auto l4 = std::make_shared<Sphere>(Vec3{ xg * 3.0, y + lh, z }, r, light4);
 
         scene.Add(l1);
         scene.AddLight(l1);
@@ -153,14 +157,14 @@ void MISTest2(Scene& scene)
     // Lights
     {
         auto light1 = std::make_shared<DiffuseLight>(Color{ 800 });
-        auto light2 = std::make_shared<DiffuseLight>(Color{ 100 });
         auto light3 = std::make_shared<DiffuseLight>(Color{ 901.803 });
+        auto light2 = std::make_shared<DiffuseLight>(Color{ 100 });
         auto light4 = std::make_shared<DiffuseLight>(Color{ 11.1111 });
         auto light5 = std::make_shared<DiffuseLight>(Color{ 1.23457 });
 
         auto l1 = std::make_shared<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
         auto l3 = std::make_shared<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
+        auto l2 = std::make_shared<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
         auto l4 = std::make_shared<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
         auto l5 = std::make_shared<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
