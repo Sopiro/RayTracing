@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (11)
+    switch (9)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -210,12 +210,12 @@ int main()
     {
         GGXVNDFSamplingTest(scene);
 
-        Vec3 lookfrom{ 0.0, 2.0, 4.0 };
+        Vec3 lookfrom{ 0.0, 2.0, 10.0 };
         Vec3 lookat{ 0.0, 1.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
-        double vFov = 71.0;
+        double vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -248,6 +248,11 @@ int main()
 
                 Ray ray = camera.GetRay(u, v);
                 samples += PathTrace2(scene, ray, bounce_count);
+            }
+
+            if (is_nullish(samples))
+            {
+                std::cout << "null" << std::endl;
             }
 
             // Resolve NaNs

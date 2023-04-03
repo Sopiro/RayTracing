@@ -9,7 +9,7 @@ inline static double Luminance(Vec3 color)
 }
 
 constexpr Vec3 default_reflectance{ 0.04 };
-constexpr double tolerance = epsilon;
+constexpr double tolerance = 1e-6;
 
 inline static Vec3 F0(Vec3 basecolor, double metallic)
 {
@@ -32,7 +32,7 @@ inline static double G_Smith(double NoV, double NoL, double alpha2)
 {
     double denomA = NoV * sqrt(alpha2 + (1.0 - alpha2) * NoL * NoL);
     double denomB = NoL * sqrt(alpha2 + (1.0 - alpha2) * NoV * NoV);
-    return 2.0 * NoL * NoV / (denomA + denomB);
+    return 2.0 * NoL * NoV / (denomA + denomB + epsilon);
 }
 
 // Microfacet BRDF
@@ -67,7 +67,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     double D = D_GGX(NoH, alpha2);
     double G = G_Smith(NoV, NoL, alpha2);
 
-    Vec3 f_s = (F * D * G) / (4.0 * NoV * NoL + tolerance);
+    Vec3 f_s = (F * D * G) / (4.0 * NoV * NoL + epsilon);
     Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor / pi);
 
     return (f_d + f_s) * NoL;

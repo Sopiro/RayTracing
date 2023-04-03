@@ -84,7 +84,15 @@ public:
             // sampled half vector
             Vec3 h{ x, y, Abs(z) };
             Vec3 wo = Reflect(-wi, uvw.GetLocal(h));
-            return wo;
+
+            if (Dot(wo, uvw.w) < 0.0)
+            {
+                return Reflect(-wi, uvw.w);
+            }
+            else
+            {
+                return wo;
+            }
         }
         else
         {
