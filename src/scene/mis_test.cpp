@@ -183,4 +183,85 @@ void MISTest2(Scene& scene)
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0 }));
 }
 
+void MISTestWak(Scene& scene)
+{
+    {
+        auto floor = RandomPBRMaterial();
+        floor->basecolor_map = ImageTexture::Create("res/wakdu.jpg");
+        floor->roughness_map = SolidColor::Create(Vec3{ 1.0 });
+        floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
+
+        double s = 20.0;
+        auto tf = Transform{ Vec3{ 0.0, -4.0, -4.0 }, Quat{ identity }, Vec3{ s, 1.0, s } };
+        scene.Add(RectXZ(tf, floor));
+
+        tf = Transform{ Vec3{ 0.0, -4.0, -4.0 }, Quat{ identity }, Vec3{ s, s, 1.0 } };
+        scene.Add(RectXY(tf, floor));
+    }
+
+    // plates
+    {
+        auto m1 = RandomPBRMaterial();
+        m1->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
+        m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
+        m1->roughness_map = SolidColor::Create(Vec3{ 0.005 });
+
+        auto m2 = RandomPBRMaterial();
+        m2->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
+        m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
+        m2->roughness_map = SolidColor::Create(Vec3{ 0.02 });
+
+        auto m3 = RandomPBRMaterial();
+        m3->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
+        m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
+        m3->roughness_map = SolidColor::Create(Vec3{ 0.05 });
+
+        auto m4 = RandomPBRMaterial();
+        m4->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
+        m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
+        m4->roughness_map = SolidColor::Create(Vec3{ 0.1 });
+
+        auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
+        p1->GetMeshes()[0]->SetMaterial(m1);
+        scene.Add(p1);
+        auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
+        p2->GetMeshes()[0]->SetMaterial(m2);
+        scene.Add(p2);
+        auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
+        p3->GetMeshes()[0]->SetMaterial(m3);
+        scene.Add(p3);
+        auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
+        p4->GetMeshes()[0]->SetMaterial(m4);
+        scene.Add(p4);
+    }
+
+    // Lights
+    {
+        auto light1 = std::make_shared<DiffuseLight>(Color{ 800 });
+        auto light3 = std::make_shared<DiffuseLight>(Color{ 901.803, 0, 0 });
+        auto light2 = std::make_shared<DiffuseLight>(Color{ 100, 100 / 5, 0 });
+        auto light4 = std::make_shared<DiffuseLight>(Color{ 11.1111, 11.1111, 0 });
+        auto light5 = std::make_shared<DiffuseLight>(Color{ 0, 1.23457, 0 });
+
+        auto l1 = std::make_shared<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
+        auto l3 = std::make_shared<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
+        auto l2 = std::make_shared<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
+        auto l4 = std::make_shared<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
+        auto l5 = std::make_shared<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
+
+        // scene.Add(l1);
+        // scene.AddLight(l1);
+        scene.Add(l2);
+        scene.AddLight(l2);
+        scene.Add(l3);
+        scene.AddLight(l3);
+        scene.Add(l4);
+        scene.AddLight(l4);
+        scene.Add(l5);
+        scene.AddLight(l5);
+    }
+
+    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.333 }));
+}
+
 } // namespace spt

@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (9)
+    switch (10)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -179,6 +179,21 @@ int main()
     case 9: // MIS test (original)
     {
         MISTest2(scene);
+
+        Vec3 lookfrom{ 0.0, 2, 15 };
+        Vec3 lookat{ 0.0, -2, 2.5 };
+
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 28.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 10: // MIS test (wakgood)
+    {
+        MISTestWak(scene);
 
         Vec3 lookfrom{ 0.0, 2, 15 };
         Vec3 lookat{ 0.0, -2, 2.5 };
