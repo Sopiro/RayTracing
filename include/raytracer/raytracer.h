@@ -42,6 +42,7 @@ extern void BRDFSamplingTest(Scene&);
 extern void MISTest1(Scene&);
 extern void MISTest2(Scene&);
 extern void MISTestWak(Scene&);
+extern void GGXVNDFSamplingTest(Scene&);
 
 Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);

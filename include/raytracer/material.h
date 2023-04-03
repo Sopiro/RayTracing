@@ -35,6 +35,8 @@ public:
         assert(false);
         return Vec3{ 0.0 };
     }
+
+    inline static std::shared_ptr<Material> fallback_material = nullptr;
 };
 
 } // namespace spt

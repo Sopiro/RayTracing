@@ -51,7 +51,7 @@ void BRDFSamplingTest(Scene& scene)
         auto mat = RandomPBRMaterial();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
-        mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
+        mat->roughness_map = SolidColor::Create(Vec3{ 0.2 });
 
         double r = 0.25;
         auto sphere = std::make_shared<Sphere>(Vec3(0.5, r, -0.5), r, mat);
