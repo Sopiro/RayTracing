@@ -6,16 +6,16 @@ namespace spt
 void MISTest1(Scene& scene)
 {
     {
-        auto wall = RandomPBRMaterial();
-        wall->basecolor_map = SolidColor::Create(Vec3{ 0.73 });
-        wall->roughness_map = SolidColor::Create(Vec3{ 1.0 });
-        wall->metallic_map = SolidColor::Create(Vec3{ 0.0 });
+        auto floor = RandomPBRMaterial();
+        floor->basecolor_map = SolidColor::Create(Vec3{ 0.73 });
+        floor->roughness_map = SolidColor::Create(Vec3{ 1.0 });
+        floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
 
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ identity }, Vec3{ 3.0, 1.0, 3.0 } };
-        scene.Add(RectXZ(tf, wall));
+        scene.Add(RectXZ(tf, floor));
 
         tf = Transform{ Vec3{ 0.0, 0.0, -1.0 }, Quat{ identity }, Vec3{ 3.0, 3.0, 1.0 } };
-        scene.Add(RectXY(tf, wall));
+        scene.Add(RectXY(tf, floor));
     }
 
     double y = 0.05;

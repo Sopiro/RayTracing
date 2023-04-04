@@ -13,6 +13,7 @@ public:
     virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const override;
 
 public:
+    bool two_sided = false;
     std::shared_ptr<Texture> emit;
 };
 
@@ -33,7 +34,7 @@ inline bool DiffuseLight::Scatter(const Ray& in_ray, const HitRecord& in_rec, Sc
 
 inline Color DiffuseLight::Emit(const Ray& in_ray, const HitRecord& in_rec) const
 {
-    if (in_rec.front_face)
+    if (in_rec.front_face || two_sided)
     {
         return emit->Value(in_rec.uv, in_rec.point);
     }
