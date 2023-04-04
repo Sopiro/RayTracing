@@ -1,4 +1,6 @@
 #include "raytracer/pbr_material.h"
+#include "raytracer/cosine_pdf.h"
+#include "raytracer/ggx_pdf.h"
 
 namespace spt
 {

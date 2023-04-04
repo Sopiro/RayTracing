@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cosine_pdf.h"
 #include "material.h"
 
 namespace spt
