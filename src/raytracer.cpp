@@ -229,7 +229,7 @@ Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count)
                 Ray scattered{ rec.point, srec.pdf->Generate() };
                 double brdf_light_p = light_pdf.Evaluate(scattered.dir);
 
-                if (brdf_light_p > 0.0)
+                if (brdf_light_p > 0.0 && Dot(scattered.dir, rec.normal) > 0.0)
                 {
                     double brdf_p = srec.pdf->Evaluate(scattered.dir);
                     double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);

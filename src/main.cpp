@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (5)
+    switch (11)
     {
     case 0: // Raytracing in one weekend final scene
     {

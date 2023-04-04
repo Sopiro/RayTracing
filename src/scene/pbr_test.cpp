@@ -48,14 +48,14 @@ void PBRTest(Scene& scene)
     }
 
     // Light
-    {
-        auto tf = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-        auto light = std::make_shared<DiffuseLight>(Color{ 10.0 });
-        auto rect = RectYZ(tf, light);
+    // {
+    //     auto tf = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
+    //     auto light = std::make_shared<DiffuseLight>(Color{ 10.0 });
+    //     auto rect = RectYZ(tf, light);
 
-        scene.Add(rect);
-        scene.AddLight(rect);
-    }
+    //     scene.Add(rect);
+    //     scene.AddLight(rect);
+    // }
 
     // {
     //     auto tf = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
@@ -75,32 +75,32 @@ void PBRTest(Scene& scene)
     //     scene.AddLight(rect);
     // }
 
-    // {
-    //     double s = 0.4;
-    //     double cx = 10.0;
-    //     double xgap = 0.16;
-    //     double xstep = 2.0 * s + xgap;
+    {
+        double s = 0.4;
+        double cx = 10.0;
+        double xgap = 0.16;
+        double xstep = 2.0 * s + xgap;
 
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 5.0 });
-    //     light->two_sided = true;
+        auto light = std::make_shared<DiffuseLight>(Color{ 5.0 });
+        light->two_sided = true;
 
-    //     for (int32 x = 0; x < cx; ++x)
-    //     {
-    //         Vec3 pos;
+        for (int32 x = 0; x < cx; ++x)
+        {
+            Vec3 pos;
 
-    //         pos.y = 2.2;
-    //         pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
-    //         pos.z = 0.0;
+            pos.y = 2.2;
+            pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
+            pos.z = 0.0;
 
-    //         auto mat = RandomPBRMaterial();
+            auto mat = RandomPBRMaterial();
 
-    //         auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
-    //         auto rect = RectXZ(tf, light);
+            auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
+            auto rect = RectXZ(tf, light);
 
-    //         scene.Add(rect);
-    //         scene.AddLight(rect);
-    //     }
-    // }
+            scene.Add(rect);
+            scene.AddLight(rect);
+        }
+    }
 
     scene.SetEnvironmentMap(SolidColor::Create({ 0.0, 0.0, 0.0 }));
 }
