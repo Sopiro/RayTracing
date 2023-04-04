@@ -1,11 +1,10 @@
 #pragma once
 
+#include "microfacet.h"
 #include "pdf.h"
 
 namespace spt
 {
-
-extern double D_GGX(double NoH, double alpha2);
 
 class GGXPDF : public PDF
 {
