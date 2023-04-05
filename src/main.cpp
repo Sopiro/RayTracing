@@ -247,7 +247,7 @@ int main()
                 double v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GetRay(u, v);
-                samples += PathTrace2(scene, ray, bounce_count);
+                samples += PathTrace(scene, ray, bounce_count);
             }
 
             if (is_nullish(samples))

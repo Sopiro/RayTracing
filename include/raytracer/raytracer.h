@@ -13,6 +13,7 @@
 #include "lambertian.h"
 #include "material.h"
 #include "metal.h"
+#include "microfacet.h"
 #include "mixture_pdf.h"
 #include "model.h"
 #include "pdf.h"
@@ -27,10 +28,10 @@
 
 #include <omp.h>
 
+#define SAMPLE_ALL_LIGHTS 0
+
 namespace spt
 {
-
-constexpr bool importance_sampling = true;
 
 // Test scenes
 extern void RandomScene(Scene&);
@@ -46,8 +47,7 @@ extern void MISTest2(Scene&);
 extern void MISTestWak(Scene&);
 extern void GGXVNDFSamplingTest(Scene&);
 
-Color ComputeRayColor(const Scene& scene, const Ray& ray, int32 bounce_count);
-Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);
-Color PathTrace2(const Scene& scene, Ray ray, int32 bounce_count);
+// Unidirectional path tracer
+Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count);
 
 } // namespace spt

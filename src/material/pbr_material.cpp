@@ -6,7 +6,10 @@
 namespace spt
 {
 
-// Microfacet BRDF
+// Microfacet BRDF (Cook-Torrance specular + Lambertian diffuse)
+// GGX normal distribution function
+// Smith-GGX height-correlated visibility function
+// Schlick Fresnel function
 Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
@@ -28,17 +31,17 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     Vec3 l = in_scattered.dir.Normalized();
     Vec3 h = (v + l).Normalized();
 
-    double VoH = Max(Dot(v, h), 0.0);
-    double NoH = Max(Dot(n, h), 0.0);
     double NoV = Max(Dot(n, v), 0.0);
     double NoL = Max(Dot(n, l), 0.0);
+    double NoH = Max(Dot(n, h), 0.0);
+    double VoH = Max(Dot(v, h), 0.0);
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, VoH);
     double D = D_GGX(NoH, alpha2);
-    double G = G_Smith(NoV, NoL, alpha2);
+    double V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
 
-    Vec3 f_s = (F * D * G) / (4.0 * NoV * NoL + epsilon);
+    Vec3 f_s = F * (D * V);
     Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor / pi);
 
     return (f_d + f_s) * NoL;
@@ -62,7 +65,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, Dot(-wi, in_rec.normal));
     double diff_w = (1.0 - metallic);
-    double spec_w = Luminance(F);
+    double spec_w = Luma(F);
     double t = Max(spec_w / (diff_w + spec_w), 0.25);
 #endif
 

@@ -5,11 +5,14 @@
 namespace spt
 {
 
-inline double Luminance(Vec3 color)
+// https://en.wikipedia.org/wiki/Luma_(video)
+inline double Luma(Vec3 color)
 {
-    return Dot(color, Vec3(0.299, 0.587, 0.114));
+    return Dot(color, Vec3{ 0.2126, 0.7152, 0.0722 });
+    // return Dot(color, Vec3{ 0.299, 0.587, 0.114 });
 }
 
+// Default reflectance of dielectrics
 constexpr Vec3 default_reflectance{ 0.04 };
 constexpr double tolerance = 1e-6;
 
@@ -35,6 +38,20 @@ inline double G_Smith(double NoV, double NoL, double alpha2)
     double denomA = NoV * sqrt(alpha2 + (1.0 - alpha2) * NoL * NoL);
     double denomB = NoL * sqrt(alpha2 + (1.0 - alpha2) * NoV * NoV);
     return 2.0 * NoL * NoV / (denomA + denomB + epsilon);
+}
+
+inline double V_SmithGGXCorrelated(double NoV, double NoL, double alpha2)
+{
+    double GGXV = NoL * sqrt(NoV * NoV * (1.0 - alpha2) + alpha2);
+    double GGXL = NoV * sqrt(NoL * NoL * (1.0 - alpha2) + alpha2);
+    return 0.5 / (GGXV + GGXL + epsilon);
+}
+
+inline double V_SmithGGXCorrelatedFast(double NoV, double NoL, double alpha)
+{
+    double GGXV = NoL * (NoV * (1.0 - alpha) + alpha);
+    double GGXL = NoV * (NoL * (1.0 - alpha) + alpha);
+    return 0.5 / (GGXV + GGXL);
 }
 
 } // namespace spt
