@@ -2,6 +2,8 @@
 
 #include "raytracer/raytracer.h"
 
+#define SAMPLE_ALL_LIGHTS 0
+
 namespace spt
 {
 
@@ -151,14 +153,17 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
         ray = scattered;
 
         // Russian roulette
-        // double rr = fmax(abso.x, fmax(abso.y, abso.z));
-        double rr = Luma(abso);
-        if (Rand() > rr)
+        if (bounce > 2)
         {
-            break;
-        }
+            double rr = fmax(abso.x, fmax(abso.y, abso.z));
+            // double rr = Luma(abso);
+            if (Rand() > rr)
+            {
+                break;
+            }
 
-        abso *= 1.0 / rr;
+            abso *= 1.0 / rr;
+        }
     }
 
     return accu;

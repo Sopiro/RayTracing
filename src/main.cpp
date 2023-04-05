@@ -85,11 +85,11 @@ int main()
         // Vec3 lookfrom(0.0, 2.5, 4.5);
         // Vec3 lookat(0.0, 1.45, 0.0);
 
-        // Vec3 lookfrom(-1.5, 5.5, 10.0);
-        // Vec3 lookat(0.0, 3.45, 0.0);
+        Vec3 lookfrom(-1.5, 5.5, 10.0);
+        Vec3 lookat(0.0, 3.45, 0.0);
 
-        Vec3 lookfrom(0.0, 0.5, 7.0);
-        Vec3 lookat(0.0, 3.0, 0.0);
+        // Vec3 lookfrom(0.0, 0.5, 7.0);
+        // Vec3 lookat(0.0, 3.0, 0.0);
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

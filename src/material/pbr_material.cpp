@@ -1,6 +1,7 @@
 #include "raytracer/pbr_material.h"
 #include "raytracer/cosine_pdf.h"
 #include "raytracer/ggx_pdf.h"
+#include "raytracer/ggxvndf_pdf.h"
 #include "raytracer/microfacet.h"
 
 namespace spt
@@ -40,8 +41,10 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     Vec3 F = F_Schlick(f0, VoH);
     double D = D_GGX(NoH, alpha2);
     double V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
+    // double G = G2_Smith(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
+    // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL + epsilon);
     Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor / pi);
 
     return (f_d + f_s) * NoL;
@@ -70,7 +73,8 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
 #endif
 
     // out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
-    out_srec.pdf = std::make_shared<GGXPDF>(in_rec.normal, wi, roughness, t);
+    // out_srec.pdf = std::make_shared<GGXPDF>(in_rec.normal, wi, roughness, t);
+    out_srec.pdf = std::make_shared<GGXVNDFPDF>(in_rec.normal, wi, roughness, t);
     out_srec.is_specular = false;
     return true;
 }

@@ -33,13 +33,20 @@ inline double D_GGX(double NoH, double alpha2)
     return alpha2 / (b * b * pi + tolerance);
 }
 
-inline double G_Smith(double NoV, double NoL, double alpha2)
+inline double G1_Smith(double NoV, double alpha2)
+{
+    double denomC = sqrt(alpha2 + (1.0f - alpha2) * NoV * NoV) + NoV;
+    return 2.0f * NoV / (denomC + epsilon);
+}
+
+inline double G2_Smith(double NoV, double NoL, double alpha2)
 {
     double denomA = NoV * sqrt(alpha2 + (1.0 - alpha2) * NoL * NoL);
     double denomB = NoL * sqrt(alpha2 + (1.0 - alpha2) * NoV * NoV);
     return 2.0 * NoL * NoV / (denomA + denomB + epsilon);
 }
 
+// https://google.github.io/filament/Filament.html#materialsystem/specularbrdf/geometricshadowing(specularg)
 inline double V_SmithGGXCorrelated(double NoV, double NoL, double alpha2)
 {
     double GGXV = NoL * sqrt(NoV * NoV * (1.0 - alpha2) + alpha2);

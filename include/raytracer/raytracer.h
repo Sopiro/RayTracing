@@ -28,8 +28,6 @@
 
 #include <omp.h>
 
-#define SAMPLE_ALL_LIGHTS 0
-
 namespace spt
 {
 

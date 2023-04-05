@@ -50,7 +50,7 @@ public:
     {
         Vec3 h = (wi + wo).Normalized();
         double NoH = Dot(uvw.w, h);
-        double spec_w = D_GGX(NoH, alpha2) * NoH / (4.0 * Max(Dot(wo, h), epsilon));
+        double spec_w = D_GGX(NoH, alpha2) * NoH / Max(4.0 * Dot(wo, h), epsilon);
 
         double cosine = Dot(wo, uvw.w);
         double diff_w = cosine / pi;
