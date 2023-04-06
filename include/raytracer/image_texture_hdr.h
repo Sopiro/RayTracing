@@ -46,9 +46,14 @@ inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
 
 inline Color ImageTextureHDR::Value(const UV& uv, const Vec3& p) const
 {
-    // Clamp input texture coordinates to [0,1] x [1,0]
-    double u = Clamp(uv.x, 0.0, 1.0);
-    double v = 1.0 - Clamp(uv.y, 0.0, 1.0); // Flip V to image coordinates
+    double u = fmod(uv.x, 1.0);
+    double v = fmod(uv.y, 1.0);
+
+    if (u < 0.0) ++u;
+    if (v < 0.0) ++v;
+
+    // Flip V to image coordinates
+    v = 1.0 - v;
 
     int32 i = static_cast<int32>(u * width);
     int32 j = static_cast<int32>(v * height);
