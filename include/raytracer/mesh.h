@@ -13,8 +13,8 @@ enum TextureType
 {
     basecolor = 0,
     normal,
-    roughness,
     metallic,
+    roughness,
     ao,
     emissive,
     count

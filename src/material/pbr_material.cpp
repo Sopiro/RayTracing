@@ -14,13 +14,14 @@ namespace spt
 Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).x;
-    double alpha2 = roughness * roughness;
     double metallic = metallic_map->Value(in_rec.uv, in_rec.point).x;
-    Vec3 ao = ao_map->Value(in_rec.uv, in_rec.point);
+    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
+    double ao = ao_map->Value(in_rec.uv, in_rec.point).z;
     Vec3 emissive = emissive_map->Value(in_rec.uv, in_rec.point);
     Vec3 normal = normal_map->Value(in_rec.uv, in_rec.point) * 2.0 - Vec3(1.0);
     normal.Normalize();
+
+    double alpha2 = roughness * roughness;
 
     ONB tbn;
     tbn.u = in_rec.tangent;
@@ -53,8 +54,8 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
 bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).x;
     double metallic = metallic_map->Value(in_rec.uv, in_rec.point).x;
+    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
 
     Vec3 wi = in_ray.dir.Normalized();
 

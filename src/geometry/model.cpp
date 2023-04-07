@@ -82,15 +82,15 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scen
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         auto basecolor_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
-        auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
         auto metallic_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
-        auto ao_maps = LoadMaterialTextures(material, aiTextureType_AMBIENT_OCCLUSION, false);
-        auto emissive_maps = LoadMaterialTextures(material, aiTextureType_EMISSION_COLOR, false);
+        auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
+        auto ao_maps = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, false);
+        auto emissive_maps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
 
         textures[basecolor] = basecolor_maps.empty() ? nullptr : basecolor_maps[0];
         textures[normal] = normal_maps.empty() ? nullptr : normal_maps[0];
-        textures[roughness] = roughness_maps.empty() ? nullptr : roughness_maps[0];
         textures[metallic] = metallic_maps.empty() ? nullptr : metallic_maps[0];
+        textures[roughness] = roughness_maps.empty() ? nullptr : roughness_maps[0];
         textures[ao] = ao_maps.empty() ? nullptr : ao_maps[0];
         textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }

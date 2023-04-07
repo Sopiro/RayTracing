@@ -22,7 +22,7 @@ int main()
     // constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 640;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 16;
+    constexpr int32 samples_per_pixel = 64;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (3)
+    switch (4)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -103,12 +103,12 @@ int main()
     {
         NormalMapping(scene);
 
-        Vec3 lookfrom{ 10, -3.0, 8. };
-        Vec3 lookat = lookfrom + Vec3{ -1.0, -0.2, -1.0 };
+        Vec3 lookfrom{ 10.0, 0.0, 10.0 };
+        Vec3 lookat{ 3.0, -2.5, 1.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
-        double vFov = 71.0;
+        double vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
