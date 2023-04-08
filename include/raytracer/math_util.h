@@ -10,7 +10,7 @@ constexpr Vec3 x_axis{ 1.0, 0.0, 0.0 };
 constexpr Vec3 y_axis{ 0.0, 1.0, 0.0 };
 constexpr Vec3 z_axis{ 0.0, 0.0, 1.0 };
 
-static thread_local std::minstd_rand prng;
+inline thread_local std::minstd_rand prng;
 
 inline void Srand(uint32 seed)
 {

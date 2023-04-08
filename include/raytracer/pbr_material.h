@@ -18,8 +18,8 @@ public:
 public:
     std::shared_ptr<Texture> basecolor_map;
     std::shared_ptr<Texture> normal_map;
-    std::shared_ptr<Texture> roughness_map;
     std::shared_ptr<Texture> metallic_map;
+    std::shared_ptr<Texture> roughness_map;
     std::shared_ptr<Texture> ao_map;
     std::shared_ptr<Texture> emissive_map;
 };

@@ -46,7 +46,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
 
     Vec3 f_s = F * (D * V);
     // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL + epsilon);
-    Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor / pi);
+    Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor * ao / pi);
 
     return (f_d + f_s) * NoL;
 }

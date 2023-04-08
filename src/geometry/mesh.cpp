@@ -14,6 +14,13 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
     , textures{ std::move(_textures) }
     , transform{ _transform }
 {
+    // std::cout << HasBaseColorTexture() << std::endl;
+    // std::cout << HasNormalTexture() << std::endl;
+    // std::cout << HasRoughnessTexture() << std::endl;
+    // std::cout << HasMetallicTexture() << std::endl;
+    // std::cout << HasAOTexture() << std::endl;
+    // std::cout << HasEmissiveTexture() << std::endl;
+
     if (HasBaseColorTexture() == false && Material::fallback_material != nullptr)
     {
         material = Material::fallback_material;
