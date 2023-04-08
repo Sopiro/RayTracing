@@ -8,8 +8,8 @@ namespace spt
 class CosinePDF : public PDF
 {
 public:
-    CosinePDF(const Vec3& w)
-        : uvw{ w }
+    CosinePDF(const Vec3& n)
+        : uvw{ n }
     {
     }
 
@@ -18,10 +18,10 @@ public:
         return uvw.GetLocal(RandomCosineDirection());
     }
 
-    virtual double Evaluate(const Vec3& direction) const override
+    virtual double Evaluate(const Vec3& d) const override
     {
-        double cosine = Dot(direction.Normalized(), uvw.w);
-        return (cosine <= 0.0) ? 0.0 : cosine / pi;
+        double cosine = Dot(d, uvw.w);
+        return cosine < epsilon ? 0.0 : cosine / pi;
     }
 
 public:

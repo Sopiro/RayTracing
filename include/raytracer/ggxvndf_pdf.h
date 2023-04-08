@@ -16,9 +16,9 @@ class GGXVNDFPDF : public PDF
     // https://schuttejoe.github.io/post/ggximportancesamplingpart2/
 
 public:
-    GGXVNDFPDF(const Vec3& n, const Vec3& wi, double roughness, double t)
-        : uvw{ n.Normalized() }
-        , wi{ -wi.Normalized() }
+    GGXVNDFPDF(const Vec3& n, const Vec3& wo, double roughness, double t)
+        : uvw{ n }
+        , wo{ wo }
         , alpha{ roughness }
         , t{ t }
     {
@@ -30,10 +30,11 @@ public:
         {
             // Stretch
             // Section 3.2: transforming the view direction to the hemisphere configuration
-            Vec3 Vh(alpha * wi.x, alpha * wi.y, wi.z);
-            Vh.Normalized();
+            Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
+            Vh.Normalize();
 
             // Build an orthonormal basis with v, t1, and t2
+            // Section 4.1: orthonormal basis (with special case if cross product is zero)
             Vec3 T1 = (Vh.z < 0.999) ? (Cross(Vh, z_axis)).Normalized() : x_axis;
             Vec3 T2 = Cross(T1, Vh);
 
@@ -54,8 +55,7 @@ public:
             // Unstretch
             // Section 3.4: transforming the normal back to the ellipsoid configuration
             Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, Max(0.0, Nh.z)).Normalized();
-            Vec3 wo = Reflect(-wi, uvw.GetLocal(h));
-            return wo;
+            return Reflect(-wo, uvw.GetLocal(h));
         }
         else
         {
@@ -64,16 +64,16 @@ public:
         }
     }
 
-    virtual double Evaluate(const Vec3& wo) const override
+    virtual double Evaluate(const Vec3& d) const override
     {
         double alpha2 = alpha * alpha;
 
-        Vec3 h = (wi + wo).Normalized();
+        Vec3 h = (wo + d).Normalized();
         double NoH = Dot(uvw.w, h);
-        double NoV = Dot(uvw.w, wo);
+        double NoV = Dot(uvw.w, d);
         double spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / Max(4.0 * NoV, epsilon);
 
-        double cosine = Dot(wo, uvw.w);
+        double cosine = Dot(d, uvw.w);
         double diff_w = cosine / pi;
 
         return (1.0 - t) * diff_w + t * spec_w;
@@ -81,7 +81,7 @@ public:
 
 public:
     ONB uvw;
-    Vec3 wi;
+    Vec3 wo;
     double alpha;
     double t;
 };

@@ -25,8 +25,11 @@ class PDF
 public:
     virtual ~PDF() = default;
 
+    // Given an outgoing direction wo, importance sample an incident direction
     virtual Vec3 Generate() const = 0;
-    virtual double Evaluate(const Vec3& direction) const = 0;
+
+    // Evaluate PDF with given direction
+    virtual double Evaluate(const Vec3& d) const = 0;
 };
 
 } // namespace spt

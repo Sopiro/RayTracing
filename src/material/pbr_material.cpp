@@ -26,7 +26,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     ONB tbn;
     tbn.u = in_rec.tangent;
     tbn.w = in_rec.normal;
-    tbn.v = Cross(tbn.w, tbn.u);
+    tbn.v = Cross(tbn.w, tbn.u).Normalized();
 
     Vec3 n = tbn.GetLocal(normal);
     Vec3 v = -in_ray.dir.Normalized();
@@ -57,7 +57,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     double metallic = metallic_map->Value(in_rec.uv, in_rec.point).x;
     double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
 
-    Vec3 wi = in_ray.dir.Normalized();
+    Vec3 wo = -in_ray.dir.Normalized();
 
 #if 0
     Vec3 f0 = F0(basecolor, metallic);
@@ -67,15 +67,15 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     double t = Max(F0Sum / (diffuseSum + F0Sum), 0.25);
 #else
     Vec3 f0 = F0(basecolor, metallic);
-    Vec3 F = F_Schlick(f0, Dot(-wi, in_rec.normal));
+    Vec3 F = F_Schlick(f0, Dot(wo, in_rec.normal));
     double diff_w = (1.0 - metallic);
     double spec_w = Luma(F);
     double t = Max(spec_w / (diff_w + spec_w), 0.25);
 #endif
 
     // out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
-    // out_srec.pdf = std::make_shared<GGXPDF>(in_rec.normal, wi, roughness, t);
-    out_srec.pdf = std::make_shared<GGXVNDFPDF>(in_rec.normal, wi, roughness, t);
+    // out_srec.pdf = std::make_shared<GGXPDF>(in_rec.normal, wo, roughness, t);
+    out_srec.pdf = std::make_shared<GGXVNDFPDF>(in_rec.normal, wo, roughness, t);
     out_srec.is_specular = false;
     return true;
 }

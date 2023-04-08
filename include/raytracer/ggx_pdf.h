@@ -6,15 +6,16 @@
 namespace spt
 {
 
+// GGX normal distribution function PDF
 class GGXPDF : public PDF
 {
     // https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
     // https://schuttejoe.github.io/post/ggximportancesamplingpart1/
 
 public:
-    GGXPDF(const Vec3& n, const Vec3& wi, double roughness, double t)
-        : uvw{ n.Normalized() }
-        , wi{ -wi.Normalized() }
+    GGXPDF(const Vec3& n, const Vec3& wo, double roughness, double t)
+        : uvw{ n }
+        , wo{ wo }
         , alpha2{ roughness * roughness }
         , t{ t }
     {
@@ -35,9 +36,7 @@ public:
 
             // sampled half vector
             Vec3 h{ x, y, Abs(z) };
-            Vec3 wo = Reflect(-wi, uvw.GetLocal(h));
-
-            return wo;
+            return Reflect(-wo, uvw.GetLocal(h));
         }
         else
         {
@@ -46,13 +45,13 @@ public:
         }
     }
 
-    virtual double Evaluate(const Vec3& wo) const override
+    virtual double Evaluate(const Vec3& d) const override
     {
-        Vec3 h = (wi + wo).Normalized();
+        Vec3 h = (wo + d).Normalized();
         double NoH = Dot(uvw.w, h);
-        double spec_w = D_GGX(NoH, alpha2) * NoH / Max(4.0 * Dot(wo, h), epsilon);
+        double spec_w = D_GGX(NoH, alpha2) * NoH / Max(4.0 * Dot(d, h), epsilon);
 
-        double cosine = Dot(wo, uvw.w);
+        double cosine = Dot(d, uvw.w);
         double diff_w = cosine / pi;
 
         return (1.0 - t) * diff_w + t * spec_w;
@@ -60,7 +59,7 @@ public:
 
 public:
     ONB uvw;
-    Vec3 wi;
+    Vec3 wo;
     double alpha2;
     double t;
 };
