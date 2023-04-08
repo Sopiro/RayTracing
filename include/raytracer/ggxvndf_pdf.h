@@ -50,11 +50,11 @@ public:
             t2 = Lerp(sqrt(1.0 - t1 * t1), t2, s);
 
             // Section 4.3: reprojection onto hemisphere
-            Vec3 Nh = t1 * T1 + t2 * T2 + sqrt(Max(0.0, 1.0 - t1 * t1 - t2 * t2)) * Vh;
+            Vec3 Nh = t1 * T1 + t2 * T2 + sqrt(fmax(0.0, 1.0 - t1 * t1 - t2 * t2)) * Vh;
 
             // Unstretch
             // Section 3.4: transforming the normal back to the ellipsoid configuration
-            Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, Max(0.0, Nh.z)).Normalized();
+            Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, fmax(0.0, Nh.z)).Normalized();
             return Reflect(-wo, uvw.GetLocal(h));
         }
         else
