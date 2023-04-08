@@ -9,28 +9,28 @@ namespace spt
 
 struct Vertex
 {
-    Vec3 position;
+    Point position;
     Vec3 normal;
     Vec3 tangent;
-    Vec2 texCoords;
+    UV texCoords;
 };
 
 class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Vec3& point0, const Vec3& point1, const Vec3& point2, const std::shared_ptr<Material> material);
-    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const std::shared_ptr<Material> material);
+    Triangle(const Point& point0, const Point& point1, const Point& point2, const Ref<Material>& material);
+    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
 
     Vec3 GetNormal(double u, double v, double w) const;
     Vec3 GetTangent(double u, double v, double w) const;
-    Vec2 GetTexCoord(double u, double v, double w) const;
+    UV GetTexCoord(double u, double v, double w) const;
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
-    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point& origin) const override;
     virtual int32 GetSize() const override;
 
 public:
@@ -40,10 +40,10 @@ public:
     Vec3 face_normal;
     bool one_sided;
     double area;
-    std::shared_ptr<Material> material;
+    Ref<Material> material;
 };
 
-inline Triangle::Triangle(const Vec3& p0, const Vec3& p1, const Vec3& p2, const std::shared_ptr<Material> material)
+inline Triangle::Triangle(const Point& p0, const Point& p1, const Point& p2, const Ref<Material>& material)
     : one_sided{ false }
     , material{ material }
 {
@@ -74,7 +74,7 @@ inline Triangle::Triangle(const Vec3& p0, const Vec3& p1, const Vec3& p2, const 
     }
 }
 
-inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, std::shared_ptr<Material> material)
+inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material)
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }
@@ -98,7 +98,7 @@ inline Vec3 Triangle::GetTangent(double u, double v, double w) const
     return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
 }
 
-inline Vec2 Triangle::GetTexCoord(double u, double v, double w) const
+inline UV Triangle::GetTexCoord(double u, double v, double w) const
 {
     return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
 }
@@ -132,7 +132,7 @@ inline double Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) c
     return distance_squared / (cosine * area);
 }
 
-inline Vec3 Triangle::GetRandomDirection(const Vec3& origin) const
+inline Vec3 Triangle::GetRandomDirection(const Point& origin) const
 {
     double u = Rand(0.0, 1.0);
     double v = Rand(0.0, 1.0);
@@ -143,7 +143,7 @@ inline Vec3 Triangle::GetRandomDirection(const Vec3& origin) const
         v = 1.0 - v;
     }
 
-    Vec3 random_point = v0.position + e1 * u + e2 * v;
+    Point random_point = v0.position + e1 * u + e2 * v;
 
     return (random_point - origin).Normalized();
 }

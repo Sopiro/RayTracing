@@ -26,7 +26,7 @@ void EnvironmentMap(Scene& scene)
 
             // auto mat = RandomMaterial();
 
-            std::shared_ptr<Material> mat;
+            Ref<Material> mat;
             if (x >= 2)
             {
                 mat = std::make_shared<Dielectric>(1.5);
@@ -36,7 +36,7 @@ void EnvironmentMap(Scene& scene)
                 mat = std::make_shared<Metal>(Vec3{ 0.6 }, 0.0);
             }
 
-            std::shared_ptr<Hittable> object;
+            Ref<Hittable> object;
 
             if (x % 2)
             {

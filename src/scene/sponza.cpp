@@ -6,10 +6,10 @@ namespace spt
 void Sponza(Scene& scene)
 {
     // Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 0.01 } };
-    // std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza2/sponza.obj", transform);
+    // Ref<Model> sponza = std::make_shared<Model>("res/sponza2/sponza.obj", transform);
 
     Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 1.0 } };
-    std::shared_ptr<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
+    Ref<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
 
     scene.Add(sponza);
 
@@ -51,7 +51,7 @@ void Sponza(Scene& scene)
     scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
     // scene.SetEnvironmentMap(SolidColor::Create(Color{ 1.0 }));
 
-    scene.SetDirectionalLight(std::make_shared<DirectionalLight>(-Vec3{ -3.0, 15.0, 3.0 }.Normalized(), Vec3{ 15.0 }));
+    scene.SetDirectionalLight(std::make_shared<DirectionalLight>(-Vec3{ -3.0, 15.0, -3.0 }.Normalized(), Vec3{ 20.0 }));
 }
 
 } // namespace spt

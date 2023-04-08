@@ -17,16 +17,16 @@ public:
     virtual int32 GetSize() const override;
 
     size_t GetMeshCount() const;
-    std::vector<std::shared_ptr<Mesh>> GetMeshes();
+    const std::vector<Ref<Mesh>>& GetMeshes();
 
 private:
-    std::vector<std::shared_ptr<Texture>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb);
-    std::shared_ptr<Mesh> ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform);
+    std::vector<Ref<Texture>> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb);
+    Ref<Mesh> ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform);
     void ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& parent_transform);
     void LoadModel(std::string path, const Transform& transform);
 
     std::string folder;
-    std::vector<std::shared_ptr<Mesh>> meshes;
+    std::vector<Ref<Mesh>> meshes;
     BVH bvh;
 };
 
@@ -50,7 +50,7 @@ inline size_t Model::GetMeshCount() const
     return meshes.size();
 }
 
-inline std::vector<std::shared_ptr<Mesh>> Model::GetMeshes()
+inline const std::vector<Ref<Mesh>>& Model::GetMeshes()
 {
     return meshes;
 }

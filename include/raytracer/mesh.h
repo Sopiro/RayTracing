@@ -25,7 +25,7 @@ class Mesh : public Hittable
 public:
     Mesh(std::vector<Vertex> vertices,
          std::vector<uint32> indices,
-         std::array<std::shared_ptr<Texture>, TextureType::count> textures,
+         std::array<Ref<Texture>, TextureType::count> textures,
          const Mat4& transform);
 
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
@@ -39,8 +39,8 @@ public:
     bool HasAOTexture() const;
     bool HasEmissiveTexture() const;
 
-    const std::shared_ptr<Material> GetMaterial() const;
-    void SetMaterial(const std::shared_ptr<Material> material);
+    const Ref<Material>& GetMaterial() const;
+    void SetMaterial(const Ref<Material>& material);
 
 private:
     Mat4 transform;
@@ -52,8 +52,8 @@ private:
     std::vector<uint32> indices;
 
     std::vector<Triangle> triangles;
-    std::shared_ptr<Material> material;
-    std::array<std::shared_ptr<Texture>, TextureType::count> textures;
+    Ref<Material> material;
+    std::array<Ref<Texture>, TextureType::count> textures;
 };
 
 inline bool Mesh::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
@@ -101,12 +101,12 @@ inline bool Mesh::HasEmissiveTexture() const
     return textures[emissive] != nullptr;
 }
 
-inline const std::shared_ptr<Material> Mesh::GetMaterial() const
+inline const Ref<Material>& Mesh::GetMaterial() const
 {
     return material;
 }
 
-inline void Mesh::SetMaterial(const std::shared_ptr<Material> mat)
+inline void Mesh::SetMaterial(const Ref<Material>& mat)
 {
     for (int32 i = 0; i < triangles.size(); ++i)
     {

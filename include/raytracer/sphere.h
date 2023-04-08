@@ -12,25 +12,25 @@ class Sphere : public Hittable
 {
 public:
     Sphere() = default;
-    Sphere(const Vec3& center, double radius, std::shared_ptr<Material> material);
+    Sphere(const Vec3& center, double radius, const Ref<Material>& material);
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
-    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point& origin) const override;
     virtual int32 GetSize() const override;
 
 public:
     Vec3 center;
     double radius;
-    std::shared_ptr<Material> material;
+    Ref<Material> material;
 
 private:
-    static void GetUV(const Vec3& p, UV& out_uv);
+    static void GetUV(const Point& p, UV& out_uv);
 };
 
-inline Sphere::Sphere(const Vec3& _center, double _radius, std::shared_ptr<Material> _material)
+inline Sphere::Sphere(const Vec3& _center, double _radius, const Ref<Material>& _material)
     : center{ _center }
     , radius{ _radius }
     , material{ _material }
@@ -64,7 +64,7 @@ inline double Sphere::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) con
     return 1.0 / solid_angle;
 }
 
-inline Vec3 Sphere::GetRandomDirection(const Vec3& origin) const
+inline Vec3 Sphere::GetRandomDirection(const Point& origin) const
 {
     Vec3 direction = center - origin;
     double distance_sqared = direction.Length2();
@@ -79,7 +79,7 @@ inline int32 Sphere::GetSize() const
     return 1;
 }
 
-inline void Sphere::GetUV(const Vec3& p, UV& out_uv)
+inline void Sphere::GetUV(const Point& p, UV& out_uv)
 {
     // p: a given point on the sphere of radius one, centered at the origin.
     // u: returned value [0,1] of angle around the Y axis from X=-1.

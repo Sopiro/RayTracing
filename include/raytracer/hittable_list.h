@@ -14,25 +14,25 @@ class HittableList : public Hittable
 public:
     HittableList() = default;
 
-    void Add(std::shared_ptr<Hittable> object);
+    void Add(const Ref<Hittable>& object);
     void Clear();
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point& origin) const override;
     virtual int32 GetSize() const override;
     virtual void Rebuild() override;
 
-    const std::vector<std::shared_ptr<Hittable>>& GetObjects() const;
+    const std::vector<Ref<Hittable>>& GetObjects() const;
     size_t GetCount() const;
 
 private:
     BVH bvh;
-    std::vector<std::shared_ptr<Hittable>> objects;
+    std::vector<Ref<Hittable>> objects;
 };
 
-inline void HittableList::Add(std::shared_ptr<Hittable> object)
+inline void HittableList::Add(const Ref<Hittable>& object)
 {
     AABB aabb;
     object->GetAABB(aabb);
@@ -104,7 +104,7 @@ inline double HittableList::EvaluatePDF(const Ray& ray) const
     return bvh.EvaluatePDF(ray);
 }
 
-inline Vec3 HittableList::GetRandomDirection(const Vec3& origin) const
+inline Vec3 HittableList::GetRandomDirection(const Point& origin) const
 {
     return bvh.GetRandomDirection(origin);
 }
@@ -132,7 +132,7 @@ inline void HittableList::Rebuild()
     bvh.Traverse(&callback);
 }
 
-inline const std::vector<std::shared_ptr<Hittable>>& HittableList::GetObjects() const
+inline const std::vector<Ref<Hittable>>& HittableList::GetObjects() const
 {
     return objects;
 }

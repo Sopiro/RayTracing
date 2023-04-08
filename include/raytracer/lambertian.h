@@ -10,13 +10,13 @@ class Lambertian : public Material
 {
 public:
     Lambertian(const Color& color);
-    Lambertian(std::shared_ptr<Texture> albedo);
+    Lambertian(const Ref<Texture>& albedo);
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
     virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
 
 public:
-    std::shared_ptr<Texture> albedo;
+    Ref<Texture> albedo;
 };
 
 inline Lambertian::Lambertian(const Color& _color)
@@ -24,7 +24,7 @@ inline Lambertian::Lambertian(const Color& _color)
 {
 }
 
-inline Lambertian::Lambertian(std::shared_ptr<Texture> _albedo)
+inline Lambertian::Lambertian(const Ref<Texture>& _albedo)
     : albedo{ _albedo }
 {
 }

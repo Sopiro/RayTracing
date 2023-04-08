@@ -8,7 +8,7 @@ namespace spt
 class Texture
 {
 public:
-    virtual Color Value(const UV& uv, const Vec3& p) const = 0;
+    virtual Color Value(const UV& uv, const Point& p) const = 0;
 };
 
 } // namespace spt

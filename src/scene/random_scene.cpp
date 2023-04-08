@@ -19,7 +19,7 @@ void RandomScene(Scene& scene)
 
             if ((center - Vec3(4, 0.2, 0)).Length() > 0.9)
             {
-                std::shared_ptr<Material> sphere_material;
+                Ref<Material> sphere_material;
 
                 if (choose_mat < 0.8)
                 {

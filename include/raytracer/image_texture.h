@@ -10,14 +10,14 @@ namespace spt
 class ImageTexture : public Texture
 {
 public:
-    static std::shared_ptr<ImageTexture> Create(std::string path, bool srgb = false, bool hdr = false);
+    static Ref<ImageTexture> Create(std::string path, bool srgb = false, bool hdr = false);
 
     virtual ~ImageTexture();
 
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
 
-    virtual Color Value(const UV& uv, const Vec3& p) const override;
+    virtual Color Value(const UV& uv, const Point& p) const override;
 
 protected:
     ImageTexture();
@@ -72,9 +72,9 @@ inline ImageTexture::~ImageTexture()
 }
 
 static int32 texture_count = 0;
-static std::unordered_map<std::string, std::shared_ptr<ImageTexture>> loaded_textures;
+static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
 
-inline Color ImageTexture::Value(const UV& uv, const Vec3& p) const
+inline Color ImageTexture::Value(const UV& uv, const Point& p) const
 {
     double u = fmod(uv.x, 1.0);
     double v = fmod(uv.y, 1.0);

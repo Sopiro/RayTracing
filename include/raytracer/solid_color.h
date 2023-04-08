@@ -8,10 +8,10 @@ namespace spt
 class SolidColor : public Texture
 {
 public:
-    static std::shared_ptr<SolidColor> Create(Color color);
-    static std::shared_ptr<SolidColor> Create(double red, double green, double blue);
+    static Ref<SolidColor> Create(Color color);
+    static Ref<SolidColor> Create(double red, double green, double blue);
 
-    virtual Color Value(const UV& uv, const Vec3& p) const override;
+    virtual Color Value(const UV& uv, const Point& p) const override;
 
 private:
     SolidColor() = default;
@@ -34,9 +34,9 @@ struct ColorHash
 };
 
 static int32 color_count = 0;
-static std::unordered_map<Color, std::shared_ptr<SolidColor>, ColorHash> loaded_colors;
+static std::unordered_map<Color, Ref<SolidColor>, ColorHash> loaded_colors;
 
-inline std::shared_ptr<SolidColor> SolidColor::Create(Color color)
+inline Ref<SolidColor> SolidColor::Create(Color color)
 {
     auto loaded = loaded_colors.find(color);
     if (loaded != loaded_colors.end())
@@ -44,19 +44,19 @@ inline std::shared_ptr<SolidColor> SolidColor::Create(Color color)
         return loaded->second;
     }
 
-    std::shared_ptr<SolidColor> ptr{ new SolidColor(color) };
+    Ref<SolidColor> ptr{ new SolidColor(color) };
     loaded_colors.emplace(color, ptr);
     ++color_count;
 
     return ptr;
 }
 
-inline std::shared_ptr<SolidColor> SolidColor::Create(double red, double green, double blue)
+inline Ref<SolidColor> SolidColor::Create(double red, double green, double blue)
 {
     return Create(Color{ red, green, blue });
 }
 
-inline Color SolidColor::Value(const UV& uv, const Vec3& p) const
+inline Color SolidColor::Value(const UV& uv, const Point& p) const
 {
     return color;
 }

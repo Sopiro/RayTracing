@@ -7,7 +7,7 @@ namespace spt
 
 Mesh::Mesh(std::vector<Vertex> _vertices,
            std::vector<uint32> _indices,
-           std::array<std::shared_ptr<Texture>, TextureType::count> _textures,
+           std::array<Ref<Texture>, TextureType::count> _textures,
            const Mat4& _transform)
     : vertices{ std::move(_vertices) }
     , indices{ std::move(_indices) }

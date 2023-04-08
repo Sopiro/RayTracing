@@ -10,7 +10,7 @@ class ImageTextureHDR : public ImageTexture
 public:
     virtual ~ImageTextureHDR() = default;
 
-    virtual Color Value(const UV& uv, const Vec3& p) const override;
+    virtual Color Value(const UV& uv, const Point& p) const override;
 
 protected:
     friend class ImageTexture;
@@ -44,7 +44,7 @@ inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
     bytes_per_scanline = bytes_per_pixel * width;
 }
 
-inline Color ImageTextureHDR::Value(const UV& uv, const Vec3& p) const
+inline Color ImageTextureHDR::Value(const UV& uv, const Point& p) const
 {
     double u = fmod(uv.x, 1.0);
     double v = fmod(uv.y, 1.0);

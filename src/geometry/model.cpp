@@ -21,27 +21,27 @@ Model::Model(std::string path, const Transform& transform)
     }
 }
 
-std::vector<std::shared_ptr<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb)
+std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb)
 {
-    std::vector<std::shared_ptr<Texture>> textures;
+    std::vector<Ref<Texture>> textures;
 
     for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
 
-        std::shared_ptr<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
+        Ref<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }
 
     return textures;
 }
 
-std::shared_ptr<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     std::vector<Vertex> vertices;
     std::vector<uint32> indices;
-    std::array<std::shared_ptr<Texture>, TextureType::count> textures;
+    std::array<Ref<Texture>, TextureType::count> textures;
 
     // process vertices
     for (uint32 i = 0; i < mesh->mNumVertices; ++i)

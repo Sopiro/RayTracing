@@ -10,17 +10,17 @@ class CheckerTexture : public Texture
 {
 public:
     CheckerTexture() = default;
-    CheckerTexture(std::shared_ptr<Texture> even, std::shared_ptr<Texture> odd);
+    CheckerTexture(const Ref<Texture>& even, const Ref<Texture>& odd);
     CheckerTexture(Color color1, Color color2);
 
     virtual Color Value(const UV& uv, const Vec3& p) const override;
 
 public:
-    std::shared_ptr<Texture> odd;
-    std::shared_ptr<Texture> even;
+    Ref<Texture> odd;
+    Ref<Texture> even;
 };
 
-inline CheckerTexture::CheckerTexture(std::shared_ptr<Texture> _even, std::shared_ptr<Texture> _odd)
+inline CheckerTexture::CheckerTexture(const Ref<Texture>& _even, const Ref<Texture>& _odd)
     : even{ _even }
     , odd{ _odd }
 {
@@ -32,7 +32,7 @@ inline CheckerTexture::CheckerTexture(Color c1, Color c2)
 {
 }
 
-inline Color CheckerTexture::Value(const UV& uv, const Vec3& p) const
+inline Color CheckerTexture::Value(const UV& uv, const Point& p) const
 {
     double sines = sin(10.0 * p.x) * sin(10.0 * p.y) * sin(10.0 * p.z);
 

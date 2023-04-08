@@ -16,12 +16,12 @@ public:
     virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
 
 public:
-    std::shared_ptr<Texture> basecolor_map;
-    std::shared_ptr<Texture> normal_map;
-    std::shared_ptr<Texture> metallic_map;
-    std::shared_ptr<Texture> roughness_map;
-    std::shared_ptr<Texture> ao_map;
-    std::shared_ptr<Texture> emissive_map;
+    Ref<Texture> basecolor_map;
+    Ref<Texture> normal_map;
+    Ref<Texture> metallic_map;
+    Ref<Texture> roughness_map;
+    Ref<Texture> ao_map;
+    Ref<Texture> emissive_map;
 };
 
 inline Color PBRMaterial::Emit(const Ray& in_ray, const HitRecord& in_rec) const

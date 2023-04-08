@@ -57,7 +57,7 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     Vec3 tangent = GetTangent(u, v, w);
     rec.SetFaceNormal(ray, normal, tangent);
 
-    Vec2 tex = GetTexCoord(u, v, w);
+    UV tex = GetTexCoord(u, v, w);
     rec.uv = tex;
 
     return true;

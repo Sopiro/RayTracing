@@ -3,6 +3,7 @@
 #include "raytracer/raytracer.h"
 
 #define SAMPLE_ALL_LIGHTS 0
+#define MIN_BOUNCES 2
 
 namespace spt
 {
@@ -153,7 +154,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
         ray = scattered;
 
         // Russian roulette
-        if (bounce > 2)
+        if (bounce > MIN_BOUNCES)
         {
             double rr = fmax(abso.x, fmax(abso.y, abso.z));
             // double rr = Luma(abso);

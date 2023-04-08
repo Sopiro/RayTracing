@@ -14,7 +14,7 @@ inline bool is_nullish(const Vec3& v)
     return (isnan(v.x) || isnan(v.y) || isnan(v.z) || isinf(v.x) || isinf(v.y) || isinf(v.z));
 }
 
-inline std::shared_ptr<PBRMaterial> RandomPBRMaterial()
+inline Ref<PBRMaterial> RandomPBRMaterial()
 {
     auto mat = std::make_shared<PBRMaterial>();
 
@@ -29,7 +29,7 @@ inline std::shared_ptr<PBRMaterial> RandomPBRMaterial()
     return mat;
 }
 
-inline std::shared_ptr<Hittable> RectXY(const Transform& tf, const std::shared_ptr<Material> mat)
+inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -53,7 +53,7 @@ inline std::shared_ptr<Hittable> RectXY(const Transform& tf, const std::shared_p
     return rect;
 }
 
-inline std::shared_ptr<Hittable> RectXZ(const Transform& tf, const std::shared_ptr<Material> mat)
+inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -77,7 +77,7 @@ inline std::shared_ptr<Hittable> RectXZ(const Transform& tf, const std::shared_p
     return rect;
 }
 
-inline std::shared_ptr<Hittable> RectYZ(const Transform& tf, const std::shared_ptr<Material> mat)
+inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -101,7 +101,7 @@ inline std::shared_ptr<Hittable> RectYZ(const Transform& tf, const std::shared_p
     return rect;
 }
 
-inline std::shared_ptr<Hittable> Box(const Transform& tf, const std::shared_ptr<Material> mat)
+inline Ref<Hittable> Box(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });

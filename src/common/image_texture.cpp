@@ -3,7 +3,7 @@
 namespace spt
 {
 
-std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path, bool srgb, bool hdr)
+Ref<ImageTexture> ImageTexture::Create(std::string path, bool srgb, bool hdr)
 {
     auto loaded = loaded_textures.find(path);
     if (loaded != loaded_textures.end())
@@ -11,15 +11,15 @@ std::shared_ptr<ImageTexture> ImageTexture::Create(std::string path, bool srgb, 
         return loaded->second;
     }
 
-    std::shared_ptr<ImageTexture> image;
+    Ref<ImageTexture> image;
 
     if (hdr)
     {
-        image = std::shared_ptr<ImageTextureHDR>(new ImageTextureHDR(path, srgb));
+        image = Ref<ImageTextureHDR>(new ImageTextureHDR(path, srgb));
     }
     else
     {
-        image = std::shared_ptr<ImageTexture>(new ImageTexture(path, srgb));
+        image = Ref<ImageTexture>(new ImageTexture(path, srgb));
     }
 
     loaded_textures.emplace(path, image);

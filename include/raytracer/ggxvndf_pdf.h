@@ -54,7 +54,7 @@ public:
 
             // Unstretch
             // Section 3.4: transforming the normal back to the ellipsoid configuration
-            Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, fmax(0.0, Nh.z)).Normalized();
+            Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, fmax(0.0, Nh.z)).Normalized(); // Sampled half vector
             return Reflect(-wo, uvw.GetLocal(h));
         }
         else

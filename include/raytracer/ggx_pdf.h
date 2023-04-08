@@ -34,8 +34,7 @@ public:
             double y = sin(phi) * sin_thetha;
             double z = cos(theta);
 
-            // sampled half vector
-            Vec3 h{ x, y, Abs(z) };
+            Vec3 h{ x, y, Abs(z) }; // Sampled half vector
             return Reflect(-wo, uvw.GetLocal(h));
         }
         else

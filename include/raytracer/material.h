@@ -16,7 +16,7 @@ struct ScatterRecord
     Ray specular_ray;
     bool is_specular;
     Color attenuation;
-    std::shared_ptr<PDF> pdf;
+    Ref<PDF> pdf;
 };
 
 class Material
@@ -36,7 +36,7 @@ public:
         return Vec3{ 0.0 };
     }
 
-    inline static std::shared_ptr<Material> fallback_material = nullptr;
+    inline static Ref<Material> fallback_material = nullptr;
 };
 
 } // namespace spt

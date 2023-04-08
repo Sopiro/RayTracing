@@ -18,13 +18,13 @@ public:
     Scene();
 
     void Reset();
-    void Add(std::shared_ptr<Hittable> object);
-    void AddLight(std::shared_ptr<Hittable> object);
+    void Add(const Ref<Hittable>& object);
+    void AddLight(const Ref<Hittable>& object);
 
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point& origin) const override;
     virtual void Rebuild() override;
 
     const HittableList& GetHittableList() const;
@@ -32,20 +32,20 @@ public:
     bool HasLights() const;
     const HittableList& GetLights() const;
 
-    const std::shared_ptr<Texture> GetEnvironmentMap() const;
-    void SetEnvironmentMap(const std::shared_ptr<Texture> color);
+    const Ref<Texture>& GetEnvironmentMap() const;
+    void SetEnvironmentMap(const Ref<Texture> color);
     Vec3 GetSkyColor(Vec3 direction) const;
 
     bool HasDirectionalLight() const;
-    const std::shared_ptr<DirectionalLight> GetDirectionalLight() const;
-    void SetDirectionalLight(const std::shared_ptr<DirectionalLight> directional_light);
+    const Ref<DirectionalLight>& GetDirectionalLight() const;
+    void SetDirectionalLight(const Ref<DirectionalLight>& directional_light);
 
 private:
     HittableList hittables;
     HittableList lights;
 
-    std::shared_ptr<Texture> environment_map;
-    std::shared_ptr<DirectionalLight> directional_light;
+    Ref<Texture> environment_map;
+    Ref<DirectionalLight> directional_light;
 };
 
 inline Scene::Scene()
@@ -63,12 +63,12 @@ inline void Scene::Reset()
     lights.Clear();
 }
 
-inline void Scene::Add(std::shared_ptr<Hittable> object)
+inline void Scene::Add(const Ref<Hittable>& object)
 {
     hittables.Add(object);
 }
 
-inline void Scene::AddLight(std::shared_ptr<Hittable> object)
+inline void Scene::AddLight(const Ref<Hittable>& object)
 {
     lights.Add(object);
 }
@@ -93,7 +93,7 @@ inline double Scene::EvaluatePDF(const Ray& ray) const
     return hittables.EvaluatePDF(ray);
 }
 
-inline Vec3 Scene::GetRandomDirection(const Vec3& origin) const
+inline Vec3 Scene::GetRandomDirection(const Point& origin) const
 {
     return hittables.GetRandomDirection(origin);
 }
@@ -113,12 +113,12 @@ inline const HittableList& Scene::GetLights() const
     return lights;
 }
 
-inline const std::shared_ptr<Texture> Scene::GetEnvironmentMap() const
+inline const Ref<Texture>& Scene::GetEnvironmentMap() const
 {
     return environment_map;
 }
 
-inline void Scene::SetEnvironmentMap(const std::shared_ptr<Texture> env_map)
+inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
 {
     environment_map = env_map;
 }
@@ -141,12 +141,12 @@ inline bool Scene::HasDirectionalLight() const
     return directional_light != nullptr;
 }
 
-inline const std::shared_ptr<DirectionalLight> Scene::GetDirectionalLight() const
+inline const Ref<DirectionalLight>& Scene::GetDirectionalLight() const
 {
     return directional_light;
 }
 
-inline void Scene::SetDirectionalLight(const std::shared_ptr<DirectionalLight> dr)
+inline void Scene::SetDirectionalLight(const Ref<DirectionalLight>& dr)
 {
     directional_light = dr;
 }

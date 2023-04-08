@@ -20,7 +20,7 @@ int main()
     constexpr double aspect_ratio = 16.0 / 9.0;
     // constexpr double aspect_ratio = 3.0 / 2.0;
     // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 640;
+    constexpr int32 width = 320;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
     constexpr int32 samples_per_pixel = 16;
     constexpr double scale = 1.0 / samples_per_pixel;
@@ -37,8 +37,8 @@ int main()
     {
         RandomScene(scene);
 
-        Vec3 lookfrom(13, 2, 3);
-        Vec3 lookat(0, 0, 0);
+        Point lookfrom{ 13, 2, 3 };
+        Point lookat{ 0, 0, 0 };
 
         auto dist_to_focus = 10.0;
         auto aperture = 0.1;
@@ -52,8 +52,8 @@ int main()
     {
         BVHTest(scene);
 
-        Vec3 lookfrom(0, 0, 5);
-        Vec3 lookat(0, 0, 0);
+        Point lookfrom{ 0, 0, 5 };
+        Point lookat{ 0, 0, 0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -67,8 +67,8 @@ int main()
     {
         CornellBox(scene);
 
-        Vec3 lookfrom{ 0.5, 0.5, 1.25 };
-        Vec3 lookat{ 0.5, 0.5, 0.0 };
+        Point lookfrom{ 0.5, 0.5, 1.25 };
+        Point lookat{ 0.5, 0.5, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -82,17 +82,17 @@ int main()
     {
         Sponza(scene);
 
-        // Vec3 lookfrom(0.0, 2.5, 4.5);
-        // Vec3 lookat(0.0, 1.45, 0.0);
+        // Point lookfrom{ 0.0, 2.5, 4.5 };
+        // Point lookat{ 0.0, 1.45, 0.0 };
 
-        // Vec3 lookfrom(-1.5, 5.5, 10.0);
-        // Vec3 lookat(0.0, 3.45, 0.0);
+        // Point lookfrom{ -1.5, 5.5, 10.0 };
+        // Point lookat{ 0.0, 3.45, 0.0 };
 
-        // Vec3 lookfrom(0.0, 0.5, 7.0);
-        // Vec3 lookat(0.0, 3.0, 0.0);
+        // Point lookfrom{ 0.0, 0.5, 7.0 };
+        // Point lookat{ 0.0, 3.0, 0.0 };
 
-        Vec3 lookfrom(0.0, 5.0, 6.0);
-        Vec3 lookat(0.0, 5.0, 0.0);
+        Point lookfrom{ 0.0, 5.0, 6.0 };
+        Point lookat{ 0.0, 5.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -106,11 +106,11 @@ int main()
     {
         NormalMapping(scene);
 
-        Vec3 lookfrom{ 10.0, 0.0, 10.0 };
-        Vec3 lookat{ 3.0, -2.5, 1.0 };
+        Point lookfrom{ 10.0, 0.0, 10.0 };
+        Point lookat{ 3.0, -2.5, 1.0 };
 
-        // Vec3 lookfrom{ 1.0, 0.5, 4.0 };
-        // Vec3 lookat{ 0.0, 0.0, 0.0 };
+        // Point lookfrom{ 1.0, 0.5, 4.0 };
+        // Point lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -124,8 +124,8 @@ int main()
     {
         PBRTest(scene);
 
-        Vec3 lookfrom{ 0, 4.0, 5.0 };
-        Vec3 lookat{ 0.0, 0.0, 0.0 };
+        Point lookfrom{ 0.0, 4.0, 5.0 };
+        Point lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -139,8 +139,8 @@ int main()
     {
         EnvironmentMap(scene);
 
-        Vec3 lookfrom{ 0, 3.0, 5.0 };
-        Vec3 lookat{ 0.0, 0.0, 0.0 };
+        Point lookfrom{ 0.0, 3.0, 5.0 };
+        Point lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -154,8 +154,8 @@ int main()
     {
         BRDFSamplingTest(scene);
 
-        Vec3 lookfrom{ 0.5, 0.5, 1.25 };
-        Vec3 lookat{ 0.5, 0.5, 0.0 };
+        Point lookfrom{ 0.5, 0.5, 1.25 };
+        Point lookat{ 0.5, 0.5, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -171,8 +171,8 @@ int main()
 
         double y = 0.345832;
 
-        Vec3 lookfrom{ 0.0, y, 1.0 };
-        Vec3 lookat{ 0.0, y, 0.0 };
+        Point lookfrom{ 0.0, y, 1.0 };
+        Point lookat{ 0.0, y, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -186,8 +186,8 @@ int main()
     {
         MISTest2(scene);
 
-        Vec3 lookfrom{ 0.0, 2, 15 };
-        Vec3 lookat{ 0.0, -2, 2.5 };
+        Point lookfrom{ 0.0, 2, 15 };
+        Point lookat{ 0.0, -2, 2.5 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -201,8 +201,8 @@ int main()
     {
         MISTestWak(scene);
 
-        Vec3 lookfrom{ 0.0, 2, 15 };
-        Vec3 lookat{ 0.0, -2, 2.5 };
+        Point lookfrom{ 0.0, 2, 15 };
+        Point lookat{ 0.0, -2, 2.5 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -216,8 +216,8 @@ int main()
     {
         GGXVNDFSamplingTest(scene);
 
-        Vec3 lookfrom{ 0.0, 2.0, 10.0 };
-        Vec3 lookat{ 0.0, 1.0, 0.0 };
+        Point lookfrom{ 0.0, 2.0, 10.0 };
+        Point lookat{ 0.0, 1.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
