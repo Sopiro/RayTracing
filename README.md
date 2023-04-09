@@ -25,6 +25,8 @@ This is a CPU-only physically based path tracer written in C++
 ## Samples
 ![CornellBox](.github/image/render_1000x1000_s1024_d2147483647_t327.607s.png)
 ![Sponza](.github/image/render_1920x1080_s1024_d2147483647_t5748.86s.png)
+![RTIOW](.github/image/render_1920x1080_s1080_d2147483647_t263.396s.png)
+![Materials](.github/image/render_1920x1080_s2048_d2147483647_t885.34s.png)
 ![MIS](.github/image/render_1920x1080_s128_d2147483647_t191.966s.png)
 
 ## References
