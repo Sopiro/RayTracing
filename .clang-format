@@ -44,7 +44,7 @@ BraceWrapping:
   BeforeCatch:     true
   BeforeElse:      true
   BeforeLambdaBody: false
-  BeforeWhile:     false
+  BeforeWhile:     true
   IndentBraces:    false
   SplitEmptyFunction: true
   SplitEmptyRecord: true

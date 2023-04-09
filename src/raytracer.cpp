@@ -4,6 +4,7 @@
 
 #define SAMPLE_ALL_LIGHTS 0
 #define MIN_BOUNCES 2
+#define MAX_REJECTION 20
 
 namespace spt
 {
@@ -71,35 +72,45 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
             {
                 HittablePDF light_pdf{ lights[i].get(), rec.point };
 
-                // Importance sample light
+                // Importance sample lights
                 Ray to_light{ rec.point, light_pdf.Generate() };
-                double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
-
-                if (light_brdf_p > 0.0 && Dot(to_light.dir, rec.normal) > 0.0)
+                if (Dot(to_light.dir, rec.normal) > 0.0)
                 {
                     double light_p = light_pdf.Evaluate(to_light.dir);
-                    double light_w = PowerHeuristic(light_p, light_brdf_p);
+                    assert(light_p > 0.0);
 
-                    HitRecord rec2;
-                    if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                    double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                    if (light_brdf_p > 0.0)
                     {
-                        accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                        double light_w = PowerHeuristic(light_p, light_brdf_p);
+
+                        HitRecord rec2;
+                        if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                        {
+                            accu +=
+                                rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                        }
                     }
                 }
 
                 // Importance sample BRDF
                 Ray scattered{ rec.point, srec.pdf->Generate() };
-                double brdf_light_p = light_pdf.Evaluate(scattered.dir);
-
-                if (brdf_light_p > 0.0 && Dot(scattered.dir, rec.normal) > 0.0)
+                if (Dot(scattered.dir, rec.normal) > 0.0)
                 {
                     double brdf_p = srec.pdf->Evaluate(scattered.dir);
-                    double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                    assert(brdf_p > 0.0);
 
-                    HitRecord rec2;
-                    if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                    double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                    if (brdf_light_p > 0.0)
                     {
-                        accu += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                        double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+
+                        HitRecord rec2;
+                        if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                        {
+                            accu +=
+                                rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                        }
                     }
                 }
             }
@@ -113,41 +124,80 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
 
             // Importance sample lights
             Ray to_light{ rec.point, light_pdf.Generate() };
-            double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
-
-            if (light_brdf_p > 0.0 && Dot(to_light.dir, rec.normal) > 0.0)
+            if (Dot(to_light.dir, rec.normal) > 0.0)
             {
                 double light_p = light_pdf.Evaluate(to_light.dir);
-                double light_w = PowerHeuristic(light_p, light_brdf_p);
+                assert(light_p > 0.0);
 
-                HitRecord rec2;
-                if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                if (light_brdf_p > 0.0)
                 {
-                    accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                    double light_w = PowerHeuristic(light_p, light_brdf_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                    }
                 }
             }
 
             // Importance sample BRDF
             Ray scattered{ rec.point, srec.pdf->Generate() };
-            double brdf_light_p = light_pdf.Evaluate(scattered.dir);
-
-            if (brdf_light_p > 0.0 && Dot(scattered.dir, rec.normal) > 0.0)
+            if (Dot(scattered.dir, rec.normal) > 0.0)
             {
                 double brdf_p = srec.pdf->Evaluate(scattered.dir);
-                double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                assert(brdf_p > 0.0);
 
-                HitRecord rec2;
-                if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                if (brdf_light_p > 0.0)
                 {
-                    accu += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                    double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                    }
                 }
             }
         }
 #endif
 
         // Sample new search direction based on BRDF
-        Ray scattered{ rec.point, srec.pdf->Generate() };
-        double pdf_value = srec.pdf->Evaluate(scattered.dir);
+#if 0
+        Vec3 new_direction = srec.pdf->Generate();
+        double pdf_value;
+
+        if (Dot(rec.normal, new_direction) > 0.0)
+        {
+            pdf_value = srec.pdf->Evaluate(new_direction);
+        }
+        else
+        {
+            CosinePDF diffusePDF{ rec.normal };
+            new_direction = diffusePDF.Generate();
+            pdf_value = diffusePDF.Evaluate(new_direction);
+        }
+#else
+        int32 count = 0;
+        Vec3 new_direction;
+        do
+        {
+            new_direction = srec.pdf->Generate();
+        }
+        while (Dot(rec.normal, new_direction) <= 0.0 && count++ < MAX_REJECTION);
+
+        if (count >= MAX_REJECTION)
+        {
+            break;
+        }
+
+        double pdf_value = srec.pdf->Evaluate(new_direction);
+#endif
+
+        assert(pdf_value > 0.0);
+        Ray scattered{ rec.point, new_direction };
 
         accu += emitted * abso;
         abso *= rec.mat->Evaluate(ray, rec, scattered) / pdf_value;

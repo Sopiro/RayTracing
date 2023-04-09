@@ -35,7 +35,8 @@ public:
             double z = cos(theta);
 
             Vec3 h{ x, y, Abs(z) }; // Sampled half vector
-            return Reflect(-wo, uvw.GetLocal(h));
+            Vec3 wi = Reflect(-wo, uvw.GetLocal(h));
+            return wi;
         }
         else
         {
