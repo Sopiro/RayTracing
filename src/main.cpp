@@ -22,7 +22,7 @@ int main()
     // constexpr double aspect_ratio = 1.0;
     constexpr int32 width = 1920;
     constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 1024;
+    constexpr int32 samples_per_pixel = 64;
     constexpr double scale = 1.0 / samples_per_pixel;
     // constexpr int bounce_count = 10;
     constexpr int bounce_count = INT_MAX;
@@ -31,14 +31,14 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (5)
+    switch (11)
     {
     case 0: // Raytracing in one weekend final scene
     {
         RandomScene(scene);
 
-        Point lookfrom{ 13, 2, 3 };
-        Point lookat{ 0, 0, 0 };
+        Point3 lookfrom{ 13, 2, 3 };
+        Point3 lookat{ 0, 0, 0 };
 
         auto dist_to_focus = 10.0;
         auto aperture = 0.1;
@@ -52,8 +52,8 @@ int main()
     {
         BVHTest(scene);
 
-        Point lookfrom{ 0, 0, 5 };
-        Point lookat{ 0, 0, 0 };
+        Point3 lookfrom{ 0, 0, 5 };
+        Point3 lookat{ 0, 0, 0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -67,8 +67,8 @@ int main()
     {
         CornellBox(scene);
 
-        Point lookfrom{ 0.5, 0.5, 1.25 };
-        Point lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5, 0.5, 1.25 };
+        Point3 lookat{ 0.5, 0.5, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -91,8 +91,8 @@ int main()
         // Point lookfrom{ 0.0, 0.5, 7.0 };
         // Point lookat{ 0.0, 3.0, 0.0 };
 
-        Point lookfrom{ 0.0, 5.0, 6.0 };
-        Point lookat{ 0.0, 5.0, 0.0 };
+        Point3 lookfrom{ 0.0, 5.0, 6.0 };
+        Point3 lookat{ 0.0, 5.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -106,8 +106,8 @@ int main()
     {
         NormalMapping(scene);
 
-        Point lookfrom{ 10.0, 0.0, 10.0 };
-        Point lookat{ 3.0, -2.5, 1.0 };
+        Point3 lookfrom{ 10.0, 0.0, 10.0 };
+        Point3 lookat{ 3.0, -2.5, 1.0 };
 
         // Point lookfrom{ 1.0, 0.5, 4.0 };
         // Point lookat{ 0.0, 0.0, 0.0 };
@@ -124,8 +124,8 @@ int main()
     {
         PBRTest(scene);
 
-        Point lookfrom{ 0.0, 4.0, 5.0 };
-        Point lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ 0.0, 4.0, 5.0 };
+        Point3 lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -139,8 +139,8 @@ int main()
     {
         EnvironmentMap(scene);
 
-        Point lookfrom{ 0.0, 3.0, 5.0 };
-        Point lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ 0.0, 3.0, 5.0 };
+        Point3 lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -154,8 +154,8 @@ int main()
     {
         BRDFSamplingTest(scene);
 
-        Point lookfrom{ 0.5, 0.5, 1.25 };
-        Point lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5, 0.5, 1.25 };
+        Point3 lookat{ 0.5, 0.5, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -171,8 +171,8 @@ int main()
 
         double y = 0.345832;
 
-        Point lookfrom{ 0.0, y, 1.0 };
-        Point lookat{ 0.0, y, 0.0 };
+        Point3 lookfrom{ 0.0, y, 1.0 };
+        Point3 lookat{ 0.0, y, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -186,8 +186,8 @@ int main()
     {
         MISTest2(scene);
 
-        Point lookfrom{ 0.0, 2, 15 };
-        Point lookat{ 0.0, -2, 2.5 };
+        Point3 lookfrom{ 0.0, 2, 15 };
+        Point3 lookat{ 0.0, -2, 2.5 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -201,8 +201,8 @@ int main()
     {
         MISTestWak(scene);
 
-        Point lookfrom{ 0.0, 2, 15 };
-        Point lookat{ 0.0, -2, 2.5 };
+        Point3 lookfrom{ 0.0, 2, 15 };
+        Point3 lookat{ 0.0, -2, 2.5 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;
@@ -216,8 +216,8 @@ int main()
     {
         GGXVNDFSamplingTest(scene);
 
-        Point lookfrom{ 0.0, 2.0, 10.0 };
-        Point lookat{ 0.0, 1.0, 0.0 };
+        Point3 lookfrom{ 0.0, 2.0, 10.0 };
+        Point3 lookat{ 0.0, 1.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

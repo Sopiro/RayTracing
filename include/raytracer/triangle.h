@@ -9,7 +9,7 @@ namespace spt
 
 struct Vertex
 {
-    Point position;
+    Point3 position;
     Vec3 normal;
     Vec3 tangent;
     UV texCoords;
@@ -19,7 +19,7 @@ class Triangle : public Hittable
 {
 public:
     Triangle() = default;
-    Triangle(const Point& point0, const Point& point1, const Point& point2, const Ref<Material>& material);
+    Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material>& material);
     Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
 
     Vec3 GetNormal(double u, double v, double w) const;
@@ -30,7 +30,7 @@ public:
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
-    virtual Vec3 GetRandomDirection(const Point& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual int32 GetSize() const override;
 
 public:
@@ -43,7 +43,7 @@ public:
     Ref<Material> material;
 };
 
-inline Triangle::Triangle(const Point& p0, const Point& p1, const Point& p2, const Ref<Material>& material)
+inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material>& material)
     : one_sided{ false }
     , material{ material }
 {
@@ -132,7 +132,7 @@ inline double Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) c
     return distance_squared / (cosine * area);
 }
 
-inline Vec3 Triangle::GetRandomDirection(const Point& origin) const
+inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
 {
     double u = Rand(0.0, 1.0);
     double v = Rand(0.0, 1.0);
@@ -143,7 +143,7 @@ inline Vec3 Triangle::GetRandomDirection(const Point& origin) const
         v = 1.0 - v;
     }
 
-    Point random_point = v0.position + e1 * u + e2 * v;
+    Point3 random_point = v0.position + e1 * u + e2 * v;
 
     return (random_point - origin).Normalized();
 }

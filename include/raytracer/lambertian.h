@@ -40,7 +40,7 @@ inline bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Scat
 
 inline Vec3 Lambertian::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
-    return albedo->Value(in_rec.uv, in_rec.point) * Dot(in_rec.normal, in_scattered.dir) / pi;
+    return albedo->Value(in_rec.uv, in_rec.point) * Dot(in_rec.normal, in_scattered.dir) * inv_pi;
 }
 
 } // namespace spt

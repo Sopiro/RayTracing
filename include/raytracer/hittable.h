@@ -20,7 +20,7 @@ struct HitRecord
         tangent = front_face ? outward_tangent : -outward_tangent;
     }
 
-    Point point;
+    Point3 point;
     Vec3 normal, tangent;
     UV uv;
 
@@ -51,7 +51,7 @@ public:
     }
 
     // Returns random direction toward this object
-    virtual Vec3 GetRandomDirection(const Point& origin) const
+    virtual Vec3 GetRandomDirection(const Point3& origin) const
     {
         assert(false);
         return zero_vec3;

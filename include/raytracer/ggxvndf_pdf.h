@@ -43,7 +43,7 @@ public:
 
             // Section 4.2: parameterization of the projected area
             double r = sqrt(u1);
-            double phi = 2.0 * pi * u2;
+            double phi = two_pi * u2;
             double t1 = r * cos(phi);
             double t2 = r * sin(phi);
             double s = 0.5 * (1.0 + Vh.z);
@@ -55,7 +55,9 @@ public:
             // Unstretch
             // Section 3.4: transforming the normal back to the ellipsoid configuration
             Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, fmax(0.0, Nh.z)).Normalized(); // Sampled half vector
-            Vec3 wi = Reflect(-wo, uvw.GetLocal(h));
+            Vec3 wh = uvw.GetLocal(h);
+            Vec3 wi = Reflect(-wo, wh);
+
             return wi;
         }
         else
@@ -75,7 +77,7 @@ public:
         double spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / Max(4.0 * NoV, epsilon);
 
         double cosine = Dot(d, uvw.w);
-        double diff_w = cosine / pi;
+        double diff_w = cosine * inv_pi;
 
         return (1.0 - t) * diff_w + t * spec_w;
     }

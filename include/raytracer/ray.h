@@ -9,19 +9,19 @@ class Ray
 {
 public:
     Ray() = default;
-    Ray(const Point& origin, const Vec3& dir)
+    Ray(const Point3& origin, const Vec3& dir)
         : origin{ origin }
         , dir{ dir }
     {
     }
 
-    Point At(Real t) const
+    Point3 At(Real t) const
     {
         return origin + dir * t;
     }
 
 public:
-    Point origin;
+    Point3 origin;
     Vec3 dir;
 };
 

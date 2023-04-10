@@ -21,7 +21,7 @@ public:
     virtual double Evaluate(const Vec3& d) const override
     {
         double cosine = Dot(d, uvw.w);
-        return cosine < epsilon ? 0.0 : cosine / pi;
+        return cosine <= 0.0 ? 0.0 : cosine * inv_pi;
     }
 
 public:

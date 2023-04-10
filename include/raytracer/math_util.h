@@ -61,7 +61,7 @@ inline Real DegToRad(Real deg)
 
 inline Real RadToDeg(Real rad)
 {
-    return Real(rad / pi * 180.0);
+    return Real(rad * inv_pi * 180.0);
 }
 
 inline Real Rand()
@@ -208,7 +208,7 @@ inline Vec3 RandomToSphere(double radius, double distance_squared)
     double r2 = Rand();
     double z = 1.0 + r2 * (sqrt(1.0 - radius * radius / distance_squared) - 1.0);
 
-    double phi = 2.0 * pi * r1;
+    double phi = two_pi * r1;
     double x = cos(phi) * sqrt(1.0 - z * z);
     double y = sin(phi) * sqrt(1.0 - z * z);
 
@@ -222,7 +222,7 @@ inline Vec3 RandomCosineDirection()
     Real r2 = Rand();
     Real z = sqrt(1.0 - r2);
 
-    Real phi = 2.0 * pi * r1;
+    Real phi = two_pi * r1;
     Real x = cos(phi) * sqrt(r2);
     Real y = sin(phi) * sqrt(r2);
 

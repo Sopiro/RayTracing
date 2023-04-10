@@ -24,7 +24,7 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Point& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual void Rebuild() override;
 
     const HittableList& GetHittableList() const;
@@ -93,7 +93,7 @@ inline double Scene::EvaluatePDF(const Ray& ray) const
     return hittables.EvaluatePDF(ray);
 }
 
-inline Vec3 Scene::GetRandomDirection(const Point& origin) const
+inline Vec3 Scene::GetRandomDirection(const Point3& origin) const
 {
     return hittables.GetRandomDirection(origin);
 }
@@ -130,8 +130,8 @@ inline Vec3 Scene::GetSkyColor(Vec3 dir) const
     double phi = atan2(-dir.z, dir.x) + pi;
     double theta = acos(-dir.y);
 
-    double u = phi / (2.0 * pi);
-    double v = theta / pi;
+    double u = phi * inv_two_pi;
+    double v = theta * inv_pi;
 
     return environment_map->Value(UV{ u, v }, zero_vec3);
 }

@@ -30,16 +30,16 @@ struct ONB
         return x * u + y * v + z * w;
     }
 
-    Vec3 GetLocal(const Vec3& a) const
+    Vec3 GetLocal(const Vec3& d) const
     {
-        return a.x * u + a.y * v + a.z * w;
+        return d.x * u + d.y * v + d.z * w;
     }
 
     void BuildFromW(const Vec3& n)
     {
         w = n.Normalized();
 
-        Vec3 a = (fabs(w.x) > 0.9) ? y_axis : x_axis;
+        Vec3 a = (fabs(w.x) > 0.999) ? y_axis : x_axis;
 
         v = Cross(w, a).Normalized();
         u = Cross(w, v);

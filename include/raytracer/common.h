@@ -33,7 +33,7 @@ namespace spt
 constexpr double ray_tolerance = 0.00001;
 
 using Color = Vec3;
-using Point = Vec3;
+using Point3 = Vec3;
 using UV = Vec2;
 
 } // namespace spt

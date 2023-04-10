@@ -17,6 +17,9 @@ namespace spt
 {
 
 constexpr Real pi = Real(3.14159265358979323846);
+constexpr Real two_pi = Real(2.0 * 3.14159265358979323846);
+constexpr Real inv_pi = Real(1.0 / 3.14159265358979323846);
+constexpr Real inv_two_pi = Real(1.0 / (2.0 * 3.14159265358979323846));
 constexpr Real infinity = std::numeric_limits<Real>::infinity();
 constexpr Real epsilon = std::numeric_limits<Real>::epsilon();
 

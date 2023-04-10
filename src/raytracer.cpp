@@ -4,7 +4,7 @@
 
 #define SAMPLE_ALL_LIGHTS 0
 #define MIN_BOUNCES 2
-#define MAX_REJECTION 20
+#define MAX_REJECTION 10
 
 namespace spt
 {

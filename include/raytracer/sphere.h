@@ -18,7 +18,7 @@ public:
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
     virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
-    virtual Vec3 GetRandomDirection(const Point& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual int32 GetSize() const override;
 
 public:
@@ -27,7 +27,7 @@ public:
     Ref<Material> material;
 
 private:
-    static void GetUV(const Point& p, UV& out_uv);
+    static void GetUV(const Point3& p, UV& out_uv);
 };
 
 inline Sphere::Sphere(const Vec3& _center, double _radius, const Ref<Material>& _material)
@@ -59,12 +59,12 @@ inline double Sphere::EvaluatePDF(const Ray& ray) const
 inline double Sphere::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
     double cos_theta_max = sqrt(1.0 - radius * radius / (center - hit_ray.origin).Length2());
-    double solid_angle = 2.0 * pi * (1.0 - cos_theta_max);
+    double solid_angle = two_pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;
 }
 
-inline Vec3 Sphere::GetRandomDirection(const Point& origin) const
+inline Vec3 Sphere::GetRandomDirection(const Point3& origin) const
 {
     Vec3 direction = center - origin;
     double distance_sqared = direction.Length2();
@@ -79,7 +79,7 @@ inline int32 Sphere::GetSize() const
     return 1;
 }
 
-inline void Sphere::GetUV(const Point& p, UV& out_uv)
+inline void Sphere::GetUV(const Point3& p, UV& out_uv)
 {
     // p: a given point on the sphere of radius one, centered at the origin.
     // u: returned value [0,1] of angle around the Y axis from X=-1.
@@ -91,8 +91,8 @@ inline void Sphere::GetUV(const Point& p, UV& out_uv)
     double theta = acos(-p.y);
     double phi = atan2(-p.z, p.x) + pi;
 
-    out_uv.x = phi / (2.0 * pi);
-    out_uv.y = theta / pi;
+    out_uv.x = phi * inv_two_pi;
+    out_uv.y = theta * inv_pi;
 }
 
 } // namespace spt

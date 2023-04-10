@@ -20,7 +20,7 @@ public:
     virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual double EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Point& origin) const override;
+    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual int32 GetSize() const override;
     virtual void Rebuild() override;
 
@@ -104,7 +104,7 @@ inline double HittableList::EvaluatePDF(const Ray& ray) const
     return bvh.EvaluatePDF(ray);
 }
 
-inline Vec3 HittableList::GetRandomDirection(const Point& origin) const
+inline Vec3 HittableList::GetRandomDirection(const Point3& origin) const
 {
     return bvh.GetRandomDirection(origin);
 }

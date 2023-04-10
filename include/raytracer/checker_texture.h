@@ -32,7 +32,7 @@ inline CheckerTexture::CheckerTexture(Color c1, Color c2)
 {
 }
 
-inline Color CheckerTexture::Value(const UV& uv, const Point& p) const
+inline Color CheckerTexture::Value(const UV& uv, const Point3& p) const
 {
     double sines = sin(10.0 * p.x) * sin(10.0 * p.y) * sin(10.0 * p.z);
 

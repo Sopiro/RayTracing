@@ -27,15 +27,19 @@ public:
         {
             double u = Rand();
             double theta = acos(sqrt((1.0 - u) / ((alpha2 - 1.0) * u + 1.0)));
-            double phi = 2.0 * pi * Rand();
+            double phi = two_pi * Rand();
 
             double sin_thetha = sin(theta);
             double x = cos(phi) * sin_thetha;
             double y = sin(phi) * sin_thetha;
             double z = cos(theta);
 
-            Vec3 h{ x, y, Abs(z) }; // Sampled half vector
-            Vec3 wi = Reflect(-wo, uvw.GetLocal(h));
+            assert(z > 0.0);
+
+            Vec3 h{ x, y, z }; // Sampled half vector
+            Vec3 wh = uvw.GetLocal(h);
+            Vec3 wi = Reflect(-wo, wh);
+
             return wi;
         }
         else
@@ -52,7 +56,7 @@ public:
         double spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(d, h), epsilon);
 
         double cosine = Dot(d, uvw.w);
-        double diff_w = cosine / pi;
+        double diff_w = cosine * inv_pi;
 
         return (1.0 - t) * diff_w + t * spec_w;
     }

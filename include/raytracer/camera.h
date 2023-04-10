@@ -11,8 +11,8 @@ class Camera
 public:
     Camera() = default;
 
-    Camera(const Point& look_from,
-           const Point& look_at,
+    Camera(const Point3& look_from,
+           const Point3& look_at,
            const Vec3& up,
            double vfov, // vertical field-of-view in degrees
            double aspect_ratio,
@@ -21,18 +21,18 @@ public:
 
     Ray GetRay(double s, double t) const;
 
-    Point origin;
+    Point3 origin;
     Vec3 dir;
 
     Vec3 horizontal, vertical;
-    Point lower_left;
+    Point3 lower_left;
 
     Vec3 u, v, w;
     double lens_radius;
 };
 
-inline Camera::Camera(const Point& look_from,
-                      const Point& look_at,
+inline Camera::Camera(const Point3& look_from,
+                      const Point3& look_at,
                       const Vec3& up,
                       double vfov, // vertical field-of-view in degrees
                       double aspect_ratio,
