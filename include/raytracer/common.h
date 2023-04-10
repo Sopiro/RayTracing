@@ -30,7 +30,7 @@ using Ref = std::shared_ptr<T>;
 namespace spt
 {
 
-constexpr double ray_tolerance = 0.00001;
+constexpr double ray_tolerance = 1e-4;
 
 using Color = Vec3;
 using Point3 = Vec3;

@@ -13,7 +13,7 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
     double det = Dot(e1, pvec);
 
     bool backface = det < epsilon;
-    if (one_sided && backface)
+    if (backface == true && two_sided == false)
     {
         return false;
     }

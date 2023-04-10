@@ -52,7 +52,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
 
         if (scene.HasDirectionalLight())
         {
-            auto sun = scene.GetDirectionalLight();
+            const Ref<DirectionalLight>& sun = scene.GetDirectionalLight();
             Ray to_sun{ rec.point + rec.normal * ray_tolerance, -sun->dir };
             HitRecord rec2;
             if (scene.Hit(to_sun, ray_tolerance, infinity, rec2) == false)
@@ -165,7 +165,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
 #endif
 
         // Sample new search direction based on BRDF
-#if 1
+#if 0
         Vec3 new_direction = srec.pdf->Generate();
         double pdf_value;
 

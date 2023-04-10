@@ -38,13 +38,13 @@ public:
     Vec3 e1, e2;
 
     Vec3 face_normal;
-    bool one_sided;
+    bool two_sided;
     double area;
     Ref<Material> material;
 };
 
 inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material>& material)
-    : one_sided{ false }
+    : two_sided{ true }
     , material{ material }
 {
     e1 = p1 - p0;
@@ -78,7 +78,7 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }
-    , one_sided{ false }
+    , two_sided{ true }
     , material{ material }
 {
     e1 = v1.position - v0.position;

@@ -14,9 +14,9 @@ namespace spt
 Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).x;
-    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
-    double ao = ao_map->Value(in_rec.uv, in_rec.point).z;
+    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
+    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y + tolerance;
+    double ao = ao_map->Value(in_rec.uv, in_rec.point).x;
     Vec3 emissive = emissive_map->Value(in_rec.uv, in_rec.point);
     Vec3 normal = normal_map->Value(in_rec.uv, in_rec.point) * 2.0 - Vec3(1.0);
     normal.Normalize();
@@ -54,8 +54,8 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
 bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).x;
-    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
+    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
+    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y + tolerance;
 
     Vec3 wo = -in_ray.dir.Normalized();
 
@@ -70,6 +70,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     Vec3 F = F_Schlick(f0, Dot(wo, in_rec.normal));
     double diff_w = (1.0 - metallic);
     double spec_w = Luma(F);
+    // double spec_w = fmax(F.x, fmax(F.y, F.z));
     double t = fmax(spec_w / (diff_w + spec_w), 0.25);
 #endif
 

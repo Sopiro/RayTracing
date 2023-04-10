@@ -30,6 +30,8 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTexture
         aiString str;
         mat->GetTexture(type, i, &str);
 
+        // std::cout << str.C_Str() << std::endl;
+
         Ref<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }

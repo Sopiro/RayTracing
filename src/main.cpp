@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (11)
+    switch (4)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -82,14 +82,14 @@ int main()
     {
         Sponza(scene);
 
-        // Point lookfrom{ 0.0, 2.5, 4.5 };
-        // Point lookat{ 0.0, 1.45, 0.0 };
+        // Point3 lookfrom{ 0.0, 2.5, 4.5 };
+        // Point3 lookat{ 0.0, 1.45, 0.0 };
 
-        // Point lookfrom{ -1.5, 5.5, 10.0 };
-        // Point lookat{ 0.0, 3.45, 0.0 };
+        // Point3 lookfrom{ -1.5, 5.5, 10.0 };
+        // Point3 lookat{ 0.0, 3.45, 0.0 };
 
-        // Point lookfrom{ 0.0, 0.5, 7.0 };
-        // Point lookat{ 0.0, 3.0, 0.0 };
+        // Point3 lookfrom{ 0.0, 0.5, 7.0 };
+        // Point3 lookat{ 0.0, 3.0, 0.0 };
 
         Point3 lookfrom{ 0.0, 5.0, 6.0 };
         Point3 lookat{ 0.0, 5.0, 0.0 };
@@ -106,11 +106,11 @@ int main()
     {
         NormalMapping(scene);
 
-        Point3 lookfrom{ 10.0, 0.0, 10.0 };
-        Point3 lookat{ 3.0, -2.5, 1.0 };
+        // Point3 lookfrom{ 10.0, 0.0, 10.0 };
+        // Point3 lookat{ 3.0, -2.5, 1.0 };
 
-        // Point lookfrom{ 1.0, 0.5, 4.0 };
-        // Point lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom = Point3{ 1.0, 0.5, 4.0 } * 1.2;
+        Point3 lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

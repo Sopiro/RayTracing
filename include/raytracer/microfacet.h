@@ -58,7 +58,7 @@ inline double V_SmithGGXCorrelatedFast(double NoV, double NoL, double alpha)
 {
     double GGXV = NoL * (NoV * (1.0 - alpha) + alpha);
     double GGXL = NoV * (NoL * (1.0 - alpha) + alpha);
-    return 0.5 / (GGXV + GGXL);
+    return 0.5 / (GGXV + GGXL + epsilon);
 }
 
 } // namespace spt
