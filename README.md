@@ -1,6 +1,6 @@
 # Path Tracer
 
-This is a CPU-only physically based path tracer written in C++
+This is a CPU-only path tracer written in C++
 
 ## Features
 - Unidirectional path tracing
@@ -28,6 +28,7 @@ This is a CPU-only physically based path tracer written in C++
 ![RTIOW](.github/image/render_1920x1080_s1080_d2147483647_t263.396s.png)
 ![Materials](.github/image/render_1920x1080_s2048_d2147483647_t885.34s.png)
 ![MIS](.github/image/render_1920x1080_s128_d2147483647_t191.966s.png)
+![DamagedHelmet](.github/image/render_1920x1080_s2048_d2147483647_t286.828s.png)
 
 ## References
 - https://raytracing.github.io
