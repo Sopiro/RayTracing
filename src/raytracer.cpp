@@ -3,8 +3,8 @@
 #include "raytracer/raytracer.h"
 
 #define SAMPLE_ALL_LIGHTS 0
-#define MIN_BOUNCES 2
-#define MAX_REJECTION 10
+#define MIN_BOUNCES 3
+#define MAX_RESAMPLE 10
 
 namespace spt
 {
@@ -165,7 +165,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
 #endif
 
         // Sample new search direction based on BRDF
-#if 0
+#if 1
         Vec3 new_direction = srec.pdf->Generate();
         double pdf_value;
 
@@ -175,9 +175,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
         }
         else
         {
-            CosinePDF diffusePDF{ rec.normal };
-            new_direction = diffusePDF.Generate();
-            pdf_value = diffusePDF.Evaluate(new_direction);
+            break;
         }
 #else
         int32 count = 0;
@@ -186,9 +184,9 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
         {
             new_direction = srec.pdf->Generate();
         }
-        while (Dot(rec.normal, new_direction) <= 0.0 && count++ < MAX_REJECTION);
+        while (Dot(rec.normal, new_direction) <= 0.0 && count++ < MAX_RESAMPLE);
 
-        if (count >= MAX_REJECTION)
+        if (count >= MAX_RESAMPLE)
         {
             break;
         }
@@ -207,7 +205,6 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
         if (bounce > MIN_BOUNCES)
         {
             double rr = fmax(abso.x, fmax(abso.y, abso.z));
-            // double rr = Luma(abso);
             if (Rand() > rr)
             {
                 break;
