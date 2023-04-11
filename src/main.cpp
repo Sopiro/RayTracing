@@ -31,7 +31,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (13)
+    switch (14)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -256,6 +256,22 @@ int main()
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
     break;
+
+    case 14: // Stanford models
+    {
+        StanfordScene(scene);
+
+        Point3 lookfrom{ 0.0, 0.5, 2.0 };
+        Point3 lookat{ 0.0, 0.2, 0.0 };
+
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 30.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
     default:
         assert(false);
         break;

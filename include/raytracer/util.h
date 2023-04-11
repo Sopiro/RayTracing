@@ -29,7 +29,7 @@ inline Ref<PBRMaterial> RandomPBRMaterial()
     return mat;
 }
 
-inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat)
+inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -40,11 +40,11 @@ inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat)
     auto t2 = std::make_shared<Triangle>(v0, v2, v3, mat);
 
     t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(1.0, 0.0);
-    t1->v2.texCoords.Set(1.0, 1.0);
+    t1->v1.texCoords.Set(texCoords.x, 0.0);
+    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
     t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(1.0, 1.0);
-    t2->v2.texCoords.Set(0.0, 1.0);
+    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
+    t2->v2.texCoords.Set(0.0, texCoords.y);
 
     auto rect = std::make_shared<HittableList>();
     rect->Add(t1);
@@ -53,7 +53,7 @@ inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat)
     return rect;
 }
 
-inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat)
+inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -64,11 +64,11 @@ inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat)
     auto t2 = std::make_shared<Triangle>(v0, v2, v3, mat);
 
     t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(1.0, 0.0);
-    t1->v2.texCoords.Set(1.0, 1.0);
+    t1->v1.texCoords.Set(texCoords.x, 0.0);
+    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
     t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(1.0, 1.0);
-    t2->v2.texCoords.Set(0.0, 1.0);
+    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
+    t2->v2.texCoords.Set(0.0, texCoords.y);
 
     auto rect = std::make_shared<HittableList>();
     rect->Add(t1);
@@ -77,7 +77,7 @@ inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat)
     return rect;
 }
 
-inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat)
+inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -88,11 +88,11 @@ inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat)
     auto t2 = std::make_shared<Triangle>(v0, v2, v3, mat);
 
     t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(1.0, 0.0);
-    t1->v2.texCoords.Set(1.0, 1.0);
+    t1->v1.texCoords.Set(texCoords.x, 0.0);
+    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
     t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(1.0, 1.0);
-    t2->v2.texCoords.Set(0.0, 1.0);
+    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
+    t2->v2.texCoords.Set(0.0, texCoords.y);
 
     auto rect = std::make_shared<HittableList>();
     rect->Add(t1);

@@ -46,6 +46,7 @@ extern void MISTestWak(Scene&);
 extern void GGXVNDFSamplingTest(Scene&);
 extern void CornellBoxLucy(Scene&);
 extern void CameraScene(Scene&);
+extern void StanfordScene(Scene&);
 
 // Unidirectional path tracer
 Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count);
