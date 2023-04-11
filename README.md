@@ -43,7 +43,8 @@ This is a CPU-only path tracer written in C++
 - https://learnopengl.com
 - https://boksajak.github.io/blog/BRDF
 - https://www.pbr-book.org
-- https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
+- https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
 - https://schuttejoe.github.io/post/ggximportancesamplingpart2/
+- https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
 - https://hal.inria.fr/hal-01024289/file/Heitz2014Slides.pdf
 - https://jcgt.org/published/0007/04/01/
