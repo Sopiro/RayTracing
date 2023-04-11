@@ -30,6 +30,8 @@ This is a CPU-only path tracer written in C++
 ![MIS](.github/image/render_1920x1080_s128_d2147483647_t191.966s.png)
 ![MIS_wak](.github/image/render_1920x1080_s128_d2147483647_t141.974s.png)
 ![DamagedHelmet](.github/image/render_1920x1080_s1024_d2147483647_t134.453s.png)
+![Lucy1](.github/image/render_1000x1000_s1024_d2147483647_t524.58s.png)
+![Lucy2](.github/image/render_1000x1000_s1024_d2147483647_t663.434s.png)
 
 ## References
 - https://raytracing.github.io
