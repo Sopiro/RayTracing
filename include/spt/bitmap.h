@@ -16,6 +16,9 @@ public:
     void Set(int32 x, int32 y, const Color& color);
     void WriteToFile(char const* filename) const;
 
+    int32 GetWidth() const;
+    int32 GetHeight() const;
+
 private:
     int32 width, height;
     uint8* pixels;
@@ -44,6 +47,16 @@ inline void Bitmap::WriteToFile(char const* filename) const
 inline Bitmap::~Bitmap()
 {
     delete[] pixels;
+}
+
+inline int32 Bitmap::GetWidth() const
+{
+    return width;
+}
+
+inline int32 Bitmap::GetHeight() const
+{
+    return height;
 }
 
 } // namespace spt

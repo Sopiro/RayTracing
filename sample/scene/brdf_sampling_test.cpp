@@ -1,9 +1,9 @@
-#include "pathtracer/pathtracer.h"
+#include "spt/pathtracer.h"
 
 namespace spt
 {
 
-void CornellBox(Scene& scene)
+void BRDFSamplingTest(Scene& scene)
 {
     // Materials
     auto red = std::make_shared<Lambertian>(Color{ .65, .05, .05 });
@@ -37,18 +37,6 @@ void CornellBox(Scene& scene)
         scene.Add(RectXZ(tf, white));
     }
 
-    // Left block
-    {
-        double hx = 0.13;
-        double hy = 0.26;
-        double hz = 0.13;
-
-        auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-        auto box = Box(tf, white);
-
-        scene.Add(box);
-    }
-
     // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
@@ -58,31 +46,24 @@ void CornellBox(Scene& scene)
         scene.AddLight(l);
     }
 
-    // Right sphere
+    // Center sphere
     {
-        // auto mat = std::make_shared<Dielectric>(1.5);
-        // auto sphere = std::make_shared<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
+        auto mat = RandomPBRMaterial();
+        mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
+        mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
+        mat->roughness_map = SolidColor::Create(Vec3{ 0.2 });
 
-        // scene.Add(sphere);
+        double r = 0.25;
+        auto sphere = std::make_shared<Sphere>(Vec3(0.5, r, -0.5), r, mat);
+
+        scene.Add(sphere);
         // scene.AddLight(sphere);
-    }
-
-    // Right block
-    {
-        double hx = 0.13;
-        double hy = 0.13;
-        double hz = 0.13;
-
-        auto tf = Transform{ 0.7, hy, -0.3, Quat(DegToRad(-25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-        auto box = Box(tf, white);
-
-        scene.Add(box);
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 
     // scene.Rebuild();
-    std::cout << "Lights: " << scene.GetLights().GetCount() << std::endl;
+    // std::cout << scene.GetLights().GetCount() << std::endl;
 }
 
 } // namespace spt

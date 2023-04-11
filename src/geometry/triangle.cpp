@@ -1,4 +1,4 @@
-#include "pathtracer/triangle.h"
+#include "spt/triangle.h"
 
 namespace spt
 {

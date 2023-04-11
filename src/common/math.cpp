@@ -1,5 +1,5 @@
-#include "pathtracer/math.h"
-#include "pathtracer/transform.h"
+#include "spt/math.h"
+#include "spt/transform.h"
 
 namespace spt
 {

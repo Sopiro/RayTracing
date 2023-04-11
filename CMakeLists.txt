@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(pathtracer LANGUAGES CXX VERSION 0.0.1)
+project(spt LANGUAGES CXX VERSION 0.0.1)
+
+option(SPT_BUILD_SAMPLES "Build samples" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,3 +21,7 @@ endif()
 
 add_subdirectory(extern)
 add_subdirectory(src)
+
+if(SPT_BUILD_SAMPLES)
+    add_subdirectory(sample)
+endif()

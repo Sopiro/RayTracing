@@ -1,6 +1,10 @@
 #pragma once
 
-#include "pathtracer/pathtracer.h"
+#define STBI_MSC_SECURE_CRT
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
+#include "spt/pathtracer.h"
 
 #define SAMPLE_ALL_LIGHTS 0
 #define MIN_BOUNCES 3
@@ -9,13 +13,13 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
+Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
 {
     Color accu{ 0.0 };
     Color abso{ 1.0 };
     bool was_specular = false;
 
-    for (size_t bounce = 0; bounce < bounce_count; ++bounce)
+    for (int32 bounce = 0; bounce < bounce_count; ++bounce)
     {
         HitRecord rec;
         if (scene.Hit(ray, ray_tolerance, infinity, rec) == false)
@@ -71,9 +75,7 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
             for (size_t i = 0; i < lights.size(); ++i)
             {
                 HittablePDF light_pdf{ lights[i].get(), rec.point };
-#else
-            HittablePDF light_pdf{ &scene.GetLights(), rec.point };
-#endif
+
                 // Importance sample lights
                 Ray to_light{ rec.point, light_pdf.Generate() };
                 if (Dot(to_light.dir, rec.normal) > 0.0)
@@ -115,7 +117,49 @@ Color PathTrace(const Scene& scene, Ray ray, size_t bounce_count)
                         }
                     }
                 }
-#if SAMPLE_ALL_LIGHTS
+            }
+#else
+            // Sample one light uniformly
+            HittablePDF light_pdf{ &scene.GetLights(), rec.point };
+
+            // Importance sample lights
+            Ray to_light{ rec.point, light_pdf.Generate() };
+            if (Dot(to_light.dir, rec.normal) > 0.0)
+            {
+                double light_p = light_pdf.Evaluate(to_light.dir);
+                assert(light_p > 0.0);
+
+                double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                if (light_brdf_p > 0.0)
+                {
+                    double light_w = PowerHeuristic(light_p, light_brdf_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * abso * light_w / light_p;
+                    }
+                }
+            }
+
+            // Importance sample BRDF
+            Ray scattered{ rec.point, srec.pdf->Generate() };
+            if (Dot(scattered.dir, rec.normal) > 0.0)
+            {
+                double brdf_p = srec.pdf->Evaluate(scattered.dir);
+                assert(brdf_p > 0.0);
+
+                double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                if (brdf_light_p > 0.0)
+                {
+                    double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+
+                    HitRecord rec2;
+                    if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
+                    {
+                        accu += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * abso * brdf_w / brdf_p;
+                    }
+                }
             }
 #endif
         }

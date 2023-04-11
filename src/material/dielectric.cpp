@@ -1,4 +1,4 @@
-#include "pathtracer/dielectric.h"
+#include "spt/dielectric.h"
 
 namespace spt
 {

@@ -1,6 +1,6 @@
-#include "pathtracer/mesh.h"
-#include "pathtracer/lambertian.h"
-#include "pathtracer/triangle.h"
+#include "spt/mesh.h"
+#include "spt/lambertian.h"
+#include "spt/triangle.h"
 
 namespace spt
 {

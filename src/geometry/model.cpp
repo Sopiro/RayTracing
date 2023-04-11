@@ -1,6 +1,6 @@
-#include "pathtracer/model.h"
-#include "pathtracer/image_texture.h"
-#include "pathtracer/triangle.h"
+#include "spt/model.h"
+#include "spt/image_texture.h"
+#include "spt/triangle.h"
 
 #include <filesystem>
 

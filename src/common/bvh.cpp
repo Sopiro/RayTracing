@@ -1,5 +1,5 @@
-#include "pathtracer/bvh.h"
-#include "pathtracer/hittable.h"
+#include "spt/bvh.h"
+#include "spt/hittable.h"
 
 namespace spt
 {

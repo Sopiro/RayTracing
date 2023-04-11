@@ -2,11 +2,29 @@
 #include <crtdbg.h>
 #endif
 
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "spt/pathtracer.h"
 
-#include "pathtracer/pathtracer.h"
+// Test scenes
+namespace spt
+{
+
+extern void RandomScene(Scene&);
+extern void BVHTest(Scene&);
+extern void CornellBox(Scene&);
+extern void Sponza(Scene&);
+extern void NormalMapping(Scene&);
+extern void PBRTest(Scene&);
+extern void EnvironmentMap(Scene&);
+extern void BRDFSamplingTest(Scene&);
+extern void MISTest1(Scene&);
+extern void MISTest2(Scene&);
+extern void MISTestWak(Scene&);
+extern void GGXVNDFSamplingTest(Scene&);
+extern void CornellBoxLucy(Scene&);
+extern void CameraScene(Scene&);
+extern void StanfordScene(Scene&);
+
+} // namespace spt
 
 using namespace spt;
 
@@ -17,21 +35,21 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    constexpr double aspect_ratio = 16.0 / 9.0;
-    // constexpr double aspect_ratio = 3.0 / 2.0;
-    // constexpr double aspect_ratio = 1.0;
-    constexpr int32 width = 1920;
-    constexpr int32 height = static_cast<int32>(width / aspect_ratio);
-    constexpr int32 samples_per_pixel = 1024;
-    constexpr double scale = 1.0 / samples_per_pixel;
-    // constexpr int bounce_count = 10;
-    constexpr int bounce_count = INT_MAX;
+    double aspect_ratio = 16.0 / 9.0;
+    // double aspect_ratio = 3.0 / 2.0;
+    // double aspect_ratio = 1.0;
+    int32 width = 1920;
+    int32 height = static_cast<int32>(width / aspect_ratio);
+    int32 samples_per_pixel = 64;
+    double scale = 1.0 / samples_per_pixel;
+    // int32 bounce_count = 10;
+    int32 bounce_count = INT_MAX;
     Bitmap bitmap{ width, height };
 
     Scene scene;
     Camera camera;
 
-    switch (14)
+    switch (0)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -292,7 +310,7 @@ int main()
         {
             Color samples{ 0.0, 0.0, 0.0 };
 
-            for (int32 s = 0; s < samples_per_pixel; ++s)
+            for (size_t s = 0; s < samples_per_pixel; ++s)
             {
                 double u = (x + Rand()) / (width - 1);
                 double v = (y + Rand()) / (height - 1);
