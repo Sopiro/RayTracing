@@ -1,6 +1,6 @@
-#include "raytracer/mesh.h"
-#include "raytracer/lambertian.h"
-#include "raytracer/triangle.h"
+#include "pathtracer/mesh.h"
+#include "pathtracer/lambertian.h"
+#include "pathtracer/triangle.h"
 
 namespace spt
 {

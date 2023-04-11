@@ -6,7 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include "raytracer/raytracer.h"
+#include "pathtracer/pathtracer.h"
 
 using namespace spt;
 

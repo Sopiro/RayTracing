@@ -1,4 +1,4 @@
-#include "raytracer/raytracer.h"
+#include "pathtracer/pathtracer.h"
 
 namespace spt
 {

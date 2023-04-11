@@ -1,4 +1,4 @@
-#include "raytracer/constant_medium.h"
+#include "pathtracer/constant_medium.h"
 
 namespace spt
 {

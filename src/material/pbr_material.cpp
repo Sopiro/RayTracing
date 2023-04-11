@@ -1,8 +1,8 @@
-#include "raytracer/pbr_material.h"
-#include "raytracer/cosine_pdf.h"
-#include "raytracer/ggx_pdf.h"
-#include "raytracer/ggxvndf_pdf.h"
-#include "raytracer/microfacet.h"
+#include "pathtracer/pbr_material.h"
+#include "pathtracer/cosine_pdf.h"
+#include "pathtracer/ggx_pdf.h"
+#include "pathtracer/ggxvndf_pdf.h"
+#include "pathtracer/microfacet.h"
 
 namespace spt
 {

@@ -1,4 +1,4 @@
-#include "raytracer/sphere.h"
+#include "pathtracer/sphere.h"
 
 namespace spt
 {

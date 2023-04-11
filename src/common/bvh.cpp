@@ -1,5 +1,5 @@
-#include "raytracer/bvh.h"
-#include "raytracer/hittable.h"
+#include "pathtracer/bvh.h"
+#include "pathtracer/hittable.h"
 
 namespace spt
 {

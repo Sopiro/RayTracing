@@ -1,6 +1,6 @@
-#include "raytracer/model.h"
-#include "raytracer/image_texture.h"
-#include "raytracer/triangle.h"
+#include "pathtracer/model.h"
+#include "pathtracer/image_texture.h"
+#include "pathtracer/triangle.h"
 
 #include <filesystem>
 

@@ -1,4 +1,4 @@
-#include "raytracer/image_texture_hdr.h"
+#include "pathtracer/image_texture_hdr.h"
 
 namespace spt
 {
