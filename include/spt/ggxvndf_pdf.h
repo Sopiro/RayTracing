@@ -14,6 +14,7 @@ class GGXVNDFPDF : public PDF
     // https://hal.inria.fr/hal-00996995v1/document
     // https://hal.archives-ouvertes.fr/hal-01509746/document
     // https://schuttejoe.github.io/post/ggximportancesamplingpart2/
+    // https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
 
 public:
     GGXVNDFPDF(const Vec3& n, const Vec3& wo, double roughness, double t)
@@ -28,7 +29,6 @@ public:
     {
         if (Rand() < t)
         {
-            // Stretch
             // Section 3.2: transforming the view direction to the hemisphere configuration
             Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
             Vh.Normalize();
@@ -52,7 +52,6 @@ public:
             // Section 4.3: reprojection onto hemisphere
             Vec3 Nh = t1 * T1 + t2 * T2 + sqrt(fmax(0.0, 1.0 - t1 * t1 - t2 * t2)) * Vh;
 
-            // Unstretch
             // Section 3.4: transforming the normal back to the ellipsoid configuration
             Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, fmax(0.0, Nh.z)).Normalized(); // Sampled half vector
             Vec3 wh = uvw.GetLocal(h);

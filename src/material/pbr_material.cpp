@@ -13,16 +13,8 @@ namespace spt
 // Schlick Fresnel function
 Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
-    Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
-    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
-    double ao = ao_map->Value(in_rec.uv, in_rec.point).x;
-    Vec3 emissive = emissive_map->Value(in_rec.uv, in_rec.point);
     Vec3 normal = normal_map->Value(in_rec.uv, in_rec.point) * 2.0 - Vec3(1.0);
     normal.Normalize();
-
-    double alpha = fmax(roughness, epsilon);
-    double alpha2 = roughness * roughness;
 
     ONB tbn;
     tbn.u = in_rec.tangent;
@@ -32,12 +24,29 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     Vec3 n = tbn.GetLocal(normal);
     Vec3 v = -in_ray.dir.Normalized();
     Vec3 l = in_scattered.dir.Normalized();
-    Vec3 h = (v + l).Normalized();
+    Vec3 h = v + l;
 
     double NoV = fmax(Dot(n, v), 0.0);
     double NoL = fmax(Dot(n, l), 0.0);
+
+    if (NoV == 0.0 || NoL == 0.0 || h == zero_vec3)
+    {
+        return zero_vec3;
+    }
+
+    h.Normalize();
+
     double NoH = fmax(Dot(n, h), 0.0);
     double VoH = fmax(Dot(v, h), 0.0);
+
+    Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
+    double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
+    double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
+    double ao = ao_map->Value(in_rec.uv, in_rec.point).x;
+    Vec3 emissive = emissive_map->Value(in_rec.uv, in_rec.point);
+
+    double alpha = fmax(roughness, min_roughness);
+    double alpha2 = alpha * alpha;
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, VoH);
@@ -46,7 +55,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     // double G = G2_Smith(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
-    // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL + epsilon);
+    // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
     Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor * inv_pi);
 
     return (f_d + f_s) * NoL;
@@ -58,7 +67,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
     double roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
 
-    double alpha = fmax(roughness, epsilon);
+    double alpha = fmax(roughness, min_roughness);
     Vec3 wo = -in_ray.dir.Normalized();
 
 #if 0
