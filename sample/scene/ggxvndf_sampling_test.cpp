@@ -16,7 +16,6 @@ void GGXVNDFSamplingTest(Scene& scene)
 
         Material::fallback_material = mat;
 
-        // auto tf = Transform{ identity };
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 3.0 } };
         auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
 
@@ -25,6 +24,7 @@ void GGXVNDFSamplingTest(Scene& scene)
     }
 
     scene.SetEnvironmentMap(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
+    // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

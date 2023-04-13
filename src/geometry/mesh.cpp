@@ -30,8 +30,8 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
         auto mat = std::make_shared<PBRMaterial>();
         mat->basecolor_map = HasBaseColorTexture() ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
         mat->normal_map = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
-        mat->roughness_map = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.2, 0.2, 0.2);
         mat->metallic_map = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
+        mat->roughness_map = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.2, 0.2, 0.2);
         mat->ao_map = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
         mat->emissive_map = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
         material = mat;

@@ -27,10 +27,8 @@ This is a CPU-only path tracer written in C++
 ![RTIOW](.github/image/render_1920x1080_s1080_d2147483647_t263.396s.png)
 ![Materials](.github/image/render_1920x1080_s2048_d2147483647_t885.34s.png)
 ![MIS](.github/image/render_1920x1080_s128_d2147483647_t191.966s.png)
-<!-- ![MIS_wak](.github/image/render_1920x1080_s128_d2147483647_t141.974s.png) -->
 ![Sponza](.github/image/render_1920x1080_s1024_d2147483647_t4680.33s.png)
 ![DamagedHelmet](.github/image/render_1920x1080_s1024_d2147483647_t134.453s.png)
-
 |![Lucy1](.github/image/render_1000x1000_s1024_d2147483647_t524.58s.png)|![Lucy2](.github/image/render_1000x1000_s1024_d2147483647_t663.434s.png)|
 |--|--|
 

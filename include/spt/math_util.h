@@ -5,10 +5,10 @@
 namespace spt
 {
 
-constexpr Vec3 zero_vec3{ 0.0, 0.0, 0.0 };
-constexpr Vec3 x_axis{ 1.0, 0.0, 0.0 };
-constexpr Vec3 y_axis{ 0.0, 1.0, 0.0 };
-constexpr Vec3 z_axis{ 0.0, 0.0, 1.0 };
+constexpr Vec3 zero_vec3{ Real(0.0), Real(0.0), Real(0.0) };
+constexpr Vec3 x_axis{ Real(1.0), Real(0.0), Real(0.0) };
+constexpr Vec3 y_axis{ Real(0.0), Real(1.0), Real(0.0) };
+constexpr Vec3 z_axis{ Real(0.0), Real(0.0), Real(1.0) };
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
@@ -56,17 +56,17 @@ inline Real Prand(Real min, Real max)
 
 inline Real DegToRad(Real deg)
 {
-    return Real(deg * pi / 180.0);
+    return Real(deg * pi / Real(180.0));
 }
 
 inline Real RadToDeg(Real rad)
 {
-    return Real(rad * inv_pi * 180.0);
+    return Real(rad * inv_pi * Real(180.0));
 }
 
 inline Real Rand()
 {
-    static thread_local std::uniform_real_distribution<Real> distribution(0.0, 1.0);
+    static thread_local std::uniform_real_distribution<Real> distribution(Real(0.0), Real(1.0));
     static thread_local std::mt19937 generator;
 
     return distribution(generator);
@@ -202,15 +202,15 @@ inline Vec3 RandomUnitVector()
     return Vec3{ x, y, z };
 }
 
-inline Vec3 RandomToSphere(double radius, double distance_squared)
+inline Vec3 RandomToSphere(Real radius, Real distance_squared)
 {
-    double r1 = Rand();
-    double r2 = Rand();
-    double z = 1.0 + r2 * (sqrt(1.0 - radius * radius / distance_squared) - 1.0);
+    Real r1 = Rand();
+    Real r2 = Rand();
+    Real z = Real(1.0) + r2 * (sqrt(1.0 - radius * radius / distance_squared) - Real(1.0));
 
-    double phi = two_pi * r1;
-    double x = cos(phi) * sqrt(1.0 - z * z);
-    double y = sin(phi) * sqrt(1.0 - z * z);
+    Real phi = two_pi * r1;
+    Real x = cos(phi) * sqrt(Real(1.0) - z * z);
+    Real y = sin(phi) * sqrt(Real(1.0) - z * z);
 
     return Vec3{ x, y, z };
 }
@@ -220,7 +220,7 @@ inline Vec3 RandomCosineDirection()
 {
     Real r1 = Rand();
     Real r2 = Rand();
-    Real z = sqrt(1.0 - r2);
+    Real z = sqrt(Real(1.0) - r2);
 
     Real phi = two_pi * r1;
     Real x = cos(phi) * sqrt(r2);
@@ -231,28 +231,24 @@ inline Vec3 RandomCosineDirection()
 
 inline Vec3 RandomInUnitSphere()
 {
-    Real r = Rand();
-
-    return RandomUnitVector() * r;
-}
-
-inline Vec3 RandomInHemisphere(const Vec3& normal)
-{
-    Vec3 in_unit_sphere = RandomInUnitSphere();
-
-    if (Dot(in_unit_sphere, normal) > 0.0) // In the same hemisphere as the normal
+    // Rejection sampling
+    Vec3 p;
+    do
     {
-        return in_unit_sphere;
+        p = RandVec3(Real(-1.0), Real(1.0));
     }
-    else
-    {
-        return -in_unit_sphere;
-    }
+    while (p.Length2() >= Real(1.0));
+
+    return p;
 }
 
 inline Vec3 RandomInUnitDiskXY()
 {
-    return Vec3{ Rand(-1.0, 1.0), Rand(-1.0, 1.0), 0.0 };
+    Real u1 = Rand();
+    Real u2 = Rand();
+    Real r = sqrt(u1);
+    Real theta = two_pi * u2;
+    return Vec3{ r * cos(theta), r * sin(theta), Real(0.0) };
 }
 
 } // namespace spt
