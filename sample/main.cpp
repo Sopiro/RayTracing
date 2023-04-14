@@ -23,6 +23,7 @@ extern void GGXVNDFSamplingTest(Scene&);
 extern void CornellBoxLucy(Scene&);
 extern void CameraScene(Scene&);
 extern void StanfordScene(Scene&);
+extern void StatueScene(Scene&);
 
 } // namespace spt
 
@@ -35,12 +36,12 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    double aspect_ratio = 16.0 / 9.0;
+    // double aspect_ratio = 16.0 / 9.0;
     // double aspect_ratio = 3.0 / 2.0;
-    // double aspect_ratio = 1.0;
-    int32 width = 640;
+    double aspect_ratio = 1.0;
+    int32 width = 1000;
     int32 height = static_cast<int32>(width / aspect_ratio);
-    int32 samples_per_pixel = 64;
+    int32 samples_per_pixel = 1024;
     double scale = 1.0 / samples_per_pixel;
     // int32 bounce_count = 10;
     int32 bounce_count = INT_MAX;
@@ -49,7 +50,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (3)
+    switch (15)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -281,6 +282,21 @@ int main()
 
         Point3 lookfrom{ 0.0, 0.5, 2.0 };
         Point3 lookat{ 0.0, 0.2, 0.0 };
+
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 30.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 15: // Statue scene
+    {
+        StatueScene(scene);
+
+        Point3 lookfrom{ 0.0, 0.0, 10.0 };
+        Point3 lookat{ 0.0, 0.0, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

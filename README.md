@@ -31,10 +31,10 @@ This is a CPU-only path tracer written in C++
 ![DamagedHelmet](.github/image/render_1920x1080_s1024_d2147483647_t134.453s.png)
 |![Lucy1](.github/image/render_1000x1000_s1024_d2147483647_t524.58s.png)|![Lucy2](.github/image/render_1000x1000_s1024_d2147483647_t663.434s.png)|
 |--|--|
-
-
 ![AntiqueCamera](.github/image/render_1920x1080_s1024_d2147483647_t233.835s.png)
 ![StanfordModels](.github/image/render_1920x1080_s1024_d2147483647_t490.157s.png)
+|![Statue1](.github/image/render_1000x1000_s1024_d2147483647_t366.618s.png)|![Statue2](.github/image/render_1000x1000_s1024_d2147483647_t369.879s.png)|
+|--|--|
 
 ## References
 - https://raytracing.github.io
