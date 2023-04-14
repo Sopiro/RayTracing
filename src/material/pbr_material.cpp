@@ -21,23 +21,29 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     tbn.w = in_rec.normal;
     tbn.v = Cross(tbn.w, tbn.u).Normalized();
 
-    Vec3 n = tbn.GetLocal(normal);
-    Vec3 v = -in_ray.dir.Normalized();
-    Vec3 l = in_scattered.dir.Normalized();
-    Vec3 h = v + l;
+    Vec3 n = tbn.GetLocal(normal).Normalized(); // normal
+    Vec3 v = -in_ray.dir.Normalized();          // incident
+    Vec3 l = in_scattered.dir.Normalized();     // outgoing
+    Vec3 h = v + l;                             // half
 
-    double NoV = fmax(Dot(n, v), 0.0);
-    double NoL = fmax(Dot(n, l), 0.0);
+    // Resolve back facing shading normal by flipping method
+    if (Dot(n, v) < 0.0)
+    {
+        n = Reflect(-n, in_rec.normal);
+    }
 
-    if (NoV == 0.0 || NoL == 0.0 || h == zero_vec3)
+    double NoV = Dot(n, v);
+    double NoL = Dot(n, l);
+
+    if (NoV <= 0.0 || NoL <= 0.0 || h == zero_vec3)
     {
         return zero_vec3;
     }
 
     h.Normalize();
 
-    double NoH = fmax(Dot(n, h), 0.0);
-    double VoH = fmax(Dot(v, h), 0.0);
+    double NoH = Dot(n, h);
+    double VoH = Dot(v, h);
 
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
     double metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;

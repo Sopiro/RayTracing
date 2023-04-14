@@ -300,11 +300,6 @@ struct Vec3
     Vec3 Normalized() const
     {
         Real length = Length();
-        if (length < epsilon)
-        {
-            return Vec3{ Real(0.0), Real(0.0), Real(0.0) };
-        }
-
         Real invLength = Real(1.0) / length;
 
         return Vec3{ x * invLength, y * invLength, z * invLength };
