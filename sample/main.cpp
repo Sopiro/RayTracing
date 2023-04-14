@@ -24,6 +24,7 @@ extern void CornellBoxLucy(Scene&);
 extern void CameraScene(Scene&);
 extern void StanfordScene(Scene&);
 extern void StatueScene(Scene&);
+extern void ShipScene(Scene&);
 
 } // namespace spt
 
@@ -38,10 +39,11 @@ int main()
 
     // double aspect_ratio = 16.0 / 9.0;
     // double aspect_ratio = 3.0 / 2.0;
-    double aspect_ratio = 1.0;
-    int32 width = 1000;
+    double aspect_ratio = 4.0 / 3.0;
+    // double aspect_ratio = 1.0;
+    int32 width = 1600;
     int32 height = static_cast<int32>(width / aspect_ratio);
-    int32 samples_per_pixel = 1024;
+    int32 samples_per_pixel = 2048;
     double scale = 1.0 / samples_per_pixel;
     // int32 bounce_count = 10;
     int32 bounce_count = INT_MAX;
@@ -50,7 +52,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (15)
+    switch (16)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -297,6 +299,21 @@ int main()
 
         Point3 lookfrom{ 0.0, 0.0, 10.0 };
         Point3 lookat{ 0.0, 0.0, 0.0 };
+
+        auto dist_to_focus = (lookfrom - lookat).Length();
+        auto aperture = 0.0;
+        double vFov = 30.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 16: // Ship
+    {
+        ShipScene(scene);
+
+        Point3 lookfrom{ 5.0, 5.0, 10.0 };
+        Point3 lookat{ 0.0, 2.8, 0.0 };
 
         auto dist_to_focus = (lookfrom - lookat).Length();
         auto aperture = 0.0;

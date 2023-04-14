@@ -37,6 +37,8 @@ This is a CPU-only path tracer written in C++
 |![Statue1](.github/image/render_1000x1000_s1024_d2147483647_t366.618s.png)|![Statue2](.github/image/render_1000x1000_s1024_d2147483647_t369.879s.png)|
 |--|--|  
 
+![Ship](.github/image/render_1600x1200_s2048_d2147483647_t2203.37s.png)
+
 ## References
 - https://raytracing.github.io
 - https://learnopengl.com
