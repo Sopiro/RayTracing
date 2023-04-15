@@ -32,6 +32,7 @@ This is a CPU-only path tracer written in C++
 - https://raytracing.github.io
 - https://learnopengl.com
 - https://boksajak.github.io/blog/BRDF
+- https://google.github.io/filament/Filament.html
 - https://www.pbr-book.org
 - https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
 - https://schuttejoe.github.io/post/ggximportancesamplingpart2/
