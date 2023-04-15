@@ -11,6 +11,7 @@ This is a CPU-only path tracer written in C++
   - Directional light
   - Environment light
   - Area lights
+- Volume rendering
 - Modeling loading with Assimp
 - Parallel processing with OpenMP
 
@@ -55,3 +56,6 @@ This is a CPU-only path tracer written in C++
 |--|--|  
 
 ![Ship](.github/image/render_1600x1200_s2048_d2147483647_t2203.37s.png)
+|![Volume1](.github/image/render_1000x1000_s1024_d2147483647_t1027.93s.png)|![Volume2](.github/image/render_1000x1000_s1024_d2147483647_t1133.39s.png)|
+|--|--|
+|![Volume3](.github/image/render_1000x1000_s1024_d2147483647_t1243.96s.png)|![Volume4](.github/image/render_1000x1000_s1024_d2147483647_t1321.27s.png)|
