@@ -22,6 +22,23 @@ This is a CPU-only path tracer written in C++
   - Visual Studio: Run `build.bat`
   - Otherwise: Run `build.sh`
   
+## Todo
+- Memory management
+- Better material (BSDF and BSSRDF)
+- Path tracing on GPU
+
+## References
+- https://raytracing.github.io
+- https://learnopengl.com
+- https://boksajak.github.io/blog/BRDF
+- https://www.pbr-book.org
+- https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
+- https://schuttejoe.github.io/post/ggximportancesamplingpart2/
+- https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
+- https://hal.inria.fr/hal-01024289/file/Heitz2014Slides.pdf
+- https://jcgt.org/published/0007/04/01/
+
+
 ## Samples
 ![CornellBox](.github/image/render_1000x1000_s1024_d2147483647_t327.607s.png)
 ![RTIOW](.github/image/render_1920x1080_s1080_d2147483647_t263.396s.png)
@@ -38,14 +55,3 @@ This is a CPU-only path tracer written in C++
 |--|--|  
 
 ![Ship](.github/image/render_1600x1200_s2048_d2147483647_t2203.37s.png)
-
-## References
-- https://raytracing.github.io
-- https://learnopengl.com
-- https://boksajak.github.io/blog/BRDF
-- https://www.pbr-book.org
-- https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
-- https://schuttejoe.github.io/post/ggximportancesamplingpart2/
-- https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
-- https://hal.inria.fr/hal-01024289/file/Heitz2014Slides.pdf
-- https://jcgt.org/published/0007/04/01/
