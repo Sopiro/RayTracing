@@ -27,13 +27,13 @@ void PBRTest(Scene& scene)
             pos.z = z * zstep - ((cz - 1) * zstep / 2.0);
 
             auto mat = RandomPBRMaterial();
-            scene.Add(std::make_shared<Sphere>(pos, r, mat));
+            scene.Add(CreateSharedRef<Sphere>(pos, r, mat));
         }
     }
 
     // Ground
     {
-        auto mat = std::make_shared<PBRMaterial>();
+        auto mat = CreateSharedRef<PBRMaterial>();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
         mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
@@ -50,7 +50,7 @@ void PBRTest(Scene& scene)
     // Light
     // {
     //     auto tf = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 10.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 10.0 });
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -59,7 +59,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -68,7 +68,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3{ 0.0, 2.5, -4.0 }, Quat{ DegToRad(40), x_axis }, Vec3{ 4.0, 1.0, 1.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);
@@ -81,7 +81,7 @@ void PBRTest(Scene& scene)
         double xgap = 0.16;
         double xstep = 2.0 * s + xgap;
 
-        auto light = std::make_shared<DiffuseLight>(Color{ 5.0 });
+        auto light = CreateSharedRef<DiffuseLight>(Color{ 5.0 });
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)

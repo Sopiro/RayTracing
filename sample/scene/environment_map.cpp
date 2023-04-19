@@ -29,18 +29,18 @@ void EnvironmentMap(Scene& scene)
             Ref<Material> mat;
             if (x >= 2)
             {
-                mat = std::make_shared<Dielectric>(1.5);
+                mat = CreateSharedRef<Dielectric>(1.5);
             }
             else
             {
-                mat = std::make_shared<Metal>(Vec3{ 0.6 }, 0.0);
+                mat = CreateSharedRef<Metal>(Vec3{ 0.6 }, 0.0);
             }
 
             Ref<Hittable> object;
 
             if (x % 2)
             {
-                object = std::make_shared<Sphere>(pos, r, mat);
+                object = CreateSharedRef<Sphere>(pos, r, mat);
             }
             else
             {
@@ -54,7 +54,7 @@ void EnvironmentMap(Scene& scene)
 
     // Ground
     // {
-    //     auto mat = std::make_shared<PBRMaterial>();
+    //     auto mat = SharedRef<PBRMaterial>();
     //     mat->albedo_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
     //     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
     //     mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
@@ -71,7 +71,7 @@ void EnvironmentMap(Scene& scene)
     // // Light
     // {
     //     auto tf2 = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectYZ(tf2, light);
 
     //     scene.Add(rect);
@@ -80,7 +80,7 @@ void EnvironmentMap(Scene& scene)
 
     // {
     //     auto tf2 = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectYZ(tf2, light);
 
     //     scene.Add(rect);
@@ -89,7 +89,7 @@ void EnvironmentMap(Scene& scene)
 
     // {
     //     auto tf2 = Transform{ Vec3{ 0.0, 2.5, -4.0 }, Quat{ DegToRad(40), x_axis }, Vec3{ 4.0, 1.0, 1.0 } };
-    //     auto light = std::make_shared<DiffuseLight>(Color{ 8.0 });
+    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectXY(tf2, light);
 
     //     scene.Add(rect);

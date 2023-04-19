@@ -28,7 +28,7 @@ void StanfordScene(Scene& scene)
         auto mat = RandomPBRMaterial();
         Material::fallback_material = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
+        auto model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
         scene.Add(model);
     }
 
@@ -38,7 +38,7 @@ void StanfordScene(Scene& scene)
         auto mat = RandomPBRMaterial();
         Material::fallback_material = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/lucy.obj", tf);
+        auto model = CreateSharedRef<Model>("res/stanford/lucy.obj", tf);
         scene.Add(model);
     }
 
@@ -50,7 +50,7 @@ void StanfordScene(Scene& scene)
         auto mat = RandomPBRMaterial();
         Material::fallback_material = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/tyra.obj", tf);
+        auto model = CreateSharedRef<Model>("res/stanford/tyra.obj", tf);
         scene.Add(model);
     }
 
@@ -64,7 +64,7 @@ void StanfordScene(Scene& scene)
         mat->roughness_map = SolidColor::Create(Color{ 0.2 });
         Material::fallback_material = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/arma.obj", tf);
+        auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
         scene.Add(model);
     }
 
@@ -75,7 +75,7 @@ void StanfordScene(Scene& scene)
         double xgap = 0.015;
         double xstep = 2.0 * w + xgap;
 
-        auto light = std::make_shared<DiffuseLight>(Color{ 3.0 });
+        auto light = CreateSharedRef<DiffuseLight>(Color{ 3.0 });
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)

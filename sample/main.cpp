@@ -40,11 +40,11 @@ int main()
 
     // double aspect_ratio = 16.0 / 9.0;
     // double aspect_ratio = 3.0 / 2.0;
-    // double aspect_ratio = 4.0 / 3.0;
-    double aspect_ratio = 1.0;
-    int32 width = 1000;
+    double aspect_ratio = 4.0 / 3.0;
+    // double aspect_ratio = 1.0;
+    int32 width = 640;
     int32 height = static_cast<int32>(width / aspect_ratio);
-    int32 samples_per_pixel = 1024;
+    int32 samples_per_pixel = 64;
     double scale = 1.0 / samples_per_pixel;
     // int32 bounce_count = 10;
     int32 bounce_count = INT_MAX;
@@ -53,7 +53,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (17)
+    switch (11)
     {
     case 0: // Raytracing in one weekend final scene
     {

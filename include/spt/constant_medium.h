@@ -28,14 +28,14 @@ inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Hittable>& boundar
                                                     const Ref<Texture>& albedo)
     : boundary{ std::move(boundary_object) }
     , neg_inv_density{ -1.0 / density }
-    , phase_function{ std::make_shared<Isotropic>(albedo) }
+    , phase_function{ CreateSharedRef<Isotropic>(albedo) }
 {
 }
 
 inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Hittable>& boundary_object, double density, Color color)
     : boundary{ boundary_object }
     , neg_inv_density{ -1.0 / density }
-    , phase_function{ std::make_shared<Isotropic>(color) }
+    , phase_function{ CreateSharedRef<Isotropic>(color) }
 {
 }
 

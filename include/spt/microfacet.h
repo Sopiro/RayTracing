@@ -6,10 +6,10 @@ namespace spt
 {
 
 // https://en.wikipedia.org/wiki/Luma_(video)
-inline double Luma(Vec3 color)
+inline double Luma(Vec3 srgb)
 {
-    return Dot(color, Vec3{ 0.2126, 0.7152, 0.0722 });
-    // return Dot(color, Vec3{ 0.299, 0.587, 0.114 });
+    return Dot(srgb, Vec3{ 0.2126, 0.7152, 0.0722 });
+    // return Dot(srgb, Vec3{ 0.299, 0.587, 0.114 });
 }
 
 // Default reflectance of dielectrics

@@ -8,7 +8,7 @@ void ShipScene(Scene& scene)
     // Table
     {
         auto tf = Transform{ Point3{ 0.0, -2.2, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 5.0 } };
-        auto model = std::make_shared<Model>("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
+        auto model = CreateSharedRef<Model>("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -16,7 +16,7 @@ void ShipScene(Scene& scene)
     // Ship
     {
         auto tf = Transform{ Point3{ 0.0, 2.0, 0.0 }, Quat{ DegToRad(90.0), y_axis }, Vec3{ 0.1 } };
-        auto model = std::make_shared<Model>("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
+        auto model = CreateSharedRef<Model>("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -25,7 +25,7 @@ void ShipScene(Scene& scene)
     {
         double size = 0.5;
 
-        auto white = std::make_shared<DiffuseLight>(SolidColor::Create(Color{ 30.0 }));
+        auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 30.0 }));
         white->two_sided = true;
         auto tf = Transform{ Point3{ 0.0, 5.0, -3.0 }, Quat{ pi / 4.0, x_axis }, Vec3{ size } };
         auto rect = RectXY(tf, white);

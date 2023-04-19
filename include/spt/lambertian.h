@@ -33,7 +33,7 @@ inline bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, Scat
 {
     out_srec.is_specular = false;
     out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.point);
-    out_srec.pdf = std::make_shared<CosinePDF>(in_rec.normal);
+    out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);
 
     return true;
 }

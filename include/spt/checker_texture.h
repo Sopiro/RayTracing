@@ -16,8 +16,7 @@ public:
     virtual Color Value(const UV& uv, const Vec3& p) const override;
 
 public:
-    Ref<Texture> odd;
-    Ref<Texture> even;
+    Ref<Texture> odd, even;
 };
 
 inline CheckerTexture::CheckerTexture(const Ref<Texture>& _even, const Ref<Texture>& _odd)

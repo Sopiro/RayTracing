@@ -20,14 +20,14 @@ void CameraScene(Scene& scene)
     // Camera
     {
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 0.11 } };
-        auto model = std::make_shared<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
+        auto model = CreateSharedRef<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
 
         scene.Add(model);
     }
 
     // Lights
     {
-        auto light = std::make_shared<DiffuseLight>(Color{ 1.0, 0.9, 0.8 } * 3.0);
+        auto light = CreateSharedRef<DiffuseLight>(Color{ 1.0, 0.9, 0.8 } * 3.0);
         double w = 0.4;
         double h = 1.2;
         auto tf = Transform{ Point3{ 1.0, h / 2.0 - 0.01, 0.0 }, Quat{ pi, y_axis }, Vec3{ 1.0, h, w } };

@@ -5,12 +5,12 @@ namespace spt
 
 void BVHTest(Scene& scene)
 {
-    auto gray = std::make_shared<Lambertian>(Color{ 0.8, 0.8, 0.8 });
-    auto red = std::make_shared<Lambertian>(Color(.65, .05, .05));
-    auto green = std::make_shared<Lambertian>(Color(.12, .45, .15));
-    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
-    auto white = std::make_shared<Lambertian>(Color(.73, .73, .73));
-    auto black = std::make_shared<Lambertian>(Color(0.0));
+    auto gray = CreateSharedRef<Lambertian>(Color{ 0.8, 0.8, 0.8 });
+    auto red = CreateSharedRef<Lambertian>(Color(.65, .05, .05));
+    auto green = CreateSharedRef<Lambertian>(Color(.12, .45, .15));
+    auto blue = CreateSharedRef<Lambertian>(Color{ .22, .23, .75 });
+    auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
+    auto black = CreateSharedRef<Lambertian>(Color(0.0));
 
     double n = 100.0;
     double w = 7.0;
@@ -29,7 +29,7 @@ void BVHTest(Scene& scene)
             pos.y = Prand(-h, h);
             pos.z = -1;
 
-            scene.Add(std::make_shared<Sphere>(pos, r, green));
+            scene.Add(CreateSharedRef<Sphere>(pos, r, green));
         }
     }
 

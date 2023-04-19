@@ -11,15 +11,15 @@ void StatueScene(Scene& scene)
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        // auto mat = std::make_shared<Dielectric>(1.5);
+        // auto mat = SharedRef<Dielectric>(1.5);
 
         Material::fallback_material = mat;
 
         auto tf = Transform{ Point3{ 0.0, -2.0, 0.0 }, Quat{ DegToRad(45.0), y_axis }, Vec3{ 20.0 } };
-        auto model = std::make_shared<Model>("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
+        auto model = CreateSharedRef<Model>("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
 
         // auto tf = Transform{ Point3{ 0.0, -2.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 8.0 } };
-        // auto model = std::make_shared<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
+        // auto model = SharedRef<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -29,7 +29,7 @@ void StatueScene(Scene& scene)
     double size = 2.0;
 
     {
-        auto red = std::make_shared<DiffuseLight>(SolidColor::Create(Color{ light, 0.0, 0.0 }));
+        auto red = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ light, 0.0, 0.0 }));
         auto tf = Transform{ Point3{ -distance, 0.0, 0.0 }, Quat{ identity }, Vec3{ 1.0, size, size } };
         auto rect = RectYZ(tf, red);
 
@@ -38,7 +38,7 @@ void StatueScene(Scene& scene)
     }
 
     {
-        auto blue = std::make_shared<DiffuseLight>(SolidColor::Create(Color{ 0.0, 0.0, light }));
+        auto blue = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 0.0, 0.0, light }));
         auto tf = Transform{ Point3{ distance, 0.0, 0.0 }, Quat{ pi, y_axis }, Vec3{ 1.0, size, size } };
         auto rect = RectYZ(tf, blue);
 
@@ -47,7 +47,7 @@ void StatueScene(Scene& scene)
     }
 
     {
-        auto white = std::make_shared<DiffuseLight>(SolidColor::Create(Color{ 0.5 }));
+        auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 0.5 }));
 
         auto tf = Transform{ Point3{ 0.0, 4.0, 0.0 }, Quat{ pi, x_axis }, Vec3{ 8.0, 1.0, 8.0 } };
         auto rect = RectXZ(tf, white);
@@ -57,7 +57,7 @@ void StatueScene(Scene& scene)
     }
 
     // {
-    //     auto white = std::make_shared<DiffuseLight>(SolidColor::Create(Color{ 3.0 }));
+    //     auto white = SharedRef<DiffuseLight>(SolidColor::Create(Color{ 3.0 }));
 
     //     int32 count = 10;
     //     double d = two_pi / count;
@@ -69,7 +69,7 @@ void StatueScene(Scene& scene)
     //     {
     //         double angle = d * i;
     //         auto pos = Vec3{ cos(angle) * r, y, sin(angle) * r };
-    //         auto sphere = std::make_shared<Sphere>(pos, 0.1, white);
+    //         auto sphere = SharedRef<Sphere>(pos, 0.1, white);
 
     //         scene.Add(sphere);
     //         scene.AddLight(sphere);

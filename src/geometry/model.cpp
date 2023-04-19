@@ -97,7 +97,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
         textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }
 
-    return std::make_shared<Mesh>(vertices, indices, textures, transform);
+    return CreateSharedRef<Mesh>(vertices, indices, textures, transform);
 }
 
 void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& parent_transform)

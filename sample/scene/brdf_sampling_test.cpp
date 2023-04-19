@@ -6,13 +6,13 @@ namespace spt
 void BRDFSamplingTest(Scene& scene)
 {
     // Materials
-    auto red = std::make_shared<Lambertian>(Color{ .65, .05, .05 });
-    auto green = std::make_shared<Lambertian>(Color{ .12, .45, .15 });
-    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
-    auto white = std::make_shared<Lambertian>(Color{ .73, .73, .73 });
+    auto red = CreateSharedRef<Lambertian>(Color{ .65, .05, .05 });
+    auto green = CreateSharedRef<Lambertian>(Color{ .12, .45, .15 });
+    auto blue = CreateSharedRef<Lambertian>(Color{ .22, .23, .75 });
+    auto white = CreateSharedRef<Lambertian>(Color{ .73, .73, .73 });
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
-    auto light = std::make_shared<DiffuseLight>(Color{ 15.0 });
+    auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
+    auto light = CreateSharedRef<DiffuseLight>(Color{ 15.0 });
 
     // Cornell box
     {
@@ -54,7 +54,7 @@ void BRDFSamplingTest(Scene& scene)
         mat->roughness_map = SolidColor::Create(Vec3{ 0.2 });
 
         double r = 0.25;
-        auto sphere = std::make_shared<Sphere>(Vec3(0.5, r, -0.5), r, mat);
+        auto sphere = CreateSharedRef<Sphere>(Vec3(0.5, r, -0.5), r, mat);
 
         scene.Add(sphere);
         // scene.AddLight(sphere);

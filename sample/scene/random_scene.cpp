@@ -7,8 +7,8 @@ namespace spt
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 void RandomScene(Scene& scene)
 {
-    auto ground_material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
-    scene.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
+    auto ground_material = CreateSharedRef<Lambertian>(Color(0.5, 0.5, 0.5));
+    scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
     for (int a = -11; a < 11; a++)
     {
@@ -25,35 +25,35 @@ void RandomScene(Scene& scene)
                 {
                     // diffuse
                     auto albedo = RandVec3() * RandVec3();
-                    sphere_material = std::make_shared<Lambertian>(albedo);
-                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    sphere_material = CreateSharedRef<Lambertian>(albedo);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
                 }
                 else if (choose_mat < 0.95)
                 {
                     // metal
                     auto albedo = RandVec3(0.5, 1.0);
                     auto fuzz = Rand(0.0, 0.5);
-                    sphere_material = std::make_shared<Metal>(albedo, fuzz);
-                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    sphere_material = CreateSharedRef<Metal>(albedo, fuzz);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
                 }
                 else
                 {
                     // glass
-                    sphere_material = std::make_shared<Dielectric>(1.5);
-                    scene.Add(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    sphere_material = CreateSharedRef<Dielectric>(1.5);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
                 }
             }
         }
     }
 
-    auto material1 = std::make_shared<Dielectric>(1.5);
-    scene.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0, material1));
+    auto material1 = CreateSharedRef<Dielectric>(1.5);
+    scene.Add(CreateSharedRef<Sphere>(Vec3(0, 1, 0), 1.0, material1));
 
-    auto material2 = std::make_shared<Lambertian>(Color(0.4, 0.2, 0.1));
-    scene.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
+    auto material2 = CreateSharedRef<Lambertian>(Color(0.4, 0.2, 0.1));
+    scene.Add(CreateSharedRef<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
 
-    auto material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
-    scene.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0, material3));
+    auto material3 = CreateSharedRef<Metal>(Color(0.7, 0.6, 0.5), 0.0);
+    scene.Add(CreateSharedRef<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 
     scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }

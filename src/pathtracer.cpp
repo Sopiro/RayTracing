@@ -1,9 +1,5 @@
 #pragma once
 
-#define STBI_MSC_SECURE_CRT
-#define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-
 #include "spt/pathtracer.h"
 
 #define SAMPLE_ALL_LIGHTS 0
@@ -15,8 +11,8 @@ namespace spt
 
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
 {
-    Color accu{ 0.0 };
-    Color abso{ 1.0 };
+    Color accu{ 0.0 }; // Accumulation
+    Color abso{ 1.0 }; // Absorption or throughput
     bool was_specular = false;
 
     for (int32 bounce = 0; bounce < bounce_count; ++bounce)

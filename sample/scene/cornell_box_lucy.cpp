@@ -6,13 +6,13 @@ namespace spt
 void CornellBoxLucy(Scene& scene)
 {
     // Materials
-    auto red = std::make_shared<Lambertian>(Color{ .65, .05, .05 });
-    auto green = std::make_shared<Lambertian>(Color{ .12, .45, .15 });
-    auto blue = std::make_shared<Lambertian>(Color{ .22, .23, .75 });
-    auto white = std::make_shared<Lambertian>(Color{ .73, .73, .73 });
+    auto red = CreateSharedRef<Lambertian>(Color{ .65, .05, .05 });
+    auto green = CreateSharedRef<Lambertian>(Color{ .12, .45, .15 });
+    auto blue = CreateSharedRef<Lambertian>(Color{ .22, .23, .75 });
+    auto white = CreateSharedRef<Lambertian>(Color{ .73, .73, .73 });
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
-    auto light = std::make_shared<DiffuseLight>(Color{ 1.0 });
+    auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
+    auto light = CreateSharedRef<DiffuseLight>(Color{ 1.0 });
 
     // Cornell box
     {
@@ -56,10 +56,10 @@ void CornellBoxLucy(Scene& scene)
         mat->metallic_map = SolidColor::Create(Color{ 1.0 });
         mat->roughness_map = SolidColor::Create(Color{ 0.2 });
 
-        // auto mat = std::make_shared<Dielectric>(1.5);
+        // auto mat = SharedRef<Dielectric>(1.5);
 
         Material::fallback_material = mat;
-        Ref<Model> model = std::make_shared<Model>("res/stanford/lucy.obj", transform);
+        Ref<Model> model = CreateSharedRef<Model>("res/stanford/lucy.obj", transform);
         scene.Add(model);
     }
 

@@ -78,19 +78,19 @@ void MISTest1(Scene& scene)
 
     // Lights
     {
-        auto light1 = std::make_shared<DiffuseLight>(Color{ 3000.0 });
-        auto light2 = std::make_shared<DiffuseLight>(Color{ 300.0 });
-        auto light3 = std::make_shared<DiffuseLight>(Color{ 30.0 });
-        auto light4 = std::make_shared<DiffuseLight>(Color{ 3.0 });
+        auto light1 = CreateSharedRef<DiffuseLight>(Color{ 3000.0 });
+        auto light2 = CreateSharedRef<DiffuseLight>(Color{ 300.0 });
+        auto light3 = CreateSharedRef<DiffuseLight>(Color{ 30.0 });
+        auto light4 = CreateSharedRef<DiffuseLight>(Color{ 3.0 });
 
         double lh = y;
         double xg = 0.16;
 
         double r = 0.1;
-        auto l1 = std::make_shared<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, r / 27.0, light1);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -xg, y + lh, z }, r / 9.0, light2);
-        auto l3 = std::make_shared<Sphere>(Vec3{ xg, y + lh, z }, r / 3.0, light3);
-        auto l4 = std::make_shared<Sphere>(Vec3{ xg * 3.0, y + lh, z }, r, light4);
+        auto l1 = CreateSharedRef<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, r / 27.0, light1);
+        auto l2 = CreateSharedRef<Sphere>(Vec3{ -xg, y + lh, z }, r / 9.0, light2);
+        auto l3 = CreateSharedRef<Sphere>(Vec3{ xg, y + lh, z }, r / 3.0, light3);
+        auto l4 = CreateSharedRef<Sphere>(Vec3{ xg * 3.0, y + lh, z }, r, light4);
 
         scene.Add(l1);
         scene.AddLight(l1);
@@ -113,7 +113,7 @@ void MISTest2(Scene& scene)
         floor_mat->roughness_map = SolidColor::Create(Vec3{ 1.0 });
         floor_mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
 
-        auto floor = std::make_shared<Model>("res/veach_mi/floor.obj", Transform{ identity });
+        auto floor = CreateSharedRef<Model>("res/veach_mi/floor.obj", Transform{ identity });
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
         scene.Add(floor);
     }
@@ -140,33 +140,33 @@ void MISTest2(Scene& scene)
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
+        auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
         scene.Add(p1);
-        auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
+        auto p2 = CreateSharedRef<Model>("res/veach_mi/plate2.obj", Transform{ identity });
         p2->GetMeshes()[0]->SetMaterial(m2);
         scene.Add(p2);
-        auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
+        auto p3 = CreateSharedRef<Model>("res/veach_mi/plate3.obj", Transform{ identity });
         p3->GetMeshes()[0]->SetMaterial(m3);
         scene.Add(p3);
-        auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
+        auto p4 = CreateSharedRef<Model>("res/veach_mi/plate4.obj", Transform{ identity });
         p4->GetMeshes()[0]->SetMaterial(m4);
         scene.Add(p4);
     }
 
     // Lights
     {
-        auto light1 = std::make_shared<DiffuseLight>(Color{ 800 });
-        auto light3 = std::make_shared<DiffuseLight>(Color{ 901.803 });
-        auto light2 = std::make_shared<DiffuseLight>(Color{ 100 });
-        auto light4 = std::make_shared<DiffuseLight>(Color{ 11.1111 });
-        auto light5 = std::make_shared<DiffuseLight>(Color{ 1.23457 });
+        auto light1 = CreateSharedRef<DiffuseLight>(Color{ 800 });
+        auto light3 = CreateSharedRef<DiffuseLight>(Color{ 901.803 });
+        auto light2 = CreateSharedRef<DiffuseLight>(Color{ 100 });
+        auto light4 = CreateSharedRef<DiffuseLight>(Color{ 11.1111 });
+        auto light5 = CreateSharedRef<DiffuseLight>(Color{ 1.23457 });
 
-        auto l1 = std::make_shared<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
-        auto l3 = std::make_shared<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
-        auto l4 = std::make_shared<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
-        auto l5 = std::make_shared<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
+        auto l1 = CreateSharedRef<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
+        auto l3 = CreateSharedRef<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
+        auto l2 = CreateSharedRef<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
+        auto l4 = CreateSharedRef<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
+        auto l5 = CreateSharedRef<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
         scene.Add(l1);
         scene.AddLight(l1);
@@ -221,33 +221,33 @@ void MISTestWak(Scene& scene)
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
+        auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
         scene.Add(p1);
-        auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
+        auto p2 = CreateSharedRef<Model>("res/veach_mi/plate2.obj", Transform{ identity });
         p2->GetMeshes()[0]->SetMaterial(m2);
         scene.Add(p2);
-        auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
+        auto p3 = CreateSharedRef<Model>("res/veach_mi/plate3.obj", Transform{ identity });
         p3->GetMeshes()[0]->SetMaterial(m3);
         scene.Add(p3);
-        auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
+        auto p4 = CreateSharedRef<Model>("res/veach_mi/plate4.obj", Transform{ identity });
         p4->GetMeshes()[0]->SetMaterial(m4);
         scene.Add(p4);
     }
 
     // Lights
     {
-        auto light1 = std::make_shared<DiffuseLight>(Color{ 800 });
-        auto light3 = std::make_shared<DiffuseLight>(Color{ 901.803, 0, 0 });
-        auto light2 = std::make_shared<DiffuseLight>(Color{ 100, 100 / 5, 0 });
-        auto light4 = std::make_shared<DiffuseLight>(Color{ 11.1111, 11.1111, 0 });
-        auto light5 = std::make_shared<DiffuseLight>(Color{ 0, 1.23457, 0 });
+        auto light1 = CreateSharedRef<DiffuseLight>(Color{ 800 });
+        auto light3 = CreateSharedRef<DiffuseLight>(Color{ 901.803, 0, 0 });
+        auto light2 = CreateSharedRef<DiffuseLight>(Color{ 100, 100 / 5, 0 });
+        auto light4 = CreateSharedRef<DiffuseLight>(Color{ 11.1111, 11.1111, 0 });
+        auto light5 = CreateSharedRef<DiffuseLight>(Color{ 0, 1.23457, 0 });
 
-        auto l1 = std::make_shared<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
-        auto l3 = std::make_shared<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
-        auto l2 = std::make_shared<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
-        auto l4 = std::make_shared<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
-        auto l5 = std::make_shared<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
+        auto l1 = CreateSharedRef<Sphere>(Vec3{ 10, 10, 4 }, 0.5, light1);
+        auto l3 = CreateSharedRef<Sphere>(Vec3{ -3.75, 0, 0 }, 0.03333, light3);
+        auto l2 = CreateSharedRef<Sphere>(Vec3{ -1.25, 0, 0 }, 0.1, light2);
+        auto l4 = CreateSharedRef<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
+        auto l5 = CreateSharedRef<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
         // scene.Add(l1);
         // scene.AddLight(l1);
