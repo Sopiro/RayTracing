@@ -10,7 +10,7 @@ namespace spt
 class ImageTexture : public Texture
 {
 public:
-    static Ref<ImageTexture> Create(std::string path, bool srgb = false, bool hdr = false);
+    static Ref<ImageTexture> Create(const std::string& path, bool srgb = false, bool hdr = false);
 
     virtual ~ImageTexture();
 
@@ -21,7 +21,7 @@ public:
 
 protected:
     ImageTexture();
-    ImageTexture(std::string path, bool srgb);
+    ImageTexture(const std::string& path, bool srgb);
 
     const static int32 bytes_per_pixel = STBI_rgb;
 
@@ -38,7 +38,7 @@ inline ImageTexture::ImageTexture()
 {
 }
 
-inline ImageTexture::ImageTexture(std::string path, bool srgb)
+inline ImageTexture::ImageTexture(const std::string& path, bool srgb)
 {
     int32 components_per_pixel;
     data = stbi_load(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);

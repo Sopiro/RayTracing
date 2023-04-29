@@ -5,14 +5,10 @@
 namespace spt
 {
 
-Mesh::Mesh(std::vector<Vertex> _vertices,
-           std::vector<uint32> _indices,
-           std::array<Ref<Texture>, TextureType::count> _textures,
-           const Mat4& _transform)
-    : vertices{ std::move(_vertices) }
-    , indices{ std::move(_indices) }
-    , textures{ std::move(_textures) }
-    , transform{ _transform }
+Mesh::Mesh(const std::vector<Vertex>& vertices,
+           const std::vector<uint32>& indices,
+           const std::array<Ref<Texture>, TextureType::count>& _textures)
+    : textures{ _textures }
 {
     // std::cout << HasBaseColorTexture() << std::endl;
     // std::cout << HasNormalTexture() << std::endl;
@@ -35,21 +31,6 @@ Mesh::Mesh(std::vector<Vertex> _vertices,
         mat->ao_map = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
         mat->emissive_map = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
         material = mat;
-    }
-
-    for (size_t i = 0; i < vertices.size(); ++i)
-    {
-        Vertex& v = vertices[i];
-
-        Vec4 vP = transform * Vec4{ v.position, 1.0 };
-        Vec4 vN = transform * Vec4{ v.normal, 0.0 };
-        Vec4 vT = transform * Vec4{ v.tangent, 0.0 };
-        vN.Normalize();
-        vT.Normalize();
-
-        v.position.Set(vP.x, vP.y, vP.z);
-        v.normal.Set(vN.x, vN.y, vN.z);
-        v.tangent.Set(vT.x, vT.y, vT.z);
     }
 
     // Bake BVH

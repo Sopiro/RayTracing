@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Model::Model(std::string path, const Transform& transform)
+Model::Model(const std::string& path, const Transform& transform)
 {
     LoadModel(path, transform);
 
@@ -97,7 +97,23 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
         textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }
 
-    return CreateSharedRef<Mesh>(vertices, indices, textures, transform);
+    // Transform vertex attributes
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        Vertex& v = vertices[i];
+
+        Vec4 vP = transform * Vec4{ v.position, 1.0 };
+        Vec4 vN = transform * Vec4{ v.normal, 0.0 };
+        Vec4 vT = transform * Vec4{ v.tangent, 0.0 };
+        vN.Normalize();
+        vT.Normalize();
+
+        v.position.Set(vP.x, vP.y, vP.z);
+        v.normal.Set(vN.x, vN.y, vN.z);
+        v.tangent.Set(vT.x, vT.y, vT.z);
+    }
+
+    return CreateSharedRef<Mesh>(vertices, indices, textures);
 }
 
 void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& parent_transform)
@@ -120,7 +136,7 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
 
 static Assimp::Importer importer;
 
-void Model::LoadModel(std::string path, const Transform& transform)
+void Model::LoadModel(const std::string& path, const Transform& transform)
 {
     std::filesystem::path file_path(path);
 

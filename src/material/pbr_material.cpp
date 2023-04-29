@@ -13,7 +13,7 @@ namespace spt
 // Schlick Fresnel function
 Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
 {
-    Vec3 normal = normal_map->Value(in_rec.uv, in_rec.point) * 2.0 - Vec3(1.0);
+    Vec3 normal = normal_map->Value(in_rec.uv, in_rec.point) * 2.0 - Vec3{ 1.0 };
     normal.Normalize();
 
     ONB tbn;

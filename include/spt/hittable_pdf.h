@@ -13,6 +13,8 @@ public:
 
     // Returns random direction vector hitting this object
     virtual Vec3 Generate() const override;
+
+    // Evaluate pdf value with given direction from origin
     virtual double Evaluate(const Vec3& direction) const override;
 
 public:

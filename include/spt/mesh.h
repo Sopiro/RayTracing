@@ -23,10 +23,9 @@ enum TextureType
 class Mesh : public Hittable
 {
 public:
-    Mesh(std::vector<Vertex> vertices,
-         std::vector<uint32> indices,
-         std::array<Ref<Texture>, TextureType::count> textures,
-         const Mat4& transform);
+    Mesh(const std::vector<Vertex>& vertices,
+         const std::vector<uint32>& indices,
+         const std::array<Ref<Texture>, TextureType::count>& textures);
 
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
@@ -43,14 +42,8 @@ public:
     void SetMaterial(const Ref<Material>& material);
 
 private:
-    Mat4 transform;
-
     BVH bvh;
-
-    // Don't need to hold vertices and indices after baking BVH
-    std::vector<Vertex> vertices;
-    std::vector<uint32> indices;
-
+    
     std::vector<Triangle> triangles;
     Ref<Material> material;
     std::array<Ref<Texture>, TextureType::count> textures;

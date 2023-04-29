@@ -13,8 +13,7 @@ struct AABB
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
-
-    bool Hit(const Ray& r, double t_min, double t_max) const;
+    bool Hit(const Ray& ray, double t_min, double t_max) const;
 
     Vec3 min, max;
 };
@@ -53,15 +52,15 @@ inline bool AABB::TestOverlap(const AABB& other) const
     return true;
 }
 
-inline bool AABB::Hit(const Ray& r, double t_min, double t_max) const
+inline bool AABB::Hit(const Ray& ray, double t_min, double t_max) const
 {
     // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
     for (int32 axis = 0; axis < 3; ++axis)
     {
-        double invD = 1.0 / r.dir[axis];
+        double invD = 1.0 / ray.dir[axis];
 
-        double t0 = (min[axis] - r.origin[axis]) * invD;
-        double t1 = (max[axis] - r.origin[axis]) * invD;
+        double t0 = (min[axis] - ray.origin[axis]) * invD;
+        double t1 = (max[axis] - ray.origin[axis]) * invD;
 
         if (invD < 0.0)
         {

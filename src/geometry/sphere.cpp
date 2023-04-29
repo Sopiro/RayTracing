@@ -33,7 +33,7 @@ bool Sphere::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) con
     rec.t = root;
     rec.point = ray.At(rec.t);
     Vec3 outward_normal = (rec.point - center) / radius;
-    Vec3 outward_tangent = Cross(Vec3{ 0, 1.0, 0 }, rec.normal).Normalized();
+    Vec3 outward_tangent = Cross(y_axis, rec.normal).Normalized();
     rec.SetFaceNormal(ray, outward_normal, outward_tangent);
     GetUV(outward_normal, rec.uv);
 

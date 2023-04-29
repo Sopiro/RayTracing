@@ -53,7 +53,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (11)
+    switch (14)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -324,7 +324,7 @@ int main()
     }
     break;
 
-    case 17: // volume
+    case 17: // Constant volume
     {
         CornellBoxBunnyVolume(scene);
 

@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Ref<ImageTexture> ImageTexture::Create(std::string path, bool srgb, bool hdr)
+Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb, bool hdr)
 {
     auto loaded = loaded_textures.find(path);
     if (loaded != loaded_textures.end())

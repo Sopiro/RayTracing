@@ -16,10 +16,10 @@ protected:
     friend class ImageTexture;
 
     ImageTextureHDR() = default;
-    ImageTextureHDR(std::string path, bool srgb);
+    ImageTextureHDR(const std::string& path, bool srgb);
 };
 
-inline ImageTextureHDR::ImageTextureHDR(std::string path, bool srgb)
+inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 {
     int32 components_per_pixel;
     data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);

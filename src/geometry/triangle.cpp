@@ -12,14 +12,14 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
 
     double det = Dot(e1, pvec);
 
-    bool backface = det < epsilon;
+    bool backface = det < 0.0;
     if (backface == true && two_sided == false)
     {
         return false;
     }
 
     // Ray and triangle are parallel
-    if (Abs(det) < epsilon)
+    if (Abs(det) < 0.0)
     {
         return false;
     }

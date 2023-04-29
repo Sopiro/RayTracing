@@ -7,6 +7,7 @@
 namespace spt
 {
 
+// Heuristic functions for MIS
 inline double BalanceHeuristic(double pdf_f, double pdf_g)
 {
     return pdf_f / (pdf_f + pdf_g);
