@@ -22,11 +22,10 @@
 #include "scene.h"
 #include "solid_color.h"
 #include "sphere.h"
+#include "timer.h"
 #include "transform.h"
 #include "triangle.h"
 #include "util.h"
-
-#include <omp.h>
 
 namespace spt
 {

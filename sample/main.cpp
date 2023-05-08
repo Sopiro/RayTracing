@@ -2,9 +2,10 @@
 #include <crtdbg.h>
 #endif
 
-#include <format>
-
 #include "spt/pathtracer.h"
+
+#include <format>
+#include <omp.h>
 
 // Test scenes
 namespace spt
@@ -31,14 +32,14 @@ extern void CornellBoxBunnyVolume(Scene&);
 
 } // namespace spt
 
-using namespace spt;
-
 int main()
 {
 #if defined(_WIN32) && defined(_DEBUG)
     // Enable memory-leak reports
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
+
+    using namespace spt;
 
     // double aspect_ratio = 16.0 / 9.0;
     // double aspect_ratio = 3.0 / 2.0;
@@ -346,7 +347,7 @@ int main()
         break;
     }
 
-    auto t0 = std::chrono::system_clock::now();
+    Timer timer;
 
     // #pragma omp parallel for schedule(dynamic, 1)
     for (int32 y = 0; y < height; ++y)
@@ -388,13 +389,12 @@ int main()
         }
     }
 
-    auto t1 = std::chrono::system_clock::now();
-    std::chrono::duration<double> d = t1 - t0;
+    timer.Mark();
+    double t = timer.Get();
 
-    std::cout << "\nDone!: " << d.count() << 's' << std::endl;
+    std::cout << "\nDone!: " << t << 's' << std::endl;
 
-    std::string fileName =
-        std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, bounce_count, d.count());
+    std::string fileName = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, bounce_count, t);
 
     bitmap.WriteToFile(fileName.c_str());
 
