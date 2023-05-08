@@ -26,7 +26,7 @@ public:
         }
     }
 
-    GrowableArray(const GrowableArray& other) noexcept
+    GrowableArray(const GrowableArray& other)
     {
         if (other.array == other.stackArray)
         {
@@ -43,7 +43,7 @@ public:
         count = other.count;
     }
 
-    GrowableArray& operator=(const GrowableArray& other) noexcept
+    GrowableArray& operator=(const GrowableArray& other)
     {
         assert(this != &other);
 

@@ -31,6 +31,78 @@ BVH::~BVH() noexcept
     nodeCount = 0;
 }
 
+BVH::BVH(BVH&& other) noexcept
+{
+    // Steal resources
+    {
+        size = other.size;
+
+        nodeID = other.nodeID;
+        root = other.root;
+
+        nodes = other.nodes;
+        nodeCount = other.nodeCount;
+        nodeCapacity = other.nodeCapacity;
+
+        freeList = other.freeList;
+
+        leaves = std::move(other.leaves);
+    }
+
+    // Clear moved object
+    {
+        other.size = 0;
+
+        other.nodeID = 0;
+        other.root = nullNode;
+
+        other.nodes = nullptr;
+        other.nodeCount = 0;
+        other.nodeCapacity = 0;
+
+        other.freeList = nullNode;
+    }
+}
+
+BVH& BVH::operator=(BVH&& other) noexcept
+{
+    assert(this != &other);
+
+    free(nodes);
+
+    // Steal resources
+    {
+        size = other.size;
+
+        nodeID = other.nodeID;
+        root = other.root;
+
+        nodes = other.nodes;
+        nodeCount = other.nodeCount;
+        nodeCapacity = other.nodeCapacity;
+
+        freeList = other.freeList;
+
+        leaves = std::move(other.leaves);
+    }
+
+    // Clear moved object
+    {
+        other.size = 0;
+
+        other.nodeID = 0;
+        other.root = nullNode;
+
+        other.nodes = nullptr;
+        other.nodeCount = 0;
+        other.nodeCapacity = 0;
+
+        other.freeList = nullNode;
+    }
+
+    return *this;
+}
+
 NodeProxy BVH::InsertLeaf(NodeProxy leaf)
 {
     assert(0 <= leaf && leaf < nodeCapacity);

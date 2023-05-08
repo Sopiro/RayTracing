@@ -55,8 +55,8 @@ public:
     BVH(const BVH&) = delete;
     BVH& operator=(const BVH&) = delete;
 
-    BVH(BVH&&) noexcept = delete;
-    BVH& operator=(BVH&&) noexcept = delete;
+    BVH(BVH&&) noexcept;
+    BVH& operator=(BVH&&) noexcept;
 
     void Reset();
 
