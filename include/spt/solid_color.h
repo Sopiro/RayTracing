@@ -9,7 +9,7 @@ class SolidColor : public Texture
 {
 public:
     static Ref<SolidColor> Create(Color color);
-    static Ref<SolidColor> Create(double red, double green, double blue);
+    static Ref<SolidColor> Create(float64 red, float64 green, float64 blue);
 
     virtual Color Value(const UV& uv, const Point3& p) const override;
 
@@ -29,7 +29,7 @@ struct ColorHash
 {
     size_t operator()(const Color& v) const
     {
-        return std::hash<double>()(v.x) ^ std::hash<double>()(v.y) ^ std::hash<double>()(v.z);
+        return std::hash<float64>()(v.x) ^ std::hash<float64>()(v.y) ^ std::hash<float64>()(v.z);
     }
 };
 
@@ -51,7 +51,7 @@ inline Ref<SolidColor> SolidColor::Create(Color color)
     return ptr;
 }
 
-inline Ref<SolidColor> SolidColor::Create(double red, double green, double blue)
+inline Ref<SolidColor> SolidColor::Create(float64 red, float64 green, float64 blue)
 {
     return Create(Color{ red, green, blue });
 }

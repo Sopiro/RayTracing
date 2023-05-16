@@ -53,7 +53,7 @@ void BRDFSamplingTest(Scene& scene)
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.2 });
 
-        double r = 0.25;
+        float64 r = 0.25;
         auto sphere = CreateSharedRef<Sphere>(Vec3(0.5, r, -0.5), r, mat);
 
         scene.Add(sphere);

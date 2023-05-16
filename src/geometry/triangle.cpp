@@ -4,13 +4,13 @@ namespace spt
 {
 
 // Möller-Trumbore algorithm
-bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+bool Triangle::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
 {
     Vec3 d = ray.dir;
-    double l = d.Normalize();
+    float64 l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
 
-    double det = Dot(e1, pvec);
+    float64 det = Dot(e1, pvec);
 
     bool backface = det < 0.0;
     if (backface == true && two_sided == false)
@@ -24,29 +24,29 @@ bool Triangle::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) c
         return false;
     }
 
-    double invDet = 1.0 / det;
+    float64 invDet = 1.0 / det;
 
     Vec3 tvec = ray.origin - v0.position;
-    double u = Dot(tvec, pvec) * invDet;
+    float64 u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
         return false;
     }
 
     Vec3 qvec = Cross(tvec, e1);
-    double v = Dot(d, qvec) * invDet;
+    float64 v = Dot(d, qvec) * invDet;
     if (v < 0.0 || u + v > 1.0)
     {
         return false;
     }
 
-    double t = Dot(e2, qvec) * invDet / l;
+    float64 t = Dot(e2, qvec) * invDet / l;
     if (t < t_min || t > t_max)
     {
         return false;
     }
 
-    double w = 1.0 - u - v;
+    float64 w = 1.0 - u - v;
 
     rec.object = this;
     rec.mat = material.get();

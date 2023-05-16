@@ -18,8 +18,8 @@ void MISTest1(Scene& scene)
         scene.Add(RectXY(tf, floor));
     }
 
-    double y = 0.05;
-    double z = 0.0;
+    float64 y = 0.05;
+    float64 z = 0.0;
 
     // plates
     {
@@ -43,14 +43,14 @@ void MISTest1(Scene& scene)
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.005 });
 
-        double h = 0.2;
-        double dh = 0.025;
-        double w = 1.0;
+        float64 h = 0.2;
+        float64 dh = 0.025;
+        float64 w = 1.0;
 
-        double a1 = DegToRad(15.0);
-        double a2 = DegToRad(25.0);
-        double a3 = DegToRad(35.0);
-        double a4 = DegToRad(45.0);
+        float64 a1 = DegToRad(15.0);
+        float64 a2 = DegToRad(25.0);
+        float64 a3 = DegToRad(35.0);
+        float64 a4 = DegToRad(45.0);
 
         auto tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a1, x_axis }, Vec3{ w, h, h - dh } };
         scene.Add(RectXZ(tf, m1));
@@ -83,10 +83,10 @@ void MISTest1(Scene& scene)
         auto light3 = CreateSharedRef<DiffuseLight>(Color{ 30.0 });
         auto light4 = CreateSharedRef<DiffuseLight>(Color{ 3.0 });
 
-        double lh = y;
-        double xg = 0.16;
+        float64 lh = y;
+        float64 xg = 0.16;
 
-        double r = 0.1;
+        float64 r = 0.1;
         auto l1 = CreateSharedRef<Sphere>(Vec3{ -xg * 3.0, y + lh, z }, r / 27.0, light1);
         auto l2 = CreateSharedRef<Sphere>(Vec3{ -xg, y + lh, z }, r / 9.0, light2);
         auto l3 = CreateSharedRef<Sphere>(Vec3{ xg, y + lh, z }, r / 3.0, light3);
@@ -191,7 +191,7 @@ void MISTestWak(Scene& scene)
         floor->roughness_map = SolidColor::Create(Vec3{ 1.0 });
         floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
 
-        double s = 20.0;
+        float64 s = 20.0;
         auto tf = Transform{ Vec3{ 0.0, -4.0, -4.0 }, Quat{ identity }, Vec3{ s, 1.0, s } };
         scene.Add(RectXZ(tf, floor));
 

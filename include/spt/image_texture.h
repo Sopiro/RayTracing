@@ -76,8 +76,8 @@ static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
 
 inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
 {
-    double u = fmod(uv.x, 1.0);
-    double v = fmod(uv.y, 1.0);
+    float64 u = fmod(uv.x, 1.0);
+    float64 v = fmod(uv.y, 1.0);
 
     if (u < 0.0) ++u;
     if (v < 0.0) ++v;
@@ -98,7 +98,7 @@ inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
         j = height - 1;
     }
 
-    double color_scale = 1.0 / 255.0;
+    float64 color_scale = 1.0 / 255.0;
     uint8* pixel = (uint8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };

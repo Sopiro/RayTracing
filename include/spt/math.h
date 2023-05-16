@@ -11,7 +11,7 @@
 
 #include "types.h"
 
-#define Real double
+#define Real float64
 
 namespace spt
 {

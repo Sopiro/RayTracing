@@ -24,7 +24,7 @@ struct HitRecord
     Vec3 normal, tangent;
     UV uv;
 
-    double t;
+    float64 t;
     bool front_face;
 
     const Hittable* object;
@@ -34,13 +34,13 @@ struct HitRecord
 class Hittable
 {
 public:
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const = 0;
+    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    virtual double EvaluatePDF(const Ray& ray) const;
+    virtual float64 EvaluatePDF(const Ray& ray) const;
 
     // Input ray must hit this object
-    virtual double PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const;
+    virtual float64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const;
 
     // Returns random direction toward this object
     virtual Vec3 GetRandomDirection(const Point3& origin) const;
@@ -55,14 +55,14 @@ protected:
     NodeProxy node;
 };
 
-inline double Hittable::EvaluatePDF(const Ray& ray) const
+inline float64 Hittable::EvaluatePDF(const Ray& ray) const
 {
     assert(false);
     return 0.0;
 }
 
 // Ray must hit this object
-inline double Hittable::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline float64 Hittable::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
     assert(false);
     return 0.0;

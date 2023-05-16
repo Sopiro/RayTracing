@@ -16,17 +16,17 @@ void Sponza(Scene& scene)
     auto light = CreateSharedRef<DiffuseLight>(Color{ 1.0 });
     // auto mat = SharedRef<Dielectric>(1.5);
 
-    double cx = 8.0;
-    double cy = 4.0;
-    double cz = 8.0;
+    float64 cx = 8.0;
+    float64 cy = 4.0;
+    float64 cz = 8.0;
 
-    double sx = 10.0;
-    double sy = 10.0;
-    double sz = 20.0;
+    float64 sx = 10.0;
+    float64 sy = 10.0;
+    float64 sz = 20.0;
 
-    double xm = -sx / 2.0;
-    double ym = 0.0;
-    double zm = -sz / 2.0;
+    float64 xm = -sx / 2.0;
+    float64 ym = 0.0;
+    float64 zm = -sz / 2.0;
 
     // for (int32 z = 0; z < cz; ++z)
     // {

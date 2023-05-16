@@ -12,10 +12,10 @@ void BVHTest(Scene& scene)
     auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
     auto black = CreateSharedRef<Lambertian>(Color(0.0));
 
-    double n = 100.0;
-    double w = 7.0;
-    double h = w * 9.0 / 16.0;
-    double r = 0.05;
+    float64 n = 100.0;
+    float64 w = 7.0;
+    float64 h = w * 9.0 / 16.0;
+    float64 r = 0.05;
 
     for (int32 y = 0; y < n; ++y)
     {

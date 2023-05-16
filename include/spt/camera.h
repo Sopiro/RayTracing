@@ -14,12 +14,12 @@ public:
     Camera(const Point3& look_from,
            const Point3& look_at,
            const Vec3& up,
-           double vfov, // vertical field-of-view in degrees
-           double aspect_ratio,
-           double aperture,
-           double focus_dist);
+           float64 vfov, // vertical field-of-view in degrees
+           float64 aspect_ratio,
+           float64 aperture,
+           float64 focus_dist);
 
-    Ray GetRay(double s, double t) const;
+    Ray GetRay(float64 s, float64 t) const;
 
     Point3 origin;
     Vec3 dir;
@@ -28,21 +28,21 @@ public:
     Point3 lower_left;
 
     Vec3 u, v, w;
-    double lens_radius;
+    float64 lens_radius;
 };
 
 inline Camera::Camera(const Point3& look_from,
                       const Point3& look_at,
                       const Vec3& up,
-                      double vfov, // vertical field-of-view in degrees
-                      double aspect_ratio,
-                      double aperture,
-                      double focus_dist)
+                      float64 vfov, // vertical field-of-view in degrees
+                      float64 aspect_ratio,
+                      float64 aperture,
+                      float64 focus_dist)
 {
-    double theta = DegToRad(vfov);
-    double h = tan(theta / 2.0);
-    double viewport_height = 2.0 * h;
-    double viewport_width = aspect_ratio * viewport_height;
+    float64 theta = DegToRad(vfov);
+    float64 h = tan(theta / 2.0);
+    float64 viewport_height = 2.0 * h;
+    float64 viewport_width = aspect_ratio * viewport_height;
 
     w = (look_from - look_at).Normalized();
     u = Cross(up, w).Normalized();
@@ -56,7 +56,7 @@ inline Camera::Camera(const Point3& look_from,
     lens_radius = aperture / 2.0;
 }
 
-inline Ray Camera::GetRay(double s, double t) const
+inline Ray Camera::GetRay(float64 s, float64 t) const
 {
     Vec3 rd = lens_radius * RandomInUnitDiskXY();
     Vec3 offset = u * rd.x + v * rd.y;

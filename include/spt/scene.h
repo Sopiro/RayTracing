@@ -21,9 +21,9 @@ public:
     void Add(const Ref<Hittable>& object);
     void AddLight(const Ref<Hittable>& object);
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double EvaluatePDF(const Ray& ray) const override;
+    virtual float64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual void Rebuild() override;
 
@@ -78,7 +78,7 @@ inline void Scene::Rebuild()
     hittables.Rebuild();
 }
 
-inline bool Scene::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+inline bool Scene::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
 {
     return hittables.Hit(ray, t_min, t_max, rec);
 }
@@ -88,7 +88,7 @@ inline bool Scene::GetAABB(AABB& outAABB) const
     return hittables.GetAABB(outAABB);
 }
 
-inline double Scene::EvaluatePDF(const Ray& ray) const
+inline float64 Scene::EvaluatePDF(const Ray& ray) const
 {
     return hittables.EvaluatePDF(ray);
 }
@@ -127,11 +127,11 @@ inline Color Scene::GetSkyColor(Vec3 dir) const
 {
     dir.Normalize();
 
-    double phi = atan2(-dir.z, dir.x) + pi;
-    double theta = acos(-dir.y);
+    float64 phi = atan2(-dir.z, dir.x) + pi;
+    float64 theta = acos(-dir.y);
 
-    double u = phi * inv_two_pi;
-    double v = theta * inv_pi;
+    float64 u = phi * inv_two_pi;
+    float64 v = theta * inv_pi;
 
     return environment_map->Value(UV{ u, v }, zero_vec3);
 }

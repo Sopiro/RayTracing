@@ -14,7 +14,7 @@ struct ONB
     Vec3& operator[](int32 i);
     Vec3 operator[](int32 i) const;
 
-    Vec3 GetLocal(double x, double y, double z) const;
+    Vec3 GetLocal(float64 x, float64 y, float64 z) const;
     Vec3 GetLocal(const Vec3& d) const;
     void BuildFromW(const Vec3& n);
 
@@ -37,7 +37,7 @@ inline Vec3 ONB::operator[](int32 i) const
     return (&u)[i];
 }
 
-inline Vec3 ONB::GetLocal(double x, double y, double z) const
+inline Vec3 ONB::GetLocal(float64 x, float64 y, float64 z) const
 {
     return x * u + y * v + z * w;
 }

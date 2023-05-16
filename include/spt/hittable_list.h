@@ -17,9 +17,9 @@ public:
     void Add(const Ref<Hittable>& object);
     void Clear();
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double EvaluatePDF(const Ray& ray) const override;
+    virtual float64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual int32 GetSize() const override;
     virtual void Rebuild() override;
@@ -47,14 +47,14 @@ inline void HittableList::Clear()
     objects.clear();
 }
 
-inline bool HittableList::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+inline bool HittableList::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
 {
 #if USE_BVH
     return bvh.Hit(ray, t_min, t_max, rec);
 #else
     HitRecord tmp;
     bool hit = false;
-    double closest = t_max;
+    float64 closest = t_max;
 
     for (const auto& object : objects)
     {
@@ -99,7 +99,7 @@ inline bool HittableList::GetAABB(AABB& outAABB) const
 #endif
 }
 
-inline double HittableList::EvaluatePDF(const Ray& ray) const
+inline float64 HittableList::EvaluatePDF(const Ray& ray) const
 {
     return bvh.EvaluatePDF(ray);
 }

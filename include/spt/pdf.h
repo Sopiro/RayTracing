@@ -8,15 +8,15 @@ namespace spt
 {
 
 // Heuristic functions for MIS
-inline double BalanceHeuristic(double pdf_f, double pdf_g)
+inline float64 BalanceHeuristic(float64 pdf_f, float64 pdf_g)
 {
     return pdf_f / (pdf_f + pdf_g);
 }
 
-inline double PowerHeuristic(double pdf_f, double pdf_g)
+inline float64 PowerHeuristic(float64 pdf_f, float64 pdf_g)
 {
-    double f2 = pdf_f * pdf_f;
-    double g2 = pdf_g * pdf_g;
+    float64 f2 = pdf_f * pdf_f;
+    float64 g2 = pdf_g * pdf_g;
     return f2 / (f2 + g2);
 }
 
@@ -30,7 +30,7 @@ public:
     virtual Vec3 Generate() const = 0;
 
     // Evaluate PDF with given direction
-    virtual double Evaluate(const Vec3& d) const = 0;
+    virtual float64 Evaluate(const Vec3& d) const = 0;
 };
 
 } // namespace spt

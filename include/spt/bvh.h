@@ -90,9 +90,9 @@ public:
 
     Real GetTreeCost() const;
 
-    virtual bool Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual double EvaluatePDF(const Ray& ray) const override;
+    virtual float64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
     virtual int32 GetSize() const override;
     virtual void Rebuild() override;
@@ -333,16 +333,16 @@ inline bool BVH::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline double BVH::EvaluatePDF(const Ray& ray) const
+inline float64 BVH::EvaluatePDF(const Ray& ray) const
 {
     struct Callback
     {
-        double sum;
-        double weight;
+        float64 sum;
+        float64 weight;
 
         HitRecord rec;
 
-        double RayCastCallback(const Ray& ray, double t_min, double t_max, Hittable* object)
+        float64 RayCastCallback(const Ray& ray, float64 t_min, float64 t_max, Hittable* object)
         {
             bool hit = object->Hit(ray, t_min, t_max, rec);
 

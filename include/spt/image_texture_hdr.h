@@ -36,8 +36,8 @@ inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
         for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
         {
             // Clamp needed
-            float value = *((float*)data + i);
-            *((float*)data + i) = Clamp(value, 0.0f, 10.0f);
+            float32 value = *((float32*)data + i);
+            *((float32*)data + i) = Clamp(value, 0.0f, 10.0f);
         }
     }
 
@@ -46,8 +46,8 @@ inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 
 inline Color ImageTextureHDR::Value(const UV& uv, const Point3& p) const
 {
-    double u = fmod(uv.x, 1.0);
-    double v = fmod(uv.y, 1.0);
+    float64 u = fmod(uv.x, 1.0);
+    float64 v = fmod(uv.y, 1.0);
 
     if (u < 0.0) ++u;
     if (v < 0.0) ++v;
@@ -68,7 +68,7 @@ inline Color ImageTextureHDR::Value(const UV& uv, const Point3& p) const
         j = height - 1;
     }
 
-    float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
+    float32* pixel = (float32*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ pixel[0], pixel[1], pixel[2] };
 }

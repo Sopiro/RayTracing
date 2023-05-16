@@ -76,13 +76,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                 Ray to_light{ rec.point, light_pdf.Generate() };
                 if (Dot(to_light.dir, rec.normal) > 0.0)
                 {
-                    double light_p = light_pdf.Evaluate(to_light.dir);
+                    float64 light_p = light_pdf.Evaluate(to_light.dir);
                     assert(light_p > 0.0);
 
-                    double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                    float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                     if (light_brdf_p > 0.0)
                     {
-                        double light_w = PowerHeuristic(light_p, light_brdf_p);
+                        float64 light_w = PowerHeuristic(light_p, light_brdf_p);
 
                         HitRecord rec2;
                         if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
@@ -97,13 +97,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                 Ray scattered{ rec.point, srec.pdf->Generate() };
                 if (Dot(scattered.dir, rec.normal) > 0.0)
                 {
-                    double brdf_p = srec.pdf->Evaluate(scattered.dir);
+                    float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
                     assert(brdf_p > 0.0);
 
-                    double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                    float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                     if (brdf_light_p > 0.0)
                     {
-                        double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                        float64 brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
 
                         HitRecord rec2;
                         if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
@@ -122,13 +122,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             Ray to_light{ rec.point, light_pdf.Generate() };
             if (Dot(to_light.dir, rec.normal) > 0.0)
             {
-                double light_p = light_pdf.Evaluate(to_light.dir);
+                float64 light_p = light_pdf.Evaluate(to_light.dir);
                 assert(light_p > 0.0);
 
-                double light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
-                    double light_w = PowerHeuristic(light_p, light_brdf_p);
+                    float64 light_w = PowerHeuristic(light_p, light_brdf_p);
 
                     HitRecord rec2;
                     if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
@@ -142,13 +142,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             Ray scattered{ rec.point, srec.pdf->Generate() };
             if (Dot(scattered.dir, rec.normal) > 0.0)
             {
-                double brdf_p = srec.pdf->Evaluate(scattered.dir);
+                float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
                 assert(brdf_p > 0.0);
 
-                double brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
-                    double brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                    float64 brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
 
                     HitRecord rec2;
                     if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
@@ -163,7 +163,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         // Sample new search direction based on BRDF
 #if 0
         Vec3 new_direction = srec.pdf->Generate();
-        double pdf_value;
+        float64 pdf_value;
 
         if (Dot(rec.normal, new_direction) > 0.0)
         {
@@ -187,7 +187,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             break;
         }
 
-        double pdf_value = srec.pdf->Evaluate(new_direction);
+        float64 pdf_value = srec.pdf->Evaluate(new_direction);
 #endif
 
         assert(pdf_value > 0.0);
@@ -200,7 +200,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         // Russian roulette
         if (bounce > MIN_BOUNCES)
         {
-            double rr = fmax(abso.x, fmax(abso.y, abso.z));
+            float64 rr = fmax(abso.x, fmax(abso.y, abso.z));
             if (Rand() > rr)
             {
                 break;

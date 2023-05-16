@@ -6,13 +6,13 @@ namespace spt
 
 void EnvironmentMap(Scene& scene)
 {
-    double r = 1.0;
-    double cx = 4.0;
-    double cz = 1.0;
-    double xgap = 0.16;
-    double zgap = 0.14;
-    double xstep = 2.0 * r + xgap;
-    double zstep = 2.0 * r + zgap;
+    float64 r = 1.0;
+    float64 cx = 4.0;
+    float64 cz = 1.0;
+    float64 xgap = 0.16;
+    float64 zgap = 0.14;
+    float64 xstep = 2.0 * r + xgap;
+    float64 zstep = 2.0 * r + zgap;
 
     for (int32 z = 0; z < cz; ++z)
     {

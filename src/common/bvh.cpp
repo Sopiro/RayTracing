@@ -836,15 +836,15 @@ void BVH::RayCast(const Ray& r,
     }
 }
 
-bool BVH::Hit(const Ray& ray, double t_min, double t_max, HitRecord& rec) const
+bool BVH::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
 {
     struct Callback
     {
         HitRecord* rec;
         bool hit_closest;
-        double t;
+        float64 t;
 
-        double RayCastCallback(const Ray& ray, double t_min, double t_max, Hittable* object)
+        float64 RayCastCallback(const Ray& ray, float64 t_min, float64 t_max, Hittable* object)
         {
             bool hit = object->Hit(ray, t_min, t_max, *rec);
 
