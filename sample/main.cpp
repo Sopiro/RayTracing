@@ -43,9 +43,9 @@ int main()
 
     // float64 aspect_ratio = 16.0 / 9.0;
     // float64 aspect_ratio = 3.0 / 2.0;
-    // float64 aspect_ratio = 4.0 / 3.0;
-    float64 aspect_ratio = 1.0;
-    int32 width = 500;
+    float64 aspect_ratio = 4.0 / 3.0;
+    // float64 aspect_ratio = 1.0;
+    int32 width = 640;
     int32 height = static_cast<int32>(width / aspect_ratio);
     int32 samples_per_pixel = 64;
     float64 scale = 1.0 / samples_per_pixel;
@@ -56,7 +56,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (2)
+    switch (4)
     {
     case 0: // Raytracing in one weekend final scene
     {

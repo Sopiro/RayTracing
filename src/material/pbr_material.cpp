@@ -91,8 +91,8 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     float64 t = fmax(spec_w / (diff_w + spec_w), 0.25);
 #endif
 
-    // out_srec.pdf = SharedRef<CosinePDF>(in_rec.normal);
-    // out_srec.pdf = SharedRef<GGXPDF>(in_rec.normal, wo, alpha, t);
+    // out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);
+    // out_srec.pdf = CreateSharedRef<GGXPDF>(in_rec.normal, wo, alpha, t);
     out_srec.pdf = CreateSharedRef<GGXVNDFPDF>(in_rec.normal, wo, alpha, t);
     out_srec.is_specular = false;
     return true;

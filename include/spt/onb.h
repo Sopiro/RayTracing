@@ -51,10 +51,10 @@ inline void ONB::BuildFromW(const Vec3& n)
 {
     w = n.Normalized();
 
-    Vec3 a = (fabs(w.x) > 0.999) ? y_axis : x_axis;
+    Vec3 t = (fabs(w.y) > 0.999) ? x_axis : y_axis;
 
-    v = Cross(w, a).Normalized();
-    u = Cross(w, v);
+    u = Cross(t, w).Normalized();
+    v = Cross(w, u);
 }
 
 } // namespace spt

@@ -14,7 +14,7 @@ inline float64 Luma(Vec3 srgb)
 
 // Default reflectance of dielectrics
 constexpr Vec3 default_reflectance{ 0.04 };
-constexpr float64 min_roughness = epsilon;
+constexpr float64 min_roughness = 0.005;
 
 inline Vec3 F0(Vec3 basecolor, float64 metallic)
 {
