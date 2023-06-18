@@ -1,6 +1,6 @@
 # Path Tracer
 
-This is a CPU-only path tracer written in C++
+This is a physically based CPU path tracer written in C++
 
 ## Features
 - Unidirectional path tracing
