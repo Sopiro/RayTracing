@@ -82,7 +82,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                     float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                     if (light_brdf_p > 0.0)
                     {
-                        float64 light_w = PowerHeuristic(light_p, light_brdf_p);
+                        float64 light_w = BalanceHeuristic(light_p, light_brdf_p);
 
                         HitRecord rec2;
                         if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
@@ -103,7 +103,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                     float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                     if (brdf_light_p > 0.0)
                     {
-                        float64 brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                        float64 brdf_w = BalanceHeuristic(brdf_p, brdf_light_p);
 
                         HitRecord rec2;
                         if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
@@ -128,7 +128,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                 float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
-                    float64 light_w = PowerHeuristic(light_p, light_brdf_p);
+                    float64 light_w = BalanceHeuristic(light_p, light_brdf_p);
 
                     HitRecord rec2;
                     if (scene.Hit(to_light, ray_tolerance, infinity, rec2))
@@ -148,7 +148,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                 float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
-                    float64 brdf_w = PowerHeuristic(brdf_p, brdf_light_p);
+                    float64 brdf_w = BalanceHeuristic(brdf_p, brdf_light_p);
 
                     HitRecord rec2;
                     if (scene.Hit(scattered, ray_tolerance, infinity, rec2))
