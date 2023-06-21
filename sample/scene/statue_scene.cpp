@@ -11,7 +11,7 @@ void StatueScene(Scene& scene)
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        // auto mat = SharedRef<Dielectric>(1.5);
+        // auto mat = CreateSharedRef<Dielectric>(1.5);
 
         Material::fallback_material = mat;
 
@@ -19,7 +19,7 @@ void StatueScene(Scene& scene)
         auto model = CreateSharedRef<Model>("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
 
         // auto tf = Transform{ Point3{ 0.0, -2.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 8.0 } };
-        // auto model = SharedRef<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
+        // auto model = CreateSharedRef<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -57,7 +57,7 @@ void StatueScene(Scene& scene)
     }
 
     // {
-    //     auto white = SharedRef<DiffuseLight>(SolidColor::Create(Color{ 3.0 }));
+    //     auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 3.0 }));
 
     //     int32 count = 10;
     //     float64 d = two_pi / count;
@@ -69,7 +69,7 @@ void StatueScene(Scene& scene)
     //     {
     //         float64 angle = d * i;
     //         auto pos = Vec3{ cos(angle) * r, y, sin(angle) * r };
-    //         auto sphere = SharedRef<Sphere>(pos, 0.1, white);
+    //         auto sphere = CreateSharedRef<Sphere>(pos, 0.1, white);
 
     //         scene.Add(sphere);
     //         scene.AddLight(sphere);

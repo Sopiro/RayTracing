@@ -6,7 +6,7 @@ namespace spt
 void Sponza(Scene& scene)
 {
     // Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 0.01 } };
-    // Ref<Model> sponza = SharedRef<Model>("res/sponza2/sponza.obj", transform);
+    // Ref<Model> sponza = CreateSharedRef<Model>("res/sponza2/sponza.obj", transform);
 
     Transform transform{ zero_vec3, Quat{ DegToRad(90.0), y_axis }, Vec3{ 1.0 } };
     Ref<Model> sponza = CreateSharedRef<Model>("res/sponza/Sponza.gltf", transform);
@@ -14,7 +14,7 @@ void Sponza(Scene& scene)
     scene.Add(sponza);
 
     auto light = CreateSharedRef<DiffuseLight>(Color{ 1.0 });
-    // auto mat = SharedRef<Dielectric>(1.5);
+    // auto mat = CreateSharedRef<Dielectric>(1.5);
 
     float64 cx = 8.0;
     float64 cy = 4.0;
@@ -34,7 +34,7 @@ void Sponza(Scene& scene)
     //     {
     //         for (int32 x = 0; x < cx; ++x)
     //         {
-    //             auto sphere = SharedRef<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
+    //             auto sphere = CreateSharedRef<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
     //             scene.Add(sphere);
     //             scene.AddLight(sphere);
     //         }
@@ -42,8 +42,8 @@ void Sponza(Scene& scene)
     // }
 
     // {
-    //     auto light2 = SharedRef<DiffuseLight>(Color{ 20.0 });
-    //     auto sphere = SharedRef<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
+    //     auto light2 = CreateSharedRef<DiffuseLight>(Color{ 20.0 });
+    //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
     //     scene.Add(sphere);
     //     scene.AddLight(sphere);
     // }

@@ -50,7 +50,7 @@ void PBRTest(Scene& scene)
     // Light
     // {
     //     auto tf = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = SharedRef<DiffuseLight>(Color{ 10.0 });
+    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 10.0 });
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -59,7 +59,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
+    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -68,7 +68,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3{ 0.0, 2.5, -4.0 }, Quat{ DegToRad(40), x_axis }, Vec3{ 4.0, 1.0, 1.0 } };
-    //     auto light = SharedRef<DiffuseLight>(Color{ 8.0 });
+    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 8.0 });
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);

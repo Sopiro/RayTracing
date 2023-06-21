@@ -12,7 +12,7 @@ void GGXVNDFSamplingTest(Scene& scene)
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        // auto mat = SharedRef<Dielectric>(1.5);
+        // auto mat = CreateSharedRef<Dielectric>(1.5);
 
         Material::fallback_material = mat;
 

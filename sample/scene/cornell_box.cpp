@@ -60,8 +60,8 @@ void CornellBox(Scene& scene)
 
     // Right sphere
     {
-        // auto mat = SharedRef<Dielectric>(1.5);
-        // auto sphere = SharedRef<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
+        // auto mat = CreateSharedRef<Dielectric>(1.5);
+        // auto sphere = CreateSharedRef<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
 
         // scene.Add(sphere);
         // scene.AddLight(sphere);
