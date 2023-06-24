@@ -39,6 +39,7 @@ This is a physically based CPU path tracer written in C++
 - https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
 - https://hal.inria.fr/hal-01024289/file/Heitz2014Slides.pdf
 - https://jcgt.org/published/0007/04/01/
+- https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
 
 
 ## Samples

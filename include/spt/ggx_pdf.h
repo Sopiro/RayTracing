@@ -37,9 +37,10 @@ inline Vec3 GGXPDF::Generate() const
 {
     if (Rand() < t)
     {
-        float64 u = Rand();
-        float64 theta = acos(sqrt((1.0 - u) / ((alpha2 - 1.0) * u + 1.0)));
-        float64 phi = two_pi * Rand();
+        Vec2 u = RandVec2();
+
+        float64 theta = acos(sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
+        float64 phi = two_pi * u.y;
 
         float64 sin_thetha = sin(theta);
         float64 x = cos(phi) * sin_thetha;

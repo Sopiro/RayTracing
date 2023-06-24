@@ -15,6 +15,7 @@ class GGXVNDFPDF : public PDF
     // https://hal.archives-ouvertes.fr/hal-01509746/document
     // https://schuttejoe.github.io/post/ggximportancesamplingpart2/
     // https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
+    // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
 
 public:
     GGXVNDFPDF(const Vec3& n, const Vec3& wo, float64 roughness, float64 t);
@@ -41,6 +42,35 @@ inline Vec3 GGXVNDFPDF::Generate() const
 {
     if (Rand() < t)
     {
+        // Faster sampling routine
+        // https://gist.github.com/jdupuy/4c6e782b62c92b9cb3d13fbb0a5bd7a0
+#if 1
+        Vec2 u = RandVec2();
+
+        // warp to the hemisphere configuration
+        Vec3 woStd = Vec3(wo.x * alpha, wo.y * alpha, wo.z).Normalized();
+
+        // sample the visible hemisphere from a spherical cap
+
+        // sample a spherical cap in (-wo.z, 1]
+        float64 phi = 2.0 * pi * u.x;
+        float64 z = fma(1.0 - u.y, 1.0 + wo.z, -wo.z);
+        float64 sin_thetha = sqrt(Clamp(1.0 - z * z, 0.0, 1.0));
+        float64 x = sin_thetha * cos(phi);
+        float64 y = sin_thetha * sin(phi);
+        Vec3 c = Vec3(x, y, z);
+
+        // compute halfway direction
+        Vec3 h = c + wo;
+
+        // warp back to the ellipsoid configuration
+        Vec3 wm = Vec3(h.x * alpha, h.y * alpha, h.z).Normalized();
+
+        Vec3 wh = uvw.GetLocal(wm);
+        Vec3 wi = Reflect(-wo, wh);
+
+        return wi;
+#else
         // Section 3.2: transforming the view direction to the hemisphere configuration
         Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
         Vh.Normalize();
@@ -50,12 +80,11 @@ inline Vec3 GGXVNDFPDF::Generate() const
         Vec3 T1 = (Vh.z < 0.999) ? (Cross(Vh, z_axis)).Normalized() : x_axis;
         Vec3 T2 = Cross(T1, Vh);
 
-        float64 u1 = Rand();
-        float64 u2 = Rand();
+        Vec2 u = RandVec2();
 
         // Section 4.2: parameterization of the projected area
-        float64 r = sqrt(u1);
-        float64 phi = two_pi * u2;
+        float64 r = sqrt(u.x);
+        float64 phi = two_pi * u.y;
         float64 t1 = r * cos(phi);
         float64 t2 = r * sin(phi);
         float64 s = 0.5 * (1.0 + Vh.z);
@@ -70,6 +99,7 @@ inline Vec3 GGXVNDFPDF::Generate() const
         Vec3 wi = Reflect(-wo, wh);
 
         return wi;
+#endif
     }
     else
     {

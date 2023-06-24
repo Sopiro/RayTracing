@@ -77,12 +77,22 @@ inline Real Rand(Real min, Real max)
     return min + (max - min) * Rand();
 }
 
+inline Vec2 RandVec2()
+{
+    return Vec2{ Rand(), Rand() };
+}
+
+inline Vec2 RandVec2(Real min, Real max)
+{
+    return Vec2{ Rand(min, max), Rand(min, max) };
+}
+
 inline Vec3 RandVec3()
 {
     return Vec3{ Rand(), Rand(), Rand() };
 }
 
-inline static Vec3 RandVec3(Real min, Real max)
+inline Vec3 RandVec3(Real min, Real max)
 {
     return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
 }
