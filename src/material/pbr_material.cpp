@@ -88,7 +88,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     float64 diff_w = (1.0 - metallic);
     float64 spec_w = Luma(F);
     // float64 spec_w = fmax(F.x, fmax(F.y, F.z));
-    float64 t = fmax(spec_w / (diff_w + spec_w), 0.25);
+    float64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
 #endif
 
     // out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);

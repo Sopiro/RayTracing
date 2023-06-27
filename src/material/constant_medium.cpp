@@ -15,7 +15,7 @@ bool ConstantDensityMedium::Hit(const Ray& ray, float64 t_min, float64 t_max, Hi
     }
 
     // Find the farthest hit
-    if (boundary->Hit(ray, rec1.t + ray_tolerance, infinity, rec2) == false)
+    if (boundary->Hit(ray, rec1.t + ray_offset, infinity, rec2) == false)
     {
         return false;
     }

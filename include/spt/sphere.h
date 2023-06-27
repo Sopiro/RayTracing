@@ -48,7 +48,7 @@ inline bool Sphere::GetAABB(AABB& outAABB) const
 inline float64 Sphere::EvaluatePDF(const Ray& ray) const
 {
     HitRecord rec;
-    if (Hit(ray, ray_tolerance, infinity, rec) == false)
+    if (Hit(ray, ray_offset, infinity, rec) == false)
     {
         return 0.0;
     }

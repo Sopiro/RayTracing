@@ -36,7 +36,7 @@ inline std::shared_ptr<T> CreateSharedRef(Args&&... args)
 namespace spt
 {
 
-constexpr float64 ray_tolerance = 1e-5;
+constexpr float64 ray_offset = 1e-4;
 
 using Color = Vec3;
 using Point3 = Vec3;

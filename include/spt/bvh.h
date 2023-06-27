@@ -358,7 +358,7 @@ inline float64 BVH::EvaluatePDF(const Ray& ray) const
     callback.sum = 0.0;
     callback.weight = 1.0 / leaves.size();
 
-    RayCast(ray, ray_tolerance, infinity, &callback);
+    RayCast(ray, ray_offset, infinity, &callback);
 
     return callback.sum;
 }
