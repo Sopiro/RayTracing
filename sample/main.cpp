@@ -30,6 +30,7 @@ extern void StatueScene(Scene&);
 extern void ShipScene(Scene&);
 extern void CornellBoxBunnyVolume(Scene&);
 extern void CornellBoxOriginal(Scene&);
+extern void RebootScene(Scene&);
 
 } // namespace spt
 
@@ -44,11 +45,11 @@ int main()
 
     // float64 aspect_ratio = 16.0 / 9.0;
     // float64 aspect_ratio = 3.0 / 2.0;
-    // float64 aspect_ratio = 4.0 / 3.0;
-    float64 aspect_ratio = 1.0;
-    int32 width = 500;
+    float64 aspect_ratio = 4.0 / 3.0;
+    // float64 aspect_ratio = 1.0;
+    int32 width = 1600;
     int32 height = static_cast<int32>(width / aspect_ratio);
-    int32 samples_per_pixel = 64;
+    int32 samples_per_pixel = 1024;
     float64 scale = 1.0 / samples_per_pixel;
     // int32 bounce_count = 10;
     int32 bounce_count = INT_MAX;
@@ -57,7 +58,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (2)
+    switch (19)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -357,6 +358,19 @@ int main()
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
 
+    case 19: // Reboot robot scene
+    {
+        RebootScene(scene);
+
+        Point3 lookfrom{ -4.0, 3.5, -4.0 };
+        Point3 lookat{ 0.0, 0.0, 0.0 };
+
+        float64 dist_to_focus = (lookfrom - lookat).Length();
+        float64 aperture = 0.02;
+        float64 vFov = 30.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
     default:
         assert(false);
         break;

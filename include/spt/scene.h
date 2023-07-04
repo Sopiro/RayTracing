@@ -50,9 +50,6 @@ private:
 
 inline Scene::Scene()
 {
-    // environment_map = ImageTexture::Create("res/sunflowers/sunflowers_4k.hdr", false, true);
-    // environment_map = ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true);
-
     environment_map = SolidColor::Create(Color{ 0.7, 0.8, 0.9 });
     directional_light = nullptr;
 }

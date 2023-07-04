@@ -70,11 +70,12 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
     for (uint32 i = 0; i < mesh->mNumFaces; ++i)
     {
         aiFace face = mesh->mFaces[i];
-        assert(face.mNumIndices == 3);
-
-        for (uint32 j = 0; j < face.mNumIndices; ++j)
+        if (face.mNumIndices == 3)
         {
-            indices.push_back(face.mIndices[j]);
+            for (uint32 j = 0; j < face.mNumIndices; ++j)
+            {
+                indices.push_back(face.mIndices[j]);
+            }
         }
     }
 
@@ -102,9 +103,9 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
     {
         Vertex& v = vertices[i];
 
-        Vec4 vP = transform * Vec4{ v.position, 1.0 };
-        Vec4 vN = transform * Vec4{ v.normal, 0.0 };
-        Vec4 vT = transform * Vec4{ v.tangent, 0.0 };
+        Vec4 vP = transform * Vec4(v.position, 1.0);
+        Vec4 vN = transform * Vec4(v.normal, 0.0);
+        Vec4 vT = transform * Vec4(v.tangent, 0.0);
         vN.Normalize();
         vT.Normalize();
 
