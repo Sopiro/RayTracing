@@ -20,7 +20,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         HitRecord rec;
         if (scene.Hit(ray, ray_offset, infinity, rec) == false)
         {
-            radiance += scene.GetSkyColor(ray.dir) * throughput;
+            radiance += throughput * scene.GetSkyColor(ray.dir);
             break;
         }
 
@@ -31,7 +31,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += emitted * throughput;
+                radiance += throughput * emitted;
             }
             break;
         }
@@ -57,7 +57,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             HitRecord rec2;
             if (scene.Hit(to_sun, ray_offset, infinity, rec2) == false)
             {
-                radiance += rec.mat->Evaluate(ray, rec, to_sun) * sun->radiance * throughput;
+                radiance += throughput * sun->radiance * rec.mat->Evaluate(ray, rec, to_sun);
             }
         }
 
@@ -87,7 +87,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                         HitRecord rec2;
                         if (scene.Hit(to_light, ray_offset, infinity, rec2))
                         {
-                            radiance += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * throughput *
+                            radiance += throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) *
                                         light_w / light_p;
                         }
                     }
@@ -108,7 +108,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                         HitRecord rec2;
                         if (scene.Hit(scattered, ray_offset, infinity, rec2))
                         {
-                            radiance += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * throughput *
+                            radiance += throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) *
                                         brdf_w / brdf_p;
                         }
                     }
@@ -133,7 +133,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                     HitRecord rec2;
                     if (scene.Hit(to_light, ray_offset, infinity, rec2))
                     {
-                        radiance += rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) * throughput *
+                        radiance += throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) *
                                     light_w / light_p;
                     }
                 }
@@ -154,7 +154,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
                     HitRecord rec2;
                     if (scene.Hit(scattered, ray_offset, infinity, rec2))
                     {
-                        radiance += rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) * throughput *
+                        radiance += throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) *
                                     brdf_w / brdf_p;
                     }
                 }
@@ -195,7 +195,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         assert(pdf_value > 0.0);
         Ray scattered{ rec.point, new_direction };
 
-        radiance += emitted * throughput;
+        radiance += throughput * emitted;
         throughput *= rec.mat->Evaluate(ray, rec, scattered) / pdf_value;
         ray = scattered;
 

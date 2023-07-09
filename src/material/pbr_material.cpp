@@ -49,7 +49,6 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     float64 metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
     float64 roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
     float64 ao = ao_map->Value(in_rec.uv, in_rec.point).x;
-    Vec3 emissive = emissive_map->Value(in_rec.uv, in_rec.point);
 
     float64 alpha = fmax(roughness, min_roughness);
     float64 alpha2 = alpha * alpha;
