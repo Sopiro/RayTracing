@@ -19,7 +19,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     ONB tbn;
     tbn.u = in_rec.tangent;
     tbn.w = in_rec.normal;
-    tbn.v = Cross(tbn.w, tbn.u).Normalized();
+    tbn.v = Cross(tbn.w, tbn.u);
 
     Vec3 n = tbn.GetLocal(normal).Normalized(); // normal
     Vec3 v = -in_ray.dir.Normalized();          // incident

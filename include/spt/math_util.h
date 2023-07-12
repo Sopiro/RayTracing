@@ -103,11 +103,6 @@ inline T Abs(T a)
     return a > T(0) ? a : -a;
 }
 
-inline Vec2 Abs(const Vec2& a)
-{
-    return Vec2(Abs(a.x), Abs(a.y));
-}
-
 template <typename T>
 inline T Min(T a, T b)
 {
@@ -184,7 +179,7 @@ inline T Reflect(const T& v, const T& n)
 template <typename T>
 T Refract(const T& uv, const T& n, Real etai_over_etat)
 {
-    auto cos_theta = fmin(Dot(-uv, n), Real(1.0));
+    Real cos_theta = fmin(Dot(-uv, n), Real(1.0));
     T r_out_perp = etai_over_etat * (uv + cos_theta * n);
     T r_out_parallel = -sqrt(fabs(Real(1.0) - r_out_perp.Length2())) * n;
 
@@ -203,24 +198,28 @@ inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
 
 inline Vec3 RandomUnitVector()
 {
-    Real r1 = Rand();
-    Real r2 = Rand();
-    Real x = cos(2 * pi * r1) * 2 * sqrt(r2 * (1 - r2));
-    Real y = sin(2 * pi * r1) * 2 * sqrt(r2 * (1 - r2));
-    Real z = 1 - 2 * r2;
+    Real u1 = Rand();
+    Real u2 = Rand();
+
+    Real x = cos(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
+    Real y = sin(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
+    Real z = 1 - 2 * u2;
 
     return Vec3{ x, y, z };
 }
 
 inline Vec3 RandomToSphere(Real radius, Real distance_squared)
 {
-    Real r1 = Rand();
-    Real r2 = Rand();
-    Real z = Real(1.0) + r2 * (sqrt(1.0 - radius * radius / distance_squared) - Real(1.0));
+    Real u1 = Rand();
+    Real u2 = Rand();
 
-    Real phi = two_pi * r1;
-    Real x = cos(phi) * sqrt(Real(1.0) - z * z);
-    Real y = sin(phi) * sqrt(Real(1.0) - z * z);
+    Real z = Real(1.0) + u2 * (sqrt(1.0 - radius * radius / distance_squared) - Real(1.0));
+
+    Real phi = two_pi * u1;
+
+    Real sin_theta = sqrt(Real(1.0) - z * z);
+    Real x = cos(phi) * sin_theta;
+    Real y = sin(phi) * sin_theta;
 
     return Vec3{ x, y, z };
 }
@@ -228,13 +227,14 @@ inline Vec3 RandomToSphere(Real radius, Real distance_squared)
 // z > 0
 inline Vec3 RandomCosineDirection()
 {
-    Real r1 = Rand();
-    Real r2 = Rand();
-    Real z = sqrt(Real(1.0) - r2);
+    Real u1 = Rand();
+    Real u2 = Rand();
 
-    Real phi = two_pi * r1;
-    Real x = cos(phi) * sqrt(r2);
-    Real y = sin(phi) * sqrt(r2);
+    Real z = sqrt(Real(1.0) - u2);
+
+    Real phi = two_pi * u1;
+    Real x = cos(phi) * sqrt(u2);
+    Real y = sin(phi) * sqrt(u2);
 
     return Vec3{ x, y, z };
 }
@@ -256,6 +256,7 @@ inline Vec3 RandomInUnitDiskXY()
 {
     Real u1 = Rand();
     Real u2 = Rand();
+
     Real r = sqrt(u1);
     Real theta = two_pi * u2;
     return Vec3{ r * cos(theta), r * sin(theta), Real(0.0) };

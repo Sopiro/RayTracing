@@ -29,8 +29,8 @@ public:
 
     const HittableList& GetHittableList() const;
 
-    bool HasLights() const;
-    const HittableList& GetLights() const;
+    bool HasAreaLights() const;
+    const HittableList& GetAreaLights() const;
 
     const Ref<Texture>& GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -100,12 +100,12 @@ inline const HittableList& Scene::GetHittableList() const
     return hittables;
 }
 
-inline bool Scene::HasLights() const
+inline bool Scene::HasAreaLights() const
 {
     return lights.GetCount() > 0;
 }
 
-inline const HittableList& Scene::GetLights() const
+inline const HittableList& Scene::GetAreaLights() const
 {
     return lights;
 }

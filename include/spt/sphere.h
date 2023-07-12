@@ -58,7 +58,8 @@ inline float64 Sphere::EvaluatePDF(const Ray& ray) const
 
 inline float64 Sphere::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
-    float64 cos_theta_max = sqrt(1.0 - radius * radius / (center - hit_ray.origin).Length2());
+    float64 d2 = (center - hit_ray.origin).Length2();
+    float64 cos_theta_max = sqrt(1.0 - radius * radius / d2);
     float64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;

@@ -2,7 +2,6 @@
 
 #include "spt/pathtracer.h"
 
-#define SAMPLE_ALL_LIGHTS 0
 #define MIN_BOUNCES 3
 #define MAX_RESAMPLE 10
 
@@ -12,7 +11,8 @@ namespace spt
 Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
 {
     Color radiance{ 0.0 };
-    Color throughput{ 1.0 };
+    Vec3 throughput{ 1.0 };
+
     bool was_specular = false;
 
     for (int32 bounce = 0; bounce < bounce_count; ++bounce)
@@ -48,12 +48,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             was_specular = false;
         }
 
-        // Direct illuminations
+        // Evaluate direct light (next event estimation)
 
         if (scene.HasDirectionalLight())
         {
             const Ref<DirectionalLight>& sun = scene.GetDirectionalLight();
             Ray to_sun{ rec.point + rec.normal * ray_offset, -sun->dir };
+
             HitRecord rec2;
             if (scene.Hit(to_sun, ray_offset, infinity, rec2) == false)
             {
@@ -61,80 +62,26 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             }
         }
 
-        if (scene.HasLights())
+        if (scene.HasAreaLights())
         {
-            // Multiple importance sampling
+            // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
-#if SAMPLE_ALL_LIGHTS
-            // Sampling all lights
-            auto& lights = scene.GetLights().GetObjects();
-            for (size_t i = 0; i < lights.size(); ++i)
-            {
-                HittablePDF light_pdf{ lights[i].get(), rec.point };
-
-                // Importance sample lights
-                Ray to_light{ rec.point, light_pdf.Generate() };
-                if (Dot(to_light.dir, rec.normal) > 0.0)
-                {
-                    float64 light_p = light_pdf.Evaluate(to_light.dir);
-                    assert(light_p > 0.0);
-
-                    float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
-                    if (light_brdf_p > 0.0)
-                    {
-                        float64 light_w = BalanceHeuristic(light_p, light_brdf_p);
-
-                        HitRecord rec2;
-                        if (scene.Hit(to_light, ray_offset, infinity, rec2))
-                        {
-                            radiance += throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) *
-                                        light_w / light_p;
-                        }
-                    }
-                }
-
-                // Importance sample BRDF
-                Ray scattered{ rec.point, srec.pdf->Generate() };
-                if (Dot(scattered.dir, rec.normal) > 0.0)
-                {
-                    float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
-                    assert(brdf_p > 0.0);
-
-                    float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
-                    if (brdf_light_p > 0.0)
-                    {
-                        float64 brdf_w = BalanceHeuristic(brdf_p, brdf_light_p);
-
-                        HitRecord rec2;
-                        if (scene.Hit(scattered, ray_offset, infinity, rec2))
-                        {
-                            radiance += throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) *
-                                        brdf_w / brdf_p;
-                        }
-                    }
-                }
-            }
-#else
             // Sample one light uniformly
-            HittablePDF light_pdf{ &scene.GetLights(), rec.point };
+            HittablePDF light_pdf{ &scene.GetAreaLights(), rec.point };
 
             // Importance sample lights
             Ray to_light{ rec.point, light_pdf.Generate() };
             if (Dot(to_light.dir, rec.normal) > 0.0)
             {
-                float64 light_p = light_pdf.Evaluate(to_light.dir);
-                assert(light_p > 0.0);
-
                 float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
-                    float64 light_w = BalanceHeuristic(light_p, light_brdf_p);
-
                     HitRecord rec2;
                     if (scene.Hit(to_light, ray_offset, infinity, rec2))
                     {
-                        radiance += throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light) *
-                                    light_w / light_p;
+                        float64 light_p = light_pdf.Evaluate(to_light.dir);
+                        float64 w = 1.0 / (light_p + light_brdf_p);
+                        radiance += w * throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light);
                     }
                 }
             }
@@ -143,27 +90,22 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             Ray scattered{ rec.point, srec.pdf->Generate() };
             if (Dot(scattered.dir, rec.normal) > 0.0)
             {
-                float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
-                assert(brdf_p > 0.0);
-
                 float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
-                    float64 brdf_w = BalanceHeuristic(brdf_p, brdf_light_p);
-
                     HitRecord rec2;
                     if (scene.Hit(scattered, ray_offset, infinity, rec2))
                     {
-                        radiance += throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered) *
-                                    brdf_w / brdf_p;
+                        float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
+                        float64 w = 1.0 / (brdf_p + brdf_light_p);
+                        radiance += w * throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered);
                     }
                 }
             }
-#endif
         }
 
         // Sample new search direction based on BRDF
-#if 0
+#if 1
         Vec3 new_direction = srec.pdf->Generate();
         float64 pdf_value;
 
@@ -202,7 +144,6 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         // Russian roulette
         if (bounce > MIN_BOUNCES)
         {
-            // float64 rr = fmax(throughput.x, fmax(throughput.y, throughput.z));
             float64 rr = fmin(0.95, Luma(throughput));
             if (Rand() > rr)
             {
