@@ -18,13 +18,13 @@ inline Ref<PBRMaterial> RandomPBRMaterial()
 {
     Ref<PBRMaterial> mat = CreateSharedRef<PBRMaterial>();
 
-    Color basecolor = Vec3{ Prand(0.0, 1.0), Prand(0.0, 1.0), Prand(0.0, 1.0) } * 0.7;
+    Color basecolor = Vec3{ Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0) } * 0.7;
     mat->basecolor_map = SolidColor::Create(basecolor);
     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
-    mat->roughness_map = SolidColor::Create(Vec3{ Prand(0.0, 1.0) });
-    mat->metallic_map = SolidColor::Create(Vec3{ Prand() > 0.5 ? 1.0 : 0.0 });
+    mat->roughness_map = SolidColor::Create(Vec3{ Rand(0.0, 1.0) });
+    mat->metallic_map = SolidColor::Create(Vec3{ Rand() > 0.5 ? 1.0 : 0.0 });
     mat->ao_map = SolidColor::Create(Vec3{ 1.0 });
-    mat->emissive_map = SolidColor::Create(basecolor * (Prand() < 0.04 ? Prand(0.0, 0.2) : 0.0));
+    mat->emissive_map = SolidColor::Create(basecolor * (Rand() < 0.04 ? Rand(0.0, 0.2) : 0.0));
 
     return mat;
 }

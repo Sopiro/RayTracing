@@ -1,6 +1,7 @@
 #pragma once
 
 #include "math.h"
+#include "random.h"
 
 namespace spt
 {
@@ -37,23 +38,6 @@ inline Mat4 Convert(const aiMatrix4x4& aiMat)
     return t;
 }
 
-inline thread_local std::minstd_rand prng;
-
-inline void Srand(uint32 seed)
-{
-    prng.seed(seed);
-}
-
-inline Real Prand()
-{
-    return Real(prng()) / std::minstd_rand::max();
-}
-
-inline Real Prand(Real min, Real max)
-{
-    return min + (max - min) * Prand();
-}
-
 inline Real DegToRad(Real deg)
 {
     return Real(deg * pi / Real(180.0));
@@ -62,39 +46,6 @@ inline Real DegToRad(Real deg)
 inline Real RadToDeg(Real rad)
 {
     return Real(rad * inv_pi * Real(180.0));
-}
-
-inline Real Rand()
-{
-    static thread_local std::uniform_real_distribution<Real> distribution(Real(0.0), Real(1.0));
-    static thread_local std::mt19937 generator;
-
-    return distribution(generator);
-}
-
-inline Real Rand(Real min, Real max)
-{
-    return min + (max - min) * Rand();
-}
-
-inline Vec2 RandVec2()
-{
-    return Vec2{ Rand(), Rand() };
-}
-
-inline Vec2 RandVec2(Real min, Real max)
-{
-    return Vec2{ Rand(min, max), Rand(min, max) };
-}
-
-inline Vec3 RandVec3()
-{
-    return Vec3{ Rand(), Rand(), Rand() };
-}
-
-inline Vec3 RandVec3(Real min, Real max)
-{
-    return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
 }
 
 template <typename T>
@@ -194,72 +145,6 @@ inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
     Real z = cos(theta);
 
     return Vec3{ x * r, y * r, z * r };
-}
-
-inline Vec3 RandomUnitVector()
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real x = cos(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
-    Real y = sin(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
-    Real z = 1 - 2 * u2;
-
-    return Vec3{ x, y, z };
-}
-
-inline Vec3 RandomToSphere(Real radius, Real distance_squared)
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real z = Real(1.0) + u2 * (sqrt(1.0 - radius * radius / distance_squared) - Real(1.0));
-
-    Real phi = two_pi * u1;
-
-    Real sin_theta = sqrt(Real(1.0) - z * z);
-    Real x = cos(phi) * sin_theta;
-    Real y = sin(phi) * sin_theta;
-
-    return Vec3{ x, y, z };
-}
-
-// z > 0
-inline Vec3 RandomCosineDirection()
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real z = sqrt(Real(1.0) - u2);
-
-    Real phi = two_pi * u1;
-    Real x = cos(phi) * sqrt(u2);
-    Real y = sin(phi) * sqrt(u2);
-
-    return Vec3{ x, y, z };
-}
-
-inline Vec3 RandomInUnitSphere()
-{
-    // Rejection sampling
-    Vec3 p;
-    do
-    {
-        p = RandVec3(Real(-1.0), Real(1.0));
-    }
-    while (p.Length2() >= Real(1.0));
-
-    return p;
-}
-
-inline Vec3 RandomInUnitDiskXY()
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real r = sqrt(u1);
-    Real theta = two_pi * u2;
-    return Vec3{ r * cos(theta), r * sin(theta), Real(0.0) };
 }
 
 } // namespace spt

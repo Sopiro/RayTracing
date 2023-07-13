@@ -25,8 +25,8 @@ void BVHTest(Scene& scene)
             // pos.x = x / n * w - w / 2.0;
             // pos.y = y / n * w - w / 2.0;
 
-            pos.x = Prand(-w, w);
-            pos.y = Prand(-h, h);
+            pos.x = Rand(-w, w);
+            pos.y = Rand(-h, h);
             pos.z = -1;
 
             scene.Add(CreateSharedRef<Sphere>(pos, r, green));

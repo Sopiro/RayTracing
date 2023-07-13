@@ -22,6 +22,7 @@
 
 #include "math.h"
 #include "math_util.h"
+#include "random.h"
 #include "types.h"
 
 template <typename T>
