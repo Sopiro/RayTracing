@@ -49,9 +49,9 @@ private:
 };
 
 inline Scene::Scene()
+    : environment_map{ SolidColor::Create(Color{ 0.0, 0.0, 0.0 }) }
+    , directional_light{ nullptr }
 {
-    environment_map = SolidColor::Create(Color{ 0.7, 0.8, 0.9 });
-    directional_light = nullptr;
 }
 
 inline void Scene::Reset()

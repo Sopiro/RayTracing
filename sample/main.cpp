@@ -400,7 +400,7 @@ int main()
                 float64 v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GetRay(u, v);
-                samples += PathTrace(scene, ray, bounce_count);
+                samples += TracePath(scene, ray, bounce_count);
             }
 
             if (is_nullish(samples))

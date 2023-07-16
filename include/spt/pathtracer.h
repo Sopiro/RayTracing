@@ -31,6 +31,6 @@ namespace spt
 {
 
 // Unidirectional path tracer
-Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count);
+Color TracePath(const Scene& scene, Ray primary_ray, int32 bounce_count);
 
 } // namespace spt

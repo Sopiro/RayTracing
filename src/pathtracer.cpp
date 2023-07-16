@@ -8,7 +8,7 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
+Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
 {
     Color radiance{ 0.0 };
     Vec3 throughput{ 1.0 };
@@ -48,7 +48,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             was_specular = false;
         }
 
-        // Evaluate direct light (next event estimation)
+        // Evaluate direct light (Next Event Estimation)
 
         if (scene.HasDirectionalLight())
         {
