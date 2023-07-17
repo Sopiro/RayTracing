@@ -60,8 +60,6 @@ void BRDFSamplingTest(Scene& scene)
         // scene.AddLight(sphere);
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
-
     // scene.Rebuild();
     // std::cout << scene.GetLights().GetCount() << std::endl;
 }

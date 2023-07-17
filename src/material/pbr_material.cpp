@@ -75,25 +75,18 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     float64 alpha = fmax(roughness, min_roughness);
     Vec3 wo = -in_ray.dir.Normalized();
 
-#if 0
-    Vec3 f0 = F0(basecolor, metallic);
-    Vec3 diffuse = basecolor * (1.0 - metallic);
-    float64 F0Sum = f0.x + f0.y + f0.z;
-    float64 diffuseSum = diffuse.x + diffuse.y + diffuse.z;
-    float64 t = fmax(F0Sum / (diffuseSum + F0Sum), 0.25);
-#else
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, Dot(wo, in_rec.normal));
     float64 diff_w = (1.0 - metallic);
     float64 spec_w = Luma(F);
     // float64 spec_w = fmax(F.x, fmax(F.y, F.z));
     float64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
-#endif
 
     // out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);
     // out_srec.pdf = CreateSharedRef<GGXPDF>(in_rec.normal, wo, alpha, t);
     out_srec.pdf = CreateSharedRef<GGXVNDFPDF>(in_rec.normal, wo, alpha, t);
     out_srec.is_specular = false;
+
     return true;
 }
 

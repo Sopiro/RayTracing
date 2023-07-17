@@ -13,10 +13,10 @@ struct HitRecord;
 
 struct ScatterRecord
 {
-    Ray specular_ray;
     bool is_specular;
+    Ray specular_ray;
     Color attenuation;
-    Ref<PDF> pdf;
+    Ref<PDF> pdf; // Scattering pdf
 };
 
 class Material

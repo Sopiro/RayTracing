@@ -52,6 +52,8 @@ void Sponza(Scene& scene)
     // scene.SetEnvironmentMap(SolidColor::Create(Color{ 1.0 }));
 
     scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(-Vec3{ -3.0, 15.0, -3.0 }.Normalized(), Vec3{ 10.0 }));
+
+    // scene.Rebuild();
 }
 
 } // namespace spt

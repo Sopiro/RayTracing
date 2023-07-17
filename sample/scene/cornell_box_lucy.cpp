@@ -62,8 +62,6 @@ void CornellBoxLucy(Scene& scene)
         Ref<Model> model = CreateSharedRef<Model>("res/stanford/lucy.obj", transform);
         scene.Add(model);
     }
-
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 }
 
 } // namespace spt

@@ -8,7 +8,7 @@
 namespace spt
 {
 
-Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
+Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
 {
     Color radiance{ 0.0 };
     Vec3 throughput{ 1.0 };
@@ -24,14 +24,12 @@ Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
             break;
         }
 
-        Color emitted = rec.mat->Emit(ray, rec);
-
         ScatterRecord srec;
         if (rec.mat->Scatter(ray, rec, srec) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += throughput * emitted;
+                radiance += throughput * rec.mat->Emit(ray, rec);
             }
             break;
         }
@@ -47,6 +45,8 @@ Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
         {
             was_specular = false;
         }
+
+        radiance += throughput * rec.mat->Emit(ray, rec);
 
         // Evaluate direct light (Next Event Estimation)
 
@@ -80,8 +80,8 @@ Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
                     if (scene.Hit(to_light, ray_offset, infinity, rec2))
                     {
                         float64 light_p = light_pdf.Evaluate(to_light.dir);
-                        float64 w = 1.0 / (light_p + light_brdf_p);
-                        radiance += w * throughput * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light);
+                        float64 mis_w = 1.0 / (light_p + light_brdf_p);
+                        radiance += throughput * mis_w * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light);
                     }
                 }
             }
@@ -97,8 +97,8 @@ Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
                     if (scene.Hit(scattered, ray_offset, infinity, rec2))
                     {
                         float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
-                        float64 w = 1.0 / (brdf_p + brdf_light_p);
-                        radiance += w * throughput * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered);
+                        float64 mis_w = 1.0 / (brdf_p + brdf_light_p);
+                        radiance += throughput * mis_w * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered);
                     }
                 }
             }
@@ -137,7 +137,6 @@ Color TracePath(const Scene& scene, Ray ray, int32 bounce_count)
         assert(pdf_value > 0.0);
         Ray scattered{ rec.point, new_direction };
 
-        radiance += throughput * emitted;
         throughput *= rec.mat->Evaluate(ray, rec, scattered) / pdf_value;
         ray = scattered;
 

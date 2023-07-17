@@ -60,8 +60,6 @@ void CornellBoxBunnyVolume(Scene& scene)
 
         scene.Add(volume);
     }
-
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
 }
 
 } // namespace spt

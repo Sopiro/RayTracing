@@ -72,8 +72,6 @@ void CornellBoxOriginal(Scene& scene)
         scene.AddLight(l);
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0, 0.0, 0.0 }));
-
     // scene.Rebuild();
     // std::cout << "Lights: " << scene.GetLights().GetCount() << std::endl;
 }

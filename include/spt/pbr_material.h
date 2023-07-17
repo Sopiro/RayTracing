@@ -6,6 +6,7 @@
 namespace spt
 {
 
+// Microfacet material
 class PBRMaterial : public Material
 {
 public:

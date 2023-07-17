@@ -30,7 +30,8 @@ inline float64 D_GGX(float64 NoH, float64 alpha2)
 {
     float64 NoH2 = NoH * NoH;
     float64 b = (NoH2 * (alpha2 - 1.0) + 1.0);
-    return alpha2 / fmax(b * b * pi, 1e-6);
+    return alpha2 / (b * b * pi);
+    // return alpha2 / fmax(b * b * pi, 1e-6);
     // return alpha2 / fmax(b * b, min_roughness * min_roughness) * pi;
 }
 
