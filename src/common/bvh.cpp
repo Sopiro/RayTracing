@@ -14,7 +14,7 @@ BVH::BVH()
     memset(nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
-    for (int32 i = 0; i < nodeCapacity - 1; ++i)
+    for (i32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
     }
@@ -385,7 +385,7 @@ void BVH::RemoveNode(NodeProxy node)
 
     RemoveLeaf(node);
 
-    for (int32 i = 0; i < leaves.size(); ++i)
+    for (i32 i = 0; i < leaves.size(); ++i)
     {
         if (leaves[i] == node)
         {
@@ -422,7 +422,7 @@ void BVH::Rotate(NodeProxy node)
         sibling = nodes[parent].child1;
     }
 
-    int32 count = 2;
+    i32 count = 2;
     Real costDiffs[4];
     Real nodeArea = SAH(nodes[node].aabb);
 
@@ -438,8 +438,8 @@ void BVH::Rotate(NodeProxy node)
         count += 2;
     }
 
-    int32 bestDiffIndex = 0;
-    for (int32 i = 1; i < count; ++i)
+    i32 bestDiffIndex = 0;
+    for (i32 i = 1; i < count; ++i)
     {
         if (costDiffs[i] < costDiffs[bestDiffIndex])
         {
@@ -638,7 +638,7 @@ void BVH::Reset()
     memset(nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
-    for (int32 i = 0; i < nodeCapacity - 1; ++i)
+    for (i32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
     }
@@ -661,7 +661,7 @@ NodeProxy BVH::AllocateNode()
         free(oldNodes);
 
         // Build a linked list for the free list.
-        for (int32 i = nodeCount; i < nodeCapacity - 1; ++i)
+        for (i32 i = nodeCount; i < nodeCapacity - 1; ++i)
         {
             nodes[i].next = i + 1;
         }
@@ -697,10 +697,10 @@ void BVH::Rebuild()
     // Rebuild the tree with bottom up approach
 
     NodeProxy* leaves = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
-    int32 count = 0;
+    i32 count = 0;
 
     // Build an array of leaf node
-    for (int32 i = 0; i < nodeCapacity; ++i)
+    for (i32 i = 0; i < nodeCapacity; ++i)
     {
         // Already in the free list
         if (nodes[i].id == 0)
@@ -725,15 +725,15 @@ void BVH::Rebuild()
     while (count > 1)
     {
         Real minCost = infinity;
-        int32 minI = -1;
-        int32 minJ = -1;
+        i32 minI = -1;
+        i32 minJ = -1;
 
         // Find the best aabb pair
-        for (int32 i = 0; i < count; ++i)
+        for (i32 i = 0; i < count; ++i)
         {
             AABB aabbI = nodes[leaves[i]].aabb;
 
-            for (int32 j = i + 1; j < count; ++j)
+            for (i32 j = i + 1; j < count; ++j)
             {
                 AABB aabbJ = nodes[leaves[j]].aabb;
 
@@ -789,12 +789,12 @@ void BVH::RayCast(const Ray& r,
     rayAABB.min = Min(p1, p2);
     rayAABB.max = Max(p1, p2);
 
-    GrowableArray<int32, 256> stack;
+    GrowableArray<i32, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() > 0)
     {
-        int32 nodeID = stack.Pop();
+        i32 nodeID = stack.Pop();
         if (nodeID == nullNode)
         {
             continue;
@@ -836,15 +836,15 @@ void BVH::RayCast(const Ray& r,
     }
 }
 
-bool BVH::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
+bool BVH::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 {
     struct Callback
     {
         HitRecord* rec;
         bool hit_closest;
-        float64 t;
+        f64 t;
 
-        float64 RayCastCallback(const Ray& ray, float64 t_min, float64 t_max, Hittable* object)
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Hittable* object)
         {
             bool hit = object->Hit(ray, t_min, t_max, *rec);
 

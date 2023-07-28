@@ -8,14 +8,14 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
+Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
 {
     Color radiance{ 0.0 };
     Vec3 throughput{ 1.0 };
 
     bool was_specular = false;
 
-    for (int32 bounce = 0; bounce < bounce_count; ++bounce)
+    for (i32 bounce = 0; bounce < bounce_count; ++bounce)
     {
         HitRecord rec;
         if (scene.Hit(ray, ray_offset, infinity, rec) == false)
@@ -73,14 +73,14 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             Ray to_light{ rec.point, light_pdf.Generate() };
             if (Dot(to_light.dir, rec.normal) > 0.0)
             {
-                float64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
+                f64 light_brdf_p = srec.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
                     HitRecord rec2;
                     if (scene.Hit(to_light, ray_offset, infinity, rec2))
                     {
-                        float64 light_p = light_pdf.Evaluate(to_light.dir);
-                        float64 mis_w = 1.0 / (light_p + light_brdf_p);
+                        f64 light_p = light_pdf.Evaluate(to_light.dir);
+                        f64 mis_w = 1.0 / (light_p + light_brdf_p);
                         radiance += throughput * mis_w * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light);
                     }
                 }
@@ -90,14 +90,14 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
             Ray scattered{ rec.point, srec.pdf->Generate() };
             if (Dot(scattered.dir, rec.normal) > 0.0)
             {
-                float64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                f64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
                     HitRecord rec2;
                     if (scene.Hit(scattered, ray_offset, infinity, rec2))
                     {
-                        float64 brdf_p = srec.pdf->Evaluate(scattered.dir);
-                        float64 mis_w = 1.0 / (brdf_p + brdf_light_p);
+                        f64 brdf_p = srec.pdf->Evaluate(scattered.dir);
+                        f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
                         radiance += throughput * mis_w * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered);
                     }
                 }
@@ -107,7 +107,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         // Sample new search direction based on BRDF
 #if 1
         Vec3 new_direction = srec.pdf->Generate();
-        float64 pdf_value;
+        f64 pdf_value;
 
         if (Dot(rec.normal, new_direction) > 0.0)
         {
@@ -143,7 +143,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 bounce_count)
         // Russian roulette
         if (bounce > MIN_BOUNCES)
         {
-            float64 rr = fmin(0.95, Luma(throughput));
+            f64 rr = fmin(0.95, Luma(throughput));
             if (Rand() > rr)
             {
                 break;

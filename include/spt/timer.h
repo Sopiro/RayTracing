@@ -13,7 +13,7 @@ public:
     Timer();
 
     void Mark();
-    float64 Get();
+    f64 Get();
     void Reset();
 
 private:
@@ -33,11 +33,11 @@ inline void Timer::Mark()
     time_points.push_back(clock::now());
 }
 
-inline float64 Timer::Get()
+inline f64 Timer::Get()
 {
     if (ptr < time_points.size() - 1)
     {
-        std::chrono::duration<float64> dt = time_points[ptr + 1] - time_points[ptr];
+        std::chrono::duration<f64> dt = time_points[ptr + 1] - time_points[ptr];
         ++ptr;
 
         return dt.count();

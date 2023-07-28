@@ -12,9 +12,9 @@ class Model : public Hittable
 public:
     Model(const std::string& path, const Transform& transform);
 
-    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual int32 GetSize() const override;
+    virtual i32 GetSize() const override;
 
     size_t GetMeshCount() const;
     const std::vector<Ref<Mesh>>& GetMeshes();
@@ -30,7 +30,7 @@ private:
     BVH bvh;
 };
 
-inline bool Model::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
+inline bool Model::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 {
     return bvh.Hit(ray, t_min, t_max, rec);
 }
@@ -40,7 +40,7 @@ inline bool Model::GetAABB(AABB& outAABB) const
     return bvh.GetAABB(outAABB);
 }
 
-inline int32 Model::GetSize() const
+inline i32 Model::GetSize() const
 {
     return bvh.GetSize();
 }

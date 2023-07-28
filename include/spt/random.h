@@ -6,22 +6,22 @@ namespace spt
 {
 
 // https://www.pcg-random.org/
-inline uint32 PCGHash(uint32 rng_state)
+inline u32 PCGHash(u32 rng_state)
 {
-    uint32 state = rng_state * 747796405u + 2891336453u;
-    uint32 word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
+    u32 state = rng_state * 747796405u + 2891336453u;
+    u32 word = ((state >> ((state >> 28u) + 4u)) ^ state) * 277803737u;
     return (word >> 22u) ^ word;
 }
 
-inline uint32 Rand(uint32& seed)
+inline u32 Rand(u32& seed)
 {
     seed = PCGHash(seed);
     return seed;
 }
 
-inline thread_local uint32 seed = 1234;
+inline thread_local u32 seed = 1234;
 
-inline void Srand(uint32 new_seed)
+inline void Srand(u32 new_seed)
 {
     seed = new_seed;
 }

@@ -6,7 +6,7 @@ namespace spt
 {
 
 // Inspired by b2GrowableStack in box2d code
-template <typename T, int32 N>
+template <typename T, i32 N>
 class GrowableArray
 {
 public:
@@ -161,7 +161,7 @@ public:
     }
 
     // O(n)
-    void Insert(int32 index, const T& data)
+    void Insert(i32 index, const T& data)
     {
         assert(index <= count);
 
@@ -179,7 +179,7 @@ public:
             }
         }
 
-        int32 ptr = count;
+        i32 ptr = count;
         while (index != ptr)
         {
             array[ptr] = array[ptr - 1];
@@ -191,9 +191,9 @@ public:
     }
 
     // O(n)
-    void Remove(int32 index)
+    void Remove(i32 index)
     {
-        int32 ptr = index;
+        i32 ptr = index;
         while (ptr != count)
         {
             array[ptr] = array[ptr + 1];
@@ -204,13 +204,13 @@ public:
     }
 
     // O(1)
-    void RemoveSwap(int32 index)
+    void RemoveSwap(i32 index)
     {
         array[index] = array[count - 1];
         --count;
     }
 
-    int32 Count() const
+    i32 Count() const
     {
         return count;
     }
@@ -230,17 +230,17 @@ public:
         count = 0;
     }
 
-    int32 Capacity() const
+    i32 Capacity() const
     {
         return capacity;
     }
 
-    T& At(int32 index) const
+    T& At(i32 index) const
     {
         return array[index];
     }
 
-    T& operator[](int32 index) const
+    T& operator[](i32 index) const
     {
         return array[index];
     }
@@ -248,8 +248,8 @@ public:
 private:
     T* array;
     T stackArray[N];
-    int32 count;
-    int32 capacity;
+    i32 count;
+    i32 capacity;
 };
 
 } // namespace spt

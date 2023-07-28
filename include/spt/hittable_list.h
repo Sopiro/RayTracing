@@ -17,11 +17,11 @@ public:
     void Add(const Ref<Hittable>& object);
     void Clear();
 
-    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual float64 EvaluatePDF(const Ray& ray) const override;
+    virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
-    virtual int32 GetSize() const override;
+    virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
     const std::vector<Ref<Hittable>>& GetObjects() const;
@@ -47,7 +47,7 @@ inline void HittableList::Clear()
     objects.clear();
 }
 
-inline bool HittableList::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
+inline bool HittableList::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 {
 #if USE_BVH
     return bvh.Hit(ray, t_min, t_max, rec);
@@ -99,7 +99,7 @@ inline bool HittableList::GetAABB(AABB& outAABB) const
 #endif
 }
 
-inline float64 HittableList::EvaluatePDF(const Ray& ray) const
+inline f64 HittableList::EvaluatePDF(const Ray& ray) const
 {
     return bvh.EvaluatePDF(ray);
 }
@@ -109,7 +109,7 @@ inline Vec3 HittableList::GetRandomDirection(const Point3& origin) const
     return bvh.GetRandomDirection(origin);
 }
 
-inline int32 HittableList::GetSize() const
+inline i32 HittableList::GetSize() const
 {
     return bvh.GetSize();
 }

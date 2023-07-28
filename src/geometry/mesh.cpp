@@ -6,7 +6,7 @@ namespace spt
 {
 
 Mesh::Mesh(const std::vector<Vertex>& vertices,
-           const std::vector<uint32>& indices,
+           const std::vector<u32>& indices,
            const std::array<Ref<Texture>, TextureType::count>& _textures)
     : textures{ _textures }
 {
@@ -39,9 +39,9 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
 
     for (size_t i = 0; i < indices.size(); i += 3)
     {
-        uint32 index0 = indices[i];
-        uint32 index1 = indices[i + 1];
-        uint32 index2 = indices[i + 2];
+        u32 index0 = indices[i];
+        u32 index1 = indices[i + 1];
+        u32 index2 = indices[i + 2];
 
         Triangle& t = triangles.emplace_back(vertices[index0], vertices[index1], vertices[index2], material);
         AABB aabb;

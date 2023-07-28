@@ -3,22 +3,22 @@
 namespace spt
 {
 
-bool Sphere::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
+bool Sphere::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 {
     Vec3 oc = ray.origin - center;
-    float64 a = ray.dir.Length2();
-    float64 half_b = Dot(oc, ray.dir);
-    float64 c = oc.Length2() - radius * radius;
+    f64 a = ray.dir.Length2();
+    f64 half_b = Dot(oc, ray.dir);
+    f64 c = oc.Length2() - radius * radius;
 
-    float64 discriminant = half_b * half_b - a * c;
+    f64 discriminant = half_b * half_b - a * c;
     if (discriminant < 0.0)
     {
         return false;
     }
-    float64 sqrt_d = sqrt(discriminant);
+    f64 sqrt_d = sqrt(discriminant);
 
     // Find the nearest root that lies in the acceptable range.
-    float64 root = (-half_b - sqrt_d) / a;
+    f64 root = (-half_b - sqrt_d) / a;
     if (root < t_min || t_max < root)
     {
         root = (-half_b + sqrt_d) / a;

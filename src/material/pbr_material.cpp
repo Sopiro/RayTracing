@@ -32,8 +32,8 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
         n = Reflect(-n, in_rec.normal);
     }
 
-    float64 NoV = Dot(n, v);
-    float64 NoL = Dot(n, l);
+    f64 NoV = Dot(n, v);
+    f64 NoL = Dot(n, l);
 
     if (NoV <= 0.0 || NoL <= 0.0 || h == zero_vec3)
     {
@@ -42,21 +42,21 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
 
     h.Normalize();
 
-    float64 NoH = Dot(n, h);
-    float64 VoH = Dot(v, h);
+    f64 NoH = Dot(n, h);
+    f64 VoH = Dot(v, h);
 
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    float64 metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
-    float64 roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
-    float64 ao = ao_map->Value(in_rec.uv, in_rec.point).x;
+    f64 metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
+    f64 roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
+    f64 ao = ao_map->Value(in_rec.uv, in_rec.point).x;
 
-    float64 alpha = fmax(roughness, min_roughness);
-    float64 alpha2 = alpha * alpha;
+    f64 alpha = fmax(roughness, min_roughness);
+    f64 alpha2 = alpha * alpha;
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, VoH);
-    float64 D = D_GGX(NoH, alpha2);
-    float64 V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
+    f64 D = D_GGX(NoH, alpha2);
+    f64 V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
     // float64 G = G2_Smith(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
@@ -69,18 +69,18 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
 bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
     Vec3 basecolor = basecolor_map->Value(in_rec.uv, in_rec.point);
-    float64 metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
-    float64 roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
+    f64 metallic = metallic_map->Value(in_rec.uv, in_rec.point).z;
+    f64 roughness = roughness_map->Value(in_rec.uv, in_rec.point).y;
 
-    float64 alpha = fmax(roughness, min_roughness);
+    f64 alpha = fmax(roughness, min_roughness);
     Vec3 wo = -in_ray.dir.Normalized();
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, Dot(wo, in_rec.normal));
-    float64 diff_w = (1.0 - metallic);
-    float64 spec_w = Luma(F);
+    f64 diff_w = (1.0 - metallic);
+    f64 spec_w = Luma(F);
     // float64 spec_w = fmax(F.x, fmax(F.y, F.z));
-    float64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
+    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
 
     // out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);
     // out_srec.pdf = CreateSharedRef<GGXPDF>(in_rec.normal, wo, alpha, t);

@@ -24,9 +24,9 @@ void StatueScene(Scene& scene)
         scene.Add(model);
     }
 
-    float64 light = 8.0;
-    float64 distance = 5.0;
-    float64 size = 2.0;
+    f64 light = 8.0;
+    f64 distance = 5.0;
+    f64 size = 2.0;
 
     {
         auto red = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ light, 0.0, 0.0 }));

@@ -5,12 +5,12 @@ namespace spt
 
 bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
 {
-    float64 refraction_ratio = in_rec.front_face ? (1.0 / ior) : ior;
+    f64 refraction_ratio = in_rec.front_face ? (1.0 / ior) : ior;
 
     Vec3 unit_direction = in_ray.dir.Normalized();
 
-    float64 cos_theta = Min(Dot(-unit_direction, in_rec.normal), 1.0);
-    float64 sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+    f64 cos_theta = Min(Dot(-unit_direction, in_rec.normal), 1.0);
+    f64 sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
     // Check for total internal reflection
     bool refractable = refraction_ratio * sin_theta < 1.0;

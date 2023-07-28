@@ -22,16 +22,16 @@ public:
     Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material>& material);
     Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
 
-    Vec3 GetNormal(float64 u, float64 v, float64 w) const;
-    Vec3 GetTangent(float64 u, float64 v, float64 w) const;
-    UV GetTexCoord(float64 u, float64 v, float64 w) const;
+    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
+    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
+    UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
-    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual float64 EvaluatePDF(const Ray& ray) const override;
-    virtual float64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
+    virtual f64 EvaluatePDF(const Ray& ray) const override;
+    virtual f64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
-    virtual int32 GetSize() const override;
+    virtual i32 GetSize() const override;
 
 public:
     Vertex v0, v1, v2;
@@ -39,7 +39,7 @@ public:
 
     Vec3 face_normal;
     bool two_sided;
-    float64 area;
+    f64 area;
     Ref<Material> material;
 };
 
@@ -88,17 +88,17 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
     area = face_normal.Normalize() * 0.5;
 };
 
-inline Vec3 Triangle::GetNormal(float64 u, float64 v, float64 w) const
+inline Vec3 Triangle::GetNormal(f64 u, f64 v, f64 w) const
 {
     return (w * v0.normal + u * v1.normal + v * v2.normal).Normalized();
 }
 
-inline Vec3 Triangle::GetTangent(float64 u, float64 v, float64 w) const
+inline Vec3 Triangle::GetTangent(f64 u, f64 v, f64 w) const
 {
     return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
 }
 
-inline UV Triangle::GetTexCoord(float64 u, float64 v, float64 w) const
+inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
 {
     return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
 }
@@ -113,7 +113,7 @@ inline bool Triangle::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline float64 Triangle::EvaluatePDF(const Ray& ray) const
+inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     HitRecord rec;
     if (Hit(ray, ray_offset, infinity, rec) == false)
@@ -124,18 +124,18 @@ inline float64 Triangle::EvaluatePDF(const Ray& ray) const
     return PDFValue(ray, rec);
 }
 
-inline float64 Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline f64 Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
-    float64 distance_squared = hit_rec.t * hit_rec.t * hit_ray.dir.Length2();
-    float64 cosine = fabs(Dot(hit_ray.dir, hit_rec.normal) / hit_ray.dir.Length());
+    f64 distance_squared = hit_rec.t * hit_rec.t * hit_ray.dir.Length2();
+    f64 cosine = fabs(Dot(hit_ray.dir, hit_rec.normal) / hit_ray.dir.Length());
 
     return distance_squared / (cosine * area);
 }
 
 inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
 {
-    float64 u = Rand(0.0, 1.0);
-    float64 v = Rand(0.0, 1.0);
+    f64 u = Rand(0.0, 1.0);
+    f64 v = Rand(0.0, 1.0);
 
     if (u + v > 1.0)
     {
@@ -148,7 +148,7 @@ inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
     return (random_point - origin).Normalized();
 }
 
-inline int32 Triangle::GetSize() const
+inline i32 Triangle::GetSize() const
 {
     return 1;
 }

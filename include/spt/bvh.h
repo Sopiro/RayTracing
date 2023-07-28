@@ -23,7 +23,7 @@ inline Real SAH(const AABB& aabb)
 }
 
 class Hittable;
-typedef int32 NodeProxy;
+typedef i32 NodeProxy;
 typedef Hittable Data;
 
 struct Node
@@ -33,7 +33,7 @@ struct Node
         return child1 == nullNode;
     }
 
-    int32 id;
+    i32 id;
     AABB aabb;
 
     NodeProxy parent;
@@ -90,22 +90,22 @@ public:
 
     Real GetTreeCost() const;
 
-    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const override;
+    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual float64 EvaluatePDF(const Ray& ray) const override;
+    virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
-    virtual int32 GetSize() const override;
+    virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
 private:
-    int32 size;
+    i32 size;
 
     NodeProxy nodeID;
     NodeProxy root;
 
     Node* nodes;
-    int32 nodeCount;
-    int32 nodeCapacity;
+    i32 nodeCount;
+    i32 nodeCapacity;
 
     NodeProxy freeList;
 
@@ -275,12 +275,12 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
     rayAABB.min = Min(p1, p2);
     rayAABB.max = Max(p1, p2);
 
-    GrowableArray<int32, 256> stack;
+    GrowableArray<i32, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() > 0)
     {
-        int32 nodeID = stack.Pop();
+        i32 nodeID = stack.Pop();
         if (nodeID == nullNode)
         {
             continue;
@@ -333,16 +333,16 @@ inline bool BVH::GetAABB(AABB& outAABB) const
     return true;
 }
 
-inline float64 BVH::EvaluatePDF(const Ray& ray) const
+inline f64 BVH::EvaluatePDF(const Ray& ray) const
 {
     struct Callback
     {
-        float64 sum;
-        float64 weight;
+        f64 sum;
+        f64 weight;
 
         HitRecord rec;
 
-        float64 RayCastCallback(const Ray& ray, float64 t_min, float64 t_max, Hittable* object)
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Hittable* object)
         {
             bool hit = object->Hit(ray, t_min, t_max, rec);
 
@@ -365,12 +365,12 @@ inline float64 BVH::EvaluatePDF(const Ray& ray) const
 
 inline Vec3 BVH::GetRandomDirection(const Vec3& origin) const
 {
-    int32 index = static_cast<int32>(leaves.size() * Rand());
+    i32 index = static_cast<i32>(leaves.size() * Rand());
 
     return nodes[leaves[index]].data->GetRandomDirection(origin);
 }
 
-inline int32 BVH::GetSize() const
+inline i32 BVH::GetSize() const
 {
     return size;
 }

@@ -21,7 +21,7 @@ protected:
 
 inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 {
-    int32 components_per_pixel;
+    i32 components_per_pixel;
     data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
     if (!data)
@@ -33,11 +33,11 @@ inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
     else
     {
 #pragma omp parallel for
-        for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
+        for (i32 i = 0; i < width * height * bytes_per_pixel; ++i)
         {
             // Clamp needed
-            float32 value = *((float32*)data + i);
-            *((float32*)data + i) = Clamp(value, 0.0f, 10.0f);
+            f32 value = *((f32*)data + i);
+            *((f32*)data + i) = Clamp(value, 0.0f, 10.0f);
         }
     }
 
@@ -46,8 +46,8 @@ inline ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 
 inline Color ImageTextureHDR::Value(const UV& uv, const Point3& p) const
 {
-    float64 u = fmod(uv.x, 1.0);
-    float64 v = fmod(uv.y, 1.0);
+    f64 u = fmod(uv.x, 1.0);
+    f64 v = fmod(uv.y, 1.0);
 
     if (u < 0.0) ++u;
     if (v < 0.0) ++v;
@@ -55,8 +55,8 @@ inline Color ImageTextureHDR::Value(const UV& uv, const Point3& p) const
     // Flip V to image coordinates
     v = 1.0 - v;
 
-    int32 i = static_cast<int32>(u * width);
-    int32 j = static_cast<int32>(v * height);
+    i32 i = static_cast<i32>(u * width);
+    i32 j = static_cast<i32>(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
     if (i >= width)
@@ -68,7 +68,7 @@ inline Color ImageTextureHDR::Value(const UV& uv, const Point3& p) const
         j = height - 1;
     }
 
-    float32* pixel = (float32*)data + j * bytes_per_scanline + i * bytes_per_pixel;
+    f32* pixel = (f32*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ pixel[0], pixel[1], pixel[2] };
 }

@@ -10,7 +10,7 @@
 
 #include "types.h"
 
-#define Real float64
+#define Real f64
 
 namespace spt
 {
@@ -66,12 +66,12 @@ struct Vec2
         y = _y;
     }
 
-    Real operator[](int32 i) const
+    Real operator[](i32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](int32 i)
+    Real& operator[](i32 i)
     {
         return (&x)[i];
     }
@@ -206,12 +206,12 @@ struct Vec3
         z = _z;
     }
 
-    Real operator[](int32 i) const
+    Real operator[](i32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](int32 i)
+    Real& operator[](i32 i)
     {
         return (&x)[i];
     }
@@ -417,12 +417,12 @@ struct Vec4
         operator*=(Real(1.0) / s);
     }
 
-    Real operator[](int32 i) const
+    Real operator[](i32 i) const
     {
         return (&x)[i];
     }
 
-    Real& operator[](int32 i)
+    Real& operator[](i32 i)
     {
         return (&x)[i];
     }
@@ -485,7 +485,7 @@ struct Mat2
     {
     }
 
-    Vec2& operator[](int32 i)
+    Vec2& operator[](i32 i)
     {
         return (&ex)[i];
     }
@@ -571,7 +571,7 @@ struct Mat3
 
     Mat3(const Quat& q);
 
-    Vec3& operator[](int32 i)
+    Vec3& operator[](i32 i)
     {
         return (&ex)[i];
     }
@@ -653,7 +653,7 @@ struct Mat4
 
     Mat4(const Transform& t);
 
-    Vec4& operator[](int32 i)
+    Vec4& operator[](i32 i)
     {
         return (&ex)[i];
     }

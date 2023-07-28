@@ -8,22 +8,22 @@ namespace spt
 
 struct AABB
 {
-    float64 GetArea() const;
-    float64 GetPerimater() const;
+    f64 GetArea() const;
+    f64 GetPerimater() const;
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
-    bool Hit(const Ray& ray, float64 t_min, float64 t_max) const;
+    bool Hit(const Ray& ray, f64 t_min, f64 t_max) const;
 
     Vec3 min, max;
 };
 
-inline float64 AABB::GetArea() const
+inline f64 AABB::GetArea() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
 }
 
-inline float64 AABB::GetPerimater() const
+inline f64 AABB::GetPerimater() const
 {
     Vec3 w = max - min;
     return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
@@ -52,15 +52,15 @@ inline bool AABB::TestOverlap(const AABB& other) const
     return true;
 }
 
-inline bool AABB::Hit(const Ray& ray, float64 t_min, float64 t_max) const
+inline bool AABB::Hit(const Ray& ray, f64 t_min, f64 t_max) const
 {
     // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
-    for (int32 axis = 0; axis < 3; ++axis)
+    for (i32 axis = 0; axis < 3; ++axis)
     {
-        float64 invD = 1.0 / ray.dir[axis];
+        f64 invD = 1.0 / ray.dir[axis];
 
-        float64 t0 = (min[axis] - ray.origin[axis]) * invD;
-        float64 t1 = (max[axis] - ray.origin[axis]) * invD;
+        f64 t0 = (min[axis] - ray.origin[axis]) * invD;
+        f64 t1 = (max[axis] - ray.origin[axis]) * invD;
 
         if (invD < 0.0)
         {

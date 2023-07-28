@@ -3,7 +3,7 @@
 namespace spt
 {
 
-bool ConstantDensityMedium::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
+bool ConstantDensityMedium::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 {
     HitRecord rec1, rec2;
 
@@ -39,9 +39,9 @@ bool ConstantDensityMedium::Hit(const Ray& ray, float64 t_min, float64 t_max, Hi
         rec1.t = 0.0;
     }
 
-    float64 ray_length = ray.dir.Length();
-    float64 distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
-    float64 hit_distance = neg_inv_density * log(Rand());
+    f64 ray_length = ray.dir.Length();
+    f64 distance_inside_boundary = (rec2.t - rec1.t) * ray_length;
+    f64 hit_distance = neg_inv_density * log(Rand());
 
     if (hit_distance > distance_inside_boundary)
     {

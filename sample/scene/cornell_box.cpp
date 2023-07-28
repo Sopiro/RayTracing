@@ -39,9 +39,9 @@ void CornellBox(Scene& scene)
 
     // Left block
     {
-        float64 hx = 0.13;
-        float64 hy = 0.26;
-        float64 hz = 0.13;
+        f64 hx = 0.13;
+        f64 hy = 0.26;
+        f64 hz = 0.13;
 
         auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
         auto box = Box(tf, white);
@@ -69,9 +69,9 @@ void CornellBox(Scene& scene)
 
     // Right block
     {
-        float64 hx = 0.13;
-        float64 hy = 0.13;
-        float64 hz = 0.13;
+        f64 hx = 0.13;
+        f64 hy = 0.13;
+        f64 hz = 0.13;
 
         auto tf = Transform{ 0.7, hy, -0.3, Quat(DegToRad(-25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
         auto box = Box(tf, white);

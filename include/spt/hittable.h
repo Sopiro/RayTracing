@@ -7,7 +7,7 @@
 namespace spt
 {
 
-typedef int32 NodeProxy;
+typedef i32 NodeProxy;
 class Material;
 class Hittable;
 
@@ -24,7 +24,7 @@ struct HitRecord
     Vec3 normal, tangent;
     UV uv;
 
-    float64 t;
+    f64 t;
     bool front_face;
 
     const Hittable* object;
@@ -34,19 +34,19 @@ struct HitRecord
 class Hittable
 {
 public:
-    virtual bool Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const = 0;
+    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
-    virtual float64 EvaluatePDF(const Ray& ray) const;
+    virtual f64 EvaluatePDF(const Ray& ray) const;
 
     // Input ray must hit this object
-    virtual float64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const;
+    virtual f64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const;
 
     // Returns random direction toward this object
     virtual Vec3 GetRandomDirection(const Point3& origin) const;
 
     // Returns the total object count
-    virtual int32 GetSize() const;
+    virtual i32 GetSize() const;
 
     virtual void Rebuild();
 
@@ -55,14 +55,14 @@ protected:
     NodeProxy node;
 };
 
-inline float64 Hittable::EvaluatePDF(const Ray& ray) const
+inline f64 Hittable::EvaluatePDF(const Ray& ray) const
 {
     assert(false);
     return 0.0;
 }
 
 // Ray must hit this object
-inline float64 Hittable::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline f64 Hittable::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
 {
     assert(false);
     return 0.0;
@@ -75,7 +75,7 @@ inline Vec3 Hittable::GetRandomDirection(const Point3& origin) const
     return zero_vec3;
 }
 
-inline int32 Hittable::GetSize() const
+inline i32 Hittable::GetSize() const
 {
     assert(false);
     return 0;

@@ -12,14 +12,14 @@ void BVHTest(Scene& scene)
     auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
     auto black = CreateSharedRef<Lambertian>(Color(0.0));
 
-    float64 n = 100.0;
-    float64 w = 7.0;
-    float64 h = w * 9.0 / 16.0;
-    float64 r = 0.05;
+    f64 n = 100.0;
+    f64 w = 7.0;
+    f64 h = w * 9.0 / 16.0;
+    f64 r = 0.05;
 
-    for (int32 y = 0; y < n; ++y)
+    for (i32 y = 0; y < n; ++y)
     {
-        for (int32 x = 0; x < n; ++x)
+        for (i32 x = 0; x < n; ++x)
         {
             Vec3 pos;
             // pos.x = x / n * w - w / 2.0;

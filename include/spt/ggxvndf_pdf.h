@@ -18,19 +18,19 @@ class GGXVNDFPDF : public PDF
     // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
 
 public:
-    GGXVNDFPDF(const Vec3& n, const Vec3& wo, float64 roughness, float64 t);
+    GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
 
     virtual Vec3 Generate() const override;
-    virtual float64 Evaluate(const Vec3& d) const override;
+    virtual f64 Evaluate(const Vec3& d) const override;
 
 public:
     ONB uvw;
     Vec3 wo;
-    float64 alpha;
-    float64 t;
+    f64 alpha;
+    f64 t;
 };
 
-inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, float64 roughness, float64 t)
+inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t)
     : uvw{ n }
     , wo{ wo }
     , alpha{ roughness }
@@ -53,11 +53,11 @@ inline Vec3 GGXVNDFPDF::Generate() const
         // sample the visible hemisphere from a spherical cap
 
         // sample a spherical cap in (-wo.z, 1]
-        float64 phi = 2.0 * pi * u.x;
-        float64 z = fma(1.0 - u.y, 1.0 + wo.z, -wo.z);
-        float64 sin_thetha = sqrt(Clamp(1.0 - z * z, 0.0, 1.0));
-        float64 x = sin_thetha * cos(phi);
-        float64 y = sin_thetha * sin(phi);
+        f64 phi = 2.0 * pi * u.x;
+        f64 z = fma(1.0 - u.y, 1.0 + wo.z, -wo.z);
+        f64 sin_thetha = sqrt(Clamp(1.0 - z * z, 0.0, 1.0));
+        f64 x = sin_thetha * cos(phi);
+        f64 y = sin_thetha * sin(phi);
         Vec3 c = Vec3(x, y, z);
 
         // compute halfway direction
@@ -108,17 +108,17 @@ inline Vec3 GGXVNDFPDF::Generate() const
     }
 }
 
-inline float64 GGXVNDFPDF::Evaluate(const Vec3& d) const
+inline f64 GGXVNDFPDF::Evaluate(const Vec3& d) const
 {
-    float64 alpha2 = alpha * alpha;
+    f64 alpha2 = alpha * alpha;
 
     Vec3 h = (wo + d).Normalized();
-    float64 NoH = Dot(uvw.w, h);
-    float64 NoV = Dot(uvw.w, d);
-    float64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / Max(4.0 * NoV, epsilon);
+    f64 NoH = Dot(uvw.w, h);
+    f64 NoV = Dot(uvw.w, d);
+    f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / Max(4.0 * NoV, epsilon);
 
-    float64 cosine = Dot(d, uvw.w);
-    float64 diff_w = cosine * inv_pi;
+    f64 cosine = Dot(d, uvw.w);
+    f64 diff_w = cosine * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;
 }

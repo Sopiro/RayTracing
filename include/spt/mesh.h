@@ -24,12 +24,12 @@ class Mesh : public Hittable
 {
 public:
     Mesh(const std::vector<Vertex>& vertices,
-         const std::vector<uint32>& indices,
+         const std::vector<u32>& indices,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
     virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
-    virtual int32 GetSize() const override;
+    virtual i32 GetSize() const override;
 
     const Ref<Material>& GetMaterial() const;
     void SetMaterial(const Ref<Material>& material);
@@ -54,7 +54,7 @@ inline bool Mesh::GetAABB(AABB& outAABB) const
     return bvh.GetAABB(outAABB);
 }
 
-inline int32 Mesh::GetSize() const
+inline i32 Mesh::GetSize() const
 {
     return bvh.GetSize();
 }
@@ -66,7 +66,7 @@ inline const Ref<Material>& Mesh::GetMaterial() const
 
 inline void Mesh::SetMaterial(const Ref<Material>& mat)
 {
-    for (int32 i = 0; i < triangles.size(); ++i)
+    for (i32 i = 0; i < triangles.size(); ++i)
     {
         triangles[i].material = mat;
     }

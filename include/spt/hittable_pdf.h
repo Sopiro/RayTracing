@@ -15,7 +15,7 @@ public:
     virtual Vec3 Generate() const override;
 
     // Evaluate pdf value with given direction from origin
-    virtual float64 Evaluate(const Vec3& direction) const override;
+    virtual f64 Evaluate(const Vec3& direction) const override;
 
 public:
     Vec3 origin;
@@ -34,7 +34,7 @@ inline Vec3 HittablePDF::Generate() const
     return target->GetRandomDirection(origin);
 }
 
-inline float64 HittablePDF::Evaluate(const Vec3& direction) const
+inline f64 HittablePDF::Evaluate(const Vec3& direction) const
 {
     return target->EvaluatePDF(Ray{ origin, direction });
 }

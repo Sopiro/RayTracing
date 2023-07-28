@@ -6,17 +6,17 @@ namespace spt
 
 void EnvironmentMap(Scene& scene)
 {
-    float64 r = 1.0;
-    float64 cx = 4.0;
-    float64 cz = 1.0;
-    float64 xgap = 0.16;
-    float64 zgap = 0.14;
-    float64 xstep = 2.0 * r + xgap;
-    float64 zstep = 2.0 * r + zgap;
+    f64 r = 1.0;
+    f64 cx = 4.0;
+    f64 cz = 1.0;
+    f64 xgap = 0.16;
+    f64 zgap = 0.14;
+    f64 xstep = 2.0 * r + xgap;
+    f64 zstep = 2.0 * r + zgap;
 
-    for (int32 z = 0; z < cz; ++z)
+    for (i32 z = 0; z < cz; ++z)
     {
-        for (int32 x = 0; x < cx; ++x)
+        for (i32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 

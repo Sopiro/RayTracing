@@ -23,11 +23,11 @@ protected:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
 
-    const static int32 bytes_per_pixel = STBI_rgb;
+    const static i32 bytes_per_pixel = STBI_rgb;
 
     void* data;
-    int32 width, height;
-    int32 bytes_per_scanline;
+    i32 width, height;
+    i32 bytes_per_scanline;
 };
 
 inline ImageTexture::ImageTexture()
@@ -40,7 +40,7 @@ inline ImageTexture::ImageTexture()
 
 inline ImageTexture::ImageTexture(const std::string& path, bool srgb)
 {
-    int32 components_per_pixel;
+    i32 components_per_pixel;
     data = stbi_load(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
     if (!data)
@@ -54,11 +54,11 @@ inline ImageTexture::ImageTexture(const std::string& path, bool srgb)
         if (srgb)
         {
 #pragma omp parallel for
-            for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
+            for (i32 i = 0; i < width * height * bytes_per_pixel; ++i)
             {
                 // Convert to linear space
-                uint8 value = *((uint8*)data + i);
-                *((uint8*)data + i) = static_cast<uint8>(fmin(pow(value / 255.0, 2.2) * 255.0, 255.0));
+                u8 value = *((u8*)data + i);
+                *((u8*)data + i) = static_cast<u8>(fmin(pow(value / 255.0, 2.2) * 255.0, 255.0));
             }
         }
     }
@@ -71,13 +71,13 @@ inline ImageTexture::~ImageTexture()
     stbi_image_free(data);
 }
 
-static int32 texture_count = 0;
+static i32 texture_count = 0;
 static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
 
 inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
 {
-    float64 u = fmod(uv.x, 1.0);
-    float64 v = fmod(uv.y, 1.0);
+    f64 u = fmod(uv.x, 1.0);
+    f64 v = fmod(uv.y, 1.0);
 
     if (u < 0.0) ++u;
     if (v < 0.0) ++v;
@@ -85,8 +85,8 @@ inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
     // Flip V to image coordinates
     v = 1.0 - v;
 
-    int32 i = static_cast<int32>(u * width);
-    int32 j = static_cast<int32>(v * height);
+    i32 i = static_cast<i32>(u * width);
+    i32 j = static_cast<i32>(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
     if (i >= width)
@@ -98,8 +98,8 @@ inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
         j = height - 1;
     }
 
-    float64 color_scale = 1.0 / 255.0;
-    uint8* pixel = (uint8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
+    f64 color_scale = 1.0 / 255.0;
+    u8* pixel = (u8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };
 }

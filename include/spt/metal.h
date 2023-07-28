@@ -9,16 +9,16 @@ namespace spt
 class Metal : public Material
 {
 public:
-    Metal(const Color& albedo, float64 fuzziness);
+    Metal(const Color& albedo, f64 fuzziness);
 
     virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
 
 public:
     Color albedo;
-    float64 fuzziness;
+    f64 fuzziness;
 };
 
-inline Metal::Metal(const Color& _albedo, float64 _fuzziness)
+inline Metal::Metal(const Color& _albedo, f64 _fuzziness)
     : albedo{ _albedo }
     , fuzziness{ _fuzziness }
 {

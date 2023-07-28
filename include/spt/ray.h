@@ -11,7 +11,7 @@ public:
     Ray() = default;
     Ray(const Point3& origin, const Vec3& dir);
 
-    Point3 At(Real t) const;
+    Point3 At(f64 t) const;
 
 public:
     Point3 origin;
@@ -24,7 +24,7 @@ inline Ray::Ray(const Point3& origin, const Vec3& dir)
 {
 }
 
-inline Point3 Ray::At(Real t) const
+inline Point3 Ray::At(f64 t) const
 {
     return origin + dir * t;
 }

@@ -5,14 +5,14 @@
 namespace spt
 {
 
-inline Color ToLinear(const Color& color, float64 gamma = 2.2)
+inline Color ToLinear(const Color& color, f64 gamma = 2.2)
 {
     return Color{ pow(color.x, gamma), pow(color.y, gamma), pow(color.z, gamma) };
 }
 
-inline Color GammaCorrection(const Color& color, float64 gamma = 2.2)
+inline Color GammaCorrection(const Color& color, f64 gamma = 2.2)
 {
-    float64 invGamma = 1.0 / gamma;
+    f64 invGamma = 1.0 / gamma;
     return Color{ pow(color.x, invGamma), pow(color.y, invGamma), pow(color.z, invGamma) };
 }
 
@@ -32,11 +32,11 @@ inline Color Tonemap_Reinhard2(const Color& hdr)
 
 inline Color Tonemap_ACES(const Color& hdr)
 {
-    constexpr float64 a = 2.51;
-    constexpr float64 b = 0.03;
-    constexpr float64 c = 2.43;
-    constexpr float64 d = 0.59;
-    constexpr float64 e = 0.14;
+    constexpr f64 a = 2.51;
+    constexpr f64 b = 0.03;
+    constexpr f64 c = 2.43;
+    constexpr f64 d = 0.59;
+    constexpr f64 e = 0.14;
     return (hdr * (a * hdr + Color{ b })) / (hdr * (c * hdr + Color{ d }) + Color{ e });
 }
 
@@ -49,7 +49,7 @@ inline Color Tonemap_Unreal(const Color& hdr)
 }
 
 // https://www.shadertoy.com/view/llsSD2
-inline Color Tonemap_FilmicHejl2015(const Color& hdr, float64 whitePt)
+inline Color Tonemap_FilmicHejl2015(const Color& hdr, f64 whitePt)
 {
     Vec4 vh = Vec4(hdr, whitePt);
     Vec4 va = 1.425 * vh + 0.05; // eval filmic curve

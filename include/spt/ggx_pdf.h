@@ -13,19 +13,19 @@ class GGXPDF : public PDF
     // https://schuttejoe.github.io/post/ggximportancesamplingpart1/
 
 public:
-    GGXPDF(const Vec3& n, const Vec3& wo, float64 roughness, float64 t);
+    GGXPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
 
     virtual Vec3 Generate() const override;
-    virtual float64 Evaluate(const Vec3& d) const override;
+    virtual f64 Evaluate(const Vec3& d) const override;
 
 public:
     ONB uvw;
     Vec3 wo;
-    float64 alpha2;
-    float64 t;
+    f64 alpha2;
+    f64 t;
 };
 
-inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, float64 roughness, float64 t)
+inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t)
     : uvw{ n }
     , wo{ wo }
     , alpha2{ roughness * roughness }
@@ -39,13 +39,13 @@ inline Vec3 GGXPDF::Generate() const
     {
         Vec2 u = RandVec2();
 
-        float64 theta = acos(sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
-        float64 phi = two_pi * u.y;
+        f64 theta = acos(sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
+        f64 phi = two_pi * u.y;
 
-        float64 sin_thetha = sin(theta);
-        float64 x = cos(phi) * sin_thetha;
-        float64 y = sin(phi) * sin_thetha;
-        float64 z = cos(theta);
+        f64 sin_thetha = sin(theta);
+        f64 x = cos(phi) * sin_thetha;
+        f64 y = sin(phi) * sin_thetha;
+        f64 z = cos(theta);
 
         assert(z > 0.0);
 
@@ -62,14 +62,14 @@ inline Vec3 GGXPDF::Generate() const
     }
 }
 
-inline float64 GGXPDF::Evaluate(const Vec3& d) const
+inline f64 GGXPDF::Evaluate(const Vec3& d) const
 {
     Vec3 h = (wo + d).Normalized();
-    float64 NoH = Dot(uvw.w, h);
-    float64 spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(d, h), epsilon);
+    f64 NoH = Dot(uvw.w, h);
+    f64 spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(d, h), epsilon);
 
-    float64 cosine = Dot(d, uvw.w);
-    float64 diff_w = cosine * inv_pi;
+    f64 cosine = Dot(d, uvw.w);
+    f64 diff_w = cosine * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;
 }

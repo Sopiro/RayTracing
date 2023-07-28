@@ -25,7 +25,7 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTexture
 {
     std::vector<Ref<Texture>> textures;
 
-    for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
+    for (u32 i = 0; i < mat->GetTextureCount(type); ++i)
     {
         aiString str;
         mat->GetTexture(type, i, &str);
@@ -42,11 +42,11 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTexture
 Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     std::vector<Vertex> vertices;
-    std::vector<uint32> indices;
+    std::vector<u32> indices;
     std::array<Ref<Texture>, TextureType::count> textures;
 
     // process vertices
-    for (uint32 i = 0; i < mesh->mNumVertices; ++i)
+    for (u32 i = 0; i < mesh->mNumVertices; ++i)
     {
         Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
@@ -67,12 +67,12 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
     }
 
     // process indices
-    for (uint32 i = 0; i < mesh->mNumFaces; ++i)
+    for (u32 i = 0; i < mesh->mNumFaces; ++i)
     {
         aiFace face = mesh->mFaces[i];
         if (face.mNumIndices == 3)
         {
-            for (uint32 j = 0; j < face.mNumIndices; ++j)
+            for (u32 j = 0; j < face.mNumIndices; ++j)
             {
                 indices.push_back(face.mIndices[j]);
             }
@@ -122,14 +122,14 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
     Mat4 transform = parent_transform * Convert(node->mTransformation);
 
     // process all the node's meshes (if any)
-    for (uint32 i = 0; i < node->mNumMeshes; ++i)
+    for (u32 i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(ProcessAssimpMesh(mesh, scene, transform));
     }
 
     // do the same for each of its children
-    for (uint32 i = 0; i < node->mNumChildren; ++i)
+    for (u32 i = 0; i < node->mNumChildren; ++i)
     {
         ProcessAssimpNode(node->mChildren[i], scene, transform);
     }
