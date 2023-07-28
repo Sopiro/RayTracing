@@ -10,26 +10,26 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
            const std::array<Ref<Texture>, TextureType::count>& _textures)
     : textures{ _textures }
 {
-    // std::cout << HasBaseColorTexture() << std::endl;
-    // std::cout << HasNormalTexture() << std::endl;
-    // std::cout << HasRoughnessTexture() << std::endl;
-    // std::cout << HasMetallicTexture() << std::endl;
-    // std::cout << HasAOTexture() << std::endl;
-    // std::cout << HasEmissiveTexture() << std::endl;
+    // std::cout << HasTexture(basecolor) << std::endl;
+    // std::cout << HasTexture(normal) << std::endl;
+    // std::cout << HasTexture(metallic) << std::endl;
+    // std::cout << HasTexture(roughness) << std::endl;
+    // std::cout << HasTexture(ao) << std::endl;
+    // std::cout << HasTexture(emissive) << std::endl;
 
-    if (HasBaseColorTexture() == false && Material::fallback_material != nullptr)
+    if (HasTexture(basecolor) == false && Material::fallback_material != nullptr)
     {
         material = Material::fallback_material;
     }
     else
     {
         auto mat = CreateSharedRef<PBRMaterial>();
-        mat->basecolor_map = HasBaseColorTexture() ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
-        mat->normal_map = HasNormalTexture() ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
-        mat->metallic_map = HasMetallicTexture() ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
-        mat->roughness_map = HasRoughnessTexture() ? textures[roughness] : SolidColor::Create(0.2, 0.2, 0.2);
-        mat->ao_map = HasAOTexture() ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
-        mat->emissive_map = HasEmissiveTexture() ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
+        mat->basecolor_map = HasTexture(basecolor) ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
+        mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+        mat->metallic_map = HasTexture(metallic) ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);
+        mat->roughness_map = HasTexture(roughness) ? textures[roughness] : SolidColor::Create(0.2, 0.2, 0.2);
+        mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0, 1.0, 1.0);
+        mat->emissive_map = HasTexture(emissive) ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
         material = mat;
     }
 

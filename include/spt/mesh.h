@@ -31,19 +31,14 @@ public:
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual int32 GetSize() const override;
 
-    bool HasBaseColorTexture() const;
-    bool HasNormalTexture() const;
-    bool HasRoughnessTexture() const;
-    bool HasMetallicTexture() const;
-    bool HasAOTexture() const;
-    bool HasEmissiveTexture() const;
-
     const Ref<Material>& GetMaterial() const;
     void SetMaterial(const Ref<Material>& material);
 
+    bool HasTexture(TextureType type) const;
+
 private:
     BVH bvh;
-    
+
     std::vector<Triangle> triangles;
     Ref<Material> material;
     std::array<Ref<Texture>, TextureType::count> textures;
@@ -64,36 +59,6 @@ inline int32 Mesh::GetSize() const
     return bvh.GetSize();
 }
 
-inline bool Mesh::HasBaseColorTexture() const
-{
-    return textures[basecolor] != nullptr;
-}
-
-inline bool Mesh::HasNormalTexture() const
-{
-    return textures[normal] != nullptr;
-}
-
-inline bool Mesh::HasRoughnessTexture() const
-{
-    return textures[roughness] != nullptr;
-}
-
-inline bool Mesh::HasMetallicTexture() const
-{
-    return textures[metallic] != nullptr;
-}
-
-inline bool Mesh::HasAOTexture() const
-{
-    return textures[ao] != nullptr;
-}
-
-inline bool Mesh::HasEmissiveTexture() const
-{
-    return textures[emissive] != nullptr;
-}
-
 inline const Ref<Material>& Mesh::GetMaterial() const
 {
     return material;
@@ -106,6 +71,11 @@ inline void Mesh::SetMaterial(const Ref<Material>& mat)
         triangles[i].material = mat;
     }
     material = mat;
+}
+
+inline bool Mesh::HasTexture(TextureType type) const
+{
+    return textures[type] != nullptr;
 }
 
 } // namespace spt

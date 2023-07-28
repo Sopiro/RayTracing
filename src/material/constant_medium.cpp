@@ -5,8 +5,7 @@ namespace spt
 
 bool ConstantDensityMedium::Hit(const Ray& ray, float64 t_min, float64 t_max, HitRecord& rec) const
 {
-    HitRecord rec1;
-    HitRecord rec2;
+    HitRecord rec1, rec2;
 
     // Find the closest hit
     if (boundary->Hit(ray, -infinity, infinity, rec1) == false)
