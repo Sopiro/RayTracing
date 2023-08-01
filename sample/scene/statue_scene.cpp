@@ -59,15 +59,15 @@ void StatueScene(Scene& scene)
     // {
     //     auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 3.0 }));
 
-    //     int32 count = 10;
-    //     float64 d = two_pi / count;
+    //     i32 count = 10;
+    //     f64 d = two_pi / count;
 
-    //     float64 y = 2.0;
-    //     float64 r = 1.5;
+    //     f64 y = 2.0;
+    //     f64 r = 1.5;
 
     //     for (int i = 0; i < count; ++i)
     //     {
-    //         float64 angle = d * i;
+    //         f64 angle = d * i;
     //         auto pos = Vec3{ cos(angle) * r, y, sin(angle) * r };
     //         auto sphere = CreateSharedRef<Sphere>(pos, 0.1, white);
 

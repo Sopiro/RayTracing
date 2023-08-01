@@ -28,11 +28,11 @@ void Sponza(Scene& scene)
     f64 ym = 0.0;
     f64 zm = -sz / 2.0;
 
-    // for (int32 z = 0; z < cz; ++z)
+    // for (i32 z = 0; z < cz; ++z)
     // {
-    //     for (int32 y = 0; y < cy; ++y)
+    //     for (i32 y = 0; y < cy; ++y)
     //     {
-    //         for (int32 x = 0; x < cx; ++x)
+    //         for (i32 x = 0; x < cx; ++x)
     //         {
     //             auto sphere = CreateSharedRef<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
     //             scene.Add(sphere);

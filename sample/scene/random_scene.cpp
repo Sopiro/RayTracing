@@ -10,9 +10,9 @@ void RandomScene(Scene& scene)
     auto ground_material = CreateSharedRef<Lambertian>(Color(0.5, 0.5, 0.5));
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
-    for (int a = -11; a < 11; a++)
+    for (i32 a = -11; a < 11; a++)
     {
-        for (int b = -11; b < 11; b++)
+        for (i32 b = -11; b < 11; b++)
         {
             auto choose_mat = Rand();
             Vec3 center(a + 0.9 * Rand(), 0.2, b + 0.9 * Rand());

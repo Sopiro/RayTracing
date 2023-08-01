@@ -43,15 +43,15 @@ int main()
 
     using namespace spt;
 
-    // float64 aspect_ratio = 16.0 / 9.0;
-    // float64 aspect_ratio = 3.0 / 2.0;
-    // float64 aspect_ratio = 4.0 / 3.0;
+    // f64 aspect_ratio = 16.0 / 9.0;
+    // f64 aspect_ratio = 3.0 / 2.0;
+    // f64 aspect_ratio = 4.0 / 3.0;
     f64 aspect_ratio = 1.0;
     i32 width = 500;
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
     f64 scale = 1.0 / samples_per_pixel;
-    // int32 bounce_count = 10;
+    // i32 bounce_count = 10;
     i32 bounce_count = INT_MAX;
     Bitmap bitmap{ width, height };
 

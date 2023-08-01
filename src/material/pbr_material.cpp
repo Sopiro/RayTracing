@@ -57,7 +57,7 @@ Vec3 PBRMaterial::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray
     Vec3 F = F_Schlick(f0, VoH);
     f64 D = D_GGX(NoH, alpha2);
     f64 V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
-    // float64 G = G2_Smith(NoV, NoL, alpha2);
+    // f64 G = G2_Smith(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
     // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
@@ -79,7 +79,7 @@ bool PBRMaterial::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRec
     Vec3 F = F_Schlick(f0, Dot(wo, in_rec.normal));
     f64 diff_w = (1.0 - metallic);
     f64 spec_w = Luma(F);
-    // float64 spec_w = fmax(F.x, fmax(F.y, F.z));
+    // f64 spec_w = fmax(F.x, fmax(F.y, F.z));
     f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
 
     // out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);

@@ -54,7 +54,7 @@ inline bool HittableList::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& r
 #else
     HitRecord tmp;
     bool hit = false;
-    float64 closest = t_max;
+    f64 closest = t_max;
 
     for (const auto& object : objects)
     {
@@ -83,7 +83,7 @@ inline bool HittableList::GetAABB(AABB& outAABB) const
     objects[0]->GetAABB(outAABB);
 
     AABB temp;
-    for (int32 i = 1; i < objects.size(); ++i)
+    for (i32 i = 1; i < objects.size(); ++i)
     {
         const auto& object = objects[i];
 

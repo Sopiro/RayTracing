@@ -83,11 +83,11 @@ inline Vec3 GGXVNDFPDF::Generate() const
         Vec2 u = RandVec2();
 
         // Section 4.2: parameterization of the projected area
-        float64 r = sqrt(u.x);
-        float64 phi = two_pi * u.y;
-        float64 t1 = r * cos(phi);
-        float64 t2 = r * sin(phi);
-        float64 s = 0.5 * (1.0 + Vh.z);
+        f64 r = sqrt(u.x);
+        f64 phi = two_pi * u.y;
+        f64 t1 = r * cos(phi);
+        f64 t2 = r * sin(phi);
+        f64 s = 0.5 * (1.0 + Vh.z);
         t2 = Lerp(sqrt(1.0 - t1 * t1), t2, s);
 
         // Section 4.3: reprojection onto hemisphere
