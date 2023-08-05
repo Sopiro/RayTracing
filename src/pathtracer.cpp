@@ -15,7 +15,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
 
     bool was_specular = false;
 
-    for (i32 bounce = 0; bounce < bounce_count; ++bounce)
+    for (i32 bounce = 0;; ++bounce)
     {
         HitRecord rec;
         if (scene.Hit(ray, ray_offset, infinity, rec) == false)
@@ -31,6 +31,11 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             {
                 radiance += throughput * rec.mat->Emit(ray, rec);
             }
+            break;
+        }
+
+        if (bounce >= bounce_count)
+        {
             break;
         }
 
@@ -118,7 +123,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             break;
         }
 #else
-        int32 count = 0;
+        i32 count = 0;
         Vec3 new_direction;
         do
         {
@@ -131,7 +136,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             break;
         }
 
-        float64 pdf_value = srec.pdf->Evaluate(new_direction);
+        f64 pdf_value = srec.pdf->Evaluate(new_direction);
 #endif
 
         assert(pdf_value > 0.0);
