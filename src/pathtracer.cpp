@@ -1,5 +1,3 @@
-#pragma once
-
 #include "spt/pathtracer.h"
 
 #define MIN_BOUNCES 3

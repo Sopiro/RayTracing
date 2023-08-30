@@ -33,7 +33,6 @@ public:
 
     const Ref<Material>& GetMaterial() const;
     void SetMaterial(const Ref<Material>& material);
-
     bool HasTexture(TextureType type) const;
 
 private:

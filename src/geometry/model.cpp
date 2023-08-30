@@ -21,7 +21,7 @@ Model::Model(const std::string& path, const Transform& transform)
     }
 }
 
-std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, bool srgb)
+std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
 {
     std::vector<Ref<Texture>> textures;
 
@@ -39,15 +39,17 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(aiMaterial* mat, aiTexture
     return textures;
 }
 
-Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     std::vector<Vertex> vertices;
-    std::vector<u32> indices;
-    std::array<Ref<Texture>, TextureType::count> textures;
+    vertices.reserve(mesh->mNumVertices);
 
-    // process vertices
-    for (u32 i = 0; i < mesh->mNumVertices; ++i)
+    // Process vertices
+    for (i32 i = 0; i < mesh->mNumVertices; ++i)
     {
+        assert(mesh->HasPositions());
+        assert(mesh->HasNormals());
+
         Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
 
@@ -57,29 +59,36 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
             tangent = Vec3{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
         }
 
-        Vec2 texCoords{ 0.0, 0.0 };
+        Vec2 texCoord{ 0.0, 0.0 };
         if (mesh->HasTextureCoords(0))
         {
-            texCoords.Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+            texCoord.Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
         }
 
-        vertices.emplace_back(position, normal, tangent, texCoords);
+        vertices.emplace_back(position, normal, tangent, texCoord);
     }
 
-    // process indices
-    for (u32 i = 0; i < mesh->mNumFaces; ++i)
+    // Process indices
+    const u32 vertices_per_face = 3;
+
+    std::vector<u32> indices;
+    indices.reserve(mesh->mNumFaces * vertices_per_face);
+
+    for (i32 i = 0; i < mesh->mNumFaces; ++i)
     {
         aiFace face = mesh->mFaces[i];
-        if (face.mNumIndices == 3)
+        if (face.mNumIndices == vertices_per_face)
         {
-            for (u32 j = 0; j < face.mNumIndices; ++j)
+            for (i32 j = 0; j < face.mNumIndices; ++j)
             {
-                indices.push_back(face.mIndices[j]);
+                indices.emplace_back(face.mIndices[j]);
             }
         }
     }
 
-    // process materials
+    // Process materials
+    std::array<Ref<Texture>, TextureType::count> textures;
+
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -117,14 +126,14 @@ Ref<Mesh> Model::ProcessAssimpMesh(aiMesh* mesh, const aiScene* scene, const Mat
     return CreateSharedRef<Mesh>(vertices, indices, textures);
 }
 
-void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& parent_transform)
+void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
 {
-    Mat4 transform = parent_transform * Convert(node->mTransformation);
+    Mat4 transform = Mul(parent_transform, Convert(node->mTransformation));
 
     // process all the node's meshes (if any)
     for (u32 i = 0; i < node->mNumMeshes; ++i)
     {
-        aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+        const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(ProcessAssimpMesh(mesh, scene, transform));
     }
 
@@ -135,17 +144,21 @@ void Model::ProcessAssimpNode(aiNode* node, const aiScene* scene, const Mat4& pa
     }
 }
 
-static Assimp::Importer importer;
-
 void Model::LoadModel(const std::string& path, const Transform& transform)
 {
-    std::filesystem::path file_path(path);
+    folder = std::move(std::filesystem::path(path).remove_filename().string());
 
-    folder = file_path.parent_path().string();
-    folder.push_back('/');
+    Assimp::Importer importer;
 
-    const aiScene* scene = importer.ReadFile(path.data(), aiProcessPreset_TargetRealtime_MaxQuality);
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    // clang-format off
+    const aiScene* scene = importer.ReadFile(
+        path, 
+        aiProcessPreset_TargetRealtime_Quality | 
+        aiProcess_PreTransformVertices
+    );
+    // clang-format on
+
+    if (scene == nullptr)
     {
         std::cout << "Faild to load model: " << path << std::endl;
         std::cout << "Assimp error: " << importer.GetErrorString() << std::endl;

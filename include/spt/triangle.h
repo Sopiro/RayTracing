@@ -12,7 +12,7 @@ struct Vertex
     Point3 position;
     Vec3 normal;
     Vec3 tangent;
-    UV texCoords;
+    UV texCoord;
 };
 
 class Triangle : public Hittable
@@ -68,9 +68,9 @@ inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, 
         v1.tangent = tangent;
         v2.tangent = tangent;
 
-        v0.texCoords.SetZero();
-        v1.texCoords.SetZero();
-        v2.texCoords.SetZero();
+        v0.texCoord.SetZero();
+        v1.texCoord.SetZero();
+        v2.texCoord.SetZero();
     }
 }
 
@@ -100,7 +100,7 @@ inline Vec3 Triangle::GetTangent(f64 u, f64 v, f64 w) const
 
 inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
 {
-    return w * v0.texCoords + u * v1.texCoords + v * v2.texCoords;
+    return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
 }
 
 static constexpr Vec3 aabb_offset{ epsilon * 10.0 };

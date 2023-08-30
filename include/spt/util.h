@@ -29,7 +29,7 @@ inline Ref<PBRMaterial> RandomPBRMaterial()
     return mat;
 }
 
-inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
+inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -39,12 +39,12 @@ inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const
     auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
     auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
 
-    t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(texCoords.x, 0.0);
-    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v2.texCoords.Set(0.0, texCoords.y);
+    t1->v0.texCoord.Set(0.0, 0.0);
+    t1->v1.texCoord.Set(texCoord.x, 0.0);
+    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v0.texCoord.Set(0.0, 0.0);
+    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v2.texCoord.Set(0.0, texCoord.y);
 
     auto rect = CreateSharedRef<HittableList>();
     rect->Add(t1);
@@ -53,7 +53,7 @@ inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const
     return rect;
 }
 
-inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
+inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -63,12 +63,12 @@ inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const
     auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
     auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
 
-    t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(texCoords.x, 0.0);
-    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v2.texCoords.Set(0.0, texCoords.y);
+    t1->v0.texCoord.Set(0.0, 0.0);
+    t1->v1.texCoord.Set(texCoord.x, 0.0);
+    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v0.texCoord.Set(0.0, 0.0);
+    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v2.texCoord.Set(0.0, texCoord.y);
 
     auto rect = CreateSharedRef<HittableList>();
     rect->Add(t1);
@@ -77,7 +77,7 @@ inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const
     return rect;
 }
 
-inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoords = UV{ 1.0, 1.0 })
+inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -87,12 +87,12 @@ inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const
     auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
     auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
 
-    t1->v0.texCoords.Set(0.0, 0.0);
-    t1->v1.texCoords.Set(texCoords.x, 0.0);
-    t1->v2.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v0.texCoords.Set(0.0, 0.0);
-    t2->v1.texCoords.Set(texCoords.x, texCoords.y);
-    t2->v2.texCoords.Set(0.0, texCoords.y);
+    t1->v0.texCoord.Set(0.0, 0.0);
+    t1->v1.texCoord.Set(texCoord.x, 0.0);
+    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v0.texCoord.Set(0.0, 0.0);
+    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2->v2.texCoord.Set(0.0, texCoord.y);
 
     auto rect = CreateSharedRef<HittableList>();
     rect->Add(t1);
