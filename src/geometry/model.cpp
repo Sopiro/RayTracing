@@ -45,7 +45,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     vertices.reserve(mesh->mNumVertices);
 
     // Process vertices
-    for (i32 i = 0; i < mesh->mNumVertices; ++i)
+    for (u32 i = 0; i < mesh->mNumVertices; ++i)
     {
         assert(mesh->HasPositions());
         assert(mesh->HasNormals());
@@ -74,12 +74,12 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     std::vector<u32> indices;
     indices.reserve(mesh->mNumFaces * vertices_per_face);
 
-    for (i32 i = 0; i < mesh->mNumFaces; ++i)
+    for (u32 i = 0; i < mesh->mNumFaces; ++i)
     {
         aiFace face = mesh->mFaces[i];
         if (face.mNumIndices == vertices_per_face)
         {
-            for (i32 j = 0; j < face.mNumIndices; ++j)
+            for (u32 j = 0; j < face.mNumIndices; ++j)
             {
                 indices.emplace_back(face.mIndices[j]);
             }

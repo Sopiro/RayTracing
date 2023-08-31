@@ -1,7 +1,6 @@
 #include "spt/pathtracer.h"
 
 #define MIN_BOUNCES 3
-#define MAX_RESAMPLE 10
 
 namespace spt
 {
@@ -84,6 +83,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                     {
                         f64 light_p = light_pdf.Evaluate(to_light.dir);
                         f64 mis_w = 1.0 / (light_p + light_brdf_p);
+
                         radiance += throughput * mis_w * rec2.mat->Emit(to_light, rec2) * rec.mat->Evaluate(ray, rec, to_light);
                     }
                 }
@@ -101,6 +101,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                     {
                         f64 brdf_p = srec.pdf->Evaluate(scattered.dir);
                         f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
+
                         radiance += throughput * mis_w * rec2.mat->Emit(scattered, rec2) * rec.mat->Evaluate(ray, rec, scattered);
                     }
                 }
@@ -108,7 +109,6 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
         }
 
         // Sample new search direction based on BRDF
-#if 1
         Vec3 new_direction = srec.pdf->Generate();
         f64 pdf_value;
 
@@ -120,22 +120,6 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
         {
             break;
         }
-#else
-        i32 count = 0;
-        Vec3 new_direction;
-        do
-        {
-            new_direction = srec.pdf->Generate();
-        }
-        while (Dot(rec.normal, new_direction) <= 0.0 && count++ < MAX_RESAMPLE);
-
-        if (count >= MAX_RESAMPLE)
-        {
-            break;
-        }
-
-        f64 pdf_value = srec.pdf->Evaluate(new_direction);
-#endif
 
         assert(pdf_value > 0.0);
         Ray scattered{ rec.point, new_direction };
