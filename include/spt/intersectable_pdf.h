@@ -14,7 +14,7 @@ public:
     // Returns random direction vector hitting this object
     virtual Vec3 Generate() const override;
 
-    // Evaluate pdf value with given incomming direction from origin
+    // Evaluate pdf value with given incident direction from origin
     virtual f64 Evaluate(const Vec3& wi) const override;
 
 public:

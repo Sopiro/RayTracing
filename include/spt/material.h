@@ -19,18 +19,24 @@ struct Interaction
     Ref<PDF> pdf; // Scattering pdf
 };
 
+// Lambertian
+// Metal
+// Dielectric
+// Isotropic
+// Microfacet
+// DiffuseLight
 class Material
 {
 public:
-    virtual Color Emit(const Ray& in_wi, const Intersection& in_is) const
+    virtual Color Emit(const Intersection& is, const Ray& wi) const
     {
         return Color{ 0.0, 0.0, 0.0 };
     }
 
-    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const = 0;
+    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const = 0;
 
     // BRDF with cosine term
-    virtual Vec3 Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const
+    virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const
     {
         assert(false);
         return Vec3{ 0.0 };

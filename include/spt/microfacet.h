@@ -74,9 +74,9 @@ class Microfacet : public Material
 public:
     Microfacet() = default;
 
-    virtual Color Emit(const Ray& in_wi, const Intersection& in_is) const override;
-    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const override;
-    virtual Vec3 Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const override;
+    virtual Color Emit(const Intersection& is, const Ray& wi) const override;
+    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const override;
 
 public:
     Ref<Texture> basecolor_map;
@@ -87,9 +87,9 @@ public:
     Ref<Texture> emissive_map;
 };
 
-inline Color Microfacet::Emit(const Ray& in_wi, const Intersection& in_is) const
+inline Color Microfacet::Emit(const Intersection& is, const Ray& wi) const
 {
-    return emissive_map->Value(in_is.uv, in_is.point);
+    return emissive_map->Value(is.uv, is.point);
 }
 
 } // namespace spt

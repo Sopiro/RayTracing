@@ -22,11 +22,11 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
         }
 
         Interaction ir;
-        if (is.mat->Scatter(ray, is, ir) == false)
+        if (is.mat->Scatter(is, ray, ir) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += throughput * is.mat->Emit(ray, is);
+                radiance += throughput * is.mat->Emit(is, ray);
             }
             break;
         }
@@ -48,7 +48,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             was_specular = false;
         }
 
-        radiance += throughput * is.mat->Emit(ray, is);
+        radiance += throughput * is.mat->Emit(is, ray);
 
         // Evaluate direct light (Next Event Estimation)
 
@@ -57,10 +57,10 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             const Ref<DirectionalLight>& sun = scene.GetDirectionalLight();
             Ray to_sun{ is.point + is.normal * ray_offset, -sun->dir };
 
-            Intersection rec2;
-            if (scene.Intersect(to_sun, ray_offset, infinity, rec2) == false)
+            Intersection is2;
+            if (scene.Intersect(to_sun, ray_offset, infinity, is2) == false)
             {
-                radiance += throughput * sun->radiance * is.mat->Evaluate(ray, is, to_sun);
+                radiance += throughput * sun->radiance * is.mat->Evaluate(is, ray, to_sun);
             }
         }
 
@@ -78,13 +78,13 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                 f64 light_brdf_p = ir.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
-                    Intersection rec2;
-                    if (scene.Intersect(to_light, ray_offset, infinity, rec2))
+                    Intersection is2;
+                    if (scene.Intersect(to_light, ray_offset, infinity, is2))
                     {
                         f64 light_p = light_pdf.Evaluate(to_light.dir);
                         f64 mis_w = 1.0 / (light_p + light_brdf_p);
 
-                        radiance += throughput * mis_w * rec2.mat->Emit(to_light, rec2) * is.mat->Evaluate(ray, is, to_light);
+                        radiance += throughput * mis_w * is2.mat->Emit(is2, to_light) * is.mat->Evaluate(is, ray, to_light);
                     }
                 }
             }
@@ -96,35 +96,35 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                 f64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
-                    Intersection rec2;
-                    if (scene.Intersect(scattered, ray_offset, infinity, rec2))
+                    Intersection is2;
+                    if (scene.Intersect(scattered, ray_offset, infinity, is2))
                     {
                         f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
                         f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                        radiance += throughput * mis_w * rec2.mat->Emit(scattered, rec2) * is.mat->Evaluate(ray, is, scattered);
+                        radiance += throughput * mis_w * is2.mat->Emit(is2, scattered) * is.mat->Evaluate(is, ray, scattered);
                     }
                 }
             }
         }
 
         // Sample new search direction based on BRDF
-        Vec3 new_direction = ir.pdf->Generate();
-        f64 pdf_value;
+        Vec3 wi = ir.pdf->Generate();
+        f64 pdf;
 
-        if (Dot(is.normal, new_direction) > 0.0)
+        if (Dot(is.normal, wi) > 0.0)
         {
-            pdf_value = ir.pdf->Evaluate(new_direction);
+            pdf = ir.pdf->Evaluate(wi);
         }
         else
         {
             break;
         }
 
-        assert(pdf_value > 0.0);
-        Ray scattered{ is.point, new_direction };
+        assert(pdf > 0.0);
+        Ray scattered{ is.point, wi };
 
-        throughput *= is.mat->Evaluate(ray, is, scattered) / pdf_value;
+        throughput *= is.mat->Evaluate(is, ray, scattered) / pdf;
         ray = scattered;
 
         // Russian roulette
