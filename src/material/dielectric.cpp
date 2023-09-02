@@ -3,13 +3,13 @@
 namespace spt
 {
 
-bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
+bool Dielectric::Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const
 {
-    f64 refraction_ratio = in_rec.front_face ? (1.0 / ior) : ior;
+    f64 refraction_ratio = in_is.front_face ? (1.0 / ior) : ior;
 
-    Vec3 unit_direction = in_ray.dir.Normalized();
+    Vec3 unit_direction = in_wi.dir.Normalized();
 
-    f64 cos_theta = Min(Dot(-unit_direction, in_rec.normal), 1.0);
+    f64 cos_theta = Min(Dot(-unit_direction, in_is.normal), 1.0);
     f64 sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
     // Check for total internal reflection
@@ -18,17 +18,17 @@ bool Dielectric::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterReco
 
     if (refractable == false || Reflectance(cos_theta, refraction_ratio) > Rand())
     {
-        direction = Reflect(unit_direction, in_rec.normal);
+        direction = Reflect(unit_direction, in_is.normal);
     }
     else
     {
-        direction = Refract(unit_direction, in_rec.normal, refraction_ratio);
+        direction = Refract(unit_direction, in_is.normal, refraction_ratio);
     }
 
-    out_srec.is_specular = true;
-    out_srec.pdf = nullptr;
-    out_srec.attenuation = Color{ 1.0, 1.0, 1.0 };
-    out_srec.specular_ray = Ray{ in_rec.point, direction };
+    out_ir.is_specular = true;
+    out_ir.pdf = nullptr;
+    out_ir.attenuation = Color{ 1.0, 1.0, 1.0 };
+    out_ir.specular_ray = Ray{ in_is.point, direction };
 
     return true;
 }

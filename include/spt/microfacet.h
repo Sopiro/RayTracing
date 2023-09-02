@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "material.h"
 
 namespace spt
 {
@@ -61,6 +62,34 @@ inline f64 V_SmithGGXCorrelatedFast(f64 NoV, f64 NoL, f64 alpha)
     f64 GGXV = NoL * (NoV * (1.0 - alpha) + alpha);
     f64 GGXL = NoV * (NoL * (1.0 - alpha) + alpha);
     return 0.5 / (GGXV + GGXL);
+}
+
+// Microfacet material
+// Microfacet BRDF (Cook-Torrance specular + Lambertian diffuse)
+// GGX normal distribution function
+// Smith-GGX height-correlated visibility function
+// Schlick Fresnel function
+class Microfacet : public Material
+{
+public:
+    Microfacet() = default;
+
+    virtual Color Emit(const Ray& in_wi, const Intersection& in_is) const override;
+    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const override;
+    virtual Vec3 Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const override;
+
+public:
+    Ref<Texture> basecolor_map;
+    Ref<Texture> normal_map;
+    Ref<Texture> metallic_map;
+    Ref<Texture> roughness_map;
+    Ref<Texture> ao_map;
+    Ref<Texture> emissive_map;
+};
+
+inline Color Microfacet::Emit(const Ray& in_wi, const Intersection& in_is) const
+{
+    return emissive_map->Value(in_is.uv, in_is.point);
 }
 
 } // namespace spt

@@ -7,12 +7,12 @@
 namespace spt
 {
 
-class Model : public Hittable
+class Model : public Intersectable
 {
 public:
     Model(const std::string& path, const Transform& transform);
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual i32 GetSize() const override;
 
@@ -30,9 +30,9 @@ private:
     BVH bvh;
 };
 
-inline bool Model::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+inline bool Model::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
-    return bvh.Hit(ray, t_min, t_max, rec);
+    return bvh.Intersect(ray, t_min, t_max, is);
 }
 
 inline bool Model::GetAABB(AABB& outAABB) const

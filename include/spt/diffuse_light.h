@@ -9,8 +9,8 @@ public:
     DiffuseLight(const Ref<Texture>& emission);
     DiffuseLight(Color color);
 
-    virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
-    virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const override;
+    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const override;
+    virtual Color Emit(const Ray& in_wi, const Intersection& in_is) const override;
 
 public:
     bool two_sided = false;
@@ -27,16 +27,16 @@ inline DiffuseLight::DiffuseLight(Color color)
 {
 }
 
-inline bool DiffuseLight::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
+inline bool DiffuseLight::Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const
 {
     return false;
 }
 
-inline Color DiffuseLight::Emit(const Ray& in_ray, const HitRecord& in_rec) const
+inline Color DiffuseLight::Emit(const Ray& in_wi, const Intersection& in_is) const
 {
-    if (in_rec.front_face || two_sided)
+    if (in_is.front_face || two_sided)
     {
-        return emit->Value(in_rec.uv, in_rec.point);
+        return emit->Value(in_is.uv, in_is.point);
     }
     else
     {

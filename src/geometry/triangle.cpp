@@ -4,7 +4,7 @@ namespace spt
 {
 
 // Möller-Trumbore algorithm
-bool Triangle::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+bool Triangle::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
     Vec3 d = ray.dir;
     f64 l = d.Normalize();
@@ -48,17 +48,17 @@ bool Triangle::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
 
     f64 w = 1.0 - u - v;
 
-    rec.object = this;
-    rec.mat = material.get();
-    rec.t = t;
-    rec.point = ray.At(rec.t);
+    is.object = this;
+    is.mat = material.get();
+    is.t = t;
+    is.point = ray.At(is.t);
 
     Vec3 normal = GetNormal(u, v, w);
     Vec3 tangent = GetTangent(u, v, w);
-    rec.SetFaceNormal(ray, normal, tangent);
+    is.SetFaceNormal(ray, normal, tangent);
 
     UV tex = GetTexCoord(u, v, w);
-    rec.uv = tex;
+    is.uv = tex;
 
     return true;
 }

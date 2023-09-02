@@ -16,7 +16,7 @@ public:
     GGXPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
 
     virtual Vec3 Generate() const override;
-    virtual f64 Evaluate(const Vec3& d) const override;
+    virtual f64 Evaluate(const Vec3& wi) const override;
 
 public:
     ONB uvw;
@@ -62,13 +62,13 @@ inline Vec3 GGXPDF::Generate() const
     }
 }
 
-inline f64 GGXPDF::Evaluate(const Vec3& d) const
+inline f64 GGXPDF::Evaluate(const Vec3& wi) const
 {
-    Vec3 h = (wo + d).Normalized();
+    Vec3 h = (wo + wi).Normalized();
     f64 NoH = Dot(uvw.w, h);
-    f64 spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(d, h), epsilon);
+    f64 spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(wi, h), epsilon);
 
-    f64 cosine = Dot(d, uvw.w);
+    f64 cosine = Dot(wi, uvw.w);
     f64 diff_w = cosine * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;

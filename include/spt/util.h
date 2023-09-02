@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "material.h"
-#include "pbr_material.h"
+#include "microfacet.h"
 #include "solid_color.h"
 #include "transform.h"
 
@@ -14,9 +14,9 @@ inline bool is_nullish(const Vec3& v)
     return (isnan(v.x) || isnan(v.y) || isnan(v.z) || isinf(v.x) || isinf(v.y) || isinf(v.z));
 }
 
-inline Ref<PBRMaterial> RandomPBRMaterial()
+inline Ref<Microfacet> RandomPBRMaterial()
 {
-    Ref<PBRMaterial> mat = CreateSharedRef<PBRMaterial>();
+    Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
 
     Color basecolor = Vec3{ Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0) } * 0.7;
     mat->basecolor_map = SolidColor::Create(basecolor);
@@ -29,7 +29,7 @@ inline Ref<PBRMaterial> RandomPBRMaterial()
     return mat;
 }
 
-inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
+inline Ref<Intersectable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -46,14 +46,14 @@ inline Ref<Hittable> RectXY(const Transform& tf, const Ref<Material>& mat, const
     t2->v1.texCoord.Set(texCoord.x, texCoord.y);
     t2->v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<HittableList>();
+    auto rect = CreateSharedRef<IntersectableList>();
     rect->Add(t1);
     rect->Add(t2);
 
     return rect;
 }
 
-inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
+inline Ref<Intersectable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -70,14 +70,14 @@ inline Ref<Hittable> RectXZ(const Transform& tf, const Ref<Material>& mat, const
     t2->v1.texCoord.Set(texCoord.x, texCoord.y);
     t2->v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<HittableList>();
+    auto rect = CreateSharedRef<IntersectableList>();
     rect->Add(t1);
     rect->Add(t2);
 
     return rect;
 }
 
-inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
+inline Ref<Intersectable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 })
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -94,14 +94,14 @@ inline Ref<Hittable> RectYZ(const Transform& tf, const Ref<Material>& mat, const
     t2->v1.texCoord.Set(texCoord.x, texCoord.y);
     t2->v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<HittableList>();
+    auto rect = CreateSharedRef<IntersectableList>();
     rect->Add(t1);
     rect->Add(t2);
 
     return rect;
 }
 
-inline Ref<Hittable> Box(const Transform& tf, const Ref<Material>& mat)
+inline Ref<Intersectable> Box(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });
@@ -113,7 +113,7 @@ inline Ref<Hittable> Box(const Transform& tf, const Ref<Material>& mat)
     Vec3 v6 = Mul(tf, Vec3{ 0.5, 0.5, -0.5 });
     Vec3 v7 = Mul(tf, Vec3{ -0.5, 0.5, -0.5 });
 
-    auto box = CreateSharedRef<HittableList>();
+    auto box = CreateSharedRef<IntersectableList>();
 
     // front
     box->Add(CreateSharedRef<Triangle>(v0, v1, v2, mat));

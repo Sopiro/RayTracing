@@ -12,8 +12,8 @@ public:
     Lambertian(const Color& color);
     Lambertian(const Ref<Texture>& albedo);
 
-    virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const override;
-    virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const override;
+    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const override;
+    virtual Vec3 Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const override;
 
 public:
     Ref<Texture> albedo;
@@ -29,18 +29,18 @@ inline Lambertian::Lambertian(const Ref<Texture>& _albedo)
 {
 }
 
-inline bool Lambertian::Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const
+inline bool Lambertian::Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const
 {
-    out_srec.is_specular = false;
-    out_srec.attenuation = albedo->Value(in_rec.uv, in_rec.point);
-    out_srec.pdf = CreateSharedRef<CosinePDF>(in_rec.normal);
+    out_ir.is_specular = false;
+    out_ir.attenuation = albedo->Value(in_is.uv, in_is.point);
+    out_ir.pdf = CreateSharedRef<CosinePDF>(in_is.normal);
 
     return true;
 }
 
-inline Vec3 Lambertian::Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
+inline Vec3 Lambertian::Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const
 {
-    return albedo->Value(in_rec.uv, in_rec.point) * Dot(in_rec.normal, in_scattered.dir) * inv_pi;
+    return albedo->Value(in_is.uv, in_is.point) * Dot(in_is.normal, in_wo.dir) * inv_pi;
 }
 
 } // namespace spt

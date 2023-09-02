@@ -10,10 +10,11 @@ struct AABB
 {
     f64 GetArea() const;
     f64 GetPerimater() const;
+
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
-    bool Hit(const Ray& ray, f64 t_min, f64 t_max) const;
+    bool Intersect(const Ray& ray, f64 t_min, f64 t_max) const;
 
     Vec3 min, max;
 };
@@ -52,7 +53,7 @@ inline bool AABB::TestOverlap(const AABB& other) const
     return true;
 }
 
-inline bool AABB::Hit(const Ray& ray, f64 t_min, f64 t_max) const
+inline bool AABB::Intersect(const Ray& ray, f64 t_min, f64 t_max) const
 {
     // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
     for (i32 axis = 0; axis < 3; ++axis)

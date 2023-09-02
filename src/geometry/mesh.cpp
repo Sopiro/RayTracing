@@ -23,7 +23,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
     }
     else
     {
-        auto mat = CreateSharedRef<PBRMaterial>();
+        auto mat = CreateSharedRef<Microfacet>();
         mat->basecolor_map = HasTexture(basecolor) ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
         mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
         mat->metallic_map = HasTexture(metallic) ? textures[metallic] : SolidColor::Create(0.0, 0.0, 0.0);

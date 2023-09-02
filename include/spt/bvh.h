@@ -3,7 +3,7 @@
 #include "aabb.h"
 #include "common.h"
 #include "growable_array.h"
-#include "hittable.h"
+#include "intersectable.h"
 
 #define nullNode (-1)
 
@@ -22,9 +22,9 @@ inline Real SAH(const AABB& aabb)
 #endif
 }
 
-class Hittable;
+class Intersectable;
 typedef i32 NodeProxy;
-typedef Hittable Data;
+typedef Intersectable Data;
 
 struct Node
 {
@@ -46,7 +46,7 @@ struct Node
     Data* data; // user data
 };
 
-class BVH : public Hittable
+class BVH : public Intersectable
 {
 public:
     BVH();
@@ -61,7 +61,7 @@ public:
     void Reset();
 
     NodeProxy CreateNode(Data* data, const AABB& aabb);
-    bool MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool forceMove);
+    bool MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move);
     void RemoveNode(NodeProxy node);
 
     bool TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const;
@@ -80,7 +80,7 @@ public:
     void RayCast(const Ray& r,
                  Real t_min,
                  Real t_max,
-                 const std::function<Real(const Ray&, Real, Real, Hittable*)>& callback) const;
+                 const std::function<Real(const Ray&, Real, Real, Intersectable*)>& callback) const;
     template <typename T>
     void RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const;
 
@@ -90,7 +90,7 @@ public:
 
     Real GetTreeCost() const;
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
@@ -292,7 +292,7 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
             continue;
         }
 
-        if (node->aabb.Hit(r, t_min, t) == false)
+        if (node->aabb.Intersect(r, t_min, t) == false)
         {
             continue;
         }
@@ -340,15 +340,15 @@ inline f64 BVH::EvaluatePDF(const Ray& ray) const
         f64 sum;
         f64 weight;
 
-        HitRecord rec;
+        Intersection is;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Hittable* object)
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
         {
-            bool hit = object->Hit(ray, t_min, t_max, rec);
+            bool hit = object->Intersect(ray, t_min, t_max, is);
 
             if (hit)
             {
-                sum += weight * rec.object->PDFValue(ray, rec) / object->GetSize();
+                sum += weight * is.object->PDFValue(ray, is) / object->GetSize();
             }
 
             return t_max;

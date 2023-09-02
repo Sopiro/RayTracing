@@ -9,9 +9,9 @@
 namespace spt
 {
 
-struct HitRecord;
+struct Intersection;
 
-struct ScatterRecord
+struct Interaction
 {
     bool is_specular;
     Ray specular_ray;
@@ -22,15 +22,15 @@ struct ScatterRecord
 class Material
 {
 public:
-    virtual Color Emit(const Ray& in_ray, const HitRecord& in_rec) const
+    virtual Color Emit(const Ray& in_wi, const Intersection& in_is) const
     {
         return Color{ 0.0, 0.0, 0.0 };
     }
 
-    virtual bool Scatter(const Ray& in_ray, const HitRecord& in_rec, ScatterRecord& out_srec) const = 0;
+    virtual bool Scatter(const Ray& in_wi, const Intersection& in_is, Interaction& out_ir) const = 0;
 
     // BRDF with cosine term
-    virtual Vec3 Evaluate(const Ray& in_ray, const HitRecord& in_rec, const Ray& in_scattered) const
+    virtual Vec3 Evaluate(const Ray& in_wi, const Intersection& in_is, const Ray& in_wo) const
     {
         assert(false);
         return Vec3{ 0.0 };

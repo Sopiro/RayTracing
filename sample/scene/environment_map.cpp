@@ -36,7 +36,7 @@ void EnvironmentMap(Scene& scene)
                 mat = CreateSharedRef<Metal>(Vec3{ 0.6 }, 0.0);
             }
 
-            Ref<Hittable> object;
+            Ref<Intersectable> object;
 
             if (x % 2)
             {

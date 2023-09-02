@@ -3,7 +3,7 @@
 namespace spt
 {
 
-bool Sphere::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+bool Sphere::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
     Vec3 oc = ray.origin - center;
     f64 a = ray.dir.Length2();
@@ -28,17 +28,17 @@ bool Sphere::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
         }
     }
 
-    rec.object = this;
-    rec.mat = material.get();
-    rec.t = root;
-    rec.point = ray.At(rec.t);
-    Vec3 outward_normal = (rec.point - center) / radius;
+    is.object = this;
+    is.mat = material.get();
+    is.t = root;
+    is.point = ray.At(is.t);
+    Vec3 outward_normal = (is.point - center) / radius;
 
     Vec3 t = (fabs(outward_normal.y) > 0.999) ? x_axis : y_axis;
     Vec3 outward_tangent = Cross(t, outward_normal).Normalized();
 
-    rec.SetFaceNormal(ray, outward_normal, outward_tangent);
-    GetUV(outward_normal, rec.uv);
+    is.SetFaceNormal(ray, outward_normal, outward_tangent);
+    GetUV(outward_normal, is.uv);
 
     return true;
 }

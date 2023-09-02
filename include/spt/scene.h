@@ -3,34 +3,34 @@
 #include "bvh.h"
 #include "common.h"
 #include "directional_light.h"
-#include "hittable.h"
-#include "hittable_list.h"
 #include "image_texture.h"
+#include "intersectable.h"
+#include "intersectable_list.h"
 #include "solid_color.h"
 #include "sphere.h"
 
 namespace spt
 {
 
-class Scene : public Hittable
+class Scene : public Intersectable
 {
 public:
     Scene();
 
     void Reset();
-    void Add(const Ref<Hittable>& object);
-    void AddLight(const Ref<Hittable>& object);
+    void Add(const Ref<Intersectable>& object);
+    void AddLight(const Ref<Intersectable>& object);
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual void Rebuild() override;
 
-    const HittableList& GetHittableList() const;
+    const IntersectableList& GetIntersectableList() const;
 
     bool HasAreaLights() const;
-    const HittableList& GetAreaLights() const;
+    const IntersectableList& GetAreaLights() const;
 
     const Ref<Texture>& GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -41,8 +41,8 @@ public:
     void SetDirectionalLight(const Ref<DirectionalLight>& directional_light);
 
 private:
-    HittableList hittables;
-    HittableList lights;
+    IntersectableList intersectables;
+    IntersectableList lights;
 
     Ref<Texture> environment_map;
     Ref<DirectionalLight> directional_light;
@@ -56,48 +56,48 @@ inline Scene::Scene()
 
 inline void Scene::Reset()
 {
-    hittables.Clear();
+    intersectables.Clear();
     lights.Clear();
 }
 
-inline void Scene::Add(const Ref<Hittable>& object)
+inline void Scene::Add(const Ref<Intersectable>& object)
 {
-    hittables.Add(object);
+    intersectables.Add(object);
 }
 
-inline void Scene::AddLight(const Ref<Hittable>& object)
+inline void Scene::AddLight(const Ref<Intersectable>& object)
 {
     lights.Add(object);
 }
 
 inline void Scene::Rebuild()
 {
-    hittables.Rebuild();
+    intersectables.Rebuild();
 }
 
-inline bool Scene::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+inline bool Scene::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
-    return hittables.Hit(ray, t_min, t_max, rec);
+    return intersectables.Intersect(ray, t_min, t_max, is);
 }
 
-inline bool Scene::GetAABB(AABB& outAABB) const
+inline bool Scene::GetAABB(AABB& out_aabb) const
 {
-    return hittables.GetAABB(outAABB);
+    return intersectables.GetAABB(out_aabb);
 }
 
 inline f64 Scene::EvaluatePDF(const Ray& ray) const
 {
-    return hittables.EvaluatePDF(ray);
+    return intersectables.EvaluatePDF(ray);
 }
 
 inline Vec3 Scene::GetRandomDirection(const Point3& origin) const
 {
-    return hittables.GetRandomDirection(origin);
+    return intersectables.GetRandomDirection(origin);
 }
 
-inline const HittableList& Scene::GetHittableList() const
+inline const IntersectableList& Scene::GetIntersectableList() const
 {
-    return hittables;
+    return intersectables;
 }
 
 inline bool Scene::HasAreaLights() const
@@ -105,7 +105,7 @@ inline bool Scene::HasAreaLights() const
     return lights.GetCount() > 0;
 }
 
-inline const HittableList& Scene::GetAreaLights() const
+inline const IntersectableList& Scene::GetAreaLights() const
 {
     return lights;
 }

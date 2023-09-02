@@ -33,7 +33,7 @@ void PBRTest(Scene& scene)
 
     // Ground
     {
-        auto mat = CreateSharedRef<PBRMaterial>();
+        auto mat = CreateSharedRef<Microfacet>();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
         mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });

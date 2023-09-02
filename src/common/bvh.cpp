@@ -1,5 +1,5 @@
 #include "spt/bvh.h"
-#include "spt/hittable.h"
+#include "spt/intersectable.h"
 
 namespace spt
 {
@@ -330,13 +330,13 @@ NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
     return newNode;
 }
 
-bool BVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool forceMove)
+bool BVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
 
     const AABB& treeAABB = nodes[node].aabb;
-    if (treeAABB.Contains(aabb) && forceMove == false)
+    if (treeAABB.Contains(aabb) && force_move == false)
     {
         return false;
     }
@@ -779,7 +779,7 @@ void BVH::Rebuild()
 void BVH::RayCast(const Ray& r,
                   Real t_min,
                   Real t_max,
-                  const std::function<Real(const Ray&, Real, Real, Hittable*)>& callback) const
+                  const std::function<Real(const Ray&, Real, Real, Intersectable*)>& callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
@@ -806,7 +806,7 @@ void BVH::RayCast(const Ray& r,
             continue;
         }
 
-        if (node->aabb.Hit(r, t_min, t) == false)
+        if (node->aabb.Intersect(r, t_min, t) == false)
         {
             continue;
         }
@@ -836,22 +836,22 @@ void BVH::RayCast(const Ray& r,
     }
 }
 
-bool BVH::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+bool BVH::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
     struct Callback
     {
-        HitRecord* rec;
+        Intersection* is;
         bool hit_closest;
         f64 t;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Hittable* object)
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
         {
-            bool hit = object->Hit(ray, t_min, t_max, *rec);
+            bool hit = object->Intersect(ray, t_min, t_max, *is);
 
             if (hit)
             {
                 hit_closest = true;
-                t = rec->t;
+                t = is->t;
             }
 
             // Keep traverse with smaller bounds
@@ -859,7 +859,7 @@ bool BVH::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
         }
     } callback;
 
-    callback.rec = &rec;
+    callback.is = &is;
     callback.hit_closest = false;
     callback.t = t_max;
 

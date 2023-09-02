@@ -2,37 +2,37 @@
 
 #include "bvh.h"
 #include "common.h"
-#include "hittable.h"
+#include "intersectable.h"
 
 #define USE_BVH 1
 
 namespace spt
 {
 
-class HittableList : public Hittable
+class IntersectableList : public Intersectable
 {
 public:
-    HittableList() = default;
+    IntersectableList() = default;
 
-    void Add(const Ref<Hittable>& object);
+    void Add(const Ref<Intersectable>& object);
     void Clear();
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
-    const std::vector<Ref<Hittable>>& GetObjects() const;
+    const std::vector<Ref<Intersectable>>& GetObjects() const;
     size_t GetCount() const;
 
 private:
     BVH bvh;
-    std::vector<Ref<Hittable>> objects;
+    std::vector<Ref<Intersectable>> objects;
 };
 
-inline void HittableList::Add(const Ref<Hittable>& object)
+inline void IntersectableList::Add(const Ref<Intersectable>& object)
 {
     AABB aabb;
     object->GetAABB(aabb);
@@ -41,16 +41,16 @@ inline void HittableList::Add(const Ref<Hittable>& object)
     objects.push_back(object);
 }
 
-inline void HittableList::Clear()
+inline void IntersectableList::Clear()
 {
     bvh.Reset();
     objects.clear();
 }
 
-inline bool HittableList::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const
+inline bool IntersectableList::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
 #if USE_BVH
-    return bvh.Hit(ray, t_min, t_max, rec);
+    return bvh.Intersect(ray, t_min, t_max, is);
 #else
     HitRecord tmp;
     bool hit = false;
@@ -62,7 +62,7 @@ inline bool HittableList::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& r
         {
             hit = true;
             closest = tmp.t;
-            rec = tmp;
+            is = tmp;
         }
     }
 
@@ -70,17 +70,17 @@ inline bool HittableList::Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& r
 #endif
 }
 
-inline bool HittableList::GetAABB(AABB& outAABB) const
+inline bool IntersectableList::GetAABB(AABB& out_aabb) const
 {
 #if USE_BVH
-    return bvh.GetAABB(outAABB);
+    return bvh.GetAABB(out_aabb);
 #else
     if (objects.empty())
     {
         return false;
     }
 
-    objects[0]->GetAABB(outAABB);
+    objects[0]->GetAABB(out_aabb);
 
     AABB temp;
     for (i32 i = 1; i < objects.size(); ++i)
@@ -92,29 +92,29 @@ inline bool HittableList::GetAABB(AABB& outAABB) const
             return false;
         }
 
-        outAABB = Union(outAABB, temp);
+        out_aabb = Union(out_aabb, temp);
     }
 
     return true;
 #endif
 }
 
-inline f64 HittableList::EvaluatePDF(const Ray& ray) const
+inline f64 IntersectableList::EvaluatePDF(const Ray& ray) const
 {
     return bvh.EvaluatePDF(ray);
 }
 
-inline Vec3 HittableList::GetRandomDirection(const Point3& origin) const
+inline Vec3 IntersectableList::GetRandomDirection(const Point3& origin) const
 {
     return bvh.GetRandomDirection(origin);
 }
 
-inline i32 HittableList::GetSize() const
+inline i32 IntersectableList::GetSize() const
 {
     return bvh.GetSize();
 }
 
-inline void HittableList::Rebuild()
+inline void IntersectableList::Rebuild()
 {
     bvh.Rebuild();
 
@@ -132,12 +132,12 @@ inline void HittableList::Rebuild()
     bvh.Traverse(&callback);
 }
 
-inline const std::vector<Ref<Hittable>>& HittableList::GetObjects() const
+inline const std::vector<Ref<Intersectable>>& IntersectableList::GetObjects() const
 {
     return objects;
 }
 
-inline size_t HittableList::GetCount() const
+inline size_t IntersectableList::GetCount() const
 {
     return objects.size();
 }

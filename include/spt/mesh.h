@@ -3,7 +3,7 @@
 #include "bvh.h"
 #include "common.h"
 #include "material.h"
-#include "pbr_material.h"
+#include "microfacet.h"
 #include "triangle.h"
 
 namespace spt
@@ -20,14 +20,14 @@ enum TextureType
     count
 };
 
-class Mesh : public Hittable
+class Mesh : public Intersectable
 {
 public:
     Mesh(const std::vector<Vertex>& vertices,
          const std::vector<u32>& indices,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
-    virtual bool Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const override;
+    virtual bool Intersect(const Ray& ray, Real t_min, Real t_max, Intersection& is) const override;
     virtual bool GetAABB(AABB& outAABB) const override;
     virtual i32 GetSize() const override;
 
@@ -43,9 +43,9 @@ private:
     std::array<Ref<Texture>, TextureType::count> textures;
 };
 
-inline bool Mesh::Hit(const Ray& ray, Real t_min, Real t_max, HitRecord& rec) const
+inline bool Mesh::Intersect(const Ray& ray, Real t_min, Real t_max, Intersection& is) const
 {
-    return bvh.Hit(ray, t_min, t_max, rec);
+    return bvh.Intersect(ray, t_min, t_max, is);
 }
 
 inline bool Mesh::GetAABB(AABB& outAABB) const

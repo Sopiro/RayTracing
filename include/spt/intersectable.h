@@ -9,9 +9,9 @@ namespace spt
 
 typedef i32 NodeProxy;
 class Material;
-class Hittable;
+class Intersectable;
 
-struct HitRecord
+struct Intersection
 {
     void SetFaceNormal(const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
     {
@@ -27,20 +27,20 @@ struct HitRecord
     f64 t;
     bool front_face;
 
-    const Hittable* object;
+    const Intersectable* object;
     const Material* mat;
 };
 
-class Hittable
+class Intersectable
 {
 public:
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const = 0;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const = 0;
     virtual bool GetAABB(AABB& outAABB) const = 0;
 
     virtual f64 EvaluatePDF(const Ray& ray) const;
 
     // Input ray must hit this object
-    virtual f64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const;
+    virtual f64 PDFValue(const Ray& hit_ray, const Intersection& hit_is) const;
 
     // Returns random direction toward this object
     virtual Vec3 GetRandomDirection(const Point3& origin) const;
@@ -55,33 +55,33 @@ protected:
     NodeProxy node;
 };
 
-inline f64 Hittable::EvaluatePDF(const Ray& ray) const
+inline f64 Intersectable::EvaluatePDF(const Ray& ray) const
 {
     assert(false);
     return 0.0;
 }
 
 // Ray must hit this object
-inline f64 Hittable::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline f64 Intersectable::PDFValue(const Ray& hit_ray, const Intersection& hit_is) const
 {
     assert(false);
     return 0.0;
 }
 
 // Returns random direction toward this object
-inline Vec3 Hittable::GetRandomDirection(const Point3& origin) const
+inline Vec3 Intersectable::GetRandomDirection(const Point3& origin) const
 {
     assert(false);
     return zero_vec3;
 }
 
-inline i32 Hittable::GetSize() const
+inline i32 Intersectable::GetSize() const
 {
     assert(false);
     return 0;
 }
 
-inline void Hittable::Rebuild()
+inline void Intersectable::Rebuild()
 {
     assert(false);
 }

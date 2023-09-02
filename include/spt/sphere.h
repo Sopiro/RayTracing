@@ -1,23 +1,23 @@
 #pragma once
 
 #include "common.h"
-#include "hittable.h"
+#include "intersectable.h"
 #include "onb.h"
 #include "ray.h"
 
 namespace spt
 {
 
-class Sphere : public Hittable
+class Sphere : public Intersectable
 {
 public:
     Sphere() = default;
     Sphere(const Vec3& center, f64 radius, const Ref<Material>& material);
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
+    virtual f64 PDFValue(const Ray& hit_ray, const Intersection& is) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
 
@@ -37,26 +37,26 @@ inline Sphere::Sphere(const Vec3& _center, f64 _radius, const Ref<Material>& _ma
 {
 }
 
-inline bool Sphere::GetAABB(AABB& outAABB) const
+inline bool Sphere::GetAABB(AABB& out_aabb) const
 {
-    outAABB.min = center - Vec3{ radius };
-    outAABB.max = center + Vec3{ radius };
+    out_aabb.min = center - Vec3{ radius };
+    out_aabb.max = center + Vec3{ radius };
 
     return true;
 }
 
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 {
-    HitRecord rec;
-    if (Hit(ray, ray_offset, infinity, rec) == false)
+    Intersection is;
+    if (Intersect(ray, ray_offset, infinity, is) == false)
     {
         return 0.0;
     }
 
-    return PDFValue(ray, rec);
+    return PDFValue(ray, is);
 }
 
-inline f64 Sphere::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline f64 Sphere::PDFValue(const Ray& hit_ray, const Intersection& hit_is) const
 {
     f64 d2 = (center - hit_ray.origin).Length2();
     f64 cos_theta_max = sqrt(1.0 - radius * radius / d2);

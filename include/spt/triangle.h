@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "hittable.h"
+#include "intersectable.h"
 #include "ray.h"
 
 namespace spt
@@ -15,7 +15,7 @@ struct Vertex
     UV texCoord;
 };
 
-class Triangle : public Hittable
+class Triangle : public Intersectable
 {
 public:
     Triangle() = default;
@@ -26,20 +26,18 @@ public:
     Vec3 GetTangent(f64 u, f64 v, f64 w) const;
     UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
-    virtual bool Hit(const Ray& ray, f64 t_min, f64 t_max, HitRecord& rec) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const override;
+    virtual f64 PDFValue(const Ray& hit_ray, const Intersection& hit_itst) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
 
 public:
     Vertex v0, v1, v2;
     Vec3 e1, e2;
-
     Vec3 face_normal;
     bool two_sided;
-    f64 area;
     Ref<Material> material;
 };
 
@@ -50,7 +48,6 @@ inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, 
     e1 = p1 - p0;
     e2 = p2 - p0;
     face_normal = Cross(e1, e2);
-    area = face_normal.Normalize() * 0.5;
 
     // Setup vertices
     {
@@ -81,11 +78,10 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
     , two_sided{ true }
     , material{ material }
 {
-    e1 = v1.position - v0.position;
-    e2 = v2.position - v0.position;
+    Vec3 e1 = v1.position - v0.position;
+    Vec3 e2 = v2.position - v0.position;
 
     face_normal = Cross(e1, e2);
-    area = face_normal.Normalize() * 0.5;
 };
 
 inline Vec3 Triangle::GetNormal(f64 u, f64 v, f64 w) const
@@ -105,29 +101,31 @@ inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
 
 static constexpr Vec3 aabb_offset{ epsilon * 10.0 };
 
-inline bool Triangle::GetAABB(AABB& outAABB) const
+inline bool Triangle::GetAABB(AABB& out_aabb) const
 {
-    outAABB.min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
-    outAABB.max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
+    out_aabb.min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
+    out_aabb.max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
 
     return true;
 }
 
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
-    HitRecord rec;
-    if (Hit(ray, ray_offset, infinity, rec) == false)
+    Intersection is;
+    if (Intersect(ray, ray_offset, infinity, is) == false)
     {
         return 0.0;
     }
 
-    return PDFValue(ray, rec);
+    return PDFValue(ray, is);
 }
 
-inline f64 Triangle::PDFValue(const Ray& hit_ray, const HitRecord& hit_rec) const
+inline f64 Triangle::PDFValue(const Ray& hit_ray, const Intersection& hit_itst) const
 {
-    f64 distance_squared = hit_rec.t * hit_rec.t * hit_ray.dir.Length2();
-    f64 cosine = fabs(Dot(hit_ray.dir, hit_rec.normal) / hit_ray.dir.Length());
+    f64 distance_squared = hit_itst.t * hit_itst.t * hit_ray.dir.Length2();
+    f64 cosine = fabs(Dot(hit_ray.dir, hit_itst.normal) / hit_ray.dir.Length());
+
+    f64 area = 0.5 * Cross(e1, e2).Length();
 
     return distance_squared / (cosine * area);
 }

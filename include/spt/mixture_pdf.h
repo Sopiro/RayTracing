@@ -11,7 +11,7 @@ public:
     MixturePDF(PDF* pdf1, PDF* pdf2);
 
     virtual Vec3 Generate() const override;
-    virtual f64 Evaluate(const Vec3& direction) const override;
+    virtual f64 Evaluate(const Vec3& wi) const override;
 
 public:
     PDF* p1;
@@ -36,10 +36,10 @@ inline Vec3 MixturePDF::Generate() const
     }
 }
 
-inline f64 MixturePDF::Evaluate(const Vec3& direction) const
+inline f64 MixturePDF::Evaluate(const Vec3& wi) const
 {
     // Mixing two pdfs
-    return 0.5 * p1->Evaluate(direction) + 0.5 * p2->Evaluate(direction);
+    return 0.5 * p1->Evaluate(wi) + 0.5 * p2->Evaluate(wi);
 }
 
 } // namespace spt
