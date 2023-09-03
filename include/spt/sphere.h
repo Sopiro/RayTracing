@@ -17,9 +17,10 @@ public:
     virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
     virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Ray& hit_ray, const Intersection& is) const override;
+    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
+    virtual const Material* GetMaterial() const override;
 
 public:
     Vec3 center;
@@ -53,10 +54,10 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    return PDFValue(ray, is);
+    return PDFValue(is, ray);
 }
 
-inline f64 Sphere::PDFValue(const Ray& hit_ray, const Intersection& hit_is) const
+inline f64 Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
 {
     f64 d2 = (center - hit_ray.origin).Length2();
     f64 cos_theta_max = sqrt(1.0 - radius * radius / d2);
@@ -94,6 +95,11 @@ inline void Sphere::GetUV(const Point3& p, UV& out_uv)
 
     out_uv.x = phi * inv_two_pi;
     out_uv.y = theta * inv_pi;
+}
+
+inline const Material* Sphere::GetMaterial() const
+{
+    return material.get();
 }
 
 } // namespace spt

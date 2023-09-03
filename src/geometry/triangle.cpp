@@ -49,13 +49,12 @@ bool Triangle::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is)
     f64 w = 1.0 - u - v;
 
     is.object = this;
-    is.mat = material.get();
     is.t = t;
     is.point = ray.At(is.t);
 
     Vec3 normal = GetNormal(u, v, w);
     Vec3 tangent = GetTangent(u, v, w);
-    is.SetFaceNormal(ray, normal, tangent);
+    SetFaceNormal(is, ray, normal, tangent);
 
     UV tex = GetTexCoord(u, v, w);
     is.uv = tex;

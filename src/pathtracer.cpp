@@ -5,7 +5,7 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
+Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 {
     Color radiance{ 0.0 };
     Vec3 throughput{ 1.0 };
@@ -21,17 +21,19 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             break;
         }
 
+        const Material* mat = is.object->GetMaterial();
+
         Interaction ir;
-        if (is.mat->Scatter(is, ray, ir) == false)
+        if (mat->Scatter(is, ray, ir) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += throughput * is.mat->Emit(is, ray);
+                radiance += throughput * mat->Emit(is, ray);
             }
             break;
         }
 
-        if (bounce >= bounce_count)
+        if (bounce >= max_bounces)
         {
             break;
         }
@@ -48,7 +50,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             was_specular = false;
         }
 
-        radiance += throughput * is.mat->Emit(is, ray);
+        radiance += throughput * mat->Emit(is, ray);
 
         // Evaluate direct light (Next Event Estimation)
 
@@ -60,7 +62,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
             Intersection is2;
             if (scene.Intersect(to_sun, ray_offset, infinity, is2) == false)
             {
-                radiance += throughput * sun->radiance * is.mat->Evaluate(is, ray, to_sun);
+                radiance += throughput * sun->radiance * mat->Evaluate(is, ray, to_sun);
             }
         }
 
@@ -84,7 +86,8 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                         f64 light_p = light_pdf.Evaluate(to_light.dir);
                         f64 mis_w = 1.0 / (light_p + light_brdf_p);
 
-                        radiance += throughput * mis_w * is2.mat->Emit(is2, to_light) * is.mat->Evaluate(is, ray, to_light);
+                        Color le = is2.object->GetMaterial()->Emit(is2, to_light);
+                        radiance += throughput * mis_w * le * mat->Evaluate(is, ray, to_light);
                     }
                 }
             }
@@ -102,7 +105,8 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
                         f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
                         f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                        radiance += throughput * mis_w * is2.mat->Emit(is2, scattered) * is.mat->Evaluate(is, ray, scattered);
+                        Color le = is2.object->GetMaterial()->Emit(is2, scattered);
+                        radiance += throughput * mis_w * le * mat->Evaluate(is, ray, scattered);
                     }
                 }
             }
@@ -124,7 +128,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 bounce_count)
         assert(pdf > 0.0);
         Ray scattered{ is.point, wi };
 
-        throughput *= is.mat->Evaluate(is, ray, scattered) / pdf;
+        throughput *= mat->Evaluate(is, ray, scattered) / pdf;
         ray = scattered;
 
         // Russian roulette

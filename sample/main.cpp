@@ -51,8 +51,7 @@ int main()
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
     f64 scale = 1.0 / samples_per_pixel;
-    // i32 bounce_count = 10;
-    i32 bounce_count = INT_MAX;
+    i32 max_bounces = INT_MAX;
     Bitmap bitmap{ width, height };
 
     Scene scene;
@@ -400,7 +399,7 @@ int main()
                 f64 v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GetRay(u, v);
-                samples += PathTrace(scene, ray, bounce_count);
+                samples += PathTrace(scene, ray, max_bounces);
             }
 
             if (is_nullish(samples))
@@ -426,7 +425,7 @@ int main()
 
     std::cout << "\nDone!: " << t << 's' << std::endl;
 
-    std::string fileName = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, bounce_count, t);
+    std::string fileName = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
 
     bitmap.WriteToFile(fileName.c_str());
 

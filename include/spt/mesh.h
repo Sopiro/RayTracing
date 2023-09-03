@@ -28,10 +28,10 @@ public:
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
     virtual bool Intersect(const Ray& ray, Real t_min, Real t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual i32 GetSize() const override;
 
-    const Ref<Material>& GetMaterial() const;
+    virtual const Material* GetMaterial() const override;
     void SetMaterial(const Ref<Material>& material);
     bool HasTexture(TextureType type) const;
 
@@ -48,9 +48,9 @@ inline bool Mesh::Intersect(const Ray& ray, Real t_min, Real t_max, Intersection
     return bvh.Intersect(ray, t_min, t_max, is);
 }
 
-inline bool Mesh::GetAABB(AABB& outAABB) const
+inline bool Mesh::GetAABB(AABB& out_aabb) const
 {
-    return bvh.GetAABB(outAABB);
+    return bvh.GetAABB(out_aabb);
 }
 
 inline i32 Mesh::GetSize() const
@@ -58,9 +58,9 @@ inline i32 Mesh::GetSize() const
     return bvh.GetSize();
 }
 
-inline const Ref<Material>& Mesh::GetMaterial() const
+inline const Material* Mesh::GetMaterial() const
 {
-    return material;
+    return material.get();
 }
 
 inline void Mesh::SetMaterial(const Ref<Material>& mat)

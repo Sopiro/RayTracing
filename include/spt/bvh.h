@@ -91,7 +91,7 @@ public:
     Real GetTreeCost() const;
 
     virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& outAABB) const override;
+    virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
     virtual i32 GetSize() const override;
@@ -322,14 +322,14 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
     }
 }
 
-inline bool BVH::GetAABB(AABB& outAABB) const
+inline bool BVH::GetAABB(AABB& out_aabb) const
 {
     if (nodeCount == 0)
     {
         return false;
     }
 
-    outAABB = nodes[root].aabb;
+    out_aabb = nodes[root].aabb;
     return true;
 }
 
@@ -348,7 +348,7 @@ inline f64 BVH::EvaluatePDF(const Ray& ray) const
 
             if (hit)
             {
-                sum += weight * is.object->PDFValue(ray, is) / object->GetSize();
+                sum += weight * is.object->PDFValue(is, ray) / object->GetSize();
             }
 
             return t_max;

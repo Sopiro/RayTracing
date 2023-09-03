@@ -29,9 +29,10 @@ public:
     virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
     virtual bool GetAABB(AABB& out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Ray& hit_ray, const Intersection& hit_itst) const override;
+    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
+    virtual const Material* GetMaterial() const override;
 
 public:
     Vertex v0, v1, v2;
@@ -41,9 +42,9 @@ public:
     Ref<Material> material;
 };
 
-inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material>& material)
+inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material>& mat)
     : two_sided{ true }
-    , material{ material }
+    , material{ mat }
 {
     e1 = p1 - p0;
     e2 = p2 - p0;
@@ -71,15 +72,15 @@ inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, 
     }
 }
 
-inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material)
+inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& mat)
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }
     , two_sided{ true }
-    , material{ material }
+    , material{ mat }
 {
-    Vec3 e1 = v1.position - v0.position;
-    Vec3 e2 = v2.position - v0.position;
+    e1 = v1.position - v0.position;
+    e2 = v2.position - v0.position;
 
     face_normal = Cross(e1, e2);
 };
@@ -99,10 +100,10 @@ inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
     return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
 }
 
-static constexpr Vec3 aabb_offset{ epsilon * 10.0 };
-
 inline bool Triangle::GetAABB(AABB& out_aabb) const
 {
+    const Vec3 aabb_offset{ epsilon * 10.0 };
+
     out_aabb.min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
     out_aabb.max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
 
@@ -117,13 +118,13 @@ inline f64 Triangle::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    return PDFValue(ray, is);
+    return PDFValue(is, ray);
 }
 
-inline f64 Triangle::PDFValue(const Ray& hit_ray, const Intersection& hit_itst) const
+inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
 {
-    f64 distance_squared = hit_itst.t * hit_itst.t * hit_ray.dir.Length2();
-    f64 cosine = fabs(Dot(hit_ray.dir, hit_itst.normal) / hit_ray.dir.Length());
+    f64 distance_squared = hit_is.t * hit_is.t * hit_ray.dir.Length2();
+    f64 cosine = fabs(Dot(hit_ray.dir, hit_is.normal) / hit_ray.dir.Length());
 
     f64 area = 0.5 * Cross(e1, e2).Length();
 
@@ -149,6 +150,11 @@ inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
 inline i32 Triangle::GetSize() const
 {
     return 1;
+}
+
+inline const Material* Triangle::GetMaterial() const
+{
+    return material.get();
 }
 
 } // namespace spt

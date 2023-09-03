@@ -5,42 +5,42 @@ namespace spt
 
 bool ConstantDensityMedium::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
 {
-    Intersection itst1, itst2;
+    Intersection is1, is2;
 
     // Find the closest hit
-    if (boundary->Intersect(ray, -infinity, infinity, itst1) == false)
+    if (boundary->Intersect(ray, -infinity, infinity, is1) == false)
     {
         return false;
     }
 
     // Find the farthest hit
-    if (boundary->Intersect(ray, itst1.t + ray_offset, infinity, itst2) == false)
+    if (boundary->Intersect(ray, is1.t + ray_offset, infinity, is2) == false)
     {
         return false;
     }
 
-    if (itst1.t < t_min)
+    if (is1.t < t_min)
     {
-        itst1.t = t_min;
+        is1.t = t_min;
     }
 
-    if (itst2.t > t_max)
+    if (is2.t > t_max)
     {
-        itst2.t = t_max;
+        is2.t = t_max;
     }
 
-    if (itst1.t >= itst2.t)
+    if (is1.t >= is2.t)
     {
         return false;
     }
 
-    if (itst1.t < 0.0)
+    if (is1.t < 0.0)
     {
-        itst1.t = 0.0;
+        is1.t = 0.0;
     }
 
     f64 ray_length = ray.dir.Length();
-    f64 distance_inside_boundary = (itst2.t - itst1.t) * ray_length;
+    f64 distance_inside_boundary = (is2.t - is1.t) * ray_length;
     f64 hit_distance = neg_inv_density * log(Rand());
 
     if (hit_distance > distance_inside_boundary)
@@ -49,8 +49,7 @@ bool ConstantDensityMedium::Intersect(const Ray& ray, f64 t_min, f64 t_max, Inte
     }
 
     is.object = this;
-    is.mat = phase_function.get();
-    is.t = itst1.t + hit_distance / ray_length;
+    is.t = is1.t + hit_distance / ray_length;
     is.point = ray.At(is.t);
     is.normal = Vec3{ 1.0, 0.0, 0.0 }; // arbitrary
     is.front_face = true;              // also arbitrary
