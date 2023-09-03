@@ -74,7 +74,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             IntersectablePDF light_pdf{ &scene.GetAreaLights(), is.point };
 
             // Importance sample lights
-            Ray to_light{ is.point, light_pdf.Generate() };
+            Ray to_light{ is.point, light_pdf.Sample() };
             if (Dot(to_light.dir, is.normal) > 0.0)
             {
                 f64 light_brdf_p = ir.pdf->Evaluate(to_light.dir);
@@ -93,7 +93,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             }
 
             // Importance sample BRDF
-            Ray scattered{ is.point, ir.pdf->Generate() };
+            Ray scattered{ is.point, ir.pdf->Sample() };
             if (Dot(scattered.dir, is.normal) > 0.0)
             {
                 f64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
@@ -113,7 +113,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         }
 
         // Sample new search direction based on BRDF
-        Vec3 wi = ir.pdf->Generate();
+        Vec3 wi = ir.pdf->Sample();
         f64 pdf;
 
         if (Dot(is.normal, wi) > 0.0)

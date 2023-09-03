@@ -12,7 +12,7 @@ public:
     IntersectablePDF(const Intersectable* target, const Vec3& origin);
 
     // Returns random direction vector hitting this object
-    virtual Vec3 Generate() const override;
+    virtual Vec3 Sample() const override;
 
     // Evaluate pdf value with given incident direction from origin
     virtual f64 Evaluate(const Vec3& wi) const override;
@@ -29,7 +29,7 @@ inline IntersectablePDF::IntersectablePDF(const Intersectable* target, const Vec
 }
 
 // Returns random direction vector hitting this object
-inline Vec3 IntersectablePDF::Generate() const
+inline Vec3 IntersectablePDF::Sample() const
 {
     return target->GetRandomDirection(origin);
 }

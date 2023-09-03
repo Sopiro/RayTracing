@@ -14,8 +14,10 @@ struct Intersection;
 struct Interaction
 {
     bool is_specular;
+
     Ray specular_ray;
     Color attenuation;
+
     Ref<PDF> pdf; // Scattering pdf
 };
 

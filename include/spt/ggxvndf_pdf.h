@@ -20,7 +20,7 @@ class GGXVNDFPDF : public PDF
 public:
     GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
 
-    virtual Vec3 Generate() const override;
+    virtual Vec3 Sample() const override;
     virtual f64 Evaluate(const Vec3& wi) const override;
 
 public:
@@ -38,7 +38,7 @@ inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 
 {
 }
 
-inline Vec3 GGXVNDFPDF::Generate() const
+inline Vec3 GGXVNDFPDF::Sample() const
 {
     if (Rand() < t)
     {

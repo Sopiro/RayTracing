@@ -51,7 +51,7 @@ int main()
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
     f64 scale = 1.0 / samples_per_pixel;
-    i32 max_bounces = INT_MAX;
+    i32 max_bounces = 20;
     Bitmap bitmap{ width, height };
 
     Scene scene;

@@ -20,14 +20,14 @@ inline f64 PowerHeuristic(f64 pdf_f, f64 pdf_g)
     return f2 / (f2 + g2);
 }
 
-// Probability distribution function
+// Directinal PDF(Probability Distribution Function)
 class PDF
 {
 public:
     virtual ~PDF() = default;
 
     // Given an outgoing direction wo, importance sample an incident direction
-    virtual Vec3 Generate() const = 0;
+    virtual Vec3 Sample() const = 0;
 
     // Evaluate PDF with given direction
     virtual f64 Evaluate(const Vec3& wi) const = 0;

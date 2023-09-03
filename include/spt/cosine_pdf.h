@@ -10,7 +10,7 @@ class CosinePDF : public PDF
 public:
     CosinePDF(const Vec3& n);
 
-    virtual Vec3 Generate() const override;
+    virtual Vec3 Sample() const override;
     virtual f64 Evaluate(const Vec3& wi) const override;
 
 public:
@@ -22,7 +22,7 @@ inline CosinePDF::CosinePDF(const Vec3& n)
 {
 }
 
-inline Vec3 CosinePDF::Generate() const
+inline Vec3 CosinePDF::Sample() const
 {
     return uvw.GetLocal(RandomCosineDirection());
 }
