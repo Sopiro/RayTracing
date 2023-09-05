@@ -101,6 +101,21 @@ inline Vec3 RandomCosineDirection()
 
 inline Vec3 RandomInUnitSphere()
 {
+#if 0
+    Real u1 = Rand();
+    Real u2 = Rand();
+
+    Real theta = two_pi * u1;
+    Real phi = acos(2.0 * u2 - 1.0);
+
+    Real sin_phi = sin(phi);
+
+    Real x = sin_phi * cos(theta);
+    Real y = sin_phi * sin(theta);
+    Real z = cos(phi);
+
+    return Vec3{ x, y, z };
+#else
     // Rejection sampling
     Vec3 p;
     do
@@ -110,6 +125,7 @@ inline Vec3 RandomInUnitSphere()
     while (p.Length2() >= Real(1.0));
 
     return p;
+#endif
 }
 
 inline Vec3 RandomInUnitDiskXY()

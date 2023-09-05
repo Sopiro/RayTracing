@@ -133,6 +133,7 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
 
 inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
 {
+#if 1
     f64 u = Rand(0.0, 1.0);
     f64 v = Rand(0.0, 1.0);
 
@@ -145,6 +146,18 @@ inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
     Point3 random_point = v0.position + e1 * u + e2 * v;
 
     return (random_point - origin).Normalized();
+#else
+    f64 u1 = Rand(0.0, 1.0);
+    f64 u2 = Rand(0.0, 1.0);
+
+    f64 s = sqrt(u1);
+    f64 u = 1.0 - s;
+    f64 v = u2 * s;
+
+    Point3 random_point = v0.position + e1 * u + e2 * v;
+
+    return (random_point - origin).Normalized();
+#endif
 }
 
 inline i32 Triangle::GetSize() const
