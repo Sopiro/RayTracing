@@ -21,8 +21,8 @@ public:
     void Add(const Ref<Intersectable>& object);
     void AddLight(const Ref<Intersectable>& object);
 
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual void Rebuild() override;
@@ -75,12 +75,12 @@ inline void Scene::Rebuild()
     intersectables.Rebuild();
 }
 
-inline bool Scene::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
+inline bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    return intersectables.Intersect(ray, t_min, t_max, is);
+    return intersectables.Intersect(is, ray, t_min, t_max);
 }
 
-inline bool Scene::GetAABB(AABB& out_aabb) const
+inline bool Scene::GetAABB(AABB* out_aabb) const
 {
     return intersectables.GetAABB(out_aabb);
 }

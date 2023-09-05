@@ -17,8 +17,8 @@ public:
     void Add(const Ref<Intersectable>& object);
     void Clear();
 
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
@@ -35,7 +35,7 @@ private:
 inline void IntersectableList::Add(const Ref<Intersectable>& object)
 {
     AABB aabb;
-    object->GetAABB(aabb);
+    object->GetAABB(&aabb);
 
     bvh.CreateNode(object.get(), aabb);
     objects.push_back(object);
@@ -47,10 +47,10 @@ inline void IntersectableList::Clear()
     objects.clear();
 }
 
-inline bool IntersectableList::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
+inline bool IntersectableList::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
 #if USE_BVH
-    return bvh.Intersect(ray, t_min, t_max, is);
+    return bvh.Intersect(is, ray, t_min, t_max);
 #else
     HitRecord tmp;
     bool hit = false;
@@ -70,7 +70,7 @@ inline bool IntersectableList::Intersect(const Ray& ray, f64 t_min, f64 t_max, I
 #endif
 }
 
-inline bool IntersectableList::GetAABB(AABB& out_aabb) const
+inline bool IntersectableList::GetAABB(AABB* out_aabb) const
 {
 #if USE_BVH
     return bvh.GetAABB(out_aabb);

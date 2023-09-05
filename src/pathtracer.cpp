@@ -15,7 +15,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
     for (i32 bounce = 0;; ++bounce)
     {
         Intersection is;
-        if (scene.Intersect(ray, ray_offset, infinity, is) == false)
+        if (scene.Intersect(&is, ray, ray_offset, infinity) == false)
         {
             radiance += throughput * scene.GetSkyColor(ray.dir);
             break;
@@ -24,7 +24,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         const Material* mat = is.object->GetMaterial();
 
         Interaction ir;
-        if (mat->Scatter(is, ray, ir) == false)
+        if (mat->Scatter(&ir, is, ray) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
@@ -60,7 +60,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             Ray to_sun{ is.point + is.normal * ray_offset, -sun->dir };
 
             Intersection is2;
-            if (scene.Intersect(to_sun, ray_offset, infinity, is2) == false)
+            if (scene.Intersect(&is2, to_sun, ray_offset, infinity) == false)
             {
                 radiance += throughput * sun->radiance * mat->Evaluate(is, ray, to_sun);
             }
@@ -81,7 +81,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 if (light_brdf_p > 0.0)
                 {
                     Intersection is2;
-                    if (scene.Intersect(to_light, ray_offset, infinity, is2))
+                    if (scene.Intersect(&is2, to_light, ray_offset, infinity))
                     {
                         f64 light_p = light_pdf.Evaluate(to_light.dir);
                         f64 mis_w = 1.0 / (light_p + light_brdf_p);
@@ -100,7 +100,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 if (brdf_light_p > 0.0)
                 {
                     Intersection is2;
-                    if (scene.Intersect(scattered, ray_offset, infinity, is2))
+                    if (scene.Intersect(&is2, scattered, ray_offset, infinity))
                     {
                         f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
                         f64 mis_w = 1.0 / (brdf_p + brdf_light_p);

@@ -27,8 +27,8 @@ public:
          const std::vector<u32>& indices,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
-    virtual bool Intersect(const Ray& ray, Real t_min, Real t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Real t_min, Real t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual i32 GetSize() const override;
 
     virtual const Material* GetMaterial() const override;
@@ -43,12 +43,12 @@ private:
     std::array<Ref<Texture>, TextureType::count> textures;
 };
 
-inline bool Mesh::Intersect(const Ray& ray, Real t_min, Real t_max, Intersection& is) const
+inline bool Mesh::Intersect(Intersection* is, const Ray& ray, Real t_min, Real t_max) const
 {
-    return bvh.Intersect(ray, t_min, t_max, is);
+    return bvh.Intersect(is, ray, t_min, t_max);
 }
 
-inline bool Mesh::GetAABB(AABB& out_aabb) const
+inline bool Mesh::GetAABB(AABB* out_aabb) const
 {
     return bvh.GetAABB(out_aabb);
 }

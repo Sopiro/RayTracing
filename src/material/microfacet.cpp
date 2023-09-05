@@ -62,7 +62,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) 
     return (f_d + f_s) * NoL;
 }
 
-bool Microfacet::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
     Vec3 basecolor = basecolor_map->Value(is.uv, is.point);
     f64 metallic = metallic_map->Value(is.uv, is.point).z;
@@ -80,8 +80,8 @@ bool Microfacet::Scatter(const Intersection& is, const Ray& wi, Interaction& out
 
     // out_ir.pdf = CreateSharedRef<CosinePDF>(is.normal);
     // out_ir.pdf = CreateSharedRef<GGXPDF>(is.normal, wo, alpha, t);
-    out_ir.pdf = CreateSharedRef<GGXVNDFPDF>(is.normal, wo, alpha, t);
-    out_ir.is_specular = false;
+    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.normal, wo, alpha, t);
+    ir->is_specular = false;
 
     return true;
 }

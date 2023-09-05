@@ -15,7 +15,7 @@ Model::Model(const std::string& path, const Transform& transform)
     {
         Mesh* m = meshes[i].get();
         AABB aabb;
-        m->GetAABB(aabb);
+        m->GetAABB(&aabb);
 
         bvh.CreateNode(m, aabb);
     }

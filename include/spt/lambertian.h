@@ -12,7 +12,7 @@ public:
     Lambertian(const Color& color);
     Lambertian(const Ref<Texture>& albedo);
 
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
     virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const override;
 
 public:
@@ -29,11 +29,11 @@ inline Lambertian::Lambertian(const Ref<Texture>& _albedo)
 {
 }
 
-inline bool Lambertian::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
-    out_ir.is_specular = false;
-    out_ir.attenuation = albedo->Value(is.uv, is.point);
-    out_ir.pdf = CreateSharedRef<CosinePDF>(is.normal);
+    ir->is_specular = false;
+    ir->attenuation = albedo->Value(is.uv, is.point);
+    ir->pdf = CreateSharedRef<CosinePDF>(is.normal);
 
     return true;
 }

@@ -45,7 +45,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
 
         Triangle& t = triangles.emplace_back(vertices[index0], vertices[index1], vertices[index2], material);
         AABB aabb;
-        t.GetAABB(aabb);
+        t.GetAABB(&aabb);
         bvh.CreateNode(&t, aabb);
     }
 }

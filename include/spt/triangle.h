@@ -26,8 +26,8 @@ public:
     Vec3 GetTangent(f64 u, f64 v, f64 w) const;
     UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
@@ -100,12 +100,12 @@ inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
     return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
 }
 
-inline bool Triangle::GetAABB(AABB& out_aabb) const
+inline bool Triangle::GetAABB(AABB* out_aabb) const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
-    out_aabb.min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
-    out_aabb.max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
+    out_aabb->min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
+    out_aabb->max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
 
     return true;
 }
@@ -113,7 +113,7 @@ inline bool Triangle::GetAABB(AABB& out_aabb) const
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
-    if (Intersect(ray, ray_offset, infinity, is) == false)
+    if (Intersect(&is, ray, ray_offset, infinity) == false)
     {
         return 0.0;
     }

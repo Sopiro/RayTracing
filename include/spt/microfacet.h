@@ -75,7 +75,7 @@ public:
     Microfacet() = default;
 
     virtual Color Emit(const Intersection& is, const Ray& wi) const override;
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
     virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const override;
 
 public:

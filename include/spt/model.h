@@ -12,8 +12,8 @@ class Model : public Intersectable
 public:
     Model(const std::string& path, const Transform& transform);
 
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual i32 GetSize() const override;
 
     size_t GetMeshCount() const;
@@ -30,12 +30,12 @@ private:
     BVH bvh;
 };
 
-inline bool Model::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
+inline bool Model::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    return bvh.Intersect(ray, t_min, t_max, is);
+    return bvh.Intersect(is, ray, t_min, t_max);
 }
 
-inline bool Model::GetAABB(AABB& out_aabb) const
+inline bool Model::GetAABB(AABB* out_aabb) const
 {
     return bvh.GetAABB(out_aabb);
 }

@@ -11,7 +11,7 @@ public:
     Isotropic(const Color& color);
     Isotropic(const Ref<Texture>& albedo);
 
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
 
 public:
     Ref<Texture> albedo;
@@ -27,12 +27,12 @@ inline Isotropic::Isotropic(const Ref<Texture>& a)
 {
 }
 
-inline bool Isotropic::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
-    out_ir.is_specular = true;
-    out_ir.pdf = nullptr;
-    out_ir.attenuation = albedo->Value(is.uv, is.point);
-    out_ir.specular_ray = Ray{ is.point, RandomInUnitSphere() };
+    ir->is_specular = true;
+    ir->pdf = nullptr;
+    ir->attenuation = albedo->Value(is.uv, is.point);
+    ir->specular_ray = Ray{ is.point, RandomInUnitSphere() };
 
     return true;
 }

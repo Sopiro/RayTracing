@@ -11,7 +11,7 @@ class Metal : public Material
 public:
     Metal(const Color& albedo, f64 fuzziness);
 
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
 
 public:
     Color albedo;
@@ -24,14 +24,14 @@ inline Metal::Metal(const Color& _albedo, f64 _fuzziness)
 {
 }
 
-inline bool Metal::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+inline bool Metal::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
     Vec3 reflected = Reflect(wi.dir.Normalized(), is.normal);
 
-    out_ir.specular_ray = Ray{ is.point, reflected + fuzziness * RandomInUnitSphere() };
-    out_ir.attenuation = albedo;
-    out_ir.is_specular = true;
-    out_ir.pdf = nullptr;
+    ir->specular_ray = Ray{ is.point, reflected + fuzziness * RandomInUnitSphere() };
+    ir->attenuation = albedo;
+    ir->is_specular = true;
+    ir->pdf = nullptr;
 
     return true;
 }

@@ -836,7 +836,7 @@ void BVH::RayCast(const Ray& r,
     }
 }
 
-bool BVH::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const
+bool BVH::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
     struct Callback
     {
@@ -846,7 +846,7 @@ bool BVH::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) cons
 
         f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
         {
-            bool hit = object->Intersect(ray, t_min, t_max, *is);
+            bool hit = object->Intersect(is, ray, t_min, t_max);
 
             if (hit)
             {
@@ -859,7 +859,7 @@ bool BVH::Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) cons
         }
     } callback;
 
-    callback.is = &is;
+    callback.is = is;
     callback.hit_closest = false;
     callback.t = t_max;
 

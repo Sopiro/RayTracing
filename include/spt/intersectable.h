@@ -23,19 +23,20 @@ struct Intersection
     UV uv;
 };
 
-inline void SetFaceNormal(Intersection& is, const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
+inline void SetFaceNormal(Intersection* is, const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
 {
-    is.front_face = Dot(ray.dir, outward_normal) < 0.0;
-    is.normal = is.front_face ? outward_normal : -outward_normal;
-    is.tangent = is.front_face ? outward_tangent : -outward_tangent;
+    is->front_face = Dot(ray.dir, outward_normal) < 0.0;
+    is->normal = is->front_face ? outward_normal : -outward_normal;
+    is->tangent = is->front_face ? outward_tangent : -outward_tangent;
 }
 
 class Intersectable
 {
 public:
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const = 0;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const = 0;
 
-    virtual bool GetAABB(AABB& out_aabb) const = 0;
+    // Returns false if it's invalid
+    virtual bool GetAABB(AABB* out_aabb) const = 0;
 
     virtual f64 EvaluatePDF(const Ray& ray) const;
 

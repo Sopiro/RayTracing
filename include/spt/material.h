@@ -30,7 +30,7 @@ struct Interaction
 class Material
 {
 public:
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const = 0;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const = 0;
 
     virtual Color Emit(const Intersection& is, const Ray& wi) const;
 

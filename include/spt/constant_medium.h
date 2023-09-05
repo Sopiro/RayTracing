@@ -14,8 +14,8 @@ public:
     ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, const Ref<Texture>& albedo);
     ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, Color color);
 
-    virtual bool Intersect(const Ray& ray, f64 t_min, f64 t_max, Intersection& is) const override;
-    virtual bool GetAABB(AABB& out_aabb) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool GetAABB(AABB* out_aabb) const override;
     virtual const Material* GetMaterial() const override;
 
 public:
@@ -40,7 +40,7 @@ inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable>& bo
 {
 }
 
-inline bool ConstantDensityMedium::GetAABB(AABB& out_aabb) const
+inline bool ConstantDensityMedium::GetAABB(AABB* out_aabb) const
 {
     return boundary->GetAABB(out_aabb);
 }

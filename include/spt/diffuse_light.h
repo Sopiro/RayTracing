@@ -9,7 +9,7 @@ public:
     DiffuseLight(const Ref<Texture>& emission);
     DiffuseLight(Color color);
 
-    virtual bool Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
     virtual Color Emit(const Intersection& is, const Ray& wi) const override;
 
 public:
@@ -27,7 +27,7 @@ inline DiffuseLight::DiffuseLight(Color color)
 {
 }
 
-inline bool DiffuseLight::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+inline bool DiffuseLight::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
     return false;
 }

@@ -3,7 +3,7 @@
 namespace spt
 {
 
-bool Dielectric::Scatter(const Intersection& is, const Ray& wi, Interaction& out_ir) const
+bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
 {
     f64 refraction_ratio = is.front_face ? (1.0 / ior) : ior;
 
@@ -25,10 +25,10 @@ bool Dielectric::Scatter(const Intersection& is, const Ray& wi, Interaction& out
         direction = Refract(unit_direction, is.normal, refraction_ratio);
     }
 
-    out_ir.is_specular = true;
-    out_ir.pdf = nullptr;
-    out_ir.attenuation = Color{ 1.0, 1.0, 1.0 };
-    out_ir.specular_ray = Ray{ is.point, direction };
+    ir->is_specular = true;
+    ir->pdf = nullptr;
+    ir->attenuation = Color{ 1.0, 1.0, 1.0 };
+    ir->specular_ray = Ray{ is.point, direction };
 
     return true;
 }
