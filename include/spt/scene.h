@@ -16,10 +16,7 @@ class Scene : public Intersectable
 {
 public:
     Scene();
-
-    void Reset();
-    void Add(const Ref<Intersectable>& object);
-    void AddLight(const Ref<Intersectable>& object);
+    virtual ~Scene() = default;
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
@@ -28,9 +25,7 @@ public:
     virtual void Rebuild() override;
 
     const IntersectableList& GetIntersectableList() const;
-
-    bool HasAreaLights() const;
-    const IntersectableList& GetAreaLights() const;
+    void Add(const Ref<Intersectable>& object);
 
     const Ref<Texture>& GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -39,6 +34,12 @@ public:
     bool HasDirectionalLight() const;
     const Ref<DirectionalLight>& GetDirectionalLight() const;
     void SetDirectionalLight(const Ref<DirectionalLight>& directional_light);
+
+    bool HasAreaLights() const;
+    const IntersectableList& GetAreaLights() const;
+    void AddLight(const Ref<Intersectable>& object);
+
+    void Reset();
 
 private:
     IntersectableList intersectables;
@@ -58,16 +59,6 @@ inline void Scene::Reset()
 {
     intersectables.Clear();
     lights.Clear();
-}
-
-inline void Scene::Add(const Ref<Intersectable>& object)
-{
-    intersectables.Add(object);
-}
-
-inline void Scene::AddLight(const Ref<Intersectable>& object)
-{
-    lights.Add(object);
 }
 
 inline void Scene::Rebuild()
@@ -100,14 +91,9 @@ inline const IntersectableList& Scene::GetIntersectableList() const
     return intersectables;
 }
 
-inline bool Scene::HasAreaLights() const
+inline void Scene::Add(const Ref<Intersectable>& object)
 {
-    return lights.GetCount() > 0;
-}
-
-inline const IntersectableList& Scene::GetAreaLights() const
-{
-    return lights;
+    intersectables.Add(object);
 }
 
 inline const Ref<Texture>& Scene::GetEnvironmentMap() const
@@ -146,6 +132,21 @@ inline const Ref<DirectionalLight>& Scene::GetDirectionalLight() const
 inline void Scene::SetDirectionalLight(const Ref<DirectionalLight>& dr)
 {
     directional_light = dr;
+}
+
+inline bool Scene::HasAreaLights() const
+{
+    return lights.GetCount() > 0;
+}
+
+inline const IntersectableList& Scene::GetAreaLights() const
+{
+    return lights;
+}
+
+inline void Scene::AddLight(const Ref<Intersectable>& object)
+{
+    lights.Add(object);
 }
 
 } // namespace spt

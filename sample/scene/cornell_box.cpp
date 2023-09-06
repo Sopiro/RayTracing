@@ -13,6 +13,7 @@ void CornellBox(Scene& scene)
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
     auto light = CreateSharedRef<DiffuseLight>(Color{ 15.0 });
+    auto mirror = CreateSharedRef<Metal>(Color{ Color{ .73, .73, .73 } }, 0.0);
 
     // Cornell box
     {
