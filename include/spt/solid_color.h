@@ -9,6 +9,7 @@ class SolidColor : public Texture
 {
 public:
     static Ref<SolidColor> Create(Color color);
+    static Ref<SolidColor> Create(f64 rgb);
     static Ref<SolidColor> Create(f64 red, f64 green, f64 blue);
 
     virtual Color Value(const UV& uv, const Point3& p) const override;
@@ -51,9 +52,14 @@ inline Ref<SolidColor> SolidColor::Create(Color color)
     return ptr;
 }
 
-inline Ref<SolidColor> SolidColor::Create(f64 red, f64 green, f64 blue)
+inline Ref<SolidColor> SolidColor::Create(f64 rgb)
 {
-    return Create(Color{ red, green, blue });
+    return Create(Color{ rgb });
+}
+
+inline Ref<SolidColor> SolidColor::Create(f64 r, f64 g, f64 b)
+{
+    return Create(Color{ r, g, b });
 }
 
 inline Color SolidColor::Value(const UV& uv, const Point3& p) const

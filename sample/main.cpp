@@ -31,6 +31,7 @@ extern void ShipScene(Scene&);
 extern void CornellBoxBunnyVolume(Scene&);
 extern void CornellBoxOriginal(Scene&);
 extern void RebootScene(Scene&);
+extern void CornellBoxGlossy(Scene&);
 
 } // namespace spt
 
@@ -57,7 +58,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (2)
+    switch (20)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -373,6 +374,19 @@ int main()
     }
     break;
 
+    case 20: // Glossy cornell box
+    {
+        CornellBoxGlossy(scene);
+
+        Point3 lookfrom{ 0.5, 0.5, 1.25 };
+        Point3 lookat{ 0.5, 0.5, 0.0 };
+
+        f64 dist_to_focus = (lookfrom - lookat).Length();
+        f64 aperture = 0.0;
+        f64 vFov = 45.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
     default:
         assert(false);
         break;
