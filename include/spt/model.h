@@ -11,6 +11,7 @@ class Model : public Intersectable
 {
 public:
     Model(const std::string& path, const Transform& transform);
+    virtual ~Model() = default;
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;

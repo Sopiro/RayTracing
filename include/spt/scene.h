@@ -37,7 +37,7 @@ public:
 
     bool HasAreaLights() const;
     const IntersectableList& GetAreaLights() const;
-    void AddLight(const Ref<Intersectable>& object);
+    void AddAreaLight(const Ref<Intersectable>& object);
 
     void Reset();
 
@@ -144,7 +144,7 @@ inline const IntersectableList& Scene::GetAreaLights() const
     return lights;
 }
 
-inline void Scene::AddLight(const Ref<Intersectable>& object)
+inline void Scene::AddAreaLight(const Ref<Intersectable>& object)
 {
     lights.Add(object);
 }

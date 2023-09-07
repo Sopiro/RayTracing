@@ -25,7 +25,7 @@ void RebootScene(Scene& scene)
         auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 3.0, -4.0), 1.0, red);
 
         scene.Add(sphere);
-        scene.AddLight(sphere);
+        scene.AddAreaLight(sphere);
     }
 
     {
@@ -34,7 +34,7 @@ void RebootScene(Scene& scene)
         auto rect = RectXZ(tf, white);
 
         scene.Add(rect);
-        scene.AddLight(rect);
+        scene.AddAreaLight(rect);
     }
 
     scene.SetEnvironmentMap(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true));

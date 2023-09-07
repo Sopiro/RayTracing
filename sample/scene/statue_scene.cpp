@@ -34,7 +34,7 @@ void StatueScene(Scene& scene)
         auto rect = RectYZ(tf, red);
 
         scene.Add(rect);
-        scene.AddLight(rect);
+        scene.AddAreaLight(rect);
     }
 
     {
@@ -43,7 +43,7 @@ void StatueScene(Scene& scene)
         auto rect = RectYZ(tf, blue);
 
         scene.Add(rect);
-        scene.AddLight(rect);
+        scene.AddAreaLight(rect);
     }
 
     {
@@ -53,7 +53,7 @@ void StatueScene(Scene& scene)
         auto rect = RectXZ(tf, white);
 
         scene.Add(rect);
-        scene.AddLight(rect);
+        scene.AddAreaLight(rect);
     }
 
     // {

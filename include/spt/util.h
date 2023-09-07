@@ -116,28 +116,94 @@ inline Ref<Intersectable> Box(const Transform& tf, const Ref<Material>& mat)
     auto box = CreateSharedRef<IntersectableList>();
 
     // front
-    box->Add(CreateSharedRef<Triangle>(v0, v1, v2, mat));
-    box->Add(CreateSharedRef<Triangle>(v0, v2, v3, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v0, v1, v2, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v0, v2, v3, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     // right
-    box->Add(CreateSharedRef<Triangle>(v1, v5, v6, mat));
-    box->Add(CreateSharedRef<Triangle>(v1, v6, v2, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v1, v5, v6, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v1, v6, v2, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     // back
-    box->Add(CreateSharedRef<Triangle>(v5, v4, v7, mat));
-    box->Add(CreateSharedRef<Triangle>(v5, v7, v6, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v5, v4, v7, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v5, v7, v6, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     // left
-    box->Add(CreateSharedRef<Triangle>(v4, v0, v3, mat));
-    box->Add(CreateSharedRef<Triangle>(v4, v3, v7, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v4, v0, v3, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v4, v3, v7, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     // top
-    box->Add(CreateSharedRef<Triangle>(v3, v2, v6, mat));
-    box->Add(CreateSharedRef<Triangle>(v3, v6, v7, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v3, v2, v6, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v3, v6, v7, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     // bottom
-    box->Add(CreateSharedRef<Triangle>(v1, v0, v4, mat));
-    box->Add(CreateSharedRef<Triangle>(v1, v4, v5, mat));
+    {
+        auto t = CreateSharedRef<Triangle>(v1, v0, v4, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 0.0);
+        t->v2.texCoord.Set(1.0, 1.0);
+        box->Add(t);
+
+        t = CreateSharedRef<Triangle>(v1, v4, v5, mat);
+        t->v0.texCoord.Set(0.0, 0.0);
+        t->v1.texCoord.Set(1.0, 1.0);
+        t->v2.texCoord.Set(0.0, 1.0);
+        box->Add(t);
+    }
 
     return box;
 }

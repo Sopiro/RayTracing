@@ -93,13 +93,13 @@ void MISTest1(Scene& scene)
         auto l4 = CreateSharedRef<Sphere>(Vec3{ xg * 3.0, y + lh, z }, r, light4);
 
         scene.Add(l1);
-        scene.AddLight(l1);
+        scene.AddAreaLight(l1);
         scene.Add(l2);
-        scene.AddLight(l2);
+        scene.AddAreaLight(l2);
         scene.Add(l3);
-        scene.AddLight(l3);
+        scene.AddAreaLight(l3);
         scene.Add(l4);
-        scene.AddLight(l4);
+        scene.AddAreaLight(l4);
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.01 }));
@@ -169,15 +169,15 @@ void MISTest2(Scene& scene)
         auto l5 = CreateSharedRef<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
         scene.Add(l1);
-        scene.AddLight(l1);
+        scene.AddAreaLight(l1);
         scene.Add(l2);
-        scene.AddLight(l2);
+        scene.AddAreaLight(l2);
         scene.Add(l3);
-        scene.AddLight(l3);
+        scene.AddAreaLight(l3);
         scene.Add(l4);
-        scene.AddLight(l4);
+        scene.AddAreaLight(l4);
         scene.Add(l5);
-        scene.AddLight(l5);
+        scene.AddAreaLight(l5);
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.0 }));
@@ -252,13 +252,13 @@ void MISTestWak(Scene& scene)
         // scene.Add(l1);
         // scene.AddLight(l1);
         scene.Add(l2);
-        scene.AddLight(l2);
+        scene.AddAreaLight(l2);
         scene.Add(l3);
-        scene.AddLight(l3);
+        scene.AddAreaLight(l3);
         scene.Add(l4);
-        scene.AddLight(l4);
+        scene.AddAreaLight(l4);
         scene.Add(l5);
-        scene.AddLight(l5);
+        scene.AddAreaLight(l5);
     }
 
     scene.SetEnvironmentMap(SolidColor::Create(Vec3{ 0.333 }));

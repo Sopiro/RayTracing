@@ -50,7 +50,7 @@ class BVH : public Intersectable
 {
 public:
     BVH();
-    ~BVH() noexcept;
+    virtual ~BVH() noexcept;
 
     BVH(const BVH&) = delete;
     BVH& operator=(const BVH&) = delete;

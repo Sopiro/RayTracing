@@ -456,9 +456,13 @@ void BVH::Rotate(NodeProxy node)
         {
         case 0: // Swap(sibling, node->child2);
             if (nodes[parent].child1 == sibling)
+            {
                 nodes[parent].child1 = nodes[node].child2;
+            }
             else
+            {
                 nodes[parent].child2 = nodes[node].child2;
+            }
 
             nodes[nodes[node].child2].parent = parent;
 
@@ -469,9 +473,13 @@ void BVH::Rotate(NodeProxy node)
             break;
         case 1: // Swap(sibling, node->child1);
             if (nodes[parent].child1 == sibling)
+            {
                 nodes[parent].child1 = nodes[node].child1;
+            }
             else
+            {
                 nodes[parent].child2 = nodes[node].child1;
+            }
 
             nodes[nodes[node].child1].parent = parent;
 
@@ -482,9 +490,13 @@ void BVH::Rotate(NodeProxy node)
             break;
         case 2: // Swap(node, sibling->child2);
             if (nodes[parent].child1 == node)
+            {
                 nodes[parent].child1 = nodes[sibling].child2;
+            }
             else
+            {
                 nodes[parent].child2 = nodes[sibling].child2;
+            }
 
             nodes[nodes[sibling].child2].parent = parent;
 
@@ -495,9 +507,13 @@ void BVH::Rotate(NodeProxy node)
             break;
         case 3: // Swap(node, sibling->child1);
             if (nodes[parent].child1 == node)
+            {
                 nodes[parent].child1 = nodes[sibling].child1;
+            }
             else
+            {
                 nodes[parent].child2 = nodes[sibling].child1;
+            }
 
             nodes[nodes[sibling].child1].parent = parent;
 

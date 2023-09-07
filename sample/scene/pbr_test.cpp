@@ -98,7 +98,7 @@ void PBRTest(Scene& scene)
             auto rect = RectXZ(tf, light);
 
             scene.Add(rect);
-            scene.AddLight(rect);
+            scene.AddAreaLight(rect);
         }
     }
 

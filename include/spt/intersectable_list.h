@@ -13,8 +13,7 @@ class IntersectableList : public Intersectable
 {
 public:
     IntersectableList() = default;
-
-    void Add(const Ref<Intersectable>& object);
+    virtual ~IntersectableList() = default;
     void Clear();
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
@@ -25,6 +24,8 @@ public:
     virtual void Rebuild() override;
 
     const std::vector<Ref<Intersectable>>& GetObjects() const;
+    void Add(const Ref<Intersectable>& object);
+
     size_t GetCount() const;
 
 private:

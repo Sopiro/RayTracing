@@ -56,7 +56,7 @@ void CornellBox(Scene& scene)
         auto l = RectXZ(tf, light);
 
         scene.Add(l);
-        scene.AddLight(l);
+        scene.AddAreaLight(l);
     }
 
     // Right sphere
