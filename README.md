@@ -5,13 +5,16 @@ This is a physically based CPU path tracer written in C++
 ## Features
 - Unidirectional path tracing
 - BVH accelerated ray tracing
+  - Binary SAH based dynamic BVH
 - Multiple importance sampling
+  - BRDF + NEE
 - Physically based materials
 - Light sources
   - Directional light
   - Environment light
   - Area lights
 - Volume rendering
+- Ray guiding
 - Modeling loading with Assimp
 - Parallel processing with OpenMP
 
