@@ -25,9 +25,18 @@ struct Intersection
 
 inline void SetFaceNormal(Intersection* is, const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
 {
-    is->front_face = Dot(ray.dir, outward_normal) < 0.0;
-    is->normal = is->front_face ? outward_normal : -outward_normal;
-    is->tangent = is->front_face ? outward_tangent : -outward_tangent;
+    if (Dot(ray.dir, outward_normal) < 0.0)
+    {
+        is->front_face = true;
+        is->normal = outward_normal;
+        is->tangent = outward_tangent;
+    }
+    else
+    {
+        is->front_face = false;
+        is->normal = -outward_normal;
+        is->tangent = -outward_tangent;
+    }
 }
 
 class Intersectable

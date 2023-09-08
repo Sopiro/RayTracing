@@ -8,35 +8,36 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
     Intersection is1, is2;
 
     // Find the closest hit
-    if (boundary->Intersect(&is1, ray, -infinity, infinity) == false)
+    if (boundary->Intersect(&is1, ray, t_min, infinity) == false)
     {
         return false;
     }
 
-    // Find the farthest hit
-    if (boundary->Intersect(&is2, ray, is1.t + ray_offset, infinity) == false)
+    if (is1.front_face)
     {
-        return false;
-    }
+        // Find the closest boundary
+        if (boundary->Intersect(&is2, ray, is1.t + ray_offset, infinity) == false)
+        {
+            return false;
+        }
 
-    if (is1.t < t_min)
+        if (is2.front_face)
+        {
+            // Something went wrong..
+            // is2.t = ray_offset;
+            return false;
+        }
+
+        if (is2.t > t_max)
+        {
+            is2.t = t_max;
+        }
+    }
+    else
     {
+        // Ray origin is inside the medium
+        is2.t = is1.t;
         is1.t = t_min;
-    }
-
-    if (is2.t > t_max)
-    {
-        is2.t = t_max;
-    }
-
-    if (is1.t >= is2.t)
-    {
-        return false;
-    }
-
-    if (is1.t < 0.0)
-    {
-        is1.t = 0.0;
     }
 
     f64 ray_length = ray.dir.Length();
@@ -51,8 +52,8 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
     is->object = this;
     is->t = is1.t + hit_distance / ray_length;
     is->point = ray.At(is->t);
-    is->normal = Vec3{ 1.0, 0.0, 0.0 }; // arbitrary
-    is->front_face = true;              // also arbitrary
+    is->normal = y_axis;   // arbitrary
+    is->front_face = true; // also arbitrary
 
     return true;
 }

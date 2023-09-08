@@ -10,9 +10,11 @@ void CornellBoxBunnyVolume(Scene& scene)
     auto green = CreateSharedRef<Lambertian>(Color{ .12, .45, .15 });
     auto blue = CreateSharedRef<Lambertian>(Color{ .22, .23, .75 });
     auto white = CreateSharedRef<Lambertian>(Color{ .73, .73, .73 });
+    auto skin = CreateSharedRef<Lambertian>(Color{ 251. / 255., 206. / 255., 177. / 255. });
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
     auto light = CreateSharedRef<DiffuseLight>(Color{ 1.0 });
+    auto glass = CreateSharedRef<Dielectric>(1.5);
 
     // Cornell box
     {
@@ -47,16 +49,17 @@ void CornellBoxBunnyVolume(Scene& scene)
         scene.AddAreaLight(l);
     }
 
+    // Bunny
     {
-        // Bunny
-        Transform transform{ Point3{ 0.5, 0.1, -0.5 }, Quat{ identity }, Vec3{ 0.7 } };
-        // auto mat = RandomPBRMaterial();
-        // mat->basecolor_map = SolidColor::Create(Color{ 1.0 });
-        // mat->metallic_map = SolidColor::Create(Color{ 1.0 });
-        // mat->roughness_map = SolidColor::Create(Color{ 0.2 });
+        Vec3 center = Point3{ 0.5, 0.5, -0.5 };
+        Transform tf{ center, Quat{ DegToRad(45), y_axis }, Vec3{ 0.5 } };
+        auto m = Box(tf, white);
+        // auto m = CreateSharedRef<Sphere>(tf.p, 0.3, white);
 
-        Ref<Model> model = CreateSharedRef<Model>("res/stanford/bunny.obj", transform);
-        auto volume = CreateSharedRef<ConstantDensityMedium>(model, 4.0, Color{ 1.0 });
+        // Vec3 center = Point3{ 0.5, 0.0, -0.5 };
+        // Transform tf{ center, Quat{ identity }, Vec3{ 0.7 } };
+        // Ref<Model> m = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
+        auto volume = CreateSharedRef<ConstantDensityMedium>(m, 100.0, Color{ 1.0 });
 
         scene.Add(volume);
     }

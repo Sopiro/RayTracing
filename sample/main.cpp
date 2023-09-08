@@ -52,13 +52,13 @@ int main()
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
     f64 scale = 1.0 / samples_per_pixel;
-    i32 max_bounces = 20;
+    i32 max_bounces = INT_MAX;
     Bitmap bitmap{ width, height };
 
     Scene scene;
     Camera camera;
 
-    switch (20)
+    switch (17)
     {
     case 0: // Raytracing in one weekend final scene
     {

@@ -5,9 +5,8 @@
 namespace spt
 {
 
-class Ray
+struct Ray
 {
-public:
     Ray() = default;
     Ray(const Point3& origin, const Vec3& direction);
 

@@ -61,7 +61,10 @@ inline Ray Camera::GetRay(f64 s, f64 t) const
     Vec3 rd = lens_radius * RandomInUnitDiskXY();
     Vec3 offset = u * rd.x + v * rd.y;
 
-    return Ray{ origin + offset, lower_left + horizontal * s + vertical * t - (origin + offset) };
+    Vec3 camera_center = origin + offset;
+    Vec3 pixel_center = lower_left + horizontal * s + vertical * t;
+
+    return Ray{ camera_center, pixel_center - camera_center };
 }
 
 } // namespace spt
