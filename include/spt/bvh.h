@@ -365,7 +365,8 @@ inline f64 BVH::EvaluatePDF(const Ray& ray) const
 
 inline Vec3 BVH::GetRandomDirection(const Vec3& origin) const
 {
-    i32 index = static_cast<i32>(leaves.size() * Rand());
+    size_t count = leaves.size();
+    size_t index = std::min((size_t)(count * Rand()), count - 1);
 
     return nodes[leaves[index]].data->GetRandomDirection(origin);
 }

@@ -21,13 +21,6 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
             return false;
         }
 
-        if (is2.front_face)
-        {
-            // Something went wrong..
-            // is2.t = ray_offset;
-            return false;
-        }
-
         if (is2.t > t_max)
         {
             is2.t = t_max;
