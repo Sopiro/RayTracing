@@ -53,16 +53,6 @@ inline Vec3 Sphere::Sample() const
     return center + UniformSampleSphere() * radius;
 }
 
-inline Vec3 Sphere::Sample(const Point3& origin) const
-{
-    Vec3 direction = center - origin;
-    f64 distance_sqared = direction.Length2();
-
-    ONB uvw{ direction };
-
-    return uvw.GetLocal(RandomToSphere(radius, distance_sqared));
-}
-
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
@@ -76,8 +66,8 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 
 inline f64 Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
 {
-    f64 d2 = (center - hit_ray.origin).Length2();
-    f64 cos_theta_max = sqrt(1.0 - radius * radius / d2);
+    f64 distance_squared = (center - hit_ray.origin).Length2();
+    f64 cos_theta_max = sqrt(1.0 - radius * radius / distance_squared);
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;

@@ -52,15 +52,14 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
         radiance += throughput * mat->Emit(is, ray);
 
-        // Evaluate direct light (Next Event Estimation)
+        // Estimate direct light
 
         if (scene.HasDirectionalLight())
         {
             const Ref<DirectionalLight>& sun = scene.GetDirectionalLight();
             Ray to_sun{ is.point + is.normal * ray_offset, -sun->dir + RandomInUnitSphere() * sun->radius };
 
-            Intersection is2;
-            if (scene.Intersect(&is2, to_sun, ray_offset, infinity) == false)
+            if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)
             {
                 radiance += throughput * sun->radiance * mat->Evaluate(is, ray, to_sun);
             }

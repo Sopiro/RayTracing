@@ -87,22 +87,6 @@ inline Vec3 CosineSampleHemisphere()
     return Vec3{ x, y, z };
 }
 
-inline Vec3 RandomToSphere(Real radius, Real distance_squared)
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real z = Real(1.0) + u2 * (sqrt(1.0 - radius * radius / distance_squared) - Real(1.0));
-
-    Real phi = two_pi * u1;
-
-    Real sin_theta = sqrt(Real(1.0) - z * z);
-    Real x = cos(phi) * sin_theta;
-    Real y = sin(phi) * sin_theta;
-
-    return Vec3{ x, y, z };
-}
-
 inline Vec3 RandomInUnitSphere()
 {
 #if 0

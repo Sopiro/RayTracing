@@ -71,4 +71,38 @@ bool Sphere::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return true;
 }
 
+Vec3 Sphere::Sample(const Point3& origin) const
+{
+    Vec3 direction = center - origin;
+    Real distance = direction.Normalize();
+    Real distance_squared = distance * distance;
+
+#if 0
+    if (distance * distance <= radius * radius)
+    {
+        return Sample();
+    }
+#endif
+
+    ONB uvw{ direction };
+
+    Real u1 = Rand();
+    Real u2 = Rand();
+
+    Real cos_theta_max = sqrt(1.0 - radius * radius / distance_squared);
+    Real z = Real(1.0) + u2 * (cos_theta_max - Real(1.0));
+
+    Real phi = two_pi * u1;
+
+    Real sin_theta = sqrt(Real(1.0) - z * z);
+    Real x = cos(phi) * sin_theta;
+    Real y = sin(phi) * sin_theta;
+
+    Vec3 d{ x, y, z };
+
+    // Real d_s = distance * z - sqrt(radius * radius - distance_squared * sin_theta * sin_theta);
+
+    return uvw.GetLocal(d);
+}
+
 } // namespace spt
