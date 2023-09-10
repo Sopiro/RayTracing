@@ -81,7 +81,7 @@ void CornellBox(Scene& scene)
     }
 
     // scene.Rebuild();
-    // std::cout << "Lights: " << scene.GetLights().GetCount() << std::endl;
+    // std::cout << "Lights: " << scene.GetAreaLights().GetCount() << std::endl;
 }
 
 } // namespace spt

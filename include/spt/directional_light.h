@@ -9,7 +9,7 @@ struct DirectionalLight
 {
     Vec3 dir;
     Vec3 radiance;
-    f64 radius;
+    f64 radius; // Visible radius
 };
 
 } // namespace spt
