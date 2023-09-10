@@ -138,10 +138,14 @@ struct Vec2
         return x * x + y * y;
     }
 
-    // Optimized to not check length == 0
     Real Normalize()
     {
         Real length = Length();
+        if (length < epsilon)
+        {
+            return Real(0.0);
+        }
+
         Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
@@ -149,7 +153,6 @@ struct Vec2
         return length;
     }
 
-    // Optimized to not check length == 0
     Vec2 Normalized() const
     {
         Real invLength = Real(1.0) / Length();
@@ -288,6 +291,11 @@ struct Vec3
     Real Normalize()
     {
         Real length = Length();
+        if (length < epsilon)
+        {
+            return Real(0.0);
+        }
+
         Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
@@ -448,6 +456,11 @@ struct Vec4
     Real Normalize()
     {
         Real length = Length();
+        if (length < epsilon)
+        {
+            return Real(0.0);
+        }
+
         Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
@@ -1143,14 +1156,6 @@ inline Vec2 Mul(const Mat2& m, const Vec2& v)
     };
 }
 
-inline Vec2 operator*(const Mat2& m, const Vec2& v)
-{
-    return Vec2{
-        m.ex.x * v.x + m.ey.x * v.y,
-        m.ex.y * v.x + m.ey.y * v.y,
-    };
-}
-
 // M^T * V
 inline Vec2 MulT(const Mat2& m, const Vec2& v)
 {
@@ -1160,12 +1165,7 @@ inline Vec2 MulT(const Mat2& m, const Vec2& v)
 // A * B
 inline Mat2 Mul(const Mat2& a, const Mat2& b)
 {
-    return Mat2{ a * b.ex, a * b.ey };
-}
-
-inline Mat2 operator*(const Mat2& a, const Mat2& b)
-{
-    return Mat2{ a * b.ex, a * b.ey };
+    return Mat2{ Mul(a, b.ex), Mul(a, b.ey) };
 }
 
 // A^T * B
@@ -1191,15 +1191,6 @@ inline Vec3 Mul(const Mat3& m, const Vec3& v)
     };
 }
 
-inline Vec3 operator*(const Mat3& m, const Vec3& v)
-{
-    return Vec3{
-        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z,
-        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z,
-        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z,
-    };
-}
-
 // M^T * V
 inline Vec3 MulT(const Mat3& m, const Vec3& v)
 {
@@ -1209,12 +1200,7 @@ inline Vec3 MulT(const Mat3& m, const Vec3& v)
 // A * B
 inline Mat3 Mul(const Mat3& a, const Mat3& b)
 {
-    return Mat3{ a * b.ex, a * b.ey, a * b.ez };
-}
-
-inline Mat3 operator*(const Mat3& a, const Mat3& b)
-{
-    return Mat3{ a * b.ex, a * b.ey, a * b.ez };
+    return Mat3{ Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez) };
 }
 
 // A^T * B
@@ -1242,16 +1228,6 @@ inline Vec4 Mul(const Mat4& m, const Vec4& v)
     };
 }
 
-inline Vec4 operator*(const Mat4& m, const Vec4& v)
-{
-    return Vec4{
-        m.ex.x * v.x + m.ey.x * v.y + m.ez.x * v.z + m.ew.x * v.w,
-        m.ex.y * v.x + m.ey.y * v.y + m.ez.y * v.z + m.ew.y * v.w,
-        m.ex.z * v.x + m.ey.z * v.y + m.ez.z * v.z + m.ew.z * v.w,
-        m.ex.w * v.x + m.ey.w * v.y + m.ez.w * v.z + m.ew.w * v.w,
-    };
-}
-
 // M^T * V
 inline Vec4 MulT(const Mat4& m, const Vec4& v)
 {
@@ -1261,12 +1237,7 @@ inline Vec4 MulT(const Mat4& m, const Vec4& v)
 // A * B
 inline Mat4 Mul(const Mat4& a, const Mat4& b)
 {
-    return Mat4{ a * b.ex, a * b.ey, a * b.ez, a * b.ew };
-}
-
-inline Mat4 operator*(const Mat4& a, const Mat4& b)
-{
-    return Mat4{ a * b.ex, a * b.ey, a * b.ez, a * b.ew };
+    return Mat4{ Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez), Mul(a, b.ew) };
 }
 
 // A^T * B

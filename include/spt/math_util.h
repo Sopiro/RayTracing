@@ -6,7 +6,10 @@
 namespace spt
 {
 
+constexpr Vec2 zero_vec2{ Real(0.0), Real(0.0) };
 constexpr Vec3 zero_vec3{ Real(0.0), Real(0.0), Real(0.0) };
+constexpr Vec4 zero_vec4{ Real(0.0), Real(0.0), Real(0.0), Real(0.0) };
+
 constexpr Vec3 x_axis{ Real(1.0), Real(0.0), Real(0.0) };
 constexpr Vec3 y_axis{ Real(0.0), Real(1.0), Real(0.0) };
 constexpr Vec3 z_axis{ Real(0.0), Real(0.0), Real(1.0) };
