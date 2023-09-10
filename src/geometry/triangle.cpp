@@ -12,14 +12,14 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 det = Dot(e1, pvec);
 
-    bool backface = det < 0.0;
+    bool backface = det < epsilon;
     if (backface == true && two_sided == false)
     {
         return false;
     }
 
     // Ray and triangle are parallel
-    if (Abs(det) < 0.0)
+    if (Abs(det) < epsilon)
     {
         return false;
     }
@@ -48,6 +48,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 w = 1.0 - u - v;
 
+    // Intersection found
     is->object = this;
     is->t = t;
     is->point = ray.At(t);

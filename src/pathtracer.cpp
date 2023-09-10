@@ -70,7 +70,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         {
             // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
-            // Sample one light uniformly
+            // Sample one area light uniformly
             IntersectablePDF light_pdf{ &scene.GetAreaLights(), is.point };
 
             // Importance sample lights
@@ -80,14 +80,19 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 f64 light_brdf_p = ir.pdf->Evaluate(to_light.dir);
                 if (light_brdf_p > 0.0)
                 {
+                    f64 light_p = light_pdf.Evaluate(to_light.dir);
+                    f64 mis_w = 1.0 / (light_p + light_brdf_p);
+
                     Intersection is2;
                     if (scene.Intersect(&is2, to_light, ray_offset, infinity))
                     {
-                        f64 light_p = light_pdf.Evaluate(to_light.dir);
-                        f64 mis_w = 1.0 / (light_p + light_brdf_p);
-
-                        Color le = is2.object->GetMaterial()->Emit(is2, to_light);
-                        radiance += throughput * mis_w * le * mat->Evaluate(is, ray, to_light);
+                        Color li = is2.object->GetMaterial()->Emit(is2, to_light);
+                        radiance += throughput * mis_w * li * mat->Evaluate(is, ray, to_light);
+                    }
+                    else
+                    {
+                        Color li = scene.GetSkyColor(to_light.dir);
+                        radiance += throughput * mis_w * li * mat->Evaluate(is, ray, to_light);
                     }
                 }
             }
@@ -99,14 +104,19 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 f64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
                 if (brdf_light_p > 0.0)
                 {
+                    f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
+                    f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
+
                     Intersection is2;
                     if (scene.Intersect(&is2, scattered, ray_offset, infinity))
                     {
-                        f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
-                        f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
-
-                        Color le = is2.object->GetMaterial()->Emit(is2, scattered);
-                        radiance += throughput * mis_w * le * mat->Evaluate(is, ray, scattered);
+                        Color li = is2.object->GetMaterial()->Emit(is2, scattered);
+                        radiance += throughput * mis_w * li * mat->Evaluate(is, ray, scattered);
+                    }
+                    else
+                    {
+                        Color li = scene.GetSkyColor(scattered.dir);
+                        radiance += throughput * mis_w * li * mat->Evaluate(is, ray, scattered);
                     }
                 }
             }

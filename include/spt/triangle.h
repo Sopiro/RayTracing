@@ -22,10 +22,6 @@ public:
     Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material>& material);
     Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
 
-    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
-    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
-    UV GetTexCoord(f64 u, f64 v, f64 w) const;
-
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
@@ -33,6 +29,10 @@ public:
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
     virtual const Material* GetMaterial() const override;
+
+    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
+    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
+    UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
 public:
     Vertex v0, v1, v2;
@@ -84,21 +84,6 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
 
     face_normal = Cross(e1, e2);
 };
-
-inline Vec3 Triangle::GetNormal(f64 u, f64 v, f64 w) const
-{
-    return (w * v0.normal + u * v1.normal + v * v2.normal).Normalized();
-}
-
-inline Vec3 Triangle::GetTangent(f64 u, f64 v, f64 w) const
-{
-    return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
-}
-
-inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
-{
-    return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
-}
 
 inline bool Triangle::GetAABB(AABB* out_aabb) const
 {
@@ -168,6 +153,21 @@ inline i32 Triangle::GetSize() const
 inline const Material* Triangle::GetMaterial() const
 {
     return material.get();
+}
+
+inline Vec3 Triangle::GetNormal(f64 u, f64 v, f64 w) const
+{
+    return (w * v0.normal + u * v1.normal + v * v2.normal).Normalized();
+}
+
+inline Vec3 Triangle::GetTangent(f64 u, f64 v, f64 w) const
+{
+    return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
+}
+
+inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
+{
+    return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
 }
 
 } // namespace spt

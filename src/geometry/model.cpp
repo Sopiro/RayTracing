@@ -56,7 +56,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         Vec3 tangent{ 1.0, 0.0, 0.0 };
         if (mesh->HasTangentsAndBitangents())
         {
-            tangent = Vec3{ mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
+            tangent.Set(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
         }
 
         Vec2 texCoord{ 0.0, 0.0 };
@@ -92,6 +92,17 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     if (mesh->mMaterialIndex >= 0)
     {
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+        aiColor3D diffuseColor;
+        aiColor3D specularColor;
+        aiColor3D emissiveColor;
+        float opacity;
+
+        material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+        material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
+        material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
+        material->Get(AI_MATKEY_OPACITY, opacity);
+
         auto basecolor_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
         auto metallic_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
@@ -112,9 +123,9 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     {
         Vertex& v = vertices[i];
 
-        Vec4 vP = transform * Vec4(v.position, 1.0);
-        Vec4 vN = transform * Vec4(v.normal, 0.0);
-        Vec4 vT = transform * Vec4(v.tangent, 0.0);
+        Vec4 vP = Mul(transform, Vec4(v.position, 1.0));
+        Vec4 vN = Mul(transform, Vec4(v.normal, 0.0));
+        Vec4 vT = Mul(transform, Vec4(v.tangent, 0.0));
         vN.Normalize();
         vT.Normalize();
 
@@ -153,7 +164,7 @@ void Model::LoadModel(const std::string& path, const Transform& transform)
     // clang-format off
     const aiScene* scene = importer.ReadFile(
         path, 
-        aiProcessPreset_TargetRealtime_Quality | 
+        aiProcessPreset_TargetRealtime_MaxQuality | 
         aiProcess_PreTransformVertices
     );
     // clang-format on
