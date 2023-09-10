@@ -91,6 +91,7 @@ public:
     Real GetTreeCost() const;
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Vec3& origin) const override;

@@ -23,6 +23,7 @@ public:
     Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;

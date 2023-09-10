@@ -17,6 +17,7 @@ public:
     void Clear();
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual Vec3 GetRandomDirection(const Point3& origin) const override;
@@ -53,21 +54,38 @@ inline bool IntersectableList::Intersect(Intersection* is, const Ray& ray, f64 t
 #if USE_BVH
     return bvh.Intersect(is, ray, t_min, t_max);
 #else
-    HitRecord tmp;
+    Intersection tmp;
     bool hit = false;
     f64 closest = t_max;
 
     for (const auto& object : objects)
     {
-        if (object->Hit(ray, t_min, closest, tmp))
+        if (object->Intersect(&tmp, ray, t_min, closest))
         {
             hit = true;
             closest = tmp.t;
-            is = tmp;
+            *is = tmp;
         }
     }
 
     return hit;
+#endif
+}
+
+inline bool IntersectableList::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+#if USE_BVH
+    return bvh.IntersectAny(ray, t_min, t_max);
+#else
+    for (const auto& object : objects)
+    {
+        if (object->IntersectAny(ray, t_min, t_max))
+        {
+            return true;
+        }
+    }
+
+    return false;
 #endif
 }
 
@@ -88,12 +106,12 @@ inline bool IntersectableList::GetAABB(AABB* out_aabb) const
     {
         const auto& object = objects[i];
 
-        if (object->GetAABB(temp) == false)
+        if (object->GetAABB(&temp) == false)
         {
             return false;
         }
 
-        out_aabb = Union(out_aabb, temp);
+        *out_aabb = Union(*out_aabb, temp);
     }
 
     return true;

@@ -48,7 +48,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 w = 1.0 - u - v;
 
-    // Intersection found
+    // Found intersection
     is->object = this;
     is->t = t;
     is->point = ray.At(t);
@@ -59,6 +59,51 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     UV tex = GetTexCoord(u, v, w);
     is->uv = tex;
+
+    return true;
+}
+
+bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+    Vec3 d = ray.dir;
+    f64 l = d.Normalize();
+    Vec3 pvec = Cross(d, e2);
+
+    f64 det = Dot(e1, pvec);
+
+    bool backface = det < epsilon;
+    if (backface == true && two_sided == false)
+    {
+        return false;
+    }
+
+    // Ray and triangle are parallel
+    if (Abs(det) < epsilon)
+    {
+        return false;
+    }
+
+    f64 invDet = 1.0 / det;
+
+    Vec3 tvec = ray.origin - v0.position;
+    f64 u = Dot(tvec, pvec) * invDet;
+    if (u < 0.0 || u > 1.0)
+    {
+        return false;
+    }
+
+    Vec3 qvec = Cross(tvec, e1);
+    f64 v = Dot(d, qvec) * invDet;
+    if (v < 0.0 || u + v > 1.0)
+    {
+        return false;
+    }
+
+    f64 t = Dot(e2, qvec) * invDet / l;
+    if (t < t_min || t > t_max)
+    {
+        return false;
+    }
 
     return true;
 }

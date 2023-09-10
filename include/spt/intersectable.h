@@ -43,6 +43,7 @@ class Intersectable
 {
 public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const = 0;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const = 0;
 
     // Returns false if it's invalid
     virtual bool GetAABB(AABB* out_aabb) const = 0;

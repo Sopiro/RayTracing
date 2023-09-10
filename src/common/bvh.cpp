@@ -884,4 +884,29 @@ bool BVH::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) cons
     return callback.hit_closest;
 }
 
+bool BVH::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+    struct Callback
+    {
+        bool hit_any;
+
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        {
+            if (object->IntersectAny(ray, t_min, t_max))
+            {
+                hit_any = true;
+            }
+
+            // Stop traversal
+            return 0.0;
+        }
+    } callback;
+
+    callback.hit_any = false;
+
+    RayCast(ray, t_min, t_max, &callback);
+
+    return callback.hit_any;
+}
+
 } // namespace spt

@@ -14,6 +14,7 @@ public:
     virtual ~Model() = default;
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual i32 GetSize() const override;
 
@@ -34,6 +35,11 @@ private:
 inline bool Model::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
     return bvh.Intersect(is, ray, t_min, t_max);
+}
+
+inline bool Model::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+    return bvh.IntersectAny(ray, t_min, t_max);
 }
 
 inline bool Model::GetAABB(AABB* out_aabb) const

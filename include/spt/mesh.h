@@ -28,7 +28,8 @@ public:
          const std::array<Color, 3>& colors,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, Real t_min, Real t_max) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual i32 GetSize() const override;
 
@@ -44,9 +45,14 @@ private:
     std::array<Ref<Texture>, TextureType::count> textures;
 };
 
-inline bool Mesh::Intersect(Intersection* is, const Ray& ray, Real t_min, Real t_max) const
+inline bool Mesh::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
     return bvh.Intersect(is, ray, t_min, t_max);
+}
+
+inline bool Mesh::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+    return bvh.IntersectAny(ray, t_min, t_max);
 }
 
 inline bool Mesh::GetAABB(AABB* out_aabb) const

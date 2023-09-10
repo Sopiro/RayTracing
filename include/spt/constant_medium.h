@@ -15,6 +15,7 @@ public:
     ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, Color color);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
@@ -43,6 +44,11 @@ inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable>& bo
     , neg_inv_density{ -1.0 / density }
     , phase_function{ CreateSharedRef<Isotropic>(color) }
 {
+}
+
+inline bool ConstantDensityMedium::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+{
+    return boundary->IntersectAny(ray, t_min, t_max);
 }
 
 inline bool ConstantDensityMedium::GetAABB(AABB* out_aabb) const
