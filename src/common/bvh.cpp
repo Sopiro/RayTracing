@@ -892,13 +892,17 @@ bool BVH::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 
         f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
         {
-            if (object->IntersectAny(ray, t_min, t_max))
+            bool hit = object->IntersectAny(ray, t_min, t_max);
+
+            if (hit)
             {
                 hit_any = true;
+
+                // Stop traversal
+                return t_min;
             }
 
-            // Stop traversal
-            return 0.0;
+            return t_max;
         }
     } callback;
 

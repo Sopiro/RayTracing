@@ -10,7 +10,7 @@
 
 #include "types.h"
 
-#define Real f64
+using Real = f64;
 
 namespace spt
 {

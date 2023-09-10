@@ -103,7 +103,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
     }
     else
     {
-        Vec3 random_cosine = RandomCosineDirection();
+        Vec3 random_cosine = CosineSampleHemisphere();
         return uvw.GetLocal(random_cosine);
     }
 }

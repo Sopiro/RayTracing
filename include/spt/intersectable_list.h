@@ -19,8 +19,8 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
+    virtual Vec3 Sample(const Point3& origin) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
@@ -118,14 +118,14 @@ inline bool IntersectableList::GetAABB(AABB* out_aabb) const
 #endif
 }
 
+inline Vec3 IntersectableList::Sample(const Point3& origin) const
+{
+    return bvh.Sample(origin);
+}
+
 inline f64 IntersectableList::EvaluatePDF(const Ray& ray) const
 {
     return bvh.EvaluatePDF(ray);
-}
-
-inline Vec3 IntersectableList::GetRandomDirection(const Point3& origin) const
-{
-    return bvh.GetRandomDirection(origin);
 }
 
 inline i32 IntersectableList::GetSize() const

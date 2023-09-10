@@ -20,7 +20,7 @@ Ref<Microfacet> RandomPBRMaterial()
     return mat;
 }
 
-Ref<Intersectable> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<IntersectableList> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -44,7 +44,7 @@ Ref<Intersectable> RectXY(const Transform& tf, const Ref<Material>& mat, const U
     return rect;
 }
 
-Ref<Intersectable> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<IntersectableList> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -68,7 +68,7 @@ Ref<Intersectable> RectXZ(const Transform& tf, const Ref<Material>& mat, const U
     return rect;
 }
 
-Ref<Intersectable> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<IntersectableList> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -92,7 +92,7 @@ Ref<Intersectable> RectYZ(const Transform& tf, const Ref<Material>& mat, const U
     return rect;
 }
 
-Ref<Intersectable> Box(const Transform& tf, const Ref<Material>& mat)
+Ref<IntersectableList> Box(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });

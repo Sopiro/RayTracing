@@ -25,9 +25,10 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
+    virtual Vec3 Sample() const override;
+    virtual Vec3 Sample(const Point3& origin) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
-    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
     virtual const Material* GetMaterial() const override;
 
@@ -96,6 +97,38 @@ inline bool Triangle::GetAABB(AABB* out_aabb) const
     return true;
 }
 
+inline Vec3 Triangle::Sample() const
+{
+#if 1
+    f64 u = Rand(0.0, 1.0);
+    f64 v = Rand(0.0, 1.0);
+
+    if (u + v > 1.0)
+    {
+        u = 1.0 - u;
+        v = 1.0 - v;
+    }
+
+    return v0.position + e1 * u + e2 * v;
+#else
+    f64 u1 = Rand(0.0, 1.0);
+    f64 u2 = Rand(0.0, 1.0);
+
+    f64 s = sqrt(u1);
+    f64 u = 1.0 - s;
+    f64 v = u2 * s;
+
+    return v0.position + e1 * u + e2 * v;
+#endif
+}
+
+inline Vec3 Triangle::Sample(const Point3& origin) const
+{
+    Point3 random_point = Sample();
+
+    return (random_point - origin).Normalized();
+}
+
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
@@ -115,35 +148,6 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     f64 area = 0.5 * Cross(e1, e2).Length();
 
     return distance_squared / (cosine * area);
-}
-
-inline Vec3 Triangle::GetRandomDirection(const Point3& origin) const
-{
-#if 1
-    f64 u = Rand(0.0, 1.0);
-    f64 v = Rand(0.0, 1.0);
-
-    if (u + v > 1.0)
-    {
-        u = 1.0 - u;
-        v = 1.0 - v;
-    }
-
-    Point3 random_point = v0.position + e1 * u + e2 * v;
-
-    return (random_point - origin).Normalized();
-#else
-    f64 u1 = Rand(0.0, 1.0);
-    f64 u2 = Rand(0.0, 1.0);
-
-    f64 s = sqrt(u1);
-    f64 u = 1.0 - s;
-    f64 v = u2 * s;
-
-    Point3 random_point = v0.position + e1 * u + e2 * v;
-
-    return (random_point - origin).Normalized();
-#endif
 }
 
 inline i32 Triangle::GetSize() const

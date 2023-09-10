@@ -31,7 +31,7 @@ inline IntersectablePDF::IntersectablePDF(const Intersectable* target, const Vec
 // Returns random direction vector hitting this object
 inline Vec3 IntersectablePDF::Sample() const
 {
-    return target->GetRandomDirection(origin);
+    return target->Sample(origin);
 }
 
 inline f64 IntersectablePDF::Evaluate(const Vec3& wi) const

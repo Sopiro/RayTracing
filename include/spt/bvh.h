@@ -93,8 +93,8 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
+    virtual Vec3 Sample(const Vec3& origin) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual Vec3 GetRandomDirection(const Vec3& origin) const override;
     virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
@@ -334,6 +334,14 @@ inline bool BVH::GetAABB(AABB* out_aabb) const
     return true;
 }
 
+inline Vec3 BVH::Sample(const Vec3& origin) const
+{
+    size_t count = leaves.size();
+    size_t index = std::min((size_t)(count * Rand()), count - 1);
+
+    return nodes[leaves[index]].data->Sample(origin);
+}
+
 inline f64 BVH::EvaluatePDF(const Ray& ray) const
 {
     struct Callback
@@ -362,14 +370,6 @@ inline f64 BVH::EvaluatePDF(const Ray& ray) const
     RayCast(ray, ray_offset, infinity, &callback);
 
     return callback.sum;
-}
-
-inline Vec3 BVH::GetRandomDirection(const Vec3& origin) const
-{
-    size_t count = leaves.size();
-    size_t index = std::min((size_t)(count * Rand()), count - 1);
-
-    return nodes[leaves[index]].data->GetRandomDirection(origin);
 }
 
 inline i32 BVH::GetSize() const

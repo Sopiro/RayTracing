@@ -56,14 +56,33 @@ inline Vec3 RandVec3(Real min, Real max)
     return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
 }
 
-inline Vec3 RandomUnitVector()
+inline Vec3 UniformSampleSphere()
 {
     Real u1 = Rand();
     Real u2 = Rand();
 
-    Real x = cos(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
-    Real y = sin(2 * pi * u1) * 2 * sqrt(u2 * (1 - u2));
-    Real z = 1 - 2 * u2;
+    Real z = 1.0 - 2.0 * u1;
+    Real r = sqrt(fmax(0.0, 1.0 - z * z));
+    Real phi = two_pi * u2;
+
+    Real x = r * cos(phi);
+    Real y = r * sin(phi);
+
+    return Vec3{ x, y, z };
+}
+
+// z > 0
+inline Vec3 CosineSampleHemisphere()
+{
+    Real u1 = Rand();
+    Real u2 = Rand();
+
+    Real z = sqrt(Real(1.0) - u2);
+
+    Real phi = two_pi * u1;
+    Real su2 = sqrt(u2);
+    Real x = cos(phi) * su2;
+    Real y = sin(phi) * su2;
 
     return Vec3{ x, y, z };
 }
@@ -80,21 +99,6 @@ inline Vec3 RandomToSphere(Real radius, Real distance_squared)
     Real sin_theta = sqrt(Real(1.0) - z * z);
     Real x = cos(phi) * sin_theta;
     Real y = sin(phi) * sin_theta;
-
-    return Vec3{ x, y, z };
-}
-
-// z > 0
-inline Vec3 RandomCosineDirection()
-{
-    Real u1 = Rand();
-    Real u2 = Rand();
-
-    Real z = sqrt(Real(1.0) - u2);
-
-    Real phi = two_pi * u1;
-    Real x = cos(phi) * sqrt(u2);
-    Real y = sin(phi) * sqrt(u2);
 
     return Vec3{ x, y, z };
 }
@@ -128,7 +132,7 @@ inline Vec3 RandomInUnitSphere()
 #endif
 }
 
-inline Vec3 RandomInUnitDiskXY()
+inline Vec3 UniformSampleUnitDiskXY()
 {
     Real u1 = Rand();
     Real u2 = Rand();

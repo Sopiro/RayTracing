@@ -48,13 +48,16 @@ public:
     // Returns false if it's invalid
     virtual bool GetAABB(AABB* out_aabb) const = 0;
 
+    // Returns random point on the surface
+    virtual Vec3 Sample() const;
+
+    // Returns random direction toward this object
+    virtual Vec3 Sample(const Point3& origin) const;
+
     virtual f64 EvaluatePDF(const Ray& ray) const;
 
     // Input ray must hit this object
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const;
-
-    // Returns random direction toward this object
-    virtual Vec3 GetRandomDirection(const Point3& origin) const;
 
     // Returns the total object count
     virtual i32 GetSize() const;
@@ -68,6 +71,19 @@ protected:
     NodeProxy node;
 };
 
+inline Vec3 Intersectable::Sample() const
+{
+    assert(false);
+    return zero_vec3;
+}
+
+// Returns random direction toward this object
+inline Vec3 Intersectable::Sample(const Point3& origin) const
+{
+    assert(false);
+    return zero_vec3;
+}
+
 inline f64 Intersectable::EvaluatePDF(const Ray& ray) const
 {
     assert(false);
@@ -79,13 +95,6 @@ inline f64 Intersectable::PDFValue(const Intersection& hit_is, const Ray& hit_ra
 {
     assert(false);
     return 0.0;
-}
-
-// Returns random direction toward this object
-inline Vec3 Intersectable::GetRandomDirection(const Point3& origin) const
-{
-    assert(false);
-    return zero_vec3;
 }
 
 inline i32 Intersectable::GetSize() const

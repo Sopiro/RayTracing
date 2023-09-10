@@ -17,9 +17,10 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
+    virtual Vec3 Sample() const override;
+    virtual Vec3 Sample(const Point3& origin) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
-    virtual Vec3 GetRandomDirection(const Point3& origin) const override;
     virtual i32 GetSize() const override;
     virtual const Material* GetMaterial() const override;
 
@@ -47,6 +48,21 @@ inline bool Sphere::GetAABB(AABB* out_aabb) const
     return true;
 }
 
+inline Vec3 Sphere::Sample() const
+{
+    return center + UniformSampleSphere() * radius;
+}
+
+inline Vec3 Sphere::Sample(const Point3& origin) const
+{
+    Vec3 direction = center - origin;
+    f64 distance_sqared = direction.Length2();
+
+    ONB uvw{ direction };
+
+    return uvw.GetLocal(RandomToSphere(radius, distance_sqared));
+}
+
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
@@ -65,16 +81,6 @@ inline f64 Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) cons
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;
-}
-
-inline Vec3 Sphere::GetRandomDirection(const Point3& origin) const
-{
-    Vec3 direction = center - origin;
-    f64 distance_sqared = direction.Length2();
-
-    ONB uvw{ direction };
-
-    return uvw.GetLocal(RandomToSphere(radius, distance_sqared));
 }
 
 inline i32 Sphere::GetSize() const

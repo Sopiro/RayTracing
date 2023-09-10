@@ -58,7 +58,7 @@ inline Camera::Camera(const Point3& look_from,
 
 inline Ray Camera::GetRay(f64 s, f64 t) const
 {
-    Vec3 rd = lens_radius * RandomInUnitDiskXY();
+    Vec3 rd = lens_radius * UniformSampleUnitDiskXY();
     Vec3 offset = u * rd.x + v * rd.y;
 
     Vec3 camera_center = origin + offset;
