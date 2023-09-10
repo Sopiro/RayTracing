@@ -87,6 +87,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     }
 
     // Process materials
+    std::array<Color, 3> colors;
     std::array<Ref<Texture>, TextureType::count> textures;
 
     if (mesh->mMaterialIndex >= 0)
@@ -96,12 +97,14 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         aiColor3D diffuseColor;
         aiColor3D specularColor;
         aiColor3D emissiveColor;
-        float opacity;
 
         material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
         material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
         material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
-        material->Get(AI_MATKEY_OPACITY, opacity);
+
+        colors[0].Set(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+        colors[1].Set(specularColor.r, specularColor.g, specularColor.b);
+        colors[2].Set(emissiveColor.r, emissiveColor.g, emissiveColor.b);
 
         auto basecolor_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
@@ -134,7 +137,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         v.tangent.Set(vT.x, vT.y, vT.z);
     }
 
-    return CreateSharedRef<Mesh>(vertices, indices, textures);
+    return CreateSharedRef<Mesh>(vertices, indices, colors, textures);
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

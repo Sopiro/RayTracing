@@ -51,7 +51,7 @@ void Sponza(Scene& scene)
     scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
     // scene.SetEnvironmentMap(SolidColor::Create(Color{ 1.0 }));
 
-    scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(-Vec3{ -3.0, 15.0, -3.0 }.Normalized(), Vec3{ 10.0 }));
+    scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(-Vec3{ -3.0, 15.0, -3.0 }.Normalized(), Vec3{ 10.0 }, 0.01));
 
     // scene.Rebuild();
 }

@@ -25,6 +25,7 @@ class Mesh : public Intersectable
 public:
     Mesh(const std::vector<Vertex>& vertices,
          const std::vector<u32>& indices,
+         const std::array<Color, 3>& colors,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Real t_min, Real t_max) const override;

@@ -9,6 +9,7 @@ namespace spt
 
 Mesh::Mesh(const std::vector<Vertex>& vertices,
            const std::vector<u32>& indices,
+           const std::array<Color, 3>& colors,
            const std::array<Ref<Texture>, TextureType::count>& _textures)
     : textures{ _textures }
 {
@@ -27,12 +28,54 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
     else
     {
         auto mat = CreateSharedRef<Microfacet>();
-        mat->basecolor_map = HasTexture(basecolor) ? textures[basecolor] : SolidColor::Create(1.0, 0.0, 1.0);
+
+        if (HasTexture(basecolor))
+        {
+            mat->basecolor_map = textures[basecolor];
+        }
+        else
+        {
+            mat->basecolor_map = SolidColor::Create(colors[0]);
+        }
+
         mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
-        mat->metallic_map = HasTexture(metallic) ? textures[metallic] : SolidColor::Create(0.0);
-        mat->roughness_map = HasTexture(roughness) ? textures[roughness] : SolidColor::Create(0.2);
+
+        if (HasTexture(metallic))
+        {
+            mat->metallic_map = textures[metallic];
+        }
+        else
+        {
+            if (colors[1].x < 0.01 && colors[1].y < 0.01 && colors[1].z < 0.01)
+            {
+                mat->metallic_map = SolidColor::Create(0.0);
+            }
+            else
+            {
+                mat->metallic_map = SolidColor::Create(1.0);
+            }
+        }
+
+        if (HasTexture(roughness))
+        {
+            mat->roughness_map = textures[roughness];
+        }
+        else
+        {
+            mat->roughness_map = SolidColor::Create(colors[1]);
+        }
+
         mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0);
-        mat->emissive_map = HasTexture(emissive) ? textures[emissive] : SolidColor::Create(0.0, 0.0, 0.0);
+
+        if (HasTexture(emissive))
+        {
+            mat->emissive_map = textures[emissive];
+        }
+        else
+        {
+            mat->emissive_map = SolidColor::Create(colors[2]);
+        }
+
         material = mat;
     }
 

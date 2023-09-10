@@ -32,6 +32,7 @@ extern void CornellBoxBunnyVolume(Scene&);
 extern void CornellBoxOriginal(Scene&);
 extern void RebootScene(Scene&);
 extern void CornellBoxGlossy(Scene&);
+extern void BreakfastRoom(Scene&);
 
 } // namespace spt
 
@@ -44,10 +45,10 @@ int main()
 
     using namespace spt;
 
-    // f64 aspect_ratio = 16.0 / 9.0;
+    f64 aspect_ratio = 16.0 / 9.0;
     // f64 aspect_ratio = 3.0 / 2.0;
     // f64 aspect_ratio = 4.0 / 3.0;
-    f64 aspect_ratio = 1.0;
+    // f64 aspect_ratio = 1.0;
     i32 width = 500;
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
@@ -58,7 +59,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (17)
+    switch (21)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -386,6 +387,20 @@ int main()
         f64 vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    case 21: // Breakfast room
+    {
+        BreakfastRoom(scene);
+
+        Point3 lookfrom{ 0.0, 2.2, 4.5 };
+        Point3 lookat{ 0.0, 1.5, 0.0 };
+
+        f64 dist_to_focus = (lookfrom - lookat).Length();
+        f64 aperture = 0.0;
+        f64 vFov = 71.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        break;
     }
     default:
         assert(false);
