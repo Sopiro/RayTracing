@@ -56,7 +56,8 @@ void CornellBox(Scene& scene)
         auto l = RectXZ(tf, light);
 
         scene.Add(l);
-        scene.AddAreaLight(l);
+        scene.AddAreaLight(l->GetObjects()[0]);
+        scene.AddAreaLight(l->GetObjects()[1]);
     }
 
     // Right sphere
@@ -81,7 +82,7 @@ void CornellBox(Scene& scene)
     }
 
     // scene.Rebuild();
-    // std::cout << "Lights: " << scene.GetAreaLights().GetCount() << std::endl;
+    std::cout << "Lights: " << scene.GetAreaLights().GetCount() << std::endl;
 }
 
 } // namespace spt

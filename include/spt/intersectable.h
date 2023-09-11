@@ -49,10 +49,10 @@ public:
     virtual bool GetAABB(AABB* out_aabb) const = 0;
 
     // Returns random point on the surface
-    virtual Vec3 Sample() const;
+    virtual Point3 Sample() const;
 
-    // Returns random direction toward this object
-    virtual Vec3 Sample(const Point3& origin) const;
+    // Returns random point relative to the reference point
+    virtual Point3 Sample(const Point3& ref) const;
 
     virtual f64 EvaluatePDF(const Ray& ray) const;
 

@@ -387,7 +387,9 @@ int main()
         f64 vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        break;
     }
+
     case 21: // Breakfast room
     {
         BreakfastRoom(scene);

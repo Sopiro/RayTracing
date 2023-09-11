@@ -6,6 +6,7 @@ namespace spt
 {
 
 // Orthonormal basis
+// Only concern about polar angle
 struct ONB
 {
     ONB() = default;
@@ -16,7 +17,7 @@ struct ONB
 
     Vec3 GetLocal(f64 x, f64 y, f64 z) const;
     Vec3 GetLocal(const Vec3& d) const;
-    void BuildFromW(const Vec3& n);
+    void BuildFromW(const Vec3& w);
 
     // tangent, bitangent, normal
     Vec3 u, v, w;
@@ -49,7 +50,7 @@ inline Vec3 ONB::GetLocal(const Vec3& d) const
 
 inline void ONB::BuildFromW(const Vec3& n)
 {
-    w = n.Normalized();
+    w = n;
 
     Vec3 t = (fabs(w.y) > 0.999) ? x_axis : y_axis;
 

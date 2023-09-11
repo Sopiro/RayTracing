@@ -19,7 +19,8 @@ void BreakfastRoom(Scene& scene)
     auto l = RectYZ(tf, light);
 
     scene.Add(l);
-    scene.AddAreaLight(l);
+    scene.AddAreaLight(l->GetObjects()[0]);
+    scene.AddAreaLight(l->GetObjects()[1]);
 }
 
 } // namespace spt

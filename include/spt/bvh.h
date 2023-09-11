@@ -93,8 +93,6 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual Vec3 Sample(const Vec3& origin) const override;
-    virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual i32 GetSize() const override;
     virtual void Rebuild() override;
 
@@ -332,44 +330,6 @@ inline bool BVH::GetAABB(AABB* out_aabb) const
 
     *out_aabb = nodes[root].aabb;
     return true;
-}
-
-inline Vec3 BVH::Sample(const Vec3& origin) const
-{
-    size_t count = leaves.size();
-    size_t index = std::min((size_t)(count * Rand()), count - 1);
-
-    return nodes[leaves[index]].data->Sample(origin);
-}
-
-inline f64 BVH::EvaluatePDF(const Ray& ray) const
-{
-    struct Callback
-    {
-        f64 sum;
-        f64 weight;
-
-        Intersection is;
-
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
-        {
-            bool hit = object->Intersect(&is, ray, t_min, t_max);
-
-            if (hit)
-            {
-                sum += weight * is.object->PDFValue(is, ray) / object->GetSize();
-            }
-
-            return t_max;
-        }
-    } callback;
-
-    callback.sum = 0.0;
-    callback.weight = 1.0 / leaves.size();
-
-    RayCast(ray, ray_offset, infinity, &callback);
-
-    return callback.sum;
 }
 
 inline i32 BVH::GetSize() const

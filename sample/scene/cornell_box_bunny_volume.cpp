@@ -46,21 +46,22 @@ void CornellBoxBunnyVolume(Scene& scene)
         auto l = RectXZ(tf, light);
 
         scene.Add(l);
-        scene.AddAreaLight(l);
+        scene.AddAreaLight(l->GetObjects()[0]);
+        scene.AddAreaLight(l->GetObjects()[1]);
     }
 
     // Bunny
     {
-        // Vec3 center = Point3{ 0.5, 0.25, -0.5 };
-        // Transform tf{ center, Quat{ DegToRad(45), y_axis }, Vec3{ 0.5 } };
-        // auto m = Box(tf, white);
+        Vec3 center = Point3{ 0.5, 0.5, -0.5 };
+        Transform tf{ center, Quat{ DegToRad(45), y_axis }, Vec3{ 0.5 } };
+        auto m = Box(tf, white);
         // auto m = CreateSharedRef<Sphere>(tf.p, 0.3, white);
 
-        Vec3 center = Point3{ 0.5, 0.1, -0.5 };
-        Transform tf{ center, Quat{ DegToRad(0), x_axis }, Vec3{ 0.7 } };
-        Ref<Model> m = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
+        // Vec3 center = Point3{ 0.5, 0.1, -0.5 };
+        // Transform tf{ center, Quat{ DegToRad(0), x_axis }, Vec3{ 0.7 } };
+        // Ref<Model> m = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
 
-        auto volume = CreateSharedRef<ConstantDensityMedium>(m, 5.0, Color{ 1.0 });
+        auto volume = CreateSharedRef<ConstantDensityMedium>(m, 100.0, Color{ 1.0 });
 
         scene.Add(volume);
     }

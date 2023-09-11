@@ -21,8 +21,6 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual Vec3 Sample(const Point3& origin) const override;
-    virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual void Rebuild() override;
 
     const IntersectableList& GetIntersectableList() const;
@@ -80,16 +78,6 @@ inline bool Scene::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 inline bool Scene::GetAABB(AABB* out_aabb) const
 {
     return intersectables.GetAABB(out_aabb);
-}
-
-inline Vec3 Scene::Sample(const Point3& origin) const
-{
-    return intersectables.Sample(origin);
-}
-
-inline f64 Scene::EvaluatePDF(const Ray& ray) const
-{
-    return intersectables.EvaluatePDF(ray);
 }
 
 inline const IntersectableList& Scene::GetIntersectableList() const

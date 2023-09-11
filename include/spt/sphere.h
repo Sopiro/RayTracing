@@ -17,8 +17,8 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual Vec3 Sample() const override;
-    virtual Vec3 Sample(const Point3& origin) const override;
+    virtual Point3 Sample() const override;
+    virtual Point3 Sample(const Point3& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
     virtual i32 GetSize() const override;
@@ -48,7 +48,7 @@ inline bool Sphere::GetAABB(AABB* out_aabb) const
     return true;
 }
 
-inline Vec3 Sphere::Sample() const
+inline Point3 Sphere::Sample() const
 {
     return center + UniformSampleSphere() * radius;
 }
