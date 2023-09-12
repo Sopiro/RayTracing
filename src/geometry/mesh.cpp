@@ -18,6 +18,7 @@ Mesh::Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& _materia
         vertices.push_back(tri.v0);
         vertices.push_back(tri.v1);
         vertices.push_back(tri.v2);
+
         indices.push_back(k++);
         indices.push_back(k++);
         indices.push_back(k++);
@@ -60,60 +61,59 @@ Mesh::Mesh(const std::vector<Vertex>& _vertices,
     if (HasTexture(basecolor) == false && Material::fallback_material != nullptr)
     {
         material = Material::fallback_material;
+        return;
+    }
+
+    auto mat = CreateSharedRef<Microfacet>();
+
+    if (HasTexture(basecolor))
+    {
+        mat->basecolor_map = textures[basecolor];
     }
     else
     {
-        auto mat = CreateSharedRef<Microfacet>();
-
-        if (HasTexture(basecolor))
-        {
-            mat->basecolor_map = textures[basecolor];
-        }
-        else
-        {
-            mat->basecolor_map = SolidColor::Create(colors[0]);
-        }
-
-        mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
-
-        if (HasTexture(metallic))
-        {
-            mat->metallic_map = textures[metallic];
-        }
-        else
-        {
-            if (colors[1].x < 0.01 && colors[1].y < 0.01 && colors[1].z < 0.01)
-            {
-                mat->metallic_map = SolidColor::Create(0.0);
-            }
-            else
-            {
-                mat->metallic_map = SolidColor::Create(1.0);
-            }
-        }
-
-        if (HasTexture(roughness))
-        {
-            mat->roughness_map = textures[roughness];
-        }
-        else
-        {
-            mat->roughness_map = SolidColor::Create(colors[1]);
-        }
-
-        mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0);
-
-        if (HasTexture(emissive))
-        {
-            mat->emissive_map = textures[emissive];
-        }
-        else
-        {
-            mat->emissive_map = SolidColor::Create(colors[2]);
-        }
-
-        material = mat;
+        mat->basecolor_map = SolidColor::Create(colors[0]);
     }
+
+    mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+
+    if (HasTexture(metallic))
+    {
+        mat->metallic_map = textures[metallic];
+    }
+    else
+    {
+        if (colors[1].x < 0.01 && colors[1].y < 0.01 && colors[1].z < 0.01)
+        {
+            mat->metallic_map = SolidColor::Create(0.0);
+        }
+        else
+        {
+            mat->metallic_map = SolidColor::Create(1.0);
+        }
+    }
+
+    if (HasTexture(roughness))
+    {
+        mat->roughness_map = textures[roughness];
+    }
+    else
+    {
+        mat->roughness_map = SolidColor::Create(colors[1]);
+    }
+
+    mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0);
+
+    if (HasTexture(emissive))
+    {
+        mat->emissive_map = textures[emissive];
+    }
+    else
+    {
+        mat->emissive_map = SolidColor::Create(colors[2]);
+    }
+
+    material = mat;
 }
 
 } // namespace spt

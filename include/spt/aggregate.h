@@ -42,11 +42,11 @@ inline void Aggregate::GetAABB(AABB* out_aabb) const
 
 inline void Aggregate::Add(Ref<Intersectable> object)
 {
-    objects.push_back(object);
-
     AABB aabb;
     object->GetAABB(&aabb);
     bvh.CreateNode(object.get(), aabb);
+
+    objects.push_back(object);
 }
 
 inline void Aggregate::Add(Ref<Mesh> mesh)
@@ -54,7 +54,7 @@ inline void Aggregate::Add(Ref<Mesh> mesh)
     auto& vertices = mesh->vertices;
     auto& indices = mesh->indices;
 
-    for (size_t i = 0; i < mesh->indices.size(); i += 3)
+    for (size_t i = 0; i < indices.size(); i += 3)
     {
         u32 index0 = indices[i];
         u32 index1 = indices[i + 1];
@@ -64,15 +64,13 @@ inline void Aggregate::Add(Ref<Mesh> mesh)
         Vertex& vertex1 = vertices[index1];
         Vertex& vertex2 = vertices[index2];
 
-        auto tri = CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material);
-
-        Add(tri);
+        Add(CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material));
     }
 }
 
 inline void Aggregate::Add(Ref<Model> model)
 {
-    const std::vector<Ref<Mesh>>& meshes = model->GetMeshes();
+    auto& meshes = model->GetMeshes();
 
     for (size_t i = 0; i < meshes.size(); ++i)
     {

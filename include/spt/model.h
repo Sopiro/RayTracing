@@ -13,7 +13,6 @@ public:
     Model(const std::string& path, const Transform& transform);
     virtual ~Model() = default;
 
-    size_t GetMeshCount() const;
     const std::vector<Ref<Mesh>>& GetMeshes();
 
 private:
@@ -27,11 +26,6 @@ private:
     std::string folder;
     std::vector<Ref<Mesh>> meshes;
 };
-
-inline size_t Model::GetMeshCount() const
-{
-    return meshes.size();
-}
 
 inline const std::vector<Ref<Mesh>>& Model::GetMeshes()
 {
