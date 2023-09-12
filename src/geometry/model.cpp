@@ -10,15 +10,6 @@ namespace spt
 Model::Model(const std::string& path, const Transform& transform)
 {
     LoadModel(path, transform);
-
-    for (size_t i = 0; i < meshes.size(); ++i)
-    {
-        Mesh* m = meshes[i].get();
-        AABB aabb;
-        m->GetAABB(&aabb);
-
-        bvh.CreateNode(m, aabb);
-    }
 }
 
 std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)

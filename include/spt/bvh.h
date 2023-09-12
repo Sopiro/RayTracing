@@ -3,7 +3,8 @@
 #include "aabb.h"
 #include "common.h"
 #include "growable_array.h"
-#include "intersectable.h"
+#include "primitive.h"
+#include "triangle.h"
 
 #define nullNode (-1)
 
@@ -23,33 +24,35 @@ inline Real SAH(const AABB& aabb)
 }
 
 class Intersectable;
-typedef i32 NodeProxy;
-typedef Intersectable Data;
 
-struct Node
-{
-    bool IsLeaf() const
-    {
-        return child1 == nullNode;
-    }
-
-    i32 id;
-    AABB aabb;
-
-    NodeProxy parent;
-    NodeProxy child1;
-    NodeProxy child2;
-
-    NodeProxy next;
-    bool moved;
-
-    Data* data; // user data
-};
-
-class BVH : public Intersectable
+class BVH
 {
 public:
+    using Data = Intersectable;
+
+    struct Node
+    {
+        bool IsLeaf() const
+        {
+            return child1 == nullNode;
+        }
+
+        i32 id;
+        AABB aabb;
+
+        NodeProxy parent;
+        NodeProxy child1;
+        NodeProxy child2;
+
+        NodeProxy next;
+        bool moved;
+
+        Data* data; // user data
+    };
+
     BVH();
+    BVH(std::vector<Triangle>& triangles);
+
     virtual ~BVH() noexcept;
 
     BVH(const BVH&) = delete;
@@ -90,14 +93,10 @@ public:
 
     Real GetTreeCost() const;
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual i32 GetSize() const override;
-    virtual void Rebuild() override;
+    void Rebuild();
 
 private:
-    i32 size;
+    friend class Aggregate;
 
     NodeProxy nodeID;
     NodeProxy root;
@@ -107,8 +106,6 @@ private:
     i32 nodeCapacity;
 
     NodeProxy freeList;
-
-    std::vector<NodeProxy> leaves;
 
     NodeProxy AllocateNode();
     void FreeNode(NodeProxy node);
@@ -149,7 +146,7 @@ inline bool BVH::WasMoved(NodeProxy node) const
     return nodes[node].moved;
 }
 
-inline Data* BVH::GetData(NodeProxy node) const
+inline BVH::Data* BVH::GetData(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
@@ -319,22 +316,6 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
             stack.Emplace(node->child2);
         }
     }
-}
-
-inline bool BVH::GetAABB(AABB* out_aabb) const
-{
-    if (nodeCount == 0)
-    {
-        return false;
-    }
-
-    *out_aabb = nodes[root].aabb;
-    return true;
-}
-
-inline i32 BVH::GetSize() const
-{
-    return size;
 }
 
 } // namespace spt

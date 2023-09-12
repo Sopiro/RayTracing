@@ -7,11 +7,30 @@
 namespace spt
 {
 
-Mesh::Mesh(const std::vector<Vertex>& vertices,
-           const std::vector<u32>& indices,
+Mesh::Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& _material)
+    : material{ _material }
+{
+    u32 k = 0;
+    for (size_t i = 0; i < triangles.size(); ++i)
+    {
+        const Triangle& tri = triangles[i];
+
+        vertices.push_back(tri.v0);
+        vertices.push_back(tri.v1);
+        vertices.push_back(tri.v2);
+        indices.push_back(k++);
+        indices.push_back(k++);
+        indices.push_back(k++);
+    }
+}
+
+Mesh::Mesh(const std::vector<Vertex>& _vertices,
+           const std::vector<u32>& _indices,
            const std::array<Color, 3>& colors,
            const std::array<Ref<Texture>, TextureType::count>& _textures)
-    : textures{ _textures }
+    : vertices{ _vertices }
+    , indices{ _indices }
+    , textures{ _textures }
 {
     // std::cout << "Basecolor\t: " << HasTexture(basecolor) << std::endl;
     // std::cout << "Normal\t\t: " << HasTexture(normal) << std::endl;
@@ -77,22 +96,6 @@ Mesh::Mesh(const std::vector<Vertex>& vertices,
         }
 
         material = mat;
-    }
-
-    // Bake BVH
-
-    triangles.reserve(indices.size() / 3 + 1);
-
-    for (size_t i = 0; i < indices.size(); i += 3)
-    {
-        u32 index0 = indices[i];
-        u32 index1 = indices[i + 1];
-        u32 index2 = indices[i + 2];
-
-        Triangle& t = triangles.emplace_back(vertices[index0], vertices[index1], vertices[index2], material);
-        AABB aabb;
-        t.GetAABB(&aabb);
-        bvh.CreateNode(&t, aabb);
     }
 }
 

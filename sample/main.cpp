@@ -404,6 +404,7 @@ int main()
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
         break;
     }
+
     default:
         assert(false);
         break;

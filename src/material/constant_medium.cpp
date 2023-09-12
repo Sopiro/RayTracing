@@ -43,6 +43,7 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
     }
 
     is->object = this;
+    is->material = phase_function.get();
     is->t = is1.t + hit_distance / ray_length;
     is->point = ray.At(is->t);
     is->normal = y_axis;   // arbitrary

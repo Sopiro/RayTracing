@@ -20,8 +20,25 @@ BVH::BVH()
     }
     nodes[nodeCapacity - 1].next = nullNode;
     freeList = 0;
+}
 
-    size = 0;
+BVH::BVH(std::vector<Triangle>& primitives)
+    : BVH()
+{
+    for (size_t i = 0; i < primitives.size(); ++i)
+    {
+        AABB aabb;
+        primitives[i].GetAABB(&aabb);
+
+        NodeProxy newNode = AllocateNode();
+        nodes[newNode].aabb.max = aabb.max + aabb_margin;
+        nodes[newNode].aabb.min = aabb.min - aabb_margin;
+        nodes[newNode].data = &primitives[i];
+        nodes[newNode].parent = nullNode;
+        nodes[newNode].moved = true;
+    }
+
+    Rebuild();
 }
 
 BVH::~BVH() noexcept
@@ -35,8 +52,6 @@ BVH::BVH(BVH&& other) noexcept
 {
     // Steal resources
     {
-        size = other.size;
-
         nodeID = other.nodeID;
         root = other.root;
 
@@ -45,14 +60,10 @@ BVH::BVH(BVH&& other) noexcept
         nodeCapacity = other.nodeCapacity;
 
         freeList = other.freeList;
-
-        leaves = std::move(other.leaves);
     }
 
     // Clear moved object
     {
-        other.size = 0;
-
         other.nodeID = 0;
         other.root = nullNode;
 
@@ -72,8 +83,6 @@ BVH& BVH::operator=(BVH&& other) noexcept
 
     // Steal resources
     {
-        size = other.size;
-
         nodeID = other.nodeID;
         root = other.root;
 
@@ -82,14 +91,10 @@ BVH& BVH::operator=(BVH&& other) noexcept
         nodeCapacity = other.nodeCapacity;
 
         freeList = other.freeList;
-
-        leaves = std::move(other.leaves);
     }
 
     // Clear moved object
     {
-        other.size = 0;
-
         other.nodeID = 0;
         other.root = nullNode;
 
@@ -323,9 +328,8 @@ NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
     nodes[newNode].moved = true;
 
     InsertLeaf(newNode);
-    leaves.push_back(newNode);
 
-    size += data->GetSize();
+    data->node = newNode;
 
     return newNode;
 }
@@ -381,20 +385,7 @@ void BVH::RemoveNode(NodeProxy node)
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
 
-    size -= nodes[node].data->GetSize();
-
     RemoveLeaf(node);
-
-    for (i32 i = 0; i < leaves.size(); ++i)
-    {
-        if (leaves[i] == node)
-        {
-            leaves[i] = leaves.back();
-        }
-    }
-
-    leaves.pop_back();
-
     FreeNode(node);
 }
 
@@ -850,67 +841,6 @@ void BVH::RayCast(const Ray& r,
             stack.Emplace(node->child2);
         }
     }
-}
-
-bool BVH::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
-{
-    struct Callback
-    {
-        Intersection* is;
-        bool hit_closest;
-        f64 t;
-
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
-        {
-            bool hit = object->Intersect(is, ray, t_min, t_max);
-
-            if (hit)
-            {
-                hit_closest = true;
-                t = is->t;
-            }
-
-            // Keep traverse with smaller bounds
-            return t;
-        }
-    } callback;
-
-    callback.is = is;
-    callback.hit_closest = false;
-    callback.t = t_max;
-
-    RayCast(ray, t_min, t_max, &callback);
-
-    return callback.hit_closest;
-}
-
-bool BVH::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
-{
-    struct Callback
-    {
-        bool hit_any;
-
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
-        {
-            bool hit = object->IntersectAny(ray, t_min, t_max);
-
-            if (hit)
-            {
-                hit_any = true;
-
-                // Stop traversal
-                return t_min;
-            }
-
-            return t_max;
-        }
-    } callback;
-
-    callback.hit_any = false;
-
-    RayCast(ray, t_min, t_max, &callback);
-
-    return callback.hit_any;
 }
 
 } // namespace spt

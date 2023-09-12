@@ -1,11 +1,12 @@
 #pragma once
 
-#include "bvh.h"
+#include "aggregate.h"
 #include "common.h"
 #include "directional_light.h"
 #include "image_texture.h"
 #include "intersectable.h"
-#include "intersectable_list.h"
+#include "mesh.h"
+#include "model.h"
 #include "solid_color.h"
 #include "sphere.h"
 
@@ -20,11 +21,11 @@ public:
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual void Rebuild() override;
+    virtual void GetAABB(AABB* out_aabb) const override;
 
-    const IntersectableList& GetIntersectableList() const;
     void Add(const Ref<Intersectable>& object);
+    void Add(const Ref<Mesh>& object);
+    void Add(const Ref<Model>& object);
 
     const Ref<Texture>& GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -35,17 +36,19 @@ public:
     void SetDirectionalLight(const Ref<DirectionalLight>& directional_light);
 
     bool HasAreaLights() const;
-    const IntersectableList& GetAreaLights() const;
-    void AddAreaLight(const Ref<Intersectable>& object);
+    const std::vector<Ref<Primitive>>& GetAreaLights() const;
+    void AddAreaLight(const Ref<Primitive>& object);
+    void AddAreaLight(const Ref<Mesh>& object);
 
     void Reset();
+    void Rebuild();
 
 private:
-    IntersectableList intersectables;
-    IntersectableList lights;
+    Aggregate accel; // Acceleration structure
 
     Ref<Texture> environment_map;
     Ref<DirectionalLight> directional_light;
+    std::vector<Ref<Primitive>> area_lights;
 };
 
 inline Scene::Scene()
@@ -54,40 +57,34 @@ inline Scene::Scene()
 {
 }
 
-inline void Scene::Reset()
-{
-    intersectables.Clear();
-    lights.Clear();
-}
-
-inline void Scene::Rebuild()
-{
-    intersectables.Rebuild();
-}
-
 inline bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    return intersectables.Intersect(is, ray, t_min, t_max);
+    return accel.Intersect(is, ray, t_min, t_max);
 }
 
 inline bool Scene::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
-    return intersectables.IntersectAny(ray, t_min, t_max);
+    return accel.IntersectAny(ray, t_min, t_max);
 }
 
-inline bool Scene::GetAABB(AABB* out_aabb) const
+inline void Scene::GetAABB(AABB* out_aabb) const
 {
-    return intersectables.GetAABB(out_aabb);
-}
-
-inline const IntersectableList& Scene::GetIntersectableList() const
-{
-    return intersectables;
+    return accel.GetAABB(out_aabb);
 }
 
 inline void Scene::Add(const Ref<Intersectable>& object)
 {
-    intersectables.Add(object);
+    accel.Add(object);
+}
+
+inline void Scene::Add(const Ref<Mesh>& mesh)
+{
+    accel.Add(mesh);
+}
+
+inline void Scene::Add(const Ref<Model>& model)
+{
+    accel.Add(model);
 }
 
 inline const Ref<Texture>& Scene::GetEnvironmentMap() const
@@ -130,17 +127,43 @@ inline void Scene::SetDirectionalLight(const Ref<DirectionalLight>& dr)
 
 inline bool Scene::HasAreaLights() const
 {
-    return lights.GetCount() > 0;
+    return area_lights.size() > 0;
 }
 
-inline const IntersectableList& Scene::GetAreaLights() const
+inline const std::vector<Ref<Primitive>>& Scene::GetAreaLights() const
 {
-    return lights;
+    return area_lights;
 }
 
-inline void Scene::AddAreaLight(const Ref<Intersectable>& object)
+inline void Scene::AddAreaLight(const Ref<Primitive>& object)
 {
-    lights.Add(object);
+    area_lights.push_back(object);
+}
+
+inline void Scene::AddAreaLight(const Ref<Mesh>& mesh)
+{
+    for (size_t i = 0; i < mesh->indices.size(); i += 3)
+    {
+        u32 index0 = mesh->indices[i];
+        u32 index1 = mesh->indices[i + 1];
+        u32 index2 = mesh->indices[i + 2];
+
+        auto tri =
+            CreateSharedRef<Triangle>(mesh->vertices[index0], mesh->vertices[index1], mesh->vertices[index2], mesh->material);
+
+        area_lights.push_back(tri);
+    }
+}
+
+inline void Scene::Reset()
+{
+    accel.Reset();
+    area_lights.clear();
+}
+
+inline void Scene::Rebuild()
+{
+    accel.Rebuild();
 }
 
 } // namespace spt

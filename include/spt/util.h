@@ -1,8 +1,8 @@
 #pragma once
 
 #include "common.h"
-#include "intersectable_list.h"
 #include "material.h"
+#include "mesh.h"
 #include "microfacet.h"
 #include "solid_color.h"
 #include "transform.h"
@@ -31,9 +31,9 @@ inline bool is_nullish(const Vec4& v)
 }
 
 Ref<Microfacet> RandomPBRMaterial();
-Ref<IntersectableList> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<IntersectableList> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<IntersectableList> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<IntersectableList> Box(const Transform& tf, const Ref<Material>& mat);
+Ref<Mesh> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> Box(const Transform& tf, const Ref<Material>& mat);
 
 } // namespace spt

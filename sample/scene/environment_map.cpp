@@ -36,19 +36,15 @@ void EnvironmentMap(Scene& scene)
                 mat = CreateSharedRef<Metal>(Vec3{ 0.6 }, 0.0);
             }
 
-            Ref<Intersectable> object;
-
             if (x % 2)
             {
-                object = CreateSharedRef<Sphere>(pos, r, mat);
+                scene.Add(CreateSharedRef<Sphere>(pos, r, mat));
             }
             else
             {
                 auto tf = Transform{ pos, Quat{ identity }, Vec3{ r * 1.414 } };
-                object = Box(tf, mat);
+                scene.Add(Box(tf, mat));
             }
-
-            scene.Add(object);
         }
     }
 

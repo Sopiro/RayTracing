@@ -21,7 +21,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             break;
         }
 
-        const Material* mat = is.object->GetMaterial();
+        const Material* mat = is.material;
 
         Interaction ir;
         if (mat->Scatter(&ir, is, ray) == false)
@@ -71,12 +71,12 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
             // Sample one area light uniformly
             auto& lights = scene.GetAreaLights();
-            size_t num_lights = lights.GetCount();
+            size_t num_lights = lights.size();
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
 
-            auto& light = lights.GetObjects()[index];
+            auto& light = lights[index];
 
-            IntersectablePDF light_pdf{ light.get(), is.point };
+            PrimitivePDF light_pdf{ light.get(), is.point };
 
             // Importance sample lights
             Vec3 l = light_pdf.Sample();
@@ -116,7 +116,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                             f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
                             f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                            Color li = is2.object->GetMaterial()->Emit(is2, scattered);
+                            Color li = is2.material->Emit(is2, scattered);
                             radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray, scattered);
                         }
                     }

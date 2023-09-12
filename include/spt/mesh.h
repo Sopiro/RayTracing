@@ -20,50 +20,31 @@ enum TextureType
     count
 };
 
-class Mesh : public Intersectable
+class Mesh
 {
 public:
+    Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& material);
     Mesh(const std::vector<Vertex>& vertices,
          const std::vector<u32>& indices,
          const std::array<Color, 3>& colors,
          const std::array<Ref<Texture>, TextureType::count>& textures);
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual i32 GetSize() const override;
-
-    virtual const Material* GetMaterial() const override;
+    const Material* GetMaterial() const;
     void SetMaterial(const Ref<Material>& material);
+
     bool HasTexture(TextureType type) const;
+    const Ref<Texture> GetTexture(TextureType type) const;
 
 private:
-    BVH bvh;
+    friend class Aggregate;
+    friend class Scene;
 
-    std::vector<Triangle> triangles;
-    Ref<Material> material;
+    std::vector<Vertex> vertices;
+    std::vector<u32> indices;
+
     std::array<Ref<Texture>, TextureType::count> textures;
+    Ref<Material> material;
 };
-
-inline bool Mesh::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
-{
-    return bvh.Intersect(is, ray, t_min, t_max);
-}
-
-inline bool Mesh::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
-{
-    return bvh.IntersectAny(ray, t_min, t_max);
-}
-
-inline bool Mesh::GetAABB(AABB* out_aabb) const
-{
-    return bvh.GetAABB(out_aabb);
-}
-
-inline i32 Mesh::GetSize() const
-{
-    return bvh.GetSize();
-}
 
 inline const Material* Mesh::GetMaterial() const
 {
@@ -72,16 +53,17 @@ inline const Material* Mesh::GetMaterial() const
 
 inline void Mesh::SetMaterial(const Ref<Material>& mat)
 {
-    for (i32 i = 0; i < triangles.size(); ++i)
-    {
-        triangles[i].material = mat;
-    }
     material = mat;
 }
 
 inline bool Mesh::HasTexture(TextureType type) const
 {
     return textures[type] != nullptr;
+}
+
+inline const Ref<Texture> Mesh::GetTexture(TextureType type) const
+{
+    return textures[type];
 }
 
 } // namespace spt

@@ -16,10 +16,7 @@ public:
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool GetAABB(AABB* out_aabb) const override;
-    virtual i32 GetSize() const override;
-    virtual void Rebuild() override;
-    virtual const Material* GetMaterial() const override;
+    virtual void GetAABB(AABB* out_aabb) const override;
 
 public:
     Ref<Intersectable> boundary;
@@ -48,24 +45,9 @@ inline bool ConstantDensityMedium::IntersectAny(const Ray& ray, f64 t_min, f64 t
     return boundary->IntersectAny(ray, t_min, t_max);
 }
 
-inline bool ConstantDensityMedium::GetAABB(AABB* out_aabb) const
+inline void ConstantDensityMedium::GetAABB(AABB* out_aabb) const
 {
-    return boundary->GetAABB(out_aabb);
-}
-
-inline i32 ConstantDensityMedium::GetSize() const
-{
-    return boundary->GetSize();
-}
-
-inline void ConstantDensityMedium::Rebuild()
-{
-    boundary->Rebuild();
-}
-
-inline const Material* ConstantDensityMedium::GetMaterial() const
-{
-    return phase_function.get();
+    boundary->GetAABB(out_aabb);
 }
 
 } // namespace spt

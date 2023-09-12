@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "intersectable.h"
+#include "primitive.h"
 #include "ray.h"
 
 namespace spt
@@ -15,7 +15,7 @@ struct Vertex
     UV texCoord;
 };
 
-class Triangle : public Intersectable
+class Triangle : public Primitive
 {
 public:
     Triangle() = default;
@@ -24,12 +24,12 @@ public:
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool GetAABB(AABB* out_aabb) const override;
+    virtual void GetAABB(AABB* out_aabb) const override;
+
     virtual Point3 Sample() const override;
     virtual Point3 Sample(const Point3& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
-    virtual i32 GetSize() const override;
     virtual const Material* GetMaterial() const override;
 
     Vec3 GetNormal(f64 u, f64 v, f64 w) const;
@@ -87,14 +87,12 @@ inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Ve
     face_normal = Cross(e1, e2);
 };
 
-inline bool Triangle::GetAABB(AABB* out_aabb) const
+inline void Triangle::GetAABB(AABB* out_aabb) const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
     out_aabb->min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
     out_aabb->max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
-
-    return true;
 }
 
 inline Point3 Triangle::Sample() const
@@ -146,11 +144,6 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     f64 area = 0.5 * Cross(e1, e2).Length();
 
     return distance_squared / (cosine * area);
-}
-
-inline i32 Triangle::GetSize() const
-{
-    return 1;
 }
 
 inline const Material* Triangle::GetMaterial() const

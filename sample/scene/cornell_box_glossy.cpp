@@ -108,8 +108,6 @@ void CornellBoxGlossy(Scene& scene)
         auto l = RectXZ(tf, light);
 
         scene.Add(l);
-        scene.AddAreaLight(l->GetObjects()[0]);
-        scene.AddAreaLight(l->GetObjects()[1]);
     }
 
     // scene.Rebuild();

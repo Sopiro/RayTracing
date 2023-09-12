@@ -50,6 +50,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     // Found intersection
     is->object = this;
+    is->material = material.get();
     is->t = t;
     is->point = ray.At(t);
 

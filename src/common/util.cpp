@@ -1,5 +1,5 @@
 #include "spt/util.h"
-#include "spt/intersectable_list.h"
+#include "spt/mesh.h"
 #include "spt/triangle.h"
 
 namespace spt
@@ -20,79 +20,67 @@ Ref<Microfacet> RandomPBRMaterial()
     return mat;
 }
 
-Ref<IntersectableList> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
     Vec3 v2 = Mul(tf, Vec3{ 0.5, 0.5, 0.0 });
     Vec3 v3 = Mul(tf, Vec3{ -0.5, 0.5, 0.0 });
 
-    auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
-    auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
+    auto t1 = Triangle{ v0, v1, v2, mat };
+    auto t2 = Triangle{ v0, v2, v3, mat };
 
-    t1->v0.texCoord.Set(0.0, 0.0);
-    t1->v1.texCoord.Set(texCoord.x, 0.0);
-    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v0.texCoord.Set(0.0, 0.0);
-    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v2.texCoord.Set(0.0, texCoord.y);
+    t1.v0.texCoord.Set(0.0, 0.0);
+    t1.v1.texCoord.Set(texCoord.x, 0.0);
+    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v0.texCoord.Set(0.0, 0.0);
+    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<IntersectableList>();
-    rect->Add(t1);
-    rect->Add(t2);
+    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
+};
 
-    return rect;
-}
-
-Ref<IntersectableList> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
     Vec3 v2 = Mul(tf, Vec3{ 0.5, 0.0, -0.5 });
     Vec3 v3 = Mul(tf, Vec3{ -0.5, 0.0, -0.5 });
 
-    auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
-    auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
+    auto t1 = Triangle{ v0, v1, v2, mat };
+    auto t2 = Triangle{ v0, v2, v3, mat };
 
-    t1->v0.texCoord.Set(0.0, 0.0);
-    t1->v1.texCoord.Set(texCoord.x, 0.0);
-    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v0.texCoord.Set(0.0, 0.0);
-    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v2.texCoord.Set(0.0, texCoord.y);
+    t1.v0.texCoord.Set(0.0, 0.0);
+    t1.v1.texCoord.Set(texCoord.x, 0.0);
+    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v0.texCoord.Set(0.0, 0.0);
+    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<IntersectableList>();
-    rect->Add(t1);
-    rect->Add(t2);
-
-    return rect;
+    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
 }
 
-Ref<IntersectableList> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
     Vec3 v2 = Mul(tf, Vec3{ 0.0, 0.5, -0.5 });
     Vec3 v3 = Mul(tf, Vec3{ 0.0, 0.5, 0.5 });
 
-    auto t1 = CreateSharedRef<Triangle>(v0, v1, v2, mat);
-    auto t2 = CreateSharedRef<Triangle>(v0, v2, v3, mat);
+    auto t1 = Triangle{ v0, v1, v2, mat };
+    auto t2 = Triangle{ v0, v2, v3, mat };
 
-    t1->v0.texCoord.Set(0.0, 0.0);
-    t1->v1.texCoord.Set(texCoord.x, 0.0);
-    t1->v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v0.texCoord.Set(0.0, 0.0);
-    t2->v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2->v2.texCoord.Set(0.0, texCoord.y);
+    t1.v0.texCoord.Set(0.0, 0.0);
+    t1.v1.texCoord.Set(texCoord.x, 0.0);
+    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v0.texCoord.Set(0.0, 0.0);
+    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
+    t2.v2.texCoord.Set(0.0, texCoord.y);
 
-    auto rect = CreateSharedRef<IntersectableList>();
-    rect->Add(t1);
-    rect->Add(t2);
-
-    return rect;
+    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
 }
 
-Ref<IntersectableList> Box(const Transform& tf, const Ref<Material>& mat)
+Ref<Mesh> Box(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });
@@ -104,99 +92,73 @@ Ref<IntersectableList> Box(const Transform& tf, const Ref<Material>& mat)
     Vec3 v6 = Mul(tf, Vec3{ 0.5, 0.5, -0.5 });
     Vec3 v7 = Mul(tf, Vec3{ -0.5, 0.5, -0.5 });
 
-    auto box = CreateSharedRef<IntersectableList>();
-
     // front
-    {
-        auto t = CreateSharedRef<Triangle>(v0, v1, v2, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t1 = Triangle(v0, v1, v2, mat);
+    t1.v0.texCoord.Set(0.0, 0.0);
+    t1.v1.texCoord.Set(1.0, 0.0);
+    t1.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v0, v2, v3, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t2 = Triangle(v0, v2, v3, mat);
+    t2.v0.texCoord.Set(0.0, 0.0);
+    t2.v1.texCoord.Set(1.0, 1.0);
+    t2.v2.texCoord.Set(0.0, 1.0);
 
     // right
-    {
-        auto t = CreateSharedRef<Triangle>(v1, v5, v6, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t3 = Triangle(v1, v5, v6, mat);
+    t3.v0.texCoord.Set(0.0, 0.0);
+    t3.v1.texCoord.Set(1.0, 0.0);
+    t3.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v1, v6, v2, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t4 = Triangle(v1, v6, v2, mat);
+    t4.v0.texCoord.Set(0.0, 0.0);
+    t4.v1.texCoord.Set(1.0, 1.0);
+    t4.v2.texCoord.Set(0.0, 1.0);
 
     // back
-    {
-        auto t = CreateSharedRef<Triangle>(v5, v4, v7, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t5 = Triangle(v5, v4, v7, mat);
+    t5.v0.texCoord.Set(0.0, 0.0);
+    t5.v1.texCoord.Set(1.0, 0.0);
+    t5.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v5, v7, v6, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t6 = Triangle(v5, v7, v6, mat);
+    t6.v0.texCoord.Set(0.0, 0.0);
+    t6.v1.texCoord.Set(1.0, 1.0);
+    t6.v2.texCoord.Set(0.0, 1.0);
 
     // left
-    {
-        auto t = CreateSharedRef<Triangle>(v4, v0, v3, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t7 = Triangle(v4, v0, v3, mat);
+    t7.v0.texCoord.Set(0.0, 0.0);
+    t7.v1.texCoord.Set(1.0, 0.0);
+    t7.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v4, v3, v7, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t8 = Triangle(v4, v3, v7, mat);
+    t8.v0.texCoord.Set(0.0, 0.0);
+    t8.v1.texCoord.Set(1.0, 1.0);
+    t8.v2.texCoord.Set(0.0, 1.0);
 
     // top
-    {
-        auto t = CreateSharedRef<Triangle>(v3, v2, v6, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t9 = Triangle(v3, v2, v6, mat);
+    t9.v0.texCoord.Set(0.0, 0.0);
+    t9.v1.texCoord.Set(1.0, 0.0);
+    t9.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v3, v6, v7, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t10 = Triangle(v3, v6, v7, mat);
+    t10.v0.texCoord.Set(0.0, 0.0);
+    t10.v1.texCoord.Set(1.0, 1.0);
+    t10.v2.texCoord.Set(0.0, 1.0);
 
     // bottom
-    {
-        auto t = CreateSharedRef<Triangle>(v1, v0, v4, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 0.0);
-        t->v2.texCoord.Set(1.0, 1.0);
-        box->Add(t);
+    auto t11 = Triangle(v1, v0, v4, mat);
+    t11.v0.texCoord.Set(0.0, 0.0);
+    t11.v1.texCoord.Set(1.0, 0.0);
+    t11.v2.texCoord.Set(1.0, 1.0);
 
-        t = CreateSharedRef<Triangle>(v1, v4, v5, mat);
-        t->v0.texCoord.Set(0.0, 0.0);
-        t->v1.texCoord.Set(1.0, 1.0);
-        t->v2.texCoord.Set(0.0, 1.0);
-        box->Add(t);
-    }
+    auto t12 = Triangle(v1, v4, v5, mat);
+    t12.v0.texCoord.Set(0.0, 0.0);
+    t12.v1.texCoord.Set(1.0, 1.0);
+    t12.v2.texCoord.Set(0.0, 1.0);
 
-    return box;
+    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12 }, mat);
 }
 
 } // namespace spt

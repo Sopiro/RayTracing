@@ -1,15 +1,15 @@
 #pragma once
 
-#include "intersectable.h"
 #include "pdf.h"
+#include "primitive.h"
 
 namespace spt
 {
 
-class IntersectablePDF : public PDF
+class PrimitivePDF : public PDF
 {
 public:
-    IntersectablePDF(const Intersectable* target, const Vec3& origin);
+    PrimitivePDF(const Primitive* target, const Vec3& origin);
 
     // Returns random direction vector hitting this object
     virtual Vec3 Sample() const override;
@@ -19,23 +19,23 @@ public:
 
 public:
     Vec3 origin;
-    const Intersectable* target;
+    const Primitive* target;
 };
 
-inline IntersectablePDF::IntersectablePDF(const Intersectable* target, const Vec3& origin)
+inline PrimitivePDF::PrimitivePDF(const Primitive* target, const Vec3& origin)
     : target{ target }
     , origin{ origin }
 {
 }
 
 // Returns random direction vector hitting this object
-inline Vec3 IntersectablePDF::Sample() const
+inline Vec3 PrimitivePDF::Sample() const
 {
     Point3 point = target->Sample(origin);
     return point - origin;
 }
 
-inline f64 IntersectablePDF::Evaluate(const Vec3& wi) const
+inline f64 PrimitivePDF::Evaluate(const Vec3& wi) const
 {
     return target->EvaluatePDF(Ray{ origin, wi });
 }
