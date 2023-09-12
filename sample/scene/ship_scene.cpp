@@ -28,25 +28,25 @@ void ShipScene(Scene& scene)
         auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 30.0 }));
         white->two_sided = true;
         auto tf = Transform{ Point3{ 0.0, 5.0, -3.0 }, Quat{ pi / 4.0, x_axis }, Vec3{ size } };
-        auto rect = RectXY(tf, white);
+        auto rect = CreateRectXY(tf, white);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ 0.0, 5.0, 3.0 }, Quat{ pi - pi / 4.0, x_axis }, Vec3{ size } };
-        rect = RectXY(tf, white);
+        rect = CreateRectXY(tf, white);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ -3.0, 5.0, 0.0 }, Quat{ -pi / 4.0, z_axis }, Vec3{ size } };
-        rect = RectYZ(tf, white);
+        rect = CreateRectYZ(tf, white);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ 3.0, 5.0, 0.0 }, Quat{ pi + pi / 4.0, z_axis }, Vec3{ size } };
-        rect = RectYZ(tf, white);
+        rect = CreateRectYZ(tf, white);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
@@ -63,19 +63,19 @@ void ShipScene(Scene& scene)
         f64 y = 2.1;
 
         auto tf = Transform{ Point3{ 0.0, y - size / 2.0, 0.0 }, Quat{ identity }, Vec3{ size } };
-        auto rect = RectXZ(tf, mat);
+        auto rect = CreateRectXZ(tf, mat);
         scene.Add(rect);
 
         tf = Transform{ Point3{ -size / 2.0, y, 0.0 }, Quat{ identity }, Vec3{ size } };
-        rect = RectYZ(tf, mat);
+        rect = CreateRectYZ(tf, mat);
         scene.Add(rect);
 
         tf = Transform{ Point3{ 0.0, y, -size / 2.0 }, Quat{ identity }, Vec3{ size } };
-        rect = RectXY(tf, mat);
+        rect = CreateRectXY(tf, mat);
         scene.Add(rect);
 
         tf = Transform{ Point3{ 0.0, y - size / 2.0, 0.0 }, Quat{ identity }, Vec3{ size } };
-        rect = RectXZ(tf, mat);
+        rect = CreateRectXZ(tf, mat);
         scene.Add(rect);
     }
 

@@ -18,25 +18,25 @@ void CornellBoxLucy(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3{ 0.5, 0.5, -1.0 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectXY(tf, white));
+        scene.Add(CreateRectXY(tf, white));
 
         // left
         tf = Transform{ Vec3{ 0.0, 0.5, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, red));
+        scene.Add(CreateRectYZ(tf, red));
 
         // right
         tf = Transform{ Vec3{ 1.0, 0.5, -0.5 }, Quat{ pi, y_axis }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, green));
+        scene.Add(CreateRectYZ(tf, green));
 
         // bottom
         tf = Transform{ Vec3{ 0.5, 0, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        auto bottom = RectXZ(tf, light);
+        auto bottom = CreateRectXZ(tf, light);
         scene.Add(bottom);
         scene.AddAreaLight(bottom);
 
         // top
         tf = Transform{ Vec3{ 0.5, 1.0, -0.5 }, Quat{ pi, x_axis }, Vec3{ 1.0 } };
-        scene.Add(RectXZ(tf, white));
+        scene.Add(CreateRectXZ(tf, white));
     }
 
     // // Lights

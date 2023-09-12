@@ -31,7 +31,7 @@ void StatueScene(Scene& scene)
     {
         auto red = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ light, 0.0, 0.0 }));
         auto tf = Transform{ Point3{ -distance, 0.0, 0.0 }, Quat{ identity }, Vec3{ 1.0, size, size } };
-        auto rect = RectYZ(tf, red);
+        auto rect = CreateRectYZ(tf, red);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
@@ -40,7 +40,7 @@ void StatueScene(Scene& scene)
     {
         auto blue = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 0.0, 0.0, light }));
         auto tf = Transform{ Point3{ distance, 0.0, 0.0 }, Quat{ pi, y_axis }, Vec3{ 1.0, size, size } };
-        auto rect = RectYZ(tf, blue);
+        auto rect = CreateRectYZ(tf, blue);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
@@ -50,7 +50,7 @@ void StatueScene(Scene& scene)
         auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 0.5 }));
 
         auto tf = Transform{ Point3{ 0.0, 4.0, 0.0 }, Quat{ pi, x_axis }, Vec3{ 8.0, 1.0, 8.0 } };
-        auto rect = RectXZ(tf, white);
+        auto rect = CreateRectXZ(tf, white);
 
         scene.Add(rect);
         scene.AddAreaLight(rect);
@@ -84,7 +84,7 @@ void StatueScene(Scene& scene)
         mat->roughness_map = SolidColor::Create(Vec3{ 0.01 });
 
         auto tf = Transform{ Point3{ 0.0, -2.0, 0.0 }, Quat{ identity }, Vec3{ 8.0, 1.0, 8.0 } };
-        auto rect = RectXZ(tf, mat);
+        auto rect = CreateRectXZ(tf, mat);
 
         scene.Add(rect);
 
@@ -94,7 +94,7 @@ void StatueScene(Scene& scene)
         // mat->roughness_map = SolidColor::Create(Vec3{ 0.05 });
 
         tf = Transform{ Point3{ 0.0, 0.0, -4.0 }, Quat{ identity }, Vec3{ 8.0, 8.0, 1.0 } };
-        rect = RectXY(tf, mat);
+        rect = CreateRectXY(tf, mat);
 
         scene.Add(rect);
     }

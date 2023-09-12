@@ -27,7 +27,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->emissive_map = SolidColor::Create(0.0);
 
         auto tf = Transform{ Vec3{ 0.5, 0.5, -1.0 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectXY(tf, mat));
+        scene.Add(CreateRectXY(tf, mat));
 
         // left
 
@@ -37,7 +37,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->metallic_map = SolidColor::Create(0.0);
         mat->emissive_map = SolidColor::Create(0.0);
         tf = Transform{ Vec3{ 0.0, 0.5, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, mat));
+        scene.Add(CreateRectYZ(tf, mat));
 
         // right
 
@@ -47,7 +47,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->metallic_map = SolidColor::Create(0.0);
         mat->emissive_map = SolidColor::Create(0.0);
         tf = Transform{ Vec3{ 1.0, 0.5, -0.5 }, Quat{ pi, y_axis }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, mat));
+        scene.Add(CreateRectYZ(tf, mat));
 
         // bottom
         mat = RandomPBRMaterial();
@@ -56,7 +56,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->metallic_map = SolidColor::Create(0.0);
         mat->emissive_map = SolidColor::Create(0.0);
         tf = Transform{ Vec3{ 0.5, 0, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectXZ(tf, mat));
+        scene.Add(CreateRectXZ(tf, mat));
 
         // top
         mat = RandomPBRMaterial();
@@ -65,7 +65,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->metallic_map = SolidColor::Create(0.0);
         mat->emissive_map = SolidColor::Create(0.0);
         tf = Transform{ Vec3{ 0.5, 1.0, -0.5 }, Quat{ pi, x_axis }, Vec3{ 1.0 } };
-        scene.Add(RectXZ(tf, mat));
+        scene.Add(CreateRectXZ(tf, mat));
     }
 
     // Left block
@@ -81,7 +81,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->emissive_map = SolidColor::Create(0.0);
 
         auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-        auto box = Box(tf, mat);
+        auto box = CreateBox(tf, mat);
 
         scene.Add(box);
     }
@@ -105,7 +105,7 @@ void CornellBoxGlossy(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
-        auto l = RectXZ(tf, light);
+        auto l = CreateRectXZ(tf, light);
 
         scene.Add(l);
     }

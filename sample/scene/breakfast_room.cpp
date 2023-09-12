@@ -16,7 +16,7 @@ void BreakfastRoom(Scene& scene)
 
     auto light = CreateSharedRef<DiffuseLight>(Color{ 5000.0 });
     tf = Transform{ 30, 10, 15, Quat{ pi, z_axis }, Vec3{ 1.0, 1.5, 5.0 } };
-    auto l = RectYZ(tf, light);
+    auto l = CreateRectYZ(tf, light);
 
     scene.Add(l);
     scene.AddAreaLight(l);

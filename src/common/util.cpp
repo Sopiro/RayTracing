@@ -20,7 +20,7 @@ Ref<Microfacet> RandomPBRMaterial()
     return mat;
 }
 
-Ref<Mesh> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
@@ -40,7 +40,7 @@ Ref<Mesh> RectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoo
     return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
 };
 
-Ref<Mesh> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
@@ -60,7 +60,7 @@ Ref<Mesh> RectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoo
     return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
 }
 
-Ref<Mesh> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
+Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord)
 {
     Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
@@ -80,7 +80,7 @@ Ref<Mesh> RectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoo
     return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
 }
 
-Ref<Mesh> Box(const Transform& tf, const Ref<Material>& mat)
+Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material>& mat)
 {
     Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
     Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });

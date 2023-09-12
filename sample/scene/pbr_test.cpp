@@ -42,7 +42,7 @@ void PBRTest(Scene& scene)
         mat->emissive_map = SolidColor::Create(Vec3{ 0.0 });
 
         auto tf1 = Transform{ Vec3{ 0.5, -r, -0.5 }, Quat{ identity }, Vec3{ 100.0 } };
-        auto ground = RectXZ(tf1, mat);
+        auto ground = CreateRectXZ(tf1, mat);
 
         scene.Add(ground);
     }
@@ -95,7 +95,7 @@ void PBRTest(Scene& scene)
             auto mat = RandomPBRMaterial();
 
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
-            auto rect = RectXZ(tf, light);
+            auto rect = CreateRectXZ(tf, light);
 
             scene.Add(rect);
             scene.AddAreaLight(rect);

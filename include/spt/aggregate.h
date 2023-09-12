@@ -51,14 +51,20 @@ inline void Aggregate::Add(Ref<Intersectable> object)
 
 inline void Aggregate::Add(Ref<Mesh> mesh)
 {
+    auto& vertices = mesh->vertices;
+    auto& indices = mesh->indices;
+
     for (size_t i = 0; i < mesh->indices.size(); i += 3)
     {
-        u32 index0 = mesh->indices[i];
-        u32 index1 = mesh->indices[i + 1];
-        u32 index2 = mesh->indices[i + 2];
+        u32 index0 = indices[i];
+        u32 index1 = indices[i + 1];
+        u32 index2 = indices[i + 2];
 
-        auto tri =
-            CreateSharedRef<Triangle>(mesh->vertices[index0], mesh->vertices[index1], mesh->vertices[index2], mesh->material);
+        Vertex& vertex0 = vertices[index0];
+        Vertex& vertex1 = vertices[index1];
+        Vertex& vertex2 = vertices[index2];
+
+        auto tri = CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material);
 
         Add(tri);
     }

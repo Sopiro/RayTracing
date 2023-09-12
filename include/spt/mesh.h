@@ -26,8 +26,9 @@ public:
     Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& material);
     Mesh(const std::vector<Vertex>& vertices,
          const std::vector<u32>& indices,
+         const std::array<Ref<Texture>, TextureType::count>& textures,
          const std::array<Color, 3>& colors,
-         const std::array<Ref<Texture>, TextureType::count>& textures);
+         const Mat4& transform);
 
     const Material* GetMaterial() const;
     void SetMaterial(const Ref<Material>& material);

@@ -12,10 +12,10 @@ void MISTest1(Scene& scene)
         floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
 
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ identity }, Vec3{ 3.0, 1.0, 3.0 } };
-        scene.Add(RectXZ(tf, floor));
+        scene.Add(CreateRectXZ(tf, floor));
 
         tf = Transform{ Vec3{ 0.0, 0.0, -1.0 }, Quat{ identity }, Vec3{ 3.0, 3.0, 1.0 } };
-        scene.Add(RectXY(tf, floor));
+        scene.Add(CreateRectXY(tf, floor));
     }
 
     f64 y = 0.05;
@@ -53,25 +53,25 @@ void MISTest1(Scene& scene)
         f64 a4 = DegToRad(45.0);
 
         auto tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a1, x_axis }, Vec3{ w, h, h - dh } };
-        scene.Add(RectXZ(tf, m1));
+        scene.Add(CreateRectXZ(tf, m1));
 
         y += (sin(a1) * h + sin(a2) * h) / 2.0;
         z -= (cos(a1) * h + cos(a2) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a2, x_axis }, Vec3{ w, h, h - dh } };
-        scene.Add(RectXZ(tf, m2));
+        scene.Add(CreateRectXZ(tf, m2));
 
         y += (sin(a2) * h + sin(a3) * h) / 2.0;
         z -= (cos(a2) * h + cos(a3) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a3, x_axis }, Vec3{ w, h, h - dh } };
-        scene.Add(RectXZ(tf, m3));
+        scene.Add(CreateRectXZ(tf, m3));
 
         y += (sin(a3) * h + sin(a4) * h) / 2.0;
         z -= (cos(a3) * h + cos(a4) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a4, x_axis }, Vec3{ w, h, h - dh } };
-        scene.Add(RectXZ(tf, m4));
+        scene.Add(CreateRectXZ(tf, m4));
     }
 
     // std::cout << y << ", " << z << std::endl;
@@ -193,10 +193,10 @@ void MISTestWak(Scene& scene)
 
         f64 s = 20.0;
         auto tf = Transform{ Vec3{ 0.0, -4.0, -4.0 }, Quat{ identity }, Vec3{ s, 1.0, s } };
-        scene.Add(RectXZ(tf, floor));
+        scene.Add(CreateRectXZ(tf, floor));
 
         tf = Transform{ Vec3{ 0.0, -4.0, -4.0 }, Quat{ identity }, Vec3{ s, s, 1.0 } };
-        scene.Add(RectXY(tf, floor));
+        scene.Add(CreateRectXY(tf, floor));
     }
 
     // plates

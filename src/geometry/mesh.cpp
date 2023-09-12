@@ -26,8 +26,9 @@ Mesh::Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& _materia
 
 Mesh::Mesh(const std::vector<Vertex>& _vertices,
            const std::vector<u32>& _indices,
+           const std::array<Ref<Texture>, TextureType::count>& _textures,
            const std::array<Color, 3>& colors,
-           const std::array<Ref<Texture>, TextureType::count>& _textures)
+           const Mat4& transform)
     : vertices{ _vertices }
     , indices{ _indices }
     , textures{ _textures }
@@ -39,6 +40,22 @@ Mesh::Mesh(const std::vector<Vertex>& _vertices,
     // std::cout << "AO\t\t: " << HasTexture(ao) << std::endl;
     // std::cout << "Emissive\t: " << HasTexture(emissive) << std::endl;
     // std::cout << std::endl;
+
+    // Transform vertex attributes with given transform
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        Vertex& v = vertices[i];
+
+        Vec4 vP = Mul(transform, Vec4(v.position, 1.0));
+        Vec4 vN = Mul(transform, Vec4(v.normal, 0.0));
+        Vec4 vT = Mul(transform, Vec4(v.tangent, 0.0));
+        vN.Normalize();
+        vT.Normalize();
+
+        v.position.Set(vP.x, vP.y, vP.z);
+        v.normal.Set(vN.x, vN.y, vN.z);
+        v.tangent.Set(vT.x, vT.y, vT.z);
+    }
 
     if (HasTexture(basecolor) == false && Material::fallback_material != nullptr)
     {

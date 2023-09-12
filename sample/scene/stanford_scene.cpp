@@ -15,7 +15,7 @@ void StanfordScene(Scene& scene)
         mat->metallic_map = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
 
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ identity }, Vec3{ 8.0 } };
-        auto floor = RectXZ(tf, mat, UV{ 4.0, 4.0 });
+        auto floor = CreateRectXZ(tf, mat, UV{ 4.0, 4.0 });
         scene.Add(floor);
     }
 
@@ -89,7 +89,7 @@ void StanfordScene(Scene& scene)
             auto mat = RandomPBRMaterial();
 
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ w, w, h } };
-            auto rect = RectXZ(tf, light);
+            auto rect = CreateRectXZ(tf, light);
 
             scene.Add(rect);
             scene.AddAreaLight(rect);

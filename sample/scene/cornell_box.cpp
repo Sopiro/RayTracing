@@ -19,23 +19,23 @@ void CornellBox(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3{ 0.5, 0.5, -1.0 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectXY(tf, wakgood_mat));
+        scene.Add(CreateRectXY(tf, wakgood_mat));
 
         // left
         tf = Transform{ Vec3{ 0.0, 0.5, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, red));
+        scene.Add(CreateRectYZ(tf, red));
 
         // right
         tf = Transform{ Vec3{ 1.0, 0.5, -0.5 }, Quat{ pi, y_axis }, Vec3{ 1.0 } };
-        scene.Add(RectYZ(tf, green));
+        scene.Add(CreateRectYZ(tf, green));
 
         // bottom
         tf = Transform{ Vec3{ 0.5, 0, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
-        scene.Add(RectXZ(tf, white));
+        scene.Add(CreateRectXZ(tf, white));
 
         // top
         tf = Transform{ Vec3{ 0.5, 1.0, -0.5 }, Quat{ pi, x_axis }, Vec3{ 1.0 } };
-        scene.Add(RectXZ(tf, white));
+        scene.Add(CreateRectXZ(tf, white));
     }
 
     // Left block
@@ -45,7 +45,7 @@ void CornellBox(Scene& scene)
         f64 hz = 0.13;
 
         auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-        auto box = Box(tf, white);
+        auto box = CreateBox(tf, white);
 
         scene.Add(box);
     }
@@ -53,7 +53,7 @@ void CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
-        auto l = RectXZ(tf, light);
+        auto l = CreateRectXZ(tf, light);
 
         scene.Add(l);
         scene.AddAreaLight(l);
@@ -75,7 +75,7 @@ void CornellBox(Scene& scene)
         f64 hz = 0.13;
 
         auto tf = Transform{ 0.7, hy, -0.3, Quat(DegToRad(-25.0), y_axis), Vec3{ hx * 2.0, hy * 2.0, hz * 2.0 } };
-        auto box = Box(tf, white);
+        auto box = CreateBox(tf, white);
 
         scene.Add(box);
     }

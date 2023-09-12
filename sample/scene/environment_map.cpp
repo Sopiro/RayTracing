@@ -43,7 +43,7 @@ void EnvironmentMap(Scene& scene)
             else
             {
                 auto tf = Transform{ pos, Quat{ identity }, Vec3{ r * 1.414 } };
-                scene.Add(Box(tf, mat));
+                scene.Add(CreateBox(tf, mat));
             }
         }
     }
