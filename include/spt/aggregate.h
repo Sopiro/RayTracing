@@ -16,9 +16,9 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    void Add(Ref<Intersectable> object);
-    void Add(Ref<Mesh> mesh);
-    void Add(Ref<Model> model);
+    void Add(const Ref<Intersectable> object);
+    void Add(const Ref<Mesh> mesh);
+    void Add(const Ref<Model> model);
 
     void Reset();
     void Rebuild();
@@ -40,16 +40,16 @@ inline void Aggregate::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-inline void Aggregate::Add(Ref<Intersectable> object)
+inline void Aggregate::Add(const Ref<Intersectable> object)
 {
+    objects.push_back(object);
+
     AABB aabb;
     object->GetAABB(&aabb);
     bvh.CreateNode(object.get(), aabb);
-
-    objects.push_back(object);
 }
 
-inline void Aggregate::Add(Ref<Mesh> mesh)
+inline void Aggregate::Add(const Ref<Mesh> mesh)
 {
     auto& vertices = mesh->vertices;
     auto& indices = mesh->indices;
@@ -68,7 +68,7 @@ inline void Aggregate::Add(Ref<Mesh> mesh)
     }
 }
 
-inline void Aggregate::Add(Ref<Model> model)
+inline void Aggregate::Add(const Ref<Model> model)
 {
     auto& meshes = model->GetMeshes();
 

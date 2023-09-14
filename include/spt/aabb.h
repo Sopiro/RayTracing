@@ -8,8 +8,8 @@ namespace spt
 
 struct AABB
 {
-    f64 GetArea() const;
-    f64 GetPerimater() const;
+    f64 GetVolume() const;
+    f64 GetSurfaceArea() const;
 
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
@@ -19,12 +19,12 @@ struct AABB
     Vec3 min, max;
 };
 
-inline f64 AABB::GetArea() const
+inline f64 AABB::GetVolume() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
 }
 
-inline f64 AABB::GetPerimater() const
+inline f64 AABB::GetSurfaceArea() const
 {
     Vec3 w = max - min;
     return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));

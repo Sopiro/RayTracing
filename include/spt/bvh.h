@@ -17,9 +17,9 @@ constexpr Real aabb_multiplier{ Real(1.0) };
 inline Real SAH(const AABB& aabb)
 {
 #if 0
-    return aabb.GetArea();
+    return aabb.GetVolume();
 #else
-    return aabb.GetPerimater();
+    return aabb.GetSurfaceArea();
 #endif
 }
 

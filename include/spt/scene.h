@@ -142,15 +142,16 @@ inline void Scene::AddAreaLight(const Ref<Primitive>& object)
 
 inline void Scene::AddAreaLight(const Ref<Mesh>& mesh)
 {
-    for (size_t i = 0; i < mesh->indices.size(); i += 3)
+    auto& vertices = mesh->vertices;
+    auto& indices = mesh->indices;
+
+    for (size_t i = 0; i < indices.size(); i += 3)
     {
-        u32 index0 = mesh->indices[i];
-        u32 index1 = mesh->indices[i + 1];
-        u32 index2 = mesh->indices[i + 2];
+        u32 index0 = indices[i];
+        u32 index1 = indices[i + 1];
+        u32 index2 = indices[i + 2];
 
-        auto tri =
-            CreateSharedRef<Triangle>(mesh->vertices[index0], mesh->vertices[index1], mesh->vertices[index2], mesh->material);
-
+        auto tri = CreateSharedRef<Triangle>(vertices[index0], vertices[index1], vertices[index2], mesh->material);
         area_lights.push_back(tri);
     }
 }
