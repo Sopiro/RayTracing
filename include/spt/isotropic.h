@@ -9,7 +9,7 @@ class Isotropic : public Material
 {
 public:
     Isotropic(const Color& color);
-    Isotropic(const Ref<Texture>& albedo);
+    Isotropic(const Ref<Texture> albedo);
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
 
@@ -22,7 +22,7 @@ inline Isotropic::Isotropic(const Color& c)
 {
 }
 
-inline Isotropic::Isotropic(const Ref<Texture>& a)
+inline Isotropic::Isotropic(const Ref<Texture> a)
     : albedo(a)
 {
 }

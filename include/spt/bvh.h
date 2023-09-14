@@ -51,7 +51,6 @@ public:
     };
 
     BVH();
-    BVH(std::vector<Triangle>& triangles);
 
     virtual ~BVH() noexcept;
 

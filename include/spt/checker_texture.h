@@ -10,7 +10,7 @@ class CheckerTexture : public Texture
 {
 public:
     CheckerTexture() = default;
-    CheckerTexture(const Ref<Texture>& even, const Ref<Texture>& odd);
+    CheckerTexture(const Ref<Texture> even, const Ref<Texture> odd);
     CheckerTexture(Color color1, Color color2);
 
     virtual Color Value(const UV& uv, const Vec3& p) const override;
@@ -19,7 +19,7 @@ public:
     Ref<Texture> odd, even;
 };
 
-inline CheckerTexture::CheckerTexture(const Ref<Texture>& _even, const Ref<Texture>& _odd)
+inline CheckerTexture::CheckerTexture(const Ref<Texture> _even, const Ref<Texture> _odd)
     : even{ _even }
     , odd{ _odd }
 {

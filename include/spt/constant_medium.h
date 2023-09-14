@@ -11,8 +11,8 @@ namespace spt
 class ConstantDensityMedium : public Intersectable
 {
 public:
-    ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, const Ref<Texture>& albedo);
-    ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, Color color);
+    ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, const Ref<Texture> albedo);
+    ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
@@ -24,16 +24,16 @@ public:
     f64 neg_inv_density;
 };
 
-inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable>& boundary_object,
+inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object,
                                                     f64 density,
-                                                    const Ref<Texture>& albedo)
+                                                    const Ref<Texture> albedo)
     : boundary{ std::move(boundary_object) }
     , neg_inv_density{ -1.0 / density }
     , phase_function{ CreateSharedRef<Isotropic>(albedo) }
 {
 }
 
-inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable>& boundary_object, f64 density, Color color)
+inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color)
     : boundary{ boundary_object }
     , neg_inv_density{ -1.0 / density }
     , phase_function{ CreateSharedRef<Isotropic>(color) }

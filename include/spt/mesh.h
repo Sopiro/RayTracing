@@ -23,7 +23,7 @@ enum TextureType
 class Mesh
 {
 public:
-    Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& material);
+    Mesh(const std::vector<Triangle>& triangles, const Ref<Material> material);
     Mesh(const std::vector<Vertex>& vertices,
          const std::vector<u32>& indices,
          const std::array<Ref<Texture>, TextureType::count>& textures,
@@ -31,7 +31,7 @@ public:
          const Mat4& transform);
 
     const Material* GetMaterial() const;
-    void SetMaterial(const Ref<Material>& material);
+    void SetMaterial(const Ref<Material> material);
 
     bool HasTexture(TextureType type) const;
     const Ref<Texture> GetTexture(TextureType type) const;
@@ -52,7 +52,7 @@ inline const Material* Mesh::GetMaterial() const
     return material.get();
 }
 
-inline void Mesh::SetMaterial(const Ref<Material>& mat)
+inline void Mesh::SetMaterial(const Ref<Material> mat)
 {
     material = mat;
 }

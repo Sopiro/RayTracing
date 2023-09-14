@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Mesh::Mesh(const std::vector<Triangle>& triangles, const Ref<Material>& _material)
+Mesh::Mesh(const std::vector<Triangle>& triangles, const Ref<Material> _material)
     : material{ _material }
 {
     u32 k = 0;

@@ -56,7 +56,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
         if (scene.HasDirectionalLight())
         {
-            const Ref<DirectionalLight>& sun = scene.GetDirectionalLight();
+            const Ref<DirectionalLight> sun = scene.GetDirectionalLight();
             Ray to_sun{ is.point + is.normal * ray_offset, -sun->dir + RandomInUnitSphere() * sun->radius };
 
             if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)

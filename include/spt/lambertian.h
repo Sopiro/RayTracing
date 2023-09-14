@@ -10,7 +10,7 @@ class Lambertian : public Material
 {
 public:
     Lambertian(const Color& color);
-    Lambertian(const Ref<Texture>& albedo);
+    Lambertian(const Ref<Texture> albedo);
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
     virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const override;
@@ -24,7 +24,7 @@ inline Lambertian::Lambertian(const Color& _color)
 {
 }
 
-inline Lambertian::Lambertian(const Ref<Texture>& _albedo)
+inline Lambertian::Lambertian(const Ref<Texture> _albedo)
     : albedo{ _albedo }
 {
 }

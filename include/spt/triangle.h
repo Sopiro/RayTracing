@@ -19,8 +19,8 @@ class Triangle : public Primitive
 {
 public:
     Triangle() = default;
-    Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material>& material);
-    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& material);
+    Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material> material);
+    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material> material);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
@@ -44,7 +44,7 @@ public:
     Ref<Material> material;
 };
 
-inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material>& mat)
+inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material> mat)
     : two_sided{ true }
     , material{ mat }
 {
@@ -74,7 +74,7 @@ inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, 
     }
 }
 
-inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material>& mat)
+inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material> mat)
     : v0{ vertex0 }
     , v1{ vertex1 }
     , v2{ vertex2 }

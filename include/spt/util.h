@@ -31,9 +31,9 @@ inline bool is_nullish(const Vec4& v)
 }
 
 Ref<Microfacet> RandomPBRMaterial();
-Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material>& mat, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material>& mat);
+Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat);
 
 } // namespace spt

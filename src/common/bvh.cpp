@@ -22,25 +22,6 @@ BVH::BVH()
     freeList = 0;
 }
 
-BVH::BVH(std::vector<Triangle>& primitives)
-    : BVH()
-{
-    for (size_t i = 0; i < primitives.size(); ++i)
-    {
-        AABB aabb;
-        primitives[i].GetAABB(&aabb);
-
-        NodeProxy newNode = AllocateNode();
-        nodes[newNode].aabb.max = aabb.max + aabb_margin;
-        nodes[newNode].aabb.min = aabb.min - aabb_margin;
-        nodes[newNode].data = &primitives[i];
-        nodes[newNode].parent = nullNode;
-        nodes[newNode].moved = true;
-    }
-
-    Rebuild();
-}
-
 BVH::~BVH() noexcept
 {
     free(nodes);

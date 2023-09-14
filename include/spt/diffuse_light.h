@@ -6,7 +6,7 @@ namespace spt
 class DiffuseLight : public Material
 {
 public:
-    DiffuseLight(const Ref<Texture>& emission);
+    DiffuseLight(const Ref<Texture> emission);
     DiffuseLight(Color color);
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
@@ -17,7 +17,7 @@ public:
     Ref<Texture> emit;
 };
 
-inline DiffuseLight::DiffuseLight(const Ref<Texture>& emission)
+inline DiffuseLight::DiffuseLight(const Ref<Texture> emission)
     : emit{ emission }
 {
 }

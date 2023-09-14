@@ -23,22 +23,22 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    void Add(const Ref<Intersectable>& object);
-    void Add(const Ref<Mesh>& object);
-    void Add(const Ref<Model>& object);
+    void Add(const Ref<Intersectable> object);
+    void Add(const Ref<Mesh> object);
+    void Add(const Ref<Model> object);
 
-    const Ref<Texture>& GetEnvironmentMap() const;
+    const Ref<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
     Color GetSkyColor(Vec3 direction) const;
 
     bool HasDirectionalLight() const;
-    const Ref<DirectionalLight>& GetDirectionalLight() const;
-    void SetDirectionalLight(const Ref<DirectionalLight>& directional_light);
+    const Ref<DirectionalLight> GetDirectionalLight() const;
+    void SetDirectionalLight(const Ref<DirectionalLight> directional_light);
 
     bool HasAreaLights() const;
     const std::vector<Ref<Primitive>>& GetAreaLights() const;
-    void AddAreaLight(const Ref<Primitive>& object);
-    void AddAreaLight(const Ref<Mesh>& object);
+    void AddAreaLight(const Ref<Primitive> object);
+    void AddAreaLight(const Ref<Mesh> object);
 
     void Reset();
     void Rebuild();
@@ -72,22 +72,22 @@ inline void Scene::GetAABB(AABB* out_aabb) const
     return accel.GetAABB(out_aabb);
 }
 
-inline void Scene::Add(const Ref<Intersectable>& object)
+inline void Scene::Add(const Ref<Intersectable> object)
 {
     accel.Add(object);
 }
 
-inline void Scene::Add(const Ref<Mesh>& mesh)
+inline void Scene::Add(const Ref<Mesh> mesh)
 {
     accel.Add(mesh);
 }
 
-inline void Scene::Add(const Ref<Model>& model)
+inline void Scene::Add(const Ref<Model> model)
 {
     accel.Add(model);
 }
 
-inline const Ref<Texture>& Scene::GetEnvironmentMap() const
+inline const Ref<Texture> Scene::GetEnvironmentMap() const
 {
     return environment_map;
 }
@@ -115,12 +115,12 @@ inline bool Scene::HasDirectionalLight() const
     return directional_light != nullptr;
 }
 
-inline const Ref<DirectionalLight>& Scene::GetDirectionalLight() const
+inline const Ref<DirectionalLight> Scene::GetDirectionalLight() const
 {
     return directional_light;
 }
 
-inline void Scene::SetDirectionalLight(const Ref<DirectionalLight>& dr)
+inline void Scene::SetDirectionalLight(const Ref<DirectionalLight> dr)
 {
     directional_light = dr;
 }
@@ -135,12 +135,12 @@ inline const std::vector<Ref<Primitive>>& Scene::GetAreaLights() const
     return area_lights;
 }
 
-inline void Scene::AddAreaLight(const Ref<Primitive>& object)
+inline void Scene::AddAreaLight(const Ref<Primitive> object)
 {
     area_lights.push_back(object);
 }
 
-inline void Scene::AddAreaLight(const Ref<Mesh>& mesh)
+inline void Scene::AddAreaLight(const Ref<Mesh> mesh)
 {
     auto& vertices = mesh->vertices;
     auto& indices = mesh->indices;

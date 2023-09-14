@@ -12,7 +12,7 @@ class Sphere : public Primitive
 {
 public:
     Sphere() = default;
-    Sphere(const Vec3& center, f64 radius, const Ref<Material>& material);
+    Sphere(const Vec3& center, f64 radius, const Ref<Material> material);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
@@ -33,7 +33,7 @@ private:
     static void GetUV(const Point3& p, UV& out_uv);
 };
 
-inline Sphere::Sphere(const Vec3& _center, f64 _radius, const Ref<Material>& _material)
+inline Sphere::Sphere(const Vec3& _center, f64 _radius, const Ref<Material> _material)
     : center{ _center }
     , radius{ _radius }
     , material{ _material }

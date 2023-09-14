@@ -64,7 +64,12 @@ inline void Aggregate::Add(const Ref<Mesh> mesh)
         Vertex& vertex1 = vertices[index1];
         Vertex& vertex2 = vertices[index2];
 
-        Add(CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material));
+        auto tri = CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material);
+        objects.push_back(tri);
+
+        AABB aabb;
+        tri->GetAABB(&aabb);
+        bvh.CreateNode(tri.get(), aabb);
     }
 }
 
