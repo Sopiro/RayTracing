@@ -17,18 +17,18 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         Intersection is;
         if (scene.Intersect(&is, ray, ray_offset, infinity) == false)
         {
-            radiance += throughput * scene.GetSkyColor(ray.dir);
+            radiance += throughput * scene.GetSkyColor(ray.d);
             break;
         }
 
         const Material* mat = is.material;
 
         Interaction ir;
-        if (mat->Scatter(&ir, is, ray) == false)
+        if (mat->Scatter(&ir, is, ray.d) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += throughput * mat->Emit(is, ray);
+                radiance += throughput * mat->Emit(is, ray.d);
             }
             break;
         }
@@ -50,7 +50,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             was_specular = false;
         }
 
-        radiance += throughput * mat->Emit(is, ray);
+        radiance += throughput * mat->Emit(is, ray.d);
 
         // Estimate direct light
 
@@ -61,7 +61,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
             if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)
             {
-                radiance += throughput * sun->radiance * mat->Evaluate(is, ray, to_sun);
+                radiance += throughput * sun->radiance * mat->Evaluate(is, ray.d, to_sun.d);
             }
         }
 
@@ -83,7 +83,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             Ray to_light{ is.point, d };
 
             // Importance sample lights
-            if (Dot(to_light.dir, is.normal) > 0.0)
+            if (Dot(to_light.d, is.normal) > 0.0)
             {
                 f64 light_brdf_p = ir.pdf->Evaluate(d);
                 if (light_brdf_p > 0.0)
@@ -93,16 +93,16 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                         f64 mis_w = 1.0 / (light_sample.pdf + light_brdf_p);
 
                         Intersection is2;
-                        is2.front_face = Dot(light_sample.n, to_light.dir) < 0.0;
-                        Color li = light->GetMaterial()->Emit(is2, to_light);
-                        radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray, to_light);
+                        is2.front_face = Dot(light_sample.n, to_light.d) < 0.0;
+                        Color li = light->GetMaterial()->Emit(is2, d);
+                        radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray.d, d);
                     }
                 }
             }
 
             // Importance sample BRDF
             Ray scattered{ is.point, ir.pdf->Sample() };
-            if (Dot(scattered.dir, is.normal) > 0.0)
+            if (Dot(scattered.d, is.normal) > 0.0)
             {
                 f64 brdf_light_p = light->EvaluatePDF(scattered);
                 if (brdf_light_p > 0.0)
@@ -112,11 +112,11 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                     {
                         if (is2.object == light.get())
                         {
-                            f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
+                            f64 brdf_p = ir.pdf->Evaluate(scattered.d);
                             f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                            Color li = light->GetMaterial()->Emit(is2, scattered);
-                            radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray, scattered);
+                            Color li = light->GetMaterial()->Emit(is2, scattered.d);
+                            radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray.d, scattered.d);
                         }
                     }
                 }
@@ -139,7 +139,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         assert(pdf > 0.0);
         Ray scattered{ is.point, wi };
 
-        throughput *= mat->Evaluate(is, ray, scattered) / pdf;
+        throughput *= mat->Evaluate(is, ray.d, wi) / pdf;
         ray = scattered;
 
         // Russian roulette

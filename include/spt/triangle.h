@@ -118,8 +118,8 @@ inline f64 Triangle::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    f64 distance_squared = is.t * is.t * ray.dir.Length2();
-    f64 cosine = fabs(Dot(ray.dir, is.normal) / ray.dir.Length());
+    f64 distance_squared = is.t * is.t * ray.d.Length2();
+    f64 cosine = fabs(Dot(ray.d, is.normal) / ray.d.Length());
 
     const Vec3& p0 = mesh->vertices[v[0]].position;
     const Vec3& p1 = mesh->vertices[v[1]].position;

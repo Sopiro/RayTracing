@@ -14,19 +14,19 @@ struct Ray
 
     Point3 At(f64 t) const;
 
-    Point3 origin;
-    Vec3 dir;
+    Point3 o;
+    Vec3 d;
 };
 
-inline Ray::Ray(const Point3& _origin, const Vec3& _direction)
-    : origin{ _origin }
-    , dir{ _direction }
+inline Ray::Ray(const Point3& origin, const Vec3& direction)
+    : o{ origin }
+    , d{ direction }
 {
 }
 
 inline Point3 Ray::At(f64 t) const
 {
-    return origin + dir * t;
+    return o + d * t;
 }
 
 } // namespace spt

@@ -3,11 +3,11 @@
 namespace spt
 {
 
-bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
+bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     f64 refraction_ratio = is.front_face ? (1.0 / ior) : ior;
 
-    Vec3 unit_direction = wi.dir.Normalized();
+    Vec3 unit_direction = wi.Normalized();
 
     f64 cos_theta = Min(Dot(-unit_direction, is.normal), 1.0);
     f64 sin_theta = sqrt(1.0 - cos_theta * cos_theta);

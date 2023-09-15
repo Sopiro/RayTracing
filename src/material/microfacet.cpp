@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Vec3 Microfacet::Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const
+Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
     Vec3 normal = normal_map->Value(is.uv, is.point) * 2.0 - Vec3(1.0);
     normal.Normalize();
@@ -18,8 +18,8 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) 
     tbn.v = Cross(tbn.w, tbn.u);
 
     Vec3 n = tbn.GetLocal(normal).Normalized(); // normal
-    Vec3 v = -wi.dir.Normalized();              // incident
-    Vec3 l = wo.dir.Normalized();               // outgoing
+    Vec3 v = -wi.Normalized();                  // incident
+    Vec3 l = wo.Normalized();                   // outgoing
     Vec3 h = v + l;                             // half
 
     // Resolve back facing shading normal by flipping method
@@ -62,14 +62,14 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) 
     return (f_d + f_s) * NoL;
 }
 
-bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Ray& wi) const
+bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     Vec3 basecolor = basecolor_map->Value(is.uv, is.point);
     f64 metallic = metallic_map->Value(is.uv, is.point).z;
     f64 roughness = roughness_map->Value(is.uv, is.point).y;
 
     f64 alpha = fmax(roughness, min_roughness);
-    Vec3 wo = -wi.dir.Normalized();
+    Vec3 wo = -wi.Normalized();
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, Dot(wo, is.normal));

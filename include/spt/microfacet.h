@@ -74,9 +74,9 @@ class Microfacet : public Material
 public:
     Microfacet() = default;
 
-    virtual Color Emit(const Intersection& is, const Ray& wi) const override;
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
-    virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const override;
+    virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
+    virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:
     Ref<Texture> basecolor_map;
@@ -87,7 +87,7 @@ public:
     Ref<Texture> emissive_map;
 };
 
-inline Color Microfacet::Emit(const Intersection& is, const Ray& wi) const
+inline Color Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
     return emissive_map->Value(is.uv, is.point);
 }

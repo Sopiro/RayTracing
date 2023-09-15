@@ -62,7 +62,7 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    f64 distance_squared = (center - ray.origin).Length2();
+    f64 distance_squared = (center - ray.o).Length2();
     f64 cos_theta_max = sqrt(1.0 - radius * radius / distance_squared);
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 

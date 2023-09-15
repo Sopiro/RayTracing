@@ -30,22 +30,22 @@ struct Interaction
 class Material
 {
 public:
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const = 0;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const = 0;
 
-    virtual Color Emit(const Intersection& is, const Ray& wi) const;
+    virtual Color Emit(const Intersection& is, const Vec3& wi) const;
 
     // BRDF with cosine term
-    virtual Vec3 Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const;
+    virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;
 
     inline static Ref<Material> fallback_material = nullptr;
 };
 
-inline Color Material::Emit(const Intersection& is, const Ray& wi) const
+inline Color Material::Emit(const Intersection& is, const Vec3& wi) const
 {
     return zero_vec3;
 }
 
-inline Vec3 Material::Evaluate(const Intersection& is, const Ray& wi, const Ray& wo) const
+inline Vec3 Material::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
     assert(false);
     return zero_vec3;

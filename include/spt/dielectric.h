@@ -10,7 +10,7 @@ class Dielectric : public Material
 public:
     Dielectric(f64 index_of_refraction);
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Ray& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
 
     f64 ior; // Index of Refraction
 

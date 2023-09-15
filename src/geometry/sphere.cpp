@@ -5,9 +5,9 @@ namespace spt
 
 bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    Vec3 oc = ray.origin - center;
-    f64 a = ray.dir.Length2();
-    f64 half_b = Dot(oc, ray.dir);
+    Vec3 oc = ray.o - center;
+    f64 a = ray.d.Length2();
+    f64 half_b = Dot(oc, ray.d);
     f64 c = oc.Length2() - radius * radius;
 
     f64 discriminant = half_b * half_b - a * c;
@@ -46,9 +46,9 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) c
 
 bool Sphere::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
-    Vec3 oc = ray.origin - center;
-    f64 a = ray.dir.Length2();
-    f64 half_b = Dot(oc, ray.dir);
+    Vec3 oc = ray.o - center;
+    f64 a = ray.d.Length2();
+    f64 half_b = Dot(oc, ray.d);
     f64 c = oc.Length2() - radius * radius;
 
     f64 discriminant = half_b * half_b - a * c;

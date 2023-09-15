@@ -33,7 +33,7 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
         is1.t = t_min;
     }
 
-    f64 ray_length = ray.dir.Length();
+    f64 ray_length = ray.d.Length();
     f64 distance_inside_boundary = (is2.t - is1.t) * ray_length;
     f64 hit_distance = neg_inv_density * log(Rand());
 

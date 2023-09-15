@@ -13,7 +13,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-    Vec3 d = ray.dir;
+    Vec3 d = ray.d;
     f64 l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
 
@@ -33,7 +33,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 invDet = 1.0 / det;
 
-    Vec3 tvec = ray.origin - p0;
+    Vec3 tvec = ray.o - p0;
     f64 u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
@@ -80,7 +80,7 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-    Vec3 d = ray.dir;
+    Vec3 d = ray.d;
     f64 l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
 
@@ -100,7 +100,7 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 
     f64 invDet = 1.0 / det;
 
-    Vec3 tvec = ray.origin - p0;
+    Vec3 tvec = ray.o - p0;
     f64 u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {

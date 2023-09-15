@@ -31,7 +31,7 @@ public:
 
 inline void SetFaceNormal(Intersection* is, const Ray& ray, const Vec3& outward_normal, const Vec3& outward_tangent)
 {
-    if (Dot(ray.dir, outward_normal) < 0.0)
+    if (Dot(ray.d, outward_normal) < 0.0)
     {
         is->front_face = true;
         is->normal = outward_normal;
