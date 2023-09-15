@@ -1,6 +1,7 @@
 #include "spt/model.h"
 #include "spt/image_texture.h"
 #include "spt/triangle.h"
+#include "spt/util.h"
 
 #include <filesystem>
 
@@ -112,7 +113,9 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }
 
-    return CreateSharedRef<Mesh>(vertices, indices, textures, colors, transform);
+    Ref<Material> material = CreateMaterial(textures, colors);
+
+    return CreateSharedRef<Mesh>(vertices, indices, transform, material);
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

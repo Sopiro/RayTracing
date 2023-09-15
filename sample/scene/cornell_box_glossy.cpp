@@ -20,7 +20,7 @@ void CornellBoxGlossy(Scene& scene)
     {
         // front
 
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = wakgood_texture;
         mat->roughness_map = SolidColor::Create(0.01);
         mat->metallic_map = SolidColor::Create(0.0);
@@ -31,7 +31,7 @@ void CornellBoxGlossy(Scene& scene)
 
         // left
 
-        mat = RandomPBRMaterial();
+        mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(.65, .05, .05);
         mat->roughness_map = SolidColor::Create(0.01);
         mat->metallic_map = SolidColor::Create(0.0);
@@ -41,7 +41,7 @@ void CornellBoxGlossy(Scene& scene)
 
         // right
 
-        mat = RandomPBRMaterial();
+        mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(.12, .45, .15);
         mat->roughness_map = SolidColor::Create(0.01);
         mat->metallic_map = SolidColor::Create(0.0);
@@ -50,7 +50,7 @@ void CornellBoxGlossy(Scene& scene)
         scene.Add(CreateRectYZ(tf, mat));
 
         // bottom
-        mat = RandomPBRMaterial();
+        mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(.73);
         mat->roughness_map = SolidColor::Create(0.01);
         mat->metallic_map = SolidColor::Create(0.0);
@@ -59,7 +59,7 @@ void CornellBoxGlossy(Scene& scene)
         scene.Add(CreateRectXZ(tf, mat));
 
         // top
-        mat = RandomPBRMaterial();
+        mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(.73);
         mat->roughness_map = SolidColor::Create(0.01);
         mat->metallic_map = SolidColor::Create(0.0);
@@ -74,7 +74,7 @@ void CornellBoxGlossy(Scene& scene)
         f64 hy = 0.26;
         f64 hz = 0.13;
 
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(1.0);
         mat->roughness_map = SolidColor::Create(0.1);
         mat->metallic_map = SolidColor::Create(1.0);
@@ -88,7 +88,7 @@ void CornellBoxGlossy(Scene& scene)
 
     // Right bunny
     {
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(0.7);
         mat->roughness_map = SolidColor::Create(0.05);
         mat->metallic_map = SolidColor::Create(1.0);

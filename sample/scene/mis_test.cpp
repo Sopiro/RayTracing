@@ -6,7 +6,7 @@ namespace spt
 void MISTest1(Scene& scene)
 {
     {
-        auto floor = RandomPBRMaterial();
+        auto floor = RandomMicrofacetMaterial();
         floor->basecolor_map = SolidColor::Create(Vec3{ 0.73 });
         floor->roughness_map = SolidColor::Create(Vec3{ 1.0 });
         floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
@@ -23,22 +23,22 @@ void MISTest1(Scene& scene)
 
     // plates
     {
-        auto m1 = RandomPBRMaterial();
+        auto m1 = RandomMicrofacetMaterial();
         m1->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m1->roughness_map = SolidColor::Create(Vec3{ 0.1 });
 
-        auto m2 = RandomPBRMaterial();
+        auto m2 = RandomMicrofacetMaterial();
         m2->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m2->roughness_map = SolidColor::Create(Vec3{ 0.05 });
 
-        auto m3 = RandomPBRMaterial();
+        auto m3 = RandomMicrofacetMaterial();
         m3->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m3->roughness_map = SolidColor::Create(Vec3{ 0.02 });
 
-        auto m4 = RandomPBRMaterial();
+        auto m4 = RandomMicrofacetMaterial();
         m4->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.005 });
@@ -108,7 +108,7 @@ void MISTest1(Scene& scene)
 void MISTest2(Scene& scene)
 {
     {
-        auto floor_mat = RandomPBRMaterial();
+        auto floor_mat = RandomMicrofacetMaterial();
         floor_mat->basecolor_map = SolidColor::Create(Vec3{ 0.4 });
         floor_mat->roughness_map = SolidColor::Create(Vec3{ 1.0 });
         floor_mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
@@ -120,22 +120,22 @@ void MISTest2(Scene& scene)
 
     // plates
     {
-        auto m1 = RandomPBRMaterial();
+        auto m1 = RandomMicrofacetMaterial();
         m1->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m1->roughness_map = SolidColor::Create(Vec3{ 0.005 });
 
-        auto m2 = RandomPBRMaterial();
+        auto m2 = RandomMicrofacetMaterial();
         m2->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m2->roughness_map = SolidColor::Create(Vec3{ 0.02 });
 
-        auto m3 = RandomPBRMaterial();
+        auto m3 = RandomMicrofacetMaterial();
         m3->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m3->roughness_map = SolidColor::Create(Vec3{ 0.05 });
 
-        auto m4 = RandomPBRMaterial();
+        auto m4 = RandomMicrofacetMaterial();
         m4->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.1 });
@@ -186,7 +186,7 @@ void MISTest2(Scene& scene)
 void MISTestWak(Scene& scene)
 {
     {
-        auto floor = RandomPBRMaterial();
+        auto floor = RandomMicrofacetMaterial();
         floor->basecolor_map = ImageTexture::Create("res/wakdu.jpg");
         floor->roughness_map = SolidColor::Create(Vec3{ 1.0 });
         floor->metallic_map = SolidColor::Create(Vec3{ 0.0 });
@@ -201,22 +201,22 @@ void MISTestWak(Scene& scene)
 
     // plates
     {
-        auto m1 = RandomPBRMaterial();
+        auto m1 = RandomMicrofacetMaterial();
         m1->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m1->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m1->roughness_map = SolidColor::Create(Vec3{ 0.005 });
 
-        auto m2 = RandomPBRMaterial();
+        auto m2 = RandomMicrofacetMaterial();
         m2->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m2->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m2->roughness_map = SolidColor::Create(Vec3{ 0.02 });
 
-        auto m3 = RandomPBRMaterial();
+        auto m3 = RandomMicrofacetMaterial();
         m3->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m3->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m3->roughness_map = SolidColor::Create(Vec3{ 0.05 });
 
-        auto m4 = RandomPBRMaterial();
+        auto m4 = RandomMicrofacetMaterial();
         m4->basecolor_map = SolidColor::Create(Vec3{ 0.07, 0.09, 0.13 });
         m4->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         m4->roughness_map = SolidColor::Create(Vec3{ 0.1 });

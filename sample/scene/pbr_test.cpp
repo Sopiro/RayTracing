@@ -26,7 +26,7 @@ void PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
             pos.z = z * zstep - ((cz - 1) * zstep / 2.0);
 
-            auto mat = RandomPBRMaterial();
+            auto mat = RandomMicrofacetMaterial();
             scene.Add(CreateSharedRef<Sphere>(pos, r, mat));
         }
     }
@@ -92,7 +92,7 @@ void PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
             pos.z = 0.0;
 
-            auto mat = RandomPBRMaterial();
+            auto mat = RandomMicrofacetMaterial();
 
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
             auto rect = CreateRectXZ(tf, light);

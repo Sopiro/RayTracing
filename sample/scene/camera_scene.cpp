@@ -7,7 +7,7 @@ void CameraScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(Vec3{ 0.5 });
         mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.01 });

@@ -7,7 +7,7 @@ void GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
     {
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });

@@ -6,7 +6,7 @@ namespace spt
 void StatueScene(Scene& scene)
 {
     {
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         mat->metallic_map = SolidColor::Create(Vec3{ 1.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
@@ -78,7 +78,7 @@ void StatueScene(Scene& scene)
 
     // Floor
     {
-        auto mat = RandomPBRMaterial();
+        auto mat = RandomMicrofacetMaterial();
         mat->basecolor_map = SolidColor::Create(Vec3{ 1.0 });
         mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.01 });

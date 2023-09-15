@@ -5,7 +5,70 @@
 namespace spt
 {
 
-Ref<Microfacet> RandomPBRMaterial()
+Ref<Material> CreateMaterial(const std::array<Ref<Texture>, TextureType::count>& textures, const std::array<Color, 3>& colors)
+{
+#define HasTexture(type) (textures[type] != nullptr)
+
+    if (HasTexture(basecolor) == false && Material::fallback_material != nullptr)
+    {
+        return Material::fallback_material;
+    }
+
+    auto mat = CreateSharedRef<Microfacet>();
+
+    if (HasTexture(basecolor))
+    {
+        mat->basecolor_map = textures[basecolor];
+    }
+    else
+    {
+        mat->basecolor_map = SolidColor::Create(colors[0]);
+    }
+
+    mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+
+    if (HasTexture(metallic))
+    {
+        mat->metallic_map = textures[metallic];
+    }
+    else
+    {
+        if (colors[1].x < 0.01 && colors[1].y < 0.01 && colors[1].z < 0.01)
+        {
+            mat->metallic_map = SolidColor::Create(0.0);
+        }
+        else
+        {
+            mat->metallic_map = SolidColor::Create(1.0);
+        }
+    }
+
+    if (HasTexture(roughness))
+    {
+        mat->roughness_map = textures[roughness];
+    }
+    else
+    {
+        mat->roughness_map = SolidColor::Create(colors[1]);
+    }
+
+    mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0);
+
+    if (HasTexture(emissive))
+    {
+        mat->emissive_map = textures[emissive];
+    }
+    else
+    {
+        mat->emissive_map = SolidColor::Create(colors[2]);
+    }
+
+    return mat;
+
+#undef HasTexture
+}
+
+Ref<Microfacet> RandomMicrofacetMaterial()
 {
     Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
 
@@ -22,143 +85,123 @@ Ref<Microfacet> RandomPBRMaterial()
 
 Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const UV& texCoord)
 {
-    Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.0 });
-    Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.0 });
-    Vec3 v2 = Mul(tf, Vec3{ 0.5, 0.5, 0.0 });
-    Vec3 v3 = Mul(tf, Vec3{ -0.5, 0.5, 0.0 });
+    Vec3 p0 = { -0.5, -0.5, 0.0 };
+    Vec3 p1 = { 0.5, -0.5, 0.0 };
+    Vec3 p2 = { 0.5, 0.5, 0.0 };
+    Vec3 p3 = { -0.5, 0.5, 0.0 };
 
-    auto t1 = Triangle{ v0, v1, v2, mat };
-    auto t2 = Triangle{ v0, v2, v3, mat };
+    Vertex v0{ p0, z_axis, x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v1{ p1, z_axis, x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v2{ p2, z_axis, x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v3{ p3, z_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
-    t1.v0.texCoord.Set(0.0, 0.0);
-    t1.v1.texCoord.Set(texCoord.x, 0.0);
-    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v0.texCoord.Set(0.0, 0.0);
-    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v2.texCoord.Set(0.0, texCoord.y);
+    auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
+    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
+    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 };
 
 Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const UV& texCoord)
 {
-    Vec3 v0 = Mul(tf, Vec3{ -0.5, 0.0, 0.5 });
-    Vec3 v1 = Mul(tf, Vec3{ 0.5, 0.0, 0.5 });
-    Vec3 v2 = Mul(tf, Vec3{ 0.5, 0.0, -0.5 });
-    Vec3 v3 = Mul(tf, Vec3{ -0.5, 0.0, -0.5 });
+    Vec3 p0 = { -0.5, 0.0, 0.5 };
+    Vec3 p1 = { 0.5, 0.0, 0.5 };
+    Vec3 p2 = { 0.5, 0.0, -0.5 };
+    Vec3 p3 = { -0.5, 0.0, -0.5 };
 
-    auto t1 = Triangle{ v0, v1, v2, mat };
-    auto t2 = Triangle{ v0, v2, v3, mat };
+    Vertex v0{ p0, y_axis, x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v1{ p1, y_axis, x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v2{ p2, y_axis, x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v3{ p3, y_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
-    t1.v0.texCoord.Set(0.0, 0.0);
-    t1.v1.texCoord.Set(texCoord.x, 0.0);
-    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v0.texCoord.Set(0.0, 0.0);
-    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v2.texCoord.Set(0.0, texCoord.y);
+    auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
+    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
+    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
 
 Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const UV& texCoord)
 {
-    Vec3 v0 = Mul(tf, Vec3{ 0.0, -0.5, 0.5 });
-    Vec3 v1 = Mul(tf, Vec3{ 0.0, -0.5, -0.5 });
-    Vec3 v2 = Mul(tf, Vec3{ 0.0, 0.5, -0.5 });
-    Vec3 v3 = Mul(tf, Vec3{ 0.0, 0.5, 0.5 });
+    Vec3 p0 = { 0.0, -0.5, 0.5 };
+    Vec3 p1 = { 0.0, -0.5, -0.5 };
+    Vec3 p2 = { 0.0, 0.5, -0.5 };
+    Vec3 p3 = { 0.0, 0.5, 0.5 };
 
-    auto t1 = Triangle{ v0, v1, v2, mat };
-    auto t2 = Triangle{ v0, v2, v3, mat };
+    Vertex v0{ p0, x_axis, -z_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v1{ p1, x_axis, -z_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v2{ p2, x_axis, -z_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v3{ p3, x_axis, -z_axis, Vec2{ 0.0, texCoord.y } };
 
-    t1.v0.texCoord.Set(0.0, 0.0);
-    t1.v1.texCoord.Set(texCoord.x, 0.0);
-    t1.v2.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v0.texCoord.Set(0.0, 0.0);
-    t2.v1.texCoord.Set(texCoord.x, texCoord.y);
-    t2.v2.texCoord.Set(0.0, texCoord.y);
+    auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
+    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2 }, mat);
+    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
 
-Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat)
+Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const UV& texCoord)
 {
-    Vec3 v0 = Mul(tf, Vec3{ -0.5, -0.5, 0.5 });
-    Vec3 v1 = Mul(tf, Vec3{ 0.5, -0.5, 0.5 });
-    Vec3 v2 = Mul(tf, Vec3{ 0.5, 0.5, 0.5 });
-    Vec3 v3 = Mul(tf, Vec3{ -0.5, 0.5, 0.5 });
+    /*
+          7--------6
+         /|       /|
+        3--------2 |
+        | 4------|-5
+        |/       |/
+        0--------1
+    */
+    Vec3 p0 = { -0.5, -0.5, 0.5 };
+    Vec3 p1 = { 0.5, -0.5, 0.5 };
+    Vec3 p2 = { 0.5, 0.5, 0.5 };
+    Vec3 p3 = { -0.5, 0.5, 0.5 };
 
-    Vec3 v4 = Mul(tf, Vec3{ -0.5, -0.5, -0.5 });
-    Vec3 v5 = Mul(tf, Vec3{ 0.5, -0.5, -0.5 });
-    Vec3 v6 = Mul(tf, Vec3{ 0.5, 0.5, -0.5 });
-    Vec3 v7 = Mul(tf, Vec3{ -0.5, 0.5, -0.5 });
+    Vec3 p4 = { -0.5, -0.5, -0.5 };
+    Vec3 p5 = { 0.5, -0.5, -0.5 };
+    Vec3 p6 = { 0.5, 0.5, -0.5 };
+    Vec3 p7 = { -0.5, 0.5, -0.5 };
 
-    // front
-    auto t1 = Triangle(v0, v1, v2, mat);
-    t1.v0.texCoord.Set(0.0, 0.0);
-    t1.v1.texCoord.Set(1.0, 0.0);
-    t1.v2.texCoord.Set(1.0, 1.0);
+    Vertex v00 = { p0, z_axis, x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v01 = { p1, z_axis, x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v02 = { p2, z_axis, x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v03 = { p3, z_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
-    auto t2 = Triangle(v0, v2, v3, mat);
-    t2.v0.texCoord.Set(0.0, 0.0);
-    t2.v1.texCoord.Set(1.0, 1.0);
-    t2.v2.texCoord.Set(0.0, 1.0);
+    Vertex v04 = { p1, x_axis, -z_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v05 = { p5, x_axis, -z_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v06 = { p6, x_axis, -z_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v07 = { p2, x_axis, -z_axis, Vec2{ 0.0, texCoord.y } };
 
-    // right
-    auto t3 = Triangle(v1, v5, v6, mat);
-    t3.v0.texCoord.Set(0.0, 0.0);
-    t3.v1.texCoord.Set(1.0, 0.0);
-    t3.v2.texCoord.Set(1.0, 1.0);
+    Vertex v08 = { p5, -z_axis, -x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v09 = { p4, -z_axis, -x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v10 = { p7, -z_axis, -x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v11 = { p6, -z_axis, -x_axis, Vec2{ 0.0, texCoord.y } };
 
-    auto t4 = Triangle(v1, v6, v2, mat);
-    t4.v0.texCoord.Set(0.0, 0.0);
-    t4.v1.texCoord.Set(1.0, 1.0);
-    t4.v2.texCoord.Set(0.0, 1.0);
+    Vertex v12 = { p4, -x_axis, z_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v13 = { p0, -x_axis, z_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v14 = { p3, -x_axis, z_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v15 = { p7, -x_axis, z_axis, Vec2{ 0.0, texCoord.y } };
 
-    // back
-    auto t5 = Triangle(v5, v4, v7, mat);
-    t5.v0.texCoord.Set(0.0, 0.0);
-    t5.v1.texCoord.Set(1.0, 0.0);
-    t5.v2.texCoord.Set(1.0, 1.0);
+    Vertex v16 = { p3, y_axis, x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v17 = { p2, y_axis, x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v18 = { p6, y_axis, x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v19 = { p7, y_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
-    auto t6 = Triangle(v5, v7, v6, mat);
-    t6.v0.texCoord.Set(0.0, 0.0);
-    t6.v1.texCoord.Set(1.0, 1.0);
-    t6.v2.texCoord.Set(0.0, 1.0);
+    Vertex v20 = { p1, -y_axis, -x_axis, Vec2{ 0.0, 0.0 } };
+    Vertex v21 = { p0, -y_axis, -x_axis, Vec2{ texCoord.x, 0.0 } };
+    Vertex v22 = { p4, -y_axis, -x_axis, Vec2{ texCoord.x, texCoord.y } };
+    Vertex v23 = { p5, -y_axis, -x_axis, Vec2{ 0.0, texCoord.y } };
 
-    // left
-    auto t7 = Triangle(v4, v0, v3, mat);
-    t7.v0.texCoord.Set(0.0, 0.0);
-    t7.v1.texCoord.Set(1.0, 0.0);
-    t7.v2.texCoord.Set(1.0, 1.0);
+    auto vertices = std::vector<Vertex>{ v00, v01, v02, v03, v04, v05, v06, v07, v08, v09, v10, v11,
+                                         v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23 };
 
-    auto t8 = Triangle(v4, v3, v7, mat);
-    t8.v0.texCoord.Set(0.0, 0.0);
-    t8.v1.texCoord.Set(1.0, 1.0);
-    t8.v2.texCoord.Set(0.0, 1.0);
+    // clang-format off
+    auto indices = std::vector<u32>{
+        0, 1, 2, 0, 2, 3,
+        4, 5, 6, 4, 6, 7,
+        8, 9, 10, 8, 10, 11,
+        12, 13, 14, 12, 14, 15,
+        16, 17, 18, 16, 18, 19,
+        20, 21, 22, 20, 22, 23
+    };
+    // clang-format on
 
-    // top
-    auto t9 = Triangle(v3, v2, v6, mat);
-    t9.v0.texCoord.Set(0.0, 0.0);
-    t9.v1.texCoord.Set(1.0, 0.0);
-    t9.v2.texCoord.Set(1.0, 1.0);
-
-    auto t10 = Triangle(v3, v6, v7, mat);
-    t10.v0.texCoord.Set(0.0, 0.0);
-    t10.v1.texCoord.Set(1.0, 1.0);
-    t10.v2.texCoord.Set(0.0, 1.0);
-
-    // bottom
-    auto t11 = Triangle(v1, v0, v4, mat);
-    t11.v0.texCoord.Set(0.0, 0.0);
-    t11.v1.texCoord.Set(1.0, 0.0);
-    t11.v2.texCoord.Set(1.0, 1.0);
-
-    auto t12 = Triangle(v1, v4, v5, mat);
-    t12.v0.texCoord.Set(0.0, 0.0);
-    t12.v1.texCoord.Set(1.0, 1.0);
-    t12.v2.texCoord.Set(0.0, 1.0);
-
-    return CreateSharedRef<Mesh>(std::vector<Triangle>{ t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12 }, mat);
+    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
 
 } // namespace spt
