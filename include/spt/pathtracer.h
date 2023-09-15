@@ -18,7 +18,6 @@
 #include "pdf.h"
 #include "postprocess.h"
 #include "primitive.h"
-#include "primitive_pdf.h"
 #include "ray.h"
 #include "scene.h"
 #include "solid_color.h"

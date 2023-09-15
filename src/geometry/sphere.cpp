@@ -72,7 +72,7 @@ bool Sphere::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return true;
 }
 
-Point3 Sphere::Sample(const Point3& ref) const
+void Sphere::Sample(SurfaceSample* sample, Vec3* wi, const Point3& ref) const
 {
     Vec3 direction = center - ref;
     Real distance = direction.Normalize();
@@ -110,7 +110,14 @@ Point3 Sphere::Sample(const Point3& ref) const
 
     // Vec3 dd{ -xx, -yy, -zz };
     ONB uvw{ direction };
-    return ref + uvw.GetLocal(d) * s;
+
+    *wi = uvw.GetLocal(d) * s;
+
+    f64 solid_angle = two_pi * (1.0 - cos_theta_max);
+
+    sample->p = ref + *wi;
+    sample->n = (sample->p - center).Normalized();
+    sample->pdf = 1.0 / solid_angle;
 }
 
 } // namespace spt

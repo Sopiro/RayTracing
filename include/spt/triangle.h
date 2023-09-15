@@ -18,10 +18,10 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    virtual Point3 Sample() const override;
-    virtual Point3 Sample(const Point3& ref) const override;
+    virtual void Sample(SurfaceSample* sample) const override;
+    virtual void Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+
     virtual const Material* GetMaterial() const override;
 
 private:
@@ -47,24 +47,24 @@ inline void Triangle::GetAABB(AABB* out_aabb) const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
-    const Vec3& p0 = mesh->vertices[v[0]].position;
-    const Vec3& p1 = mesh->vertices[v[1]].position;
-    const Vec3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->vertices[v[0]].position;
+    const Point3& p1 = mesh->vertices[v[1]].position;
+    const Point3& p2 = mesh->vertices[v[2]].position;
 
     out_aabb->min = Min(Min(p0, p1), p2) - aabb_offset;
     out_aabb->max = Max(Max(p0, p1), p2) + aabb_offset;
 }
 
-inline Point3 Triangle::Sample() const
+inline void Triangle::Sample(SurfaceSample* sample) const
 {
-    const Vec3& p0 = mesh->vertices[v[0]].position;
-    const Vec3& p1 = mesh->vertices[v[1]].position;
-    const Vec3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->vertices[v[0]].position;
+    const Point3& p1 = mesh->vertices[v[1]].position;
+    const Point3& p2 = mesh->vertices[v[2]].position;
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-#if 1
+#if 0
     f64 u = Rand(0.0, 1.0);
     f64 v = Rand(0.0, 1.0);
 
@@ -74,7 +74,10 @@ inline Point3 Triangle::Sample() const
         v = 1.0 - v;
     }
 
-    return p0 + e1 * u + e2 * v;
+    Vec3 n = Cross(e1, e2).Normalized();
+    Point3 p = p0 + e1 * u + e2 * v;
+
+    return SurfaceSample{ p, n };
 #else
     f64 u1 = Rand(0.0, 1.0);
     f64 u2 = Rand(0.0, 1.0);
@@ -83,13 +86,28 @@ inline Point3 Triangle::Sample() const
     f64 u = 1.0 - s;
     f64 v = u2 * s;
 
-    return v0.position + e1 * u + e2 * v;
+    Vec3 normal = Cross(e1, e2);
+    f64 area = normal.Normalize() * 0.5;
+    Point3 point = p0 + e1 * u + e2 * v;
+
+    sample->n = normal;
+    sample->p = point;
+    sample->pdf = 1.0 / area;
 #endif
 }
 
-inline Point3 Triangle::Sample(const Point3& ref) const
+inline void Triangle::Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& ref) const
 {
-    return Sample();
+    Sample(sample);
+
+    // Convert to solid angle measure
+    Vec3 dir = sample->p - ref;
+    f64 distance_squared = Dot(dir, dir);
+
+    f64 cosine = fabs(Dot(dir, sample->n) / dir.Length());
+    sample->pdf *= distance_squared / cosine;
+
+    *ref2p = dir;
 }
 
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
@@ -100,13 +118,8 @@ inline f64 Triangle::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    return PDFValue(is, ray);
-}
-
-inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
-{
-    f64 distance_squared = hit_is.t * hit_is.t * hit_ray.dir.Length2();
-    f64 cosine = fabs(Dot(hit_ray.dir, hit_is.normal) / hit_ray.dir.Length());
+    f64 distance_squared = is.t * is.t * ray.dir.Length2();
+    f64 cosine = fabs(Dot(ray.dir, is.normal) / ray.dir.Length());
 
     const Vec3& p0 = mesh->vertices[v[0]].position;
     const Vec3& p1 = mesh->vertices[v[1]].position;
@@ -136,9 +149,9 @@ inline Vec3 Triangle::GetShadingNormal(f64 _u, f64 _v, f64 _w) const
 
 inline Vec3 Triangle::GetShadingTangent(f64 _u, f64 _v, f64 _w) const
 {
-    const Vec3& t0 = mesh->vertices[v[0]].normal;
-    const Vec3& t1 = mesh->vertices[v[1]].normal;
-    const Vec3& t2 = mesh->vertices[v[2]].normal;
+    const Vec3& t0 = mesh->vertices[v[0]].tangent;
+    const Vec3& t1 = mesh->vertices[v[1]].tangent;
+    const Vec3& t2 = mesh->vertices[v[2]].tangent;
 
     return (_w * t0 + _u * t1 + _v * t2).Normalized();
 }

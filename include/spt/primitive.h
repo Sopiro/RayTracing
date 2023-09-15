@@ -5,6 +5,13 @@
 namespace spt
 {
 
+struct SurfaceSample
+{
+    Point3 p;
+    Vec3 n;
+    f64 pdf;
+};
+
 // Represents a geometric primitive
 class Primitive : public Intersectable
 {
@@ -12,15 +19,12 @@ public:
     virtual ~Primitive() = default;
 
     // Returns random point on the surface
-    virtual Point3 Sample() const = 0;
+    virtual void Sample(SurfaceSample* sample) const = 0;
 
     // Returns random point relative to the reference point
-    virtual Point3 Sample(const Point3& ref) const = 0;
+    virtual void Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& ref) const = 0;
 
     virtual f64 EvaluatePDF(const Ray& ray) const = 0;
-
-    // Input ray must hit this object
-    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
 
     virtual const Material* GetMaterial() const = 0;
 };

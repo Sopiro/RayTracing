@@ -70,31 +70,30 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
             // Sample one area light uniformly
-            auto& lights = scene.GetAreaLights();
+            const std::vector<Ref<Primitive>>& lights = scene.GetAreaLights();
             size_t num_lights = lights.size();
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
+            Ref<Primitive> light = lights[index];
 
-            auto& light = lights[index];
+            Vec3 d;
+            SurfaceSample light_sample;
+            light->Sample(&light_sample, &d, is.point);
 
-            PrimitivePDF light_pdf{ light.get(), is.point };
+            f64 len = d.Normalize();
+            Ray to_light{ is.point, d };
 
             // Importance sample lights
-            Vec3 l = light_pdf.Sample();
-            f64 len = l.Normalize();
-
-            Ray to_light{ is.point, l };
             if (Dot(to_light.dir, is.normal) > 0.0)
             {
-                f64 light_brdf_p = ir.pdf->Evaluate(to_light.dir);
+                f64 light_brdf_p = ir.pdf->Evaluate(d);
                 if (light_brdf_p > 0.0)
                 {
                     if (scene.IntersectAny(to_light, ray_offset, len - ray_offset) == false)
                     {
-                        f64 light_p = light_pdf.Evaluate(to_light.dir);
-                        f64 mis_w = 1.0 / (light_p + light_brdf_p);
+                        f64 mis_w = 1.0 / (light_sample.pdf + light_brdf_p);
 
                         Intersection is2;
-                        is2.front_face = true;
+                        is2.front_face = Dot(light_sample.n, to_light.dir) < 0.0;
                         Color li = light->GetMaterial()->Emit(is2, to_light);
                         radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray, to_light);
                     }
@@ -105,7 +104,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             Ray scattered{ is.point, ir.pdf->Sample() };
             if (Dot(scattered.dir, is.normal) > 0.0)
             {
-                f64 brdf_light_p = light_pdf.Evaluate(scattered.dir);
+                f64 brdf_light_p = light->EvaluatePDF(scattered);
                 if (brdf_light_p > 0.0)
                 {
                     Intersection is2;

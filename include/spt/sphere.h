@@ -18,10 +18,10 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    virtual Point3 Sample() const override;
-    virtual Point3 Sample(const Point3& ref) const override;
+    virtual void Sample(SurfaceSample* sample) const override;
+    virtual void Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+
     virtual const Material* GetMaterial() const override;
 
 public:
@@ -46,9 +46,12 @@ inline void Sphere::GetAABB(AABB* out_aabb) const
     out_aabb->max = center + Vec3{ radius };
 }
 
-inline Point3 Sphere::Sample() const
+inline void Sphere::Sample(SurfaceSample* sample) const
 {
-    return center + UniformSampleSphere() * radius;
+    f64 area = 4.0 * pi * radius * radius;
+    sample->n = UniformSampleSphere();
+    sample->p = center + sample->n * radius;
+    sample->pdf = 1.0 / area;
 }
 
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const
@@ -59,12 +62,7 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    return PDFValue(is, ray);
-}
-
-inline f64 Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
-{
-    f64 distance_squared = (center - hit_ray.origin).Length2();
+    f64 distance_squared = (center - ray.origin).Length2();
     f64 cos_theta_max = sqrt(1.0 - radius * radius / distance_squared);
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 

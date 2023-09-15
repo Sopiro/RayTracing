@@ -6,9 +6,9 @@ namespace spt
 // Möller-Trumbore algorithm
 bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    const Vec3& p0 = mesh->vertices[v[0]].position;
-    const Vec3& p1 = mesh->vertices[v[1]].position;
-    const Vec3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->vertices[v[0]].position;
+    const Point3& p1 = mesh->vertices[v[1]].position;
+    const Point3& p2 = mesh->vertices[v[2]].position;
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
@@ -73,9 +73,9 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
 bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
-    const Vec3& p0 = mesh->vertices[v[0]].position;
-    const Vec3& p1 = mesh->vertices[v[1]].position;
-    const Vec3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->vertices[v[0]].position;
+    const Point3& p1 = mesh->vertices[v[1]].position;
+    const Point3& p2 = mesh->vertices[v[2]].position;
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
