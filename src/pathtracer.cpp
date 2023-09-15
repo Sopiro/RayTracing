@@ -14,21 +14,23 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
     for (i32 bounce = 0;; ++bounce)
     {
+        Vec3 d = ray.d.Normalized();
+
         Intersection is;
         if (scene.Intersect(&is, ray, ray_offset, infinity) == false)
         {
-            radiance += throughput * scene.GetSkyColor(ray.d);
+            radiance += throughput * scene.GetSkyColor(d);
             break;
         }
 
         const Material* mat = is.material;
 
         Interaction ir;
-        if (mat->Scatter(&ir, is, ray.d) == false)
+        if (mat->Scatter(&ir, is, d) == false)
         {
             if (bounce == 0 || was_specular == true)
             {
-                radiance += throughput * mat->Emit(is, ray.d);
+                radiance += throughput * mat->Emit(is, d);
             }
             break;
         }
@@ -50,7 +52,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             was_specular = false;
         }
 
-        radiance += throughput * mat->Emit(is, ray.d);
+        radiance += throughput * mat->Emit(is, d);
 
         // Estimate direct light
 
@@ -61,7 +63,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
             if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)
             {
-                radiance += throughput * sun->radiance * mat->Evaluate(is, ray.d, to_sun.d);
+                radiance += throughput * sun->radiance * mat->Evaluate(is, d, to_sun.d.Normalized());
             }
         }
 
@@ -75,17 +77,17 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
             Ref<Primitive> light = lights[index];
 
-            Vec3 d;
+            Vec3 l;
             SurfaceSample light_sample;
-            light->Sample(&light_sample, &d, is.point);
+            light->Sample(&light_sample, &l, is.point);
 
-            f64 len = d.Normalize();
-            Ray to_light{ is.point, d };
+            f64 len = l.Normalize();
+            Ray to_light{ is.point, l };
 
             // Importance sample lights
-            if (Dot(to_light.d, is.normal) > 0.0)
+            if (Dot(l, is.normal) > 0.0)
             {
-                f64 light_brdf_p = ir.pdf->Evaluate(d);
+                f64 light_brdf_p = ir.pdf->Evaluate(l);
                 if (light_brdf_p > 0.0)
                 {
                     if (scene.IntersectAny(to_light, ray_offset, len - ray_offset) == false)
@@ -93,16 +95,18 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                         f64 mis_w = 1.0 / (light_sample.pdf + light_brdf_p);
 
                         Intersection is2;
-                        is2.front_face = Dot(light_sample.n, to_light.d) < 0.0;
-                        Color li = light->GetMaterial()->Emit(is2, d);
-                        radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray.d, d);
+                        is2.front_face = Dot(light_sample.n, l) < 0.0;
+                        Color li = light->GetMaterial()->Emit(is2, l);
+                        radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, d, l);
                     }
                 }
             }
 
             // Importance sample BRDF
-            Ray scattered{ is.point, ir.pdf->Sample() };
-            if (Dot(scattered.d, is.normal) > 0.0)
+            Vec3 s = ir.pdf->Sample();
+
+            Ray scattered{ is.point, s };
+            if (Dot(s, is.normal) > 0.0)
             {
                 f64 brdf_light_p = light->EvaluatePDF(scattered);
                 if (brdf_light_p > 0.0)
@@ -112,11 +116,11 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                     {
                         if (is2.object == light.get())
                         {
-                            f64 brdf_p = ir.pdf->Evaluate(scattered.d);
+                            f64 brdf_p = ir.pdf->Evaluate(s);
                             f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                            Color li = light->GetMaterial()->Emit(is2, scattered.d);
-                            radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray.d, scattered.d);
+                            Color li = light->GetMaterial()->Emit(is2, s);
+                            radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, d, s);
                         }
                     }
                 }
@@ -139,7 +143,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         assert(pdf > 0.0);
         Ray scattered{ is.point, wi };
 
-        throughput *= mat->Evaluate(is, ray.d, wi) / pdf;
+        throughput *= mat->Evaluate(is, d, wi) / pdf;
         ray = scattered;
 
         // Russian roulette

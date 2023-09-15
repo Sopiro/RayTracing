@@ -29,7 +29,7 @@ public:
 
     const Ref<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
-    Color GetSkyColor(Vec3 direction) const;
+    Color GetSkyColor(const Vec3& direction) const;
 
     bool HasDirectionalLight() const;
     const Ref<DirectionalLight> GetDirectionalLight() const;
@@ -97,9 +97,8 @@ inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
     environment_map = env_map;
 }
 
-inline Color Scene::GetSkyColor(Vec3 dir) const
+inline Color Scene::GetSkyColor(const Vec3& dir) const
 {
-    dir.Normalize();
     return environment_map->Value(ComputeSphereUV(dir), zero_vec3);
 }
 

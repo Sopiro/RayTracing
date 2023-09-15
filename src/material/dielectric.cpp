@@ -7,9 +7,7 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 {
     f64 refraction_ratio = is.front_face ? (1.0 / ior) : ior;
 
-    Vec3 unit_direction = wi.Normalized();
-
-    f64 cos_theta = Min(Dot(-unit_direction, is.normal), 1.0);
+    f64 cos_theta = Min(Dot(-wi, is.normal), 1.0);
     f64 sin_theta = sqrt(1.0 - cos_theta * cos_theta);
 
     // Check for total internal reflection
@@ -18,11 +16,11 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
     if (refractable == false || Reflectance(cos_theta, refraction_ratio) > Rand())
     {
-        direction = Reflect(unit_direction, is.normal);
+        direction = Reflect(wi, is.normal);
     }
     else
     {
-        direction = Refract(unit_direction, is.normal, refraction_ratio);
+        direction = Refract(wi, is.normal, refraction_ratio);
     }
 
     ir->is_specular = true;

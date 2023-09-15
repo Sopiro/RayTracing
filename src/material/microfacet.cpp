@@ -18,8 +18,8 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     tbn.v = Cross(tbn.w, tbn.u);
 
     Vec3 n = tbn.GetLocal(normal).Normalized(); // normal
-    Vec3 v = -wi.Normalized();                  // incident
-    Vec3 l = wo.Normalized();                   // outgoing
+    Vec3 v = -wi;                               // incident
+    Vec3 l = wo;                                // outgoing
     Vec3 h = v + l;                             // half
 
     // Resolve back facing shading normal by flipping method
@@ -69,7 +69,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     f64 roughness = roughness_map->Value(is.uv, is.point).y;
 
     f64 alpha = fmax(roughness, min_roughness);
-    Vec3 wo = -wi.Normalized();
+    Vec3 wo = -wi;
 
     Vec3 f0 = F0(basecolor, metallic);
     Vec3 F = F_Schlick(f0, Dot(wo, is.normal));
