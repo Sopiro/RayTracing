@@ -1,10 +1,8 @@
 #pragma once
 
 #include "aabb.h"
-#include "common.h"
 #include "growable_array.h"
-#include "primitive.h"
-#include "triangle.h"
+#include "intersectable.h"
 
 #define nullNode (-1)
 

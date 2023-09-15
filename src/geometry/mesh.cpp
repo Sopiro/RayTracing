@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<u32> _indices, const Mat4& transform, const Ref<Material> _material)
+Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<i32> _indices, const Mat4& transform, const Ref<Material> _material)
     : vertices{ std::move(_vertices) }
     , indices{ std::move(_indices) }
     , material{ _material }
@@ -27,6 +27,8 @@ Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<u32> _indices, const Mat4&
         v.normal.Set(vN.x, vN.y, vN.z);
         v.tangent.Set(vT.x, vT.y, vT.z);
     }
+
+    triangle_count = i32(indices.size() / 3);
 }
 
 } // namespace spt

@@ -1,26 +1,18 @@
 #pragma once
 
 #include "common.h"
+#include "mesh.h"
 #include "primitive.h"
 #include "ray.h"
 
 namespace spt
 {
 
-struct Vertex
-{
-    Point3 position;
-    Vec3 normal;
-    Vec3 tangent;
-    UV texCoord;
-};
-
 class Triangle : public Primitive
 {
 public:
     Triangle() = default;
-    Triangle(const Point3& point0, const Point3& point1, const Point3& point2, const Ref<Material> material);
-    Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material> material);
+    Triangle(const Ref<Mesh> mesh, size_t tri_index);
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
@@ -32,71 +24,46 @@ public:
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
     virtual const Material* GetMaterial() const override;
 
-    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
-    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
+private:
+    friend class Scene;
+
+    Vec3 GetShadingNormal(f64 u, f64 v, f64 w) const;
+    Vec3 GetShadingTangent(f64 u, f64 v, f64 w) const;
     UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
-public:
-    Vertex v0, v1, v2;
-    Vec3 e1, e2;
-    Vec3 face_normal;
-    bool two_sided;
-    Ref<Material> material;
+    const Ref<Mesh> mesh;
+    const i32* v;
+
+    bool two_sided = true;
 };
 
-inline Triangle::Triangle(const Point3& p0, const Point3& p1, const Point3& p2, const Ref<Material> mat)
-    : two_sided{ true }
-    , material{ mat }
+inline Triangle::Triangle(const Ref<Mesh> _mesh, size_t tri_index)
+    : mesh{ _mesh }
 {
-    e1 = p1 - p0;
-    e2 = p2 - p0;
-    face_normal = Cross(e1, e2);
-
-    // Setup vertices
-    {
-        Vec3 tangent = e1.Normalized();
-
-        v0.position = p0;
-        v1.position = p1;
-        v2.position = p2;
-
-        v0.normal = face_normal;
-        v1.normal = face_normal;
-        v2.normal = face_normal;
-
-        v0.tangent = tangent;
-        v1.tangent = tangent;
-        v2.tangent = tangent;
-
-        v0.texCoord.SetZero();
-        v1.texCoord.SetZero();
-        v2.texCoord.SetZero();
-    }
+    v = &mesh->indices[tri_index * 3];
 }
-
-inline Triangle::Triangle(const Vertex& vertex0, const Vertex& vertex1, const Vertex& vertex2, const Ref<Material> mat)
-    : v0{ vertex0 }
-    , v1{ vertex1 }
-    , v2{ vertex2 }
-    , two_sided{ true }
-    , material{ mat }
-{
-    e1 = v1.position - v0.position;
-    e2 = v2.position - v0.position;
-
-    face_normal = Cross(e1, e2);
-};
 
 inline void Triangle::GetAABB(AABB* out_aabb) const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
-    out_aabb->min = Min(Min(v0.position, v1.position), v2.position) - aabb_offset;
-    out_aabb->max = Max(Max(v0.position, v1.position), v2.position) + aabb_offset;
+    const Vec3& p0 = mesh->vertices[v[0]].position;
+    const Vec3& p1 = mesh->vertices[v[1]].position;
+    const Vec3& p2 = mesh->vertices[v[2]].position;
+
+    out_aabb->min = Min(Min(p0, p1), p2) - aabb_offset;
+    out_aabb->max = Max(Max(p0, p1), p2) + aabb_offset;
 }
 
 inline Point3 Triangle::Sample() const
 {
+    const Vec3& p0 = mesh->vertices[v[0]].position;
+    const Vec3& p1 = mesh->vertices[v[1]].position;
+    const Vec3& p2 = mesh->vertices[v[2]].position;
+
+    Vec3 e1 = p1 - p0;
+    Vec3 e2 = p2 - p0;
+
 #if 1
     f64 u = Rand(0.0, 1.0);
     f64 v = Rand(0.0, 1.0);
@@ -107,7 +74,7 @@ inline Point3 Triangle::Sample() const
         v = 1.0 - v;
     }
 
-    return v0.position + e1 * u + e2 * v;
+    return p0 + e1 * u + e2 * v;
 #else
     f64 u1 = Rand(0.0, 1.0);
     f64 u2 = Rand(0.0, 1.0);
@@ -141,6 +108,13 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     f64 distance_squared = hit_is.t * hit_is.t * hit_ray.dir.Length2();
     f64 cosine = fabs(Dot(hit_ray.dir, hit_is.normal) / hit_ray.dir.Length());
 
+    const Vec3& p0 = mesh->vertices[v[0]].position;
+    const Vec3& p1 = mesh->vertices[v[1]].position;
+    const Vec3& p2 = mesh->vertices[v[2]].position;
+
+    Vec3 e1 = p1 - p0;
+    Vec3 e2 = p2 - p0;
+
     f64 area = 0.5 * Cross(e1, e2).Length();
 
     return distance_squared / (cosine * area);
@@ -148,22 +122,33 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
 
 inline const Material* Triangle::GetMaterial() const
 {
-    return material.get();
+    return mesh->material.get();
 }
 
-inline Vec3 Triangle::GetNormal(f64 u, f64 v, f64 w) const
+inline Vec3 Triangle::GetShadingNormal(f64 _u, f64 _v, f64 _w) const
 {
-    return (w * v0.normal + u * v1.normal + v * v2.normal).Normalized();
+    const Vec3& n0 = mesh->vertices[v[0]].normal;
+    const Vec3& n1 = mesh->vertices[v[1]].normal;
+    const Vec3& n2 = mesh->vertices[v[2]].normal;
+
+    return (_w * n0 + _u * n1 + _v * n2).Normalized();
 }
 
-inline Vec3 Triangle::GetTangent(f64 u, f64 v, f64 w) const
+inline Vec3 Triangle::GetShadingTangent(f64 _u, f64 _v, f64 _w) const
 {
-    return (w * v0.tangent + u * v1.tangent + v * v2.tangent).Normalized();
+    const Vec3& t0 = mesh->vertices[v[0]].normal;
+    const Vec3& t1 = mesh->vertices[v[1]].normal;
+    const Vec3& t2 = mesh->vertices[v[2]].normal;
+
+    return (_w * t0 + _u * t1 + _v * t2).Normalized();
 }
 
-inline UV Triangle::GetTexCoord(f64 u, f64 v, f64 w) const
+inline UV Triangle::GetTexCoord(f64 _u, f64 _v, f64 _w) const
 {
-    return w * v0.texCoord + u * v1.texCoord + v * v2.texCoord;
-}
+    const Vec2& u0 = mesh->vertices[v[0]].texCoord;
+    const Vec2& u1 = mesh->vertices[v[1]].texCoord;
+    const Vec2& u2 = mesh->vertices[v[2]].texCoord;
 
+    return _w * u0 + _u * u1 + _v * u2;
+}
 } // namespace spt

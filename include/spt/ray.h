@@ -5,6 +5,8 @@
 namespace spt
 {
 
+constexpr f64 ray_offset = 1e-4;
+
 struct Ray
 {
     Ray() = default;

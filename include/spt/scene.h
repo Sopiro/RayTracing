@@ -100,14 +100,7 @@ inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
 inline Color Scene::GetSkyColor(Vec3 dir) const
 {
     dir.Normalize();
-
-    f64 phi = atan2(-dir.z, dir.x) + pi;
-    f64 theta = acos(-dir.y);
-
-    f64 u = phi * inv_two_pi;
-    f64 v = theta * inv_pi;
-
-    return environment_map->Value(UV{ u, v }, zero_vec3);
+    return environment_map->Value(ComputeSphereUV(dir), zero_vec3);
 }
 
 inline bool Scene::HasDirectionalLight() const
@@ -142,16 +135,9 @@ inline void Scene::AddAreaLight(const Ref<Primitive> object)
 
 inline void Scene::AddAreaLight(const Ref<Mesh> mesh)
 {
-    auto& vertices = mesh->vertices;
-    auto& indices = mesh->indices;
-
-    for (size_t i = 0; i < indices.size(); i += 3)
+    for (i32 i = 0; i < mesh->triangle_count; ++i)
     {
-        u32 index0 = indices[i];
-        u32 index1 = indices[i + 1];
-        u32 index2 = indices[i + 2];
-
-        auto tri = CreateSharedRef<Triangle>(vertices[index0], vertices[index1], vertices[index2], mesh->material);
+        auto tri = CreateSharedRef<Triangle>(mesh, i);
         area_lights.push_back(tri);
     }
 }

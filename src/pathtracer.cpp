@@ -116,7 +116,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                             f64 brdf_p = ir.pdf->Evaluate(scattered.dir);
                             f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
 
-                            Color li = is2.material->Emit(is2, scattered);
+                            Color li = light->GetMaterial()->Emit(is2, scattered);
                             radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, ray, scattered);
                         }
                     }

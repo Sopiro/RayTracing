@@ -40,7 +40,7 @@ inline Color DiffuseLight::Emit(const Intersection& is, const Ray& wi) const
     }
     else
     {
-        return Color{ 0.0, 0.0, 0.0 };
+        return zero_vec3;
     }
 }
 

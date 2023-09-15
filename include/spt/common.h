@@ -33,14 +33,3 @@ inline std::shared_ptr<T> CreateSharedRef(Args&&... args)
 {
     return std::make_shared<T>(std::forward<Args>(args)...);
 }
-
-namespace spt
-{
-
-constexpr f64 ray_offset = 1e-4;
-
-using Color = Vec3;
-using Point3 = Vec3;
-using UV = Vec2;
-
-} // namespace spt

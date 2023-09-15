@@ -61,9 +61,9 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     }
 
     // Process indices
-    const u32 vertices_per_face = 3;
+    const i32 vertices_per_face = 3;
 
-    std::vector<u32> indices;
+    std::vector<i32> indices;
     indices.reserve(mesh->mNumFaces * vertices_per_face);
 
     for (u32 i = 0; i < mesh->mNumFaces; ++i)

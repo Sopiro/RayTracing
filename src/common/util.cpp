@@ -96,7 +96,7 @@ Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, z_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 };
@@ -114,7 +114,7 @@ Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, y_axis, x_axis, Vec2{ 0.0, texCoord.y } };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
@@ -132,7 +132,7 @@ Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, x_axis, -z_axis, Vec2{ 0.0, texCoord.y } };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<u32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
@@ -191,7 +191,7 @@ Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const UV& texC
                                          v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23 };
 
     // clang-format off
-    auto indices = std::vector<u32>{
+    auto indices = std::vector<i32>{
         0, 1, 2, 0, 2, 3,
         4, 5, 6, 4, 6, 7,
         8, 9, 10, 8, 10, 11,

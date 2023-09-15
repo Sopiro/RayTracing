@@ -30,7 +30,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) c
 
     // Found intersection
     is->object = this;
-    is->material = material.get();
+    is->material = GetMaterial();
     is->t = root;
     is->point = ray.At(root);
     Vec3 outward_normal = (is->point - center) / radius;

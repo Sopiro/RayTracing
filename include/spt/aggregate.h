@@ -2,6 +2,7 @@
 
 #include "bvh.h"
 #include "model.h"
+#include "triangle.h"
 
 namespace spt
 {
@@ -51,20 +52,9 @@ inline void Aggregate::Add(const Ref<Intersectable> object)
 
 inline void Aggregate::Add(const Ref<Mesh> mesh)
 {
-    auto& vertices = mesh->vertices;
-    auto& indices = mesh->indices;
-
-    for (size_t i = 0; i < indices.size(); i += 3)
+    for (i32 i = 0; i < mesh->triangle_count; ++i)
     {
-        u32 index0 = indices[i];
-        u32 index1 = indices[i + 1];
-        u32 index2 = indices[i + 2];
-
-        Vertex& vertex0 = vertices[index0];
-        Vertex& vertex1 = vertices[index1];
-        Vertex& vertex2 = vertices[index2];
-
-        auto tri = CreateSharedRef<Triangle>(vertex0, vertex1, vertex2, mesh->material);
+        auto tri = CreateSharedRef<Triangle>(mesh, i);
         objects.push_back(tri);
 
         AABB aabb;

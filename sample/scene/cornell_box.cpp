@@ -50,24 +50,6 @@ void CornellBox(Scene& scene)
         scene.Add(box);
     }
 
-    // Lights
-    {
-        auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
-        auto l = CreateRectXZ(tf, light);
-
-        scene.Add(l);
-        scene.AddAreaLight(l);
-    }
-
-    // Right sphere
-    {
-        // auto mat = CreateSharedRef<Dielectric>(1.5);
-        // auto sphere = CreateSharedRef<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
-
-        // scene.Add(sphere);
-        // scene.AddLight(sphere);
-    }
-
     // Right block
     {
         f64 hx = 0.13;
@@ -78,6 +60,24 @@ void CornellBox(Scene& scene)
         auto box = CreateBox(tf, white);
 
         scene.Add(box);
+    }
+
+    // Right sphere
+    // {
+    // auto mat = CreateSharedRef<Dielectric>(1.5);
+    // auto sphere = CreateSharedRef<Sphere>(Vec3(0.65, 0.15, -0.3), 0.15, mat);
+
+    // scene.Add(sphere);
+    // scene.AddLight(sphere);
+    // }
+
+    // Lights
+    {
+        auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
+        auto l = CreateRectXZ(tf, light);
+
+        scene.Add(l);
+        scene.AddAreaLight(l);
     }
 
     // scene.Rebuild();

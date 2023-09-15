@@ -6,6 +6,13 @@ namespace spt
 // Möller-Trumbore algorithm
 bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
+    const Vec3& p0 = mesh->vertices[v[0]].position;
+    const Vec3& p1 = mesh->vertices[v[1]].position;
+    const Vec3& p2 = mesh->vertices[v[2]].position;
+
+    Vec3 e1 = p1 - p0;
+    Vec3 e2 = p2 - p0;
+
     Vec3 d = ray.dir;
     f64 l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
@@ -26,7 +33,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 invDet = 1.0 / det;
 
-    Vec3 tvec = ray.origin - v0.position;
+    Vec3 tvec = ray.origin - p0;
     f64 u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
@@ -50,12 +57,12 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     // Found intersection
     is->object = this;
-    is->material = material.get();
+    is->material = GetMaterial();
     is->t = t;
     is->point = ray.At(t);
 
-    Vec3 normal = GetNormal(u, v, w);
-    Vec3 tangent = GetTangent(u, v, w);
+    Vec3 normal = GetShadingNormal(u, v, w);
+    Vec3 tangent = GetShadingTangent(u, v, w);
     SetFaceNormal(is, ray, normal, tangent);
 
     UV tex = GetTexCoord(u, v, w);
@@ -66,6 +73,13 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
 bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
+    const Vec3& p0 = mesh->vertices[v[0]].position;
+    const Vec3& p1 = mesh->vertices[v[1]].position;
+    const Vec3& p2 = mesh->vertices[v[2]].position;
+
+    Vec3 e1 = p1 - p0;
+    Vec3 e2 = p2 - p0;
+
     Vec3 d = ray.dir;
     f64 l = d.Normalize();
     Vec3 pvec = Cross(d, e2);
@@ -86,7 +100,7 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 
     f64 invDet = 1.0 / det;
 
-    Vec3 tvec = ray.origin - v0.position;
+    Vec3 tvec = ray.origin - p0;
     f64 u = Dot(tvec, pvec) * invDet;
     if (u < 0.0 || u > 1.0)
     {
