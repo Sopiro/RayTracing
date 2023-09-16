@@ -10,38 +10,52 @@
 namespace spt
 {
 
-inline bool is_nullish(f64 v)
+inline bool IsNullish(f64 v)
 {
-    return isnan(v) || isinf(v);
+    return std::isnan(v) || std::isinf(v);
 }
 
-inline bool is_nullish(const Vec2& v)
+inline bool IsNullish(const Vec2& v)
 {
-    return isnan(v.x) || isnan(v.y) || isinf(v.x) || isinf(v.y);
+    return std::isnan(v.x) || std::isnan(v.y) || std::isinf(v.x) || std::isinf(v.y);
 }
 
-inline bool is_nullish(const Vec3& v)
+inline bool IsNullish(const Vec3& v)
 {
-    return isnan(v.x) || isnan(v.y) || isnan(v.z) || isinf(v.x) || isinf(v.y) || isinf(v.z);
+    return std::isnan(v.x) || std::isnan(v.y) || std::isnan(v.z) || std::isinf(v.x) || std::isinf(v.y) || std::isinf(v.z);
 }
 
-inline bool is_nullish(const Vec4& v)
+inline bool IsNullish(const Vec4& v)
 {
-    return isnan(v.x) || isnan(v.y) || isnan(v.z) || isnan(v.w) || isinf(v.x) || isinf(v.y) || isinf(v.z) || isinf(v.w);
+    return std::isnan(v.x) || std::isnan(v.y) || std::isnan(v.z) || std::isnan(v.w) || std::isinf(v.x) || std::isinf(v.y) ||
+           std::isinf(v.z) || std::isinf(v.w);
 }
 
-enum TextureType
+inline bool IsBlack(Color color)
 {
-    basecolor = 0,
-    normal,
-    metallic,
-    roughness,
-    ao,
-    emissive,
-    count
+    static const f64 epsilon = f64(10e-3);
+    return std::fabs(color.x) < epsilon && std::fabs(color.y) < epsilon && std::fabs(color.z) < epsilon;
+}
+
+struct MaterialTextures
+{
+    Ref<Texture> basecolor;
+    Ref<Texture> normal;
+    Ref<Texture> metallic;
+    Ref<Texture> roughness;
+    Ref<Texture> ao;
+    Ref<Texture> emissive;
 };
 
-Ref<Material> CreateMaterial(const std::array<Ref<Texture>, TextureType::count>& textures, const std::array<Color, 3>& colors);
+struct MaterialColors
+{
+    Color diffuse;
+    Color specular;
+    Color emissive;
+};
+
+// Create microfacet material with given textures and colors
+Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors);
 Ref<Microfacet> RandomMicrofacetMaterial();
 
 Ref<Mesh> CreateRectXY(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV{ 1.0, 1.0 });

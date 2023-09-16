@@ -58,7 +58,7 @@ void CornellBoxLucy(Scene& scene)
 
         // auto mat = CreateSharedRef<Dielectric>(1.5);
 
-        Material::fallback_material = mat;
+        Material::fallback = mat;
         Ref<Model> model = CreateSharedRef<Model>("res/stanford/lucy.obj", transform);
         scene.Add(model);
     }

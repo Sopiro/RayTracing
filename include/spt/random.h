@@ -62,11 +62,11 @@ inline Vec3 UniformSampleSphere()
     Real u2 = Rand();
 
     Real z = 1.0 - 2.0 * u1;
-    Real r = sqrt(fmax(0.0, 1.0 - z * z));
+    Real r = std::sqrt(std::fmax(0.0, 1.0 - z * z));
     Real phi = two_pi * u2;
 
-    Real x = r * cos(phi);
-    Real y = r * sin(phi);
+    Real x = r * std::cos(phi);
+    Real y = r * std::sin(phi);
 
     return Vec3{ x, y, z };
 }
@@ -77,12 +77,12 @@ inline Vec3 CosineSampleHemisphere()
     Real u1 = Rand();
     Real u2 = Rand();
 
-    Real z = sqrt(Real(1.0) - u2);
+    Real z = std::sqrt(Real(1.0) - u2);
 
     Real phi = two_pi * u1;
-    Real su2 = sqrt(u2);
-    Real x = cos(phi) * su2;
-    Real y = sin(phi) * su2;
+    Real su2 = std::sqrt(u2);
+    Real x = std::cos(phi) * su2;
+    Real y = std::sin(phi) * su2;
 
     return Vec3{ x, y, z };
 }
@@ -94,13 +94,13 @@ inline Vec3 RandomInUnitSphere()
     Real u2 = Rand();
 
     Real theta = two_pi * u1;
-    Real phi = acos(2.0 * u2 - 1.0);
+    Real phi = std::acos(2.0 * u2 - 1.0);
 
-    Real sin_phi = sin(phi);
+    Real sin_phi = std::sin(phi);
 
-    Real x = sin_phi * cos(theta);
-    Real y = sin_phi * sin(theta);
-    Real z = cos(phi);
+    Real x = sin_phi * std::cos(theta);
+    Real y = sin_phi * std::sin(theta);
+    Real z = std::cos(phi);
 
     return Vec3{ x, y, z };
 #else
@@ -121,9 +121,9 @@ inline Vec3 UniformSampleUnitDiskXY()
     Real u1 = Rand();
     Real u2 = Rand();
 
-    Real r = sqrt(u1);
+    Real r = std::sqrt(u1);
     Real theta = two_pi * u2;
-    return Vec3{ r * cos(theta), r * sin(theta), Real(0.0) };
+    return Vec3{ r * std::cos(theta), r * std::sin(theta), Real(0.0) };
 }
 
 } // namespace spt

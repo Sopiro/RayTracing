@@ -79,8 +79,8 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     }
 
     // Process materials
-    std::array<Color, 3> colors;
-    std::array<Ref<Texture>, TextureType::count> textures;
+    MaterialColors colors;
+    MaterialTextures textures;
 
     if (mesh->mMaterialIndex >= 0)
     {
@@ -94,9 +94,9 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
         material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
 
-        colors[0].Set(diffuseColor.r, diffuseColor.g, diffuseColor.b);
-        colors[1].Set(specularColor.r, specularColor.g, specularColor.b);
-        colors[2].Set(emissiveColor.r, emissiveColor.g, emissiveColor.b);
+        colors.diffuse.Set(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+        colors.specular.Set(specularColor.r, specularColor.g, specularColor.b);
+        colors.emissive.Set(emissiveColor.r, emissiveColor.g, emissiveColor.b);
 
         auto basecolor_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
         auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
@@ -105,12 +105,12 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         auto ao_maps = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, false);
         auto emissive_maps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
 
-        textures[basecolor] = basecolor_maps.empty() ? nullptr : basecolor_maps[0];
-        textures[normal] = normal_maps.empty() ? nullptr : normal_maps[0];
-        textures[metallic] = metallic_maps.empty() ? nullptr : metallic_maps[0];
-        textures[roughness] = roughness_maps.empty() ? nullptr : roughness_maps[0];
-        textures[ao] = ao_maps.empty() ? nullptr : ao_maps[0];
-        textures[emissive] = emissive_maps.empty() ? nullptr : emissive_maps[0];
+        textures.basecolor = basecolor_maps.empty() ? nullptr : basecolor_maps[0];
+        textures.normal = normal_maps.empty() ? nullptr : normal_maps[0];
+        textures.metallic = metallic_maps.empty() ? nullptr : metallic_maps[0];
+        textures.roughness = roughness_maps.empty() ? nullptr : roughness_maps[0];
+        textures.ao = ao_maps.empty() ? nullptr : ao_maps[0];
+        textures.emissive = emissive_maps.empty() ? nullptr : emissive_maps[0];
     }
 
     Ref<Material> material = CreateMaterial(textures, colors);

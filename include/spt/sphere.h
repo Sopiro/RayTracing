@@ -63,7 +63,7 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
     }
 
     f64 distance_squared = (center - ray.o).Length2();
-    f64 cos_theta_max = sqrt(1.0 - radius * radius / distance_squared);
+    f64 cos_theta_max = std::sqrt(1.0 - radius * radius / distance_squared);
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
     return 1.0 / solid_angle;
@@ -71,8 +71,8 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 
 inline void Sphere::GetUV(const Point3& p, UV& out_uv)
 {
-    f64 theta = acos(-p.y);
-    f64 phi = atan2(-p.z, p.x) + pi;
+    f64 theta = std::acos(-p.y);
+    f64 phi = std::atan2(-p.z, p.x) + pi;
 
     out_uv.x = phi * inv_two_pi;
     out_uv.y = theta * inv_pi;

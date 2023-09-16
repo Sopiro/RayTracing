@@ -45,10 +45,10 @@ int main()
 
     using namespace spt;
 
-    f64 aspect_ratio = 16.0 / 9.0;
+    // f64 aspect_ratio = 16.0 / 9.0;
     // f64 aspect_ratio = 3.0 / 2.0;
     // f64 aspect_ratio = 4.0 / 3.0;
-    // f64 aspect_ratio = 1.0;
+    f64 aspect_ratio = 1.0;
     i32 width = 500;
     i32 height = static_cast<i32>(width / aspect_ratio);
     i32 samples_per_pixel = 64;
@@ -59,7 +59,7 @@ int main()
     Scene scene;
     Camera camera;
 
-    switch (3)
+    switch (2)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -434,7 +434,7 @@ int main()
                 samples += PathTrace(scene, ray, max_bounces);
             }
 
-            if (is_nullish(samples))
+            if (IsNullish(samples))
             {
                 std::cout << "null" << std::endl;
             }

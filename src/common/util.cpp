@@ -5,35 +5,35 @@
 namespace spt
 {
 
-Ref<Material> CreateMaterial(const std::array<Ref<Texture>, TextureType::count>& textures, const std::array<Color, 3>& colors)
+Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors)
 {
-#define HasTexture(type) (textures[type] != nullptr)
+#define HasTexture(type) (textures.type != nullptr)
 
-    if (HasTexture(basecolor) == false && Material::fallback_material != nullptr)
+    if (HasTexture(basecolor) == false && Material::fallback != nullptr)
     {
-        return Material::fallback_material;
+        return Material::fallback;
     }
 
     auto mat = CreateSharedRef<Microfacet>();
 
     if (HasTexture(basecolor))
     {
-        mat->basecolor_map = textures[basecolor];
+        mat->basecolor_map = textures.basecolor;
     }
     else
     {
-        mat->basecolor_map = SolidColor::Create(colors[0]);
+        mat->basecolor_map = SolidColor::Create(colors.diffuse);
     }
 
-    mat->normal_map = HasTexture(normal) ? textures[normal] : SolidColor::Create(0.5, 0.5, 1.0);
+    mat->normal_map = HasTexture(normal) ? textures.normal : SolidColor::Create(0.5, 0.5, 1.0);
 
     if (HasTexture(metallic))
     {
-        mat->metallic_map = textures[metallic];
+        mat->metallic_map = textures.metallic;
     }
     else
     {
-        if (colors[1].x < 0.01 && colors[1].y < 0.01 && colors[1].z < 0.01)
+        if (IsBlack(colors.specular))
         {
             mat->metallic_map = SolidColor::Create(0.0);
         }
@@ -45,22 +45,22 @@ Ref<Material> CreateMaterial(const std::array<Ref<Texture>, TextureType::count>&
 
     if (HasTexture(roughness))
     {
-        mat->roughness_map = textures[roughness];
+        mat->roughness_map = textures.roughness;
     }
     else
     {
-        mat->roughness_map = SolidColor::Create(colors[1]);
+        mat->roughness_map = SolidColor::Create(colors.specular);
     }
 
-    mat->ao_map = HasTexture(ao) ? textures[ao] : SolidColor::Create(1.0);
+    mat->ao_map = HasTexture(ao) ? textures.ao : SolidColor::Create(1.0);
 
     if (HasTexture(emissive))
     {
-        mat->emissive_map = textures[emissive];
+        mat->emissive_map = textures.emissive;
     }
     else
     {
-        mat->emissive_map = SolidColor::Create(colors[2]);
+        mat->emissive_map = SolidColor::Create(colors.emissive);
     }
 
     return mat;

@@ -71,33 +71,28 @@ inline T Max(T a, T b)
 
 inline Vec2 Min(const Vec2& a, const Vec2& b)
 {
-    return Vec2(Min(a.x, b.x), Min(a.y, b.y));
+    return Vec2(std::fmin(a.x, b.x), std::fmin(a.y, b.y));
 }
 
 inline Vec2 Max(const Vec2& a, const Vec2& b)
 {
-    return Vec2(Max(a.x, b.x), Max(a.y, b.y));
+    return Vec2(std::fmax(a.x, b.x), std::fmax(a.y, b.y));
 }
 
 inline Vec3 Min(const Vec3& a, const Vec3& b)
 {
-    return Vec3(Min(a.x, b.x), Min(a.y, b.y), Min(a.z, b.z));
+    return Vec3(std::fmin(a.x, b.x), std::fmin(a.y, b.y), std::fmin(a.z, b.z));
 }
 
 inline Vec3 Max(const Vec3& a, const Vec3& b)
 {
-    return Vec3(Max(a.x, b.x), Max(a.y, b.y), Max(a.z, b.z));
+    return Vec3(std::fmax(a.x, b.x), std::fmax(a.y, b.y), std::fmax(a.z, b.z));
 }
 
 template <typename T>
 inline T Clamp(T v, T _min, T _max)
 {
     return Max(_min, Min(v, _max));
-}
-
-inline Vec2 Clamp(const Vec2& a, const Vec2& _min, const Vec2& _max)
-{
-    return Max(_min, Min(a, _max));
 }
 
 template <typename T>
@@ -110,12 +105,12 @@ template <typename T>
 inline T Slerp(const T& start, const T& end, Real percent)
 {
     Real dot = Clamp(Dot(start, end), -Real(1.0), Real(1.0));
-    Real angle = acosf(dot) * percent;
+    Real angle = std::acos(dot) * percent;
 
     T rv = end - start * dot;
     rv.Normalize();
 
-    return start * cos(angle) + rv * sin(angle);
+    return start * std::cos(angle) + rv * std::sin(angle);
 }
 
 template <typename T>
@@ -133,27 +128,27 @@ inline T Reflect(const T& v, const T& n)
 template <typename T>
 T Refract(const T& uv, const T& n, Real etai_over_etat)
 {
-    Real cos_theta = fmin(Dot(-uv, n), Real(1.0));
+    Real cos_theta = std::fmin(Dot(-uv, n), Real(1.0));
     T r_out_perp = etai_over_etat * (uv + cos_theta * n);
-    T r_out_parallel = -sqrt(fabs(Real(1.0) - r_out_perp.Length2())) * n;
+    T r_out_parallel = -std::sqrt(std::fabs(Real(1.0) - r_out_perp.Length2())) * n;
 
     return r_out_perp + r_out_parallel;
 }
 
 inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
 {
-    Real sin_thetha = sin(theta);
-    Real x = cos(phi) * sin_thetha;
-    Real y = sin(phi) * sin_thetha;
-    Real z = cos(theta);
+    Real sin_thetha = std::sin(theta);
+    Real x = std::cos(phi) * sin_thetha;
+    Real y = std::sin(phi) * sin_thetha;
+    Real z = std::cos(theta);
 
     return Vec3{ x * r, y * r, z * r };
 }
 
 inline UV ComputeSphereUV(const Vec3& dir)
 {
-    f64 phi = atan2(-dir.z, dir.x) + pi;
-    f64 theta = acos(-dir.y);
+    f64 phi = std::atan2(-dir.z, dir.x) + pi;
+    f64 theta = std::acos(-dir.y);
 
     f64 u = phi * inv_two_pi;
     f64 v = theta * inv_pi;

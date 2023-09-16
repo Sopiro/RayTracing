@@ -12,7 +12,7 @@ void RebootScene(Scene& scene)
         mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
         mat->roughness_map = SolidColor::Create(Vec3{ 0.001 });
 
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 0.01 } };
         auto model = CreateSharedRef<Model>("res/reboot_dramatic_scene/scene.gltf", tf);

@@ -26,7 +26,7 @@ void StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3{ gap * 3.0, 0.0, 0.0 }, Quat{ 0.0, y_axis }, Vec3{ scale } };
         auto mat = RandomMicrofacetMaterial();
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
         scene.Add(model);
@@ -36,7 +36,7 @@ void StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3{ gap, 0.0, 0.0 }, Quat{ 0.0, y_axis }, Vec3{ scale } };
         auto mat = RandomMicrofacetMaterial();
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/lucy.obj", tf);
         scene.Add(model);
@@ -48,7 +48,7 @@ void StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3{ -gap, 0.0, 0.0 }, Quat{ DegToRad(45.0), y_axis }, Vec3{ scale } };
         auto mat = RandomMicrofacetMaterial();
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/tyra.obj", tf);
         scene.Add(model);
@@ -62,7 +62,7 @@ void StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         mat->metallic_map = SolidColor::Create(Color{ 1.0 });
         mat->roughness_map = SolidColor::Create(Color{ 0.2 });
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
         scene.Add(model);

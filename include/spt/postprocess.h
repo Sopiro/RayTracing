@@ -7,13 +7,13 @@ namespace spt
 
 inline Color ToLinear(const Color& color, f64 gamma = 2.2)
 {
-    return Color{ pow(color.x, gamma), pow(color.y, gamma), pow(color.z, gamma) };
+    return Color{ std::pow(color.x, gamma), std::pow(color.y, gamma), std::pow(color.z, gamma) };
 }
 
 inline Color GammaCorrection(const Color& color, f64 gamma = 2.2)
 {
     f64 invGamma = 1.0 / gamma;
-    return Color{ pow(color.x, invGamma), pow(color.y, invGamma), pow(color.z, invGamma) };
+    return Color{ std::pow(color.x, invGamma), std::pow(color.y, invGamma), std::pow(color.z, invGamma) };
 }
 
 // Tone mapping functions

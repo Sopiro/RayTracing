@@ -12,9 +12,8 @@ public:
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
     virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
 
-public:
-    bool two_sided = false;
     Ref<Texture> emit;
+    bool two_sided = false;
 };
 
 inline DiffuseLight::DiffuseLight(const Ref<Texture> emission)

@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include <float.h>
+#include <cfloat>
+#include <cmath>
+#include <cstdint>
 #include <limits>
-#include <math.h>
-#include <stdint.h>
 
 #include "types.h"
 
@@ -134,7 +134,7 @@ struct Vec2
 
     Real Length() const
     {
-        return sqrt(x * x + y * y);
+        return std::sqrt(x * x + y * y);
     }
 
     Real Length2() const
@@ -284,7 +284,7 @@ struct Vec3
 
     Real Length() const
     {
-        return sqrt(x * x + y * y + z * z);
+        return std::sqrt(x * x + y * y + z * z);
     }
 
     Real Length2() const
@@ -449,7 +449,7 @@ struct Vec4
 
     Real Length() const
     {
-        return sqrt(x * x + y * y + z * z + w * w);
+        return std::sqrt(x * x + y * y + z * z + w * w);
     }
 
     Real Length2() const
@@ -750,11 +750,11 @@ struct Quat
     {
         Real halfAngle = angle * Real(0.5);
 
-        Real s = sin(halfAngle);
+        Real s = std::sin(halfAngle);
         x = unitAxis.x * s;
         y = unitAxis.y * s;
         z = unitAxis.z * s;
-        w = cos(halfAngle);
+        w = std::cos(halfAngle);
     }
 
     Quat operator-()
@@ -775,7 +775,7 @@ struct Quat
     // Magnitude
     Real Length() const
     {
-        return sqrt(x * x + y * y + z * z + w * w);
+        return std::sqrt(x * x + y * y + z * z + w * w);
     }
 
     Real Length2() const
@@ -1139,7 +1139,7 @@ inline Quat operator-(const Quat& a, const Quat& b)
 // Compute angle between two quaternions
 inline Real Angle(const Quat& a, const Quat& b)
 {
-    return acos(Dot(a, b)) * Real(2.0);
+    return std::acos(Dot(a, b)) * Real(2.0);
 }
 
 // Quat functions end

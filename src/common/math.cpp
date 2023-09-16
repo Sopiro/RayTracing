@@ -65,8 +65,8 @@ Mat3 Mat3::Scale(Real x, Real y)
 
 Mat3 Mat3::Rotate(Real z)
 {
-    Real s = sin(z);
-    Real c = cos(z);
+    Real s = std::sin(z);
+    Real c = std::cos(z);
 
     Mat3 t;
 
@@ -120,12 +120,12 @@ Mat4 Mat4::Scale(Real x, Real y, Real z)
 
 Mat4 Mat4::Rotate(Real x, Real y, Real z)
 {
-    Real sinX = sin(x);
-    Real cosX = cos(x);
-    Real sinY = sin(y);
-    Real cosY = cos(y);
-    Real sinZ = sin(z);
-    Real cosZ = cos(z);
+    Real sinX = std::sin(x);
+    Real cosX = std::cos(x);
+    Real sinY = std::sin(y);
+    Real cosY = std::cos(y);
+    Real sinZ = std::sin(z);
+    Real cosZ = std::cos(z);
 
     Mat4 t;
 
@@ -233,12 +233,12 @@ Quat::Quat(const Mat3& m)
         if (m.ex.x > m.ey.y)
         {
             Real t = Real(1.0) + m.ex.x - m.ey.y - m.ez.z;
-            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Real(0.5) / sqrt(t));
+            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Real(0.5) / std::sqrt(t));
         }
         else
         {
             Real t = Real(1.0) - m.ex.x + m.ey.y - m.ez.z;
-            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Real(0.5) / sqrt(t));
+            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Real(0.5) / std::sqrt(t));
         }
     }
     else
@@ -246,12 +246,12 @@ Quat::Quat(const Mat3& m)
         if (m.ex.x < -m.ey.y)
         {
             Real t = Real(1.0) - m.ex.x - m.ey.y + m.ez.z;
-            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Real(0.5) / sqrt(t));
+            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Real(0.5) / std::sqrt(t));
         }
         else
         {
             Real t = Real(1.0) + m.ex.x + m.ey.y + m.ez.z;
-            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Real(0.5) / sqrt(t));
+            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Real(0.5) / std::sqrt(t));
         }
     }
 }

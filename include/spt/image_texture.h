@@ -58,7 +58,7 @@ inline ImageTexture::ImageTexture(const std::string& path, bool srgb)
             {
                 // Convert to linear space
                 u8 value = *((u8*)data + i);
-                *((u8*)data + i) = static_cast<u8>(fmin(pow(value / 255.0, 2.2) * 255.0, 255.0));
+                *((u8*)data + i) = static_cast<u8>(std::fmin(std::pow(value / 255.0, 2.2) * 255.0, 255.0));
             }
         }
     }

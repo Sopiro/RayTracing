@@ -55,20 +55,20 @@ void MISTest1(Scene& scene)
         auto tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a1, x_axis }, Vec3{ w, h, h - dh } };
         scene.Add(CreateRectXZ(tf, m1));
 
-        y += (sin(a1) * h + sin(a2) * h) / 2.0;
-        z -= (cos(a1) * h + cos(a2) * h) / 2.0;
+        y += (std::sin(a1) * h + std::sin(a2) * h) / 2.0;
+        z -= (std::cos(a1) * h + std::cos(a2) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a2, x_axis }, Vec3{ w, h, h - dh } };
         scene.Add(CreateRectXZ(tf, m2));
 
-        y += (sin(a2) * h + sin(a3) * h) / 2.0;
-        z -= (cos(a2) * h + cos(a3) * h) / 2.0;
+        y += (std::sin(a2) * h + std::sin(a3) * h) / 2.0;
+        z -= (std::cos(a2) * h + std::cos(a3) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a3, x_axis }, Vec3{ w, h, h - dh } };
         scene.Add(CreateRectXZ(tf, m3));
 
-        y += (sin(a3) * h + sin(a4) * h) / 2.0;
-        z -= (cos(a3) * h + cos(a4) * h) / 2.0;
+        y += (std::sin(a3) * h + std::sin(a4) * h) / 2.0;
+        z -= (std::cos(a3) * h + std::cos(a4) * h) / 2.0;
 
         tf = Transform{ Vec3{ 0.0, y, z }, Quat{ a4, x_axis }, Vec3{ w, h, h - dh } };
         scene.Add(CreateRectXZ(tf, m4));

@@ -13,7 +13,7 @@ void StatueScene(Scene& scene)
 
         // auto mat = CreateSharedRef<Dielectric>(1.5);
 
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto tf = Transform{ Point3{ 0.0, -2.0, 0.0 }, Quat{ DegToRad(45.0), y_axis }, Vec3{ 20.0 } };
         auto model = CreateSharedRef<Model>("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
@@ -68,7 +68,7 @@ void StatueScene(Scene& scene)
     //     for (int i = 0; i < count; ++i)
     //     {
     //         f64 angle = d * i;
-    //         auto pos = Vec3{ cos(angle) * r, y, sin(angle) * r };
+    //         auto pos = Vec3{ std::cos(angle) * r, y, std::sin(angle) * r };
     //         auto sphere = CreateSharedRef<Sphere>(pos, 0.1, white);
 
     //         scene.Add(sphere);

@@ -33,8 +33,6 @@ private:
 
     const Ref<Mesh> mesh;
     const i32* v;
-
-    bool two_sided = true;
 };
 
 inline Triangle::Triangle(const Ref<Mesh> _mesh, size_t tri_index)
@@ -64,7 +62,7 @@ inline void Triangle::Sample(SurfaceSample* sample) const
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-#if 0
+#if 1
     f64 u = Rand(0.0, 1.0);
     f64 v = Rand(0.0, 1.0);
 
@@ -74,15 +72,18 @@ inline void Triangle::Sample(SurfaceSample* sample) const
         v = 1.0 - v;
     }
 
-    Vec3 n = Cross(e1, e2).Normalized();
-    Point3 p = p0 + e1 * u + e2 * v;
+    Vec3 normal = Cross(e1, e2);
+    f64 area = normal.Normalize() * 0.5;
+    Point3 point = p0 + e1 * u + e2 * v;
 
-    return SurfaceSample{ p, n };
+    sample->n = normal;
+    sample->p = point;
+    sample->pdf = 1.0 / area;
 #else
     f64 u1 = Rand(0.0, 1.0);
     f64 u2 = Rand(0.0, 1.0);
 
-    f64 s = sqrt(u1);
+    f64 s = std::sqrt(u1);
     f64 u = 1.0 - s;
     f64 v = u2 * s;
 
@@ -104,7 +105,7 @@ inline void Triangle::Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& r
     Vec3 dir = sample->p - ref;
     f64 distance_squared = Dot(dir, dir);
 
-    f64 cosine = fabs(Dot(dir, sample->n) / dir.Length());
+    f64 cosine = std::fabs(Dot(dir, sample->n) / dir.Length());
     sample->pdf *= distance_squared / cosine;
 
     *ref2p = dir;
@@ -119,7 +120,7 @@ inline f64 Triangle::EvaluatePDF(const Ray& ray) const
     }
 
     f64 distance_squared = is.t * is.t * ray.d.Length2();
-    f64 cosine = fabs(Dot(ray.d, is.normal) / ray.d.Length());
+    f64 cosine = std::fabs(Dot(ray.d, is.normal) / ray.d.Length());
 
     const Vec3& p0 = mesh->vertices[v[0]].position;
     const Vec3& p1 = mesh->vertices[v[1]].position;

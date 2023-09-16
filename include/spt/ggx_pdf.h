@@ -39,13 +39,13 @@ inline Vec3 GGXPDF::Sample() const
     {
         Vec2 u = RandVec2();
 
-        f64 theta = acos(sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
+        f64 theta = std::acos(std::sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
         f64 phi = two_pi * u.y;
 
-        f64 sin_thetha = sin(theta);
-        f64 x = cos(phi) * sin_thetha;
-        f64 y = sin(phi) * sin_thetha;
-        f64 z = cos(theta);
+        f64 sin_thetha = std::sin(theta);
+        f64 x = std::cos(phi) * sin_thetha;
+        f64 y = std::sin(phi) * sin_thetha;
+        f64 z = std::cos(theta);
 
         assert(z > 0.0);
 
@@ -66,7 +66,7 @@ inline f64 GGXPDF::Evaluate(const Vec3& wi) const
 {
     Vec3 h = (wo + wi).Normalized();
     f64 NoH = Dot(uvw.w, h);
-    f64 spec_w = D_GGX(NoH, alpha2) * NoH / fmax(4.0 * Dot(wi, h), epsilon);
+    f64 spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * Dot(wi, h), epsilon);
 
     f64 cosine = Dot(wi, uvw.w);
     f64 diff_w = cosine * inv_pi;

@@ -10,7 +10,6 @@ namespace spt
 using NodeProxy = i32;
 
 class Material;
-class Primitive;
 struct Intersection;
 
 class Intersectable

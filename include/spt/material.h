@@ -37,7 +37,7 @@ public:
     // BRDF with cosine term
     virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;
 
-    inline static Ref<Material> fallback_material = nullptr;
+    inline static Ref<Material> fallback = nullptr;
 };
 
 inline Color Material::Emit(const Intersection& is, const Vec3& wi) const

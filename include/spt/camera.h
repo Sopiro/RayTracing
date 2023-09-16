@@ -14,7 +14,7 @@ public:
     Camera(const Point3& look_from,
            const Point3& look_at,
            const Vec3& up,
-           f64 vfov, // vertical field-of-view in degrees
+           f64 vfov, // vertical field-of-view. in degrees.
            f64 aspect_ratio,
            f64 aperture,
            f64 focus_dist);
@@ -40,7 +40,7 @@ inline Camera::Camera(const Point3& look_from,
                       f64 focus_dist)
 {
     f64 theta = DegToRad(vfov);
-    f64 h = tan(theta / 2.0);
+    f64 h = std::tan(theta / 2.0);
     f64 viewport_height = 2.0 * h;
     f64 viewport_width = aspect_ratio * viewport_height;
 

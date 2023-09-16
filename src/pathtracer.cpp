@@ -149,7 +149,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         // Russian roulette
         if (bounce > MIN_BOUNCES)
         {
-            f64 rr = fmin(0.95, Luma(throughput));
+            f64 rr = std::fmin(0.95, Luma(throughput));
             if (Rand() > rr)
             {
                 break;

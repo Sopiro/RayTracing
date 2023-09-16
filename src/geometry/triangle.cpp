@@ -20,13 +20,13 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
     f64 det = Dot(e1, pvec);
 
     bool backface = det < epsilon;
-    if (backface == true && two_sided == false)
-    {
-        return false;
-    }
+    // if (backface == true)
+    // {
+    //     return false;
+    // }
 
     // Ray and triangle are parallel
-    if (Abs(det) < epsilon)
+    if (std::fabs(det) < epsilon)
     {
         return false;
     }
@@ -87,13 +87,13 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     f64 det = Dot(e1, pvec);
 
     bool backface = det < epsilon;
-    if (backface == true && two_sided == false)
-    {
-        return false;
-    }
+    // if (backface == true)
+    // {
+    //     return false;
+    // }
 
     // Ray and triangle are parallel
-    if (Abs(det) < epsilon)
+    if (std::fabs(det) < epsilon)
     {
         return false;
     }

@@ -52,7 +52,7 @@ inline void ONB::BuildFromW(const Vec3& n)
 {
     w = n;
 
-    Vec3 t = (fabs(w.y) > 0.999) ? x_axis : y_axis;
+    Vec3 t = (std::fabs(w.y) > 0.999) ? x_axis : y_axis;
 
     u = Cross(t, w).Normalized();
     v = Cross(w, u);

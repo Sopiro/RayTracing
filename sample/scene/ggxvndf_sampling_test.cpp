@@ -14,7 +14,7 @@ void GGXVNDFSamplingTest(Scene& scene)
 
         // auto mat = CreateSharedRef<Dielectric>(1.5);
 
-        Material::fallback_material = mat;
+        Material::fallback = mat;
 
         auto tf = Transform{ Vec3{ 0.0, 0.0, 0.0 }, Quat{ DegToRad(0.0), y_axis }, Vec3{ 3.0 } };
         auto model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
