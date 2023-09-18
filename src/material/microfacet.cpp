@@ -15,12 +15,12 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     ONB tbn;
     tbn.u = is.tangent;
     tbn.w = is.normal;
-    tbn.v = Cross(tbn.w, tbn.u).Normalized();
+    tbn.v = Normalize(Cross(tbn.w, tbn.u));
 
-    Vec3 n = tbn.GetLocal(normal).Normalized(); // normal
-    Vec3 v = -wi;                               // incident
-    Vec3 l = wo;                                // outgoing
-    Vec3 h = v + l;                             // half
+    Vec3 n = Normalize(tbn.GetLocal(normal)); // normal
+    Vec3 v = -wi;                             // incident
+    Vec3 l = wo;                              // outgoing
+    Vec3 h = v + l;                           // half
 
     // Resolve back facing shading normal by flipping method
     if (Dot(n, v) < 0.0)

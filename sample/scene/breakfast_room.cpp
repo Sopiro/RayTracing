@@ -12,7 +12,7 @@ void BreakfastRoom(Scene& scene)
     scene.Add(m);
 
     scene.SetEnvironmentMap(SolidColor::Create(Color{ 7.0 }));
-    scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(-Vec3{ 15.0, 5.0, 5.0 }.Normalized(), Vec3{ 20.0 }, 0.02));
+    scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(15.0, 5.0, 5.0)), Vec3(20.0), 0.02));
 
     // auto light = CreateSharedRef<DiffuseLight>(Color{ 5000.0 });
     // tf = Transform{ 30, 10, 15, Quat{ pi, z_axis }, Vec3{ 1.0, 1.5, 5.0 } };

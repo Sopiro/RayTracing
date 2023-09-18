@@ -5,6 +5,7 @@
 namespace spt
 {
 
+// todo: http://www.pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error.html
 constexpr f64 ray_offset = 1e-4;
 
 struct Ray

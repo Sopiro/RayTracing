@@ -157,13 +157,6 @@ struct Vec2
         return length;
     }
 
-    Vec2 Normalized() const
-    {
-        Real invLength = Real(1.0) / Length();
-
-        return Vec2{ x * invLength, y * invLength };
-    }
-
     // Get the skew vector such that dot(skew_vec, other) == cross(vec, other)
     // return cross(1, *this);
     Vec2 Skew() const
@@ -306,14 +299,6 @@ struct Vec3
         z *= invLength;
 
         return length;
-    }
-
-    Vec3 Normalized() const
-    {
-        Real length = Length();
-        Real invLength = Real(1.0) / length;
-
-        return Vec3{ x * invLength, y * invLength, z * invLength };
     }
 };
 
@@ -786,6 +771,11 @@ struct Quat
     Real Normalize()
     {
         Real length = Length();
+        if (length < epsilon)
+        {
+            return Real(0.0);
+        }
+
         Real invLength = Real(1.0) / length;
         x *= invLength;
         y *= invLength;
@@ -793,19 +783,6 @@ struct Quat
         w *= invLength;
 
         return length;
-    }
-
-    Quat Normalized() const
-    {
-        Real length = Length();
-        if (length < epsilon)
-        {
-            return Quat{ Real(0.0), Real(0.0), Real(0.0), Real(0.0) };
-        }
-
-        Real invLength = Real(1.0) / length;
-
-        return Quat{ x * invLength, y * invLength, z * invLength, w * invLength };
     }
 
     Quat GetConjugate() const
@@ -963,11 +940,6 @@ inline Real Length2(const Vec2& v)
     return v.Length2();
 }
 
-inline Vec2 Normalize(const Vec2& v)
-{
-    return v.Normalized();
-}
-
 // Vec2 functions end
 
 // Vec3 functions begin
@@ -1102,6 +1074,13 @@ inline bool operator!=(const Vec4& a, const Vec4& b)
 }
 
 // Vec4 functions end
+
+template <typename T>
+inline T Normalize(const T& v)
+{
+    Real invLength = Real(1.0) / v.Length();
+    return v * invLength;
+}
 
 // Quat functions begin
 

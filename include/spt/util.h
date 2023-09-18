@@ -33,8 +33,7 @@ inline bool IsNullish(const Vec4& v)
 
 inline bool IsBlack(Color color)
 {
-    static const f64 epsilon = f64(10e-3);
-    return std::fabs(color.x) < epsilon && std::fabs(color.y) < epsilon && std::fabs(color.z) < epsilon;
+    return std::fabs(color.x) == 0.0 && std::fabs(color.y) == 0.0 && std::fabs(color.z) == 0.0;
 }
 
 struct MaterialTextures

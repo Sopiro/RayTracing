@@ -36,7 +36,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) c
     Vec3 outward_normal = (is->point - center) / radius;
 
     Vec3 t = (std::fabs(outward_normal.y) > 0.999) ? x_axis : y_axis;
-    Vec3 outward_tangent = Cross(t, outward_normal).Normalized();
+    Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
     SetFaceNormal(is, ray, outward_normal, outward_tangent);
     GetUV(outward_normal, is->uv);
@@ -116,7 +116,7 @@ void Sphere::Sample(SurfaceSample* sample, Vec3* wi, const Point3& ref) const
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
     sample->p = ref + *wi;
-    sample->n = (sample->p - center).Normalized();
+    sample->n = Normalize(sample->p - center);
     sample->pdf = 1.0 / solid_angle;
 }
 

@@ -44,8 +44,8 @@ inline Camera::Camera(const Point3& look_from,
     f64 viewport_height = 2.0 * h;
     f64 viewport_width = aspect_ratio * viewport_height;
 
-    w = (look_from - look_at).Normalized();
-    u = Cross(up, w).Normalized();
+    w = Normalize(look_from - look_at);
+    u = Normalize(Cross(up, w));
     v = Cross(w, u);
 
     origin = look_from;

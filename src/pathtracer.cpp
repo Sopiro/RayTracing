@@ -14,7 +14,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
     for (i32 bounce = 0;; ++bounce)
     {
-        Vec3 d = ray.d.Normalized();
+        Vec3 d = Normalize(ray.d);
 
         Intersection is;
         if (scene.Intersect(&is, ray, ray_offset, infinity) == false)
@@ -63,7 +63,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
             if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)
             {
-                radiance += throughput * sun->radiance * mat->Evaluate(is, d, to_sun.d.Normalized());
+                radiance += throughput * sun->radiance * mat->Evaluate(is, d, Normalize(to_sun.d));
             }
         }
 

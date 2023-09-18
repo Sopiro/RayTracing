@@ -145,7 +145,7 @@ inline Vec3 Triangle::GetShadingNormal(f64 _u, f64 _v, f64 _w) const
     const Vec3& n1 = mesh->vertices[v[1]].normal;
     const Vec3& n2 = mesh->vertices[v[2]].normal;
 
-    return (_w * n0 + _u * n1 + _v * n2).Normalized();
+    return Normalize(_w * n0 + _u * n1 + _v * n2);
 }
 
 inline Vec3 Triangle::GetShadingTangent(f64 _u, f64 _v, f64 _w) const
@@ -154,7 +154,7 @@ inline Vec3 Triangle::GetShadingTangent(f64 _u, f64 _v, f64 _w) const
     const Vec3& t1 = mesh->vertices[v[1]].tangent;
     const Vec3& t2 = mesh->vertices[v[2]].tangent;
 
-    return (_w * t0 + _u * t1 + _v * t2).Normalized();
+    return Normalize(_w * t0 + _u * t1 + _v * t2);
 }
 
 inline UV Triangle::GetTexCoord(f64 _u, f64 _v, f64 _w) const

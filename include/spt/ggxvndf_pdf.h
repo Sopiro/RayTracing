@@ -48,7 +48,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
         Vec2 u = RandVec2();
 
         // warp to the hemisphere configuration
-        Vec3 woStd = Vec3(wo.x * alpha, wo.y * alpha, wo.z).Normalized();
+        Vec3 woStd = Normalize(Vec3(wo.x * alpha, wo.y * alpha, wo.z));
 
         // sample the visible hemisphere from a spherical cap
 
@@ -64,7 +64,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
         Vec3 h = c + wo;
 
         // warp back to the ellipsoid configuration
-        Vec3 wm = Vec3(h.x * alpha, h.y * alpha, h.z).Normalized();
+        Vec3 wm = Normalize(Vec3(h.x * alpha, h.y * alpha, h.z));
 
         Vec3 wh = uvw.GetLocal(wm);
         Vec3 wi = Reflect(-wo, wh);
@@ -77,7 +77,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
 
         // Build an orthonormal basis with v, t1, and t2
         // Section 4.1: orthonormal basis (with special case if cross product is zero)
-        Vec3 T1 = (Vh.z < 0.999) ? (Cross(Vh, z_axis)).Normalized() : x_axis;
+        Vec3 T1 = (Vh.z < 0.999) ? Normalize(Cross(Vh, z_axis)) : x_axis;
         Vec3 T2 = Cross(T1, Vh);
 
         Vec2 u = RandVec2();
@@ -94,7 +94,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
         Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(0.0, 1.0 - t1 * t1 - t2 * t2)) * Vh;
 
         // Section 3.4: transforming the normal back to the ellipsoid configuration
-        Vec3 h = Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(0.0, Nh.z)).Normalized(); // Sampled half vector
+        Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(0.0, Nh.z))); // Sampled half vector
         Vec3 wh = uvw.GetLocal(h);
         Vec3 wi = Reflect(-wo, wh);
 
@@ -112,7 +112,7 @@ inline f64 GGXVNDFPDF::Evaluate(const Vec3& wi) const
 {
     f64 alpha2 = alpha * alpha;
 
-    Vec3 h = (wo + wi).Normalized();
+    Vec3 h = Normalize(wo + wi);
     f64 NoH = Dot(uvw.w, h);
     f64 NoV = Dot(uvw.w, wi);
     f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / std::fmax(4.0 * NoV, epsilon);
