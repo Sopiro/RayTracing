@@ -1,6 +1,7 @@
 #pragma once
 
 #include "aggregate.h"
+#include "area_light.h"
 #include "common.h"
 #include "directional_light.h"
 #include "image_texture.h"
@@ -36,7 +37,7 @@ public:
     void SetDirectionalLight(const Ref<DirectionalLight> directional_light);
 
     bool HasAreaLights() const;
-    const std::vector<Ref<Primitive>>& GetAreaLights() const;
+    const std::vector<Ref<AreaLight>>& GetAreaLights() const;
     void AddAreaLight(const Ref<Primitive> object);
     void AddAreaLight(const Ref<Mesh> object);
 
@@ -48,7 +49,7 @@ private:
 
     Ref<Texture> environment_map;
     Ref<DirectionalLight> directional_light;
-    std::vector<Ref<Primitive>> area_lights;
+    std::vector<Ref<AreaLight>> area_lights;
 };
 
 inline Scene::Scene()
@@ -122,14 +123,15 @@ inline bool Scene::HasAreaLights() const
     return area_lights.size() > 0;
 }
 
-inline const std::vector<Ref<Primitive>>& Scene::GetAreaLights() const
+inline const std::vector<Ref<AreaLight>>& Scene::GetAreaLights() const
 {
     return area_lights;
 }
 
-inline void Scene::AddAreaLight(const Ref<Primitive> object)
+inline void Scene::AddAreaLight(const Ref<Primitive> primitive)
 {
-    area_lights.push_back(object);
+    area_lights.push_back(CreateSharedRef<AreaLight>(primitive));
+    accel.Add(primitive);
 }
 
 inline void Scene::AddAreaLight(const Ref<Mesh> mesh)
@@ -137,7 +139,8 @@ inline void Scene::AddAreaLight(const Ref<Mesh> mesh)
     for (i32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
-        area_lights.push_back(tri);
+        area_lights.push_back(CreateSharedRef<AreaLight>(tri));
+        accel.Add(tri);
     }
 }
 

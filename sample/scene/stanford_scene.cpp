@@ -76,7 +76,6 @@ void StanfordScene(Scene& scene)
         f64 xstep = 2.0 * w + xgap;
 
         auto light = CreateSharedRef<DiffuseLight>(Color{ 3.0 });
-        light->two_sided = true;
 
         for (i32 x = 0; x < cx; ++x)
         {

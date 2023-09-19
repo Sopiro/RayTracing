@@ -18,8 +18,8 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    virtual void Sample(SurfaceSample* sample) const override;
-    virtual void Sample(SurfaceSample* sample, Vec3* ref2p, const Point3& ref) const override;
+    virtual void Sample(Intersection* sample, f64* pdf) const override;
+    virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
 
     virtual const Material* GetMaterial() const override;
@@ -46,12 +46,13 @@ inline void Sphere::GetAABB(AABB* out_aabb) const
     out_aabb->max = center + Vec3{ radius };
 }
 
-inline void Sphere::Sample(SurfaceSample* sample) const
+inline void Sphere::Sample(Intersection* sample, f64* pdf) const
 {
     f64 area = 4.0 * pi * radius * radius;
-    sample->n = UniformSampleSphere();
-    sample->p = center + sample->n * radius;
-    sample->pdf = 1.0 / area;
+    sample->normal = UniformSampleSphere();
+    sample->point = center + sample->normal * radius;
+    GetUV(sample->normal, sample->uv);
+    *pdf = 1.0 / area;
 }
 
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const

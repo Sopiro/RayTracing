@@ -82,7 +82,6 @@ void PBRTest(Scene& scene)
         f64 xstep = 2.0 * s + xgap;
 
         auto light = CreateSharedRef<DiffuseLight>(Color{ 5.0 });
-        light->two_sided = true;
 
         for (i32 x = 0; x < cx; ++x)
         {

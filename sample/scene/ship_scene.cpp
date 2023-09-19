@@ -26,7 +26,6 @@ void ShipScene(Scene& scene)
         f64 size = 0.5;
 
         auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 30.0 }));
-        white->two_sided = true;
         auto tf = Transform{ Point3{ 0.0, 5.0, -3.0 }, Quat{ pi / 4.0, x_axis }, Vec3{ size } };
         auto rect = CreateRectXY(tf, white);
 

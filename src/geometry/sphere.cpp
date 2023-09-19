@@ -38,7 +38,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) c
     Vec3 t = (std::fabs(outward_normal.y) > 0.999) ? x_axis : y_axis;
     Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
-    SetFaceNormal(is, ray, outward_normal, outward_tangent);
+    SetFaceNormal(is, ray.d, outward_normal, outward_tangent);
     GetUV(outward_normal, is->uv);
 
     return true;
@@ -72,7 +72,7 @@ bool Sphere::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return true;
 }
 
-void Sphere::Sample(SurfaceSample* sample, Vec3* wi, const Point3& ref) const
+void Sphere::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
 {
     Vec3 direction = center - ref;
     Real distance = direction.Normalize();
@@ -111,13 +111,15 @@ void Sphere::Sample(SurfaceSample* sample, Vec3* wi, const Point3& ref) const
     // Vec3 dd{ -xx, -yy, -zz };
     ONB uvw{ direction };
 
-    *wi = uvw.GetLocal(d) * s;
+    *ref2p = uvw.GetLocal(d) * s;
 
     f64 solid_angle = two_pi * (1.0 - cos_theta_max);
 
-    sample->p = ref + *wi;
-    sample->n = Normalize(sample->p - center);
-    sample->pdf = 1.0 / solid_angle;
+    sample->point = ref + *ref2p;
+    sample->normal = Normalize(sample->point - center);
+    *pdf = 1.0 / solid_angle;
+
+    sample->front_face = true;
 }
 
 } // namespace spt

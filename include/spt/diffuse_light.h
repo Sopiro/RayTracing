@@ -13,7 +13,6 @@ public:
     virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
 
     Ref<Texture> emit;
-    bool two_sided = false;
 };
 
 inline DiffuseLight::DiffuseLight(const Ref<Texture> emission)
@@ -33,14 +32,7 @@ inline bool DiffuseLight::Scatter(Interaction* ir, const Intersection& is, const
 
 inline Color DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
 {
-    if (is.front_face || two_sided)
-    {
-        return emit->Value(is.uv, is.point);
-    }
-    else
-    {
-        return zero_vec3;
-    }
+    return emit->Value(is.uv, is.point);
 }
 
 } // namespace spt

@@ -61,12 +61,11 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
     is->t = t;
     is->point = ray.At(t);
 
-    Vec3 normal = GetShadingNormal(u, v, w);
-    Vec3 tangent = GetShadingTangent(u, v, w);
-    SetFaceNormal(is, ray, normal, tangent);
+    Vec3 normal = GetNormal(u, v, w);
+    Vec3 tangent = GetTangent(u, v, w);
+    SetFaceNormal(is, ray.d, normal, tangent);
 
-    UV tex = GetTexCoord(u, v, w);
-    is->uv = tex;
+    is->uv = GetTexCoord(u, v, w);
 
     return true;
 }
@@ -121,6 +120,54 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     }
 
     return true;
+}
+
+void Triangle::Sample(Intersection* sample, f64* pdf) const
+{
+    const Point3& p0 = mesh->vertices[v[0]].position;
+    const Point3& p1 = mesh->vertices[v[1]].position;
+    const Point3& p2 = mesh->vertices[v[2]].position;
+
+    Vec3 e1 = p1 - p0;
+    Vec3 e2 = p2 - p0;
+
+#if 1
+    f64 u = Rand(0.0, 1.0);
+    f64 v = Rand(0.0, 1.0);
+
+    if (u + v > 1.0)
+    {
+        u = 1.0 - u;
+        v = 1.0 - v;
+    }
+
+    Vec3 normal = Cross(e1, e2);
+    f64 area = normal.Normalize() * 0.5;
+    Point3 point = p0 + e1 * u + e2 * v;
+
+    sample->normal = normal;
+    sample->point = point;
+    *pdf = 1.0 / area;
+
+    f64 w = 1.0 - u - v;
+    sample->uv = GetTexCoord(u, v, w);
+
+#else
+    f64 u1 = Rand(0.0, 1.0);
+    f64 u2 = Rand(0.0, 1.0);
+
+    f64 s = std::sqrt(u1);
+    f64 u = 1.0 - s;
+    f64 v = u2 * s;
+
+    Vec3 normal = Cross(e1, e2);
+    f64 area = normal.Normalize() * 0.5;
+    Point3 point = p0 + e1 * u + e2 * v;
+
+    sample->n = normal;
+    sample->p = point;
+    sample->pdf = 1.0 / area;
+#endif
 }
 
 } // namespace spt
