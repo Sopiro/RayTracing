@@ -12,7 +12,7 @@ public:
     static Ref<SolidColor> Create(f64 rgb);
     static Ref<SolidColor> Create(f64 red, f64 green, f64 blue);
 
-    virtual Color Value(const UV& uv, const Point3& p) const override;
+    virtual Color Value(const UV& uv) const override;
 
 private:
     SolidColor() = default;
@@ -62,7 +62,7 @@ inline Ref<SolidColor> SolidColor::Create(f64 r, f64 g, f64 b)
     return Create(Color{ r, g, b });
 }
 
-inline Color SolidColor::Value(const UV& uv, const Point3& p) const
+inline Color SolidColor::Value(const UV& uv) const
 {
     return color;
 }

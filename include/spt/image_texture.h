@@ -17,7 +17,7 @@ public:
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
 
-    virtual Color Value(const UV& uv, const Point3& p) const override;
+    virtual Color Value(const UV& uv) const override;
 
 protected:
     ImageTexture();
@@ -74,7 +74,7 @@ inline ImageTexture::~ImageTexture()
 static i32 texture_count = 0;
 static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
 
-inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
+inline Color ImageTexture::Value(const UV& uv) const
 {
     f64 u = fmod(uv.x, 1.0);
     f64 v = fmod(uv.y, 1.0);
@@ -89,14 +89,8 @@ inline Color ImageTexture::Value(const UV& uv, const Point3& p) const
     i32 j = static_cast<i32>(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
-    if (i >= width)
-    {
-        i = width - 1;
-    }
-    if (j >= height)
-    {
-        j = height - 1;
-    }
+    if (i >= width) i = width - 1;
+    if (j >= height) j = height - 1;
 
     f64 color_scale = 1.0 / 255.0;
     u8* pixel = (u8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;

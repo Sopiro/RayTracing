@@ -31,7 +31,7 @@ inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Ve
 {
     ir->is_specular = true;
     ir->pdf = nullptr;
-    ir->attenuation = albedo->Value(is.uv, is.point);
+    ir->attenuation = albedo->Value(is.uv);
     ir->specular_ray = Ray{ is.point, RandomInUnitSphere() };
 
     return true;

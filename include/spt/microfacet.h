@@ -89,7 +89,7 @@ public:
 
 inline Color Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
-    return emissive_map->Value(is.uv, is.point);
+    return emissive_map->Value(is.uv);
 }
 
 } // namespace spt

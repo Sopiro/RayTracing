@@ -35,7 +35,7 @@ inline Color DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
 {
     if (is.front_face || two_sided)
     {
-        return emission->Value(is.uv, is.point);
+        return emission->Value(is.uv);
     }
     else
     {

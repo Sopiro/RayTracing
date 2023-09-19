@@ -100,7 +100,7 @@ inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
 
 inline Color Scene::GetSkyColor(const Vec3& dir) const
 {
-    return environment_map->Value(ComputeSphereUV(dir), zero_vec3);
+    return environment_map->Value(ComputeSphereUV(dir));
 }
 
 inline bool Scene::HasDirectionalLight() const

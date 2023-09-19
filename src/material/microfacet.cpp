@@ -9,7 +9,7 @@ namespace spt
 
 Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
-    Vec3 normal = normal_map->Value(is.uv, is.point) * 2.0 - Vec3(1.0);
+    Vec3 normal = normal_map->Value(is.uv) * 2.0 - Vec3(1.0);
     normal.Normalize();
 
     ONB tbn;
@@ -26,7 +26,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     // Resolve back facing shading normal by flipping method
     if (Dot(n, v) < 0.0)
     {
-        n = Reflect(-n, is.normal);
+        n = Reflect(-n, is.shading.normal);
     }
 
     f64 NoV = Dot(n, v);
@@ -42,10 +42,10 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     f64 NoH = Dot(n, h);
     f64 VoH = Dot(v, h);
 
-    Vec3 basecolor = basecolor_map->Value(is.uv, is.point);
-    f64 metallic = metallic_map->Value(is.uv, is.point).z;
-    f64 roughness = roughness_map->Value(is.uv, is.point).y;
-    f64 ao = ao_map->Value(is.uv, is.point).x;
+    Vec3 basecolor = basecolor_map->Value(is.uv);
+    f64 metallic = metallic_map->Value(is.uv).z;
+    f64 roughness = roughness_map->Value(is.uv).y;
+    f64 ao = ao_map->Value(is.uv).x;
 
     f64 alpha = std::fmax(roughness, min_roughness);
     f64 alpha2 = alpha * alpha;
@@ -65,23 +65,23 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
 
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
-    Vec3 basecolor = basecolor_map->Value(is.uv, is.point);
-    f64 metallic = metallic_map->Value(is.uv, is.point).z;
-    f64 roughness = roughness_map->Value(is.uv, is.point).y;
+    Vec3 basecolor = basecolor_map->Value(is.uv);
+    f64 metallic = metallic_map->Value(is.uv).z;
+    f64 roughness = roughness_map->Value(is.uv).y;
 
     f64 alpha = std::fmax(roughness, min_roughness);
     Vec3 wo = -wi;
 
     Vec3 f0 = F0(basecolor, metallic);
-    Vec3 F = F_Schlick(f0, Dot(wo, is.normal));
+    Vec3 F = F_Schlick(f0, Dot(wo, is.shading.normal));
     f64 diff_w = (1.0 - metallic);
     f64 spec_w = Luma(F);
     // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
     f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
 
-    // ir->pdf = CreateSharedRef<CosinePDF>(is.normal);
-    // ir->pdf = CreateSharedRef<GGXPDF>(is.normal, wo, alpha, t);
-    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.normal, wo, alpha, t);
+    // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
+    // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);
+    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.shading.normal, wo, alpha, t);
     ir->is_specular = false;
 
     return true;
