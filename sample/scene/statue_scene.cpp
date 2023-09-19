@@ -33,7 +33,6 @@ void StatueScene(Scene& scene)
         auto tf = Transform{ Point3{ -distance, 0.0, 0.0 }, Quat{ identity }, Vec3{ 1.0, size, size } };
         auto rect = CreateRectYZ(tf, red);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
     }
 
@@ -42,7 +41,6 @@ void StatueScene(Scene& scene)
         auto tf = Transform{ Point3{ distance, 0.0, 0.0 }, Quat{ pi, y_axis }, Vec3{ 1.0, size, size } };
         auto rect = CreateRectYZ(tf, blue);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
     }
 
@@ -52,7 +50,6 @@ void StatueScene(Scene& scene)
         auto tf = Transform{ Point3{ 0.0, 4.0, 0.0 }, Quat{ pi, x_axis }, Vec3{ 8.0, 1.0, 8.0 } };
         auto rect = CreateRectXZ(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
     }
 
@@ -71,8 +68,7 @@ void StatueScene(Scene& scene)
     //         auto pos = Vec3{ std::cos(angle) * r, y, std::sin(angle) * r };
     //         auto sphere = CreateSharedRef<Sphere>(pos, 0.1, white);
 
-    //         scene.Add(sphere);
-    //         scene.AddLight(sphere);
+    //         scene.AddAreaLight(sphere);
     //     }
     // }
 

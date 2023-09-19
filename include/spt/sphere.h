@@ -30,7 +30,7 @@ public:
     Ref<Material> material;
 
 private:
-    static void GetUV(const Point3& p, UV& out_uv);
+    static UV GetUV(const Point3& p);
 };
 
 inline Sphere::Sphere(const Vec3& _center, f64 _radius, const Ref<Material> _material)
@@ -51,7 +51,7 @@ inline void Sphere::Sample(Intersection* sample, f64* pdf) const
     f64 area = 4.0 * pi * radius * radius;
     sample->normal = UniformSampleSphere();
     sample->point = center + sample->normal * radius;
-    GetUV(sample->normal, sample->uv);
+    sample->uv = GetUV(sample->normal);
     *pdf = 1.0 / area;
 }
 
@@ -70,13 +70,12 @@ inline f64 Sphere::EvaluatePDF(const Ray& ray) const
     return 1.0 / solid_angle;
 }
 
-inline void Sphere::GetUV(const Point3& p, UV& out_uv)
+inline UV Sphere::GetUV(const Point3& n)
 {
-    f64 theta = std::acos(-p.y);
-    f64 phi = std::atan2(-p.z, p.x) + pi;
+    f64 theta = std::acos(-n.y);
+    f64 phi = std::atan2(-n.z, n.x) + pi;
 
-    out_uv.x = phi * inv_two_pi;
-    out_uv.y = theta * inv_pi;
+    return UV{ phi * inv_two_pi, theta * inv_pi };
 }
 
 inline const Material* Sphere::GetMaterial() const

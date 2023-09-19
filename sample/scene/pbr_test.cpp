@@ -82,6 +82,7 @@ void PBRTest(Scene& scene)
         f64 xstep = 2.0 * s + xgap;
 
         auto light = CreateSharedRef<DiffuseLight>(Color{ 5.0 });
+        light->two_sided = true;
 
         for (i32 x = 0; x < cx; ++x)
         {
@@ -96,7 +97,6 @@ void PBRTest(Scene& scene)
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
             auto rect = CreateRectXZ(tf, light);
 
-            scene.Add(rect);
             scene.AddAreaLight(rect);
         }
     }

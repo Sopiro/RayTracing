@@ -92,13 +92,9 @@ void MISTest1(Scene& scene)
         auto l3 = CreateSharedRef<Sphere>(Vec3{ xg, y + lh, z }, r / 3.0, light3);
         auto l4 = CreateSharedRef<Sphere>(Vec3{ xg * 3.0, y + lh, z }, r, light4);
 
-        scene.Add(l1);
         scene.AddAreaLight(l1);
-        scene.Add(l2);
         scene.AddAreaLight(l2);
-        scene.Add(l3);
         scene.AddAreaLight(l3);
-        scene.Add(l4);
         scene.AddAreaLight(l4);
     }
 
@@ -168,15 +164,10 @@ void MISTest2(Scene& scene)
         auto l4 = CreateSharedRef<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
         auto l5 = CreateSharedRef<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
-        scene.Add(l1);
         scene.AddAreaLight(l1);
-        scene.Add(l2);
         scene.AddAreaLight(l2);
-        scene.Add(l3);
         scene.AddAreaLight(l3);
-        scene.Add(l4);
         scene.AddAreaLight(l4);
-        scene.Add(l5);
         scene.AddAreaLight(l5);
     }
 
@@ -249,15 +240,10 @@ void MISTestWak(Scene& scene)
         auto l4 = CreateSharedRef<Sphere>(Vec3{ 1.25, 0, 0 }, 0.3, light4);
         auto l5 = CreateSharedRef<Sphere>(Vec3{ 3.75, 0, 0 }, 0.9, light5);
 
-        // scene.Add(l1);
         // scene.AddLight(l1);
-        scene.Add(l2);
         scene.AddAreaLight(l2);
-        scene.Add(l3);
         scene.AddAreaLight(l3);
-        scene.Add(l4);
         scene.AddAreaLight(l4);
-        scene.Add(l5);
         scene.AddAreaLight(l5);
     }
 

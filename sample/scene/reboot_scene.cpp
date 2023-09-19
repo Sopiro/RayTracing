@@ -24,7 +24,6 @@ void RebootScene(Scene& scene)
         auto red = CreateSharedRef<DiffuseLight>(Color{ 14.0, 0.0, 0.0 });
         auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 3.0, -4.0), 1.0, red);
 
-        scene.Add(sphere);
         scene.AddAreaLight(sphere);
     }
 
@@ -33,7 +32,6 @@ void RebootScene(Scene& scene)
         auto tf = Transform{ Vec3{ 0.0, 8.0, 0.0 }, Quat{ DegToRad(180.0), x_axis }, Vec3{ 3.0 } };
         auto rect = CreateRectXZ(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
     }
 

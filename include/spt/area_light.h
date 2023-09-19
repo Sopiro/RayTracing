@@ -16,7 +16,6 @@ public:
     virtual f64 EvaluatePDF(const Ray& ray) override;
 
     const Primitive* GetPrimitive() const;
-    Color Emit(const Intersection& is, const Vec3& wi) const;
 
     bool two_sided;
 
@@ -40,15 +39,8 @@ inline Color AreaLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Inters
     *visibility = ref2p.Normalize();
     *wi = ref2p;
 
-    if (two_sided || sample.front_face)
-    {
-        const Material* mat = primitive->GetMaterial();
-        return mat->Emit(sample, ref2p);
-    }
-    else
-    {
-        return zero_vec3;
-    }
+    const Material* mat = primitive->GetMaterial();
+    return mat->Emit(sample, ref2p);
 }
 
 inline f64 AreaLight::EvaluatePDF(const Ray& ray)
@@ -59,19 +51,6 @@ inline f64 AreaLight::EvaluatePDF(const Ray& ray)
 inline const Primitive* AreaLight::GetPrimitive() const
 {
     return primitive.get();
-}
-
-inline Color AreaLight::Emit(const Intersection& is, const Vec3& wi) const
-{
-    if (two_sided || is.front_face)
-    {
-        const Material* mat = primitive->GetMaterial();
-        return mat->Emit(is, wi);
-    }
-    else
-    {
-        return zero_vec3;
-    }
 }
 
 } // namespace spt

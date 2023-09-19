@@ -31,7 +31,6 @@ void CornellBoxLucy(Scene& scene)
         // bottom
         tf = Transform{ Vec3{ 0.5, 0, -0.5 }, Quat{ identity }, Vec3{ 1.0 } };
         auto bottom = CreateRectXZ(tf, light);
-        scene.Add(bottom);
         scene.AddAreaLight(bottom);
 
         // top

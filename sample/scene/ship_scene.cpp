@@ -26,28 +26,25 @@ void ShipScene(Scene& scene)
         f64 size = 0.5;
 
         auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color{ 30.0 }));
+        white->two_sided = true;
         auto tf = Transform{ Point3{ 0.0, 5.0, -3.0 }, Quat{ pi / 4.0, x_axis }, Vec3{ size } };
         auto rect = CreateRectXY(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ 0.0, 5.0, 3.0 }, Quat{ pi - pi / 4.0, x_axis }, Vec3{ size } };
         rect = CreateRectXY(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ -3.0, 5.0, 0.0 }, Quat{ -pi / 4.0, z_axis }, Vec3{ size } };
         rect = CreateRectYZ(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
 
         tf = Transform{ Point3{ 3.0, 5.0, 0.0 }, Quat{ pi + pi / 4.0, z_axis }, Vec3{ size } };
         rect = CreateRectYZ(tf, white);
 
-        scene.Add(rect);
         scene.AddAreaLight(rect);
     }
 

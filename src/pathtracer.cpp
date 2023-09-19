@@ -72,55 +72,52 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
             // Sample one area light uniformly
-            const std::vector<Ref<Primitive>>& lights = scene.GetAreaLights();
+            const std::vector<Ref<AreaLight>>& lights = scene.GetAreaLights();
             size_t num_lights = lights.size();
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
-            Ref<Primitive> light = lights[index];
+            Ref<AreaLight> light = lights[index];
 
-            Vec3 l;
-            SurfaceSample light_sample;
-            light->Sample(&light_sample, &l, is.point);
+            Vec3 to_light;
+            f64 light_pdf;
+            f64 visibility;
+            Color li = light->Sample(&to_light, &light_pdf, &visibility, is);
 
-            f64 len = l.Normalize();
-            Ray to_light{ is.point, l };
+            Ray shadow_ray{ is.point, to_light };
 
-            // Importance sample lights
-            if (Dot(l, is.normal) > 0.0)
+            // Importance sample light
+            f64 light_brdf_pdf = ir.pdf->Evaluate(to_light);
+            if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
-                f64 light_brdf_p = ir.pdf->Evaluate(l);
-                if (light_brdf_p > 0.0)
+                if (scene.IntersectAny(shadow_ray, ray_offset, visibility - ray_offset) == false)
                 {
-                    if (scene.IntersectAny(to_light, ray_offset, len - ray_offset) == false)
-                    {
-                        f64 mis_w = 1.0 / (light_sample.pdf + light_brdf_p);
+                    f64 mis_weight = 1.0 / (light_pdf + light_brdf_pdf);
 
-                        Intersection is2;
-                        is2.front_face = Dot(light_sample.n, l) < 0.0;
-                        Color li = light->GetMaterial()->Emit(is2, l);
-                        radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, d, l);
-                    }
+                    radiance += throughput * f64(num_lights) * mis_weight * li * mat->Evaluate(is, d, to_light);
                 }
             }
 
-            // Importance sample BRDF
-            Vec3 s = ir.pdf->Sample();
-
-            Ray scattered{ is.point, s };
-            if (Dot(s, is.normal) > 0.0)
+            if (light->IsDeltaLight() == false)
             {
-                f64 brdf_light_p = light->EvaluatePDF(scattered);
-                if (brdf_light_p > 0.0)
+                // Importance sample BRDF
+                Vec3 scattered = ir.pdf->Sample();
+                shadow_ray = Ray{ is.point, scattered };
+
+                f64 brdf_light_pdf = light->EvaluatePDF(shadow_ray);
+                if (brdf_light_pdf > 0.0)
                 {
                     Intersection is2;
-                    if (scene.Intersect(&is2, scattered, ray_offset, infinity))
+                    if (scene.Intersect(&is2, shadow_ray, ray_offset, infinity))
                     {
-                        if (is2.object == light.get())
+                        if (is2.object == light->GetPrimitive())
                         {
-                            f64 brdf_p = ir.pdf->Evaluate(s);
-                            f64 mis_w = 1.0 / (brdf_p + brdf_light_p);
+                            f64 brdf_p = ir.pdf->Evaluate(scattered);
+                            f64 mis_weight = 1.0 / (brdf_p + brdf_light_pdf);
 
-                            Color li = light->GetMaterial()->Emit(is2, s);
-                            radiance += throughput * f64(num_lights) * mis_w * li * mat->Evaluate(is, d, s);
+                            li = is2.material->Emit(is2, scattered);
+                            if (IsBlack(li) == false)
+                            {
+                                radiance += throughput * f64(num_lights) * mis_weight * li * mat->Evaluate(is, d, scattered);
+                            }
                         }
                     }
                 }
