@@ -13,9 +13,10 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     normal.Normalize();
 
     ONB tbn;
-    tbn.u = is.tangent;
-    tbn.w = is.normal;
-    tbn.v = Normalize(Cross(tbn.w, tbn.u));
+    tbn.u = is.shading.tangent;
+    tbn.w = is.shading.normal;
+    tbn.v = Cross(tbn.w, tbn.u);
+    tbn.v.Normalize();
 
     Vec3 n = Normalize(tbn.GetLocal(normal)); // normal
     Vec3 v = -wi;                             // incident

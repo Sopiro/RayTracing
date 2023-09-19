@@ -38,7 +38,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) c
     Vec3 t = (std::fabs(outward_normal.y) > 0.999) ? x_axis : y_axis;
     Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
-    SetFaceNormal(is, ray.d, outward_normal, outward_tangent);
+    SetFaceNormal(is, ray.d, outward_normal, outward_normal, outward_tangent);
     is->uv = GetUV(outward_normal);
 
     return true;

@@ -37,8 +37,13 @@ struct Intersection
     const Material* material;
 
     Point3 point;
-    Vec3 normal, tangent;
+    Vec3 normal; // Geometric normal
     UV uv;
+
+    struct
+    {
+        Vec3 normal, tangent;
+    } shading;
 };
 
 } // namespace spt

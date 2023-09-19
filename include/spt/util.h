@@ -36,6 +36,13 @@ inline bool IsBlack(Color color)
     return std::fabs(color.x) == 0.0 && std::fabs(color.y) == 0.0 && std::fabs(color.z) == 0.0;
 }
 
+#define checkNull(v)                                                                                                             \
+    if (IsNullish(v))                                                                                                            \
+    {                                                                                                                            \
+        std::cout << #v;                                                                                                         \
+        std::cout << " null" << std::endl;                                                                                       \
+    }
+
 struct MaterialTextures
 {
     Ref<Texture> basecolor;
