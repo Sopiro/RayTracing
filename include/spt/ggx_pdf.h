@@ -66,7 +66,8 @@ inline f64 GGXPDF::Evaluate(const Vec3& wi) const
 {
     Vec3 h = Normalize(wo + wi);
     f64 NoH = Dot(uvw.w, h);
-    f64 spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * Dot(wi, h), epsilon);
+    f64 LoH = Dot(uvw.w, wi);
+    f64 spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * LoH, 0.0);
 
     f64 cosine = Dot(wi, uvw.w);
     f64 diff_w = cosine * inv_pi;

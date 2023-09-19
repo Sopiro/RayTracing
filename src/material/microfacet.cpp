@@ -7,6 +7,30 @@
 namespace spt
 {
 
+bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
+{
+    Vec3 basecolor = basecolor_map->Value(is.uv);
+    f64 metallic = metallic_map->Value(is.uv).z;
+    f64 roughness = roughness_map->Value(is.uv).y;
+
+    f64 alpha = std::fmax(roughness, min_roughness);
+    Vec3 wo = -wi;
+
+    Vec3 f0 = F0(basecolor, metallic);
+    Vec3 F = F_Schlick(f0, Dot(wo, is.shading.normal));
+    f64 diff_w = (1.0 - metallic);
+    f64 spec_w = Luma(F);
+    // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
+    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
+
+    // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
+    // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);
+    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.shading.normal, wo, alpha, t);
+    ir->is_specular = false;
+
+    return true;
+}
+
 Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
     Vec3 normal = normal_map->Value(is.uv) * 2.0 - Vec3(1.0);
@@ -61,30 +85,6 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor * inv_pi);
 
     return (f_d + f_s) * NoL;
-}
-
-bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
-{
-    Vec3 basecolor = basecolor_map->Value(is.uv);
-    f64 metallic = metallic_map->Value(is.uv).z;
-    f64 roughness = roughness_map->Value(is.uv).y;
-
-    f64 alpha = std::fmax(roughness, min_roughness);
-    Vec3 wo = -wi;
-
-    Vec3 f0 = F0(basecolor, metallic);
-    Vec3 F = F_Schlick(f0, Dot(wo, is.shading.normal));
-    f64 diff_w = (1.0 - metallic);
-    f64 spec_w = Luma(F);
-    // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
-    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
-
-    // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
-    // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);
-    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.shading.normal, wo, alpha, t);
-    ir->is_specular = false;
-
-    return true;
 }
 
 } // namespace spt
