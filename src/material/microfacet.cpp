@@ -21,7 +21,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     f64 diff_w = (1.0 - metallic);
     f64 spec_w = Luma(F);
     // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
-    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.95);
+    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.9);
 
     // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
     // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);

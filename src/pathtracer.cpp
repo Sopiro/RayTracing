@@ -77,7 +77,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             f64 light_brdf_pdf = ir.pdf->Evaluate(to_light);
             if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
-                if (scene.IntersectAny(shadow_ray, ray_epsilon, visibility - epsilon) == false)
+                if (scene.IntersectAny(shadow_ray, ray_epsilon, visibility - ray_epsilon) == false)
                 {
                     f64 mis_weight = 1.0 / (light_pdf + light_brdf_pdf);
 
