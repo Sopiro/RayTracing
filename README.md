@@ -10,9 +10,7 @@ This is a physically based CPU path tracer written in C++
   - BRDF + NEE
 - Physically based materials
 - Light sources
-  - Directional light
-  - Environment light
-  - Area lights
+  - Directional lights, Point lights, Area lights
 - Volume rendering
 - Ray guiding
 - Modeling loading with Assimp
@@ -27,16 +25,16 @@ This is a physically based CPU path tracer written in C++
   - Otherwise: Run `build.sh`
   
 ## Todo
-- Memory management
-- Better material (BSDF and BSSRDF)
-- Path tracing on GPU
+- Better memory management
+- Better material (BTDF and BSSRDF)
+- Raytracing on GPU
 
 ## References
 - https://raytracing.github.io
+- https://www.pbr-book.org
 - https://learnopengl.com
 - https://boksajak.github.io/blog/BRDF
 - https://google.github.io/filament/Filament.html
-- https://www.pbr-book.org
 - https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
 - https://schuttejoe.github.io/post/ggximportancesamplingpart2/
 - https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
