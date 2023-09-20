@@ -8,17 +8,17 @@ namespace spt
 struct DirectionalLight : public Light
 {
 public:
-    DirectionalLight(const Vec3& dir, const Vec3& intensity, f64 radius);
+    DirectionalLight(const Vec3& dir, const Color& intensity, f64 radius);
 
     virtual Color Sample(Vec3* wi, f64* pdf, f64* visibility, const Intersection& ref) const override;
     virtual f64 EvaluatePDF(const Ray& ray) const override;
 
     Vec3 dir;
-    Vec3 intensity; // radiance
-    f64 radius;     // visible radius
+    Color intensity; // radiance
+    f64 radius;      // visible radius
 };
 
-inline DirectionalLight::DirectionalLight(const Vec3& _dir, const Vec3& _intensity, f64 _radius)
+inline DirectionalLight::DirectionalLight(const Vec3& _dir, const Color& _intensity, f64 _radius)
     : Light(Light::Type::directional_light)
     , dir{ Normalize(_dir) }
     , intensity{ _intensity }

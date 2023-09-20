@@ -8,6 +8,7 @@
 #include "intersectable.h"
 #include "mesh.h"
 #include "model.h"
+#include "point_light.h"
 #include "solid_color.h"
 #include "sphere.h"
 
@@ -34,6 +35,7 @@ public:
     void AddLight(const Ref<Primitive> object);
     void AddLight(const Ref<Mesh> object);
     void AddLight(const Ref<DirectionalLight> directional_light);
+    void AddLight(const Ref<PointLight> point_light);
 
     const Ref<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -114,6 +116,11 @@ inline void Scene::AddLight(const Ref<Mesh> mesh)
 inline void Scene::AddLight(const Ref<DirectionalLight> directional_light)
 {
     lights.push_back(directional_light);
+}
+
+inline void Scene::AddLight(const Ref<PointLight> point_light)
+{
+    lights.push_back(point_light);
 }
 
 inline const Ref<Texture> Scene::GetEnvironmentMap() const

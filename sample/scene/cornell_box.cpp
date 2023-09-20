@@ -74,15 +74,15 @@ void CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat{ pi, x_axis }, Vec3{ 0.25 } };
-        auto l = CreateRectXZ(tf, light);
+        scene.AddLight(CreateRectXZ(tf, light));
 
-        scene.AddLight(l);
+        // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5, 0.9, -0.5), Color(0.25)));
+
+        // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.05));
     }
 
     // scene.Rebuild();
     // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
-
-    // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.01));
 }
 
 } // namespace spt
