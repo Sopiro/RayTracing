@@ -97,7 +97,7 @@ void PBRTest(Scene& scene)
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ s, s, 2.0 } };
             auto rect = CreateRectXZ(tf, light);
 
-            scene.AddAreaLight(rect);
+            scene.AddLight(rect);
         }
     }
 

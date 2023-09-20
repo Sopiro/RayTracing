@@ -18,7 +18,7 @@ void BreakfastRoom(Scene& scene)
     // tf = Transform{ 30, 10, 15, Quat{ pi, z_axis }, Vec3{ 1.0, 1.5, 5.0 } };
     // auto l = CreateRectYZ(tf, light);
 
-    // scene.AddAreaLight(l);
+    // scene.AddLight(l);
 }
 
 } // namespace spt

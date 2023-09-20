@@ -33,22 +33,22 @@ void CameraScene(Scene& scene)
         auto tf = Transform{ Point3{ 1.0, h / 2.0 - 0.01, 0.0 }, Quat{ pi, y_axis }, Vec3{ 1.0, h, w } };
         auto rect = CreateRectYZ(tf, light);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ 0.0, h / 2.0 - 0.01, -1.0 }, Quat{ 0.0, y_axis }, Vec3{ w, h, 1.0 } };
         rect = CreateRectXY(tf, light);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ 0.0, h / 2.0 - 0.01, 1.0 }, Quat{ pi, y_axis }, Vec3{ w, h, 1.0 } };
         rect = CreateRectXY(tf, light);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ -1.0, h / 2.0 - 0.01, 0.0 }, Quat{ 0.0, y_axis }, Vec3{ 1.0, h, w } };
         rect = CreateRectYZ(tf, light);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));

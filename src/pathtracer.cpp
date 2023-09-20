@@ -67,15 +67,15 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             }
         }
 
-        if (scene.HasAreaLights())
+        if (scene.HasLights())
         {
             // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
             // Sample one area light uniformly
-            const std::vector<Ref<AreaLight>>& lights = scene.GetAreaLights();
+            const std::vector<Ref<Light>>& lights = scene.GetLights();
             size_t num_lights = lights.size();
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
-            Ref<AreaLight> light = lights[index];
+            Light* light = lights[index].get();
 
             Vec3 to_light;
             f64 light_pdf;
@@ -108,7 +108,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                     Intersection is2;
                     if (scene.Intersect(&is2, shadow_ray, ray_offset, infinity))
                     {
-                        if (is2.object == light->GetPrimitive())
+                        if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
                             f64 brdf_p = ir.pdf->Evaluate(scattered);
                             f64 mis_weight = 1.0 / (brdf_p + brdf_light_pdf);

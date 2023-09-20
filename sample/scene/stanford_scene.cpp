@@ -91,7 +91,7 @@ void StanfordScene(Scene& scene)
             auto tf = Transform{ pos, Quat{ pi, x_axis }, Vec3{ w, w, h } };
             auto rect = CreateRectXZ(tf, light);
 
-            scene.AddAreaLight(rect);
+            scene.AddLight(rect);
         }
     }
 

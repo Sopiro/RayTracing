@@ -17,8 +17,6 @@ public:
 
     const Primitive* GetPrimitive() const;
 
-    bool two_sided;
-
 private:
     Ref<Primitive> primitive;
 };
@@ -26,7 +24,6 @@ private:
 inline AreaLight::AreaLight(const Ref<Primitive> _primitive)
     : Light{ Light::Type::area_light }
     , primitive{ _primitive }
-    , two_sided{ false }
 {
 }
 

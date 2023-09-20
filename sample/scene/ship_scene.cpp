@@ -30,22 +30,22 @@ void ShipScene(Scene& scene)
         auto tf = Transform{ Point3{ 0.0, 5.0, -3.0 }, Quat{ pi / 4.0, x_axis }, Vec3{ size } };
         auto rect = CreateRectXY(tf, white);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ 0.0, 5.0, 3.0 }, Quat{ pi - pi / 4.0, x_axis }, Vec3{ size } };
         rect = CreateRectXY(tf, white);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ -3.0, 5.0, 0.0 }, Quat{ -pi / 4.0, z_axis }, Vec3{ size } };
         rect = CreateRectYZ(tf, white);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
 
         tf = Transform{ Point3{ 3.0, 5.0, 0.0 }, Quat{ pi + pi / 4.0, z_axis }, Vec3{ size } };
         rect = CreateRectYZ(tf, white);
 
-        scene.AddAreaLight(rect);
+        scene.AddLight(rect);
     }
 
     // Floor
