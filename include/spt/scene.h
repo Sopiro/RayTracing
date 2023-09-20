@@ -28,33 +28,30 @@ public:
     void Add(const Ref<Mesh> object);
     void Add(const Ref<Model> object);
 
+    bool HasLights() const;
+    const std::vector<Ref<Light>>& GetLights() const;
+
+    void AddLight(const Ref<Primitive> object);
+    void AddLight(const Ref<Mesh> object);
+    void AddLight(const Ref<DirectionalLight> directional_light);
+
     const Ref<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
     Color GetSkyColor(const Vec3& direction) const;
-
-    bool HasDirectionalLight() const;
-    const Ref<DirectionalLight> GetDirectionalLight() const;
-    void SetDirectionalLight(const Ref<DirectionalLight> directional_light);
-
-    bool HasLights() const;
-    const std::vector<Ref<Light>>& GetLights() const;
-    void AddLight(const Ref<Primitive> object);
-    void AddLight(const Ref<Mesh> object);
 
     void Reset();
     void Rebuild();
 
 private:
-    Aggregate accel; // Acceleration structure
+    // Acceleration structure
+    Aggregate accel;
 
-    Ref<Texture> environment_map;
-    Ref<DirectionalLight> directional_light;
+    Ref<Texture> environment_map; // todo: importance sample this
     std::vector<Ref<Light>> lights;
 };
 
 inline Scene::Scene()
     : environment_map{ SolidColor::Create(Color{ 0.0, 0.0, 0.0 }) }
-    , directional_light{ nullptr }
 {
 }
 
@@ -88,36 +85,6 @@ inline void Scene::Add(const Ref<Model> model)
     accel.Add(model);
 }
 
-inline const Ref<Texture> Scene::GetEnvironmentMap() const
-{
-    return environment_map;
-}
-
-inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
-{
-    environment_map = env_map;
-}
-
-inline Color Scene::GetSkyColor(const Vec3& dir) const
-{
-    return environment_map->Value(ComputeSphereUV(dir));
-}
-
-inline bool Scene::HasDirectionalLight() const
-{
-    return directional_light != nullptr;
-}
-
-inline const Ref<DirectionalLight> Scene::GetDirectionalLight() const
-{
-    return directional_light;
-}
-
-inline void Scene::SetDirectionalLight(const Ref<DirectionalLight> dr)
-{
-    directional_light = dr;
-}
-
 inline bool Scene::HasLights() const
 {
     return lights.size() > 0;
@@ -142,6 +109,26 @@ inline void Scene::AddLight(const Ref<Mesh> mesh)
         lights.push_back(CreateSharedRef<AreaLight>(tri));
         accel.Add(tri);
     }
+}
+
+inline void Scene::AddLight(const Ref<DirectionalLight> directional_light)
+{
+    lights.push_back(directional_light);
+}
+
+inline const Ref<Texture> Scene::GetEnvironmentMap() const
+{
+    return environment_map;
+}
+
+inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
+{
+    environment_map = env_map;
+}
+
+inline Color Scene::GetSkyColor(const Vec3& dir) const
+{
+    return environment_map->Value(ComputeSphereUV(dir));
 }
 
 inline void Scene::Reset()

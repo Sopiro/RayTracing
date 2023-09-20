@@ -79,7 +79,7 @@ inline void Triangle::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const 
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
-    if (Intersect(&is, ray, ray_offset, infinity) == false)
+    if (Intersect(&is, ray, ray_epsilon, infinity) == false)
     {
         return 0.0;
     }

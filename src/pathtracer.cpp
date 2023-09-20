@@ -17,7 +17,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         Vec3 d = Normalize(ray.d);
 
         Intersection is;
-        if (scene.Intersect(&is, ray, ray_offset, infinity) == false)
+        if (scene.Intersect(&is, ray, ray_epsilon, infinity) == false)
         {
             radiance += throughput * scene.GetSkyColor(d);
             break;
@@ -56,17 +56,6 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
         // Estimate direct light
 
-        if (scene.HasDirectionalLight())
-        {
-            const Ref<DirectionalLight> sun = scene.GetDirectionalLight();
-            Ray to_sun{ is.point + is.normal * ray_offset, -sun->dir + RandomInUnitSphere() * sun->radius };
-
-            if (scene.IntersectAny(to_sun, ray_offset, infinity) == false)
-            {
-                radiance += throughput * sun->radiance * mat->Evaluate(is, d, Normalize(to_sun.d));
-            }
-        }
-
         if (scene.HasLights())
         {
             // Multiple importance sampling with balance heuristic (Direct light + BRDF)
@@ -88,7 +77,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             f64 light_brdf_pdf = ir.pdf->Evaluate(to_light);
             if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
-                if (scene.IntersectAny(shadow_ray, ray_offset, visibility - ray_offset) == false)
+                if (scene.IntersectAny(shadow_ray, ray_epsilon, visibility - ray_epsilon) == false)
                 {
                     f64 mis_weight = 1.0 / (light_pdf + light_brdf_pdf);
 
@@ -106,7 +95,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 if (brdf_light_pdf > 0.0)
                 {
                     Intersection is2;
-                    if (scene.Intersect(&is2, shadow_ray, ray_offset, infinity))
+                    if (scene.Intersect(&is2, shadow_ray, ray_epsilon, infinity))
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {

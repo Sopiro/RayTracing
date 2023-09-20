@@ -55,7 +55,7 @@ inline void Sphere::Sample(Intersection* sample, f64* pdf) const
 inline f64 Sphere::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
-    if (Intersect(&is, ray, ray_offset, infinity) == false)
+    if (Intersect(&is, ray, ray_epsilon, infinity) == false)
     {
         return 0.0;
     }

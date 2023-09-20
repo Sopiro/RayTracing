@@ -82,7 +82,7 @@ void CornellBox(Scene& scene)
     // scene.Rebuild();
     // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
 
-    // scene.SetDirectionalLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.01));
+    // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.01));
 }
 
 } // namespace spt

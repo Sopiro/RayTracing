@@ -13,7 +13,7 @@ public:
     AreaLight(const Ref<Primitive> primitive);
 
     virtual Color Sample(Vec3* wi, f64* pdf, f64* visibility, const Intersection& ref) const override;
-    virtual f64 EvaluatePDF(const Ray& ray) override;
+    virtual f64 EvaluatePDF(const Ray& ray) const override;
 
     const Primitive* GetPrimitive() const;
 
@@ -40,7 +40,7 @@ inline Color AreaLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Inters
     return mat->Emit(sample, ref2p);
 }
 
-inline f64 AreaLight::EvaluatePDF(const Ray& ray)
+inline f64 AreaLight::EvaluatePDF(const Ray& ray) const
 {
     return primitive->EvaluatePDF(ray);
 }

@@ -16,7 +16,7 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
     if (is1.front_face)
     {
         // Find the closest boundary
-        if (boundary->Intersect(&is2, ray, is1.t + ray_offset, infinity) == false)
+        if (boundary->Intersect(&is2, ray, is1.t + ray_epsilon, infinity) == false)
         {
             return false;
         }
