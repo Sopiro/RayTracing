@@ -13,7 +13,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     f64 metallic = metallic_map->Value(is.uv).z;
     f64 roughness = roughness_map->Value(is.uv).y;
 
-    f64 alpha = std::fmax(roughness, min_roughness);
+    f64 alpha = RoughnessToAlpha(roughness);
     Vec3 wo = -wi;
 
     Vec3 f0 = F0(basecolor, metallic);
@@ -21,7 +21,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     f64 diff_w = (1.0 - metallic);
     f64 spec_w = Luma(F);
     // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
-    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.25, 0.9);
+    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.95);
 
     // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
     // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);
@@ -50,7 +50,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     // Resolve back facing shading normal by flipping method
     if (Dot(n, v) < 0.0)
     {
-        n = Reflect(-n, is.shading.normal);
+        n = Reflect(n, is.shading.normal);
     }
 
     f64 NoV = Dot(n, v);
@@ -71,7 +71,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     f64 roughness = roughness_map->Value(is.uv).y;
     f64 ao = ao_map->Value(is.uv).x;
 
-    f64 alpha = std::fmax(roughness, min_roughness);
+    f64 alpha = RoughnessToAlpha(roughness);
     f64 alpha2 = alpha * alpha;
 
     Vec3 f0 = F0(basecolor, metallic);

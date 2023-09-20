@@ -89,6 +89,11 @@ inline Vec3 Max(const Vec3& a, const Vec3& b)
     return Vec3(std::fmax(a.x, b.x), std::fmax(a.y, b.y), std::fmax(a.z, b.z));
 }
 
+inline f64 Clamp(f64 v, f64 _min, f64 _max)
+{
+    return std::fmax(_min, std::fmin(v, _max));
+}
+
 template <typename T>
 inline T Clamp(T v, T _min, T _max)
 {
@@ -122,7 +127,7 @@ inline T Project(const T& v, const T& n)
 template <typename T>
 inline T Reflect(const T& v, const T& n)
 {
-    return v - 2 * Dot(v, n) * n;
+    return -v + 2 * Dot(v, n) * n;
 }
 
 template <typename T>

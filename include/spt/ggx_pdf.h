@@ -13,7 +13,7 @@ class GGXPDF : public PDF
     // https://schuttejoe.github.io/post/ggximportancesamplingpart1/
 
 public:
-    GGXPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
+    GGXPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t);
 
     virtual Vec3 Sample() const override;
     virtual f64 Evaluate(const Vec3& wi) const override;
@@ -25,10 +25,10 @@ public:
     f64 t;
 };
 
-inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t)
+inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t)
     : uvw{ n }
     , wo{ wo }
-    , alpha2{ roughness * roughness }
+    , alpha2{ a * a }
     , t{ t }
 {
 }
@@ -51,7 +51,7 @@ inline Vec3 GGXPDF::Sample() const
 
         Vec3 h{ x, y, z }; // Sampled half vector
         Vec3 wh = uvw.GetLocal(h);
-        Vec3 wi = Reflect(-wo, wh);
+        Vec3 wi = Reflect(wo, wh);
 
         return wi;
     }
@@ -65,12 +65,11 @@ inline Vec3 GGXPDF::Sample() const
 inline f64 GGXPDF::Evaluate(const Vec3& wi) const
 {
     Vec3 h = Normalize(wo + wi);
-    f64 NoH = Dot(uvw.w, h);
-    f64 LoH = Dot(uvw.w, wi);
+    f64 NoH = Dot(h, uvw.w);
+    f64 LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
     f64 spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * LoH, 0.0);
 
-    f64 cosine = Dot(wi, uvw.w);
-    f64 diff_w = cosine * inv_pi;
+    f64 diff_w = LoH * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;
 }

@@ -18,7 +18,7 @@ class GGXVNDFPDF : public PDF
     // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
 
 public:
-    GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t);
+    GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t);
 
     virtual Vec3 Sample() const override;
     virtual f64 Evaluate(const Vec3& wi) const override;
@@ -30,10 +30,10 @@ public:
     f64 t;
 };
 
-inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 roughness, f64 t)
+inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t)
     : uvw{ n }
     , wo{ wo }
-    , alpha{ roughness }
+    , alpha{ a }
     , t{ t }
 {
 }
@@ -64,10 +64,12 @@ inline Vec3 GGXVNDFPDF::Sample() const
         Vec3 h = c + wo;
 
         // warp back to the ellipsoid configuration
-        Vec3 wm = Normalize(Vec3(h.x * alpha, h.y * alpha, h.z));
+        Vec3 wm = Normalize(Vec3(h.x * alpha, h.y * alpha, h.z)); // Sampled half vector
 
         Vec3 wh = uvw.GetLocal(wm);
-        Vec3 wi = Reflect(-wo, wh);
+
+        // Get the wi by reflecting the wo about wh
+        Vec3 wi = Reflect(wo, wh);
 
         return wi;
 #else
@@ -96,7 +98,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
         // Section 3.4: transforming the normal back to the ellipsoid configuration
         Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(0.0, Nh.z))); // Sampled half vector
         Vec3 wh = uvw.GetLocal(h);
-        Vec3 wi = Reflect(-wo, wh);
+        Vec3 wi = Reflect(wo, wh);
 
         return wi;
 #endif
@@ -113,12 +115,11 @@ inline f64 GGXVNDFPDF::Evaluate(const Vec3& wi) const
     f64 alpha2 = alpha * alpha;
 
     Vec3 h = Normalize(wo + wi);
-    f64 NoH = Dot(uvw.w, h);
-    f64 NoV = Dot(uvw.w, wi);
-    f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(NoV, alpha2) / std::fmax(4.0 * NoV, 0.0);
+    f64 NoH = Dot(h, uvw.w);
+    f64 LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
+    f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4.0 * LoH, 0.0);
 
-    f64 cosine = Dot(wi, uvw.w);
-    f64 diff_w = cosine * inv_pi;
+    f64 diff_w = LoH * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;
 }

@@ -16,11 +16,11 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
     if (refractable == false || Reflectance(cos_theta, refraction_ratio) > Rand())
     {
-        direction = Reflect(wi, is.normal);
+        direction = Reflect(-wi, is.normal);
     }
     else
     {
-        direction = Refract(wi, is.normal, refraction_ratio);
+        direction = Refract(-wi, is.normal, refraction_ratio);
     }
 
     ir->is_specular = true;
