@@ -58,7 +58,7 @@ inline Vec3 GGXVNDFPDF::Sample() const
         f64 sin_thetha = std::sqrt(Clamp(1.0 - z * z, 0.0, 1.0));
         f64 x = sin_thetha * std::cos(phi);
         f64 y = sin_thetha * std::sin(phi);
-        Vec3 c = Vec3(x, y, z);
+        Vec3 c(x, y, z);
 
         // compute halfway direction
         Vec3 h = c + wo;

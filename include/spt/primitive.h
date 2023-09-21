@@ -25,19 +25,18 @@ public:
 inline void SetFaceNormal(
     Intersection* is, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
 {
+    is->shading.normal = shading_normal;
+    is->shading.tangent = shading_tangent;
+
     if (Dot(wi, outward_normal) < 0.0)
     {
         is->front_face = true;
         is->normal = outward_normal;
-        is->shading.normal = shading_normal;
-        is->shading.tangent = shading_tangent;
     }
     else
     {
         is->front_face = false;
         is->normal = -outward_normal;
-        is->shading.normal = -shading_normal;
-        is->shading.tangent = -shading_tangent;
     }
 }
 

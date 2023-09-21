@@ -85,8 +85,8 @@ inline Color ImageTexture::Value(const UV& uv) const
     // Flip V to image coordinates
     v = 1.0 - v;
 
-    i32 i = static_cast<i32>(u * width);
-    i32 j = static_cast<i32>(v * height);
+    i32 i = i32(u * width);
+    i32 j = i32(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
     if (i >= width) i = width - 1;
@@ -95,7 +95,7 @@ inline Color ImageTexture::Value(const UV& uv) const
     f64 color_scale = 1.0 / 255.0;
     u8* pixel = (u8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
 
-    return Color{ color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2] };
+    return Color(color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2]);
 }
 
 } // namespace spt

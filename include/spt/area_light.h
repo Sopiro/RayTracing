@@ -33,7 +33,7 @@ inline Color AreaLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Inters
     Vec3 ref2p;
     primitive->Sample(&sample, pdf, &ref2p, ref.point);
 
-    *visibility = ref2p.Normalize();
+    *visibility = ref2p.Normalize() - ray_epsilon;
     *wi = ref2p;
 
     const Material* mat = primitive->GetMaterial();

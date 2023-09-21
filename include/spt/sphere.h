@@ -39,8 +39,8 @@ inline Sphere::Sphere(const Vec3& _center, f64 _radius, const Ref<Material> _mat
 
 inline void Sphere::GetAABB(AABB* out_aabb) const
 {
-    out_aabb->min = center - Vec3{ radius };
-    out_aabb->max = center + Vec3{ radius };
+    out_aabb->min = center - Vec3(radius);
+    out_aabb->max = center + Vec3(radius);
 }
 
 inline void Sphere::Sample(Intersection* sample, f64* pdf) const

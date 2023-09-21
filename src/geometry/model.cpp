@@ -157,7 +157,7 @@ void Model::LoadModel(const std::string& path, const Transform& transform)
         return;
     }
 
-    ProcessAssimpNode(scene->mRootNode, scene, Mat4{ transform });
+    ProcessAssimpNode(scene->mRootNode, scene, Mat4(transform));
 }
 
 } // namespace spt

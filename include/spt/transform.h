@@ -48,7 +48,7 @@ struct Transform
     {
     }
 
-    Transform(Real x, Real y, Real z, const Quat& orientation = Quat{ Real(1.0) }, const Vec3& scale = Vec3{ Real{ 1.0 } })
+    Transform(Real x, Real y, Real z, const Quat& orientation = Quat(Real(1.0)), const Vec3& scale = Vec3(Real(1.0)))
         : p{ x, y, z }
         , q{ orientation }
         , r{ scale }

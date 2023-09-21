@@ -38,22 +38,22 @@ inline Real Rand(Real min, Real max)
 
 inline Vec2 RandVec2()
 {
-    return Vec2{ Rand(), Rand() };
+    return Vec2(Rand(), Rand());
 }
 
 inline Vec2 RandVec2(Real min, Real max)
 {
-    return Vec2{ Rand(min, max), Rand(min, max) };
+    return Vec2(Rand(min, max), Rand(min, max));
 }
 
 inline Vec3 RandVec3()
 {
-    return Vec3{ Rand(), Rand(), Rand() };
+    return Vec3(Rand(), Rand(), Rand());
 }
 
 inline Vec3 RandVec3(Real min, Real max)
 {
-    return Vec3{ Rand(min, max), Rand(min, max), Rand(min, max) };
+    return Vec3(Rand(min, max), Rand(min, max), Rand(min, max));
 }
 
 inline Vec3 UniformSampleSphere()
@@ -68,7 +68,7 @@ inline Vec3 UniformSampleSphere()
     Real x = r * std::cos(phi);
     Real y = r * std::sin(phi);
 
-    return Vec3{ x, y, z };
+    return Vec3(x, y, z);
 }
 
 // z > 0
@@ -84,7 +84,7 @@ inline Vec3 CosineSampleHemisphere()
     Real x = std::cos(phi) * su2;
     Real y = std::sin(phi) * su2;
 
-    return Vec3{ x, y, z };
+    return Vec3(x, y, z);
 }
 
 inline Vec3 RandomInUnitSphere()
@@ -102,7 +102,7 @@ inline Vec3 RandomInUnitSphere()
     Real y = sin_phi * std::sin(theta);
     Real z = std::cos(phi);
 
-    return Vec3{ x, y, z };
+    return Vec3(x, y, z);
 #else
     // Rejection sampling
     Vec3 p;
@@ -123,7 +123,7 @@ inline Vec3 UniformSampleUnitDiskXY()
 
     Real r = std::sqrt(u1);
     Real theta = two_pi * u2;
-    return Vec3{ r * std::cos(theta), r * std::sin(theta), Real(0.0) };
+    return Vec3(r * std::cos(theta), r * std::sin(theta), Real(0.0));
 }
 
 } // namespace spt

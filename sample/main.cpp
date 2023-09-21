@@ -137,8 +137,8 @@ int main()
         // Point3 lookfrom{ 10.0, 0.0, 10.0 };
         // Point3 lookat{ 3.0, -2.5, 1.0 };
 
-        Point3 lookfrom = Point3{ 1.0, 0.5, 4.0 } * 1.2;
-        Point3 lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom = Point3(1.0, 0.5, 4.0) * 1.2;
+        Point3 lookat = Point3(0.0, 0.0, 0.0);
 
         f64 dist_to_focus = (lookfrom - lookat).Length();
         f64 aperture = 0.0;

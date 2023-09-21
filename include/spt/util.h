@@ -64,9 +64,9 @@ struct MaterialColors
 Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors);
 Ref<Microfacet> RandomMicrofacetMaterial();
 
-Ref<Mesh> CreateRectXY(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateRectXZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateRectYZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV{ 1.0, 1.0 });
-Ref<Mesh> CreateBox(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV{ 1.0, 1.0 });
+Ref<Mesh> CreateRectXY(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
+Ref<Mesh> CreateRectXZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
+Ref<Mesh> CreateRectYZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
+Ref<Mesh> CreateBox(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
 
 } // namespace spt

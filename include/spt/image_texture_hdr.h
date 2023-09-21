@@ -55,8 +55,8 @@ inline Color ImageTextureHDR::Value(const UV& uv) const
     // Flip V to image coordinates
     v = 1.0 - v;
 
-    i32 i = static_cast<i32>(u * width);
-    i32 j = static_cast<i32>(v * height);
+    i32 i = i32(u * width);
+    i32 j = i32(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
     if (i >= width) i = width - 1;
@@ -64,7 +64,7 @@ inline Color ImageTextureHDR::Value(const UV& uv) const
 
     f32* pixel = (f32*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
-    return Color{ pixel[0], pixel[1], pixel[2] };
+    return Color(pixel[0], pixel[1], pixel[2]);
 }
 
 } // namespace spt

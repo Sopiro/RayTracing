@@ -29,13 +29,13 @@ public:
     void Add(const Ref<Mesh> object);
     void Add(const Ref<Model> object);
 
-    bool HasLights() const;
-    const std::vector<Ref<Light>>& GetLights() const;
-
     void AddLight(const Ref<Primitive> object);
     void AddLight(const Ref<Mesh> object);
     void AddLight(const Ref<DirectionalLight> directional_light);
     void AddLight(const Ref<PointLight> point_light);
+
+    bool HasLights() const;
+    const std::vector<Ref<Light>>& GetLights() const;
 
     const Ref<Texture> GetEnvironmentMap() const;
     void SetEnvironmentMap(const Ref<Texture> color);
@@ -53,7 +53,7 @@ private:
 };
 
 inline Scene::Scene()
-    : environment_map{ SolidColor::Create(Color{ 0.0, 0.0, 0.0 }) }
+    : environment_map{ SolidColor::Create(Color(0.0, 0.0, 0.0)) }
 {
 }
 
@@ -87,16 +87,6 @@ inline void Scene::Add(const Ref<Model> model)
     accel.Add(model);
 }
 
-inline bool Scene::HasLights() const
-{
-    return lights.size() > 0;
-}
-
-inline const std::vector<Ref<Light>>& Scene::GetLights() const
-{
-    return lights;
-}
-
 inline void Scene::AddLight(const Ref<Primitive> primitive)
 {
     lights.push_back(CreateSharedRef<AreaLight>(primitive));
@@ -121,6 +111,16 @@ inline void Scene::AddLight(const Ref<DirectionalLight> directional_light)
 inline void Scene::AddLight(const Ref<PointLight> point_light)
 {
     lights.push_back(point_light);
+}
+
+inline bool Scene::HasLights() const
+{
+    return lights.size() > 0;
+}
+
+inline const std::vector<Ref<Light>>& Scene::GetLights() const
+{
+    return lights;
 }
 
 inline const Ref<Texture> Scene::GetEnvironmentMap() const

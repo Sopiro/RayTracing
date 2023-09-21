@@ -33,7 +33,7 @@ void EnvironmentMap(Scene& scene)
             }
             else
             {
-                mat = CreateSharedRef<Metal>(Vec3{ 0.6 }, 0.0);
+                mat = CreateSharedRef<Metal>(Vec3(0.6), 0.0);
             }
 
             if (x % 2)
@@ -42,7 +42,7 @@ void EnvironmentMap(Scene& scene)
             }
             else
             {
-                auto tf = Transform{ pos, Quat{ identity }, Vec3{ r * 1.414 } };
+                auto tf = Transform{ pos, Quat(identity), Vec3(r * 1.414) };
                 scene.Add(CreateBox(tf, mat));
             }
         }
@@ -51,14 +51,14 @@ void EnvironmentMap(Scene& scene)
     // Ground
     // {
     //     auto mat = CreateSharedRef<PBRMaterial>();
-    //     mat->albedo_map = SolidColor::Create(Vec3{ 1.0 } * 0.9);
+    //     mat->albedo_map = SolidColor::Create(Vec3(1.0) * 0.9);
     //     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
-    //     mat->roughness_map = SolidColor::Create(Vec3{ 0.1 });
-    //     mat->metallic_map = SolidColor::Create(Vec3{ 0.0 });
-    //     mat->ao_map = SolidColor::Create(Vec3{ 1.0 });
-    //     mat->emissive_map = SolidColor::Create(Vec3{ 0.0 });
+    //     mat->roughness_map = SolidColor::Create(Vec3(0.1));
+    //     mat->metallic_map = SolidColor::Create(Vec3(0.0));
+    //     mat->ao_map = SolidColor::Create(Vec3(1.0));
+    //     mat->emissive_map = SolidColor::Create(Vec3(0.0));
 
-    //     auto tf1 = Transform{ Vec3{ 0.5, -r, -0.5 }, Quat{ identity }, Vec3{ 100.0 } };
+    //     auto tf1 = Transform{ Vec3(0.5, -r, -0.5), Quat(identity), Vec3(100.0) };
     //     auto ground = RectXZ(tf1, mat);
 
     //     scene.Add(ground);
@@ -66,8 +66,8 @@ void EnvironmentMap(Scene& scene)
 
     // // Light
     // {
-    //     auto tf2 = Transform{ Vec3{ -4.0, 2.5, 0.0 }, Quat{ DegToRad(-40.0), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 8.0 });
+    //     auto tf2 = Transform{ Vec3(-4.0, 2.5, 0.0), Quat(DegToRad(-40.0), z_axis), Vec3(1.0, 1.0, 4.0) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Color(8.0));
     //     auto rect = RectYZ(tf2, light);
 
     //     scene.Add(rect);
@@ -75,8 +75,8 @@ void EnvironmentMap(Scene& scene)
     // }
 
     // {
-    //     auto tf2 = Transform{ Vec3{ 4.0, 2.5, 0.0 }, Quat{ DegToRad(180 + 50), z_axis }, Vec3{ 1.0, 1.0, 4.0 } };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 8.0 });
+    //     auto tf2 = Transform{ Vec3(4.0, 2.5, 0.0), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0, 1.0, 4.0) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Color(8.0));
     //     auto rect = RectYZ(tf2, light);
 
     //     scene.Add(rect);
@@ -84,8 +84,8 @@ void EnvironmentMap(Scene& scene)
     // }
 
     // {
-    //     auto tf2 = Transform{ Vec3{ 0.0, 2.5, -4.0 }, Quat{ DegToRad(40), x_axis }, Vec3{ 4.0, 1.0, 1.0 } };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color{ 8.0 });
+    //     auto tf2 = Transform{ Vec3(0.0, 2.5, -4.0), Quat(DegToRad(40), x_axis), Vec3(4.0, 1.0, 1.0) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Color(8.0));
     //     auto rect = RectXY(tf2, light);
 
     //     scene.Add(rect);

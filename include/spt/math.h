@@ -82,7 +82,7 @@ struct Vec2
 
     Vec2 operator-() const
     {
-        return Vec2{ -x, -y };
+        return Vec2(-x, -y);
     }
 
     void operator+=(Real s)
@@ -161,7 +161,7 @@ struct Vec2
     // return cross(1, *this);
     Vec2 Skew() const
     {
-        return Vec2{ -y, x };
+        return Vec2(-y, x);
     }
 };
 
@@ -218,7 +218,7 @@ struct Vec3
 
     Vec3 operator-() const
     {
-        return Vec3{ -x, -y, -z };
+        return Vec3(-x, -y, -z);
     }
 
     void operator+=(Real s)
@@ -358,7 +358,7 @@ struct Vec4
 
     Vec4 operator-() const
     {
-        return Vec4{ -x, -y, -z, -w };
+        return Vec4(-x, -y, -z, -w);
     }
 
     void operator+=(Real s)
@@ -744,12 +744,12 @@ struct Quat
 
     Quat operator-()
     {
-        return Quat{ -x, -y, -z, -w };
+        return Quat(-x, -y, -z, -w);
     }
 
     Quat operator*(Real s) const
     {
-        return Quat{ x * s, y * s, z * s, w * s };
+        return Quat(x * s, y * s, z * s, w * s);
     }
 
     bool IsIdentity() const
@@ -787,12 +787,12 @@ struct Quat
 
     Quat GetConjugate() const
     {
-        return Quat{ -x, -y, -z, w };
+        return Quat(-x, -y, -z, w);
     }
 
     Vec3 GetImaginaryPart() const
     {
-        return Vec3{ x, y, z };
+        return Vec3(x, y, z);
     }
 
     // Optimized qvq'
@@ -872,27 +872,27 @@ inline Real Cross(const Vec2& a, const Vec2& b)
 
 inline Vec2 Cross(Real s, const Vec2& v)
 {
-    return Vec2{ -s * v.y, s * v.x };
+    return Vec2(-s * v.y, s * v.x);
 }
 
 inline Vec2 Cross(const Vec2& v, Real s)
 {
-    return Vec2{ s * v.y, -s * v.x };
+    return Vec2(s * v.y, -s * v.x);
 }
 
 inline Vec2 operator+(const Vec2& a, const Vec2& b)
 {
-    return Vec2{ a.x + b.x, a.y + b.y };
+    return Vec2(a.x + b.x, a.y + b.y);
 }
 
 inline Vec2 operator-(const Vec2& a, const Vec2& b)
 {
-    return Vec2{ a.x - b.x, a.y - b.y };
+    return Vec2(a.x - b.x, a.y - b.y);
 }
 
 inline Vec2 operator*(const Vec2& v, Real s)
 {
-    return Vec2{ v.x * s, v.y * s };
+    return Vec2(v.x * s, v.y * s);
 }
 
 inline Vec2 operator*(Real s, const Vec2& v)
@@ -902,7 +902,7 @@ inline Vec2 operator*(Real s, const Vec2& v)
 
 inline Vec2 operator*(const Vec2& a, const Vec2& b)
 {
-    return Vec2{ a.x * b.x, a.y * b.y };
+    return Vec2(a.x * b.x, a.y * b.y);
 }
 
 inline Vec2 operator/(const Vec2& v, Real s)
@@ -951,22 +951,22 @@ inline Real Dot(const Vec3& a, const Vec3& b)
 
 inline Vec3 Cross(const Vec3& a, const Vec3& b)
 {
-    return Vec3{ a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x };
+    return Vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
 inline Vec3 operator+(const Vec3& a, const Vec3& b)
 {
-    return Vec3{ a.x + b.x, a.y + b.y, a.z + b.z };
+    return Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
 
 inline Vec3 operator-(const Vec3& a, const Vec3& b)
 {
-    return Vec3{ a.x - b.x, a.y - b.y, a.z - b.z };
+    return Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
 inline Vec3 operator*(const Vec3& v, Real s)
 {
-    return Vec3{ v.x * s, v.y * s, v.z * s };
+    return Vec3(v.x * s, v.y * s, v.z * s);
 }
 
 inline Vec3 operator*(Real s, const Vec3& v)
@@ -976,7 +976,7 @@ inline Vec3 operator*(Real s, const Vec3& v)
 
 inline Vec3 operator*(const Vec3& a, const Vec3& b)
 {
-    return Vec3{ a.x * b.x, a.y * b.y, a.z * b.z };
+    return Vec3(a.x * b.x, a.y * b.y, a.z * b.z);
 }
 
 inline Vec3 operator/(const Vec3& v, Real s)
@@ -991,7 +991,7 @@ inline Vec3 operator/(Real s, const Vec3& v)
 
 inline Vec3 operator/(const Vec3& a, const Vec3& b)
 {
-    return Vec3{ a.x / b.x, a.y / b.y, a.z / b.z };
+    return Vec3(a.x / b.x, a.y / b.y, a.z / b.z);
 }
 
 inline bool operator==(const Vec3& a, const Vec3& b)
@@ -1025,17 +1025,17 @@ inline Real Dot(const Vec4& a, const Vec4& b)
 
 inline Vec4 operator+(const Vec4& a, const Vec4& b)
 {
-    return Vec4{ a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w };
+    return Vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
 inline Vec4 operator-(const Vec4& a, const Vec4& b)
 {
-    return Vec4{ a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w };
+    return Vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }
 
 inline Vec4 operator*(const Vec4& v, Real s)
 {
-    return Vec4{ v.x * s, v.y * s, v.z * s, v.w * s };
+    return Vec4(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
 inline Vec4 operator*(Real s, const Vec4& v)
@@ -1045,7 +1045,7 @@ inline Vec4 operator*(Real s, const Vec4& v)
 
 inline Vec4 operator*(const Vec4& a, const Vec4& b)
 {
-    return Vec4{ a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };
+    return Vec4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
 }
 
 inline Vec4 operator/(const Vec4& v, Real s)
@@ -1060,7 +1060,7 @@ inline Vec4 operator/(Real s, const Vec4& v)
 
 inline Vec4 operator/(const Vec4& a, const Vec4& b)
 {
-    return Vec4{ a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w };
+    return Vec4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
 }
 
 inline bool operator==(const Vec4& a, const Vec4& b)
@@ -1127,37 +1127,34 @@ inline Real Angle(const Quat& a, const Quat& b)
 
 inline Mat2 operator+(const Mat2& a, const Mat2& b)
 {
-    return Mat2{ a.ex + b.ex, a.ey + b.ey };
+    return Mat2(a.ex + b.ex, a.ey + b.ey);
 }
 
 // M * V
 inline Vec2 Mul(const Mat2& m, const Vec2& v)
 {
-    return Vec2{
-        m.ex.x * v.x + m.ey.x * v.y,
-        m.ex.y * v.x + m.ey.y * v.y,
-    };
+    return Vec2(m.ex.x * v.x + m.ey.x * v.y, m.ex.y * v.x + m.ey.y * v.y);
 }
 
 // M^T * V
 inline Vec2 MulT(const Mat2& m, const Vec2& v)
 {
-    return Vec2{ Dot(m.ex, v), Dot(m.ey, v) };
+    return Vec2(Dot(m.ex, v), Dot(m.ey, v));
 }
 
 // A * B
 inline Mat2 Mul(const Mat2& a, const Mat2& b)
 {
-    return Mat2{ Mul(a, b.ex), Mul(a, b.ey) };
+    return Mat2(Mul(a, b.ex), Mul(a, b.ey));
 }
 
 // A^T * B
 inline Mat2 MulT(const Mat2& a, const Mat2& b)
 {
-    Vec2 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex) };
-    Vec2 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey) };
+    Vec2 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex));
+    Vec2 c2(Dot(a.ex, b.ey), Dot(a.ey, b.ey));
 
-    return Mat2{ c1, c2 };
+    return Mat2(c1, c2);
 }
 
 // Mat2 functions end
@@ -1177,23 +1174,23 @@ inline Vec3 Mul(const Mat3& m, const Vec3& v)
 // M^T * V
 inline Vec3 MulT(const Mat3& m, const Vec3& v)
 {
-    return Vec3{ Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v) };
+    return Vec3(Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v));
 }
 
 // A * B
 inline Mat3 Mul(const Mat3& a, const Mat3& b)
 {
-    return Mat3{ Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez) };
+    return Mat3(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez));
 }
 
 // A^T * B
 inline Mat3 MulT(const Mat3& a, const Mat3& b)
 {
-    Vec3 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex) };
-    Vec3 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey) };
-    Vec3 c3{ Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez) };
+    Vec3 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex));
+    Vec3 c2(Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey));
+    Vec3 c3(Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez));
 
-    return Mat3{ c1, c2, c3 };
+    return Mat3(c1, c2, c3);
 }
 
 // Mat3 functions end
@@ -1214,24 +1211,24 @@ inline Vec4 Mul(const Mat4& m, const Vec4& v)
 // M^T * V
 inline Vec4 MulT(const Mat4& m, const Vec4& v)
 {
-    return Vec4{ Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v), Dot(m.ew, v) };
+    return Vec4(Dot(m.ex, v), Dot(m.ey, v), Dot(m.ez, v), Dot(m.ew, v));
 }
 
 // A * B
 inline Mat4 Mul(const Mat4& a, const Mat4& b)
 {
-    return Mat4{ Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez), Mul(a, b.ew) };
+    return Mat4(Mul(a, b.ex), Mul(a, b.ey), Mul(a, b.ez), Mul(a, b.ew));
 }
 
 // A^T * B
 inline Mat4 MulT(const Mat4& a, const Mat4& b)
 {
-    Vec4 c1{ Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex), Dot(a.ew, b.ex) };
-    Vec4 c2{ Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey), Dot(a.ew, b.ey) };
-    Vec4 c3{ Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez), Dot(a.ew, b.ez) };
-    Vec4 c4{ Dot(a.ex, b.ew), Dot(a.ey, b.ew), Dot(a.ez, b.ew), Dot(a.ew, b.ew) };
+    Vec4 c1(Dot(a.ex, b.ex), Dot(a.ey, b.ex), Dot(a.ez, b.ex), Dot(a.ew, b.ex));
+    Vec4 c2(Dot(a.ex, b.ey), Dot(a.ey, b.ey), Dot(a.ez, b.ey), Dot(a.ew, b.ey));
+    Vec4 c3(Dot(a.ex, b.ez), Dot(a.ey, b.ez), Dot(a.ez, b.ez), Dot(a.ew, b.ez));
+    Vec4 c4(Dot(a.ex, b.ew), Dot(a.ey, b.ew), Dot(a.ez, b.ew), Dot(a.ew, b.ew));
 
-    return Mat4{ c1, c2, c3, c4 };
+    return Mat4(c1, c2, c3, c4);
 }
 
 inline Mat4 Orth(Real left, Real right, Real bottom, Real top, Real zNear, Real zFar)

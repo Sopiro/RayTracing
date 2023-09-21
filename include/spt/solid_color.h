@@ -54,12 +54,12 @@ inline Ref<SolidColor> SolidColor::Create(Color color)
 
 inline Ref<SolidColor> SolidColor::Create(f64 rgb)
 {
-    return Create(Color{ rgb });
+    return Create(Color(rgb));
 }
 
 inline Ref<SolidColor> SolidColor::Create(f64 r, f64 g, f64 b)
 {
-    return Create(Color{ r, g, b });
+    return Create(Color(r, g, b));
 }
 
 inline Color SolidColor::Value(const UV& uv) const

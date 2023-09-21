@@ -147,7 +147,7 @@ inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
     Real y = std::sin(phi) * sin_thetha;
     Real z = std::cos(theta);
 
-    return Vec3{ x * r, y * r, z * r };
+    return Vec3(x * r, y * r, z * r);
 }
 
 inline UV ComputeSphereUV(const Vec3& dir)
@@ -155,7 +155,7 @@ inline UV ComputeSphereUV(const Vec3& dir)
     f64 theta = std::acos(-dir.y);
     f64 phi = std::atan2(-dir.z, dir.x) + pi;
 
-    return UV{ phi * inv_two_pi, theta * inv_pi };
+    return UV(phi * inv_two_pi, theta * inv_pi);
 }
 
 } // namespace spt

@@ -19,8 +19,8 @@ inline f64 RoughnessToAlpha(f64 roughness)
 // https://en.wikipedia.org/wiki/Luma_(video)
 inline f64 Luma(Vec3 srgb)
 {
-    return Dot(srgb, Vec3{ 0.2126, 0.7152, 0.0722 });
-    // return Dot(srgb, Vec3{ 0.299, 0.587, 0.114 });
+    return Dot(srgb, Vec3(0.2126, 0.7152, 0.0722));
+    // return Dot(srgb, Vec3(0.299, 0.587, 0.114));
 }
 
 inline Vec3 F0(Vec3 basecolor, f64 metallic)
