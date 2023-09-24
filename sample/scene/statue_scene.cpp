@@ -7,9 +7,9 @@ void StatueScene(Scene& scene)
 {
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor_map = SolidColor::Create(Vec3(1.0));
-        mat->metallic_map = SolidColor::Create(Vec3(1.0));
-        mat->roughness_map = SolidColor::Create(Vec3(0.1));
+        mat->basecolor = SolidColor::Create(Vec3(1.0));
+        mat->metallic = SolidColor::Create(Vec3(1.0));
+        mat->roughness = SolidColor::Create(Vec3(0.1));
 
         // auto mat = CreateSharedRef<Dielectric>(1.5);
 
@@ -75,9 +75,9 @@ void StatueScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor_map = SolidColor::Create(Vec3(1.0));
-        mat->metallic_map = SolidColor::Create(Vec3(0.0));
-        mat->roughness_map = SolidColor::Create(Vec3(0.01));
+        mat->basecolor = SolidColor::Create(Vec3(1.0));
+        mat->metallic = SolidColor::Create(Vec3(0.0));
+        mat->roughness = SolidColor::Create(Vec3(0.01));
 
         auto tf = Transform{ Point3(0.0, -2.0, 0.0), Quat(identity), Vec3(8.0, 1.0, 8.0) };
         auto rect = CreateRectXZ(tf, mat);

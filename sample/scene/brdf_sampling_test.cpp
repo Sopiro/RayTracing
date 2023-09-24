@@ -48,9 +48,9 @@ void BRDFSamplingTest(Scene& scene)
     // Center sphere
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor_map = SolidColor::Create(Vec3(1.0));
-        mat->metallic_map = SolidColor::Create(Vec3(1.0));
-        mat->roughness_map = SolidColor::Create(Vec3(0.2));
+        mat->basecolor = SolidColor::Create(Vec3(1.0));
+        mat->metallic = SolidColor::Create(Vec3(1.0));
+        mat->roughness = SolidColor::Create(Vec3(0.2));
 
         f64 r = 0.25;
         auto sphere = CreateSharedRef<Sphere>(Vec3(0.5, r, -0.5), r, mat);

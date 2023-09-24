@@ -33,6 +33,13 @@ inline bool IsBlack(Color color)
     return std::fabs(color.x) == 0.0 && std::fabs(color.y) == 0.0 && std::fabs(color.z) == 0.0;
 }
 
+// https://en.wikipedia.org/wiki/Luma_(video)
+inline f64 Luma(Vec3 srgb)
+{
+    return Dot(srgb, Vec3(0.2126, 0.7152, 0.0722));
+    // return Dot(srgb, Vec3(0.299, 0.587, 0.114));
+}
+
 #define checkNull(v)                                                                                                             \
     if (IsNullish(v))                                                                                                            \
     {                                                                                                                            \
@@ -43,11 +50,10 @@ inline bool IsBlack(Color color)
 struct MaterialTextures
 {
     Ref<Texture> basecolor;
-    Ref<Texture> normal;
     Ref<Texture> metallic;
     Ref<Texture> roughness;
-    Ref<Texture> ao;
     Ref<Texture> emissive;
+    Ref<Texture> normal_map;
 };
 
 struct MaterialColors

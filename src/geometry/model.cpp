@@ -98,19 +98,18 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         colors.specular.Set(specularColor.r, specularColor.g, specularColor.b);
         colors.emissive.Set(emissiveColor.r, emissiveColor.g, emissiveColor.b);
 
-        auto basecolor_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
-        auto normal_maps = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
-        auto metallic_maps = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
-        auto roughness_maps = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
-        auto ao_maps = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, false);
-        auto emissive_maps = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
+        auto basecolor_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
+        auto metallic_textures = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
+        auto roughness_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
+        auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
+        auto normal_map_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
+        // auto ao_textures = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, false);
 
-        textures.basecolor = basecolor_maps.empty() ? nullptr : basecolor_maps[0];
-        textures.normal = normal_maps.empty() ? nullptr : normal_maps[0];
-        textures.metallic = metallic_maps.empty() ? nullptr : metallic_maps[0];
-        textures.roughness = roughness_maps.empty() ? nullptr : roughness_maps[0];
-        textures.ao = ao_maps.empty() ? nullptr : ao_maps[0];
-        textures.emissive = emissive_maps.empty() ? nullptr : emissive_maps[0];
+        textures.basecolor = basecolor_textures.empty() ? nullptr : basecolor_textures[0];
+        textures.normal_map = normal_map_textures.empty() ? nullptr : normal_map_textures[0];
+        textures.metallic = metallic_textures.empty() ? nullptr : metallic_textures[0];
+        textures.roughness = roughness_textures.empty() ? nullptr : roughness_textures[0];
+        textures.emissive = emissive_textures.empty() ? nullptr : emissive_textures[0];
     }
 
     Ref<Material> material = CreateMaterial(textures, colors);

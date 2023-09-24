@@ -15,13 +15,6 @@ inline f64 RoughnessToAlpha(f64 roughness)
     return std::fmax(roughness, min_alpha);
 }
 
-// https://en.wikipedia.org/wiki/Luma_(video)
-inline f64 Luma(Vec3 srgb)
-{
-    return Dot(srgb, Vec3(0.2126, 0.7152, 0.0722));
-    // return Dot(srgb, Vec3(0.299, 0.587, 0.114));
-}
-
 inline Vec3 F0(Vec3 basecolor, f64 metallic)
 {
     return Lerp(default_reflectance, basecolor, metallic);
@@ -82,17 +75,13 @@ public:
     virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:
-    Ref<Texture> basecolor_map;
+    Ref<Texture> basecolor, metallic, roughness, emissive;
     Ref<Texture> normal_map;
-    Ref<Texture> metallic_map;
-    Ref<Texture> roughness_map;
-    Ref<Texture> ao_map;
-    Ref<Texture> emissive_map;
 };
 
 inline Color Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
-    return emissive_map->Value(is.uv);
+    return emissive->Value(is.uv);
 }
 
 } // namespace spt

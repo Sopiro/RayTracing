@@ -18,49 +18,47 @@ Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialCol
 
     if (HasTexture(basecolor))
     {
-        mat->basecolor_map = textures.basecolor;
+        mat->basecolor = textures.basecolor;
     }
     else
     {
-        mat->basecolor_map = SolidColor::Create(colors.diffuse);
+        mat->basecolor = SolidColor::Create(colors.diffuse);
     }
 
-    mat->normal_map = HasTexture(normal) ? textures.normal : SolidColor::Create(0.5, 0.5, 1.0);
+    mat->normal_map = HasTexture(normal_map) ? textures.normal_map : SolidColor::Create(0.5, 0.5, 1.0);
 
     if (HasTexture(metallic))
     {
-        mat->metallic_map = textures.metallic;
+        mat->metallic = textures.metallic;
     }
     else
     {
         if (IsBlack(colors.specular))
         {
-            mat->metallic_map = SolidColor::Create(0.0);
+            mat->metallic = SolidColor::Create(0.0);
         }
         else
         {
-            mat->metallic_map = SolidColor::Create(1.0);
+            mat->metallic = SolidColor::Create(1.0);
         }
     }
 
     if (HasTexture(roughness))
     {
-        mat->roughness_map = textures.roughness;
+        mat->roughness = textures.roughness;
     }
     else
     {
-        mat->roughness_map = SolidColor::Create(colors.specular);
+        mat->roughness = SolidColor::Create(colors.specular);
     }
-
-    mat->ao_map = HasTexture(ao) ? textures.ao : SolidColor::Create(1.0);
 
     if (HasTexture(emissive))
     {
-        mat->emissive_map = textures.emissive;
+        mat->emissive = textures.emissive;
     }
     else
     {
-        mat->emissive_map = SolidColor::Create(colors.emissive);
+        mat->emissive = SolidColor::Create(colors.emissive);
     }
 
     return mat;
@@ -73,12 +71,11 @@ Ref<Microfacet> RandomMicrofacetMaterial()
     Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
 
     Color basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * 0.7;
-    mat->basecolor_map = SolidColor::Create(basecolor);
+    mat->basecolor = SolidColor::Create(basecolor);
+    mat->roughness = SolidColor::Create(Vec3(Rand(0.0, 1.0)));
+    mat->metallic = SolidColor::Create(Vec3(Rand() > 0.5 ? 1.0 : 0.0));
+    mat->emissive = SolidColor::Create(basecolor * (Rand() < 0.04 ? Rand(0.0, 0.2) : 0.0));
     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
-    mat->roughness_map = SolidColor::Create(Vec3(Rand(0.0, 1.0)));
-    mat->metallic_map = SolidColor::Create(Vec3(Rand() > 0.5 ? 1.0 : 0.0));
-    mat->ao_map = SolidColor::Create(Vec3(1.0));
-    mat->emissive_map = SolidColor::Create(basecolor * (Rand() < 0.04 ? Rand(0.0, 0.2) : 0.0));
 
     return mat;
 }

@@ -4,21 +4,23 @@
 #include "spt/ggx_pdf.h"
 #include "spt/ggxvndf_pdf.h"
 
+#include "spt/util.h"
+
 namespace spt
 {
 
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
-    Vec3 basecolor = basecolor_map->Value(is.uv);
-    f64 metallic = metallic_map->Value(is.uv).z;
-    f64 roughness = roughness_map->Value(is.uv).y;
+    Vec3 c = basecolor->Value(is.uv);
+    f64 m = metallic->Value(is.uv).z;
+    f64 r = roughness->Value(is.uv).y;
 
-    f64 alpha = RoughnessToAlpha(roughness);
+    f64 alpha = RoughnessToAlpha(r);
     Vec3 wo = -wi;
 
-    Vec3 f0 = F0(basecolor, metallic);
+    Vec3 f0 = F0(c, m);
     Vec3 F = F_Schlick(f0, Dot(wo, is.shading.normal));
-    f64 diff_w = (1.0 - metallic);
+    f64 diff_w = (1.0 - m);
     f64 spec_w = Luma(F);
     // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
     f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.9);
@@ -66,15 +68,14 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     f64 NoH = Dot(n, h);
     f64 VoH = Dot(v, h);
 
-    Vec3 basecolor = basecolor_map->Value(is.uv);
-    f64 metallic = metallic_map->Value(is.uv).z;
-    f64 roughness = roughness_map->Value(is.uv).y;
-    f64 ao = ao_map->Value(is.uv).x;
+    Vec3 c = basecolor->Value(is.uv);
+    f64 m = metallic->Value(is.uv).z;
+    f64 r = roughness->Value(is.uv).y;
 
-    f64 alpha = RoughnessToAlpha(roughness);
+    f64 alpha = RoughnessToAlpha(r);
     f64 alpha2 = alpha * alpha;
 
-    Vec3 f0 = F0(basecolor, metallic);
+    Vec3 f0 = F0(c, m);
     Vec3 F = F_Schlick(f0, VoH);
     f64 D = D_GGX(NoH, alpha2);
     f64 V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
@@ -82,7 +83,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
 
     Vec3 f_s = F * (D * V);
     // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
-    Vec3 f_d = (Vec3(1.0) - F) * (1.0 - metallic) * (basecolor * inv_pi);
+    Vec3 f_d = (Vec3(1.0) - F) * (1.0 - m) * (c * inv_pi);
 
     return (f_d + f_s) * NoL;
 }

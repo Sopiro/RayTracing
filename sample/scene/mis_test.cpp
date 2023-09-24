@@ -7,9 +7,9 @@ void MISTest1(Scene& scene)
 {
     {
         auto floor = RandomMicrofacetMaterial();
-        floor->basecolor_map = SolidColor::Create(Vec3(0.73));
-        floor->roughness_map = SolidColor::Create(Vec3(1.0));
-        floor->metallic_map = SolidColor::Create(Vec3(0.0));
+        floor->basecolor = SolidColor::Create(Vec3(0.73));
+        floor->roughness = SolidColor::Create(Vec3(1.0));
+        floor->metallic = SolidColor::Create(Vec3(0.0));
 
         auto tf = Transform{ Vec3(0.0, 0.0, 0.0), Quat(identity), Vec3(3.0, 1.0, 3.0) };
         scene.Add(CreateRectXZ(tf, floor));
@@ -24,24 +24,24 @@ void MISTest1(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic_map = SolidColor::Create(Vec3(1.0));
-        m1->roughness_map = SolidColor::Create(Vec3(0.1));
+        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = SolidColor::Create(Vec3(1.0));
+        m1->roughness = SolidColor::Create(Vec3(0.1));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic_map = SolidColor::Create(Vec3(1.0));
-        m2->roughness_map = SolidColor::Create(Vec3(0.05));
+        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = SolidColor::Create(Vec3(1.0));
+        m2->roughness = SolidColor::Create(Vec3(0.05));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic_map = SolidColor::Create(Vec3(1.0));
-        m3->roughness_map = SolidColor::Create(Vec3(0.02));
+        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = SolidColor::Create(Vec3(1.0));
+        m3->roughness = SolidColor::Create(Vec3(0.02));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic_map = SolidColor::Create(Vec3(1.0));
-        m4->roughness_map = SolidColor::Create(Vec3(0.005));
+        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = SolidColor::Create(Vec3(1.0));
+        m4->roughness = SolidColor::Create(Vec3(0.005));
 
         f64 h = 0.2;
         f64 dh = 0.025;
@@ -105,9 +105,9 @@ void MISTest2(Scene& scene)
 {
     {
         auto floor_mat = RandomMicrofacetMaterial();
-        floor_mat->basecolor_map = SolidColor::Create(Vec3(0.4));
-        floor_mat->roughness_map = SolidColor::Create(Vec3(1.0));
-        floor_mat->metallic_map = SolidColor::Create(Vec3(0.0));
+        floor_mat->basecolor = SolidColor::Create(Vec3(0.4));
+        floor_mat->roughness = SolidColor::Create(Vec3(1.0));
+        floor_mat->metallic = SolidColor::Create(Vec3(0.0));
 
         auto floor = CreateSharedRef<Model>("res/veach_mi/floor.obj", Transform{ identity });
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
@@ -117,24 +117,24 @@ void MISTest2(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic_map = SolidColor::Create(Vec3(1.0));
-        m1->roughness_map = SolidColor::Create(Vec3(0.005));
+        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = SolidColor::Create(Vec3(1.0));
+        m1->roughness = SolidColor::Create(Vec3(0.005));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic_map = SolidColor::Create(Vec3(1.0));
-        m2->roughness_map = SolidColor::Create(Vec3(0.02));
+        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = SolidColor::Create(Vec3(1.0));
+        m2->roughness = SolidColor::Create(Vec3(0.02));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic_map = SolidColor::Create(Vec3(1.0));
-        m3->roughness_map = SolidColor::Create(Vec3(0.05));
+        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = SolidColor::Create(Vec3(1.0));
+        m3->roughness = SolidColor::Create(Vec3(0.05));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic_map = SolidColor::Create(Vec3(1.0));
-        m4->roughness_map = SolidColor::Create(Vec3(0.1));
+        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = SolidColor::Create(Vec3(1.0));
+        m4->roughness = SolidColor::Create(Vec3(0.1));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
@@ -178,9 +178,9 @@ void MISTestWak(Scene& scene)
 {
     {
         auto floor = RandomMicrofacetMaterial();
-        floor->basecolor_map = ImageTexture::Create("res/wakdu.jpg");
-        floor->roughness_map = SolidColor::Create(Vec3(1.0));
-        floor->metallic_map = SolidColor::Create(Vec3(0.0));
+        floor->basecolor = ImageTexture::Create("res/wakdu.jpg");
+        floor->roughness = SolidColor::Create(Vec3(1.0));
+        floor->metallic = SolidColor::Create(Vec3(0.0));
 
         f64 s = 20.0;
         auto tf = Transform{ Vec3(0.0, -4.0, -4.0), Quat(identity), Vec3(s, 1.0, s) };
@@ -193,24 +193,24 @@ void MISTestWak(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic_map = SolidColor::Create(Vec3(1.0));
-        m1->roughness_map = SolidColor::Create(Vec3(0.005));
+        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = SolidColor::Create(Vec3(1.0));
+        m1->roughness = SolidColor::Create(Vec3(0.005));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic_map = SolidColor::Create(Vec3(1.0));
-        m2->roughness_map = SolidColor::Create(Vec3(0.02));
+        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = SolidColor::Create(Vec3(1.0));
+        m2->roughness = SolidColor::Create(Vec3(0.02));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic_map = SolidColor::Create(Vec3(1.0));
-        m3->roughness_map = SolidColor::Create(Vec3(0.05));
+        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = SolidColor::Create(Vec3(1.0));
+        m3->roughness = SolidColor::Create(Vec3(0.05));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor_map = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic_map = SolidColor::Create(Vec3(1.0));
-        m4->roughness_map = SolidColor::Create(Vec3(0.1));
+        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = SolidColor::Create(Vec3(1.0));
+        m4->roughness = SolidColor::Create(Vec3(0.1));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);

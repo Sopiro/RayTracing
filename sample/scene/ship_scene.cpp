@@ -51,9 +51,9 @@ void ShipScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor_map = SolidColor::Create(Vec3(1.0));
-        mat->metallic_map = SolidColor::Create(Vec3(0.0));
-        mat->roughness_map = SolidColor::Create(Vec3(0.001));
+        mat->basecolor = SolidColor::Create(Vec3(1.0));
+        mat->metallic = SolidColor::Create(Vec3(0.0));
+        mat->roughness = SolidColor::Create(Vec3(0.001));
 
         f64 size = 9.0;
         f64 y = 2.1;
