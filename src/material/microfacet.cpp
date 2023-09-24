@@ -78,8 +78,8 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     Vec3 f0 = F0(c, m);
     Vec3 F = F_Schlick(f0, VoH);
     f64 D = D_GGX(NoH, alpha2);
-    f64 V = V_SmithGGXCorrelated(NoV, NoL, alpha2);
-    // f64 G = G2_Smith(NoV, NoL, alpha2);
+    // f64 G = G2_Smith_Correlated(NoV, NoL, alpha2);
+    f64 V = V_Smith_Correlated(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
     // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
