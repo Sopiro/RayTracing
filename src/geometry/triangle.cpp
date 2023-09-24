@@ -19,8 +19,8 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
 
     f64 det = Dot(e1, pvec);
 
-    bool backface = det < epsilon;
-    // if (backface == true)
+    // bool backface = det < epsilon;
+    // if (backface)
     // {
     //     return false;
     // }
@@ -86,8 +86,8 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 
     f64 det = Dot(e1, pvec);
 
-    bool backface = det < epsilon;
-    // if (backface == true)
+    // bool backface = det < epsilon;
+    // if (backface)
     // {
     //     return false;
     // }

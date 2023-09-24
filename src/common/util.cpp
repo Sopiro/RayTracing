@@ -74,7 +74,7 @@ Ref<Microfacet> RandomMicrofacetMaterial()
     mat->basecolor = SolidColor::Create(basecolor);
     mat->roughness = SolidColor::Create(Vec3(Rand(0.0, 1.0)));
     mat->metallic = SolidColor::Create(Vec3(Rand() > 0.5 ? 1.0 : 0.0));
-    mat->emissive = SolidColor::Create(basecolor * (Rand() < 0.04 ? Rand(0.0, 0.2) : 0.0));
+    mat->emissive = SolidColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, 0.3) : 0.0));
     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
 
     return mat;
