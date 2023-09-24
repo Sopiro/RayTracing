@@ -106,7 +106,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
 
 #if 1
     NodeProxy bestSibling = root;
-    Real bestCost = SAH(Union(nodes[root].aabb, aabb));
+    Real bestCost = SAH(AABB::Union(nodes[root].aabb, aabb));
 
     GrowableArray<std::pair<NodeProxy, Real>, 256> stack;
     stack.Emplace(root, 0.0f);
@@ -117,7 +117,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         Real inheritedCost = stack.Back().second;
         stack.Pop();
 
-        AABB combined = Union(nodes[current].aabb, aabb);
+        AABB combined = AABB::Union(nodes[current].aabb, aabb);
         Real directCost = SAH(combined);
 
         Real cost = directCost + inheritedCost;
@@ -149,7 +149,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         NodeProxy child2 = nodes[bestSibling].child2;
 
         Real area = SAH(nodes[bestSibling].aabb);
-        AABB combined = Union(nodes[bestSibling].aabb, aabb);
+        AABB combined = AABB::Union(nodes[bestSibling].aabb, aabb);
         Real combinedArea = SAH(combined);
 
         Real cost = combinedArea;
@@ -158,11 +158,11 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         Real cost1;
         if (nodes[child1].IsLeaf())
         {
-            cost1 = SAH(Union(nodes[child1].aabb, aabb)) + inheritanceCost;
+            cost1 = SAH(AABB::Union(nodes[child1].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            Real newArea = SAH(Union(nodes[child1].aabb, aabb));
+            Real newArea = SAH(AABB::Union(nodes[child1].aabb, aabb));
             Real oldArea = SAH(nodes[child1].aabb);
             cost1 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child1
         }
@@ -170,11 +170,11 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         Real cost2;
         if (nodes[child2].IsLeaf())
         {
-            cost2 = SAH(Union(nodes[child2].aabb, aabb)) + inheritanceCost;
+            cost2 = SAH(AABB::Union(nodes[child2].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            Real newArea = SAH(Union(nodes[child2].aabb, aabb));
+            Real newArea = SAH(AABB::Union(nodes[child2].aabb, aabb));
             Real oldArea = SAH(nodes[child2].aabb);
             cost2 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child2
         }
@@ -198,7 +198,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
     // Create a new parent
     NodeProxy oldParent = nodes[bestSibling].parent;
     NodeProxy newParent = AllocateNode();
-    nodes[newParent].aabb = Union(aabb, nodes[bestSibling].aabb);
+    nodes[newParent].aabb = AABB::Union(aabb, nodes[bestSibling].aabb);
     nodes[newParent].data = nullptr;
     nodes[newParent].parent = oldParent;
 
@@ -234,7 +234,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         NodeProxy child1 = nodes[ancestor].child1;
         NodeProxy child2 = nodes[ancestor].child2;
 
-        nodes[ancestor].aabb = Union(nodes[child1].aabb, nodes[child2].aabb);
+        nodes[ancestor].aabb = AABB::Union(nodes[child1].aabb, nodes[child2].aabb);
 
         Rotate(ancestor);
 
@@ -284,7 +284,7 @@ void BVH::RemoveLeaf(NodeProxy leaf)
             NodeProxy child1 = nodes[ancestor].child1;
             NodeProxy child2 = nodes[ancestor].child2;
 
-            nodes[ancestor].aabb = Union(nodes[child1].aabb, nodes[child2].aabb);
+            nodes[ancestor].aabb = AABB::Union(nodes[child1].aabb, nodes[child2].aabb);
 
             ancestor = nodes[ancestor].parent;
         }
@@ -398,14 +398,14 @@ void BVH::Rotate(NodeProxy node)
     Real costDiffs[4];
     Real nodeArea = SAH(nodes[node].aabb);
 
-    costDiffs[0] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
-    costDiffs[1] = SAH(Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
+    costDiffs[0] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
+    costDiffs[1] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
 
     if (nodes[sibling].IsLeaf() == false)
     {
         Real siblingArea = SAH(nodes[sibling].aabb);
-        costDiffs[2] = SAH(Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
-        costDiffs[3] = SAH(Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb)) - siblingArea;
+        costDiffs[2] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
+        costDiffs[3] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb)) - siblingArea;
 
         count += 2;
     }
@@ -441,7 +441,7 @@ void BVH::Rotate(NodeProxy node)
             nodes[node].child2 = sibling;
             nodes[sibling].parent = node;
 
-            nodes[node].aabb = Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb);
+            nodes[node].aabb = AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb);
             break;
         case 1: // Swap(sibling, node->child1);
             if (nodes[parent].child1 == sibling)
@@ -458,7 +458,7 @@ void BVH::Rotate(NodeProxy node)
             nodes[node].child1 = sibling;
             nodes[sibling].parent = node;
 
-            nodes[node].aabb = Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb);
+            nodes[node].aabb = AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb);
             break;
         case 2: // Swap(node, sibling->child2);
             if (nodes[parent].child1 == node)
@@ -475,7 +475,7 @@ void BVH::Rotate(NodeProxy node)
             nodes[sibling].child2 = node;
             nodes[node].parent = sibling;
 
-            nodes[sibling].aabb = Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb);
+            nodes[sibling].aabb = AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb);
             break;
         case 3: // Swap(node, sibling->child1);
             if (nodes[parent].child1 == node)
@@ -492,7 +492,7 @@ void BVH::Rotate(NodeProxy node)
             nodes[sibling].child1 = node;
             nodes[node].parent = sibling;
 
-            nodes[sibling].aabb = Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb);
+            nodes[sibling].aabb = AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb);
             break;
         }
     }
@@ -725,7 +725,7 @@ void BVH::Rebuild()
             {
                 AABB aabbJ = nodes[leaves[j]].aabb;
 
-                AABB combined = Union(aabbI, aabbJ);
+                AABB combined = AABB::Union(aabbI, aabbJ);
                 Real cost = SAH(combined);
 
                 if (cost < minCost)
@@ -748,7 +748,7 @@ void BVH::Rebuild()
 
         parent->child1 = index1;
         parent->child2 = index2;
-        parent->aabb = Union(child1->aabb, child2->aabb);
+        parent->aabb = AABB::Union(child1->aabb, child2->aabb);
         parent->parent = nullNode;
 
         child1->parent = parentIndex;

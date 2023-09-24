@@ -23,9 +23,9 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
     f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.9);
 
-    // ir->pdf = CreateSharedRef<CosinePDF>(is.shading.normal);
-    // ir->pdf = CreateSharedRef<GGXPDF>(is.shading.normal, wo, alpha, t);
-    ir->pdf = CreateSharedRef<GGXVNDFPDF>(is.shading.normal, wo, alpha, t);
+    // ir->pdf = new (ir->mem) CosinePDF(is.shading.normal);
+    // ir->pdf = new (ir->mem) GGXPDF(is.shading.normal, wo, alpha, t);
+    ir->pdf = new (ir->mem) GGXVNDFPDF(is.shading.normal, wo, alpha, t);
     ir->is_specular = false;
 
     return true;

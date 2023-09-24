@@ -27,8 +27,9 @@ public:
     Vec3 horizontal, vertical;
     Point3 lower_left;
 
-    Vec3 u, v, w;
     f64 lens_radius;
+
+    Vec3 u, v, w; // Local coordinate frame
 };
 
 inline Camera::Camera(const Point3& look_from,

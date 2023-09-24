@@ -17,6 +17,8 @@ struct AABB
     bool Intersect(const Ray& ray, f64 t_min, f64 t_max) const;
 
     Vec3 min, max;
+
+    static AABB Union(const AABB& b1, const AABB& b2);
 };
 
 inline f64 AABB::GetVolume() const
@@ -80,7 +82,7 @@ inline bool AABB::Intersect(const Ray& ray, f64 t_min, f64 t_max) const
     return true;
 }
 
-inline AABB Union(const AABB& b1, const AABB& b2)
+inline AABB AABB::Union(const AABB& b1, const AABB& b2)
 {
     Vec3 min = Min(b1.min, b2.min);
     Vec3 max = Max(b1.max, b2.max);

@@ -18,7 +18,8 @@ struct Interaction
     Ray specular_ray;
     Color attenuation;
 
-    Ref<PDF> pdf; // Scattering pdf
+    char mem[120];
+    PDF* pdf; // Scattering pdf
 };
 
 // Lambertian
