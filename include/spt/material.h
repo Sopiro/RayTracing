@@ -1,6 +1,10 @@
 #pragma once
 
+#include "cosine_pdf.h"
+#include "ggx_pdf.h"
+#include "ggxvndf_pdf.h"
 #include "pdf.h"
+
 #include "ray.h"
 #include "solid_color.h"
 
@@ -16,8 +20,18 @@ struct Interaction
     Ray specular_ray;
     Color attenuation;
 
-    char mem[120];
-    PDF* pdf; // Scattering pdf
+    const PDF* GetScatteringPDF() const
+    {
+        assert(is_specular == false);
+        return (PDF*)mem;
+    }
+
+private:
+    friend class Lambertian;
+    friend class Microfacet;
+
+    constexpr static size_t pdf_mem_size = std::max(std::max(sizeof(CosinePDF), sizeof(GGXPDF)), sizeof(GGXVNDFPDF));
+    char mem[pdf_mem_size];
 };
 
 // Lambertian
@@ -33,7 +47,7 @@ public:
 
     virtual Color Emit(const Intersection& is, const Vec3& wi) const;
 
-    // BRDF with cosine term
+    // BRDF + cosine term
     virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;
 
     inline static Ref<Material> fallback = nullptr;

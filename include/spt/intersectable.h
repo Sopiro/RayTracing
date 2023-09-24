@@ -29,7 +29,6 @@ protected:
 struct Intersection
 {
     f64 t;
-    bool front_face;
 
     const Intersectable* object;
     const Material* material;
@@ -37,6 +36,8 @@ struct Intersection
     Point3 point;
     Vec3 normal; // Geometric normal
     UV uv;
+
+    bool front_face;
 
     struct
     {

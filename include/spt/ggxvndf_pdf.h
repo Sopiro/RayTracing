@@ -1,6 +1,6 @@
 #pragma once
 
-#include "microfacet.h"
+#include "brdf.h"
 #include "pdf.h"
 
 namespace spt

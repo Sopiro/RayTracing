@@ -31,7 +31,6 @@ inline bool Metal::Scatter(Interaction* ir, const Intersection& is, const Vec3& 
     ir->specular_ray = Ray{ is.point, reflected + fuzziness * RandomInUnitSphere() };
     ir->attenuation = albedo;
     ir->is_specular = true;
-    ir->pdf = nullptr;
 
     return true;
 }

@@ -52,6 +52,8 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             was_specular = false;
         }
 
+        const PDF* pdf = ir.GetScatteringPDF();
+
         radiance += throughput * mat->Emit(is, d);
 
         // Estimate direct light
@@ -74,7 +76,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             Ray shadow_ray{ is.point, to_light };
 
             // Importance sample light
-            f64 light_brdf_pdf = ir.pdf->Evaluate(to_light);
+            f64 light_brdf_pdf = pdf->Evaluate(to_light);
             if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
                 if (scene.IntersectAny(shadow_ray, ray_epsilon, visibility) == false)
@@ -88,7 +90,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             if (light->IsDeltaLight() == false)
             {
                 // Importance sample BRDF
-                Vec3 scattered = ir.pdf->Sample();
+                Vec3 scattered = pdf->Sample();
                 shadow_ray = Ray{ is.point, scattered };
 
                 f64 brdf_light_pdf = light->EvaluatePDF(shadow_ray);
@@ -99,7 +101,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
-                            f64 brdf_p = ir.pdf->Evaluate(scattered);
+                            f64 brdf_p = pdf->Evaluate(scattered);
                             f64 mis_weight = 1.0 / (brdf_p + brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
@@ -114,22 +116,22 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         }
 
         // Sample new search direction based on BRDF
-        Vec3 wi = ir.pdf->Sample();
-        f64 pdf;
+        Vec3 wi = pdf->Sample();
+        f64 pdf_value;
 
         if (Dot(is.normal, wi) > 0.0)
         {
-            pdf = ir.pdf->Evaluate(wi);
+            pdf_value = pdf->Evaluate(wi);
         }
         else
         {
             break;
         }
 
-        assert(pdf > 0.0);
+        assert(pdf_value > 0.0);
         Ray scattered{ is.point, wi };
 
-        throughput *= mat->Evaluate(is, d, wi) / pdf;
+        throughput *= mat->Evaluate(is, d, wi) / pdf_value;
         ray = scattered;
 
         // Russian roulette
