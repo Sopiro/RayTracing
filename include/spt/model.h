@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "mesh.h"
 #include "transform.h"
 

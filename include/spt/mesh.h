@@ -1,7 +1,6 @@
 #pragma once
 
 #include "bvh.h"
-#include "common.h"
 #include "microfacet.h"
 
 namespace spt

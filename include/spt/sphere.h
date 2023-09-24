@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "onb.h"
 #include "primitive.h"
 #include "ray.h"

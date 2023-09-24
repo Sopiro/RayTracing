@@ -1,9 +1,6 @@
 #pragma once
 
-#include "common.h"
-#include "material.h"
 #include "mesh.h"
-#include "microfacet.h"
 #include "solid_color.h"
 #include "transform.h"
 

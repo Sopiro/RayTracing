@@ -1,8 +1,6 @@
 #pragma once
 
 #include "aabb.h"
-#include "common.h"
-#include "ray.h"
 
 namespace spt
 {

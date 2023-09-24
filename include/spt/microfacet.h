@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "material.h"
 
 namespace spt

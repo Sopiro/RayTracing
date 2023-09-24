@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "intersectable.h"
 #include "onb.h"
 

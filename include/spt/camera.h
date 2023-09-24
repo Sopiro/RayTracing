@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "ray.h"
 
 namespace spt

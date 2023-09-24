@@ -2,15 +2,12 @@
 
 #include "aggregate.h"
 #include "area_light.h"
-#include "common.h"
 #include "directional_light.h"
 #include "image_texture.h"
 #include "intersectable.h"
-#include "mesh.h"
 #include "model.h"
 #include "point_light.h"
 #include "solid_color.h"
-#include "sphere.h"
 
 namespace spt
 {

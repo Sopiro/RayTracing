@@ -1,9 +1,7 @@
 #pragma once
 
-#include "common.h"
 #include "intersectable.h"
 #include "isotropic.h"
-#include "material.h"
 
 namespace spt
 {

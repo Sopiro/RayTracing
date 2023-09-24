@@ -1,10 +1,8 @@
 #pragma once
 
-#include "common.h"
 #include "pdf.h"
 #include "ray.h"
 #include "solid_color.h"
-#include "texture.h"
 
 namespace spt
 {
