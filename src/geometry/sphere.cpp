@@ -72,6 +72,15 @@ bool Sphere::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return true;
 }
 
+void Sphere::Sample(Intersection* sample, f64* pdf) const
+{
+    f64 area = 4.0 * pi * radius * radius;
+    sample->normal = UniformSampleSphere();
+    sample->point = center + sample->normal * radius;
+    sample->uv = ComputeSphereUV(sample->normal);
+    *pdf = 1.0 / area;
+}
+
 void Sphere::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
 {
     Vec3 direction = center - ref;
@@ -120,6 +129,9 @@ void Sphere::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& r
     *pdf = 1.0 / solid_angle;
 
     sample->front_face = true;
+
+    sample->object = this;
+    sample->material = GetMaterial();
 }
 
 } // namespace spt

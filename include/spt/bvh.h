@@ -12,15 +12,6 @@ namespace spt
 constexpr Vec3 aabb_margin{ Real(0.0) };
 constexpr Real aabb_multiplier{ Real(1.0) };
 
-inline Real SAH(const AABB& aabb)
-{
-#if 0
-    return aabb.GetVolume();
-#else
-    return aabb.GetSurfaceArea();
-#endif
-}
-
 class Intersectable;
 
 class BVH
@@ -94,6 +85,7 @@ public:
 
 private:
     friend class Aggregate;
+    friend class Scene;
 
     NodeProxy nodeID;
     NodeProxy root;
@@ -112,6 +104,8 @@ private:
 
     void Rotate(NodeProxy node);
     void Swap(NodeProxy node1, NodeProxy node2);
+
+    static Real SAH(const AABB& aabb);
 };
 
 inline bool BVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
@@ -313,6 +307,15 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
             stack.Emplace(node->child2);
         }
     }
+}
+
+inline Real BVH::SAH(const AABB& aabb)
+{
+#if 0
+    return aabb.GetVolume();
+#else
+    return aabb.GetSurfaceArea();
+#endif
 }
 
 } // namespace spt

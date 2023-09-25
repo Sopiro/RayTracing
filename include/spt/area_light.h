@@ -36,8 +36,7 @@ inline Color AreaLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Inters
     *visibility = ref2p.Normalize() - ray_epsilon;
     *wi = ref2p;
 
-    const Material* mat = primitive->GetMaterial();
-    return mat->Emit(sample, ref2p);
+    return sample.material->Emit(sample, ref2p);
 }
 
 inline f64 AreaLight::EvaluatePDF(const Ray& ray) const

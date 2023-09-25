@@ -62,11 +62,11 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
     is->point = ray.At(t);
 
     Vec3 normal = Normalize(Cross(e1, e2));
-    Vec3 shading_normal = GetNormal(u, v, w);
-    Vec3 shading_tangent = GetTangent(u, v, w);
+    Vec3 shading_normal = DecodeNormal(u, v, w);
+    Vec3 shading_tangent = DecodeTangent(u, v, w);
     SetFaceNormal(is, ray.d, normal, shading_normal, shading_tangent);
 
-    is->uv = GetTexCoord(u, v, w);
+    is->uv = DecodeTexCoord(u, v, w);
 
     return true;
 }
@@ -151,7 +151,7 @@ void Triangle::Sample(Intersection* sample, f64* pdf) const
     *pdf = 1.0 / area;
 
     f64 w = 1.0 - u - v;
-    sample->uv = GetTexCoord(u, v, w);
+    sample->uv = DecodeTexCoord(u, v, w);
 
 #else
     f64 u1 = Rand(0.0, 1.0);
@@ -169,6 +169,32 @@ void Triangle::Sample(Intersection* sample, f64* pdf) const
     sample->p = point;
     sample->pdf = 1.0 / area;
 #endif
+}
+
+void Triangle::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
+{
+    Sample(sample, pdf);
+
+    Vec3 d = sample->point - ref;
+    f64 distance_squared = Dot(d, d);
+
+    f64 cosine = Dot(d, sample->normal) / std::sqrt(distance_squared);
+    if (cosine > 0.0)
+    {
+        sample->front_face = false;
+        sample->normal.Negate();
+    }
+    else
+    {
+        sample->front_face = true;
+        cosine = -cosine;
+    }
+
+    *pdf *= distance_squared / cosine; // Convert to solid angle measure
+    *ref2p = d;
+
+    sample->object = this;
+    sample->material = GetMaterial();
 }
 
 } // namespace spt

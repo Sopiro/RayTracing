@@ -18,6 +18,7 @@ public:
     virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const = 0;
 
     virtual f64 EvaluatePDF(const Ray& ray) const = 0;
+    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
 
     virtual const Material* GetMaterial() const = 0;
 };

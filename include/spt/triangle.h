@@ -19,16 +19,18 @@ public:
 
     virtual void Sample(Intersection* sample, f64* pdf) const override;
     virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
+
     virtual f64 EvaluatePDF(const Ray& ray) const override;
+    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
     virtual const Material* GetMaterial() const override;
 
 private:
     friend class Scene;
 
-    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
-    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
-    UV GetTexCoord(f64 u, f64 v, f64 w) const;
+    Vec3 DecodeNormal(f64 u, f64 v, f64 w) const;
+    Vec3 DecodeTangent(f64 u, f64 v, f64 w) const;
+    UV DecodeTexCoord(f64 u, f64 v, f64 w) const;
 
     const Ref<Mesh> mesh;
     const i32* v;
@@ -52,29 +54,6 @@ inline void Triangle::GetAABB(AABB* out_aabb) const
     out_aabb->max = Max(Max(p0, p1), p2) + aabb_offset;
 }
 
-inline void Triangle::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
-{
-    Sample(sample, pdf);
-
-    Vec3 d = sample->point - ref;
-    f64 distance_squared = Dot(d, d);
-
-    f64 cosine = Dot(d, sample->normal) / std::sqrt(distance_squared);
-    if (cosine > 0.0)
-    {
-        sample->front_face = false;
-        sample->normal.Negate();
-    }
-    else
-    {
-        sample->front_face = true;
-        cosine = -cosine;
-    }
-
-    *pdf *= distance_squared / cosine; // Convert to solid angle measure
-    *ref2p = d;
-}
-
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
@@ -83,8 +62,13 @@ inline f64 Triangle::EvaluatePDF(const Ray& ray) const
         return 0.0;
     }
 
-    f64 distance_squared = is.t * is.t * ray.d.Length2();
-    f64 cosine = std::fabs(Dot(ray.d, is.normal) / ray.d.Length());
+    return PDFValue(is, ray);
+}
+
+inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
+{
+    f64 distance_squared = hit_is.t * hit_is.t * hit_ray.d.Length2();
+    f64 cosine = std::fabs(Dot(hit_ray.d, hit_is.normal) / hit_ray.d.Length());
 
     const Vec3& p0 = mesh->vertices[v[0]].position;
     const Vec3& p1 = mesh->vertices[v[1]].position;
@@ -103,7 +87,7 @@ inline const Material* Triangle::GetMaterial() const
     return mesh->material.get();
 }
 
-inline Vec3 Triangle::GetNormal(f64 _u, f64 _v, f64 _w) const
+inline Vec3 Triangle::DecodeNormal(f64 _u, f64 _v, f64 _w) const
 {
     const Vec3& n0 = mesh->vertices[v[0]].normal;
     const Vec3& n1 = mesh->vertices[v[1]].normal;
@@ -112,7 +96,7 @@ inline Vec3 Triangle::GetNormal(f64 _u, f64 _v, f64 _w) const
     return Normalize(_w * n0 + _u * n1 + _v * n2);
 }
 
-inline Vec3 Triangle::GetTangent(f64 _u, f64 _v, f64 _w) const
+inline Vec3 Triangle::DecodeTangent(f64 _u, f64 _v, f64 _w) const
 {
     const Vec3& t0 = mesh->vertices[v[0]].tangent;
     const Vec3& t1 = mesh->vertices[v[1]].tangent;
@@ -121,7 +105,7 @@ inline Vec3 Triangle::GetTangent(f64 _u, f64 _v, f64 _w) const
     return Normalize(_w * t0 + _u * t1 + _v * t2);
 }
 
-inline UV Triangle::GetTexCoord(f64 _u, f64 _v, f64 _w) const
+inline UV Triangle::DecodeTexCoord(f64 _u, f64 _v, f64 _w) const
 {
     const Vec2& u0 = mesh->vertices[v[0]].texCoord;
     const Vec2& u1 = mesh->vertices[v[1]].texCoord;
