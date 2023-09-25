@@ -1,9 +1,9 @@
-#include "spt/aggregate.h"
+#include "spt/scene.h"
 
 namespace spt
 {
 
-bool Aggregate::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
+bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
     struct Callback
     {
@@ -32,11 +32,10 @@ bool Aggregate::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max
 
     bvh.RayCast(ray, t_min, t_max, &callback);
 
-    is->object = this;
     return callback.hit_closest;
 }
 
-bool Aggregate::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+bool Scene::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
     struct Callback
     {

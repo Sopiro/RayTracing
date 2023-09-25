@@ -8,7 +8,7 @@ namespace spt
 {
 
 // Represents aggregate primitive
-class Aggregate : public Intersectable
+class Aggregate : public Primitive
 {
 public:
     virtual ~Aggregate() = default;
@@ -17,7 +17,15 @@ public:
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    void Add(const Ref<Intersectable> object);
+    virtual void Sample(Intersection* sample, f64* pdf) const override;
+    virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
+
+    virtual f64 EvaluatePDF(const Ray& ray) const override;
+    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+
+    virtual const Material* GetMaterial() const override;
+
+    void Add(const Ref<Primitive> object);
     void Add(const Ref<Mesh> mesh);
     void Add(const Ref<Model> model);
 
@@ -27,7 +35,7 @@ public:
 private:
     BVH bvh;
 
-    std::vector<Ref<Intersectable>> objects;
+    std::vector<Ref<Primitive>> objects;
 };
 
 inline void Aggregate::GetAABB(AABB* out_aabb) const
@@ -41,7 +49,64 @@ inline void Aggregate::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-inline void Aggregate::Add(const Ref<Intersectable> object)
+inline void Aggregate::Sample(Intersection* sample, f64* pdf) const
+{
+    assert(false);
+}
+
+inline void Aggregate::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
+{
+    size_t count = objects.size();
+    size_t index = std::min(size_t(Rand() * count), count - 1);
+    Primitive* object = objects[index].get();
+
+    object->Sample(sample, pdf, ref2p, ref);
+
+    *pdf = EvaluatePDF(Ray(ref, *ref2p));
+}
+
+inline f64 Aggregate::EvaluatePDF(const Ray& ray) const
+{
+    struct Callback
+    {
+        f64 sum;
+        f64 weight;
+
+        Intersection is;
+
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        {
+            bool hit = object->Intersect(&is, ray, t_min, t_max);
+
+            if (hit)
+            {
+                sum += ((Primitive*)is.object)->PDFValue(is, ray);
+            }
+
+            return t_max;
+        }
+    } callback;
+
+    callback.sum = 0.0;
+
+    bvh.RayCast(ray, ray_epsilon, infinity, &callback);
+
+    return callback.sum / f64(objects.size());
+}
+
+inline f64 Aggregate::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
+{
+    assert(false);
+    return 0.0;
+}
+
+inline const Material* Aggregate::GetMaterial() const
+{
+    assert(false);
+    return nullptr;
+}
+
+inline void Aggregate::Add(const Ref<Primitive> object)
 {
     objects.push_back(object);
 
@@ -76,6 +141,7 @@ inline void Aggregate::Add(const Ref<Model> model)
 inline void Aggregate::Reset()
 {
     bvh.Reset();
+    objects.clear();
 }
 
 inline void Aggregate::Rebuild()

@@ -43,10 +43,11 @@ public:
 
 private:
     // Acceleration structure
-    Aggregate accel;
+    BVH bvh;
+    std::vector<Ref<Intersectable>> objects;
+    std::vector<Ref<Light>> lights;
 
     Ref<Texture> environment_map; // todo: importance sample this
-    std::vector<Ref<Light>> lights;
 };
 
 inline Scene::Scene()
@@ -54,40 +55,52 @@ inline Scene::Scene()
 {
 }
 
-inline bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
-{
-    return accel.Intersect(is, ray, t_min, t_max);
-}
-
-inline bool Scene::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
-{
-    return accel.IntersectAny(ray, t_min, t_max);
-}
-
 inline void Scene::GetAABB(AABB* out_aabb) const
 {
-    return accel.GetAABB(out_aabb);
+    if (bvh.nodeCount == 0)
+    {
+        out_aabb->min.SetZero();
+        out_aabb->max.SetZero();
+    }
+
+    *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
 inline void Scene::Add(const Ref<Intersectable> object)
 {
-    accel.Add(object);
+    objects.push_back(object);
+
+    AABB aabb;
+    object->GetAABB(&aabb);
+    bvh.CreateNode(object.get(), aabb);
 }
 
 inline void Scene::Add(const Ref<Mesh> mesh)
 {
-    accel.Add(mesh);
+    for (i32 i = 0; i < mesh->triangle_count; ++i)
+    {
+        auto tri = CreateSharedRef<Triangle>(mesh, i);
+        objects.push_back(tri);
+
+        AABB aabb;
+        tri->GetAABB(&aabb);
+        bvh.CreateNode(tri.get(), aabb);
+    }
 }
 
 inline void Scene::Add(const Ref<Model> model)
 {
-    accel.Add(model);
+    auto& meshes = model->GetMeshes();
+    for (size_t i = 0; i < meshes.size(); ++i)
+    {
+        Add(meshes[i]);
+    }
 }
 
 inline void Scene::AddLight(const Ref<Primitive> primitive)
 {
+    Add(primitive);
     lights.push_back(CreateSharedRef<AreaLight>(primitive));
-    accel.Add(primitive);
 }
 
 inline void Scene::AddLight(const Ref<Mesh> mesh)
@@ -95,8 +108,9 @@ inline void Scene::AddLight(const Ref<Mesh> mesh)
     for (i32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
+        Add(tri);
+
         lights.push_back(CreateSharedRef<AreaLight>(tri));
-        accel.Add(tri);
     }
 }
 
@@ -137,13 +151,14 @@ inline Color Scene::GetSkyColor(const Vec3& dir) const
 
 inline void Scene::Reset()
 {
-    accel.Reset();
+    bvh.Reset();
+    objects.clear();
     lights.clear();
 }
 
 inline void Scene::Rebuild()
 {
-    accel.Rebuild();
+    bvh.Rebuild();
 }
 
 } // namespace spt
