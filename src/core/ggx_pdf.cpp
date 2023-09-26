@@ -8,18 +8,8 @@ Vec3 GGXPDF::Sample() const
     if (Rand() < t)
     {
         Vec2 u = RandVec2();
+        Vec3 h = Sample_GGX(wo, alpha2, u);
 
-        f64 theta = std::acos(std::sqrt((1.0 - u.x) / ((alpha2 - 1.0) * u.x + 1.0)));
-        f64 phi = two_pi * u.y;
-
-        f64 sin_thetha = std::sin(theta);
-        f64 x = std::cos(phi) * sin_thetha;
-        f64 y = std::sin(phi) * sin_thetha;
-        f64 z = std::cos(theta);
-
-        assert(z > 0.0);
-
-        Vec3 h{ x, y, z }; // Sampled half vector
         Vec3 wh = uvw.GetLocal(h);
         Vec3 wi = Reflect(wo, wh);
 
