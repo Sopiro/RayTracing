@@ -1,4 +1,4 @@
-#include "spt/pathtracer.h"
+#include "spt/spt.h"
 
 namespace spt
 {

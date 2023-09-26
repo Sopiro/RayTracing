@@ -13,9 +13,9 @@ public:
     Triangle() = default;
     Triangle(const Ref<Mesh> mesh, size_t tri_index);
 
+    virtual void GetAABB(AABB* out_aabb) const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual void GetAABB(AABB* out_aabb) const override;
 
     virtual void Sample(Intersection* sample, f64* pdf) const override;
     virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
@@ -57,7 +57,7 @@ inline void Triangle::GetAABB(AABB* out_aabb) const
 inline f64 Triangle::EvaluatePDF(const Ray& ray) const
 {
     Intersection is;
-    if (Intersect(&is, ray, ray_epsilon, infinity) == false)
+    if (Intersect(&is, ray, Ray::epsilon, infinity) == false)
     {
         return 0.0;
     }

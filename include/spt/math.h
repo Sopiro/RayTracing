@@ -163,6 +163,11 @@ struct Vec2
     {
         return Vec2(-y, x);
     }
+
+    bool IsNullish() const
+    {
+        return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y);
+    }
 };
 
 struct Vec3
@@ -299,6 +304,11 @@ struct Vec3
         z *= invLength;
 
         return length;
+    }
+
+    bool IsNullish() const
+    {
+        return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y) || std::isnan(z) || std::isinf(z);
     }
 };
 
@@ -457,6 +467,12 @@ struct Vec4
         w *= invLength;
 
         return length;
+    }
+
+    bool IsNullish() const
+    {
+        return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y) || std::isnan(z) || std::isinf(z) ||
+               std::isnan(w) || std::isinf(w);
     }
 };
 

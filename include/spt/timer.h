@@ -13,8 +13,9 @@ public:
     Timer();
 
     void Mark();
-    f64 Get();
     void Reset();
+
+    f64 Get();
 
 private:
     std::vector<clock::time_point> time_points;
@@ -33,6 +34,13 @@ inline void Timer::Mark()
     time_points.push_back(clock::now());
 }
 
+inline void Timer::Reset()
+{
+    time_points.clear();
+    time_points.push_back(clock::now());
+    ptr = 0;
+}
+
 inline f64 Timer::Get()
 {
     if (ptr < time_points.size() - 1)
@@ -46,13 +54,6 @@ inline f64 Timer::Get()
     {
         return 0.0;
     }
-}
-
-inline void Timer::Reset()
-{
-    time_points.clear();
-    time_points.push_back(clock::now());
-    ptr = 0;
 }
 
 } // namespace spt

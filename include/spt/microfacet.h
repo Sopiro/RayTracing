@@ -16,8 +16,8 @@ class Microfacet : public Material
 public:
     Microfacet() = default;
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
     virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
     virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:

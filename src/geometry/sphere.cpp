@@ -1,4 +1,5 @@
 #include "spt/sphere.h"
+#include "spt/onb.h"
 
 namespace spt
 {

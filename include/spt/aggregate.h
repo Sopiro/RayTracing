@@ -13,9 +13,9 @@ class Aggregate : public Primitive
 public:
     virtual ~Aggregate() = default;
 
+    virtual void GetAABB(AABB* out_aabb) const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual void GetAABB(AABB* out_aabb) const override;
 
     virtual void Sample(Intersection* sample, f64* pdf) const override;
     virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
@@ -34,7 +34,6 @@ public:
 
 private:
     BVH bvh;
-
     std::vector<Ref<Primitive>> objects;
 };
 
@@ -63,35 +62,6 @@ inline void Aggregate::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const
     object->Sample(sample, pdf, ref2p, ref);
 
     *pdf = EvaluatePDF(Ray(ref, *ref2p));
-}
-
-inline f64 Aggregate::EvaluatePDF(const Ray& ray) const
-{
-    struct Callback
-    {
-        f64 sum;
-        f64 weight;
-
-        Intersection is;
-
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
-        {
-            bool hit = object->Intersect(&is, ray, t_min, t_max);
-
-            if (hit)
-            {
-                sum += ((Primitive*)is.object)->PDFValue(is, ray);
-            }
-
-            return t_max;
-        }
-    } callback;
-
-    callback.sum = 0.0;
-
-    bvh.RayCast(ray, ray_epsilon, infinity, &callback);
-
-    return callback.sum / f64(objects.size());
 }
 
 inline f64 Aggregate::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const

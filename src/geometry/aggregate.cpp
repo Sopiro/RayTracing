@@ -65,4 +65,33 @@ bool Aggregate::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return callback.hit_any;
 }
 
+f64 Aggregate::EvaluatePDF(const Ray& ray) const
+{
+    struct Callback
+    {
+        f64 sum;
+        f64 weight;
+
+        Intersection is;
+
+        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        {
+            bool hit = object->Intersect(&is, ray, t_min, t_max);
+
+            if (hit)
+            {
+                sum += ((Primitive*)is.object)->PDFValue(is, ray);
+            }
+
+            return t_max;
+        }
+    } callback;
+
+    callback.sum = 0.0;
+
+    bvh.RayCast(ray, Ray::epsilon, infinity, &callback);
+
+    return callback.sum / f64(objects.size());
+}
+
 } // namespace spt

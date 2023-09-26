@@ -15,9 +15,9 @@ class Intersectable
 public:
     virtual ~Intersectable() = default;
 
+    virtual void GetAABB(AABB* out_aabb) const = 0;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const = 0;
     virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const = 0;
-    virtual void GetAABB(AABB* out_aabb) const = 0;
 
 protected:
     friend class BVH;

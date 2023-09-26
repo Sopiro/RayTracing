@@ -2,7 +2,7 @@
 #include <crtdbg.h>
 #endif
 
-#include "spt/pathtracer.h"
+#include "spt/spt.h"
 
 #include <format>
 #include <omp.h>

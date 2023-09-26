@@ -21,9 +21,13 @@ public:
     virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
 
     virtual const Material* GetMaterial() const = 0;
+
+protected:
+    static void SetFaceNormal(
+        Intersection* is, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent);
 };
 
-inline void SetFaceNormal(
+inline void Primitive::SetFaceNormal(
     Intersection* is, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
 {
     is->shading.normal = shading_normal;

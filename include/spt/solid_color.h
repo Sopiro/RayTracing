@@ -8,6 +8,17 @@ namespace spt
 class SolidColor : public Texture
 {
 public:
+    struct ColorHash
+    {
+        size_t operator()(const Color& v) const
+        {
+            return std::hash<f64>()(v.x) ^ std::hash<f64>()(v.y) ^ std::hash<f64>()(v.z);
+        }
+    };
+
+    inline static i32 color_count = 0;
+    inline static std::unordered_map<Color, Ref<SolidColor>, ColorHash> loaded_colors;
+
     static Ref<SolidColor> Create(Color color);
     static Ref<SolidColor> Create(f64 rgb);
     static Ref<SolidColor> Create(f64 red, f64 green, f64 blue);
@@ -26,16 +37,10 @@ inline SolidColor::SolidColor(Color _color)
 {
 }
 
-struct ColorHash
+inline Color SolidColor::Value(const UV& uv) const
 {
-    size_t operator()(const Color& v) const
-    {
-        return std::hash<f64>()(v.x) ^ std::hash<f64>()(v.y) ^ std::hash<f64>()(v.z);
-    }
-};
-
-static i32 color_count = 0;
-static std::unordered_map<Color, Ref<SolidColor>, ColorHash> loaded_colors;
+    return color;
+}
 
 inline Ref<SolidColor> SolidColor::Create(Color color)
 {
@@ -60,11 +65,6 @@ inline Ref<SolidColor> SolidColor::Create(f64 rgb)
 inline Ref<SolidColor> SolidColor::Create(f64 r, f64 g, f64 b)
 {
     return Create(Color(r, g, b));
-}
-
-inline Color SolidColor::Value(const UV& uv) const
-{
-    return color;
 }
 
 } // namespace spt

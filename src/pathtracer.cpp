@@ -1,4 +1,5 @@
-#include "spt/pathtracer.h"
+#include "spt/spt.h"
+#include "spt/util.h"
 
 #define MIN_BOUNCES 3
 
@@ -17,7 +18,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         Vec3 d = Normalize(ray.d);
 
         Intersection is;
-        if (scene.Intersect(&is, ray, ray_epsilon, infinity) == false)
+        if (scene.Intersect(&is, ray, Ray::epsilon, infinity) == false)
         {
             radiance += throughput * scene.GetSkyColor(d);
             break;
@@ -79,7 +80,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             f64 light_brdf_pdf = pdf->Evaluate(to_light);
             if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
-                if (scene.IntersectAny(shadow_ray, ray_epsilon, visibility) == false)
+                if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
                     f64 mis_weight = 1.0 / (light_pdf + light_brdf_pdf);
 
@@ -97,7 +98,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 if (brdf_light_pdf > 0.0)
                 {
                     Intersection is2;
-                    if (scene.Intersect(&is2, shadow_ray, ray_epsilon, infinity))
+                    if (scene.Intersect(&is2, shadow_ray, Ray::epsilon, infinity))
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {

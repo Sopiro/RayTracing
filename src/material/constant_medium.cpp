@@ -3,6 +3,20 @@
 namespace spt
 {
 
+ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, const Ref<Texture> albedo)
+    : boundary{ std::move(boundary_object) }
+    , neg_inv_density{ -1.0 / density }
+    , phase_function{ CreateSharedRef<Isotropic>(albedo) }
+{
+}
+
+ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color)
+    : boundary{ boundary_object }
+    , neg_inv_density{ -1.0 / density }
+    , phase_function{ CreateSharedRef<Isotropic>(color) }
+{
+}
+
 bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
     Intersection is1, is2;
@@ -16,7 +30,7 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
     if (is1.front_face)
     {
         // Find the closest boundary
-        if (boundary->Intersect(&is2, ray, is1.t + ray_epsilon, infinity) == false)
+        if (boundary->Intersect(&is2, ray, is1.t + Ray::epsilon, infinity) == false)
         {
             return false;
         }

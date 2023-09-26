@@ -3,6 +3,11 @@
 namespace spt
 {
 
+Dielectric::Dielectric(f64 index_of_refraction)
+    : ior{ index_of_refraction }
+{
+}
+
 bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     f64 refraction_ratio = is.front_face ? (1.0 / ior) : ior;

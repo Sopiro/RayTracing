@@ -1,0 +1,98 @@
+#include "spt/ggxvndf_pdf.h"
+
+#define SPHERICAL_CAPS_VNDF_SAMPLING 1
+
+namespace spt
+{
+
+Vec3 GGXVNDFPDF::Sample() const
+{
+    if (Rand() < t)
+    {
+        // "Sampling Visible GGX Normals with Spherical Caps" by Dupuy & Benyoub
+        // https://gist.github.com/jdupuy/4c6e782b62c92b9cb3d13fbb0a5bd7a0
+        // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
+#if SPHERICAL_CAPS_VNDF_SAMPLING
+        Vec2 u = RandVec2();
+
+        // warp to the hemisphere configuration
+        Vec3 woStd = Normalize(Vec3(wo.x * alpha, wo.y * alpha, wo.z));
+
+        // sample the visible hemisphere from a spherical cap
+
+        // sample a spherical cap in (-wo.z, 1]
+        f64 phi = 2.0 * pi * u.x;
+        f64 z = std::fma(1.0 - u.y, 1.0 + wo.z, -wo.z);
+        f64 sin_thetha = std::sqrt(Clamp(1.0 - z * z, 0.0, 1.0));
+        f64 x = sin_thetha * std::cos(phi);
+        f64 y = sin_thetha * std::sin(phi);
+        Vec3 c(x, y, z);
+
+        // compute halfway direction
+        Vec3 h = c + wo;
+
+        // warp back to the ellipsoid configuration
+        Vec3 wm = Normalize(Vec3(h.x * alpha, h.y * alpha, h.z)); // Sampled half vector
+
+        Vec3 wh = uvw.GetLocal(wm);
+
+        // Get the wi by reflecting the wo about wh
+        Vec3 wi = Reflect(wo, wh);
+
+        return wi;
+#else
+        // Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
+        // https://jcgt.org/published/0007/04/01/
+
+        // Section 3.2: transforming the view direction to the hemisphere configuration
+        Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
+        Vh.Normalize();
+
+        // Build an orthonormal basis with v, t1, and t2
+        // Section 4.1: orthonormal basis (with special case if cross product is zero)
+        Vec3 T1 = (Vh.z < 0.999) ? Normalize(Cross(Vh, z_axis)) : x_axis;
+        Vec3 T2 = Cross(T1, Vh);
+
+        Vec2 u = RandVec2();
+
+        // Section 4.2: parameterization of the projected area
+        f64 r = std::sqrt(u.x);
+        f64 phi = two_pi * u.y;
+        f64 t1 = r * std::cos(phi);
+        f64 t2 = r * std::sin(phi);
+        f64 s = 0.5 * (1.0 + Vh.z);
+        t2 = Lerp(std::sqrt(1.0 - t1 * t1), t2, s);
+
+        // Section 4.3: reprojection onto hemisphere
+        Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(0.0, 1.0 - t1 * t1 - t2 * t2)) * Vh;
+
+        // Section 3.4: transforming the normal back to the ellipsoid configuration
+        Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(0.0, Nh.z))); // Sampled half vector
+        Vec3 wh = uvw.GetLocal(h);
+        Vec3 wi = Reflect(wo, wh);
+
+        return wi;
+#endif
+    }
+    else
+    {
+        Vec3 random_cosine = CosineSampleHemisphere();
+        return uvw.GetLocal(random_cosine);
+    }
+}
+
+f64 GGXVNDFPDF::Evaluate(const Vec3& wi) const
+{
+    f64 alpha2 = alpha * alpha;
+
+    Vec3 h = Normalize(wo + wi);
+    f64 NoH = Dot(h, uvw.w);
+    f64 LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
+    f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4.0 * LoH, 0.0);
+
+    f64 diff_w = LoH * inv_pi;
+
+    return (1.0 - t) * diff_w + t * spec_w;
+}
+
+} // namespace spt

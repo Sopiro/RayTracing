@@ -48,9 +48,9 @@ inline i32 Bitmap::GetHeight() const
 
 inline void Bitmap::Set(i32 x, i32 y, const Color& color)
 {
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 0] = static_cast<i32>(Clamp(color.x, 0.0, 0.999) * 256.0);
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 1] = static_cast<i32>(Clamp(color.y, 0.0, 0.999) * 256.0);
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 2] = static_cast<i32>(Clamp(color.z, 0.0, 0.999) * 256.0);
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 0] = i32(std::fmin(Clamp(color.x, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 1] = i32(std::fmin(Clamp(color.y, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 2] = i32(std::fmin(Clamp(color.z, 0.0, 1.0) * 256.0, 255.0));
 }
 
 inline void Bitmap::WriteToFile(char const* filename) const

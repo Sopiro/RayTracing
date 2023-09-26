@@ -18,11 +18,6 @@ private:
     static f64 Reflectance(f64 cosine, f64 ref_idx);
 };
 
-inline Dielectric::Dielectric(f64 index_of_refraction)
-    : ior{ index_of_refraction }
-{
-}
-
 inline f64 Dielectric::Reflectance(f64 cosine, f64 ref_idx)
 {
     // Schlick's approximation for reflectance.

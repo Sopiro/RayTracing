@@ -22,22 +22,6 @@ public:
     f64 neg_inv_density;
 };
 
-inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object,
-                                                    f64 density,
-                                                    const Ref<Texture> albedo)
-    : boundary{ std::move(boundary_object) }
-    , neg_inv_density{ -1.0 / density }
-    , phase_function{ CreateSharedRef<Isotropic>(albedo) }
-{
-}
-
-inline ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color)
-    : boundary{ boundary_object }
-    , neg_inv_density{ -1.0 / density }
-    , phase_function{ CreateSharedRef<Isotropic>(color) }
-{
-}
-
 inline bool ConstantDensityMedium::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
     return boundary->IntersectAny(ray, t_min, t_max);
