@@ -7,25 +7,64 @@
 namespace spt
 {
 
-Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<i32> _indices, const Mat4& transform, const Ref<Material> _material)
-    : vertices{ std::move(_vertices) }
+Mesh::Mesh(std::vector<Point3> _positions,
+           std::vector<Vec3> _normals,
+           std::vector<Vec3> _tangents,
+           std::vector<UV> _texCoords,
+           std::vector<i32> _indices,
+           const Mat4& transform,
+           const Ref<Material> _material)
+    : positions{ std::move(_positions) }
+    , normals{ std::move(_normals) }
+    , tangents{ std::move(_tangents) }
+    , texCoords{ std::move(_texCoords) }
     , indices{ std::move(_indices) }
     , material{ _material }
 {
-    // Transform vertices to the world space
-    for (size_t i = 0; i < vertices.size(); ++i)
-    {
-        Vertex& v = vertices[i];
+    size_t count = positions.size();
 
-        Vec4 vP = Mul(transform, Vec4(v.position, 1.0));
-        Vec4 vN = Mul(transform, Vec4(v.normal, 0.0));
-        Vec4 vT = Mul(transform, Vec4(v.tangent, 0.0));
+    // Transform vertices to the world space
+    for (size_t i = 0; i < count; ++i)
+    {
+        Vec4 vP = Mul(transform, Vec4(positions[i], 1.0));
+        Vec4 vN = Mul(transform, Vec4(normals[i], 0.0));
+        Vec4 vT = Mul(transform, Vec4(tangents[i], 0.0));
         vN.Normalize();
         vT.Normalize();
 
-        v.position.Set(vP.x, vP.y, vP.z);
-        v.normal.Set(vN.x, vN.y, vN.z);
-        v.tangent.Set(vT.x, vT.y, vT.z);
+        positions[i].Set(vP.x, vP.y, vP.z);
+        normals[i].Set(vN.x, vN.y, vN.z);
+        tangents[i].Set(vT.x, vT.y, vT.z);
+    }
+
+    triangle_count = i32(indices.size() / 3);
+}
+
+Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<i32> _indices, const Mat4& transform, const Ref<Material> _material)
+    : indices{ std::move(_indices) }
+    , material{ _material }
+{
+    size_t count = vertices.size();
+
+    positions.resize(count);
+    normals.resize(count);
+    tangents.resize(count);
+    texCoords.resize(count);
+
+    // Transform vertices to the world space
+    for (size_t i = 0; i < count; ++i)
+    {
+        Vec4 vP = Mul(transform, Vec4(vertices[i].position, 1.0));
+        Vec4 vN = Mul(transform, Vec4(vertices[i].normal, 0.0));
+        Vec4 vT = Mul(transform, Vec4(vertices[i].texCoord, 0.0));
+        vN.Normalize();
+        vT.Normalize();
+
+        positions[i].Set(vP.x, vP.y, vP.z);
+        normals[i].Set(vN.x, vN.y, vN.z);
+        tangents[i].Set(vT.x, vT.y, vT.z);
+
+        texCoords[i] = vertices[i].texCoord;
     }
 
     triangle_count = i32(indices.size() / 3);

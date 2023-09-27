@@ -18,7 +18,14 @@ struct Vertex
 class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> vertices, std::vector<i32> indices, const Mat4& transform, const Ref<Material> material);
+    Mesh(std::vector<Point3> positions,
+         std::vector<Vec3> normals,
+         std::vector<Vec3> tangents,
+         std::vector<UV> texCoords,
+         std::vector<i32> indices,
+         const Mat4& transform,
+         const Ref<Material> material);
+    Mesh(const std::vector<Vertex>& vertices, std::vector<i32> indices, const Mat4& transform, const Ref<Material> material);
 
     const Material* GetMaterial() const;
     void SetMaterial(const Ref<Material> material);
@@ -31,7 +38,10 @@ private:
     friend class Triangle;
 
     i32 triangle_count;
-    std::vector<Vertex> vertices;
+    std::vector<Point3> positions;
+    std::vector<Vec3> normals;
+    std::vector<Vec3> tangents;
+    std::vector<UV> texCoords;
     std::vector<i32> indices;
 
     Ref<Material> material;

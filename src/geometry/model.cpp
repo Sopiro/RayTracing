@@ -33,31 +33,44 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
-    std::vector<Vertex> vertices;
-    vertices.reserve(mesh->mNumVertices);
+    assert(mesh->HasPositions());
+    assert(mesh->HasNormals());
+
+    std::vector<Point3> positions;
+    std::vector<Vec3> normals;
+    std::vector<Vec3> tangents;
+    std::vector<UV> texCoords;
+
+    u32 vertexCount = mesh->mNumVertices;
+
+    positions.resize(vertexCount);
+    normals.resize(vertexCount);
+    tangents.resize(vertexCount);
+    texCoords.resize(vertexCount);
 
     // Process vertices
-    for (u32 i = 0; i < mesh->mNumVertices; ++i)
+    for (u32 i = 0; i < vertexCount; ++i)
     {
-        assert(mesh->HasPositions());
-        assert(mesh->HasNormals());
+        positions[i].Set(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+        normals[i].Set(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 
-        Vec3 position{ mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
-        Vec3 normal{ mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
-
-        Vec3 tangent{ 1.0, 0.0, 0.0 };
         if (mesh->HasTangentsAndBitangents())
         {
-            tangent.Set(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+            tangents[i].Set(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+        }
+        else
+        {
+            tangents[i].SetZero();
         }
 
-        Vec2 texCoord{ 0.0, 0.0 };
         if (mesh->HasTextureCoords(0))
         {
-            texCoord.Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+            texCoords[i].Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
         }
-
-        vertices.emplace_back(position, normal, tangent, texCoord);
+        else
+        {
+            texCoords[i].SetZero();
+        }
     }
 
     // Process indices
@@ -114,7 +127,8 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
 
     Ref<Material> material = CreateMaterial(textures, colors);
 
-    return CreateSharedRef<Mesh>(vertices, indices, transform, material);
+    return CreateSharedRef<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
+                                 std::move(indices), transform, material);
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

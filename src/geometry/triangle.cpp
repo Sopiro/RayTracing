@@ -6,9 +6,9 @@ namespace spt
 // Möller-Trumbore algorithm
 bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
 {
-    const Point3& p0 = mesh->vertices[v[0]].position;
-    const Point3& p1 = mesh->vertices[v[1]].position;
-    const Point3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->positions[v[0]];
+    const Point3& p1 = mesh->positions[v[1]];
+    const Point3& p2 = mesh->positions[v[2]];
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
@@ -62,20 +62,20 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max)
     is->point = ray.At(t);
 
     Vec3 normal = Normalize(Cross(e1, e2));
-    Vec3 shading_normal = DecodeNormal(u, v, w);
-    Vec3 shading_tangent = DecodeTangent(u, v, w);
+    Vec3 shading_normal = GetNormal(u, v, w);
+    Vec3 shading_tangent = GetTangent(u, v, w);
     SetFaceNormal(is, ray.d, normal, shading_normal, shading_tangent);
 
-    is->uv = DecodeTexCoord(u, v, w);
+    is->uv = GetTexCoord(u, v, w);
 
     return true;
 }
 
 bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 {
-    const Point3& p0 = mesh->vertices[v[0]].position;
-    const Point3& p1 = mesh->vertices[v[1]].position;
-    const Point3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->positions[v[0]];
+    const Point3& p1 = mesh->positions[v[1]];
+    const Point3& p2 = mesh->positions[v[2]];
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
@@ -125,9 +125,9 @@ bool Triangle::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
 
 void Triangle::Sample(Intersection* sample, f64* pdf) const
 {
-    const Point3& p0 = mesh->vertices[v[0]].position;
-    const Point3& p1 = mesh->vertices[v[1]].position;
-    const Point3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->positions[v[0]];
+    const Point3& p1 = mesh->positions[v[1]];
+    const Point3& p2 = mesh->positions[v[2]];
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
@@ -151,7 +151,7 @@ void Triangle::Sample(Intersection* sample, f64* pdf) const
     *pdf = 1.0 / area;
 
     f64 w = 1.0 - u - v;
-    sample->uv = DecodeTexCoord(u, v, w);
+    sample->uv = GetTexCoord(u, v, w);
 
 #else
     f64 u1 = Rand(0.0, 1.0);

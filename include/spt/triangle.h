@@ -28,9 +28,9 @@ public:
 private:
     friend class Scene;
 
-    Vec3 DecodeNormal(f64 u, f64 v, f64 w) const;
-    Vec3 DecodeTangent(f64 u, f64 v, f64 w) const;
-    UV DecodeTexCoord(f64 u, f64 v, f64 w) const;
+    Vec3 GetNormal(f64 u, f64 v, f64 w) const;
+    Vec3 GetTangent(f64 u, f64 v, f64 w) const;
+    UV GetTexCoord(f64 u, f64 v, f64 w) const;
 
     const Ref<Mesh> mesh;
     const i32* v;
@@ -46,9 +46,9 @@ inline void Triangle::GetAABB(AABB* out_aabb) const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
-    const Point3& p0 = mesh->vertices[v[0]].position;
-    const Point3& p1 = mesh->vertices[v[1]].position;
-    const Point3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->positions[v[0]];
+    const Point3& p1 = mesh->positions[v[1]];
+    const Point3& p2 = mesh->positions[v[2]];
 
     out_aabb->min = Min(Min(p0, p1), p2) - aabb_offset;
     out_aabb->max = Max(Max(p0, p1), p2) + aabb_offset;
@@ -70,9 +70,9 @@ inline f64 Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     f64 distance_squared = hit_is.t * hit_is.t * hit_ray.d.Length2();
     f64 cosine = std::fabs(Dot(hit_ray.d, hit_is.normal) / hit_ray.d.Length());
 
-    const Vec3& p0 = mesh->vertices[v[0]].position;
-    const Vec3& p1 = mesh->vertices[v[1]].position;
-    const Vec3& p2 = mesh->vertices[v[2]].position;
+    const Point3& p0 = mesh->positions[v[0]];
+    const Point3& p1 = mesh->positions[v[1]];
+    const Point3& p2 = mesh->positions[v[2]];
 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
@@ -87,30 +87,39 @@ inline const Material* Triangle::GetMaterial() const
     return mesh->material.get();
 }
 
-inline Vec3 Triangle::DecodeNormal(f64 _u, f64 _v, f64 _w) const
+inline Vec3 Triangle::GetNormal(f64 _u, f64 _v, f64 _w) const
 {
-    const Vec3& n0 = mesh->vertices[v[0]].normal;
-    const Vec3& n1 = mesh->vertices[v[1]].normal;
-    const Vec3& n2 = mesh->vertices[v[2]].normal;
+    const Vec3& n0 = mesh->normals[v[0]];
+    const Vec3& n1 = mesh->normals[v[1]];
+    const Vec3& n2 = mesh->normals[v[2]];
 
-    return Normalize(_w * n0 + _u * n1 + _v * n2);
+    Vec3 n = _w * n0 + _u * n1 + _v * n2;
+    n.Normalize();
+
+    return n;
 }
 
-inline Vec3 Triangle::DecodeTangent(f64 _u, f64 _v, f64 _w) const
+inline Vec3 Triangle::GetTangent(f64 _u, f64 _v, f64 _w) const
 {
-    const Vec3& t0 = mesh->vertices[v[0]].tangent;
-    const Vec3& t1 = mesh->vertices[v[1]].tangent;
-    const Vec3& t2 = mesh->vertices[v[2]].tangent;
+    const Vec3& t0 = mesh->tangents[v[0]];
+    const Vec3& t1 = mesh->tangents[v[1]];
+    const Vec3& t2 = mesh->tangents[v[2]];
 
-    return Normalize(_w * t0 + _u * t1 + _v * t2);
+    Vec3 t = _w * t0 + _u * t1 + _v * t2;
+    t.Normalize();
+
+    return t;
 }
 
-inline UV Triangle::DecodeTexCoord(f64 _u, f64 _v, f64 _w) const
+inline UV Triangle::GetTexCoord(f64 _u, f64 _v, f64 _w) const
 {
-    const Vec2& u0 = mesh->vertices[v[0]].texCoord;
-    const Vec2& u1 = mesh->vertices[v[1]].texCoord;
-    const Vec2& u2 = mesh->vertices[v[2]].texCoord;
+    const UV& u0 = mesh->texCoords[v[0]];
+    const UV& u1 = mesh->texCoords[v[1]];
+    const UV& u2 = mesh->texCoords[v[2]];
 
-    return _w * u0 + _u * u1 + _v * u2;
+    UV uv = _w * u0 + _u * u1 + _v * u2;
+
+    return uv;
 }
+
 } // namespace spt
