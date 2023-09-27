@@ -1,4 +1,5 @@
 #include "spt/camera.h"
+#include "spt/sampling.h"
 
 namespace spt
 {

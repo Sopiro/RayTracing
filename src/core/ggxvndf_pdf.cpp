@@ -1,4 +1,5 @@
 #include "spt/ggxvndf_pdf.h"
+#include "spt/sampling.h"
 
 #define SPHERICAL_CAPS_VNDF_SAMPLING 1
 

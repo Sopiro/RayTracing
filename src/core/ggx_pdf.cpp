@@ -1,4 +1,5 @@
 #include "spt/ggx_pdf.h"
+#include "spt/sampling.h"
 
 namespace spt
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pdf.h"
+#include "sampling.h"
 
 namespace spt
 {

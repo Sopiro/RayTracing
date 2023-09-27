@@ -1,5 +1,6 @@
 #include "spt/sphere.h"
 #include "spt/onb.h"
+#include "spt/sampling.h"
 
 namespace spt
 {

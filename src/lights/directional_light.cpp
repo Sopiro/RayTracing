@@ -1,4 +1,5 @@
 #include "spt/directional_light.h"
+#include "spt/sampling.h"
 
 namespace spt
 {
