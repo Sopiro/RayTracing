@@ -59,6 +59,8 @@ int main()
     Scene scene;
     Camera camera;
 
+    Timer timer;
+
     switch (2)
     {
     case 0: // Raytracing in one weekend final scene
@@ -410,7 +412,9 @@ int main()
         break;
     }
 
-    Timer timer;
+    timer.Mark();
+    Float t = timer.Get();
+    std::cout << "Scene construction: " << t << "s" << std::endl;
 
     // #pragma omp parallel for schedule(dynamic, 1)
     for (int32 y = 0; y < height; ++y)
@@ -453,7 +457,7 @@ int main()
     }
 
     timer.Mark();
-    Float t = timer.Get();
+    t = timer.Get();
 
     std::cout << "\nDone!: " << t << 's' << std::endl;
 
