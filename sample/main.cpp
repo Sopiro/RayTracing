@@ -45,15 +45,15 @@ int main()
 
     using namespace spt;
 
-    // f64 aspect_ratio = 16.0 / 9.0;
-    // f64 aspect_ratio = 3.0 / 2.0;
-    // f64 aspect_ratio = 4.0 / 3.0;
-    f64 aspect_ratio = 1.0;
-    i32 width = 500;
-    i32 height = static_cast<i32>(width / aspect_ratio);
-    i32 samples_per_pixel = 64;
-    f64 scale = 1.0 / samples_per_pixel;
-    i32 max_bounces = INT_MAX;
+    // Float aspect_ratio = 16.0 / 9.0;
+    // Float aspect_ratio = 3.0 / 2.0;
+    // Float aspect_ratio = 4.0 / 3.0;
+    Float aspect_ratio = 1.0;
+    int32 width = 500;
+    int32 height = static_cast<int32>(width / aspect_ratio);
+    int32 samples_per_pixel = 64;
+    Float scale = 1.0 / samples_per_pixel;
+    int32 max_bounces = INT_MAX;
     Bitmap bitmap{ width, height };
 
     Scene scene;
@@ -68,9 +68,9 @@ int main()
         Point3 lookfrom{ 13, 2, 3 };
         Point3 lookat{ 0, 0, 0 };
 
-        f64 dist_to_focus = 10.0;
-        f64 aperture = 0.1;
-        f64 vFov = 20;
+        Float dist_to_focus = 10.0;
+        Float aperture = 0.1;
+        Float vFov = 20;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -83,9 +83,9 @@ int main()
         Point3 lookfrom{ 0, 0, 5 };
         Point3 lookat{ 0, 0, 0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 71;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -98,9 +98,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.25 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -122,9 +122,9 @@ int main()
         Point3 lookfrom{ 0.0, 5.0, 6.0 };
         Point3 lookat{ 0.0, 5.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 71;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -140,9 +140,9 @@ int main()
         Point3 lookfrom = Point3(1.0, 0.5, 4.0) * 1.2;
         Point3 lookat = Point3(0.0, 0.0, 0.0);
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -155,9 +155,9 @@ int main()
         Point3 lookfrom{ 0.0, 4.0, 5.0 };
         Point3 lookat{ 0.0, 0.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 71.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 71.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -170,9 +170,9 @@ int main()
         Point3 lookfrom{ 0.0, 3.0, 5.0 };
         Point3 lookat{ 0.0, 0.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 71.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 71.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -185,9 +185,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.25 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -197,14 +197,14 @@ int main()
     {
         MISTest1(scene);
 
-        f64 y = 0.345832;
+        Float y = 0.345832;
 
         Point3 lookfrom{ 0.0, y, 1.0 };
         Point3 lookat{ 0.0, y, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -217,9 +217,9 @@ int main()
         Point3 lookfrom{ 0.0, 2, 15 };
         Point3 lookat{ 0.0, -2, 2.5 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 28.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 28.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -232,9 +232,9 @@ int main()
         Point3 lookfrom{ 0.0, 2, 15 };
         Point3 lookat{ 0.0, -2, 2.5 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 28.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 28.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -247,9 +247,9 @@ int main()
         Point3 lookfrom{ 0.0, 2.0, 10.0 };
         Point3 lookat{ 0.0, 1.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -262,9 +262,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.25 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -277,9 +277,9 @@ int main()
         Point3 lookfrom{ -2.0, 1.0, 2.0 };
         Point3 lookat{ 0.0, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -292,9 +292,9 @@ int main()
         Point3 lookfrom{ 0.0, 0.5, 2.0 };
         Point3 lookat{ 0.0, 0.2, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -307,9 +307,9 @@ int main()
         Point3 lookfrom{ 0.0, 0.0, 10.0 };
         Point3 lookat{ 0.0, 0.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -322,9 +322,9 @@ int main()
         Point3 lookfrom{ 5.0, 5.0, 10.0 };
         Point3 lookat{ 0.0, 2.8, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -337,9 +337,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.25 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -352,9 +352,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.64 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 35.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 35.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -367,9 +367,9 @@ int main()
         Point3 lookfrom{ -4.0, 3.5, -4.0 };
         Point3 lookat{ 0.0, 0.0, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.02;
-        f64 vFov = 30.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.02;
+        Float vFov = 30.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -382,9 +382,9 @@ int main()
         Point3 lookfrom{ 0.5, 0.5, 1.25 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 45.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 45.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -397,9 +397,9 @@ int main()
         Point3 lookfrom{ 0.0, 2.2, 4.5 };
         Point3 lookat{ 0.0, 1.5, 0.0 };
 
-        f64 dist_to_focus = (lookfrom - lookat).Length();
-        f64 aperture = 0.0;
-        f64 vFov = 71.0;
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 71.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -413,7 +413,7 @@ int main()
     Timer timer;
 
     // #pragma omp parallel for schedule(dynamic, 1)
-    for (i32 y = 0; y < height; ++y)
+    for (int32 y = 0; y < height; ++y)
     {
         if (omp_get_thread_num() == 0)
         {
@@ -421,14 +421,14 @@ int main()
         }
 
 #pragma omp parallel for schedule(dynamic, 1)
-        for (i32 x = 0; x < width; ++x)
+        for (int32 x = 0; x < width; ++x)
         {
             Color samples{ 0.0, 0.0, 0.0 };
 
             for (size_t s = 0; s < samples_per_pixel; ++s)
             {
-                f64 u = (x + Rand()) / (width - 1);
-                f64 v = (y + Rand()) / (height - 1);
+                Float u = (x + Rand()) / (width - 1);
+                Float v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GetRay(u, v);
                 samples += PathTrace(scene, ray, max_bounces);
@@ -453,7 +453,7 @@ int main()
     }
 
     timer.Mark();
-    f64 t = timer.Get();
+    Float t = timer.Get();
 
     std::cout << "\nDone!: " << t << 's' << std::endl;
 

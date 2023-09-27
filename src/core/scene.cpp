@@ -3,15 +3,15 @@
 namespace spt
 {
 
-bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
+bool Scene::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
     {
         Intersection* is;
         bool hit_closest;
-        f64 t;
+        Float t;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
             bool hit = object->Intersect(is, ray, t_min, t_max);
 
@@ -35,13 +35,13 @@ bool Scene::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) co
     return callback.hit_closest;
 }
 
-bool Scene::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
     {
         bool hit_any;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
             bool hit = object->IntersectAny(ray, t_min, t_max);
 

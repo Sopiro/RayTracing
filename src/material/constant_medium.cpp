@@ -3,21 +3,21 @@
 namespace spt
 {
 
-ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, const Ref<Texture> albedo)
+ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, const Ref<Texture> albedo)
     : boundary{ std::move(boundary_object) }
-    , neg_inv_density{ -1.0 / density }
+    , neg_inv_density{ -1 / density }
     , phase_function{ CreateSharedRef<Isotropic>(albedo) }
 {
 }
 
-ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color)
+ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, Color color)
     : boundary{ boundary_object }
-    , neg_inv_density{ -1.0 / density }
+    , neg_inv_density{ -1 / density }
     , phase_function{ CreateSharedRef<Isotropic>(color) }
 {
 }
 
-bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
+bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
 {
     Intersection is1, is2;
 
@@ -47,9 +47,9 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, f64 t_mi
         is1.t = t_min;
     }
 
-    f64 ray_length = ray.d.Length();
-    f64 distance_inside_boundary = (is2.t - is1.t) * ray_length;
-    f64 hit_distance = neg_inv_density * log(Rand());
+    Float ray_length = ray.d.Length();
+    Float distance_inside_boundary = (is2.t - is1.t) * ray_length;
+    Float hit_distance = neg_inv_density * log(Rand());
 
     if (hit_distance > distance_inside_boundary)
     {

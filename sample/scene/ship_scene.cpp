@@ -23,7 +23,7 @@ void ShipScene(Scene& scene)
 
     // Light
     {
-        f64 size = 0.5;
+        Float size = 0.5;
 
         auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(30.0)));
         white->two_sided = true;
@@ -55,8 +55,8 @@ void ShipScene(Scene& scene)
         mat->metallic = SolidColor::Create(Vec3(0.0));
         mat->roughness = SolidColor::Create(Vec3(0.001));
 
-        f64 size = 9.0;
-        f64 y = 2.1;
+        Float size = 9.0;
+        Float y = 2.1;
 
         auto tf = Transform{ Point3(0.0, y - size / 2.0, 0.0), Quat(identity), Vec3(size) };
         auto rect = CreateRectXZ(tf, mat);

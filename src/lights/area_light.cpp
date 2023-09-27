@@ -10,7 +10,7 @@ AreaLight::AreaLight(const Ref<Primitive> _primitive)
 {
 }
 
-Color AreaLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Intersection& ref) const
+Color AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
 {
     Intersection sample;
     Vec3 ref2p;

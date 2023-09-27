@@ -7,28 +7,28 @@ namespace spt
 
 struct AABB
 {
-    f64 GetVolume() const;
-    f64 GetSurfaceArea() const;
+    Float GetVolume() const;
+    Float GetSurfaceArea() const;
 
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
-    bool Intersect(const Ray& ray, f64 t_min, f64 t_max) const;
+    bool Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     Vec3 min, max;
 
     static AABB Union(const AABB& b1, const AABB& b2);
 };
 
-inline f64 AABB::GetVolume() const
+inline Float AABB::GetVolume() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
 }
 
-inline f64 AABB::GetSurfaceArea() const
+inline Float AABB::GetSurfaceArea() const
 {
     Vec3 w = max - min;
-    return 2.0 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
+    return 2 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
 }
 
 inline bool AABB::Contains(const AABB& other) const

@@ -24,9 +24,9 @@ void StatueScene(Scene& scene)
         scene.Add(model);
     }
 
-    f64 light = 8.0;
-    f64 distance = 5.0;
-    f64 size = 2.0;
+    Float light = 8.0;
+    Float distance = 5.0;
+    Float size = 2.0;
 
     {
         auto red = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(light, 0.0, 0.0)));
@@ -56,15 +56,15 @@ void StatueScene(Scene& scene)
     // {
     // auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(3.0)));
 
-    //     i32 count = 10;
-    //     f64 d = two_pi / count;
+    //     int32 count = 10;
+    //     Float d = two_pi / count;
 
-    //     f64 y = 2.0;
-    //     f64 r = 1.5;
+    //     Float y = 2.0;
+    //     Float r = 1.5;
 
     //     for (int i = 0; i < count; ++i)
     //     {
-    //         f64 angle = d * i;
+    //         Float angle = d * i;
     //         auto pos = Vec3(std::cos(angle) * r, y, std::sin(angle) * r);
     //         auto sphere = CreateSharedRef<Sphere>(pos, 0.1, white);
 

@@ -5,7 +5,7 @@
 namespace spt
 {
 
-using NodeProxy = i32;
+using NodeProxy = int32;
 
 class Material;
 struct Intersection;
@@ -16,8 +16,8 @@ public:
     virtual ~Intersectable() = default;
 
     virtual void GetAABB(AABB* out_aabb) const = 0;
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const = 0;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const = 0;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const = 0;
+    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const = 0;
 
 protected:
     friend class BVH;
@@ -28,7 +28,7 @@ protected:
 
 struct Intersection
 {
-    f64 t;
+    Float t;
 
     const Intersectable* object;
     const Material* material;

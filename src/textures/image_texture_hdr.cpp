@@ -5,7 +5,7 @@ namespace spt
 
 ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 {
-    i32 components_per_pixel;
+    int32 components_per_pixel;
     data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
     if (!data)
@@ -17,11 +17,11 @@ ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
     else
     {
 #pragma omp parallel for
-        for (i32 i = 0; i < width * height * bytes_per_pixel; ++i)
+        for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
         {
             // Clamp needed
-            f32 value = *((f32*)data + i);
-            *((f32*)data + i) = Clamp(value, 0.0f, 10.0f);
+            float value = *((float*)data + i);
+            *((float*)data + i) = Clamp(value, 0.0f, 10.0f);
         }
     }
 
@@ -30,8 +30,8 @@ ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 
 Color ImageTextureHDR::Value(const UV& uv) const
 {
-    f64 u = fmod(uv.x, 1.0);
-    f64 v = fmod(uv.y, 1.0);
+    Float u = fmod(uv.x, 1.0);
+    Float v = fmod(uv.y, 1.0);
 
     if (u < 0.0) ++u;
     if (v < 0.0) ++v;
@@ -39,14 +39,14 @@ Color ImageTextureHDR::Value(const UV& uv) const
     // Flip V to image coordinates
     v = 1.0 - v;
 
-    i32 i = i32(u * width);
-    i32 j = i32(v * height);
+    int32 i = int32(u * width);
+    int32 j = int32(v * height);
 
     // Clamp integer mapping, since actual coordinates should be less than 1.0
     if (i >= width) i = width - 1;
     if (j >= height) j = height - 1;
 
-    f32* pixel = (f32*)data + j * bytes_per_scanline + i * bytes_per_pixel;
+    float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
     return Color(pixel[0], pixel[1], pixel[2]);
 }

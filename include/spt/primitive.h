@@ -12,13 +12,13 @@ public:
     virtual ~Primitive() = default;
 
     // Returns random point on the surface
-    virtual void Sample(Intersection* sample, f64* pdf) const = 0;
+    virtual void Sample(Intersection* sample, Float* pdf) const = 0;
 
     // Returns random point relative to the reference point
-    virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const = 0;
+    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const = 0;
 
-    virtual f64 EvaluatePDF(const Ray& ray) const = 0;
-    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
+    virtual Float EvaluatePDF(const Ray& ray) const = 0;
+    virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
 
     virtual const Material* GetMaterial() const = 0;
 

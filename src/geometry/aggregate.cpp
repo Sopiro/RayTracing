@@ -3,15 +3,15 @@
 namespace spt
 {
 
-bool Aggregate::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max) const
+bool Aggregate::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
     {
         Intersection* is;
         bool hit_closest;
-        f64 t;
+        Float t;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
             bool hit = object->Intersect(is, ray, t_min, t_max);
 
@@ -36,13 +36,13 @@ bool Aggregate::Intersect(Intersection* is, const Ray& ray, f64 t_min, f64 t_max
     return callback.hit_closest;
 }
 
-bool Aggregate::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+bool Aggregate::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
     {
         bool hit_any;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
             bool hit = object->IntersectAny(ray, t_min, t_max);
 
@@ -65,16 +65,16 @@ bool Aggregate::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
     return callback.hit_any;
 }
 
-f64 Aggregate::EvaluatePDF(const Ray& ray) const
+Float Aggregate::EvaluatePDF(const Ray& ray) const
 {
     struct Callback
     {
-        f64 sum;
-        f64 weight;
+        Float sum;
+        Float weight;
 
         Intersection is;
 
-        f64 RayCastCallback(const Ray& ray, f64 t_min, f64 t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
             bool hit = object->Intersect(&is, ray, t_min, t_max);
 
@@ -91,7 +91,7 @@ f64 Aggregate::EvaluatePDF(const Ray& ray) const
 
     bvh.RayCast(ray, Ray::epsilon, infinity, &callback);
 
-    return callback.sum / f64(objects.size());
+    return callback.sum / Float(objects.size());
 }
 
 } // namespace spt

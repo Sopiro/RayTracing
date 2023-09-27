@@ -11,7 +11,7 @@ Mesh::Mesh(std::vector<Point3> _positions,
            std::vector<Vec3> _normals,
            std::vector<Vec3> _tangents,
            std::vector<UV> _texCoords,
-           std::vector<i32> _indices,
+           std::vector<int32> _indices,
            const Mat4& transform,
            const Ref<Material> _material)
     : positions{ std::move(_positions) }
@@ -37,10 +37,10 @@ Mesh::Mesh(std::vector<Point3> _positions,
         tangents[i].Set(vT.x, vT.y, vT.z);
     }
 
-    triangle_count = i32(indices.size() / 3);
+    triangle_count = int32(indices.size() / 3);
 }
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<i32> _indices, const Mat4& transform, const Ref<Material> _material)
+Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<int32> _indices, const Mat4& transform, const Ref<Material> _material)
     : indices{ std::move(_indices) }
     , material{ _material }
 {
@@ -67,7 +67,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<i32> _indices, const
         texCoords[i] = vertices[i].texCoord;
     }
 
-    triangle_count = i32(indices.size() / 3);
+    triangle_count = int32(indices.size() / 3);
 }
 
 } // namespace spt

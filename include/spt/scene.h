@@ -18,8 +18,8 @@ public:
     Scene();
     virtual ~Scene() = default;
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
     void Add(const Ref<Intersectable> object);
@@ -77,7 +77,7 @@ inline void Scene::Add(const Ref<Intersectable> object)
 
 inline void Scene::Add(const Ref<Mesh> mesh)
 {
-    for (i32 i = 0; i < mesh->triangle_count; ++i)
+    for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
         objects.push_back(tri);
@@ -105,7 +105,7 @@ inline void Scene::AddLight(const Ref<Primitive> primitive)
 
 inline void Scene::AddLight(const Ref<Mesh> mesh)
 {
-    for (i32 i = 0; i < mesh->triangle_count; ++i)
+    for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
         Add(tri);

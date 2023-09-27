@@ -12,16 +12,16 @@ public:
     {
         size_t operator()(const Color& v) const
         {
-            return std::hash<f64>()(v.x) ^ std::hash<f64>()(v.y) ^ std::hash<f64>()(v.z);
+            return std::hash<Float>()(v.x) ^ std::hash<Float>()(v.y) ^ std::hash<Float>()(v.z);
         }
     };
 
-    inline static i32 color_count = 0;
+    inline static int32 color_count = 0;
     inline static std::unordered_map<Color, Ref<SolidColor>, ColorHash> loaded_colors;
 
     static Ref<SolidColor> Create(Color color);
-    static Ref<SolidColor> Create(f64 rgb);
-    static Ref<SolidColor> Create(f64 red, f64 green, f64 blue);
+    static Ref<SolidColor> Create(Float rgb);
+    static Ref<SolidColor> Create(Float red, Float green, Float blue);
 
     virtual Color Value(const UV& uv) const override;
 
@@ -57,12 +57,12 @@ inline Ref<SolidColor> SolidColor::Create(Color color)
     return ptr;
 }
 
-inline Ref<SolidColor> SolidColor::Create(f64 rgb)
+inline Ref<SolidColor> SolidColor::Create(Float rgb)
 {
     return Create(Color(rgb));
 }
 
-inline Ref<SolidColor> SolidColor::Create(f64 r, f64 g, f64 b)
+inline Ref<SolidColor> SolidColor::Create(Float r, Float g, Float b)
 {
     return Create(Color(r, g, b));
 }

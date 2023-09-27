@@ -70,11 +70,11 @@ Ref<Microfacet> RandomMicrofacetMaterial()
 {
     Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
 
-    Color basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * 0.7;
+    Color basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
     mat->basecolor = SolidColor::Create(basecolor);
     mat->roughness = SolidColor::Create(Vec3(Rand(0.0, 1.0)));
-    mat->metallic = SolidColor::Create(Vec3(Rand() > 0.5 ? 1.0 : 0.0));
-    mat->emissive = SolidColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, 0.3) : 0.0));
+    mat->metallic = SolidColor::Create(Vec3(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
+    mat->emissive = SolidColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0)));
     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
 
     return mat;
@@ -93,7 +93,7 @@ Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, z_axis, x_axis, UV(0.0, texCoord.y) };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 };
@@ -111,7 +111,7 @@ Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, y_axis, x_axis, UV(0.0, texCoord.y) };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
@@ -129,7 +129,7 @@ Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const UV& t
     Vertex v3{ p3, x_axis, -z_axis, UV(0.0, texCoord.y) };
 
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
-    auto indices = std::vector<i32>{ 0, 1, 2, 0, 2, 3 };
+    auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
@@ -188,7 +188,7 @@ Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const UV& texC
                                          v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23 };
 
     // clang-format off
-    auto indices = std::vector<i32>{
+    auto indices = std::vector<int32>{
         0, 1, 2, 0, 2, 3,
         4, 5, 6, 4, 6, 7,
         8, 9, 10, 8, 10, 11,

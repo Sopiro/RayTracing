@@ -13,19 +13,19 @@ class GGXPDF : public PDF
     // https://schuttejoe.github.io/post/ggximportancesamplingpart1/
 
 public:
-    GGXPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t);
+    GGXPDF(const Vec3& n, const Vec3& wo, Float a, Float t);
 
     virtual Vec3 Sample() const override;
-    virtual f64 Evaluate(const Vec3& wi) const override;
+    virtual Float Evaluate(const Vec3& wi) const override;
 
 private:
     ONB uvw;
     Vec3 wo;
-    f64 alpha2;
-    f64 t;
+    Float alpha2;
+    Float t;
 };
 
-inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t)
+inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, Float a, Float t)
     : uvw{ n }
     , wo{ wo }
     , alpha2{ a * a }

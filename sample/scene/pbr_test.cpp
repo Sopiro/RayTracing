@@ -8,17 +8,17 @@ void PBRTest(Scene& scene)
     // Srand(1234);
 
     // Spheres
-    f64 r = 0.3;
-    f64 cx = 10.0;
-    f64 cz = 7.0;
-    f64 xgap = 0.16;
-    f64 zgap = 0.14;
-    f64 xstep = 2.0 * r + xgap;
-    f64 zstep = 2.0 * r + zgap;
+    Float r = 0.3;
+    Float cx = 10.0;
+    Float cz = 7.0;
+    Float xgap = 0.16;
+    Float zgap = 0.14;
+    Float xstep = 2.0 * r + xgap;
+    Float zstep = 2.0 * r + zgap;
 
-    for (i32 z = 0; z < cz; ++z)
+    for (int32 z = 0; z < cz; ++z)
     {
-        for (i32 x = 0; x < cx; ++x)
+        for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 
@@ -75,15 +75,15 @@ void PBRTest(Scene& scene)
     // }
 
     {
-        f64 s = 0.4;
-        f64 cx = 10.0;
-        f64 xgap = 0.16;
-        f64 xstep = 2.0 * s + xgap;
+        Float s = 0.4;
+        Float cx = 10.0;
+        Float xgap = 0.16;
+        Float xstep = 2.0 * s + xgap;
 
         auto light = CreateSharedRef<DiffuseLight>(Color(5.0));
         light->two_sided = true;
 
-        for (i32 x = 0; x < cx; ++x)
+        for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 

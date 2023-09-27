@@ -19,8 +19,8 @@ public:
 
     virtual ~Light() = default;
 
-    virtual Color Sample(Vec3* wi, f64* pdf, f64* visibility, const Intersection& ref) const = 0;
-    virtual f64 EvaluatePDF(const Ray& ray) const = 0;
+    virtual Color Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const = 0;
+    virtual Float EvaluatePDF(const Ray& ray) const = 0;
 
     bool IsDeltaLight() const;
 

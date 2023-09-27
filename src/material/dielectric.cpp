@@ -3,17 +3,17 @@
 namespace spt
 {
 
-Dielectric::Dielectric(f64 index_of_refraction)
+Dielectric::Dielectric(Float index_of_refraction)
     : ior{ index_of_refraction }
 {
 }
 
 bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
-    f64 refraction_ratio = is.front_face ? (1.0 / ior) : ior;
+    Float refraction_ratio = is.front_face ? (1 / ior) : ior;
 
-    f64 cos_theta = std::fmin(Dot(-wi, is.normal), 1.0);
-    f64 sin_theta = std::sqrt(1.0 - cos_theta * cos_theta);
+    Float cos_theta = std::fmin(Dot(-wi, is.normal), Float(1.0));
+    Float sin_theta = std::sqrt(1 - cos_theta * cos_theta);
 
     // Check for total internal reflection
     bool refractable = refraction_ratio * sin_theta < 1.0;

@@ -10,7 +10,7 @@ namespace spt
 class ImageTexture : public Texture
 {
 public:
-    inline static i32 texture_count = 0;
+    inline static int32 texture_count = 0;
     inline static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
     static Ref<ImageTexture> Create(const std::string& path, bool srgb = false, bool hdr = false);
 
@@ -25,11 +25,11 @@ protected:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
 
-    const static i32 bytes_per_pixel = STBI_rgb;
+    const static int32 bytes_per_pixel = STBI_rgb;
 
     void* data;
-    i32 width, height;
-    i32 bytes_per_scanline;
+    int32 width, height;
+    int32 bytes_per_scanline;
 };
 
 inline ImageTexture::ImageTexture()

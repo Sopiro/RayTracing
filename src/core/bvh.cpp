@@ -14,7 +14,7 @@ BVH::BVH()
     memset(nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
-    for (i32 i = 0; i < nodeCapacity - 1; ++i)
+    for (int32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
     }
@@ -106,21 +106,21 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
 
 #if 1
     NodeProxy bestSibling = root;
-    Real bestCost = SAH(AABB::Union(nodes[root].aabb, aabb));
+    Float bestCost = SAH(AABB::Union(nodes[root].aabb, aabb));
 
-    GrowableArray<std::pair<NodeProxy, Real>, 256> stack;
+    GrowableArray<std::pair<NodeProxy, Float>, 256> stack;
     stack.Emplace(root, 0.0f);
 
     while (stack.Count() != 0)
     {
         NodeProxy current = stack.Back().first;
-        Real inheritedCost = stack.Back().second;
+        Float inheritedCost = stack.Back().second;
         stack.Pop();
 
         AABB combined = AABB::Union(nodes[current].aabb, aabb);
-        Real directCost = SAH(combined);
+        Float directCost = SAH(combined);
 
-        Real cost = directCost + inheritedCost;
+        Float cost = directCost + inheritedCost;
         if (cost < bestCost)
         {
             bestCost = cost;
@@ -129,7 +129,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
 
         inheritedCost += directCost - SAH(nodes[current].aabb);
 
-        Real lowerBoundCost = SAH(aabb) + inheritedCost;
+        Float lowerBoundCost = SAH(aabb) + inheritedCost;
         if (lowerBoundCost < bestCost)
         {
             if (nodes[current].IsLeaf() == false)
@@ -148,34 +148,34 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
         NodeProxy child1 = nodes[bestSibling].child1;
         NodeProxy child2 = nodes[bestSibling].child2;
 
-        Real area = SAH(nodes[bestSibling].aabb);
+        Float area = SAH(nodes[bestSibling].aabb);
         AABB combined = AABB::Union(nodes[bestSibling].aabb, aabb);
-        Real combinedArea = SAH(combined);
+        Float combinedArea = SAH(combined);
 
-        Real cost = combinedArea;
-        Real inheritanceCost = combinedArea - area;
+        Float cost = combinedArea;
+        Float inheritanceCost = combinedArea - area;
 
-        Real cost1;
+        Float cost1;
         if (nodes[child1].IsLeaf())
         {
             cost1 = SAH(AABB::Union(nodes[child1].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            Real newArea = SAH(AABB::Union(nodes[child1].aabb, aabb));
-            Real oldArea = SAH(nodes[child1].aabb);
+            Float newArea = SAH(AABB::Union(nodes[child1].aabb, aabb));
+            Float oldArea = SAH(nodes[child1].aabb);
             cost1 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child1
         }
 
-        Real cost2;
+        Float cost2;
         if (nodes[child2].IsLeaf())
         {
             cost2 = SAH(AABB::Union(nodes[child2].aabb, aabb)) + inheritanceCost;
         }
         else
         {
-            Real newArea = SAH(AABB::Union(nodes[child2].aabb, aabb));
-            Real oldArea = SAH(nodes[child2].aabb);
+            Float newArea = SAH(AABB::Union(nodes[child2].aabb, aabb));
+            Float oldArea = SAH(nodes[child2].aabb);
             cost2 = (newArea - oldArea) + inheritanceCost; // Lower bound cost required when descending down to child2
         }
 
@@ -394,24 +394,24 @@ void BVH::Rotate(NodeProxy node)
         sibling = nodes[parent].child1;
     }
 
-    i32 count = 2;
-    Real costDiffs[4];
-    Real nodeArea = SAH(nodes[node].aabb);
+    int32 count = 2;
+    Float costDiffs[4];
+    Float nodeArea = SAH(nodes[node].aabb);
 
     costDiffs[0] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
     costDiffs[1] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
 
     if (nodes[sibling].IsLeaf() == false)
     {
-        Real siblingArea = SAH(nodes[sibling].aabb);
+        Float siblingArea = SAH(nodes[sibling].aabb);
         costDiffs[2] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
         costDiffs[3] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb)) - siblingArea;
 
         count += 2;
     }
 
-    i32 bestDiffIndex = 0;
-    for (i32 i = 1; i < count; ++i)
+    int32 bestDiffIndex = 0;
+    for (int32 i = 1; i < count; ++i)
     {
         if (costDiffs[i] < costDiffs[bestDiffIndex])
         {
@@ -626,7 +626,7 @@ void BVH::Reset()
     memset(nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
-    for (i32 i = 0; i < nodeCapacity - 1; ++i)
+    for (int32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
     }
@@ -649,7 +649,7 @@ NodeProxy BVH::AllocateNode()
         free(oldNodes);
 
         // Build a linked list for the free list.
-        for (i32 i = nodeCount; i < nodeCapacity - 1; ++i)
+        for (int32 i = nodeCount; i < nodeCapacity - 1; ++i)
         {
             nodes[i].next = i + 1;
         }
@@ -685,10 +685,10 @@ void BVH::Rebuild()
     // Rebuild the tree with bottom up approach
 
     NodeProxy* leaves = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
-    i32 count = 0;
+    int32 count = 0;
 
     // Build an array of leaf node
-    for (i32 i = 0; i < nodeCapacity; ++i)
+    for (int32 i = 0; i < nodeCapacity; ++i)
     {
         // Already in the free list
         if (nodes[i].id == 0)
@@ -712,21 +712,21 @@ void BVH::Rebuild()
 
     while (count > 1)
     {
-        Real minCost = infinity;
-        i32 minI = -1;
-        i32 minJ = -1;
+        Float minCost = infinity;
+        int32 minI = -1;
+        int32 minJ = -1;
 
         // Find the best aabb pair
-        for (i32 i = 0; i < count; ++i)
+        for (int32 i = 0; i < count; ++i)
         {
             AABB aabbI = nodes[leaves[i]].aabb;
 
-            for (i32 j = i + 1; j < count; ++j)
+            for (int32 j = i + 1; j < count; ++j)
             {
                 AABB aabbJ = nodes[leaves[j]].aabb;
 
                 AABB combined = AABB::Union(aabbI, aabbJ);
-                Real cost = SAH(combined);
+                Float cost = SAH(combined);
 
                 if (cost < minCost)
                 {
@@ -765,24 +765,24 @@ void BVH::Rebuild()
 }
 
 void BVH::RayCast(const Ray& r,
-                  Real t_min,
-                  Real t_max,
-                  const std::function<Real(const Ray&, Real, Real, Intersectable*)>& callback) const
+                  Float t_min,
+                  Float t_max,
+                  const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
-    Real t = t_max;
+    Float t = t_max;
 
     AABB rayAABB;
     rayAABB.min = Min(p1, p2);
     rayAABB.max = Max(p1, p2);
 
-    GrowableArray<i32, 256> stack;
+    GrowableArray<int32, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() > 0)
     {
-        i32 nodeID = stack.Pop();
+        int32 nodeID = stack.Pop();
         if (nodeID == nullNode)
         {
             continue;
@@ -801,7 +801,7 @@ void BVH::RayCast(const Ray& r,
 
         if (node->IsLeaf())
         {
-            Real value = callback(r, t_min, t, node->data);
+            Float value = callback(r, t_min, t, node->data);
             if (value <= t_min)
             {
                 return;

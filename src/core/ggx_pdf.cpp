@@ -23,14 +23,14 @@ Vec3 GGXPDF::Sample() const
     }
 }
 
-f64 GGXPDF::Evaluate(const Vec3& wi) const
+Float GGXPDF::Evaluate(const Vec3& wi) const
 {
     Vec3 h = Normalize(wo + wi);
-    f64 NoH = Dot(h, uvw.w);
-    f64 LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
-    f64 spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * LoH, 0.0);
+    Float NoH = Dot(h, uvw.w);
+    Float LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
+    Float spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * LoH, 0.0);
 
-    f64 diff_w = LoH * inv_pi;
+    Float diff_w = LoH * inv_pi;
 
     return (1.0 - t) * diff_w + t * spec_w;
 }

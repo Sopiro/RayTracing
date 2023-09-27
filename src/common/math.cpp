@@ -6,38 +6,38 @@ namespace spt
 
 Mat3::Mat3(const Quat& q)
 {
-    Real xx = q.x * q.x;
-    Real yy = q.y * q.y;
-    Real zz = q.z * q.z;
-    Real xz = q.x * q.z;
-    Real xy = q.x * q.y;
-    Real yz = q.y * q.z;
-    Real wx = q.w * q.x;
-    Real wy = q.w * q.y;
-    Real wz = q.w * q.z;
+    Float xx = q.x * q.x;
+    Float yy = q.y * q.y;
+    Float zz = q.z * q.z;
+    Float xz = q.x * q.z;
+    Float xy = q.x * q.y;
+    Float yz = q.y * q.z;
+    Float wx = q.w * q.x;
+    Float wy = q.w * q.y;
+    Float wz = q.w * q.z;
 
-    ex.x = Real(1) - Real(2) * (yy + zz);
-    ex.y = Real(2) * (xy + wz);
-    ex.z = Real(2) * (xz - wy);
+    ex.x = Float(1) - Float(2) * (yy + zz);
+    ex.y = Float(2) * (xy + wz);
+    ex.z = Float(2) * (xz - wy);
 
-    ey.x = Real(2) * (xy - wz);
-    ey.y = Real(1) - Real(2) * (xx + zz);
-    ey.z = Real(2) * (yz + wx);
+    ey.x = Float(2) * (xy - wz);
+    ey.y = Float(1) - Float(2) * (xx + zz);
+    ey.z = Float(2) * (yz + wx);
 
-    ez.x = Real(2) * (xz + wy);
-    ez.y = Real(2) * (yz - wx);
-    ez.z = Real(1) - Real(2) * (xx + yy);
+    ez.x = Float(2) * (xz + wy);
+    ez.y = Float(2) * (yz - wx);
+    ez.z = Float(1) - Float(2) * (xx + yy);
 }
 
 Mat3 Mat3::GetInverse() const
 {
     Mat3 t;
 
-    Real det = ex.x * (ey.y * ez.z - ey.z * ez.y) - ey.x * (ex.y * ez.z - ez.y * ex.z) + ez.x * (ex.y * ey.z - ey.y * ex.z);
+    Float det = ex.x * (ey.y * ez.z - ey.z * ez.y) - ey.x * (ex.y * ez.z - ez.y * ex.z) + ez.x * (ex.y * ey.z - ey.y * ex.z);
 
     if (det != 0)
     {
-        det = Real(1.0) / det;
+        det = Float(1.0) / det;
     }
 
     t.ex.x = (ey.y * ez.z - ey.z * ez.y) * det;
@@ -53,9 +53,9 @@ Mat3 Mat3::GetInverse() const
     return t;
 }
 
-Mat3 Mat3::Scale(Real x, Real y)
+Mat3 Mat3::Scale(Float x, Float y)
 {
-    Mat3 t{ Real(1.0) };
+    Mat3 t{ Float(1.0) };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -63,10 +63,10 @@ Mat3 Mat3::Scale(Real x, Real y)
     return Mul(*this, t);
 }
 
-Mat3 Mat3::Rotate(Real z)
+Mat3 Mat3::Rotate(Float z)
 {
-    Real s = std::sin(z);
-    Real c = std::cos(z);
+    Float s = std::sin(z);
+    Float c = std::cos(z);
 
     Mat3 t;
 
@@ -79,9 +79,9 @@ Mat3 Mat3::Rotate(Real z)
     return Mul(*this, t);
 }
 
-Mat3 Mat3::Translate(Real x, Real y)
+Mat3 Mat3::Translate(Float x, Float y)
 {
-    Mat3 t{ Real(1.0) };
+    Mat3 t{ Float(1.0) };
 
     t.ez.x = x;
     t.ez.y = y;
@@ -91,7 +91,7 @@ Mat3 Mat3::Translate(Real x, Real y)
 
 Mat3 Mat3::Translate(const Vec2& v)
 {
-    Mat3 t{ Real(1.0) };
+    Mat3 t{ Float(1.0) };
 
     t.ez.x = v.x;
     t.ez.y = v.y;
@@ -107,9 +107,9 @@ Mat4::Mat4(const Transform& t)
     ez *= t.r.z;
 }
 
-Mat4 Mat4::Scale(Real x, Real y, Real z)
+Mat4 Mat4::Scale(Float x, Float y, Float z)
 {
-    Mat4 t{ Real(1.0) };
+    Mat4 t{ Float(1.0) };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -118,14 +118,14 @@ Mat4 Mat4::Scale(Real x, Real y, Real z)
     return Mul(*this, t);
 }
 
-Mat4 Mat4::Rotate(Real x, Real y, Real z)
+Mat4 Mat4::Rotate(Float x, Float y, Float z)
 {
-    Real sinX = std::sin(x);
-    Real cosX = std::cos(x);
-    Real sinY = std::sin(y);
-    Real cosY = std::cos(y);
-    Real sinZ = std::sin(z);
-    Real cosZ = std::cos(z);
+    Float sinX = std::sin(x);
+    Float cosX = std::cos(x);
+    Float sinY = std::sin(y);
+    Float cosY = std::cos(y);
+    Float sinZ = std::sin(z);
+    Float cosZ = std::cos(z);
 
     Mat4 t;
 
@@ -152,9 +152,9 @@ Mat4 Mat4::Rotate(Real x, Real y, Real z)
     return Mul(*this, t);
 }
 
-Mat4 Mat4::Translate(Real x, Real y, Real z)
+Mat4 Mat4::Translate(Float x, Float y, Float z)
 {
-    Mat4 t{ Real(1.0) };
+    Mat4 t{ Float(1.0) };
 
     t.ew.x = x;
     t.ew.y = y;
@@ -165,7 +165,7 @@ Mat4 Mat4::Translate(Real x, Real y, Real z)
 
 Mat4 Mat4::Translate(const Vec3& v)
 {
-    Mat4 t{ Real(1.0) };
+    Mat4 t{ Float(1.0) };
 
     t.ew.x = v.x;
     t.ew.y = v.y;
@@ -176,31 +176,31 @@ Mat4 Mat4::Translate(const Vec3& v)
 
 Mat4 Mat4::GetInverse()
 {
-    Real a2323 = ez.z * ew.w - ez.w * ew.z;
-    Real a1323 = ez.y * ew.w - ez.w * ew.y;
-    Real a1223 = ez.y * ew.z - ez.z * ew.y;
-    Real a0323 = ez.x * ew.w - ez.w * ew.x;
-    Real a0223 = ez.x * ew.z - ez.z * ew.x;
-    Real a0123 = ez.x * ew.y - ez.y * ew.x;
-    Real a2313 = ey.z * ew.w - ey.w * ew.z;
-    Real a1313 = ey.y * ew.w - ey.w * ew.y;
-    Real a1213 = ey.y * ew.z - ey.z * ew.y;
-    Real a2312 = ey.z * ez.w - ey.w * ez.z;
-    Real a1312 = ey.y * ez.w - ey.w * ez.y;
-    Real a1212 = ey.y * ez.z - ey.z * ez.y;
-    Real a0313 = ey.x * ew.w - ey.w * ew.x;
-    Real a0213 = ey.x * ew.z - ey.z * ew.x;
-    Real a0312 = ey.x * ez.w - ey.w * ez.x;
-    Real a0212 = ey.x * ez.z - ey.z * ez.x;
-    Real a0113 = ey.x * ew.y - ey.y * ew.x;
-    Real a0112 = ey.x * ez.y - ey.y * ez.x;
+    Float a2323 = ez.z * ew.w - ez.w * ew.z;
+    Float a1323 = ez.y * ew.w - ez.w * ew.y;
+    Float a1223 = ez.y * ew.z - ez.z * ew.y;
+    Float a0323 = ez.x * ew.w - ez.w * ew.x;
+    Float a0223 = ez.x * ew.z - ez.z * ew.x;
+    Float a0123 = ez.x * ew.y - ez.y * ew.x;
+    Float a2313 = ey.z * ew.w - ey.w * ew.z;
+    Float a1313 = ey.y * ew.w - ey.w * ew.y;
+    Float a1213 = ey.y * ew.z - ey.z * ew.y;
+    Float a2312 = ey.z * ez.w - ey.w * ez.z;
+    Float a1312 = ey.y * ez.w - ey.w * ez.y;
+    Float a1212 = ey.y * ez.z - ey.z * ez.y;
+    Float a0313 = ey.x * ew.w - ey.w * ew.x;
+    Float a0213 = ey.x * ew.z - ey.z * ew.x;
+    Float a0312 = ey.x * ez.w - ey.w * ez.x;
+    Float a0212 = ey.x * ez.z - ey.z * ez.x;
+    Float a0113 = ey.x * ew.y - ey.y * ew.x;
+    Float a0112 = ey.x * ez.y - ey.y * ez.x;
 
-    Real det = ex.x * (ey.y * a2323 - ey.z * a1323 + ey.w * a1223) - ex.y * (ey.x * a2323 - ey.z * a0323 + ey.w * a0223) +
+    Float det = ex.x * (ey.y * a2323 - ey.z * a1323 + ey.w * a1223) - ex.y * (ey.x * a2323 - ey.z * a0323 + ey.w * a0223) +
                ex.z * (ey.x * a1323 - ey.y * a0323 + ey.w * a0123) - ex.w * (ey.x * a1223 - ey.y * a0223 + ey.z * a0123);
 
     if (det != 0.0)
     {
-        det = Real(1.0) / det;
+        det = Float(1.0) / det;
     }
 
     Mat4 t;
@@ -228,30 +228,30 @@ Mat4 Mat4::GetInverse()
 // https://math.stackexchange.com/questions/893984/conversion-of-rotation-matrix-to-quaternion
 Quat::Quat(const Mat3& m)
 {
-    if (m.ez.z < Real(0))
+    if (m.ez.z < Float(0))
     {
         if (m.ex.x > m.ey.y)
         {
-            Real t = Real(1.0) + m.ex.x - m.ey.y - m.ez.z;
-            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Real(0.5) / std::sqrt(t));
+            Float t = Float(1.0) + m.ex.x - m.ey.y - m.ez.z;
+            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Float(0.5) / std::sqrt(t));
         }
         else
         {
-            Real t = Real(1.0) - m.ex.x + m.ey.y - m.ez.z;
-            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Real(0.5) / std::sqrt(t));
+            Float t = Float(1.0) - m.ex.x + m.ey.y - m.ez.z;
+            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Float(0.5) / std::sqrt(t));
         }
     }
     else
     {
         if (m.ex.x < -m.ey.y)
         {
-            Real t = Real(1.0) - m.ex.x - m.ey.y + m.ez.z;
-            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Real(0.5) / std::sqrt(t));
+            Float t = Float(1.0) - m.ex.x - m.ey.y + m.ez.z;
+            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Float(0.5) / std::sqrt(t));
         }
         else
         {
-            Real t = Real(1.0) + m.ex.x + m.ey.y + m.ez.z;
-            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Real(0.5) / std::sqrt(t));
+            Float t = Float(1.0) + m.ex.x + m.ey.y + m.ez.z;
+            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Float(0.5) / std::sqrt(t));
         }
     }
 }

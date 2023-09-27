@@ -8,23 +8,23 @@ namespace spt
 class Dielectric : public Material
 {
 public:
-    Dielectric(f64 index_of_refraction);
+    Dielectric(Float index_of_refraction);
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
 
-    f64 ior; // Index of Refraction
+    Float ior; // Index of Refraction
 
 private:
-    static f64 Reflectance(f64 cosine, f64 ref_idx);
+    static Float Reflectance(Float cosine, Float ref_idx);
 };
 
-inline f64 Dielectric::Reflectance(f64 cosine, f64 ref_idx)
+inline Float Dielectric::Reflectance(Float cosine, Float ref_idx)
 {
     // Schlick's approximation for reflectance.
-    f64 r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+    Float r0 = (1 - ref_idx) / (1 + ref_idx);
     r0 = r0 * r0;
 
-    return r0 + (1.0 - r0) * std::pow((1.0 - cosine), 5.0);
+    return r0 + (1 - r0) * std::pow((1 - cosine), Float(5.0));
 }
 
 } // namespace spt

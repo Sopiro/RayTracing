@@ -10,25 +10,25 @@ namespace spt
 class Bitmap
 {
 public:
-    Bitmap(i32 width, i32 height);
+    Bitmap(int32 width, int32 height);
     ~Bitmap();
 
-    i32 GetWidth() const;
-    i32 GetHeight() const;
+    int32 GetWidth() const;
+    int32 GetHeight() const;
 
-    void Set(i32 x, i32 y, const Color& color);
+    void Set(int32 x, int32 y, const Color& color);
     void WriteToFile(char const* filename) const;
 
 private:
-    i32 width, height;
-    u8* pixels;
+    int32 width, height;
+    uint8* pixels;
 };
 
-inline Bitmap::Bitmap(i32 width, i32 height)
+inline Bitmap::Bitmap(int32 width, int32 height)
     : width{ width }
     , height{ height }
 {
-    pixels = new u8[width * height * COLOR_CHANNELS];
+    pixels = new uint8[width * height * COLOR_CHANNELS];
 }
 
 inline Bitmap::~Bitmap()
@@ -36,21 +36,21 @@ inline Bitmap::~Bitmap()
     delete[] pixels;
 }
 
-inline i32 Bitmap::GetWidth() const
+inline int32 Bitmap::GetWidth() const
 {
     return width;
 }
 
-inline i32 Bitmap::GetHeight() const
+inline int32 Bitmap::GetHeight() const
 {
     return height;
 }
 
-inline void Bitmap::Set(i32 x, i32 y, const Color& color)
+inline void Bitmap::Set(int32 x, int32 y, const Color& color)
 {
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 0] = i32(std::fmin(Clamp(color.x, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 1] = i32(std::fmin(Clamp(color.y, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 2] = i32(std::fmin(Clamp(color.z, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 0] = int32(std::fmin(Clamp(color.x, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 1] = int32(std::fmin(Clamp(color.y, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * COLOR_CHANNELS + 2] = int32(std::fmin(Clamp(color.z, 0.0, 1.0) * 256.0, 255.0));
 }
 
 inline void Bitmap::WriteToFile(char const* filename) const

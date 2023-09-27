@@ -12,18 +12,18 @@ namespace spt
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     Vec3 c = basecolor->Value(is.uv);
-    f64 m = metallic->Value(is.uv).z;
-    f64 r = roughness->Value(is.uv).y;
+    Float m = metallic->Value(is.uv).z;
+    Float r = roughness->Value(is.uv).y;
 
-    f64 alpha = RoughnessToAlpha(r);
+    Float alpha = RoughnessToAlpha(r);
     Vec3 wo = -wi;
 
     Vec3 f0 = F0(c, m);
     Vec3 F = F_Schlick(f0, Dot(wo, is.shading.normal));
-    f64 diff_w = (1.0 - m);
-    f64 spec_w = Luma(F);
-    // f64 spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
-    f64 t = Clamp(spec_w / (diff_w + spec_w), 0.15, 0.9);
+    Float diff_w = (1 - m);
+    Float spec_w = Luma(F);
+    // Float spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
+    Float t = Clamp(spec_w / (diff_w + spec_w), Float(0.15), Float(0.9));
 
     // new (ir->mem) CosinePDF(is.shading.normal);
     // new (ir->mem) GGXPDF(is.shading.normal, wo, alpha, t);
@@ -55,8 +55,8 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
         n = Reflect(n, is.shading.normal);
     }
 
-    f64 NoV = Dot(n, v);
-    f64 NoL = Dot(n, l);
+    Float NoV = Dot(n, v);
+    Float NoL = Dot(n, l);
 
     if (NoV <= 0.0 || NoL <= 0.0 || h == zero_vec3)
     {
@@ -65,25 +65,25 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
 
     h.Normalize();
 
-    f64 NoH = Dot(n, h);
-    f64 VoH = Dot(v, h);
+    Float NoH = Dot(n, h);
+    Float VoH = Dot(v, h);
 
     Vec3 c = basecolor->Value(is.uv);
-    f64 m = metallic->Value(is.uv).z;
-    f64 r = roughness->Value(is.uv).y;
+    Float m = metallic->Value(is.uv).z;
+    Float r = roughness->Value(is.uv).y;
 
-    f64 alpha = RoughnessToAlpha(r);
-    f64 alpha2 = alpha * alpha;
+    Float alpha = RoughnessToAlpha(r);
+    Float alpha2 = alpha * alpha;
 
     Vec3 f0 = F0(c, m);
     Vec3 F = F_Schlick(f0, VoH);
-    f64 D = D_GGX(NoH, alpha2);
-    // f64 G = G2_Smith_Correlated(NoV, NoL, alpha2);
-    f64 V = V_Smith_Correlated(NoV, NoL, alpha2);
+    Float D = D_GGX(NoH, alpha2);
+    // Float G = G2_Smith_Correlated(NoV, NoL, alpha2);
+    Float V = V_Smith_Correlated(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
     // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
-    Vec3 f_d = (Vec3(1.0) - F) * (1.0 - m) * (c * inv_pi);
+    Vec3 f_d = (Vec3(1) - F) * (1 - m) * (c * inv_pi);
 
     return (f_d + f_s) * NoL;
 }

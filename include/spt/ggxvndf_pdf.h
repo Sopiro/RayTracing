@@ -18,19 +18,19 @@ class GGXVNDFPDF : public PDF
     // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
 
 public:
-    GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t);
+    GGXVNDFPDF(const Vec3& n, const Vec3& wo, Float a, Float t);
 
     virtual Vec3 Sample() const override;
-    virtual f64 Evaluate(const Vec3& wi) const override;
+    virtual Float Evaluate(const Vec3& wi) const override;
 
 private:
     ONB uvw;
     Vec3 wo;
-    f64 alpha;
-    f64 t;
+    Float alpha;
+    Float t;
 };
 
-inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, f64 a, f64 t)
+inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, Float a, Float t)
     : uvw{ n }
     , wo{ wo }
     , alpha{ a }

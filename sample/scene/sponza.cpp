@@ -16,23 +16,23 @@ void Sponza(Scene& scene)
     auto light = CreateSharedRef<DiffuseLight>(Color(1.0));
     // auto mat = CreateSharedRef<Dielectric>(1.5);
 
-    f64 cx = 8.0;
-    f64 cy = 4.0;
-    f64 cz = 8.0;
+    Float cx = 8.0;
+    Float cy = 4.0;
+    Float cz = 8.0;
 
-    f64 sx = 10.0;
-    f64 sy = 10.0;
-    f64 sz = 20.0;
+    Float sx = 10.0;
+    Float sy = 10.0;
+    Float sz = 20.0;
 
-    f64 xm = -sx / 2.0;
-    f64 ym = 0.0;
-    f64 zm = -sz / 2.0;
+    Float xm = -sx / 2.0;
+    Float ym = 0.0;
+    Float zm = -sz / 2.0;
 
-    // for (i32 z = 0; z < cz; ++z)
+    // for (int32 z = 0; z < cz; ++z)
     // {
-    //     for (i32 y = 0; y < cy; ++y)
+    //     for (int32 y = 0; y < cy; ++y)
     //     {
-    //         for (i32 x = 0; x < cx; ++x)
+    //         for (int32 x = 0; x < cx; ++x)
     //         {
     //             auto sphere = CreateSharedRef<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
     //             scene.Add(sphere);

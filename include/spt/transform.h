@@ -14,30 +14,30 @@ struct Transform
     Transform() = default;
 
     Transform(Identity)
-        : p{ Real(0.0) }
+        : p{ Float(0.0) }
         , q{ identity }
-        , r{ Real(1.0) }
+        , r{ Float(1.0) }
     {
     }
 
     Transform(const Vec3& position)
         : p{ position }
         , q{ identity }
-        , r{ Real(1.0) }
+        , r{ Float(1.0) }
     {
     }
 
     Transform(const Quat& orientation)
-        : p{ Real(0.0) }
+        : p{ Float(0.0) }
         , q{ orientation }
-        , r{ Real(1.0) }
+        , r{ Float(1.0) }
     {
     }
 
     Transform(const Vec3& position, const Quat& orientation)
         : p{ position }
         , q{ orientation }
-        , r{ Real(1.0) }
+        , r{ Float(1.0) }
     {
     }
 
@@ -48,7 +48,7 @@ struct Transform
     {
     }
 
-    Transform(Real x, Real y, Real z, const Quat& orientation = Quat(Real(1.0)), const Vec3& scale = Vec3(Real(1.0)))
+    Transform(Float x, Float y, Float z, const Quat& orientation = Quat(Float(1.0)), const Vec3& scale = Vec3(Float(1.0)))
         : p{ x, y, z }
         , q{ orientation }
         , r{ scale }
@@ -66,14 +66,14 @@ struct Transform
     {
         p.SetZero();
         q.SetIdentity();
-        r.Set(Real(1.0), Real(1.0), Real(1.0));
+        r.Set(Float(1.0), Float(1.0), Float(1.0));
     }
 
     Transform& operator*=(const Transform& other);
 
     Transform GetInverse() const
     {
-        return Transform{ q.RotateInv(-p), q.GetConjugate(), Real(1.0) / r };
+        return Transform{ q.RotateInv(-p), q.GetConjugate(), Float(1.0) / r };
     }
 };
 
@@ -96,7 +96,7 @@ inline Vec3 Mul(const Transform& t, const Vec3& v)
 // A^T * V
 inline Vec3 MulT(const Transform& t, const Vec3& v)
 {
-    return t.q.RotateInv(Real(1.0) / t.r * v - t.p);
+    return t.q.RotateInv(Float(1.0) / t.r * v - t.p);
 }
 
 inline Transform operator*(const Transform& a, const Transform& b)
@@ -115,7 +115,7 @@ inline Transform MulT(const Transform& a, const Transform& b)
 {
     Quat invQ = a.q.GetConjugate();
 
-    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (Real(1.0) / a.r) * b.r };
+    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (Float(1.0) / a.r) * b.r };
 }
 
 inline Transform& Transform::operator*=(const Transform& other)

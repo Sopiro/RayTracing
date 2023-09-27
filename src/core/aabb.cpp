@@ -3,15 +3,15 @@
 namespace spt
 {
 
-bool AABB::Intersect(const Ray& ray, f64 t_min, f64 t_max) const
+bool AABB::Intersect(const Ray& ray, Float t_min, Float t_max) const
 {
     // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
-    for (i32 axis = 0; axis < 3; ++axis)
+    for (int32 axis = 0; axis < 3; ++axis)
     {
-        f64 invD = 1.0 / ray.d[axis];
+        Float invD = 1.0 / ray.d[axis];
 
-        f64 t0 = (min[axis] - ray.o[axis]) * invD;
-        f64 t1 = (max[axis] - ray.o[axis]) * invD;
+        Float t0 = (min[axis] - ray.o[axis]) * invD;
+        Float t1 = (max[axis] - ray.o[axis]) * invD;
 
         if (invD < 0.0)
         {

@@ -10,10 +10,10 @@ PointLight::PointLight(const Point3& _position, const Color& _intensity)
 {
 }
 
-Color PointLight::Sample(Vec3* wi, f64* pdf, f64* visibility, const Intersection& ref) const
+Color PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
 {
     Vec3 d = position - ref.point;
-    f64 distance = d.Normalize();
+    Float distance = d.Normalize();
 
     *wi = d;
     *visibility = distance;

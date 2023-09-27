@@ -14,14 +14,14 @@ public:
     virtual ~Aggregate() = default;
 
     virtual void GetAABB(AABB* out_aabb) const override;
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    virtual void Sample(Intersection* sample, f64* pdf) const override;
-    virtual void Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const override;
+    virtual void Sample(Intersection* sample, Float* pdf) const override;
+    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const override;
 
-    virtual f64 EvaluatePDF(const Ray& ray) const override;
-    virtual f64 PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+    virtual Float EvaluatePDF(const Ray& ray) const override;
+    virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
     virtual const Material* GetMaterial() const override;
 
@@ -48,12 +48,12 @@ inline void Aggregate::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-inline void Aggregate::Sample(Intersection* sample, f64* pdf) const
+inline void Aggregate::Sample(Intersection* sample, Float* pdf) const
 {
     assert(false);
 }
 
-inline void Aggregate::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const Point3& ref) const
+inline void Aggregate::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
 {
     size_t count = objects.size();
     size_t index = std::min(size_t(Rand() * count), count - 1);
@@ -64,7 +64,7 @@ inline void Aggregate::Sample(Intersection* sample, f64* pdf, Vec3* ref2p, const
     *pdf = EvaluatePDF(Ray(ref, *ref2p));
 }
 
-inline f64 Aggregate::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
+inline Float Aggregate::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
 {
     assert(false);
     return 0.0;
@@ -87,7 +87,7 @@ inline void Aggregate::Add(const Ref<Primitive> object)
 
 inline void Aggregate::Add(const Ref<Mesh> mesh)
 {
-    for (i32 i = 0; i < mesh->triangle_count; ++i)
+    for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
         objects.push_back(tri);

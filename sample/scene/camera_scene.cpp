@@ -28,8 +28,8 @@ void CameraScene(Scene& scene)
     // Lights
     {
         auto light = CreateSharedRef<DiffuseLight>(Color(1.0, 0.9, 0.8) * 3.0);
-        f64 w = 0.4;
-        f64 h = 1.2;
+        Float w = 0.4;
+        Float h = 1.2;
         auto tf = Transform{ Point3(1.0, h / 2.0 - 0.01, 0.0), Quat(pi, y_axis), Vec3(1.0, h, w) };
         auto rect = CreateRectYZ(tf, light);
 

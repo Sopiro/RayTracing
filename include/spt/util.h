@@ -32,7 +32,7 @@ Ref<Mesh> CreateRectXZ(const Transform& transform, const Ref<Material> material,
 Ref<Mesh> CreateRectYZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
 Ref<Mesh> CreateBox(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
 
-inline bool IsNullish(f64 v)
+inline bool IsNullish(Float v)
 {
     return std::isnan(v) || std::isinf(v);
 }
@@ -49,9 +49,9 @@ inline bool IsBlack(Color color)
 }
 
 // https://en.wikipedia.org/wiki/Luma_(video)
-inline f64 Luma(Vec3 srgb)
+inline Float Luma(Vec3 srgb)
 {
-    return Dot(srgb, Vec3(0.2126, 0.7152, 0.0722));
+    return Dot(srgb, Vec3(Float(0.2126), Float(0.7152), Float(0.0722)));
     // return Dot(srgb, Vec3(0.299, 0.587, 0.114));
 }
 

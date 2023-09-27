@@ -9,20 +9,20 @@ namespace spt
 class ConstantDensityMedium : public Intersectable
 {
 public:
-    ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, const Ref<Texture> albedo);
-    ConstantDensityMedium(const Ref<Intersectable> boundary_object, f64 density, Color color);
+    ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, const Ref<Texture> albedo);
+    ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, Color color);
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, f64 t_min, f64 t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
 public:
     Ref<Intersectable> boundary;
     Ref<Material> phase_function;
-    f64 neg_inv_density;
+    Float neg_inv_density;
 };
 
-inline bool ConstantDensityMedium::IntersectAny(const Ray& ray, f64 t_min, f64 t_max) const
+inline bool ConstantDensityMedium::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
     return boundary->IntersectAny(ray, t_min, t_max);
 }

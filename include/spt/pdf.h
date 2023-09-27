@@ -16,7 +16,7 @@ public:
     virtual Vec3 Sample() const = 0;
 
     // Evaluate PDF with given direction
-    virtual f64 Evaluate(const Vec3& wi) const = 0;
+    virtual Float Evaluate(const Vec3& wi) const = 0;
 };
 
 } // namespace spt

@@ -70,9 +70,9 @@ void CornellBoxGlossy(Scene& scene)
 
     // Left block
     {
-        f64 hx = 0.13;
-        f64 hy = 0.26;
-        f64 hz = 0.13;
+        Float hx = 0.13;
+        Float hy = 0.26;
+        Float hz = 0.13;
 
         auto mat = RandomMicrofacetMaterial();
         mat->basecolor = SolidColor::Create(1.0);

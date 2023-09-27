@@ -6,14 +6,14 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
+Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
 {
     Color radiance{ 0.0 };
     Vec3 throughput{ 1.0 };
 
     bool was_specular = false;
 
-    for (i32 bounce = 0;; ++bounce)
+    for (int32 bounce = 0;; ++bounce)
     {
         Vec3 d = Normalize(ray.d);
 
@@ -70,21 +70,21 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
             Light* light = lights[index].get();
 
             Vec3 to_light;
-            f64 light_pdf;
-            f64 visibility;
+            Float light_pdf;
+            Float visibility;
             Color li = light->Sample(&to_light, &light_pdf, &visibility, is);
 
             Ray shadow_ray{ is.point, to_light };
 
             // Importance sample light
-            f64 light_brdf_pdf = pdf->Evaluate(to_light);
+            Float light_brdf_pdf = pdf->Evaluate(to_light);
             if (IsBlack(li) == false && light_brdf_pdf > 0.0)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
-                    f64 mis_weight = 1.0 / (light_pdf + light_brdf_pdf);
+                    Float mis_weight = 1 / (light_pdf + light_brdf_pdf);
 
-                    radiance += throughput * f64(num_lights) * mis_weight * li * mat->Evaluate(is, d, to_light);
+                    radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, to_light);
                 }
             }
 
@@ -94,7 +94,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                 Vec3 scattered = pdf->Sample();
                 shadow_ray = Ray{ is.point, scattered };
 
-                f64 brdf_light_pdf = light->EvaluatePDF(shadow_ray);
+                Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
                 if (brdf_light_pdf > 0.0)
                 {
                     Intersection is2;
@@ -102,13 +102,13 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
-                            f64 brdf_p = pdf->Evaluate(scattered);
-                            f64 mis_weight = 1.0 / (brdf_p + brdf_light_pdf);
+                            Float brdf_p = pdf->Evaluate(scattered);
+                            Float mis_weight = 1 / (brdf_p + brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
                             if (IsBlack(li) == false)
                             {
-                                radiance += throughput * f64(num_lights) * mis_weight * li * mat->Evaluate(is, d, scattered);
+                                radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, scattered);
                             }
                         }
                     }
@@ -118,7 +118,7 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
 
         // Sample new search direction based on BRDF
         Vec3 wi = pdf->Sample();
-        f64 pdf_value;
+        Float pdf_value;
 
         if (Dot(is.normal, wi) > 0.0)
         {
@@ -138,13 +138,13 @@ Color PathTrace(const Scene& scene, Ray ray, i32 max_bounces)
         // Russian roulette
         if (bounce > MIN_BOUNCES)
         {
-            f64 rr = std::fmin(0.95, Luma(throughput));
+            Float rr = std::fmin(Float(0.95), Luma(throughput));
             if (Rand() > rr)
             {
                 break;
             }
 
-            throughput *= 1.0 / rr;
+            throughput *= 1 / rr;
         }
     }
 

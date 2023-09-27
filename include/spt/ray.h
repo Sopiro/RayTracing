@@ -10,13 +10,13 @@ struct Ray
     Ray() = default;
     Ray(const Point3& origin, const Vec3& direction);
 
-    Point3 At(f64 t) const;
+    Point3 At(Float t) const;
 
     Point3 o;
     Vec3 d;
 
     // todo: http://www.pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error.html
-    inline static constexpr f64 epsilon = 1e-4;
+    inline static constexpr Float epsilon = Float(1e-4);
 };
 
 inline Ray::Ray(const Point3& origin, const Vec3& direction)
@@ -25,7 +25,7 @@ inline Ray::Ray(const Point3& origin, const Vec3& direction)
 {
 }
 
-inline Point3 Ray::At(f64 t) const
+inline Point3 Ray::At(Float t) const
 {
     return o + d * t;
 }

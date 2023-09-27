@@ -11,7 +11,7 @@ public:
     MixturePDF(PDF* pdf1, PDF* pdf2);
 
     virtual Vec3 Sample() const override;
-    virtual f64 Evaluate(const Vec3& wi) const override;
+    virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
     PDF* p1;
@@ -36,7 +36,7 @@ inline Vec3 MixturePDF::Sample() const
     }
 }
 
-inline f64 MixturePDF::Evaluate(const Vec3& wi) const
+inline Float MixturePDF::Evaluate(const Vec3& wi) const
 {
     // Mixing two pdfs
     return 0.5 * (p1->Evaluate(wi) + p2->Evaluate(wi));

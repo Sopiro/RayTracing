@@ -29,18 +29,18 @@ Vec3 GGXVNDFPDF::Sample() const
     }
 }
 
-f64 GGXVNDFPDF::Evaluate(const Vec3& wi) const
+Float GGXVNDFPDF::Evaluate(const Vec3& wi) const
 {
-    f64 alpha2 = alpha * alpha;
+    Float alpha2 = alpha * alpha;
 
     Vec3 h = Normalize(wo + wi);
-    f64 NoH = Dot(h, uvw.w);
-    f64 LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
-    f64 spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4.0 * LoH, 0.0);
+    Float NoH = Dot(h, uvw.w);
+    Float LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
+    Float spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4 * LoH, Float(0.0));
 
-    f64 diff_w = LoH * inv_pi;
+    Float diff_w = LoH * inv_pi;
 
-    return (1.0 - t) * diff_w + t * spec_w;
+    return (1 - t) * diff_w + t * spec_w;
 }
 
 } // namespace spt

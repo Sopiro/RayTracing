@@ -9,8 +9,8 @@
 namespace spt
 {
 
-constexpr Vec3 aabb_margin{ Real(0.0) };
-constexpr Real aabb_multiplier{ Real(1.0) };
+constexpr Vec3 aabb_margin{ Float(0.0) };
+constexpr Float aabb_multiplier{ Float(1.0) };
 
 class Intersectable;
 
@@ -26,7 +26,7 @@ public:
             return child1 == nullNode;
         }
 
-        i32 id;
+        int32 id;
         AABB aabb;
 
         NodeProxy parent;
@@ -69,17 +69,17 @@ public:
     void Query(const AABB& aabb, T* callback) const;
 
     void RayCast(const Ray& r,
-                 Real t_min,
-                 Real t_max,
-                 const std::function<Real(const Ray&, Real, Real, Intersectable*)>& callback) const;
+                 Float t_min,
+                 Float t_max,
+                 const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const;
     template <typename T>
-    void RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const;
+    void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
     void Traverse(const std::function<void(const Node*)>& callback) const;
     template <typename T>
     void Traverse(T* callback) const;
 
-    Real GetTreeCost() const;
+    Float GetTreeCost() const;
 
     void Rebuild();
 
@@ -91,8 +91,8 @@ private:
     NodeProxy root;
 
     Node* nodes;
-    i32 nodeCount;
-    i32 nodeCapacity;
+    int32 nodeCount;
+    int32 nodeCapacity;
 
     NodeProxy freeList;
 
@@ -105,7 +105,7 @@ private:
     void Rotate(NodeProxy node);
     void Swap(NodeProxy node1, NodeProxy node2);
 
-    static Real SAH(const AABB& aabb);
+    static Float SAH(const AABB& aabb);
 };
 
 inline bool BVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
@@ -144,9 +144,9 @@ inline BVH::Data* BVH::GetData(NodeProxy node) const
     return nodes[node].data;
 }
 
-inline Real BVH::GetTreeCost() const
+inline Float BVH::GetTreeCost() const
 {
-    Real cost = Real(0.0);
+    Float cost = Float(0.0);
 
     Traverse([&cost](const Node* node) -> void { cost += SAH(node->aabb); });
 
@@ -252,22 +252,22 @@ void BVH::Traverse(T* callback) const
 }
 
 template <typename T>
-void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
+void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
-    Real t = t_max;
+    Float t = t_max;
 
     AABB rayAABB;
     rayAABB.min = Min(p1, p2);
     rayAABB.max = Max(p1, p2);
 
-    GrowableArray<i32, 256> stack;
+    GrowableArray<int32, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() > 0)
     {
-        i32 nodeID = stack.Pop();
+        int32 nodeID = stack.Pop();
         if (nodeID == nullNode)
         {
             continue;
@@ -286,7 +286,7 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
 
         if (node->IsLeaf())
         {
-            Real value = callback->RayCastCallback(r, t_min, t, node->data);
+            Float value = callback->RayCastCallback(r, t_min, t, node->data);
             if (value <= t_min)
             {
                 return;
@@ -309,7 +309,7 @@ void BVH::RayCast(const Ray& r, Real t_min, Real t_max, T* callback) const
     }
 }
 
-inline Real BVH::SAH(const AABB& aabb)
+inline Float BVH::SAH(const AABB& aabb)
 {
 #if 0
     return aabb.GetVolume();

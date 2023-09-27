@@ -18,8 +18,8 @@ void StanfordScene(Scene& scene)
         scene.Add(floor);
     }
 
-    f64 scale = 0.3;
-    f64 gap = 0.2;
+    Float scale = 0.3;
+    Float gap = 0.2;
 
     // Bunny
     {
@@ -68,16 +68,16 @@ void StanfordScene(Scene& scene)
     }
 
     {
-        f64 w = 0.04;
-        f64 h = 0.6;
-        f64 cx = 16.0;
-        f64 xgap = 0.015;
-        f64 xstep = 2.0 * w + xgap;
+        Float w = 0.04;
+        Float h = 0.6;
+        Float cx = 16.0;
+        Float xgap = 0.015;
+        Float xstep = 2.0 * w + xgap;
 
         auto light = CreateSharedRef<DiffuseLight>(Color(3.0));
         light->two_sided = true;
 
-        for (i32 x = 0; x < cx; ++x)
+        for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 

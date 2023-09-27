@@ -6,13 +6,13 @@
 namespace spt
 {
 
-constexpr Vec2 zero_vec2{ Real(0.0), Real(0.0) };
-constexpr Vec3 zero_vec3{ Real(0.0), Real(0.0), Real(0.0) };
-constexpr Vec4 zero_vec4{ Real(0.0), Real(0.0), Real(0.0), Real(0.0) };
+constexpr Vec2 zero_vec2{ Float(0.0), Float(0.0) };
+constexpr Vec3 zero_vec3{ Float(0.0), Float(0.0), Float(0.0) };
+constexpr Vec4 zero_vec4{ Float(0.0), Float(0.0), Float(0.0), Float(0.0) };
 
-constexpr Vec3 x_axis{ Real(1.0), Real(0.0), Real(0.0) };
-constexpr Vec3 y_axis{ Real(0.0), Real(1.0), Real(0.0) };
-constexpr Vec3 z_axis{ Real(0.0), Real(0.0), Real(1.0) };
+constexpr Vec3 x_axis{ Float(1.0), Float(0.0), Float(0.0) };
+constexpr Vec3 y_axis{ Float(0.0), Float(1.0), Float(0.0) };
+constexpr Vec3 z_axis{ Float(0.0), Float(0.0), Float(1.0) };
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
@@ -41,14 +41,14 @@ inline Mat4 Convert(const aiMatrix4x4& aiMat)
     return t;
 }
 
-inline Real DegToRad(Real deg)
+inline Float DegToRad(Float deg)
 {
-    return Real(deg * pi / Real(180.0));
+    return Float(deg * pi / Float(180.0));
 }
 
-inline Real RadToDeg(Real rad)
+inline Float RadToDeg(Float rad)
 {
-    return Real(rad * inv_pi * Real(180.0));
+    return Float(rad * inv_pi * Float(180.0));
 }
 
 template <typename T>
@@ -89,7 +89,7 @@ inline Vec3 Max(const Vec3& a, const Vec3& b)
     return Vec3(std::fmax(a.x, b.x), std::fmax(a.y, b.y), std::fmax(a.z, b.z));
 }
 
-inline f64 Clamp(f64 v, f64 _min, f64 _max)
+inline Float Clamp(Float v, Float _min, Float _max)
 {
     return std::fmax(_min, std::fmin(v, _max));
 }
@@ -101,16 +101,16 @@ inline T Clamp(T v, T _min, T _max)
 }
 
 template <typename T>
-inline T Lerp(const T& a, const T& b, Real t)
+inline T Lerp(const T& a, const T& b, Float t)
 {
-    return a * (Real(1.0) - t) + b * t;
+    return a * (Float(1.0) - t) + b * t;
 }
 
 template <typename T>
-inline T Slerp(const T& start, const T& end, Real percent)
+inline T Slerp(const T& start, const T& end, Float percent)
 {
-    Real dot = Clamp(Dot(start, end), -Real(1.0), Real(1.0));
-    Real angle = std::acos(dot) * percent;
+    Float dot = Clamp(Dot(start, end), -Float(1.0), Float(1.0));
+    Float angle = std::acos(dot) * percent;
 
     T rv = end - start * dot;
     rv.Normalize();
@@ -131,29 +131,29 @@ inline T Reflect(const T& v, const T& n)
 }
 
 template <typename T>
-T Refract(const T& uv, const T& n, Real etai_over_etat)
+T Refract(const T& uv, const T& n, Float etai_over_etat)
 {
-    Real cos_theta = std::fmin(Dot(-uv, n), Real(1.0));
+    Float cos_theta = std::fmin(Dot(-uv, n), Float(1.0));
     T r_out_perp = etai_over_etat * (uv + cos_theta * n);
-    T r_out_parallel = -std::sqrt(std::fabs(Real(1.0) - r_out_perp.Length2())) * n;
+    T r_out_parallel = -std::sqrt(std::fabs(Float(1.0) - r_out_perp.Length2())) * n;
 
     return r_out_perp + r_out_parallel;
 }
 
-inline Vec3 PolarToCart(Real theta, Real phi, Real r = Real(1.0))
+inline Vec3 PolarToCart(Float theta, Float phi, Float r = Float(1.0))
 {
-    Real sin_thetha = std::sin(theta);
-    Real x = std::cos(phi) * sin_thetha;
-    Real y = std::sin(phi) * sin_thetha;
-    Real z = std::cos(theta);
+    Float sin_thetha = std::sin(theta);
+    Float x = std::cos(phi) * sin_thetha;
+    Float y = std::sin(phi) * sin_thetha;
+    Float z = std::cos(theta);
 
     return Vec3(x * r, y * r, z * r);
 }
 
 inline UV ComputeSphereUV(const Vec3& dir)
 {
-    f64 theta = std::acos(-dir.y);
-    f64 phi = std::atan2(-dir.z, dir.x) + pi;
+    Float theta = std::acos(-dir.y);
+    Float phi = std::atan2(-dir.z, dir.x) + pi;
 
     return UV(phi * inv_two_pi, theta * inv_pi);
 }
