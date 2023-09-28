@@ -158,4 +158,24 @@ inline UV ComputeSphereUV(const Vec3& dir)
     return UV(phi * inv_two_pi, theta * inv_pi);
 }
 
+template <typename Predicate>
+int32 FindInterval(int32 size, const Predicate& pred)
+{
+    int32 first = 0, len = size;
+    while (len > 0)
+    {
+        int32 half = len >> 1, middle = first + half;
+        if (pred(middle))
+        {
+            first = middle + 1;
+            len -= half + 1;
+        }
+        else
+        {
+            len = half;
+        }
+    }
+    return Clamp(first - 1, 0, size - 2);
+}
+
 } // namespace spt
