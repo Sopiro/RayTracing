@@ -13,6 +13,7 @@ public:
         point_light = 0,
         directional_light,
         area_light,
+        infinite_area_light,
     };
 
     Light(Type type);

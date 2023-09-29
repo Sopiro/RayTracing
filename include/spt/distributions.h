@@ -108,8 +108,8 @@ public:
     Point2 SampleContinuous(Float* pdf, const Point2& u) const
     {
         Float pdfs[2];
-
         int32 v;
+
         Float d1 = marginal->SampleContinuous(&pdfs[1], u[1], &v);
         Float d0 = conditional_v[v]->SampleContinuous(&pdfs[0], u[0]);
 
@@ -119,8 +119,12 @@ public:
 
     Float Pdf(const Point2& p) const
     {
-        int32 iu = Clamp(int32(p[0] * conditional_v[0]->Count()), 0, conditional_v[0]->Count() - 1);
-        int32 iv = Clamp(int32(p[1] * marginal->Count()), 0, marginal->Count() - 1);
+        int32 w = conditional_v[0]->Count();
+        int32 h = marginal->Count();
+
+        int32 iu = Clamp(int32(p[0] * w), 0, w - 1);
+        int32 iv = Clamp(int32(p[1] * h), 0, h - 1);
+
         return conditional_v[iv]->func[iu] / marginal->func_integral;
     }
 
