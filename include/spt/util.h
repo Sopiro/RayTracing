@@ -1,7 +1,7 @@
 #pragma once
 
+#include "constant_color.h"
 #include "mesh.h"
-#include "solid_color.h"
 #include "transform.h"
 
 namespace spt
@@ -27,10 +27,18 @@ struct MaterialColors
 Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors);
 Ref<Microfacet> RandomMicrofacetMaterial();
 
-Ref<Mesh> CreateRectXY(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
-Ref<Mesh> CreateRectXZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
-Ref<Mesh> CreateRectYZ(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
-Ref<Mesh> CreateBox(const Transform& transform, const Ref<Material> material, const UV& texCoord = UV(1.0, 1.0));
+Ref<Mesh> CreateRectXY(const Transform& transform,
+                       const Ref<Material> material,
+                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+Ref<Mesh> CreateRectXZ(const Transform& transform,
+                       const Ref<Material> material,
+                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+Ref<Mesh> CreateRectYZ(const Transform& transform,
+                       const Ref<Material> material,
+                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+Ref<Mesh> CreateBox(const Transform& transform,
+                    const Ref<Material> material,
+                    const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
 
 inline bool IsNullish(Float v)
 {
@@ -45,14 +53,14 @@ inline bool IsNullish(const T& v)
 
 inline bool IsBlack(Color color)
 {
-    return std::fabs(color.x) == 0.0 && std::fabs(color.y) == 0.0 && std::fabs(color.z) == 0.0;
+    return std::fabs(color.x) == Float(0.0) && std::fabs(color.y) == Float(0.0) && std::fabs(color.z) == Float(0.0);
 }
 
+// Luminance of linear color
 // https://en.wikipedia.org/wiki/Luma_(video)
 inline Float Luma(Vec3 srgb)
 {
     return Dot(srgb, Vec3(Float(0.2126), Float(0.7152), Float(0.0722)));
-    // return Dot(srgb, Vec3(0.299, 0.587, 0.114));
 }
 
 #define checkNull(v)                                                                                                             \

@@ -32,7 +32,6 @@ struct Mat3;
 struct Mat4;
 struct Transform;
 
-using UV = Vec2;
 using Point2 = Vec2;
 using Color = Vec3;
 using Point3 = Vec3;

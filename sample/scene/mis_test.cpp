@@ -7,9 +7,9 @@ void MISTest1(Scene& scene)
 {
     {
         auto floor = RandomMicrofacetMaterial();
-        floor->basecolor = SolidColor::Create(Vec3(0.73));
-        floor->roughness = SolidColor::Create(Vec3(1.0));
-        floor->metallic = SolidColor::Create(Vec3(0.0));
+        floor->basecolor = ConstantColor::Create(Vec3(0.73));
+        floor->roughness = ConstantColor::Create(Vec3(1.0));
+        floor->metallic = ConstantColor::Create(Vec3(0.0));
 
         auto tf = Transform{ Vec3(0.0, 0.0, 0.0), Quat(identity), Vec3(3.0, 1.0, 3.0) };
         scene.Add(CreateRectXZ(tf, floor));
@@ -24,24 +24,24 @@ void MISTest1(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic = SolidColor::Create(Vec3(1.0));
-        m1->roughness = SolidColor::Create(Vec3(0.1));
+        m1->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = ConstantColor::Create(Vec3(1.0));
+        m1->roughness = ConstantColor::Create(Vec3(0.1));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic = SolidColor::Create(Vec3(1.0));
-        m2->roughness = SolidColor::Create(Vec3(0.05));
+        m2->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = ConstantColor::Create(Vec3(1.0));
+        m2->roughness = ConstantColor::Create(Vec3(0.05));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic = SolidColor::Create(Vec3(1.0));
-        m3->roughness = SolidColor::Create(Vec3(0.02));
+        m3->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = ConstantColor::Create(Vec3(1.0));
+        m3->roughness = ConstantColor::Create(Vec3(0.02));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic = SolidColor::Create(Vec3(1.0));
-        m4->roughness = SolidColor::Create(Vec3(0.005));
+        m4->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = ConstantColor::Create(Vec3(1.0));
+        m4->roughness = ConstantColor::Create(Vec3(0.005));
 
         Float h = 0.2;
         Float dh = 0.025;
@@ -98,16 +98,16 @@ void MISTest1(Scene& scene)
         scene.AddLight(l4);
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.01))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.01))));
 }
 
 void MISTest2(Scene& scene)
 {
     {
         auto floor_mat = RandomMicrofacetMaterial();
-        floor_mat->basecolor = SolidColor::Create(Vec3(0.4));
-        floor_mat->roughness = SolidColor::Create(Vec3(1.0));
-        floor_mat->metallic = SolidColor::Create(Vec3(0.0));
+        floor_mat->basecolor = ConstantColor::Create(Vec3(0.4));
+        floor_mat->roughness = ConstantColor::Create(Vec3(1.0));
+        floor_mat->metallic = ConstantColor::Create(Vec3(0.0));
 
         auto floor = CreateSharedRef<Model>("res/veach_mi/floor.obj", Transform{ identity });
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
@@ -117,24 +117,24 @@ void MISTest2(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic = SolidColor::Create(Vec3(1.0));
-        m1->roughness = SolidColor::Create(Vec3(0.005));
+        m1->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = ConstantColor::Create(Vec3(1.0));
+        m1->roughness = ConstantColor::Create(Vec3(0.005));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic = SolidColor::Create(Vec3(1.0));
-        m2->roughness = SolidColor::Create(Vec3(0.02));
+        m2->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = ConstantColor::Create(Vec3(1.0));
+        m2->roughness = ConstantColor::Create(Vec3(0.02));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic = SolidColor::Create(Vec3(1.0));
-        m3->roughness = SolidColor::Create(Vec3(0.05));
+        m3->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = ConstantColor::Create(Vec3(1.0));
+        m3->roughness = ConstantColor::Create(Vec3(0.05));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic = SolidColor::Create(Vec3(1.0));
-        m4->roughness = SolidColor::Create(Vec3(0.1));
+        m4->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = ConstantColor::Create(Vec3(1.0));
+        m4->roughness = ConstantColor::Create(Vec3(0.1));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
@@ -171,7 +171,7 @@ void MISTest2(Scene& scene)
         scene.AddLight(l5);
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.0))));
 }
 
 void MISTestWak(Scene& scene)
@@ -179,8 +179,8 @@ void MISTestWak(Scene& scene)
     {
         auto floor = RandomMicrofacetMaterial();
         floor->basecolor = ImageTexture::Create("res/wakdu.jpg");
-        floor->roughness = SolidColor::Create(Vec3(1.0));
-        floor->metallic = SolidColor::Create(Vec3(0.0));
+        floor->roughness = ConstantColor::Create(Vec3(1.0));
+        floor->metallic = ConstantColor::Create(Vec3(0.0));
 
         Float s = 20.0;
         auto tf = Transform{ Vec3(0.0, -4.0, -4.0), Quat(identity), Vec3(s, 1.0, s) };
@@ -193,24 +193,24 @@ void MISTestWak(Scene& scene)
     // plates
     {
         auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m1->metallic = SolidColor::Create(Vec3(1.0));
-        m1->roughness = SolidColor::Create(Vec3(0.005));
+        m1->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m1->metallic = ConstantColor::Create(Vec3(1.0));
+        m1->roughness = ConstantColor::Create(Vec3(0.005));
 
         auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m2->metallic = SolidColor::Create(Vec3(1.0));
-        m2->roughness = SolidColor::Create(Vec3(0.02));
+        m2->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m2->metallic = ConstantColor::Create(Vec3(1.0));
+        m2->roughness = ConstantColor::Create(Vec3(0.02));
 
         auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m3->metallic = SolidColor::Create(Vec3(1.0));
-        m3->roughness = SolidColor::Create(Vec3(0.05));
+        m3->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m3->metallic = ConstantColor::Create(Vec3(1.0));
+        m3->roughness = ConstantColor::Create(Vec3(0.05));
 
         auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor = SolidColor::Create(Vec3(0.07, 0.09, 0.13));
-        m4->metallic = SolidColor::Create(Vec3(1.0));
-        m4->roughness = SolidColor::Create(Vec3(0.1));
+        m4->basecolor = ConstantColor::Create(Vec3(0.07, 0.09, 0.13));
+        m4->metallic = ConstantColor::Create(Vec3(1.0));
+        m4->roughness = ConstantColor::Create(Vec3(0.1));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
@@ -247,7 +247,7 @@ void MISTestWak(Scene& scene)
         scene.AddLight(l5);
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.333))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.333))));
 }
 
 } // namespace spt

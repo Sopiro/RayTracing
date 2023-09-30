@@ -16,7 +16,7 @@ Color InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const I
     *pdf = UniformSampleSpherePDF();
     *visibility = infinity;
 
-    UV uv = ComputeSphereTexCoord(*wi);
+    Point2 uv = ComputeSphereTexCoord(*wi);
 
     return l_map->Value(uv);
 }
@@ -28,7 +28,7 @@ Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
 
 Color InfiniteAreaLight::Emit(const Ray& ray) const
 {
-    UV uv = ComputeSphereTexCoord(Normalize(ray.d));
+    Point2 uv = ComputeSphereTexCoord(Normalize(ray.d));
     return l_map->Value(uv);
 }
 

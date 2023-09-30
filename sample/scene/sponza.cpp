@@ -48,7 +48,7 @@ void Sponza(Scene& scene)
     //     scene.AddLight(sphere);
     // }
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
     scene.AddLight(
         CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true)));
     // scene.AddLight(

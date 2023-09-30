@@ -22,9 +22,9 @@ void CornellBoxGlossy(Scene& scene)
 
         auto mat = RandomMicrofacetMaterial();
         mat->basecolor = wakgood_texture;
-        mat->roughness = SolidColor::Create(0.01);
-        mat->metallic = SolidColor::Create(0.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->roughness = ConstantColor::Create(0.01);
+        mat->metallic = ConstantColor::Create(0.0);
+        mat->emissive = ConstantColor::Create(0.0);
 
         auto tf = Transform{ Vec3(0.5, 0.5, -1.0), Quat(identity), Vec3(1.0) };
         scene.Add(CreateRectXY(tf, mat));
@@ -32,38 +32,38 @@ void CornellBoxGlossy(Scene& scene)
         // left
 
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(.65, .05, .05);
-        mat->roughness = SolidColor::Create(0.01);
-        mat->metallic = SolidColor::Create(0.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(.65, .05, .05);
+        mat->roughness = ConstantColor::Create(0.01);
+        mat->metallic = ConstantColor::Create(0.0);
+        mat->emissive = ConstantColor::Create(0.0);
         tf = Transform{ Vec3(0.0, 0.5, -0.5), Quat(identity), Vec3(1.0) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // right
 
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(.12, .45, .15);
-        mat->roughness = SolidColor::Create(0.01);
-        mat->metallic = SolidColor::Create(0.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(.12, .45, .15);
+        mat->roughness = ConstantColor::Create(0.01);
+        mat->metallic = ConstantColor::Create(0.0);
+        mat->emissive = ConstantColor::Create(0.0);
         tf = Transform{ Vec3(1.0, 0.5, -0.5), Quat(pi, y_axis), Vec3(1.0) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // bottom
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(.73);
-        mat->roughness = SolidColor::Create(0.01);
-        mat->metallic = SolidColor::Create(0.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(.73);
+        mat->roughness = ConstantColor::Create(0.01);
+        mat->metallic = ConstantColor::Create(0.0);
+        mat->emissive = ConstantColor::Create(0.0);
         tf = Transform{ Vec3(0.5, 0, -0.5), Quat(identity), Vec3(1.0) };
         scene.Add(CreateRectXZ(tf, mat));
 
         // top
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(.73);
-        mat->roughness = SolidColor::Create(0.01);
-        mat->metallic = SolidColor::Create(0.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(.73);
+        mat->roughness = ConstantColor::Create(0.01);
+        mat->metallic = ConstantColor::Create(0.0);
+        mat->emissive = ConstantColor::Create(0.0);
         tf = Transform{ Vec3(0.5, 1.0, -0.5), Quat(pi, x_axis), Vec3(1.0) };
         scene.Add(CreateRectXZ(tf, mat));
     }
@@ -75,10 +75,10 @@ void CornellBoxGlossy(Scene& scene)
         Float hz = 0.13;
 
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(1.0);
-        mat->roughness = SolidColor::Create(0.1);
-        mat->metallic = SolidColor::Create(1.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(1.0);
+        mat->roughness = ConstantColor::Create(0.1);
+        mat->metallic = ConstantColor::Create(1.0);
+        mat->emissive = ConstantColor::Create(0.0);
 
         auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3(hx * 2.0, hy * 2.0, hz * 2.0) };
         auto box = CreateBox(tf, mat);
@@ -89,10 +89,10 @@ void CornellBoxGlossy(Scene& scene)
     // Right bunny
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(0.7);
-        mat->roughness = SolidColor::Create(0.05);
-        mat->metallic = SolidColor::Create(1.0);
-        mat->emissive = SolidColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(0.7);
+        mat->roughness = ConstantColor::Create(0.05);
+        mat->metallic = ConstantColor::Create(1.0);
+        mat->emissive = ConstantColor::Create(0.0);
 
         // Bunny
         Transform tf{ Point3(0.7, 0.0, -0.3), Quat(identity), Vec3(0.3) };

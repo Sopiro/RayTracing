@@ -8,9 +8,9 @@ void CameraScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(Vec3(0.5));
-        mat->metallic = SolidColor::Create(Vec3(0.0));
-        mat->roughness = SolidColor::Create(Vec3(0.01));
+        mat->basecolor = ConstantColor::Create(Vec3(0.5));
+        mat->metallic = ConstantColor::Create(Vec3(0.0));
+        mat->roughness = ConstantColor::Create(Vec3(0.01));
 
         auto tf = Transform{ zero_vec3, Quat(identity), Vec3(8.0) };
         auto floor = CreateRectXZ(tf, mat);
@@ -52,7 +52,7 @@ void CameraScene(Scene& scene)
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
 }
 
 } // namespace spt

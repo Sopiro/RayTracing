@@ -136,7 +136,7 @@ void Triangle::Sample(Intersection* sample, Float* pdf) const
     Float u = Rand(0, 1);
     Float v = Rand(0, 1);
 
-    if (u + v > 1.0)
+    if (u + v > 1)
     {
         u = 1 - u;
         v = 1 - v;
@@ -179,7 +179,7 @@ void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point
     Float distance_squared = Dot(d, d);
 
     Float cosine = Dot(d, sample->normal) / std::sqrt(distance_squared);
-    if (cosine > 0.0)
+    if (cosine > 0)
     {
         sample->front_face = false;
         sample->normal.Negate();

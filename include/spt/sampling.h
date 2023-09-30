@@ -11,7 +11,7 @@ inline Vec3 UniformSampleHemisphere()
     Float u2 = Rand();
 
     Float z = u1;
-    Float r = std::sqrt(std::max((Float)0.0, (Float)1.0 - z * z));
+    Float r = std::sqrt(std::fmax(Float(0.0), Float(1.0) - z * z));
     Float phi = 2 * pi * u2;
 
     return Vec3(r * std::cos(phi), r * std::sin(phi), z);
@@ -23,7 +23,7 @@ inline Vec3 UniformSampleSphere()
     Float u2 = Rand();
 
     Float z = 1 - 2 * u1;
-    Float r = std::sqrt(std::fmax(Float(0.0), 1 - z * z));
+    Float r = std::sqrt(std::fmax(0, 1 - z * z));
     Float phi = two_pi * u2;
 
     Float x = r * std::cos(phi);

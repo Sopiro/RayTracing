@@ -17,7 +17,7 @@ Color PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersec
 
     *wi = d;
     *visibility = distance;
-    *pdf = 1.0;
+    *pdf = Float(1.0);
 
     return intensity / (distance * distance);
 }

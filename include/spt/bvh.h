@@ -4,8 +4,6 @@
 #include "growable_array.h"
 #include "intersectable.h"
 
-#define nullNode (-1)
-
 namespace spt
 {
 
@@ -19,11 +17,13 @@ class BVH
 public:
     using Data = Intersectable;
 
+    inline static constexpr NodeProxy null_node = -1;
+
     struct Node
     {
         bool IsLeaf() const
         {
-            return child1 == nullNode;
+            return child1 == null_node;
         }
 
         int32 id;
@@ -156,7 +156,7 @@ inline Float BVH::GetTreeCost() const
 template <typename T>
 void BVH::Query(const Vec3& point, T* callback) const
 {
-    if (root == nullNode)
+    if (root == null_node)
     {
         return;
     }
@@ -192,7 +192,7 @@ void BVH::Query(const Vec3& point, T* callback) const
 template <typename T>
 void BVH::Query(const AABB& aabb, T* callback) const
 {
-    if (root == nullNode)
+    if (root == null_node)
     {
         return;
     }
@@ -228,7 +228,7 @@ void BVH::Query(const AABB& aabb, T* callback) const
 template <typename T>
 void BVH::Traverse(T* callback) const
 {
-    if (root == nullNode)
+    if (root == null_node)
     {
         return;
     }
@@ -268,7 +268,7 @@ void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
     while (stack.Count() > 0)
     {
         int32 nodeID = stack.Pop();
-        if (nodeID == nullNode)
+        if (nodeID == null_node)
         {
             continue;
         }

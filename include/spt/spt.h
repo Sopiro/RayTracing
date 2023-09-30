@@ -12,7 +12,7 @@
 
 #include "bitmap.h"
 #include "image_texture.h"
-#include "solid_color.h"
+#include "constant_color.h"
 
 #include "constant_medium.h"
 #include "dielectric.h"

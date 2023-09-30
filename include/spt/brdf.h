@@ -73,7 +73,6 @@ inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 // "Sampling Visible GGX Normals with Spherical Caps" by Dupuy & Benyoub
 // https://gist.github.com/jdupuy/4c6e782b62c92b9cb3d13fbb0a5bd7a0
 // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
-
 inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
 {
     // sample a spherical cap in (-wo.z, 1]
@@ -102,18 +101,17 @@ inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha, Vec2 u)
     return wm;
 }
 
+// Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
+// https://jcgt.org/published/0007/04/01/
 inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
 {
-    // Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
-    // https://jcgt.org/published/0007/04/01/
-
     // Section 3.2: transforming the view direction to the hemisphere configuration
     Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
     Vh.Normalize();
 
     // Build an orthonormal basis with v, t1, and t2
     // Section 4.1: orthonormal basis (with special case if cross product is zero)
-    Vec3 T1 = (Vh.z < 0.999) ? Normalize(Cross(Vh, z_axis)) : x_axis;
+    Vec3 T1 = (Vh.z < Float(0.999)) ? Normalize(Cross(Vh, z_axis)) : x_axis;
     Vec3 T2 = Cross(T1, Vh);
 
     // Section 4.2: parameterization of the projected area

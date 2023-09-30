@@ -26,7 +26,7 @@ inline MixturePDF::MixturePDF(PDF* pdf1, PDF* pdf2)
 
 inline Vec3 MixturePDF::Sample() const
 {
-    if (Rand() > 0.5)
+    if (Rand() > Float(0.5))
     {
         return p1->Sample();
     }
@@ -39,7 +39,7 @@ inline Vec3 MixturePDF::Sample() const
 inline Float MixturePDF::Evaluate(const Vec3& wi) const
 {
     // Mixing two pdfs
-    return 0.5 * (p1->Evaluate(wi) + p2->Evaluate(wi));
+    return Float(0.5) * (p1->Evaluate(wi) + p2->Evaluate(wi));
 }
 
 } // namespace spt

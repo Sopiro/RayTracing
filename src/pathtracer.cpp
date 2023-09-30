@@ -8,8 +8,8 @@ namespace spt
 
 Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
 {
-    Color radiance{ 0.0 };
-    Vec3 throughput{ 1.0 };
+    Color radiance(0, 0, 0);
+    Vec3 throughput(1, 1, 1);
 
     bool was_specular = false;
 
@@ -82,7 +82,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
 
             // Importance sample light
             Float light_brdf_pdf = pdf->Evaluate(to_light);
-            if (IsBlack(li) == false && light_brdf_pdf > 0.0)
+            if (IsBlack(li) == false && light_brdf_pdf > 0)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
@@ -105,7 +105,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                 shadow_ray = Ray{ is.point, scattered };
 
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
-                if (brdf_light_pdf > 0.0)
+                if (brdf_light_pdf > 0)
                 {
                     Intersection is2;
                     if (scene.Intersect(&is2, shadow_ray, Ray::epsilon, infinity))
@@ -140,7 +140,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         Vec3 wi = pdf->Sample();
         Float pdf_value;
 
-        if (Dot(is.normal, wi) > 0.0)
+        if (Dot(is.normal, wi) > 0)
         {
             pdf_value = pdf->Evaluate(wi);
         }
@@ -149,7 +149,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             break;
         }
 
-        assert(pdf_value > 0.0);
+        assert(pdf_value > 0);
         Ray scattered{ is.point, wi };
 
         throughput *= mat->Evaluate(is, d, wi) / pdf_value;

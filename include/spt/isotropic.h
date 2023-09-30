@@ -18,7 +18,7 @@ public:
 };
 
 inline Isotropic::Isotropic(const Color& c)
-    : albedo(SolidColor::Create(c))
+    : albedo(ConstantColor::Create(c))
 {
 }
 

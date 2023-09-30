@@ -16,7 +16,7 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     Float sin_theta = std::sqrt(1 - cos_theta * cos_theta);
 
     // Check for total internal reflection
-    bool refractable = refraction_ratio * sin_theta < 1.0;
+    bool refractable = refraction_ratio * sin_theta < 1;
     Vec3 wo;
 
     if (refractable == false || Reflectance(cos_theta, refraction_ratio) > Rand())
@@ -29,7 +29,7 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     }
 
     ir->is_specular = true;
-    ir->attenuation = Color(1.0, 1.0, 1.0);
+    ir->attenuation = Color(1, 1, 1);
     ir->specular_ray = Ray{ is.point, wo };
 
     return true;

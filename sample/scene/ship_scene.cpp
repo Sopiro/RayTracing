@@ -25,7 +25,7 @@ void ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(30.0)));
+        auto white = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Color(30.0)));
         white->two_sided = true;
         auto tf = Transform{ Point3(0.0, 5.0, -3.0), Quat(pi / 4.0, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
@@ -51,9 +51,9 @@ void ShipScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(Vec3(1.0));
-        mat->metallic = SolidColor::Create(Vec3(0.0));
-        mat->roughness = SolidColor::Create(Vec3(0.001));
+        mat->basecolor = ConstantColor::Create(Vec3(1.0));
+        mat->metallic = ConstantColor::Create(Vec3(0.0));
+        mat->roughness = ConstantColor::Create(Vec3(0.001));
 
         Float size = 9.0;
         Float y = 2.1;
@@ -77,7 +77,7 @@ void ShipScene(Scene& scene)
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false,
     // true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
 }
 
 } // namespace spt

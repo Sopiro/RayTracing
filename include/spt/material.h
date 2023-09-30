@@ -6,7 +6,7 @@
 #include "pdf.h"
 
 #include "ray.h"
-#include "solid_color.h"
+#include "constant_color.h"
 
 namespace spt
 {

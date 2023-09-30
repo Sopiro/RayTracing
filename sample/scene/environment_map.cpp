@@ -51,12 +51,12 @@ void EnvironmentMap(Scene& scene)
     // Ground
     // {
     //     auto mat = CreateSharedRef<PBRMaterial>();
-    //     mat->albedo_map = SolidColor::Create(Vec3(1.0) * 0.9);
-    //     mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
-    //     mat->roughness_map = SolidColor::Create(Vec3(0.1));
-    //     mat->metallic_map = SolidColor::Create(Vec3(0.0));
-    //     mat->ao_map = SolidColor::Create(Vec3(1.0));
-    //     mat->emissive_map = SolidColor::Create(Vec3(0.0));
+    //     mat->albedo_map = ConstantColor::Create(Vec3(1.0) * 0.9);
+    //     mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
+    //     mat->roughness_map = ConstantColor::Create(Vec3(0.1));
+    //     mat->metallic_map = ConstantColor::Create(Vec3(0.0));
+    //     mat->ao_map = ConstantColor::Create(Vec3(1.0));
+    //     mat->emissive_map = ConstantColor::Create(Vec3(0.0));
 
     //     auto tf1 = Transform{ Vec3(0.5, -r, -0.5), Quat(identity), Vec3(100.0) };
     //     auto ground = RectXZ(tf1, mat);

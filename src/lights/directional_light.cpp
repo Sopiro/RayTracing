@@ -15,7 +15,7 @@ DirectionalLight::DirectionalLight(const Vec3& _dir, const Color& _intensity, Fl
 Color DirectionalLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
 {
     *wi = -dir + RandomInUnitSphere() * radius;
-    *pdf = 1.0;
+    *pdf = Float(1.0);
     *visibility = infinity;
 
     return intensity;

@@ -5,12 +5,12 @@
 namespace spt
 {
 
-inline Color ToLinear(const Color& color, Float gamma = 2.2)
+inline Color ToLinear(const Color& color, Float gamma = Float(2.2))
 {
     return Color(std::pow(color.x, gamma), std::pow(color.y, gamma), std::pow(color.z, gamma));
 }
 
-inline Color GammaCorrection(const Color& color, Float gamma = 2.2)
+inline Color GammaCorrection(const Color& color, Float gamma = Float(2.2))
 {
     Float invGamma = 1 / gamma;
     return Color(std::pow(color.x, invGamma), std::pow(color.y, invGamma), std::pow(color.z, invGamma));

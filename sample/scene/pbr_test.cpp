@@ -34,11 +34,11 @@ void PBRTest(Scene& scene)
     // Ground
     {
         auto mat = CreateSharedRef<Microfacet>();
-        mat->basecolor = SolidColor::Create(Vec3(1.0) * 0.9);
-        mat->metallic = SolidColor::Create(Vec3(0.0));
-        mat->roughness = SolidColor::Create(Vec3(0.1));
-        mat->emissive = SolidColor::Create(Vec3(0.0));
-        mat->normal_map = SolidColor::Create(0.5, 0.5, 1.0);
+        mat->basecolor = ConstantColor::Create(Vec3(1.0) * 0.9);
+        mat->metallic = ConstantColor::Create(Vec3(0.0));
+        mat->roughness = ConstantColor::Create(Vec3(0.1));
+        mat->emissive = ConstantColor::Create(Vec3(0.0));
+        mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
 
         auto tf1 = Transform{ Vec3(0.5, -r, -0.5), Quat(identity), Vec3(100.0) };
         auto ground = CreateRectXZ(tf1, mat);
@@ -100,7 +100,7 @@ void PBRTest(Scene& scene)
         }
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0, 0.0, 0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0, 0.0, 0.0))));
 }
 
 } // namespace spt

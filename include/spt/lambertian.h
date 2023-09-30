@@ -20,7 +20,7 @@ public:
 };
 
 inline Lambertian::Lambertian(const Color& _color)
-    : albedo{ SolidColor::Create(_color) }
+    : albedo{ ConstantColor::Create(_color) }
 {
 }
 

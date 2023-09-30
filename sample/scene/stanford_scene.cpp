@@ -14,7 +14,7 @@ void StanfordScene(Scene& scene)
         mat->normal_map = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png");
 
         auto tf = Transform{ zero_vec3, Quat(identity), Vec3(8.0) };
-        auto floor = CreateRectXZ(tf, mat, UV(4.0, 4.0));
+        auto floor = CreateRectXZ(tf, mat, Point2(4.0, 4.0));
         scene.Add(floor);
     }
 
@@ -59,8 +59,8 @@ void StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(-gap * 3.0, 0.0, 0.0), Quat(0.0, y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
-        mat->metallic = SolidColor::Create(Color(1.0));
-        mat->roughness = SolidColor::Create(Color(0.2));
+        mat->metallic = ConstantColor::Create(Color(1.0));
+        mat->roughness = ConstantColor::Create(Color(0.2));
         Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
@@ -96,7 +96,7 @@ void StanfordScene(Scene& scene)
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false,
     // true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
 }
 
 } // namespace spt

@@ -33,7 +33,7 @@ inline void Primitive::SetFaceNormal(
     is->shading.normal = shading_normal;
     is->shading.tangent = shading_tangent;
 
-    if (Dot(wi, outward_normal) < 0.0)
+    if (Dot(wi, outward_normal) < 0)
     {
         is->front_face = true;
         is->normal = outward_normal;

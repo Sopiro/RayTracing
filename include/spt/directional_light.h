@@ -15,7 +15,7 @@ public:
 
     Vec3 dir;
     Color intensity; // radiance
-    Float radius;      // visible radius
+    Float radius;    // visible radius
 };
 
 inline Float DirectionalLight::EvaluatePDF(const Ray& ray) const

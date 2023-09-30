@@ -11,7 +11,7 @@ struct Vertex
     Point3 position;
     Vec3 normal;
     Vec3 tangent;
-    UV texCoord;
+    Point2 texCoord;
 };
 
 // Represents triangle mesh
@@ -21,7 +21,7 @@ public:
     Mesh(std::vector<Point3> positions,
          std::vector<Vec3> normals,
          std::vector<Vec3> tangents,
-         std::vector<UV> texCoords,
+         std::vector<Point2> texCoords,
          std::vector<int32> indices,
          const Mat4& transform,
          const Ref<Material> material);
@@ -41,7 +41,7 @@ private:
     std::vector<Point3> positions;
     std::vector<Vec3> normals;
     std::vector<Vec3> tangents;
-    std::vector<UV> texCoords;
+    std::vector<Point2> texCoords;
     std::vector<int32> indices;
 
     Ref<Material> material;

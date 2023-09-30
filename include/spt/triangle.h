@@ -30,7 +30,7 @@ private:
 
     Vec3 GetNormal(Float u, Float v, Float w) const;
     Vec3 GetTangent(Float u, Float v, Float w) const;
-    UV GetTexCoord(Float u, Float v, Float w) const;
+    Point2 GetTexCoord(Float u, Float v, Float w) const;
 
     const Ref<Mesh> mesh;
     const int32* v;
@@ -111,13 +111,13 @@ inline Vec3 Triangle::GetTangent(Float _u, Float _v, Float _w) const
     return t;
 }
 
-inline UV Triangle::GetTexCoord(Float _u, Float _v, Float _w) const
+inline Point2 Triangle::GetTexCoord(Float _u, Float _v, Float _w) const
 {
-    const UV& u0 = mesh->texCoords[v[0]];
-    const UV& u1 = mesh->texCoords[v[1]];
-    const UV& u2 = mesh->texCoords[v[2]];
+    const Point2& u0 = mesh->texCoords[v[0]];
+    const Point2& u1 = mesh->texCoords[v[1]];
+    const Point2& u2 = mesh->texCoords[v[2]];
 
-    UV uv = _w * u0 + _u * u1 + _v * u2;
+    Point2 uv = _w * u0 + _u * u1 + _v * u2;
 
     return uv;
 }

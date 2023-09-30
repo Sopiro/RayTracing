@@ -7,9 +7,9 @@ void StatueScene(Scene& scene)
 {
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(Vec3(1.0));
-        mat->metallic = SolidColor::Create(Vec3(1.0));
-        mat->roughness = SolidColor::Create(Vec3(0.1));
+        mat->basecolor = ConstantColor::Create(Vec3(1.0));
+        mat->metallic = ConstantColor::Create(Vec3(1.0));
+        mat->roughness = ConstantColor::Create(Vec3(0.1));
 
         // auto mat = CreateSharedRef<Dielectric>(1.5);
 
@@ -29,7 +29,7 @@ void StatueScene(Scene& scene)
     Float size = 2.0;
 
     {
-        auto red = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(light, 0.0, 0.0)));
+        auto red = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Color(light, 0.0, 0.0)));
         auto tf = Transform{ Point3(-distance, 0.0, 0.0), Quat(identity), Vec3(1.0, size, size) };
         auto rect = CreateRectYZ(tf, red);
 
@@ -37,7 +37,7 @@ void StatueScene(Scene& scene)
     }
 
     {
-        auto blue = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(0.0, 0.0, light)));
+        auto blue = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Color(0.0, 0.0, light)));
         auto tf = Transform{ Point3(distance, 0.0, 0.0), Quat(pi, y_axis), Vec3(1.0, size, size) };
         auto rect = CreateRectYZ(tf, blue);
 
@@ -45,7 +45,7 @@ void StatueScene(Scene& scene)
     }
 
     {
-        auto white = CreateSharedRef<DiffuseLight>(SolidColor::Create(Color(0.5)));
+        auto white = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Color(0.5)));
 
         auto tf = Transform{ Point3(0.0, 4.0, 0.0), Quat(pi, x_axis), Vec3(8.0, 1.0, 8.0) };
         auto rect = CreateRectXZ(tf, white);
@@ -75,9 +75,9 @@ void StatueScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = SolidColor::Create(Vec3(1.0));
-        mat->metallic = SolidColor::Create(Vec3(0.0));
-        mat->roughness = SolidColor::Create(Vec3(0.01));
+        mat->basecolor = ConstantColor::Create(Vec3(1.0));
+        mat->metallic = ConstantColor::Create(Vec3(0.0));
+        mat->roughness = ConstantColor::Create(Vec3(0.01));
 
         auto tf = Transform{ Point3(0.0, -2.0, 0.0), Quat(identity), Vec3(8.0, 1.0, 8.0) };
         auto rect = CreateRectXZ(tf, mat);
@@ -99,7 +99,7 @@ void StatueScene(Scene& scene)
     // false, true)));
     scene.AddLight(
         CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
 }
 
 } // namespace spt

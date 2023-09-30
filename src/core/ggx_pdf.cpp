@@ -32,7 +32,7 @@ Float GGXPDF::Evaluate(const Vec3& wi) const
 
     Float diff_w = LoH * inv_pi;
 
-    return (1.0 - t) * diff_w + t * spec_w;
+    return (1 - t) * diff_w + t * spec_w;
 }
 
 } // namespace spt

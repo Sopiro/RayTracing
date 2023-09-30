@@ -19,7 +19,7 @@ public:
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
 
-    virtual Color Value(const UV& uv) const override;
+    virtual Color Value(const Point2& uv) const override;
 
 protected:
     ImageTexture();
@@ -32,17 +32,18 @@ protected:
     int32 bytes_per_scanline;
 };
 
-inline ImageTexture::ImageTexture()
-    : data{ nullptr }
-    , width{ 0 }
-    , height{ 0 }
-    , bytes_per_scanline{ 0 }
+class ImageTextureHDR : public ImageTexture
 {
-}
+public:
+    virtual ~ImageTextureHDR() = default;
 
-inline ImageTexture::~ImageTexture()
-{
-    stbi_image_free(data);
-}
+    virtual Color Value(const Point2& uv) const override;
+
+protected:
+    friend class ImageTexture;
+
+    ImageTextureHDR() = default;
+    ImageTextureHDR(const std::string& path, bool srgb);
+};
 
 } // namespace spt

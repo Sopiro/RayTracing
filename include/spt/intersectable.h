@@ -35,7 +35,7 @@ struct Intersection
 
     Point3 point;
     Vec3 normal; // Geometric normal
-    UV uv;
+    Point2 uv;
 
     bool front_face;
 

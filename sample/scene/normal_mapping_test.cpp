@@ -19,7 +19,7 @@ void NormalMapping(Scene& scene)
         CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true)));
 
     // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0), 0.01));
-    // scene.SetEnvironmentMap(SolidColor::Create(zero_vec3));
+    // scene.SetEnvironmentMap(ConstantColor::Create(zero_vec3));
 }
 
 } // namespace spt

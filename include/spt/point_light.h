@@ -20,7 +20,7 @@ public:
 inline Float PointLight::EvaluatePDF(const Ray& ray) const
 {
     assert(false);
-    return 0.0;
+    return Float(0.0);
 }
 
 } // namespace spt

@@ -13,7 +13,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     Float c = oc.Length2() - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
-    if (discriminant < 0.0)
+    if (discriminant < 0)
     {
         return false;
     }
@@ -37,7 +37,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     is->point = ray.At(root);
     Vec3 outward_normal = (is->point - center) / radius;
 
-    Vec3 t = (std::fabs(outward_normal.y) > 0.999) ? x_axis : y_axis;
+    Vec3 t = (std::fabs(outward_normal.y) > Float(0.999)) ? x_axis : y_axis;
     Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
     SetFaceNormal(is, ray.d, outward_normal, outward_normal, outward_tangent);
@@ -54,7 +54,7 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     Float c = oc.Length2() - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
-    if (discriminant < 0.0)
+    if (discriminant < 0)
     {
         return false;
     }
@@ -76,11 +76,11 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 
 void Sphere::Sample(Intersection* sample, Float* pdf) const
 {
-    Float area = 4.0 * pi * radius * radius;
+    Float area = 4 * pi * radius * radius;
     sample->normal = UniformSampleSphere();
     sample->point = center + sample->normal * radius;
     sample->uv = ComputeSphereTexCoord(sample->normal);
-    *pdf = 1.0 / area;
+    *pdf = 1 / area;
 }
 
 void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
@@ -124,11 +124,11 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     *ref2p = uvw.GetLocal(d) * s;
 
-    Float solid_angle = two_pi * (1.0 - cos_theta_max);
+    Float solid_angle = two_pi * (1 - cos_theta_max);
 
     sample->point = ref + *ref2p;
     sample->normal = Normalize(sample->point - center);
-    *pdf = 1.0 / solid_angle;
+    *pdf = 1 / solid_angle;
 
     sample->front_face = true;
 

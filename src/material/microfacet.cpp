@@ -50,7 +50,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     Vec3 h = v + l;                           // half
 
     // Resolve back facing shading normal by flipping method
-    if (Dot(n, v) < 0.0)
+    if (Dot(n, v) < Float(0.0))
     {
         n = Reflect(n, is.shading.normal);
     }
@@ -58,7 +58,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     Float NoV = Dot(n, v);
     Float NoL = Dot(n, l);
 
-    if (NoV <= 0.0 || NoL <= 0.0 || h == zero_vec3)
+    if (NoV <= Float(0.0) || NoL <= Float(0.0) || h == zero_vec3)
     {
         return zero_vec3;
     }
@@ -82,7 +82,7 @@ Vec3 Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo
     Float V = V_Smith_Correlated(NoV, NoL, alpha2);
 
     Vec3 f_s = F * (D * V);
-    // Vec3 f_s = F * (D * G) / (4.0 * NoV * NoL);
+    // Vec3 f_s = F * (D * G) / (Float(4.0) * NoV * NoL);
     Vec3 f_d = (Vec3(1) - F) * (1 - m) * (c * inv_pi);
 
     return (f_d + f_s) * NoL;

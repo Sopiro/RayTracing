@@ -39,7 +39,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     std::vector<Point3> positions;
     std::vector<Vec3> normals;
     std::vector<Vec3> tangents;
-    std::vector<UV> texCoords;
+    std::vector<Point2> texCoords;
 
     uint32 vertexCount = mesh->mNumVertices;
 

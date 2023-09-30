@@ -13,16 +13,17 @@ public:
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
 
     Ref<Texture> emission;
-    bool two_sided = false;
+    bool two_sided;
 };
 
 inline DiffuseLight::DiffuseLight(const Ref<Texture> _emission)
     : emission{ _emission }
+    , two_sided{ false }
 {
 }
 
 inline DiffuseLight::DiffuseLight(Color color)
-    : emission{ SolidColor::Create(color) }
+    : emission{ ConstantColor::Create(color) }
 {
 }
 

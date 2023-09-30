@@ -52,7 +52,7 @@ inline Float Timer::Get()
     }
     else
     {
-        return 0.0;
+        return Float(0.0);
     }
 }
 
