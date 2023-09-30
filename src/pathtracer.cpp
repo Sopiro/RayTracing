@@ -20,7 +20,11 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         Intersection is;
         if (scene.Intersect(&is, ray, Ray::epsilon, infinity) == false)
         {
-            radiance += throughput * scene.GetSkyColor(d);
+            auto& env_lights = scene.GetInfiniteLights();
+            for (InfiniteAreaLight* light : env_lights)
+            {
+                radiance += throughput * light->Emit(ray);
+            }
             break;
         }
 
@@ -82,9 +86,15 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
-                    Float mis_weight = 1 / (light_pdf + light_brdf_pdf);
-
-                    radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, to_light);
+                    if (light->IsDeltaLight())
+                    {
+                        radiance += throughput * Float(num_lights) / light_pdf * li * mat->Evaluate(is, d, to_light);
+                    }
+                    else
+                    {
+                        Float mis_weight = 1 / (light_pdf + light_brdf_pdf);
+                        radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, to_light);
+                    }
                 }
             }
 
@@ -102,14 +112,24 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
-                            Float brdf_p = pdf->Evaluate(scattered);
-                            Float mis_weight = 1 / (brdf_p + brdf_light_pdf);
+                            Float brdf_pdf = pdf->Evaluate(scattered);
+                            Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
                             if (IsBlack(li) == false)
                             {
                                 radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, scattered);
                             }
+                        }
+                    }
+                    else
+                    {
+                        li = light->Emit(ray);
+                        if (IsBlack(li) == false)
+                        {
+                            Float brdf_pdf = pdf->Evaluate(scattered);
+                            Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
+                            radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, d, scattered);
                         }
                     }
                 }

@@ -35,8 +35,9 @@ void RebootScene(Scene& scene)
         scene.AddLight(rect);
     }
 
-    scene.SetEnvironmentMap(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
-    // scene.SetEnvironmentMap(ImageTexture::Create("res/HDR/photo_studio_01_1k.hdr", false, true));
+    scene.AddLight(
+        CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true)));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/HDR/photo_studio_01_1k.hdr", false, true)));
 }
 
 } // namespace spt

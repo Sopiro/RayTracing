@@ -11,7 +11,7 @@ void BreakfastRoom(Scene& scene)
 
     scene.Add(m);
 
-    scene.SetEnvironmentMap(SolidColor::Create(Color(7.0)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(7.0))));
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(15.0, 5.0, 5.0)), Vec3(20.0), 0.02));
 
     // auto light = CreateSharedRef<DiffuseLight>(Color(5000.0));

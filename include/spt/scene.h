@@ -4,6 +4,7 @@
 #include "area_light.h"
 #include "directional_light.h"
 #include "image_texture.h"
+#include "infinite_area_light.h"
 #include "intersectable.h"
 #include "model.h"
 #include "point_light.h"
@@ -26,17 +27,14 @@ public:
     void Add(const Ref<Mesh> object);
     void Add(const Ref<Model> object);
 
+    void AddLight(const Ref<Light> light);
     void AddLight(const Ref<Primitive> object);
     void AddLight(const Ref<Mesh> object);
-    void AddLight(const Ref<DirectionalLight> directional_light);
-    void AddLight(const Ref<PointLight> point_light);
 
     bool HasLights() const;
     const std::vector<Ref<Light>>& GetLights() const;
 
-    const Ref<Texture> GetEnvironmentMap() const;
-    void SetEnvironmentMap(const Ref<Texture> color);
-    Color GetSkyColor(const Vec3& direction) const;
+    const std::vector<InfiniteAreaLight*> GetInfiniteLights() const;
 
     void Reset();
     void Rebuild();
@@ -47,11 +45,10 @@ private:
     std::vector<Ref<Intersectable>> objects;
     std::vector<Ref<Light>> lights;
 
-    Ref<Texture> environment_map; // todo: importance sample this
+    std::vector<InfiniteAreaLight*> infinite_lights;
 };
 
 inline Scene::Scene()
-    : environment_map{ SolidColor::Create(Color(0.0, 0.0, 0.0)) }
 {
 }
 
@@ -97,6 +94,16 @@ inline void Scene::Add(const Ref<Model> model)
     }
 }
 
+inline void Scene::AddLight(const Ref<Light> light)
+{
+    lights.push_back(light);
+
+    if (light->type == Light::Type::infinite_area_light)
+    {
+        infinite_lights.push_back((InfiniteAreaLight*)light.get());
+    }
+}
+
 inline void Scene::AddLight(const Ref<Primitive> primitive)
 {
     Add(primitive);
@@ -114,16 +121,6 @@ inline void Scene::AddLight(const Ref<Mesh> mesh)
     }
 }
 
-inline void Scene::AddLight(const Ref<DirectionalLight> directional_light)
-{
-    lights.push_back(directional_light);
-}
-
-inline void Scene::AddLight(const Ref<PointLight> point_light)
-{
-    lights.push_back(point_light);
-}
-
 inline bool Scene::HasLights() const
 {
     return lights.size() > 0;
@@ -134,19 +131,9 @@ inline const std::vector<Ref<Light>>& Scene::GetLights() const
     return lights;
 }
 
-inline const Ref<Texture> Scene::GetEnvironmentMap() const
+inline const std::vector<InfiniteAreaLight*> Scene::GetInfiniteLights() const
 {
-    return environment_map;
-}
-
-inline void Scene::SetEnvironmentMap(const Ref<Texture> env_map)
-{
-    environment_map = env_map;
-}
-
-inline Color Scene::GetSkyColor(const Vec3& dir) const
-{
-    return environment_map->Value(ComputeSphereUV(dir));
+    return infinite_lights;
 }
 
 inline void Scene::Reset()

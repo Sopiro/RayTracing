@@ -98,7 +98,7 @@ void MISTest1(Scene& scene)
         scene.AddLight(l4);
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3(0.01)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.01))));
 }
 
 void MISTest2(Scene& scene)
@@ -171,7 +171,7 @@ void MISTest2(Scene& scene)
         scene.AddLight(l5);
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3(0.0)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.0))));
 }
 
 void MISTestWak(Scene& scene)
@@ -247,7 +247,7 @@ void MISTestWak(Scene& scene)
         scene.AddLight(l5);
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Vec3(0.333)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Vec3(0.333))));
 }
 
 } // namespace spt

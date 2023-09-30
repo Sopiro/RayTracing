@@ -21,7 +21,7 @@ ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
         {
             // Clamp needed
             float value = *((float*)data + i);
-            *((float*)data + i) = Clamp(value, 0.0f, 10.0f);
+            *((float*)data + i) = Clamp(value, 0.0f, 100.0f);
         }
     }
 

@@ -150,7 +150,7 @@ inline Vec3 PolarToCart(Float theta, Float phi, Float r = Float(1.0))
     return Vec3(x * r, y * r, z * r);
 }
 
-inline UV ComputeSphereUV(const Vec3& dir)
+inline UV ComputeSphereTexCoord(const Vec3& dir)
 {
     Float theta = std::acos(-dir.y);
     Float phi = std::atan2(-dir.z, dir.x) + pi;

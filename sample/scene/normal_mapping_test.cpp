@@ -13,8 +13,10 @@ void NormalMapping(Scene& scene)
 
     scene.Add(model);
 
-    // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
-    scene.SetEnvironmentMap(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
+    // scene.AddLight(
+    //     CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true)));
+    scene.AddLight(
+        CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr", false, true)));
 
     // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0), 0.01));
     // scene.SetEnvironmentMap(SolidColor::Create(zero_vec3));

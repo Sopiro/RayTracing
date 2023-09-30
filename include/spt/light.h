@@ -22,6 +22,7 @@ public:
 
     virtual Color Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
+    virtual Color Emit(const Ray& ray) const;
 
     bool IsDeltaLight() const;
 
@@ -31,6 +32,11 @@ public:
 inline Light::Light(Type _type)
     : type{ _type }
 {
+}
+
+inline Color Light::Emit(const Ray& ray) const
+{
+    return Color(0, 0, 0);
 }
 
 inline bool Light::IsDeltaLight() const

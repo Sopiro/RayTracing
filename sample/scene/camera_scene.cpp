@@ -52,7 +52,7 @@ void CameraScene(Scene& scene)
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
-    scene.SetEnvironmentMap(SolidColor::Create(Color(0.0)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0))));
 }
 
 } // namespace spt

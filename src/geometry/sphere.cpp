@@ -41,7 +41,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
     SetFaceNormal(is, ray.d, outward_normal, outward_normal, outward_tangent);
-    is->uv = ComputeSphereUV(outward_normal);
+    is->uv = ComputeSphereTexCoord(outward_normal);
 
     return true;
 }
@@ -79,7 +79,7 @@ void Sphere::Sample(Intersection* sample, Float* pdf) const
     Float area = 4.0 * pi * radius * radius;
     sample->normal = UniformSampleSphere();
     sample->point = center + sample->normal * radius;
-    sample->uv = ComputeSphereUV(sample->normal);
+    sample->uv = ComputeSphereTexCoord(sample->normal);
     *pdf = 1.0 / area;
 }
 

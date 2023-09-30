@@ -29,6 +29,7 @@
 
 #include "diffuse_light.h"
 #include "directional_light.h"
+#include "infinite_area_light.h"
 #include "point_light.h"
 
 #include "pathtracer.h"

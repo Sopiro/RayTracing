@@ -32,6 +32,11 @@ inline Vec3 UniformSampleSphere()
     return Vec3(x, y, z);
 }
 
+inline Float UniformSampleSpherePDF()
+{
+    return inv_four_pi;
+}
+
 // z > 0
 inline Vec3 CosineSampleHemisphere()
 {
@@ -46,6 +51,11 @@ inline Vec3 CosineSampleHemisphere()
     Float y = std::sin(phi) * su2;
 
     return Vec3(x, y, z);
+}
+
+inline Float CosineSampleHemispherePDF(Float cos_theta)
+{
+    return cos_theta * inv_pi;
 }
 
 inline Vec3 RandomInUnitSphere()

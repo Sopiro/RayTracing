@@ -38,7 +38,7 @@ struct Distribution1D
     Float SampleContinuous(Float* pdf, Float u, int32* off = nullptr) const
     {
         // Find the starting offset of cdf
-        int32 offset = FindInterval(cdf.size(), [&](int32 index) { return cdf[index] <= u; });
+        int32 offset = FindInterval((int32)cdf.size(), [&](int32 index) { return cdf[index] <= u; });
 
         if (off)
         {
@@ -57,7 +57,7 @@ struct Distribution1D
 
     int32 SampleDiscrete(Float u, Float* pdf = nullptr, Float* u_remapped = nullptr) const
     {
-        int32 offset = FindInterval(cdf.size(), [&](int32 index) { return cdf[index] <= u; });
+        int32 offset = FindInterval((int32)cdf.size(), [&](int32 index) { return cdf[index] <= u; });
 
         if (pdf)
         {
@@ -74,7 +74,7 @@ struct Distribution1D
 
     int32 Count() const
     {
-        return func.size();
+        return (int32)func.size();
     }
 
     Float DiscretePDF(int32 index) const
@@ -129,7 +129,7 @@ public:
     }
 
 private:
-    std::vector<std::unique_ptr<Distribution1D>> conditional_v;
+    std::vector<std::unique_ptr<Distribution1D>> conditional_v; // p(u|v)
     std::unique_ptr<Distribution1D> marginal;
 };
 

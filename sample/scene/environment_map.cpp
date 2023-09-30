@@ -92,7 +92,7 @@ void EnvironmentMap(Scene& scene)
     //     scene.AddLight(rect);
     // }
 
-    scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_4k.hdr", false, true));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_4k.hdr", false, true)));
 }
 
 } // namespace spt

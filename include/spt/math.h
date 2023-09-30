@@ -19,6 +19,7 @@ constexpr Float pi = Float(3.14159265358979323846);
 constexpr Float two_pi = Float(2.0 * 3.14159265358979323846);
 constexpr Float inv_pi = Float(1.0 / 3.14159265358979323846);
 constexpr Float inv_two_pi = Float(1.0 / (2.0 * 3.14159265358979323846));
+constexpr Float inv_four_pi = Float(1.0 / (4.0 * 3.14159265358979323846));
 constexpr Float infinity = std::numeric_limits<Float>::infinity();
 constexpr Float epsilon = std::numeric_limits<Float>::epsilon();
 

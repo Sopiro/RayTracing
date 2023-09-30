@@ -100,7 +100,7 @@ void PBRTest(Scene& scene)
         }
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create(Color(0.0, 0.0, 0.0)));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.0, 0.0, 0.0))));
 }
 
 } // namespace spt

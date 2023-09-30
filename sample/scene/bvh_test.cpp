@@ -33,7 +33,7 @@ void BVHTest(Scene& scene)
         }
     }
 
-    scene.SetEnvironmentMap(SolidColor::Create({ 0.7, 0.8, 1.0 }));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(SolidColor::Create(Color(0.7, 0.8, 1.0))));
 }
 
 } // namespace spt
