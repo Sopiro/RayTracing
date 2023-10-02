@@ -20,7 +20,7 @@ public:
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const = 0;
 
 protected:
-    friend class BVH;
+    friend class DynamicBVH;
 
     // BVH node proxy
     NodeProxy node;

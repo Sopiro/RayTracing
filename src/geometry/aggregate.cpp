@@ -91,7 +91,7 @@ Float Aggregate::EvaluatePDF(const Ray& ray) const
 
     bvh.RayCast(ray, Ray::epsilon, infinity, &callback);
 
-    return callback.sum / Float(objects.size());
+    return callback.sum / Float(primitives.size());
 }
 
 } // namespace spt

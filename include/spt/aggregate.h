@@ -25,7 +25,7 @@ public:
 
     virtual const Material* GetMaterial() const override;
 
-    void Add(const Ref<Primitive> object);
+    void Add(const Ref<Primitive> primitive);
     void Add(const Ref<Mesh> mesh);
     void Add(const Ref<Model> model);
 
@@ -33,8 +33,8 @@ public:
     void Rebuild();
 
 private:
-    BVH bvh;
-    std::vector<Ref<Primitive>> objects;
+    DynamicBVH bvh;
+    std::vector<Ref<Primitive>> primitives;
 };
 
 inline void Aggregate::GetAABB(AABB* out_aabb) const
@@ -55,9 +55,9 @@ inline void Aggregate::Sample(Intersection* sample, Float* pdf) const
 
 inline void Aggregate::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
 {
-    size_t count = objects.size();
+    size_t count = primitives.size();
     size_t index = std::min(size_t(Rand() * count), count - 1);
-    Primitive* object = objects[index].get();
+    Primitive* object = primitives[index].get();
 
     object->Sample(sample, pdf, ref2p, ref);
 
@@ -76,13 +76,13 @@ inline const Material* Aggregate::GetMaterial() const
     return nullptr;
 }
 
-inline void Aggregate::Add(const Ref<Primitive> object)
+inline void Aggregate::Add(const Ref<Primitive> primitive)
 {
-    objects.push_back(object);
+    primitives.push_back(primitive);
 
     AABB aabb;
-    object->GetAABB(&aabb);
-    bvh.CreateNode(object.get(), aabb);
+    primitive->GetAABB(&aabb);
+    bvh.CreateNode(primitive.get(), aabb);
 }
 
 inline void Aggregate::Add(const Ref<Mesh> mesh)
@@ -90,7 +90,7 @@ inline void Aggregate::Add(const Ref<Mesh> mesh)
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
-        objects.push_back(tri);
+        primitives.push_back(tri);
 
         AABB aabb;
         tri->GetAABB(&aabb);
@@ -101,7 +101,6 @@ inline void Aggregate::Add(const Ref<Mesh> mesh)
 inline void Aggregate::Add(const Ref<Model> model)
 {
     auto& meshes = model->GetMeshes();
-
     for (size_t i = 0; i < meshes.size(); ++i)
     {
         Add(meshes[i]);
@@ -111,7 +110,7 @@ inline void Aggregate::Add(const Ref<Model> model)
 inline void Aggregate::Reset()
 {
     bvh.Reset();
-    objects.clear();
+    primitives.clear();
 }
 
 inline void Aggregate::Rebuild()

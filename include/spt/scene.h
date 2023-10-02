@@ -38,7 +38,7 @@ public:
     void Rebuild();
 
 private:
-    BVH bvh; // Acceleration structure
+    DynamicBVH bvh; // Acceleration structure
     std::vector<Ref<Intersectable>> objects;
 
     std::vector<Ref<Light>> lights;

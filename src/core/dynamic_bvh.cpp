@@ -4,7 +4,7 @@
 namespace spt
 {
 
-BVH::BVH()
+DynamicBVH::DynamicBVH()
     : nodeID{ 0 }
     , root{ null_node }
     , nodeCapacity{ 32 }
@@ -22,14 +22,14 @@ BVH::BVH()
     freeList = 0;
 }
 
-BVH::~BVH() noexcept
+DynamicBVH::~DynamicBVH() noexcept
 {
     free(nodes);
     root = null_node;
     nodeCount = 0;
 }
 
-BVH::BVH(BVH&& other) noexcept
+DynamicBVH::DynamicBVH(DynamicBVH&& other) noexcept
 {
     // Steal resources
     {
@@ -56,7 +56,7 @@ BVH::BVH(BVH&& other) noexcept
     }
 }
 
-BVH& BVH::operator=(BVH&& other) noexcept
+DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
 {
     assert(this != &other);
 
@@ -89,7 +89,7 @@ BVH& BVH::operator=(BVH&& other) noexcept
     return *this;
 }
 
-NodeProxy BVH::InsertLeaf(NodeProxy leaf)
+NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
 {
     assert(0 <= leaf && leaf < nodeCapacity);
     assert(nodes[leaf].IsLeaf());
@@ -244,7 +244,7 @@ NodeProxy BVH::InsertLeaf(NodeProxy leaf)
     return leaf;
 }
 
-void BVH::RemoveLeaf(NodeProxy leaf)
+void DynamicBVH::RemoveLeaf(NodeProxy leaf)
 {
     assert(0 <= leaf && leaf < nodeCapacity);
     assert(nodes[leaf].IsLeaf());
@@ -297,7 +297,7 @@ void BVH::RemoveLeaf(NodeProxy leaf)
     }
 }
 
-NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
+NodeProxy DynamicBVH::CreateNode(Data* data, const AABB& aabb)
 {
     NodeProxy newNode = AllocateNode();
 
@@ -315,7 +315,7 @@ NodeProxy BVH::CreateNode(Data* data, const AABB& aabb)
     return newNode;
 }
 
-bool BVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move)
+bool DynamicBVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
@@ -361,7 +361,7 @@ bool BVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool for
     return true;
 }
 
-void BVH::RemoveNode(NodeProxy node)
+void DynamicBVH::RemoveNode(NodeProxy node)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
@@ -370,7 +370,7 @@ void BVH::RemoveNode(NodeProxy node)
     FreeNode(node);
 }
 
-void BVH::Rotate(NodeProxy node)
+void DynamicBVH::Rotate(NodeProxy node)
 {
     if (nodes[node].IsLeaf())
     {
@@ -498,7 +498,7 @@ void BVH::Rotate(NodeProxy node)
     }
 }
 
-void BVH::Swap(NodeProxy node1, NodeProxy node2)
+void DynamicBVH::Swap(NodeProxy node1, NodeProxy node2)
 {
     NodeProxy parent1 = nodes[node1].parent;
     NodeProxy parent2 = nodes[node2].parent;
@@ -523,7 +523,7 @@ void BVH::Swap(NodeProxy node1, NodeProxy node2)
     nodes[node1].parent = parent2;
 }
 
-void BVH::Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const
+void DynamicBVH::Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const
 {
     if (root == null_node)
     {
@@ -558,7 +558,7 @@ void BVH::Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& 
     }
 }
 
-void BVH::Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& callback) const
+void DynamicBVH::Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& callback) const
 {
     if (root == null_node)
     {
@@ -593,7 +593,7 @@ void BVH::Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& c
     }
 }
 
-void BVH::Traverse(const std::function<void(const Node*)>& callback) const
+void DynamicBVH::Traverse(const std::function<void(const Node*)>& callback) const
 {
     if (root == null_node)
     {
@@ -618,7 +618,7 @@ void BVH::Traverse(const std::function<void(const Node*)>& callback) const
     }
 }
 
-void BVH::Reset()
+void DynamicBVH::Reset()
 {
     nodeID = 0;
     root = null_node;
@@ -634,7 +634,7 @@ void BVH::Reset()
     freeList = 0;
 }
 
-NodeProxy BVH::AllocateNode()
+NodeProxy DynamicBVH::AllocateNode()
 {
     if (freeList == null_node)
     {
@@ -669,7 +669,7 @@ NodeProxy BVH::AllocateNode()
     return node;
 }
 
-void BVH::FreeNode(NodeProxy node)
+void DynamicBVH::FreeNode(NodeProxy node)
 {
     assert(0 <= node && node <= nodeCapacity);
     assert(0 < nodeCount);
@@ -680,7 +680,7 @@ void BVH::FreeNode(NodeProxy node)
     --nodeCount;
 }
 
-void BVH::Rebuild()
+void DynamicBVH::Rebuild()
 {
     // Rebuild the tree with bottom up approach
 
@@ -764,7 +764,7 @@ void BVH::Rebuild()
     free(leaves);
 }
 
-void BVH::RayCast(const Ray& r,
+void DynamicBVH::RayCast(const Ray& r,
                   Float t_min,
                   Float t_max,
                   const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const

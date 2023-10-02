@@ -12,7 +12,7 @@ constexpr Float aabb_multiplier{ Float(1.0) };
 
 class Intersectable;
 
-class BVH
+class DynamicBVH
 {
 public:
     using Data = Intersectable;
@@ -39,15 +39,15 @@ public:
         Data* data; // user data
     };
 
-    BVH();
+    DynamicBVH();
 
-    virtual ~BVH() noexcept;
+    virtual ~DynamicBVH() noexcept;
 
-    BVH(const BVH&) = delete;
-    BVH& operator=(const BVH&) = delete;
+    DynamicBVH(const DynamicBVH&) = delete;
+    DynamicBVH& operator=(const DynamicBVH&) = delete;
 
-    BVH(BVH&&) noexcept;
-    BVH& operator=(BVH&&) noexcept;
+    DynamicBVH(DynamicBVH&&) noexcept;
+    DynamicBVH& operator=(DynamicBVH&&) noexcept;
 
     void Reset();
 
@@ -108,7 +108,7 @@ private:
     static Float SAH(const AABB& aabb);
 };
 
-inline bool BVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
+inline bool DynamicBVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
 {
     assert(0 <= nodeA && nodeA < nodeCapacity);
     assert(0 <= nodeB && nodeB < nodeCapacity);
@@ -116,35 +116,35 @@ inline bool BVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
     return nodes[nodeA].aabb.TestOverlap(nodes[nodeB].aabb);
 }
 
-inline const AABB& BVH::GetAABB(NodeProxy node) const
+inline const AABB& DynamicBVH::GetAABB(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     return nodes[node].aabb;
 }
 
-inline void BVH::ClearMoved(NodeProxy node) const
+inline void DynamicBVH::ClearMoved(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     nodes[node].moved = false;
 }
 
-inline bool BVH::WasMoved(NodeProxy node) const
+inline bool DynamicBVH::WasMoved(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     return nodes[node].moved;
 }
 
-inline BVH::Data* BVH::GetData(NodeProxy node) const
+inline DynamicBVH::Data* DynamicBVH::GetData(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     return nodes[node].data;
 }
 
-inline Float BVH::GetTreeCost() const
+inline Float DynamicBVH::GetTreeCost() const
 {
     Float cost = Float(0.0);
 
@@ -154,7 +154,7 @@ inline Float BVH::GetTreeCost() const
 }
 
 template <typename T>
-void BVH::Query(const Vec3& point, T* callback) const
+void DynamicBVH::Query(const Vec3& point, T* callback) const
 {
     if (root == null_node)
     {
@@ -190,7 +190,7 @@ void BVH::Query(const Vec3& point, T* callback) const
 }
 
 template <typename T>
-void BVH::Query(const AABB& aabb, T* callback) const
+void DynamicBVH::Query(const AABB& aabb, T* callback) const
 {
     if (root == null_node)
     {
@@ -226,7 +226,7 @@ void BVH::Query(const AABB& aabb, T* callback) const
 }
 
 template <typename T>
-void BVH::Traverse(T* callback) const
+void DynamicBVH::Traverse(T* callback) const
 {
     if (root == null_node)
     {
@@ -252,7 +252,7 @@ void BVH::Traverse(T* callback) const
 }
 
 template <typename T>
-void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
+void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
@@ -309,7 +309,7 @@ void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
     }
 }
 
-inline Float BVH::SAH(const AABB& aabb)
+inline Float DynamicBVH::SAH(const AABB& aabb)
 {
 #if 0
     return aabb.GetVolume();
