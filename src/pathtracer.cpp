@@ -20,8 +20,8 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         Intersection is;
         if (scene.Intersect(&is, ray, Ray::epsilon, infinity) == false)
         {
-            auto& env_lights = scene.GetInfiniteLights();
-            for (InfiniteAreaLight* light : env_lights)
+            const std::vector<InfiniteAreaLight*>& lights = scene.GetInfiniteAreaLights();
+            for (InfiniteAreaLight* light : lights)
             {
                 radiance += throughput * light->Emit(ray);
             }
@@ -62,14 +62,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         radiance += throughput * mat->Emit(is, d);
 
         // Estimate direct light
+        // Multiple importance sampling with balance heuristic (Direct light + BRDF)
 
-        if (scene.HasLights())
+        const std::vector<Ref<Light>>& lights = scene.GetLights();
+        size_t num_lights = lights.size();
+        if (num_lights > 0)
         {
-            // Multiple importance sampling with balance heuristic (Direct light + BRDF)
-
-            // Sample one area light uniformly
-            const std::vector<Ref<Light>>& lights = scene.GetLights();
-            size_t num_lights = lights.size();
+            // Sample one light uniformly
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
             Light* light = lights[index].get();
 

@@ -16,7 +16,7 @@ namespace spt
 class Scene : public Intersectable
 {
 public:
-    Scene();
+    Scene() = default;
     virtual ~Scene() = default;
 
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -31,26 +31,19 @@ public:
     void AddLight(const Ref<Primitive> object);
     void AddLight(const Ref<Mesh> object);
 
-    bool HasLights() const;
     const std::vector<Ref<Light>>& GetLights() const;
-
-    const std::vector<InfiniteAreaLight*> GetInfiniteLights() const;
+    const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
     void Reset();
     void Rebuild();
 
 private:
-    // Acceleration structure
-    BVH bvh;
+    BVH bvh; // Acceleration structure
     std::vector<Ref<Intersectable>> objects;
-    std::vector<Ref<Light>> lights;
 
+    std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
-
-inline Scene::Scene()
-{
-}
 
 inline void Scene::GetAABB(AABB* out_aabb) const
 {
@@ -121,17 +114,12 @@ inline void Scene::AddLight(const Ref<Mesh> mesh)
     }
 }
 
-inline bool Scene::HasLights() const
-{
-    return lights.size() > 0;
-}
-
 inline const std::vector<Ref<Light>>& Scene::GetLights() const
 {
     return lights;
 }
 
-inline const std::vector<InfiniteAreaLight*> Scene::GetInfiniteLights() const
+inline const std::vector<InfiniteAreaLight*>& Scene::GetInfiniteAreaLights() const
 {
     return infinite_lights;
 }
@@ -141,6 +129,7 @@ inline void Scene::Reset()
     bvh.Reset();
     objects.clear();
     lights.clear();
+    infinite_lights.clear();
 }
 
 inline void Scene::Rebuild()
