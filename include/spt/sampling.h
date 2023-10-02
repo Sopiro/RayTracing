@@ -12,7 +12,7 @@ inline Vec3 UniformSampleHemisphere()
 
     Float z = u1;
     Float r = std::sqrt(std::fmax(Float(0.0), Float(1.0) - z * z));
-    Float phi = 2 * pi * u2;
+    Float phi = two_pi * u2;
 
     return Vec3(r * std::cos(phi), r * std::sin(phi), z);
 }

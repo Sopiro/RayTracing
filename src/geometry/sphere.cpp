@@ -76,7 +76,7 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 
 void Sphere::Sample(Intersection* sample, Float* pdf) const
 {
-    Float area = 4 * pi * radius * radius;
+    Float area = four_pi * radius * radius;
     sample->normal = UniformSampleSphere();
     sample->point = center + sample->normal * radius;
     sample->uv = ComputeSphereTexCoord(sample->normal);
@@ -88,13 +88,6 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
     Vec3 direction = center - ref;
     Float distance = direction.Normalize();
     Float distance_squared = distance * distance;
-
-#if 0
-    if (distance * distance <= radius * radius)
-    {
-        return Sample();
-    }
-#endif
 
     Float u1 = Rand();
     Float u2 = Rand();

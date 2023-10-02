@@ -150,12 +150,23 @@ inline Vec3 PolarToCart(Float theta, Float phi, Float r = Float(1.0))
     return Vec3(x * r, y * r, z * r);
 }
 
-inline Point2 ComputeSphereTexCoord(const Vec3& dir)
+inline Float SphericalTheta(const Vec3& v)
 {
-    Float theta = std::acos(-dir.y);
-    Float phi = std::atan2(-dir.z, dir.x) + pi;
+    return std::acos(v.y);
+}
 
-    return Point2(phi * inv_two_pi, theta * inv_pi);
+inline Float SphericalPhi(const Vec3& v)
+{
+    Float r = std::atan2(v.z, v.x);
+    return r < 0 ? r + two_pi : r;
+}
+
+inline Point2 ComputeSphereTexCoord(const Vec3& v)
+{
+    Float theta = SphericalTheta(v);
+    Float phi = SphericalPhi(v);
+
+    return Point2(phi * inv_two_pi, 1 - theta * inv_pi);
 }
 
 template <typename Predicate>

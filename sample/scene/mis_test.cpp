@@ -170,8 +170,6 @@ void MISTest2(Scene& scene)
         scene.AddLight(l4);
         scene.AddLight(l5);
     }
-
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.0))));
 }
 
 void MISTestWak(Scene& scene)

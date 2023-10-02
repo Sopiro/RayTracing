@@ -76,7 +76,7 @@ inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
 {
     // sample a spherical cap in (-wo.z, 1]
-    Float phi = 2 * pi * u.x;
+    Float phi = two_pi * u.x;
     Float z = std::fma((1 - u.y), (1 + wo.z), -wo.z);
     Float sinTheta = std::sqrt(std::clamp(1 - z * z, Float(0.0), Float(1.0)));
     Float x = sinTheta * std::cos(phi);

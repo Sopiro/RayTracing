@@ -39,6 +39,8 @@ ImageTexture::~ImageTexture()
 
 ImageTexture::ImageTexture(const std::string& path, bool srgb)
 {
+    stbi_set_flip_vertically_on_load(true);
+
     int32 components_per_pixel;
     data = stbi_load(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
@@ -73,8 +75,6 @@ Color ImageTexture::Value(const Point2& uv) const
     if (u < 0) ++u;
     if (v < 0) ++v;
 
-    v = 1 - v;
-
     int32 i = int32(u * width);
     int32 j = int32(v * height);
 
@@ -90,6 +90,8 @@ Color ImageTexture::Value(const Point2& uv) const
 
 ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 {
+    stbi_set_flip_vertically_on_load(true);
+
     int32 components_per_pixel;
     data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
 
@@ -120,8 +122,6 @@ Color ImageTextureHDR::Value(const Point2& uv) const
 
     if (u < 0) ++u;
     if (v < 0) ++v;
-
-    v = 1 - v;
 
     int32 i = int32(u * width);
     int32 j = int32(v * height);
