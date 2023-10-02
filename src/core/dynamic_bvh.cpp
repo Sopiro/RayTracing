@@ -1,4 +1,4 @@
-#include "spt/bvh.h"
+#include "spt/dynamic_bvh.h"
 #include "spt/intersectable.h"
 
 namespace spt

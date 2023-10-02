@@ -1,6 +1,6 @@
 #pragma once
 
-#include "bvh.h"
+#include "dynamic_bvh.h"
 #include "model.h"
 #include "triangle.h"
 
