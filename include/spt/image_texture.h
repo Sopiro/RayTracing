@@ -26,6 +26,7 @@ protected:
     ImageTexture(const std::string& path, bool srgb);
 
     const static int32 bytes_per_pixel = STBI_rgb;
+    static void UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h);
 
     void* data;
     int32 width, height;
@@ -45,5 +46,21 @@ protected:
     ImageTextureHDR() = default;
     ImageTextureHDR(const std::string& path, bool srgb);
 };
+
+inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h)
+{
+    Float u = fmod(uv.x, Float(1.0));
+    Float v = fmod(uv.y, Float(1.0));
+
+    if (u < 0) ++u;
+    if (v < 0) ++v;
+
+    *i = int32(u * w);
+    *j = int32(v * h);
+
+    // Clamp integer mapping, since actual coordinates should be less than 1.0
+    if (*i >= w) *i = w - 1;
+    if (*j >= h) *j = h - 1;
+}
 
 } // namespace spt

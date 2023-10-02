@@ -69,18 +69,8 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
 
 Color ImageTexture::Value(const Point2& uv) const
 {
-    Float u = fmod(uv.x, Float(1.0));
-    Float v = fmod(uv.y, Float(1.0));
-
-    if (u < 0) ++u;
-    if (v < 0) ++v;
-
-    int32 i = int32(u * width);
-    int32 j = int32(v * height);
-
-    // Clamp integer mapping, since actual coordinates should be less than 1.0
-    if (i >= width) i = width - 1;
-    if (j >= height) j = height - 1;
+    int32 i, j;
+    UVtoIndices(&i, &j, uv, width, height);
 
     constexpr Float color_scale = 1 / Float(255.0);
     uint8* pixel = (uint8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
@@ -117,18 +107,8 @@ ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
 
 Color ImageTextureHDR::Value(const Point2& uv) const
 {
-    Float u = fmod(uv.x, Float(1.0));
-    Float v = fmod(uv.y, Float(1.0));
-
-    if (u < 0) ++u;
-    if (v < 0) ++v;
-
-    int32 i = int32(u * width);
-    int32 j = int32(v * height);
-
-    // Clamp integer mapping, since actual coordinates should be less than 1.0
-    if (i >= width) i = width - 1;
-    if (j >= height) j = height - 1;
+    int32 i, j;
+    UVtoIndices(&i, &j, uv, width, height);
 
     float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
