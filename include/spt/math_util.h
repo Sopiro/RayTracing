@@ -14,33 +14,6 @@ constexpr Vec3 x_axis{ Float(1.0), Float(0.0), Float(0.0) };
 constexpr Vec3 y_axis{ Float(0.0), Float(1.0), Float(0.0) };
 constexpr Vec3 z_axis{ Float(0.0), Float(0.0), Float(1.0) };
 
-inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
-{
-    return out << v.x << ' ' << v.y << ' ' << v.z;
-}
-
-inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
-{
-    // clang-format off
-    return out << m.ex.x << ' ' << m.ey.x << ' ' << m.ez.x << ' ' << m.ew.x << '\n'
-               << m.ex.y << ' ' << m.ey.y << ' ' << m.ez.y << ' ' << m.ew.y << '\n'
-               << m.ex.z << ' ' << m.ey.z << ' ' << m.ez.z << ' ' << m.ew.z << '\n'
-               << m.ex.w << ' ' << m.ey.w << ' ' << m.ez.w << ' ' << m.ew.w << '\n';
-
-    // clang-format on
-}
-
-inline Mat4 Convert(const aiMatrix4x4& aiMat)
-{
-    Mat4 t;
-    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
-    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
-    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
-    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
-
-    return t;
-}
-
 inline Float DegToRad(Float deg)
 {
     return Float(deg * pi / Float(180.0));
@@ -131,7 +104,7 @@ inline T Reflect(const T& v, const T& n)
 }
 
 template <typename T>
-T Refract(const T& uv, const T& n, Float etai_over_etat)
+inline T Refract(const T& uv, const T& n, Float etai_over_etat)
 {
     Float cos_theta = std::fmin(Dot(-uv, n), Float(1.0));
     T r_out_perp = etai_over_etat * (uv + cos_theta * n);
@@ -170,7 +143,7 @@ inline Point2 ComputeSphereTexCoord(const Vec3& v)
 }
 
 template <typename Predicate>
-int32 FindInterval(int32 size, const Predicate& pred)
+inline int32 FindInterval(int32 size, const Predicate& pred)
 {
     int32 first = 0, len = size;
     while (len > 0)

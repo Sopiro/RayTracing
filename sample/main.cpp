@@ -413,7 +413,7 @@ int main()
     }
 
     timer.Mark();
-    Float t = timer.Get();
+    double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
 
     // #pragma omp parallel for schedule(dynamic, 1)

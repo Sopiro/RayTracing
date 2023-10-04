@@ -51,6 +51,13 @@ inline bool IsNullish(const T& v)
     return v.IsNullish();
 }
 
+#define checkNull(v)                                                                                                             \
+    if (IsNullish(v))                                                                                                            \
+    {                                                                                                                            \
+        std::cout << #v;                                                                                                         \
+        std::cout << " null" << std::endl;                                                                                       \
+    }
+
 inline bool IsBlack(Color color)
 {
     return std::fabs(color.x) == Float(0.0) && std::fabs(color.y) == Float(0.0) && std::fabs(color.z) == Float(0.0);
@@ -63,11 +70,20 @@ inline Float Luma(Vec3 srgb)
     return Dot(srgb, Vec3(Float(0.2126), Float(0.7152), Float(0.0722)));
 }
 
-#define checkNull(v)                                                                                                             \
-    if (IsNullish(v))                                                                                                            \
-    {                                                                                                                            \
-        std::cout << #v;                                                                                                         \
-        std::cout << " null" << std::endl;                                                                                       \
-    }
+inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
+{
+    return out << v.x << ' ' << v.y << ' ' << v.z;
+}
+
+inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
+{
+    // clang-format off
+    return out << m.ex.x << ' ' << m.ey.x << ' ' << m.ez.x << ' ' << m.ew.x << '\n'
+               << m.ex.y << ' ' << m.ey.y << ' ' << m.ez.y << ' ' << m.ew.y << '\n'
+               << m.ex.z << ' ' << m.ey.z << ' ' << m.ez.z << ' ' << m.ew.z << '\n'
+               << m.ex.w << ' ' << m.ey.w << ' ' << m.ez.w << ' ' << m.ew.w << '\n';
+
+    // clang-format on
+}
 
 } // namespace spt

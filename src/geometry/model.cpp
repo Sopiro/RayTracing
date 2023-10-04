@@ -131,9 +131,20 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
                                  std::move(indices), transform, material);
 }
 
+static Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
+{
+    Mat4 t;
+    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
+    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
+    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
+    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
+
+    return t;
+}
+
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
 {
-    Mat4 transform = Mul(parent_transform, Convert(node->mTransformation));
+    Mat4 transform = Mul(parent_transform, ConvertAssimpMatrix(node->mTransformation));
 
     // process all the node's meshes (if any)
     for (uint32 i = 0; i < node->mNumMeshes; ++i)

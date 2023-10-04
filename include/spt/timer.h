@@ -15,7 +15,7 @@ public:
     void Mark();
     void Reset();
 
-    Float Get();
+    double Get();
 
 private:
     std::vector<clock::time_point> time_points;
@@ -41,18 +41,18 @@ inline void Timer::Reset()
     ptr = 0;
 }
 
-inline Float Timer::Get()
+inline double Timer::Get()
 {
     if (ptr < time_points.size() - 1)
     {
-        std::chrono::duration<Float> dt = time_points[ptr + 1] - time_points[ptr];
+        std::chrono::duration<double> dt = time_points[ptr + 1] - time_points[ptr];
         ++ptr;
 
         return dt.count();
     }
     else
     {
-        return Float(0.0);
+        return double(0.0);
     }
 }
 

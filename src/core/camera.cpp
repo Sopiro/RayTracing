@@ -37,7 +37,7 @@ Ray Camera::GetRay(Float s, Float t) const
     Vec3 camera_center = origin + offset;
     Vec3 pixel_center = lower_left + horizontal * s + vertical * t;
 
-    return Ray{ camera_center, pixel_center - camera_center };
+    return Ray{ camera_center, Normalize(pixel_center - camera_center) };
 }
 
 } // namespace spt

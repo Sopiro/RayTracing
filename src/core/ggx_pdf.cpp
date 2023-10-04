@@ -28,7 +28,7 @@ Float GGXPDF::Evaluate(const Vec3& wi) const
     Vec3 h = Normalize(wo + wi);
     Float NoH = Dot(h, uvw.w);
     Float LoH = Dot(/*L*/ wi, /*H*/ uvw.w);
-    Float spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4.0 * LoH, 0.0);
+    Float spec_w = D_GGX(NoH, alpha2) * NoH / std::fmax(4 * LoH, Float(0.0));
 
     Float diff_w = LoH * inv_pi;
 

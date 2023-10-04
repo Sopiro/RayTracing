@@ -25,7 +25,7 @@ protected:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
 
-    const static int32 bytes_per_pixel = STBI_rgb;
+    static const int32 bytes_per_pixel = STBI_rgb;
     static void UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h);
 
     void* data;
@@ -49,8 +49,8 @@ protected:
 
 inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h)
 {
-    Float u = fmod(uv.x, Float(1.0));
-    Float v = fmod(uv.y, Float(1.0));
+    Float u = std::fmod(uv.x, Float(1.0));
+    Float v = std::fmod(uv.y, Float(1.0));
 
     if (u < 0) ++u;
     if (v < 0) ++v;

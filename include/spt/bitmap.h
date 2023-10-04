@@ -24,9 +24,9 @@ private:
     uint8* pixels;
 };
 
-inline Bitmap::Bitmap(int32 width, int32 height)
-    : width{ width }
-    , height{ height }
+inline Bitmap::Bitmap(int32 _width, int32 _height)
+    : width{ _width }
+    , height{ _height }
 {
     pixels = new uint8[width * height * color_channels];
 }
