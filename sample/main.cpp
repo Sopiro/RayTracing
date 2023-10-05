@@ -50,7 +50,7 @@ int main()
     // Float aspect_ratio = 4.0 / 3.0;
     Float aspect_ratio = 1.0;
     int32 width = 500;
-    int32 height = static_cast<int32>(width / aspect_ratio);
+    int32 height = int32(width / aspect_ratio);
     int32 samples_per_pixel = 64;
     Float scale = 1.0 / samples_per_pixel;
     int32 max_bounces = 20;

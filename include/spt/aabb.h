@@ -54,10 +54,10 @@ inline bool AABB::TestOverlap(const AABB& other) const
     return true;
 }
 
-inline AABB AABB::Union(const AABB& b1, const AABB& b2)
+inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
 {
-    Vec3 min = Min(b1.min, b2.min);
-    Vec3 max = Max(b1.max, b2.max);
+    Vec3 min = Min(aabb1.min, aabb2.min);
+    Vec3 max = Max(aabb1.max, aabb2.max);
 
     return AABB{ min, max };
 }

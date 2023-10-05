@@ -64,7 +64,9 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
     Vec3 normal = Normalize(Cross(e1, e2));
     Vec3 shading_normal = GetNormal(u, v, w);
     Vec3 shading_tangent = GetTangent(u, v, w);
-    SetFaceNormal(is, ray.d, normal, shading_normal, shading_tangent);
+    SetFaceNormal(is, ray.d, normal);
+    is->shading.normal = shading_normal;
+    is->shading.tangent = shading_tangent;
 
     is->uv = GetTexCoord(u, v, w);
 

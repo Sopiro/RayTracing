@@ -40,7 +40,9 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     Vec3 t = (std::fabs(outward_normal.y) > Float(0.999)) ? x_axis : y_axis;
     Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
 
-    SetFaceNormal(is, ray.d, outward_normal, outward_normal, outward_tangent);
+    SetFaceNormal(is, ray.d, outward_normal);
+    is->shading.normal = outward_normal;
+    is->shading.tangent = outward_tangent;
     is->uv = ComputeSphereTexCoord(outward_normal);
 
     return true;

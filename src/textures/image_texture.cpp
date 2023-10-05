@@ -59,7 +59,7 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
             {
                 // Convert to linear space
                 uint8 value = *((uint8*)data + i);
-                *((uint8*)data + i) = static_cast<uint8>(std::fmin(std::pow(value / 255.0, 2.2) * 255.0, 255.0));
+                *((uint8*)data + i) = uint8(std::fmin(std::pow(value / 255.0, 2.2) * 255.0, 255.0));
             }
         }
     }
