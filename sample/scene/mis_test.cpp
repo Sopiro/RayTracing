@@ -97,8 +97,6 @@ void MISTest1(Scene& scene)
         scene.AddLight(l3);
         scene.AddLight(l4);
     }
-
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.01))));
 }
 
 void MISTest2(Scene& scene)
@@ -244,8 +242,6 @@ void MISTestWak(Scene& scene)
         scene.AddLight(l4);
         scene.AddLight(l5);
     }
-
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Vec3(0.333))));
 }
 
 } // namespace spt

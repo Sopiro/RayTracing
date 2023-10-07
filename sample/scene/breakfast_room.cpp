@@ -11,7 +11,10 @@ void BreakfastRoom(Scene& scene)
 
     scene.Add(m);
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(7.0))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr", false, true));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
+
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(15.0, 5.0, 5.0)), Vec3(20.0), 0.02));
 
     // auto light = CreateSharedRef<DiffuseLight>(Color(5000.0));

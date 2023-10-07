@@ -100,7 +100,11 @@ void PBRTest(Scene& scene)
         }
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0, 0.0, 0.0))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/sunset.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
 }
 
 } // namespace spt

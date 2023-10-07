@@ -74,10 +74,6 @@ void ShipScene(Scene& scene)
         rect = CreateRectXZ(tf, mat);
         scene.Add(rect);
     }
-
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false,
-    // true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
 }
 
 } // namespace spt

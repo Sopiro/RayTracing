@@ -95,11 +95,8 @@ void StatueScene(Scene& scene)
         scene.Add(rect);
     }
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/solitude_night_4k/solitude_night_4k.hdr",
-    // false, true)));
-    scene.AddLight(
-        CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

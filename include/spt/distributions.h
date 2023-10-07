@@ -91,6 +91,7 @@ class Distribution2D
 public:
     Distribution2D(const Float* func, int32 nu, int32 nv)
     {
+        conditional_v.reserve(nv);
         for (int32 v = 0; v < nv; ++v)
         {
             conditional_v.emplace_back(new Distribution1D(&func[v * nu], nu));

@@ -21,6 +21,9 @@ public:
 
     virtual Color Value(const Point2& uv) const override;
 
+    int32 GetWidth() const;
+    int32 GetHeight() const;
+
 protected:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
@@ -46,6 +49,16 @@ protected:
     ImageTextureHDR() = default;
     ImageTextureHDR(const std::string& path, bool srgb);
 };
+
+inline int32 ImageTexture::GetWidth() const
+{
+    return width;
+}
+
+inline int32 ImageTexture::GetHeight() const
+{
+    return height;
+}
 
 inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h)
 {

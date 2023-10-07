@@ -33,7 +33,7 @@ void BVHTest(Scene& scene)
         }
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.7, 0.8, 1.0))));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr", false, true));
 }
 
 } // namespace spt

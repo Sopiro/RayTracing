@@ -94,9 +94,7 @@ void StanfordScene(Scene& scene)
         }
     }
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false,
-    // true)));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>(ConstantColor::Create(Color(0.0))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 }
 
 } // namespace spt

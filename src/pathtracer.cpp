@@ -122,7 +122,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                     }
                     else
                     {
-                        li = light->Emit(ray);
+                        li = light->Emit(shadow_ray);
                         if (IsBlack(li) == false)
                         {
                             Float brdf_pdf = pdf->Evaluate(scattered);
