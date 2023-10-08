@@ -79,6 +79,8 @@ void CornellBox(Scene& scene)
         // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5, 0.9, -0.5), Color(0.25)));
         // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.05));
         // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr", false, true));
+        // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr", false, true));
+        // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
     }
 
     // scene.Rebuild();

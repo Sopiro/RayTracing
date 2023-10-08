@@ -28,6 +28,8 @@ public:
     Float radius;
 
 private:
+    static inline Point2 ComputeTexCoord(const Vec3& v);
+
     Ref<Material> material;
 };
 
@@ -66,6 +68,15 @@ inline Float Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
 inline const Material* Sphere::GetMaterial() const
 {
     return material.get();
+}
+
+inline Point2 Sphere::ComputeTexCoord(const Vec3& v)
+{
+    Float theta = std::acos(v.y);
+    Float r = std::atan2(v.z, v.x);
+    Float phi = r < 0 ? r + two_pi : r;
+
+    return Point2(phi * inv_two_pi, 1 - theta * inv_pi);
 }
 
 } // namespace spt

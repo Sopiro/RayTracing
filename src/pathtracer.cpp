@@ -1,8 +1,6 @@
 #include "spt/spt.h"
 #include "spt/util.h"
 
-#define MIN_BOUNCES 3
-
 namespace spt
 {
 
@@ -154,7 +152,8 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         ray = scattered;
 
         // Russian roulette
-        if (bounce > MIN_BOUNCES)
+        const int32 min_bounces = 3;
+        if (bounce > min_bounces)
         {
             Float rr = std::fmin(Float(0.95), Luma(throughput));
             if (Rand() > rr)

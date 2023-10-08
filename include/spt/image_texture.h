@@ -68,12 +68,9 @@ inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int3
     if (u < 0) ++u;
     if (v < 0) ++v;
 
-    *i = int32(u * w);
-    *j = int32(v * h);
-
     // Clamp integer mapping, since actual coordinates should be less than 1.0
-    if (*i >= w) *i = w - 1;
-    if (*j >= h) *j = h - 1;
+    *i = std::min(int32(u * w), w - 1);
+    *j = std::min(int32(v * h), h - 1);
 }
 
 } // namespace spt

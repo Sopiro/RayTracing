@@ -196,7 +196,7 @@ Mat4 Mat4::GetInverse()
     Float a0112 = ey.x * ez.y - ey.y * ez.x;
 
     Float det = ex.x * (ey.y * a2323 - ey.z * a1323 + ey.w * a1223) - ex.y * (ey.x * a2323 - ey.z * a0323 + ey.w * a0223) +
-               ex.z * (ey.x * a1323 - ey.y * a0323 + ey.w * a0123) - ex.w * (ey.x * a1223 - ey.y * a0223 + ey.z * a0123);
+                ex.z * (ey.x * a1323 - ey.y * a0323 + ey.w * a0123) - ex.w * (ey.x * a1223 - ey.y * a0223 + ey.z * a0123);
 
     if (det != 0.0)
     {
@@ -256,11 +256,11 @@ Quat::Quat(const Mat3& m)
     }
 }
 
-Quat::Quat(const Vec3& dir, const Vec3& up)
+Quat::Quat(const Vec3& front, const Vec3& up)
 {
     Mat3 rotation;
 
-    rotation.ez = -dir;
+    rotation.ez = -front;
     rotation.ex = Cross(up, rotation.ez);
     rotation.ex.Normalize();
     rotation.ey = Cross(rotation.ez, rotation.ex);

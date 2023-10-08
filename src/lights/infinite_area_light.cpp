@@ -11,6 +11,7 @@ namespace spt
 InfiniteAreaLight::InfiniteAreaLight(const std::string& tex_map, bool srgb, bool hdr)
     : Light(Light::Type::infinite_area_light)
     , l_map{ ImageTexture::Create(tex_map, srgb, hdr) }
+    , transform{ Quat(-pi / Float(2.0), x_axis) }
 {
     int32 width = l_map->GetWidth();
     int32 height = l_map->GetHeight();
@@ -19,7 +20,7 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& tex_map, bool srgb, bool
     for (int32 v = 0; v < height; ++v)
     {
         Float vp = (Float)v / (Float)height;
-        Float sin_theta = std::sin(pi * Float(v + 0.5f) / Float(height));
+        Float sin_theta = std::sin(pi * (v + Float(0.5)) / Float(height));
 
         for (int32 u = 0; u < width; ++u)
         {
@@ -47,7 +48,7 @@ Color InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const I
     Float cos_theta = std::cos(theta), sin_theta = std::sin(theta);
     Float sin_phi = std::sin(phi), cos_phi = std::cos(phi);
 
-    *wi = Vec3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi);
+    *wi = Mul(transform, Vec3(sin_theta * cos_phi, sin_theta * sin_phi, cos_theta));
 
     if (sin_theta == 0)
     {
@@ -65,7 +66,8 @@ Color InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const I
 
 Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
 {
-    Float theta = SphericalTheta(ray.d), phi = SphericalPhi(ray.d);
+    Vec3 w = MulT(transform, ray.d);
+    Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Float sin_theta = std::sin(theta);
     if (sin_theta == 0)
     {
@@ -78,7 +80,8 @@ Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
 
 Color InfiniteAreaLight::Emit(const Ray& ray) const
 {
-    Float theta = SphericalTheta(ray.d), phi = SphericalPhi(ray.d);
+    Vec3 w = MulT(transform, ray.d);
+    Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Point2 uv(phi * inv_two_pi, 1 - theta * inv_pi);
 
     return l_map->Value(uv);

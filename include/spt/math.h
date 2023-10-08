@@ -746,7 +746,7 @@ struct Quat
 
     Quat(const Mat3& m);
 
-    Quat(const Vec3& dir, const Vec3& up);
+    Quat(const Vec3& front, const Vec3& up);
 
     // Axis must be normalized
     Quat(Float angle, const Vec3& unitAxis)

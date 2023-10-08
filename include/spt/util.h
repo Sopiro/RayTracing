@@ -58,21 +58,31 @@ inline bool IsNullish(const T& v)
         std::cout << " null" << std::endl;                                                                                       \
     }
 
-inline bool IsBlack(Color color)
+inline bool IsBlack(const Color& color)
 {
-    return std::fabs(color.x) == Float(0.0) && std::fabs(color.y) == Float(0.0) && std::fabs(color.z) == Float(0.0);
+    return color.x == Float(0.0) && color.y == Float(0.0) && color.z == Float(0.0);
 }
 
 // Luminance of linear color
 // https://en.wikipedia.org/wiki/Luma_(video)
-inline Float Luma(Vec3 srgb)
+inline Float Luma(const Vec3& srgb)
 {
-    return Dot(srgb, Vec3(Float(0.2126), Float(0.7152), Float(0.0722)));
+    constexpr Vec3 coefficient(Float(0.2126), Float(0.7152), Float(0.0722));
+    return Dot(srgb, coefficient);
 }
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {
     return out << v.x << ' ' << v.y << ' ' << v.z;
+}
+
+inline std::ostream& operator<<(std::ostream& out, const Mat3& m)
+{
+    // clang-format off
+    return out << m.ex.x << ' ' << m.ey.x << ' ' << m.ez.x << '\n'
+               << m.ex.y << ' ' << m.ey.y << ' ' << m.ez.y << '\n'
+               << m.ex.z << ' ' << m.ey.z << ' ' << m.ez.z << '\n';
+    // clang-format on
 }
 
 inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
