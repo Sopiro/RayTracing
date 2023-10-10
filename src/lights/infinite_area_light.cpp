@@ -8,9 +8,9 @@
 namespace spt
 {
 
-InfiniteAreaLight::InfiniteAreaLight(const std::string& tex_map, bool srgb, bool hdr)
+InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, bool srgb)
     : Light(Light::Type::infinite_area_light)
-    , l_map{ ImageTexture::Create(tex_map, srgb, hdr) }
+    , l_map{ ImageTexture::Create(env_map, srgb) }
     , transform{ Quat(-pi / Float(2.0), x_axis) }
 {
     int32 width = l_map->GetWidth();

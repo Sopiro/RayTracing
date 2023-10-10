@@ -12,7 +12,7 @@ namespace spt
 class InfiniteAreaLight : public Light
 {
 public:
-    InfiniteAreaLight(const std::string& tex_map, bool srgb, bool hdr);
+    InfiniteAreaLight(const std::string& env_map, bool srgb = false);
 
     virtual Color Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;

@@ -7,7 +7,7 @@
 namespace spt
 {
 
-Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb, bool hdr)
+Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb)
 {
     auto loaded = loaded_textures.find(path);
     if (loaded != loaded_textures.end())
@@ -15,8 +15,7 @@ Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb, bool 
         return loaded->second;
     }
 
-    Ref<ImageTexture> image =
-        hdr ? Ref<ImageTextureHDR>(new ImageTextureHDR(path, srgb)) : Ref<ImageTexture>(new ImageTexture(path, srgb));
+    auto image = Ref<ImageTexture>(new ImageTexture(path, srgb));
 
     loaded_textures.emplace(path, image);
     ++texture_count;
@@ -40,47 +39,8 @@ ImageTexture::~ImageTexture()
 ImageTexture::ImageTexture(const std::string& path, bool srgb)
 {
     stbi_set_flip_vertically_on_load(true);
-
-    int32 components_per_pixel;
-    data = stbi_load(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
-
-    if (!data)
-    {
-        std::cerr << "ERROR: Could not load texture image file '" << path << "'.\n";
-        width = 0;
-        height = 0;
-    }
-    else
-    {
-        if (srgb)
-        {
-#pragma omp parallel for
-            for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
-            {
-                // Convert to linear space
-                uint8 value = *((uint8*)data + i);
-                *((uint8*)data + i) = uint8(std::fmin(std::pow(value / 255.0, 2.2) * 255.0, 255.0));
-            }
-        }
-    }
-
-    bytes_per_scanline = bytes_per_pixel * width;
-}
-
-Color ImageTexture::Value(const Point2& uv) const
-{
-    int32 i, j;
-    UVtoIndices(&i, &j, uv, width, height);
-
-    constexpr Float color_scale = 1 / Float(255.0);
-    uint8* pixel = (uint8*)(data) + j * bytes_per_scanline + i * bytes_per_pixel;
-
-    return Color(color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2]);
-}
-
-ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
-{
-    stbi_set_flip_vertically_on_load(true);
+    stbi_ldr_to_hdr_scale(1.0f);
+    stbi_ldr_to_hdr_gamma(srgb ? 2.2f : 1.0f);
 
     int32 components_per_pixel;
     data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
@@ -106,7 +66,7 @@ ImageTextureHDR::ImageTextureHDR(const std::string& path, bool srgb)
     bytes_per_scanline = bytes_per_pixel * width;
 }
 
-Color ImageTextureHDR::Value(const Point2& uv) const
+Color ImageTexture::Value(const Point2& uv) const
 {
     int32 i, j;
     UVtoIndices(&i, &j, uv, width, height);

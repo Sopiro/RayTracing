@@ -12,7 +12,7 @@ class ImageTexture : public Texture
 public:
     inline static int32 texture_count = 0;
     inline static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
-    static Ref<ImageTexture> Create(const std::string& path, bool srgb = false, bool hdr = false);
+    static Ref<ImageTexture> Create(const std::string& path, bool srgb = false);
 
     virtual ~ImageTexture();
 
@@ -36,20 +36,6 @@ protected:
     int32 bytes_per_scanline;
 };
 
-class ImageTextureHDR : public ImageTexture
-{
-public:
-    virtual ~ImageTextureHDR() = default;
-
-    virtual Color Value(const Point2& uv) const override;
-
-protected:
-    friend class ImageTexture;
-
-    ImageTextureHDR() = default;
-    ImageTextureHDR(const std::string& path, bool srgb);
-};
-
 inline int32 ImageTexture::GetWidth() const
 {
     return width;
@@ -62,6 +48,7 @@ inline int32 ImageTexture::GetHeight() const
 
 inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h)
 {
+    // Wrap method
     Float u = std::fmod(uv.x, Float(1.0));
     Float v = std::fmod(uv.y, Float(1.0));
 
