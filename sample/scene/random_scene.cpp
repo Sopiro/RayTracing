@@ -7,7 +7,7 @@ namespace spt
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 void RandomScene(Scene& scene)
 {
-    auto ground_material = CreateSharedRef<Lambertian>(Color(0.5, 0.5, 0.5));
+    auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5, 0.5, 0.5));
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
     for (int32 a = -11; a < 11; a++)
@@ -49,10 +49,10 @@ void RandomScene(Scene& scene)
     auto material1 = CreateSharedRef<Dielectric>(1.5);
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, 1, 0), 1.0, material1));
 
-    auto material2 = CreateSharedRef<Lambertian>(Color(0.4, 0.2, 0.1));
+    auto material2 = CreateSharedRef<Lambertian>(Spectrum(0.4, 0.2, 0.1));
     scene.Add(CreateSharedRef<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
 
-    auto material3 = CreateSharedRef<Metal>(Color(0.7, 0.6, 0.5), 0.0);
+    auto material3 = CreateSharedRef<Metal>(Spectrum(0.7, 0.6, 0.5), 0.0);
     scene.Add(CreateSharedRef<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));

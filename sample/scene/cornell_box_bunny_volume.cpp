@@ -6,14 +6,14 @@ namespace spt
 void CornellBoxBunnyVolume(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Color(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Color(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Color(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
-    auto skin = CreateSharedRef<Lambertian>(Color(251. / 255., 206. / 255., 177. / 255.));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
+    auto skin = CreateSharedRef<Lambertian>(Spectrum(251. / 255., 206. / 255., 177. / 255.));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Color(1.0));
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0));
     auto glass = CreateSharedRef<Dielectric>(1.5);
 
     // Cornell box
@@ -61,7 +61,7 @@ void CornellBoxBunnyVolume(Scene& scene)
 
         auto a = CreateSharedRef<Aggregate>();
         a->Add(m);
-        auto volume = CreateSharedRef<ConstantDensityMedium>(a, 100.0, Color(1.0));
+        auto volume = CreateSharedRef<ConstantDensityMedium>(a, 100.0, Spectrum(1.0));
 
         scene.Add(volume);
     }

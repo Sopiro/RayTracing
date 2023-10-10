@@ -18,9 +18,9 @@ struct MaterialTextures
 
 struct MaterialColors
 {
-    Color diffuse;
-    Color specular;
-    Color emissive;
+    Vec3 diffuse;
+    Vec3 specular;
+    Vec3 emissive;
 };
 
 // Create microfacet material with given textures and colors
@@ -57,19 +57,6 @@ inline bool IsNullish(const T& v)
         std::cout << #v;                                                                                                         \
         std::cout << " null" << std::endl;                                                                                       \
     }
-
-inline bool IsBlack(const Color& color)
-{
-    return color.x == Float(0.0) && color.y == Float(0.0) && color.z == Float(0.0);
-}
-
-// Luminance of linear color
-// https://en.wikipedia.org/wiki/Luma_(video)
-inline Float Luma(const Vec3& srgb)
-{
-    constexpr Vec3 coefficient(Float(0.2126), Float(0.7152), Float(0.0722));
-    return Dot(srgb, coefficient);
-}
 
 inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
 {

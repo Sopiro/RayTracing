@@ -6,14 +6,14 @@ namespace spt
 void CornellBox(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Color(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Color(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Color(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Color(15.0));
-    auto mirror = CreateSharedRef<Metal>(Color(.73, .73, .73), 0.0);
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
+    auto mirror = CreateSharedRef<Metal>(Spectrum(.73, .73, .73), 0.0);
 
     // Cornell box
     {
@@ -76,7 +76,7 @@ void CornellBox(Scene& scene)
         auto tf = Transform{ 0.5, 0.999, -0.5, Quat(pi, x_axis), Vec3(0.25) };
         scene.AddLight(CreateRectXZ(tf, light));
 
-        // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5, 0.9, -0.5), Color(0.25)));
+        // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5, 0.9, -0.5), Spectrum(0.25)));
         // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0), 0.05));
         // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
         // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));

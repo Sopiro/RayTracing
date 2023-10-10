@@ -6,15 +6,20 @@ namespace spt
 class DiffuseLight : public Material
 {
 public:
+    DiffuseLight(const Spectrum& color);
     DiffuseLight(const Ref<Texture> emission);
-    DiffuseLight(Color color);
 
-    virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
+    virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
 
     Ref<Texture> emission;
     bool two_sided;
 };
+
+inline DiffuseLight::DiffuseLight(const Spectrum& color)
+    : emission{ ConstantColor::Create(color) }
+{
+}
 
 inline DiffuseLight::DiffuseLight(const Ref<Texture> _emission)
     : emission{ _emission }
@@ -22,12 +27,7 @@ inline DiffuseLight::DiffuseLight(const Ref<Texture> _emission)
 {
 }
 
-inline DiffuseLight::DiffuseLight(Color color)
-    : emission{ ConstantColor::Create(color) }
-{
-}
-
-inline Color DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
+inline Spectrum DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
 {
     if (is.front_face || two_sided)
     {
@@ -35,7 +35,7 @@ inline Color DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
     }
     else
     {
-        return zero_vec3;
+        return RGBSpectrum::black;
     }
 }
 

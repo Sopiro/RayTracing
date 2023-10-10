@@ -16,16 +16,16 @@ class Microfacet : public Material
 public:
     Microfacet() = default;
 
-    virtual Color Emit(const Intersection& is, const Vec3& wi) const override;
+    virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
-    virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
+    virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:
     Ref<Texture> basecolor, metallic, roughness, emissive;
     Ref<Texture> normal_map;
 };
 
-inline Color Microfacet::Emit(const Intersection& is, const Vec3& wi) const
+inline Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
     return emissive->Value(is.uv);
 }

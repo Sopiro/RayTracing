@@ -5,8 +5,8 @@
 #include "ggxvndf_pdf.h"
 #include "pdf.h"
 
-#include "ray.h"
 #include "constant_color.h"
+#include "ray.h"
 
 namespace spt
 {
@@ -18,7 +18,7 @@ struct Interaction
     bool is_specular;
 
     Ray specular_ray;
-    Color attenuation;
+    Spectrum attenuation;
 
     const PDF* GetScatteringPDF() const
     {
@@ -43,25 +43,25 @@ private:
 class Material
 {
 public:
-    virtual Color Emit(const Intersection& is, const Vec3& wi) const;
+    virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const;
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const = 0;
 
     // BRDF + cosine term
-    virtual Vec3 Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;
+    virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;
 
     inline static Ref<Material> fallback = nullptr;
 };
 
-inline Color Material::Emit(const Intersection& is, const Vec3& wi) const
+inline Spectrum Material::Emit(const Intersection& is, const Vec3& wi) const
 {
-    return zero_vec3;
+    return RGBSpectrum::black;
 }
 
-inline Vec3 Material::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
+inline Spectrum Material::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
     assert(false);
-    return zero_vec3;
+    return RGBSpectrum::black;
 }
 
 } // namespace spt

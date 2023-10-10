@@ -14,7 +14,7 @@ public:
     int32 GetWidth() const;
     int32 GetHeight() const;
 
-    void Set(int32 x, int32 y, const Color& color);
+    void Set(int32 x, int32 y, const Spectrum& color);
     void WriteToFile(const char* filename) const;
 
     inline static constexpr int32 color_channels = 3;
@@ -46,11 +46,11 @@ inline int32 Bitmap::GetHeight() const
     return height;
 }
 
-inline void Bitmap::Set(int32 x, int32 y, const Color& color)
+inline void Bitmap::Set(int32 x, int32 y, const Spectrum& color)
 {
-    pixels[(x + (height - y - 1) * width) * color_channels + 0] = int32(std::fmin(Clamp(color.x, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * color_channels + 1] = int32(std::fmin(Clamp(color.y, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * color_channels + 2] = int32(std::fmin(Clamp(color.z, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * color_channels + 0] = int32(std::fmin(Clamp(color.r, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * color_channels + 1] = int32(std::fmin(Clamp(color.g, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + (height - y - 1) * width) * color_channels + 2] = int32(std::fmin(Clamp(color.b, 0.0, 1.0) * 256.0, 255.0));
 }
 
 inline void Bitmap::WriteToFile(const char* filename) const

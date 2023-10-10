@@ -33,7 +33,7 @@ Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialCol
     }
     else
     {
-        if (IsBlack(colors.specular))
+        if (colors.specular == Vec3(0))
         {
             mat->metallic = ConstantColor::Create(0.0);
         }
@@ -70,10 +70,10 @@ Ref<Microfacet> RandomMicrofacetMaterial()
 {
     Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
 
-    Color basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
+    Spectrum basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
     mat->basecolor = ConstantColor::Create(basecolor);
-    mat->roughness = ConstantColor::Create(Vec3(Rand(0.0, 1.0)));
-    mat->metallic = ConstantColor::Create(Vec3(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
+    mat->roughness = ConstantColor::Create(Spectrum(Rand(0.0, 1.0)));
+    mat->metallic = ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
     mat->emissive = ConstantColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0)));
     mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
 
@@ -185,7 +185,7 @@ Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const Point2& 
     MeshVertex v23 = { p5, -y_axis, -x_axis, Point2(0.0, texCoord.y) };
 
     auto vertices = std::vector<MeshVertex>{ v00, v01, v02, v03, v04, v05, v06, v07, v08, v09, v10, v11,
-                                         v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23 };
+                                             v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23 };
 
     // clang-format off
     auto indices = std::vector<int32>{

@@ -10,7 +10,7 @@ ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_o
 {
 }
 
-ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, Color color)
+ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, Spectrum color)
     : boundary{ boundary_object }
     , neg_inv_density{ -1 / density }
     , phase_function{ CreateSharedRef<Isotropic>(color) }

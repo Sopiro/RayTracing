@@ -4,7 +4,7 @@
 namespace spt
 {
 
-DirectionalLight::DirectionalLight(const Vec3& _dir, const Color& _intensity, Float _radius)
+DirectionalLight::DirectionalLight(const Vec3& _dir, const Spectrum& _intensity, Float _radius)
     : Light(Light::Type::directional_light)
     , dir{ Normalize(_dir) }
     , intensity{ _intensity }
@@ -12,7 +12,7 @@ DirectionalLight::DirectionalLight(const Vec3& _dir, const Color& _intensity, Fl
 {
 }
 
-Color DirectionalLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
+Spectrum DirectionalLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
 {
     *wi = -dir + RandomInUnitSphere() * radius;
     *pdf = Float(1.0);

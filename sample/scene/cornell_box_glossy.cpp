@@ -6,14 +6,14 @@ namespace spt
 void CornellBoxGlossy(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Color(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Color(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Color(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Color(15.0));
-    auto mirror = CreateSharedRef<Metal>(Color(.73, .73, .73), 0.0);
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
+    auto mirror = CreateSharedRef<Metal>(Spectrum(.73, .73, .73), 0.0);
     auto glass = CreateSharedRef<Dielectric>(1.5);
 
     // Cornell box

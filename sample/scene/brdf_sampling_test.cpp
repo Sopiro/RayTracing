@@ -6,13 +6,13 @@ namespace spt
 void BRDFSamplingTest(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Color(Float(.65), Float(.05), Float(.05)));
-    auto green = CreateSharedRef<Lambertian>(Color(Float(.12), Float(.45), Float(.15)));
-    auto blue = CreateSharedRef<Lambertian>(Color(Float(.22), Float(.23), Float(.75)));
-    auto white = CreateSharedRef<Lambertian>(Color(Float(.73), Float(.73), Float(.73)));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(Float(.65), Float(.05), Float(.05)));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(Float(.12), Float(.45), Float(.15)));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(Float(.22), Float(.23), Float(.75)));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(Float(.73), Float(.73), Float(.73)));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Color(15.0));
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
 
     // Cornell box
     {
@@ -48,9 +48,9 @@ void BRDFSamplingTest(Scene& scene)
     // Center sphere
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Vec3(1.0));
-        mat->metallic = ConstantColor::Create(Vec3(1.0));
-        mat->roughness = ConstantColor::Create(Vec3(0.2));
+        mat->basecolor = ConstantColor::Create(Spectrum(1.0));
+        mat->metallic = ConstantColor::Create(Spectrum(1.0));
+        mat->roughness = ConstantColor::Create(Spectrum(0.2));
 
         Float r = 0.25;
         auto sphere = CreateSharedRef<Sphere>(Vec3(0.5, r, -0.5), r, mat);

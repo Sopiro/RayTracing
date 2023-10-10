@@ -427,7 +427,7 @@ int main()
 #pragma omp parallel for schedule(dynamic, 1)
         for (int32 x = 0; x < width; ++x)
         {
-            Color samples{ 0.0, 0.0, 0.0 };
+            Spectrum samples(0);
 
             for (size_t s = 0; s < samples_per_pixel; ++s)
             {
@@ -444,11 +444,11 @@ int main()
             }
 
             // Resolve NaNs
-            if (samples.x != samples.x) samples.x = 0.0;
-            if (samples.y != samples.y) samples.y = 0.0;
-            if (samples.z != samples.z) samples.z = 0.0;
+            if (samples.r != samples.r) samples.r = 0.0;
+            if (samples.g != samples.g) samples.g = 0.0;
+            if (samples.b != samples.b) samples.b = 0.0;
 
-            Color color = samples * scale;
+            Spectrum color = samples * scale;
             color = Tonemap_ACES(color);
             color = GammaCorrection(color, 2.2);
 

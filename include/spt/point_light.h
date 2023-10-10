@@ -8,13 +8,13 @@ namespace spt
 class PointLight : public Light
 {
 public:
-    PointLight(const Point3& position, const Color& intensity);
+    PointLight(const Point3& position, const Spectrum& intensity);
 
-    virtual Color Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const override;
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
 
     Point3 position;
-    Color intensity; // radiance
+    Spectrum intensity; // radiance
 };
 
 inline Float PointLight::EvaluatePDF(const Ray& ray) const

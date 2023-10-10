@@ -25,7 +25,7 @@ void ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Color(30.0)));
+        auto white = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Spectrum(30.0)));
         white->two_sided = true;
         auto tf = Transform{ Point3(0.0, 5.0, -3.0), Quat(pi / 4.0, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
@@ -51,9 +51,9 @@ void ShipScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Vec3(1.0));
-        mat->metallic = ConstantColor::Create(Vec3(0.0));
-        mat->roughness = ConstantColor::Create(Vec3(0.001));
+        mat->basecolor = ConstantColor::Create(Spectrum(1.0));
+        mat->metallic = ConstantColor::Create(Spectrum(0.0));
+        mat->roughness = ConstantColor::Create(Spectrum(0.001));
 
         Float size = 9.0;
         Float y = 2.1;

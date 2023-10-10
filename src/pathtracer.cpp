@@ -4,11 +4,9 @@
 namespace spt
 {
 
-Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
+Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
 {
-    Color radiance(0, 0, 0);
-    Vec3 throughput(1, 1, 1);
-
+    Spectrum radiance(0), throughput(1);
     bool was_specular = false;
 
     for (int32 bounce = 0;; ++bounce)
@@ -71,13 +69,13 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             Vec3 to_light;
             Float light_pdf;
             Float visibility;
-            Color li = light->Sample(&to_light, &light_pdf, &visibility, is);
+            Spectrum li = light->Sample(&to_light, &light_pdf, &visibility, is);
 
             Ray shadow_ray{ is.point, to_light };
 
             // Importance sample light
             Float light_brdf_pdf = pdf->Evaluate(to_light);
-            if (IsBlack(li) == false && light_brdf_pdf > 0)
+            if (li.IsBlack() == false && light_brdf_pdf > 0)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
@@ -111,7 +109,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                             Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
-                            if (IsBlack(li) == false)
+                            if (li.IsBlack() == false)
                             {
                                 radiance +=
                                     throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, ray.d, scattered);
@@ -121,7 +119,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                     else
                     {
                         li = light->Emit(shadow_ray);
-                        if (IsBlack(li) == false)
+                        if (li.IsBlack() == false)
                         {
                             Float brdf_pdf = pdf->Evaluate(scattered);
                             Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
@@ -155,7 +153,7 @@ Color PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         const int32 min_bounces = 3;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(Float(0.95), Luma(throughput));
+            Float rr = std::fmin(Float(0.95), throughput.Luminance());
             if (Rand() > rr)
             {
                 break;

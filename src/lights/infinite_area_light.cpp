@@ -25,21 +25,21 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, bool srgb)
         for (int32 u = 0; u < width; ++u)
         {
             Float up = (Float)u / (Float)width;
-            image[u + v * width] = sin_theta * Luma(l_map->Value(Point2(up, vp)));
+            image[u + v * width] = sin_theta * l_map->Value(Point2(up, vp)).Luminance();
         }
     }
 
     distribution.reset(new Distribution2D(image.get(), width, height));
 }
 
-Color InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
+Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
 {
     Float map_pdf;
     Point2 uv = distribution->SampleContinuous(&map_pdf, RandVec2());
 
     if (map_pdf == 0)
     {
-        return Color(0, 0, 0);
+        return RGBSpectrum::black;
     }
 
     Float theta = (1 - uv[1]) * pi;
@@ -78,7 +78,7 @@ Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
     return distribution->Pdf(uv) / (2 * pi * pi * sin_theta);
 }
 
-Color InfiniteAreaLight::Emit(const Ray& ray) const
+Spectrum InfiniteAreaLight::Emit(const Ray& ray) const
 {
     Vec3 w = MulT(transform, ray.d);
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);

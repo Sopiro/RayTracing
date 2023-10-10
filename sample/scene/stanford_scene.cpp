@@ -59,8 +59,8 @@ void StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(-gap * 3.0, 0.0, 0.0), Quat(0.0, y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
-        mat->metallic = ConstantColor::Create(Color(1.0));
-        mat->roughness = ConstantColor::Create(Color(0.2));
+        mat->metallic = ConstantColor::Create(Spectrum(1.0));
+        mat->roughness = ConstantColor::Create(Spectrum(0.2));
         Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
@@ -74,7 +74,7 @@ void StanfordScene(Scene& scene)
         Float xgap = 0.015;
         Float xstep = 2.0 * w + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Color(3.0));
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(3.0));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)

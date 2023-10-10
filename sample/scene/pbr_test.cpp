@@ -34,10 +34,10 @@ void PBRTest(Scene& scene)
     // Ground
     {
         auto mat = CreateSharedRef<Microfacet>();
-        mat->basecolor = ConstantColor::Create(Vec3(1.0) * 0.9);
-        mat->metallic = ConstantColor::Create(Vec3(0.0));
-        mat->roughness = ConstantColor::Create(Vec3(0.1));
-        mat->emissive = ConstantColor::Create(Vec3(0.0));
+        mat->basecolor = ConstantColor::Create(Spectrum(1.0) * 0.9);
+        mat->metallic = ConstantColor::Create(Spectrum(0.0));
+        mat->roughness = ConstantColor::Create(Spectrum(0.1));
+        mat->emissive = ConstantColor::Create(Spectrum(0.0));
         mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
 
         auto tf1 = Transform{ Vec3(0.5, -r, -0.5), Quat(identity), Vec3(100.0) };
@@ -49,7 +49,7 @@ void PBRTest(Scene& scene)
     // Light
     // {
     //     auto tf = Transform{ Vec3(-4.0, 2.5, 0.0), Quat(DegToRad(-40.0), z_axis), Vec3(1.0, 1.0, 4.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color(10.0));
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(10.0));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -58,7 +58,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(4.0, 2.5, 0.0), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0, 1.0, 4.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color(8.0));
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -67,7 +67,7 @@ void PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(0.0, 2.5, -4.0), Quat(DegToRad(40), x_axis), Vec3(4.0, 1.0, 1.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Color(8.0));
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0));
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);
@@ -80,7 +80,7 @@ void PBRTest(Scene& scene)
         Float xgap = 0.16;
         Float xstep = 2.0 * s + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Color(5.0));
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(5.0));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)

@@ -6,13 +6,13 @@ namespace spt
 void CornellBoxOriginal(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Color(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Color(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Color(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Color(.73, .73, .73));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Color(17.0, 12.0, 4.0));
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(17.0, 12.0, 4.0));
     // light->two_sided = true;
 
     // Cornell box

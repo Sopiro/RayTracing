@@ -10,39 +10,39 @@ class ConstantColor : public Texture
 public:
     struct ColorHash
     {
-        size_t operator()(const Color& v) const
+        size_t operator()(const Spectrum& v) const
         {
-            return std::hash<Float>()(v.x) ^ std::hash<Float>()(v.y) ^ std::hash<Float>()(v.z);
+            return std::hash<Float>()(v.r) ^ std::hash<Float>()(v.g) ^ std::hash<Float>()(v.b);
         }
     };
 
     inline static int32 color_count = 0;
-    inline static std::unordered_map<Color, Ref<ConstantColor>, ColorHash> loaded_colors;
+    inline static std::unordered_map<Spectrum, Ref<ConstantColor>, ColorHash> loaded_colors;
 
-    static Ref<ConstantColor> Create(Color color);
+    static Ref<ConstantColor> Create(Spectrum color);
     static Ref<ConstantColor> Create(Float rgb);
     static Ref<ConstantColor> Create(Float red, Float green, Float blue);
 
-    virtual Color Value(const Point2& uv) const override;
+    virtual Spectrum Value(const Point2& uv) const override;
 
 private:
     ConstantColor() = default;
-    ConstantColor(Color color);
+    ConstantColor(Spectrum color);
 
-    Color color;
+    Spectrum color;
 };
 
-inline ConstantColor::ConstantColor(Color _color)
+inline ConstantColor::ConstantColor(Spectrum _color)
     : color(_color)
 {
 }
 
-inline Color ConstantColor::Value(const Point2& uv) const
+inline Spectrum ConstantColor::Value(const Point2& uv) const
 {
     return color;
 }
 
-inline Ref<ConstantColor> ConstantColor::Create(Color color)
+inline Ref<ConstantColor> ConstantColor::Create(Spectrum color)
 {
     auto loaded = loaded_colors.find(color);
     if (loaded != loaded_colors.end())
@@ -59,12 +59,12 @@ inline Ref<ConstantColor> ConstantColor::Create(Color color)
 
 inline Ref<ConstantColor> ConstantColor::Create(Float rgb)
 {
-    return Create(Color(rgb));
+    return Create(Spectrum(rgb));
 }
 
 inline Ref<ConstantColor> ConstantColor::Create(Float r, Float g, Float b)
 {
-    return Create(Color(r, g, b));
+    return Create(Spectrum(r, g, b));
 }
 
 } // namespace spt

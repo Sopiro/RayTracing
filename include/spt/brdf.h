@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "spectrum.h"
 
 namespace spt
 {
@@ -17,14 +18,14 @@ inline Float RoughnessToAlpha(Float roughness)
     return std::fmax(roughness, min_alpha);
 }
 
-inline Vec3 F0(Vec3 basecolor, Float metallic)
+inline Spectrum F0(Spectrum basecolor, Float metallic)
 {
     return Lerp(default_reflectance, basecolor, metallic);
 }
 
-inline Vec3 F_Schlick(Vec3 f0, Float cosine_theta)
+inline Spectrum F_Schlick(Spectrum f0, Float cosine_theta)
 {
-    return f0 + (/*f90*/ Vec3(1) - f0) * std::pow(1 - cosine_theta, Float(5.0));
+    return f0 + (/*f90*/ Spectrum(1) - f0) * std::pow(1 - cosine_theta, Float(5.0));
 }
 
 // Trowbridge-Reitz distribution

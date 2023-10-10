@@ -66,14 +66,14 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
     bytes_per_scanline = bytes_per_pixel * width;
 }
 
-Color ImageTexture::Value(const Point2& uv) const
+Spectrum ImageTexture::Value(const Point2& uv) const
 {
     int32 i, j;
     UVtoIndices(&i, &j, uv, width, height);
 
     float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
 
-    return Color(pixel[0], pixel[1], pixel[2]);
+    return Spectrum(pixel[0], pixel[1], pixel[2]);
 }
 
 } // namespace spt

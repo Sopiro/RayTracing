@@ -8,9 +8,9 @@ void CameraScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Vec3(0.5));
-        mat->metallic = ConstantColor::Create(Vec3(0.0));
-        mat->roughness = ConstantColor::Create(Vec3(0.01));
+        mat->basecolor = ConstantColor::Create(Spectrum(0.5));
+        mat->metallic = ConstantColor::Create(Spectrum(0.0));
+        mat->roughness = ConstantColor::Create(Spectrum(0.01));
 
         auto tf = Transform{ zero_vec3, Quat(identity), Vec3(8.0) };
         auto floor = CreateRectXZ(tf, mat);
@@ -27,7 +27,7 @@ void CameraScene(Scene& scene)
 
     // Lights
     {
-        auto light = CreateSharedRef<DiffuseLight>(Color(1.0, 0.9, 0.8) * 3.0);
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0, 0.9, 0.8) * 3.0);
         Float w = 0.4;
         Float h = 1.2;
         auto tf = Transform{ Point3(1.0, h / 2.0 - 0.01, 0.0), Quat(pi, y_axis), Vec3(1.0, h, w) };

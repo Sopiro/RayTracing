@@ -13,7 +13,7 @@ void Sponza(Scene& scene)
 
     scene.Add(sponza);
 
-    auto light = CreateSharedRef<DiffuseLight>(Color(1.0));
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0));
     // auto mat = CreateSharedRef<Dielectric>(1.5);
 
     Float cx = 8.0;
@@ -42,7 +42,7 @@ void Sponza(Scene& scene)
     // }
 
     // {
-    //     auto light2 = CreateSharedRef<DiffuseLight>(Color(20.0));
+    //     auto light2 = CreateSharedRef<DiffuseLight>(Spectrum(20.0));
     //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
     //     scene.Add(sphere);
     //     scene.AddLight(sphere);
@@ -52,7 +52,7 @@ void Sponza(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 
-    Color sky_color(147 / 255.0, 209 / 255.0, 255 / 255.0);
+    Spectrum sky_color(147 / 255.0, 209 / 255.0, 255 / 255.0);
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0, 15.0, -3.0)), Vec3(15.0), 0.02));
 }
 

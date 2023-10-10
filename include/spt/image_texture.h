@@ -19,7 +19,7 @@ public:
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
 
-    virtual Color Value(const Point2& uv) const override;
+    virtual Spectrum Value(const Point2& uv) const override;
 
     int32 GetWidth() const;
     int32 GetHeight() const;

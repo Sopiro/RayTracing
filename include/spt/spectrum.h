@@ -1,10 +1,10 @@
 #pragma once
 
-#include "math.h"
+#include "rgb_spectrum.h"
 
 namespace spt
 {
 
-using Color = Vec3;
+using Spectrum = RGBSpectrum;
 
 } // namespace spt

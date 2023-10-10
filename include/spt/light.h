@@ -21,9 +21,9 @@ public:
 
     virtual ~Light() = default;
 
-    virtual Color Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const = 0;
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
-    virtual Color Emit(const Ray& ray) const;
+    virtual Spectrum Emit(const Ray& ray) const;
 
     bool IsDeltaLight() const;
 
@@ -35,9 +35,9 @@ inline Light::Light(Type _type)
 {
 }
 
-inline Color Light::Emit(const Ray& ray) const
+inline Spectrum Light::Emit(const Ray& ray) const
 {
-    return Color(0, 0, 0);
+    return RGBSpectrum::black;
 }
 
 inline bool Light::IsDeltaLight() const
