@@ -1,6 +1,7 @@
 #pragma once
 
 #include "intersectable.h"
+#include "spectrum.h"
 
 namespace spt
 {

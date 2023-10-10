@@ -40,7 +40,7 @@ Mesh::Mesh(std::vector<Point3> _positions,
     triangle_count = int32(indices.size() / 3);
 }
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<int32> _indices, const Mat4& transform, const Ref<Material> _material)
+Mesh::Mesh(const std::vector<MeshVertex>& vertices, std::vector<int32> _indices, const Mat4& transform, const Ref<Material> _material)
     : indices{ std::move(_indices) }
     , material{ _material }
 {

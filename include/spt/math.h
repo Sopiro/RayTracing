@@ -34,7 +34,6 @@ struct Mat4;
 struct Transform;
 
 using Point2 = Vec2;
-using Color = Vec3;
 using Point3 = Vec3;
 
 enum Identity

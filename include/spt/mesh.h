@@ -6,7 +6,7 @@
 namespace spt
 {
 
-struct Vertex
+struct MeshVertex
 {
     Point3 position;
     Vec3 normal;
@@ -25,7 +25,10 @@ public:
          std::vector<int32> indices,
          const Mat4& transform,
          const Ref<Material> material);
-    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Mat4& transform, const Ref<Material> material);
+    Mesh(const std::vector<MeshVertex>& vertices,
+         std::vector<int32> indices,
+         const Mat4& transform,
+         const Ref<Material> material);
 
     const Material* GetMaterial() const;
     void SetMaterial(const Ref<Material> material);

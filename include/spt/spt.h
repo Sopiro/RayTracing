@@ -6,13 +6,14 @@
 #include "scene.h"
 
 #include "postprocess.h"
+#include "spectrum.h"
 #include "timer.h"
 #include "transform.h"
 #include "util.h"
 
 #include "bitmap.h"
-#include "image_texture.h"
 #include "constant_color.h"
+#include "image_texture.h"
 
 #include "constant_medium.h"
 #include "dielectric.h"
