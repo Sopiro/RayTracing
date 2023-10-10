@@ -1,9 +1,4 @@
 #include "spt/microfacet.h"
-
-#include "spt/cosine_pdf.h"
-#include "spt/ggx_pdf.h"
-#include "spt/ggxvndf_pdf.h"
-
 #include "spt/util.h"
 
 namespace spt

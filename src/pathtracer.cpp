@@ -65,6 +65,7 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             // Sample one light uniformly
             size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
             Light* light = lights[index].get();
+            Float light_weight = Float(num_lights);
 
             Vec3 to_light;
             Float light_pdf;
@@ -79,14 +80,15 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
+                    Spectrum f = mat->Evaluate(is, ray.d, to_light);
                     if (light->IsDeltaLight())
                     {
-                        radiance += throughput * Float(num_lights) / light_pdf * li * mat->Evaluate(is, ray.d, to_light);
+                        radiance += throughput * light_weight / light_pdf * li * f;
                     }
                     else
                     {
                         Float mis_weight = 1 / (light_pdf + light_brdf_pdf);
-                        radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, ray.d, to_light);
+                        radiance += throughput * light_weight * mis_weight * li * f;
                     }
                 }
             }
@@ -111,8 +113,8 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                             li = is2.material->Emit(is2, scattered);
                             if (li.IsBlack() == false)
                             {
-                                radiance +=
-                                    throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, ray.d, scattered);
+                                Spectrum f = mat->Evaluate(is, ray.d, scattered);
+                                radiance += throughput * light_weight * mis_weight * li * f;
                             }
                         }
                     }
@@ -123,7 +125,8 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
                         {
                             Float brdf_pdf = pdf->Evaluate(scattered);
                             Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
-                            radiance += throughput * Float(num_lights) * mis_weight * li * mat->Evaluate(is, ray.d, scattered);
+                            Spectrum f = mat->Evaluate(is, ray.d, scattered);
+                            radiance += throughput * light_weight * mis_weight * li * f;
                         }
                     }
                 }

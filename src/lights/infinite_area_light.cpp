@@ -25,7 +25,7 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, bool srgb)
         for (int32 u = 0; u < width; ++u)
         {
             Float up = (Float)u / (Float)width;
-            image[u + v * width] = sin_theta * l_map->Value(Point2(up, vp)).Luminance();
+            image[u + v * width] = std::fmax(0, sin_theta * l_map->Value(Point2(up, vp)).Luminance());
         }
     }
 
@@ -66,7 +66,7 @@ Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, cons
 
 Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
 {
-    Vec3 w = MulT(transform, ray.d);
+    Vec3 w = MulT(transform, Normalize(ray.d));
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Float sin_theta = std::sin(theta);
     if (sin_theta == 0)
@@ -80,7 +80,7 @@ Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
 
 Spectrum InfiniteAreaLight::Emit(const Ray& ray) const
 {
-    Vec3 w = MulT(transform, ray.d);
+    Vec3 w = MulT(transform, Normalize(ray.d));
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Point2 uv(phi * inv_two_pi, 1 - theta * inv_pi);
 
