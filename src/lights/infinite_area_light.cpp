@@ -19,12 +19,12 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, bool srgb)
     std::unique_ptr<Float[]> image(new Float[width * height]);
     for (int32 v = 0; v < height; ++v)
     {
-        Float vp = (Float)v / (Float)height;
-        Float sin_theta = std::sin(pi * (v + Float(0.5)) / Float(height));
+        Float vp = (v + Float(0.5)) / (Float)height;
+        Float sin_theta = std::sin(pi * vp);
 
         for (int32 u = 0; u < width; ++u)
         {
-            Float up = (Float)u / (Float)width;
+            Float up = (u + Float(0.5)) / (Float)width;
             image[u + v * width] = std::fmax(0, sin_theta * l_map->Value(Point2(up, vp)).Luminance());
         }
     }
