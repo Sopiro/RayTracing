@@ -24,16 +24,10 @@ Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb)
 }
 
 ImageTexture::ImageTexture()
-    : data{ nullptr }
+    : pixels{ nullptr }
     , width{ 0 }
     , height{ 0 }
-    , bytes_per_scanline{ 0 }
 {
-}
-
-ImageTexture::~ImageTexture()
-{
-    stbi_image_free(data);
 }
 
 ImageTexture::ImageTexture(const std::string& path, bool srgb)
@@ -43,27 +37,27 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
     stbi_ldr_to_hdr_gamma(srgb ? 2.2f : 1.0f);
 
     int32 components_per_pixel;
-    data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, bytes_per_pixel);
+    float* data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
 
     if (!data)
     {
-        std::cerr << "ERROR: Could not load texture image file '" << path << "'.\n";
+        std::cerr << "ERROR: Could not load texture file '" << path << std::endl;
         width = 0;
         height = 0;
-    }
-    else
-    {
-#pragma omp parallel for
-        for (int32 i = 0; i < width * height * bytes_per_pixel; ++i)
-        {
-            // Clamp needed
-            float value = *((float*)data + i);
-            *((float*)data + i) = std::fmax(0.0f, value);
-            // *((float*)data + i) = Clamp(value, 0.0f, 100.0f);
-        }
+        return;
     }
 
-    bytes_per_scanline = bytes_per_pixel * width;
+    pixels = std::make_unique<Spectrum[]>(width * height);
+
+#pragma omp parallel for
+    for (int32 i = 0; i < width * height; ++i)
+    {
+        pixels[i].r = std::fmax(0, data[components_per_pixel * i + 0]);
+        pixels[i].g = std::fmax(0, data[components_per_pixel * i + 1]);
+        pixels[i].b = std::fmax(0, data[components_per_pixel * i + 2]);
+    }
+
+    stbi_image_free(data);
 }
 
 Spectrum ImageTexture::Value(const Point2& uv) const
@@ -71,9 +65,8 @@ Spectrum ImageTexture::Value(const Point2& uv) const
     int32 i, j;
     UVtoIndices(&i, &j, uv, width, height);
 
-    float* pixel = (float*)data + j * bytes_per_scanline + i * bytes_per_pixel;
-
-    return Spectrum(pixel[0], pixel[1], pixel[2]);
+    Spectrum pixel = pixels[i + j * width];
+    return pixel;
 }
 
 } // namespace spt

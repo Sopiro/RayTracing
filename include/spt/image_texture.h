@@ -14,7 +14,7 @@ public:
     inline static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
     static Ref<ImageTexture> Create(const std::string& path, bool srgb = false);
 
-    virtual ~ImageTexture();
+    virtual ~ImageTexture() = default;
 
     ImageTexture(const ImageTexture&) = delete;
     ImageTexture& operator=(const ImageTexture&) = delete;
@@ -28,12 +28,10 @@ protected:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
 
-    static const int32 bytes_per_pixel = STBI_rgb;
     static void UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h);
 
-    void* data;
+    std::unique_ptr<Spectrum[]> pixels;
     int32 width, height;
-    int32 bytes_per_scanline;
 };
 
 inline int32 ImageTexture::GetWidth() const
