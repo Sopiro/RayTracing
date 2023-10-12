@@ -9,6 +9,7 @@ public:
     DiffuseLight(const Spectrum& color);
     DiffuseLight(const Ref<Texture> emission);
 
+    virtual bool IsLightSource() const override;
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
 
@@ -25,6 +26,11 @@ inline DiffuseLight::DiffuseLight(const Ref<Texture> _emission)
     : emission{ _emission }
     , two_sided{ false }
 {
+}
+
+inline bool DiffuseLight::IsLightSource() const
+{
+    return true;
 }
 
 inline Spectrum DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const

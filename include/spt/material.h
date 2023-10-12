@@ -43,6 +43,8 @@ private:
 class Material
 {
 public:
+    virtual bool IsLightSource() const;
+
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const;
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const = 0;
@@ -52,6 +54,11 @@ public:
 
     inline static Ref<Material> fallback = nullptr;
 };
+
+inline bool Material::IsLightSource() const
+{
+    return false;
+}
 
 inline Spectrum Material::Emit(const Intersection& is, const Vec3& wi) const
 {

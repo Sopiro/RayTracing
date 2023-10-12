@@ -7,48 +7,49 @@ namespace spt
 Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
 {
     Spectrum radiance(0), throughput(1);
-    bool was_specular = false;
+    bool was_specular_bounce = false;
 
     for (int32 bounce = 0;; ++bounce)
     {
         Intersection is;
-        if (scene.Intersect(&is, ray, Ray::epsilon, infinity) == false)
+        bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
+        const Material* mat = is.material;
+
+        if (bounce == 0 || was_specular_bounce)
         {
-            const std::vector<InfiniteAreaLight*>& lights = scene.GetInfiniteAreaLights();
-            for (InfiniteAreaLight* light : lights)
+            if (found_intersection)
             {
-                radiance += throughput * light->Emit(ray);
+                if (mat->IsLightSource())
+                {
+                    radiance += throughput * mat->Emit(is, ray.d);
+                }
             }
-            break;
+            else
+            {
+                const std::vector<InfiniteAreaLight*>& lights = scene.GetInfiniteAreaLights();
+                for (InfiniteAreaLight* light : lights)
+                {
+                    radiance += throughput * light->Emit(ray);
+                }
+            }
         }
 
-        const Material* mat = is.material;
+        if (found_intersection == false || bounce >= max_bounces)
+        {
+            break;
+        }
 
         Interaction ir;
         if (mat->Scatter(&ir, is, ray.d) == false)
         {
-            if (bounce == 0 || was_specular == true)
-            {
-                radiance += throughput * mat->Emit(is, ray.d);
-            }
             break;
         }
 
-        if (bounce >= max_bounces)
-        {
-            break;
-        }
-
-        if (ir.is_specular == true)
+        if (was_specular_bounce = ir.is_specular)
         {
             throughput *= ir.attenuation;
             ray = ir.specular_ray;
-            was_specular = true;
             continue;
-        }
-        else
-        {
-            was_specular = false;
         }
 
         const PDF* pdf = ir.GetScatteringPDF();
@@ -133,7 +134,7 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             }
         }
 
-        // Sample new search direction based on BRDF
+        // Sample new path direction based on BRDF
         Vec3 wi = pdf->Sample();
         Float pdf_value;
 
