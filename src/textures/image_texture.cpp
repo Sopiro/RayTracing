@@ -36,6 +36,8 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
     stbi_ldr_to_hdr_scale(1.0f);
     stbi_ldr_to_hdr_gamma(srgb ? 2.2f : 1.0f);
 
+    assert(STBI_rgb == 3);
+
     int32 components_per_pixel;
     float* data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
 
@@ -52,9 +54,9 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
 #pragma omp parallel for
     for (int32 i = 0; i < width * height; ++i)
     {
-        pixels[i].r = std::fmax(0, data[components_per_pixel * i + 0]);
-        pixels[i].g = std::fmax(0, data[components_per_pixel * i + 1]);
-        pixels[i].b = std::fmax(0, data[components_per_pixel * i + 2]);
+        pixels[i].r = std::fmax(0, data[STBI_rgb * i + 0]);
+        pixels[i].g = std::fmax(0, data[STBI_rgb * i + 1]);
+        pixels[i].b = std::fmax(0, data[STBI_rgb * i + 2]);
     }
 
     stbi_image_free(data);

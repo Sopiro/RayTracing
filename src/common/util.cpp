@@ -49,7 +49,8 @@ Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialCol
     }
     else
     {
-        mat->roughness = ConstantColor::Create(colors.specular);
+        mat->roughness =
+            ConstantColor::Create(std::sqrt(colors.specular.x), std::sqrt(colors.specular.y), std::sqrt(colors.specular.z));
     }
 
     if (HasTexture(emissive))
@@ -72,7 +73,7 @@ Ref<Microfacet> RandomMicrofacetMaterial()
 
     Spectrum basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
     mat->basecolor = ConstantColor::Create(basecolor);
-    mat->roughness = ConstantColor::Create(Spectrum(Rand(0.0, 1.0)));
+    mat->roughness = ConstantColor::Create(Spectrum((Float)std::sqrt(Rand(0.0, 1.0))));
     mat->metallic = ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
     mat->emissive = ConstantColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0)));
     mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);

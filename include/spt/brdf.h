@@ -9,13 +9,12 @@ namespace spt
 // Functions for microfacet BRDF
 
 // Default reflectance of dielectrics
-constexpr Vec3 default_reflectance{ Float(0.04) };
-constexpr Float min_alpha = Float(0.005);
+constexpr Vec3 default_reflectance(Float(0.04));
+constexpr Float min_alpha = Float(0.002);
 
 inline Float RoughnessToAlpha(Float roughness)
 {
-    // return std::fmax(roughness * roughness, min_alpha);
-    return std::fmax(roughness, min_alpha);
+    return std::fmax(roughness * roughness, min_alpha);
 }
 
 inline Spectrum F0(Spectrum basecolor, Float metallic)
@@ -32,7 +31,7 @@ inline Spectrum F_Schlick(Spectrum f0, Float cosine_theta)
 inline Float D_GGX(Float NoH, Float alpha2)
 {
     Float b = (NoH * NoH * (alpha2 - 1) + 1);
-    return alpha2 * inv_pi / (b * b);
+    return alpha2 * inv_pi / (b * b + 1e-7);
 }
 
 inline Float G1_Smith(Float NoV, Float alpha2)
