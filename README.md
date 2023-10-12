@@ -10,9 +10,8 @@ This is a physically based CPU path tracer written in C++
   - BRDF + NEE
 - Physically based materials
 - Light sources
-  - Directional lights, Point lights, Area lights
-- Volume rendering
-- Ray guiding
+  - Point lights, Directional lights, Area lights, Environment lights
+- Simple volume rendering
 - Modeling loading with Assimp
 - Parallel processing with OpenMP
 
