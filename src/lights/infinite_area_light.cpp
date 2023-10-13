@@ -8,10 +8,10 @@
 namespace spt
 {
 
-InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, bool srgb)
+InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform& tf)
     : Light(Light::Type::infinite_area_light)
-    , l_map{ ImageTexture::Create(env_map, srgb) }
-    , transform{ Quat(-pi / Float(2.0), x_axis) }
+    , l_map{ ImageTexture::Create(env_map, false) }
+    , transform{ tf }
 {
     int32 width = l_map->GetWidth();
     int32 height = l_map->GetHeight();
@@ -48,7 +48,7 @@ Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, cons
     Float cos_theta = std::cos(theta), sin_theta = std::sin(theta);
     Float sin_phi = std::sin(phi), cos_phi = std::cos(phi);
 
-    *wi = Mul(transform, Vec3(sin_theta * cos_phi, sin_theta * sin_phi, cos_theta));
+    *wi = Mul(transform, Vec3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi));
 
     if (sin_theta == 0)
     {

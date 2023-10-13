@@ -113,25 +113,26 @@ inline T Refract(const T& uv, const T& n, Float etai_over_etat)
     return r_out_perp + r_out_parallel;
 }
 
-inline Vec3 SphericalToCart(Float theta, Float phi, Float r = Float(1.0))
-{
-    Float sin_thetha = std::sin(theta);
-    Float x = std::cos(phi) * sin_thetha;
-    Float y = std::sin(phi) * sin_thetha;
-    Float z = std::cos(theta);
-
-    return Vec3(x * r, y * r, z * r);
-}
-
 inline Float SphericalTheta(const Vec3& v)
 {
-    return std::acos(v.z);
+    return std::acos(Clamp(v.y, -1, 1));
 }
 
 inline Float SphericalPhi(const Vec3& v)
 {
-    Float r = std::atan2(v.y, v.x);
+    Float r = std::atan2(v.z, v.x);
     return r < 0 ? r + two_pi : r;
+}
+
+inline Vec3 SphericalDirection(Float theta, Float phi)
+{
+    Float sin_theta = std::sin(theta);
+    return Vec3(std::cos(phi) * sin_theta, std::cos(theta), std::sin(phi) * sin_theta);
+}
+
+inline Vec3 SphericalDirection(Float sin_theta, Float cos_theta, Float sin_phi, Float cos_phi)
+{
+    return Vec3(cos_phi * sin_theta, cos_theta, sin_phi * sin_theta);
 }
 
 template <typename Predicate>

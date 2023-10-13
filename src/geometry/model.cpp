@@ -169,8 +169,7 @@ void Model::LoadModel(const std::string& path, const Transform& transform)
     // clang-format off
     const aiScene* scene = importer.ReadFile(
         path, 
-        aiProcessPreset_TargetRealtime_MaxQuality | 
-        aiProcess_PreTransformVertices
+        aiProcessPreset_TargetRealtime_MaxQuality
     );
     // clang-format on
 

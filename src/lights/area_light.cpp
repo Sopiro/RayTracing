@@ -4,9 +4,9 @@
 namespace spt
 {
 
-AreaLight::AreaLight(const Ref<Primitive> _primitive)
+AreaLight::AreaLight(const Ref<Primitive> prim)
     : Light{ Light::Type::area_light }
-    , primitive{ _primitive }
+    , primitive{ prim }
 {
 }
 

@@ -16,24 +16,24 @@ public:
         }
     };
 
+    ConstantColor() = default;
+    ConstantColor(const Spectrum& color);
+
     inline static int32 color_count = 0;
     inline static std::unordered_map<Spectrum, Ref<ConstantColor>, ColorHash> loaded_colors;
 
-    static Ref<ConstantColor> Create(Spectrum color);
+    static Ref<ConstantColor> Create(const Spectrum& color);
     static Ref<ConstantColor> Create(Float rgb);
     static Ref<ConstantColor> Create(Float red, Float green, Float blue);
 
     virtual Spectrum Value(const Point2& uv) const override;
 
-private:
-    ConstantColor() = default;
-    ConstantColor(Spectrum color);
-
+protected:
     Spectrum color;
 };
 
-inline ConstantColor::ConstantColor(Spectrum _color)
-    : color(_color)
+inline ConstantColor::ConstantColor(const Spectrum& _color)
+    : color{ _color }
 {
 }
 
@@ -42,7 +42,7 @@ inline Spectrum ConstantColor::Value(const Point2& uv) const
     return color;
 }
 
-inline Ref<ConstantColor> ConstantColor::Create(Spectrum color)
+inline Ref<ConstantColor> ConstantColor::Create(const Spectrum& color)
 {
     auto loaded = loaded_colors.find(color);
     if (loaded != loaded_colors.end())
