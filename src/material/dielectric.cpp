@@ -25,7 +25,7 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     }
     else
     {
-        wo = Refract(-wi, is.normal, refraction_ratio);
+        wo = Refract(wi, is.normal, refraction_ratio);
     }
 
     ir->is_specular = true;

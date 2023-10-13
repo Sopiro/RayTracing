@@ -28,7 +28,6 @@ extern void StanfordScene(Scene&);
 extern void StatueScene(Scene&);
 extern void ShipScene(Scene&);
 extern void CornellBoxBunnyVolume(Scene&);
-extern void CornellBoxOriginal(Scene&);
 extern void RebootScene(Scene&);
 extern void CornellBoxGlossy(Scene&);
 extern void BreakfastRoom(Scene&);
@@ -53,7 +52,7 @@ int main()
     int32 height = int32(width / aspect_ratio);
     int32 samples_per_pixel = 64;
     Float scale = 1.0 / samples_per_pixel;
-    int32 max_bounces = 20;
+    int32 max_bounces = 50;
     Bitmap bitmap{ width, height };
 
     Scene scene;
@@ -97,12 +96,12 @@ int main()
     {
         CornellBox(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.25 };
+        Point3 lookfrom{ 0.5, 0.5, 1.64 };
         Point3 lookat{ 0.5, 0.5, 0.0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
         Float aperture = 0.0;
-        Float vFov = 45.0;
+        Float vFov = 35.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -330,22 +329,7 @@ int main()
     }
     break;
 
-    case 17: // Original cornell box scene
-    {
-        CornellBoxOriginal(scene);
-
-        Point3 lookfrom{ 0.5, 0.5, 1.64 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
-
-        Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 35.0;
-
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
-    }
-    break;
-
-    case 18: // Reboot robot scene
+    case 17: // Reboot robot scene
     {
         RebootScene(scene);
 
@@ -360,7 +344,7 @@ int main()
     }
     break;
 
-    case 19: // Glossy cornell box
+    case 18: // Glossy cornell box
     {
         CornellBoxGlossy(scene);
 
@@ -375,7 +359,7 @@ int main()
     }
     break;
 
-    case 20: // Breakfast room
+    case 19: // Breakfast room
     {
         BreakfastRoom(scene);
 
@@ -390,7 +374,7 @@ int main()
     }
     break;
 
-    case 21: // Bistro scene
+    case 20: // Bistro scene
     {
         BistroScene(scene);
 

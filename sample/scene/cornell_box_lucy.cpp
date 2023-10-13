@@ -12,7 +12,7 @@ void CornellBoxLucy(Scene& scene)
     auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0));
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
 
     // Cornell box
     {
@@ -34,17 +34,16 @@ void CornellBoxLucy(Scene& scene)
 
         // top
         tf = Transform{ Vec3(0.5, 1.0, -0.5), Quat(pi, x_axis), Vec3(1.0) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddLight(CreateRectXZ(tf, white));
     }
 
-    // // Lights
-    // {
-    //     auto tf = Transform{ 0.5, 0.999, -0.5, Quat(pi, x_axis), Vec3(0.25) };
-    //     auto l = RectXZ(tf, light);
+    // Lights
+    {
+        auto tf = Transform{ 0.5, 0.999, -0.5, Quat(pi, x_axis), Vec3(0.25) };
+        auto l = CreateRectXZ(tf, light);
 
-    //     scene.Add(l);
-    //     scene.AddLight(l);
-    // }
+        scene.AddLight(l);
+    }
 
     {
         // Lucy

@@ -13,9 +13,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <stb/stb_image.h>
-#include <stb/stb_image_write.h>
-
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
