@@ -27,7 +27,7 @@ public:
 
 inline Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
-    return emissive->Value(is.uv);
+    return emissive->Evaluate(is.uv);
 }
 
 } // namespace spt

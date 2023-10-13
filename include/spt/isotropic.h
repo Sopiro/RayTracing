@@ -30,7 +30,7 @@ inline Isotropic::Isotropic(const Ref<Texture> a)
 inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     ir->is_specular = true;
-    ir->attenuation = albedo->Value(is.uv);
+    ir->attenuation = albedo->Evaluate(is.uv);
     ir->specular_ray = Ray{ is.point, RandomInUnitSphere() };
 
     return true;

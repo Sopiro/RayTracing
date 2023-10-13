@@ -19,13 +19,13 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform
     std::unique_ptr<Float[]> image(new Float[width * height]);
     for (int32 v = 0; v < height; ++v)
     {
-        Float vp = (v + Float(0.5)) / (Float)height;
+        Float vp = (v + Float(0.5)) / height;
         Float sin_theta = std::sin(pi * vp);
 
         for (int32 u = 0; u < width; ++u)
         {
-            Float up = (u + Float(0.5)) / (Float)width;
-            image[u + v * width] = std::fmax(0, sin_theta * l_map->Value(Point2(up, vp)).Luminance());
+            Float up = Float(u) / width;
+            image[u + v * width] = std::fmax(0, sin_theta * l_map->Evaluate(Point2(up, vp)).Luminance());
         }
     }
 
@@ -61,7 +61,7 @@ Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, cons
 
     *visibility = infinity;
 
-    return l_map->Value(uv);
+    return l_map->Evaluate(uv);
 }
 
 Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
@@ -84,7 +84,7 @@ Spectrum InfiniteAreaLight::Emit(const Ray& ray) const
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Point2 uv(phi * inv_two_pi, 1 - theta * inv_pi);
 
-    return l_map->Value(uv);
+    return l_map->Evaluate(uv);
 }
 
 } // namespace spt

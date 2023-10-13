@@ -26,7 +26,7 @@ public:
     static Ref<ConstantColor> Create(Float rgb);
     static Ref<ConstantColor> Create(Float red, Float green, Float blue);
 
-    virtual Spectrum Value(const Point2& uv) const override;
+    virtual Spectrum Evaluate(const Point2& uv) const override;
 
 protected:
     Spectrum color;
@@ -37,7 +37,7 @@ inline ConstantColor::ConstantColor(const Spectrum& _color)
 {
 }
 
-inline Spectrum ConstantColor::Value(const Point2& uv) const
+inline Spectrum ConstantColor::Evaluate(const Point2& uv) const
 {
     return color;
 }

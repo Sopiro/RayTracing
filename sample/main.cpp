@@ -19,8 +19,7 @@ extern void NormalMapping(Scene&);
 extern void PBRTest(Scene&);
 extern void EnvironmentMap(Scene&);
 extern void BRDFSamplingTest(Scene&);
-extern void MISTest1(Scene&);
-extern void MISTest2(Scene&);
+extern void MISTest(Scene&);
 extern void MISTestWak(Scene&);
 extern void GGXVNDFSamplingTest(Scene&);
 extern void CornellBoxLucy(Scene&);
@@ -196,26 +195,9 @@ int main()
     }
     break;
 
-    case 8: // MIS test
+    case 8: // MIS test (original)
     {
-        MISTest1(scene);
-
-        Float y = 0.345832;
-
-        Point3 lookfrom{ 0.0, y, 1.0 };
-        Point3 lookat{ 0.0, y, 0.0 };
-
-        Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 45.0;
-
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
-    }
-    break;
-
-    case 9: // MIS test (original)
-    {
-        MISTest2(scene);
+        MISTest(scene);
 
         Point3 lookfrom{ 0.0, 2, 15 };
         Point3 lookat{ 0.0, -2, 2.5 };
@@ -228,7 +210,7 @@ int main()
     }
     break;
 
-    case 10: // MIS test (wakgood)
+    case 9: // MIS test (wakgood)
     {
         MISTestWak(scene);
 
@@ -243,7 +225,7 @@ int main()
     }
     break;
 
-    case 11: // GGXVNDF sampling test
+    case 10: // GGXVNDF sampling test
     {
         GGXVNDFSamplingTest(scene);
 
@@ -258,7 +240,7 @@ int main()
     }
     break;
 
-    case 12: // Lucy
+    case 11: // Lucy
     {
         CornellBoxLucy(scene);
 
@@ -273,7 +255,7 @@ int main()
     }
     break;
 
-    case 13: // Antique camera
+    case 12: // Antique camera
     {
         CameraScene(scene);
 
@@ -288,7 +270,7 @@ int main()
     }
     break;
 
-    case 14: // Stanford models
+    case 13: // Stanford models
     {
         StanfordScene(scene);
 
@@ -303,7 +285,7 @@ int main()
     }
     break;
 
-    case 15: // Statue scene
+    case 14: // Statue scene
     {
         StatueScene(scene);
 
@@ -318,7 +300,7 @@ int main()
     }
     break;
 
-    case 16: // Ship
+    case 15: // Ship
     {
         ShipScene(scene);
 
@@ -333,7 +315,7 @@ int main()
     }
     break;
 
-    case 17: // Constant volume
+    case 16: // Constant volume
     {
         CornellBoxBunnyVolume(scene);
 
@@ -348,7 +330,7 @@ int main()
     }
     break;
 
-    case 18: // Original cornell box scene
+    case 17: // Original cornell box scene
     {
         CornellBoxOriginal(scene);
 
@@ -363,7 +345,7 @@ int main()
     }
     break;
 
-    case 19: // Reboot robot scene
+    case 18: // Reboot robot scene
     {
         RebootScene(scene);
 
@@ -378,7 +360,7 @@ int main()
     }
     break;
 
-    case 20: // Glossy cornell box
+    case 19: // Glossy cornell box
     {
         CornellBoxGlossy(scene);
 
@@ -393,7 +375,7 @@ int main()
     }
     break;
 
-    case 21: // Breakfast room
+    case 20: // Breakfast room
     {
         BreakfastRoom(scene);
 
@@ -408,7 +390,7 @@ int main()
     }
     break;
 
-    case 22: // Bistro scene
+    case 21: // Bistro scene
     {
         BistroScene(scene);
 

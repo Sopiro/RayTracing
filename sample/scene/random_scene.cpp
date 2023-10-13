@@ -10,6 +10,8 @@ void RandomScene(Scene& scene)
     auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5, 0.5, 0.5));
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
 
+    Srand(1);
+
     for (int32 a = -11; a < 11; a++)
     {
         for (int32 b = -11; b < 11; b++)
@@ -19,28 +21,18 @@ void RandomScene(Scene& scene)
 
             if ((center - Vec3(4, 0.2, 0)).Length() > 0.9)
             {
-                Ref<Material> sphere_material;
-
-                if (choose_mat < 0.8)
+                if (choose_mat < 0.9)
                 {
-                    // diffuse
-                    auto albedo = RandVec3() * RandVec3();
-                    sphere_material = CreateSharedRef<Lambertian>(albedo);
-                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
-                }
-                else if (choose_mat < 0.95)
-                {
-                    // metal
-                    auto albedo = RandVec3(0.5, 1.0);
-                    auto fuzz = Rand(0.0, 0.5);
-                    sphere_material = CreateSharedRef<Metal>(albedo, fuzz);
-                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
+                    auto mat = RandomMicrofacetMaterial();
+                    mat->roughness = ConstantColor::Create(Rand(0, 1));
+                    mat->emissive = ConstantColor::Create(0);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, mat));
                 }
                 else
                 {
                     // glass
-                    sphere_material = CreateSharedRef<Dielectric>(1.5);
-                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, sphere_material));
+                    auto glass = CreateSharedRef<Dielectric>(1.5);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, glass));
                 }
             }
         }
@@ -56,10 +48,10 @@ void RandomScene(Scene& scene)
     scene.Add(CreateSharedRef<Sphere>(Vec3(4, 1, 0), 1.0, material3));
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr"));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis))));
+    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis))));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/harties_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));

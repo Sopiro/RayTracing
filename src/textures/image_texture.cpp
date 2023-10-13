@@ -27,10 +27,12 @@ ImageTexture::ImageTexture()
     : pixels{ nullptr }
     , width{ 0 }
     , height{ 0 }
+    , texcoord_filter{ repeat }
 {
 }
 
 ImageTexture::ImageTexture(const std::string& path, bool srgb)
+    : texcoord_filter{ repeat }
 {
     stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_scale(1.0f);
@@ -62,13 +64,63 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
     stbi_image_free(data);
 }
 
-Spectrum ImageTexture::Value(const Point2& uv) const
+Spectrum ImageTexture::Evaluate(const Point2& uv) const
 {
-    int32 i, j;
-    UVtoIndices(&i, &j, uv, width, height);
+#if 0
+    // Nearest sampling
+    Float w = uv.x * width - epsilon;
+    Float h = uv.y * height - epsilon;
 
-    Spectrum pixel = pixels[i + j * width];
-    return pixel;
+    int32 i = int32(w);
+    int32 j = int32(h);
+
+    FilterTexCoord(&i, &j);
+
+    return pixels[i + j * width];
+#else
+    // Bilinear filtering sampling
+    Float w = uv.x * width - epsilon;
+    Float h = uv.y * height - epsilon;
+
+    int32 i0 = int32(w), i1 = int32(w) + 1;
+    int32 j0 = int32(h), j1 = int32(h) + 1;
+
+    FilterTexCoord(&i0, &j0);
+    FilterTexCoord(&i1, &j1);
+
+    Float fu = w - std::floor(w);
+    Float fv = h - std::floor(h);
+
+    Spectrum sp00 = pixels[i0 + j0 * width], sp10 = pixels[i1 + j0 * width];
+    Spectrum sp01 = pixels[i0 + j1 * width], sp11 = pixels[i1 + j1 * width];
+
+    // clang-format off
+    return (1-fu) * (1-fv) * sp00 + (1-fu) * (fv) * sp01 +
+           (  fu) * (1-fv) * sp10 + (  fu) * (fv) * sp11;
+// clang-format on
+#endif
+}
+
+void ImageTexture::FilterTexCoord(int32* u, int32* v) const
+{
+    switch (texcoord_filter)
+    {
+    case TexCoordFilter::repeat:
+    {
+        *u = *u >= 0 ? *u % width : width - (-(*u) % width) - 1;
+        *v = *v >= 0 ? *v % height : height - (-(*v) % height) - 1;
+    }
+    break;
+    case TexCoordFilter::clamp:
+    {
+        *u = Clamp(*u, 0, width - 1);
+        *v = Clamp(*v, 0, height - 1);
+    }
+    break;
+    default:
+        assert(false);
+        break;
+    }
 }
 
 } // namespace spt

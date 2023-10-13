@@ -32,7 +32,7 @@ inline Lambertian::Lambertian(const Ref<Texture> _albedo)
 inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     ir->is_specular = false;
-    ir->attenuation = albedo->Value(is.uv);
+    ir->attenuation = albedo->Evaluate(is.uv);
     new (ir->mem) CosinePDF(is.normal);
 
     return true;
@@ -40,7 +40,7 @@ inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const V
 
 inline Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
-    return albedo->Value(is.uv) * Dot(is.normal, wo) * inv_pi;
+    return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
 }
 
 } // namespace spt

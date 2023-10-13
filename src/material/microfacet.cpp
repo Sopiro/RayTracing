@@ -6,9 +6,9 @@ namespace spt
 
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
-    Spectrum c = basecolor->Value(is.uv);
-    Float m = metallic->Value(is.uv).b;
-    Float r = roughness->Value(is.uv).g;
+    Spectrum c = basecolor->Evaluate(is.uv);
+    Float m = metallic->Evaluate(is.uv).b;
+    Float r = roughness->Evaluate(is.uv).g;
 
     Float alpha = RoughnessToAlpha(r);
     Vec3 wo = -wi;
@@ -30,7 +30,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
 Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
-    Vec3 normal = ToVector(normal_map->Value(is.uv)) * 2.0 - Vec3(1.0);
+    Vec3 normal = ToVector(normal_map->Evaluate(is.uv)) * 2.0 - Vec3(1.0);
     normal.Normalize();
 
     ONB tbn;
@@ -63,9 +63,9 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Float NoH = Dot(n, h);
     Float VoH = Dot(v, h);
 
-    Spectrum c = basecolor->Value(is.uv);
-    Float m = metallic->Value(is.uv).b;
-    Float r = roughness->Value(is.uv).g;
+    Spectrum c = basecolor->Evaluate(is.uv);
+    Float m = metallic->Evaluate(is.uv).b;
+    Float r = roughness->Evaluate(is.uv).g;
 
     Float alpha = RoughnessToAlpha(r);
     Float alpha2 = alpha * alpha;

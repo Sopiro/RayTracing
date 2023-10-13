@@ -37,7 +37,7 @@ inline Spectrum DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
 {
     if (is.front_face || two_sided)
     {
-        return emission->Value(is.uv);
+        return emission->Evaluate(is.uv);
     }
     else
     {

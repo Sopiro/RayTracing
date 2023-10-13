@@ -7,6 +7,12 @@
 namespace spt
 {
 
+enum TexCoordFilter
+{
+    repeat,
+    clamp,
+};
+
 class ImageTexture : public Texture
 {
 public:
@@ -17,16 +23,17 @@ public:
     ImageTexture();
     ImageTexture(const std::string& path, bool srgb);
 
-    virtual Spectrum Value(const Point2& uv) const override;
+    virtual Spectrum Evaluate(const Point2& uv) const override;
 
     int32 GetWidth() const;
     int32 GetHeight() const;
 
 protected:
-    static void UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h);
+    void FilterTexCoord(int32* u, int32* v) const;
 
     std::unique_ptr<Spectrum[]> pixels;
     int32 width, height;
+    TexCoordFilter texcoord_filter;
 };
 
 inline int32 ImageTexture::GetWidth() const
@@ -37,20 +44,6 @@ inline int32 ImageTexture::GetWidth() const
 inline int32 ImageTexture::GetHeight() const
 {
     return height;
-}
-
-inline void ImageTexture::UVtoIndices(int32* i, int32* j, const Point2& uv, int32 w, int32 h)
-{
-    // Wrap method
-    Float u = std::fmod(uv.x, Float(1.0));
-    Float v = std::fmod(uv.y, Float(1.0));
-
-    if (u < 0) ++u;
-    if (v < 0) ++v;
-
-    // Clamp integer mapping, since actual coordinates should be less than 1.0
-    *i = std::min(int32(u * w), w - 1);
-    *j = std::min(int32(v * h), h - 1);
 }
 
 } // namespace spt
