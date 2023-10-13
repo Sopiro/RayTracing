@@ -1,6 +1,5 @@
 #pragma once
 
-#include "distributions.h"
 #include "image_texture.h"
 #include "light.h"
 #include "sampling.h"
@@ -20,6 +19,7 @@ public:
 
 private:
     Transform transform;
+
     std::unique_ptr<Distribution2D> distribution;
     Ref<ImageTexture> l_map; // Environment(Radiance) map
 };

@@ -1,4 +1,7 @@
-#include "spt/spt.h"
+#include "spt/infinite_area_light.h"
+#include "spt/light.h"
+#include "spt/pdf.h"
+#include "spt/scene.h"
 #include "spt/util.h"
 
 namespace spt
