@@ -26,7 +26,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->metallic = ConstantColor::Create(0.0);
         mat->emissive = ConstantColor::Create(0.0);
 
-        auto tf = Transform{ Vec3(0.5, 0.5, -1.0), Quat(identity), Vec3(1.0) };
+        auto tf = Transform{ Vec3(0.5, 0.5, -1.0), identity, Vec3(1.0) };
         scene.Add(CreateRectXY(tf, mat));
 
         // left
@@ -36,7 +36,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->roughness = ConstantColor::Create(0.01);
         mat->metallic = ConstantColor::Create(0.0);
         mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(0.0, 0.5, -0.5), Quat(identity), Vec3(1.0) };
+        tf = Transform{ Vec3(0.0, 0.5, -0.5), identity, Vec3(1.0) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // right
@@ -55,7 +55,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->roughness = ConstantColor::Create(0.01);
         mat->metallic = ConstantColor::Create(0.0);
         mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(0.5, 0, -0.5), Quat(identity), Vec3(1.0) };
+        tf = Transform{ Vec3(0.5, 0, -0.5), identity, Vec3(1.0) };
         scene.Add(CreateRectXZ(tf, mat));
 
         // top
@@ -95,7 +95,7 @@ void CornellBoxGlossy(Scene& scene)
         mat->emissive = ConstantColor::Create(0.0);
 
         // Bunny
-        Transform tf{ Point3(0.7, 0.0, -0.3), Quat(identity), Vec3(0.3) };
+        Transform tf{ Point3(0.7, 0.0, -0.3), identity, Vec3(0.3) };
 
         Ref<Model> model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
         model->GetMeshes()[0]->SetMaterial(mat);

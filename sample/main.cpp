@@ -33,6 +33,7 @@ extern void CornellBoxOriginal(Scene&);
 extern void RebootScene(Scene&);
 extern void CornellBoxGlossy(Scene&);
 extern void BreakfastRoom(Scene&);
+extern void BistroScene(Scene&);
 
 } // namespace spt
 
@@ -402,6 +403,21 @@ int main()
         Float dist_to_focus = (lookfrom - lookat).Length();
         Float aperture = 0.0;
         Float vFov = 71.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 22: // Bistro scene
+    {
+        BistroScene(scene);
+
+        Point3 lookfrom{ -20, 5.5, 0 };
+        Point3 lookat{ 0.0, 1, 0.0 };
+
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 54.0;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }

@@ -58,19 +58,19 @@ void ShipScene(Scene& scene)
         Float size = 9.0;
         Float y = 2.1;
 
-        auto tf = Transform{ Point3(0.0, y - size / 2.0, 0.0), Quat(identity), Vec3(size) };
+        auto tf = Transform{ Point3(0.0, y - size / 2.0, 0.0), identity, Vec3(size) };
         auto rect = CreateRectXZ(tf, mat);
         scene.Add(rect);
 
-        tf = Transform{ Point3(-size / 2.0, y, 0.0), Quat(identity), Vec3(size) };
+        tf = Transform{ Point3(-size / 2.0, y, 0.0), identity, Vec3(size) };
         rect = CreateRectYZ(tf, mat);
         scene.Add(rect);
 
-        tf = Transform{ Point3(0.0, y, -size / 2.0), Quat(identity), Vec3(size) };
+        tf = Transform{ Point3(0.0, y, -size / 2.0), identity, Vec3(size) };
         rect = CreateRectXY(tf, mat);
         scene.Add(rect);
 
-        tf = Transform{ Point3(0.0, y - size / 2.0, 0.0), Quat(identity), Vec3(size) };
+        tf = Transform{ Point3(0.0, y - size / 2.0, 0.0), identity, Vec3(size) };
         rect = CreateRectXZ(tf, mat);
         scene.Add(rect);
     }

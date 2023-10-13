@@ -11,10 +11,10 @@ void MISTest1(Scene& scene)
         floor->roughness = ConstantColor::Create(Spectrum(1.0));
         floor->metallic = ConstantColor::Create(Spectrum(0.0));
 
-        auto tf = Transform{ Vec3(0.0, 0.0, 0.0), Quat(identity), Vec3(3.0, 1.0, 3.0) };
+        auto tf = Transform{ Vec3(0.0, 0.0, 0.0), identity, Vec3(3.0, 1.0, 3.0) };
         scene.Add(CreateRectXZ(tf, floor));
 
-        tf = Transform{ Vec3(0.0, 0.0, -1.0), Quat(identity), Vec3(3.0, 3.0, 1.0) };
+        tf = Transform{ Vec3(0.0, 0.0, -1.0), identity, Vec3(3.0, 3.0, 1.0) };
         scene.Add(CreateRectXY(tf, floor));
     }
 
@@ -179,10 +179,10 @@ void MISTestWak(Scene& scene)
         floor->metallic = ConstantColor::Create(Spectrum(0.0));
 
         Float s = 20.0;
-        auto tf = Transform{ Vec3(0.0, -4.0, -4.0), Quat(identity), Vec3(s, 1.0, s) };
+        auto tf = Transform{ Vec3(0.0, -4.0, -4.0), identity, Vec3(s, 1.0, s) };
         scene.Add(CreateRectXZ(tf, floor));
 
-        tf = Transform{ Vec3(0.0, -4.0, -4.0), Quat(identity), Vec3(s, s, 1.0) };
+        tf = Transform{ Vec3(0.0, -4.0, -4.0), identity, Vec3(s, s, 1.0) };
         scene.Add(CreateRectXY(tf, floor));
     }
 

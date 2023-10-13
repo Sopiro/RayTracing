@@ -30,7 +30,7 @@ void StatueScene(Scene& scene)
 
     {
         auto red = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Spectrum(light, 0.0, 0.0)));
-        auto tf = Transform{ Point3(-distance, 0.0, 0.0), Quat(identity), Vec3(1.0, size, size) };
+        auto tf = Transform{ Point3(-distance, 0.0, 0.0), identity, Vec3(1.0, size, size) };
         auto rect = CreateRectYZ(tf, red);
 
         scene.AddLight(rect);
@@ -79,7 +79,7 @@ void StatueScene(Scene& scene)
         mat->metallic = ConstantColor::Create(Spectrum(0.0));
         mat->roughness = ConstantColor::Create(Spectrum(0.01));
 
-        auto tf = Transform{ Point3(0.0, -2.0, 0.0), Quat(identity), Vec3(8.0, 1.0, 8.0) };
+        auto tf = Transform{ Point3(0.0, -2.0, 0.0), identity, Vec3(8.0, 1.0, 8.0) };
         auto rect = CreateRectXZ(tf, mat);
 
         scene.Add(rect);
@@ -89,7 +89,7 @@ void StatueScene(Scene& scene)
         // mat->metallic_map = SolidColor::Create(Vec3(1.0));
         // mat->roughness_map = SolidColor::Create(Vec3(0.05));
 
-        tf = Transform{ Point3(0.0, 0.0, -4.0), Quat(identity), Vec3(8.0, 8.0, 1.0) };
+        tf = Transform{ Point3(0.0, 0.0, -4.0), identity, Vec3(8.0, 8.0, 1.0) };
         rect = CreateRectXY(tf, mat);
 
         scene.Add(rect);

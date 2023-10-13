@@ -17,11 +17,11 @@ void CornellBoxLucy(Scene& scene)
     // Cornell box
     {
         // front
-        auto tf = Transform{ Vec3(0.5, 0.5, -1.0), Quat(identity), Vec3(1.0) };
+        auto tf = Transform{ Vec3(0.5, 0.5, -1.0), identity, Vec3(1.0) };
         scene.Add(CreateRectXY(tf, wakgood_mat));
 
         // left
-        tf = Transform{ Vec3(0.0, 0.5, -0.5), Quat(identity), Vec3(1.0) };
+        tf = Transform{ Vec3(0.0, 0.5, -0.5), identity, Vec3(1.0) };
         scene.Add(CreateRectYZ(tf, red));
 
         // right
@@ -29,7 +29,7 @@ void CornellBoxLucy(Scene& scene)
         scene.Add(CreateRectYZ(tf, green));
 
         // bottom
-        tf = Transform{ Vec3(0.5, 0, -0.5), Quat(identity), Vec3(1.0) };
+        tf = Transform{ Vec3(0.5, 0, -0.5), identity, Vec3(1.0) };
         scene.Add(CreateRectXZ(tf, white));
 
         // top
@@ -48,7 +48,7 @@ void CornellBoxLucy(Scene& scene)
 
     {
         // Lucy
-        Transform transform{ Point3(0.5, 0.0, -0.5), Quat(identity), Vec3(0.85) };
+        Transform transform{ Point3(0.5, 0.0, -0.5), identity, Vec3(0.85) };
         auto mat = RandomMicrofacetMaterial();
         mat->basecolor = ConstantColor::Create(Spectrum(1.0));
         mat->metallic = ConstantColor::Create(Spectrum(1.0));

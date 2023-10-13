@@ -12,7 +12,7 @@ void CameraScene(Scene& scene)
         mat->metallic = ConstantColor::Create(Spectrum(0.0));
         mat->roughness = ConstantColor::Create(Spectrum(0.01));
 
-        auto tf = Transform{ zero_vec3, Quat(identity), Vec3(8.0) };
+        auto tf = Transform{ zero_vec3, identity, Vec3(8.0) };
         auto floor = CreateRectXZ(tf, mat);
         scene.Add(floor);
     }

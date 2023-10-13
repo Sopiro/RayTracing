@@ -42,7 +42,7 @@ void EnvironmentMap(Scene& scene)
             }
             else
             {
-                auto tf = Transform{ pos, Quat(identity), Vec3(r * 1.414) };
+                auto tf = Transform{ pos, identity, Vec3(r * 1.414) };
                 scene.Add(CreateBox(tf, mat));
             }
         }
@@ -58,7 +58,7 @@ void EnvironmentMap(Scene& scene)
     //     mat->ao_map = ConstantColor::Create(Spectrum(1.0));
     //     mat->emissive_map = ConstantColor::Create(Spectrum(0.0));
 
-    //     auto tf1 = Transform{ Vec3(0.5, -r, -0.5), Quat(identity), Vec3(100.0) };
+    //     auto tf1 = Transform{ Vec3(0.5, -r, -0.5), identity, Vec3(100.0) };
     //     auto ground = RectXZ(tf1, mat);
 
     //     scene.Add(ground);
