@@ -58,7 +58,6 @@ struct RGBSpectrum
 
     static const int32 num_spectral_samples;
     static const RGBSpectrum black;
-    static const RGBSpectrum white;
 };
 
 inline RGBSpectrum operator+(const RGBSpectrum& sp1, const RGBSpectrum& sp2)

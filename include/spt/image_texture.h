@@ -18,10 +18,10 @@ class ImageTexture : public Texture
 public:
     inline static int32 texture_count = 0;
     inline static std::unordered_map<std::string, Ref<ImageTexture>> loaded_textures;
-    static Ref<ImageTexture> Create(const std::string& path, bool srgb = false);
+    static Ref<ImageTexture> Create(const std::string& filename, bool srgb = false);
 
     ImageTexture();
-    ImageTexture(const std::string& path, bool srgb);
+    ImageTexture(const std::string& filename, bool srgb);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
 

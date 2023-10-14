@@ -10,17 +10,17 @@
 namespace spt
 {
 
-Ref<ImageTexture> ImageTexture::Create(const std::string& path, bool srgb)
+Ref<ImageTexture> ImageTexture::Create(const std::string& filename, bool srgb)
 {
-    auto loaded = loaded_textures.find(path);
+    auto loaded = loaded_textures.find(filename);
     if (loaded != loaded_textures.end())
     {
         return loaded->second;
     }
 
-    auto image = Ref<ImageTexture>(new ImageTexture(path, srgb));
+    auto image = Ref<ImageTexture>(new ImageTexture(filename, srgb));
 
-    loaded_textures.emplace(path, image);
+    loaded_textures.emplace(filename, image);
     ++texture_count;
 
     return image;
@@ -34,7 +34,7 @@ ImageTexture::ImageTexture()
 {
 }
 
-ImageTexture::ImageTexture(const std::string& path, bool srgb)
+ImageTexture::ImageTexture(const std::string& filename, bool srgb)
     : texcoord_filter{ repeat }
 {
     stbi_set_flip_vertically_on_load(true);
@@ -44,11 +44,11 @@ ImageTexture::ImageTexture(const std::string& path, bool srgb)
     assert(STBI_rgb == 3);
 
     int32 components_per_pixel;
-    float* data = stbi_loadf(path.data(), &width, &height, &components_per_pixel, STBI_rgb);
+    float* data = stbi_loadf(filename.data(), &width, &height, &components_per_pixel, STBI_rgb);
 
     if (!data)
     {
-        std::cerr << "ERROR: Could not load texture file '" << path << std::endl;
+        std::cerr << "ERROR: Could not load texture file '" << filename << std::endl;
         width = 0;
         height = 0;
         return;
@@ -81,7 +81,7 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
 
     return pixels[i + j * width];
 #else
-    // Bilinear filtering sampling
+    // Bilinear sampling
     Float w = uv.x * width - epsilon;
     Float h = uv.y * height - epsilon;
 
@@ -100,7 +100,7 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
     // clang-format off
     return (1-fu) * (1-fv) * sp00 + (1-fu) * (fv) * sp01 +
            (  fu) * (1-fv) * sp10 + (  fu) * (fv) * sp11;
-// clang-format on
+    // clang-format on
 #endif
 }
 

@@ -8,9 +8,9 @@
 namespace spt
 {
 
-Model::Model(const std::string& path, const Transform& transform)
+Model::Model(const std::string& filename, const Transform& transform)
 {
-    LoadModel(path, transform);
+    Load(filename, transform);
 }
 
 std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
@@ -160,22 +160,22 @@ void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Ma
     }
 }
 
-void Model::LoadModel(const std::string& path, const Transform& transform)
+void Model::Load(const std::string& filename, const Transform& transform)
 {
-    folder = std::move(std::filesystem::path(path).remove_filename().string());
+    folder = std::move(std::filesystem::path(filename).remove_filename().string());
 
     Assimp::Importer importer;
 
     // clang-format off
     const aiScene* scene = importer.ReadFile(
-        path, 
+        filename, 
         aiProcessPreset_TargetRealtime_MaxQuality
     );
     // clang-format on
 
     if (scene == nullptr)
     {
-        std::cout << "Faild to load model: " << path << std::endl;
+        std::cout << "Faild to load model: " << filename << std::endl;
         std::cout << "Assimp error: " << importer.GetErrorString() << std::endl;
         return;
     }

@@ -378,7 +378,7 @@ int main()
     {
         BistroScene(scene);
 
-        Point3 lookfrom{ -20, 5.5, 0 };
+        Point3 lookfrom{ -21, 6.0, 0 };
         Point3 lookat{ 0.0, 1, 0.0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
