@@ -390,7 +390,7 @@ int main()
     }
     break;
 
-    case 21: // Bistro scene
+    case 21: // Sun temple scene
     {
         SunTempleScene(scene);
 

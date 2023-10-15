@@ -18,7 +18,7 @@ void BistroScene(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis))));
     scene.AddLight(
-        CreateSharedRef<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377), 0.25));
+        CreateSharedRef<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377), 0.02));
 }
 
 } // namespace spt
