@@ -30,7 +30,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
 Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
-    Vec3 normal = ToVector(normal_map->Evaluate(is.uv)) * 2.0 - Vec3(1.0);
+    Vec3 normal = ToVector(normalmap->Evaluate(is.uv)) * 2.0 - Vec3(1.0);
     normal.Normalize();
 
     ONB tbn;

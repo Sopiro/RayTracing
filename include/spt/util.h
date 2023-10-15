@@ -7,24 +7,6 @@
 namespace spt
 {
 
-struct MaterialTextures
-{
-    Ref<Texture> basecolor;
-    Ref<Texture> metallic;
-    Ref<Texture> roughness;
-    Ref<Texture> emissive;
-    Ref<Texture> normal_map;
-};
-
-struct MaterialColors
-{
-    Vec3 diffuse;
-    Vec3 specular;
-    Vec3 emissive;
-};
-
-// Create microfacet material with given textures and colors
-Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors);
 Ref<Microfacet> RandomMicrofacetMaterial();
 
 Ref<Mesh> CreateRectXY(const Transform& transform,

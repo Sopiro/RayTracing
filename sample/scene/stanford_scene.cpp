@@ -11,7 +11,7 @@ void StanfordScene(Scene& scene)
         mat->basecolor = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg");
         mat->metallic = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
         mat->roughness = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
-        mat->normal_map = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png");
+        mat->normalmap = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png");
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0) };
         auto floor = CreateRectXZ(tf, mat, Point2(4.0, 4.0));

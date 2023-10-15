@@ -5,68 +5,6 @@
 namespace spt
 {
 
-Ref<Material> CreateMaterial(const MaterialTextures& textures, const MaterialColors& colors)
-{
-#define HasTexture(type) (textures.type != nullptr)
-
-    if (HasTexture(basecolor) == false && Material::fallback != nullptr)
-    {
-        return Material::fallback;
-    }
-
-    auto mat = CreateSharedRef<Microfacet>();
-
-    if (HasTexture(basecolor))
-    {
-        mat->basecolor = textures.basecolor;
-    }
-    else
-    {
-        mat->basecolor = ConstantColor::Create(colors.diffuse);
-    }
-
-    mat->normal_map = HasTexture(normal_map) ? textures.normal_map : ConstantColor::Create(0.5, 0.5, 1.0);
-
-    if (HasTexture(metallic))
-    {
-        mat->metallic = textures.metallic;
-    }
-    else
-    {
-        if (colors.specular == Vec3(0))
-        {
-            mat->metallic = ConstantColor::Create(0.0);
-        }
-        else
-        {
-            mat->metallic = ConstantColor::Create(1.0);
-        }
-    }
-
-    if (HasTexture(roughness))
-    {
-        mat->roughness = textures.roughness;
-    }
-    else
-    {
-        mat->roughness =
-            ConstantColor::Create(std::sqrt(colors.specular.x), std::sqrt(colors.specular.y), std::sqrt(colors.specular.z));
-    }
-
-    if (HasTexture(emissive))
-    {
-        mat->emissive = textures.emissive;
-    }
-    else
-    {
-        mat->emissive = ConstantColor::Create(colors.emissive);
-    }
-
-    return mat;
-
-#undef HasTexture
-}
-
 Ref<Microfacet> RandomMicrofacetMaterial()
 {
     Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
@@ -76,7 +14,7 @@ Ref<Microfacet> RandomMicrofacetMaterial()
     mat->roughness = ConstantColor::Create(Spectrum((Float)std::sqrt(Rand(0.0, 1.0))));
     mat->metallic = ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
     mat->emissive = ConstantColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0)));
-    mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
+    mat->normalmap = ConstantColor::Create(0.5, 0.5, 1.0);
 
     return mat;
 }

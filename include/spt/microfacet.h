@@ -21,8 +21,7 @@ public:
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:
-    Ref<Texture> basecolor, metallic, roughness, emissive;
-    Ref<Texture> normal_map;
+    Ref<Texture> basecolor, metallic, roughness, emissive, normalmap;
 };
 
 inline Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const

@@ -38,7 +38,7 @@ void PBRTest(Scene& scene)
         mat->metallic = ConstantColor::Create(Spectrum(0.0));
         mat->roughness = ConstantColor::Create(Spectrum(0.1));
         mat->emissive = ConstantColor::Create(Spectrum(0.0));
-        mat->normal_map = ConstantColor::Create(0.5, 0.5, 1.0);
+        mat->normalmap = ConstantColor::Create(0.5, 0.5, 1.0);
 
         auto tf1 = Transform{ Vec3(0.5, -r, -0.5), identity, Vec3(100.0) };
         auto ground = CreateRectXZ(tf1, mat);

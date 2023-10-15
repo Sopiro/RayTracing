@@ -21,7 +21,6 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-
         // std::cout << str.C_Str() << std::endl;
 
         Ref<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
@@ -29,6 +28,51 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
     }
 
     return textures;
+}
+
+Ref<Material> Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
+{
+    assert(mesh->mMaterialIndex >= 0);
+
+    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+    aiString name;
+    ai_int illumModel;
+    aiColor3D diffuseColor;
+    aiColor3D specularColor;
+    aiColor3D emissiveColor;
+    ai_real metallic = 0;
+    ai_real roughness = 1;
+    ai_real aniso = 0;
+    ai_real ior;
+
+    material->Get(AI_MATKEY_NAME, name);
+    material->Get(AI_MATKEY_SHADING_MODEL, illumModel);
+    material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+    material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
+    material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
+    material->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
+    material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
+    material->Get(AI_MATKEY_ANISOTROPY_FACTOR, aniso);
+    material->Get(AI_MATKEY_REFRACTI, ior);
+
+    auto basecolor_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
+    auto metallic_textures = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
+    auto roughness_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
+    auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
+    auto normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
+
+    Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
+
+    mat->basecolor = basecolor_textures.empty() ? ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)
+                                                : basecolor_textures[0];
+    mat->metallic = metallic_textures.empty() ? ConstantColor::Create(metallic) : metallic_textures[0];
+    mat->roughness = roughness_textures.empty() ? ConstantColor::Create(roughness) : roughness_textures[0];
+    mat->emissive = emissive_textures.empty() ? ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)
+                                              : emissive_textures[0];
+    mat->normalmap = normalmap_textures.empty() ? ConstantColor::Create(0.5, 0.5, 1.0) : normalmap_textures[0];
+
+    return mat;
 }
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
@@ -91,44 +135,8 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         }
     }
 
-    // Process materials
-    MaterialColors colors;
-    MaterialTextures textures;
-
-    if (mesh->mMaterialIndex >= 0)
-    {
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-        aiColor3D diffuseColor;
-        aiColor3D specularColor;
-        aiColor3D emissiveColor;
-
-        material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-        material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
-        material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
-
-        colors.diffuse.Set(diffuseColor.r, diffuseColor.g, diffuseColor.b);
-        colors.specular.Set(specularColor.r, specularColor.g, specularColor.b);
-        colors.emissive.Set(emissiveColor.r, emissiveColor.g, emissiveColor.b);
-
-        auto basecolor_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, true);
-        auto metallic_textures = LoadMaterialTextures(material, aiTextureType_METALNESS, false);
-        auto roughness_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, false);
-        auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
-        auto normal_map_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
-        // auto ao_textures = LoadMaterialTextures(material, aiTextureType_LIGHTMAP, false);
-
-        textures.basecolor = basecolor_textures.empty() ? nullptr : basecolor_textures[0];
-        textures.normal_map = normal_map_textures.empty() ? nullptr : normal_map_textures[0];
-        textures.metallic = metallic_textures.empty() ? nullptr : metallic_textures[0];
-        textures.roughness = roughness_textures.empty() ? nullptr : roughness_textures[0];
-        textures.emissive = emissive_textures.empty() ? nullptr : emissive_textures[0];
-    }
-
-    Ref<Material> material = CreateMaterial(textures, colors);
-
     return CreateSharedRef<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                 std::move(indices), transform, material);
+                                 std::move(indices), transform, CreateMaterial(mesh, scene));
 }
 
 static Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
