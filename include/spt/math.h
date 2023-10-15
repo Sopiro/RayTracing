@@ -874,6 +874,24 @@ struct Quat
         return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - Float(1.0) + z * z2);
     }
 
+    static inline Quat FromEuler(Float x, Float y, Float z)
+    {
+        Float cr = std::cos(x * Float(0.5));
+        Float sr = std::sin(x * Float(0.5));
+        Float cp = std::cos(y * Float(0.5));
+        Float sp = std::sin(y * Float(0.5));
+        Float cy = std::cos(z * Float(0.5));
+        Float sy = std::sin(z * Float(0.5));
+
+        Quat q;
+        q.w = cr * cp * cy + sr * sp * sy;
+        q.x = sr * cp * cy - cr * sp * sy;
+        q.y = cr * sp * cy + sr * cp * sy;
+        q.z = cr * cp * sy - sr * sp * cy;
+
+        return q;
+    }
+
     Float x, y, z, w;
 };
 

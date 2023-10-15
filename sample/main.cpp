@@ -32,6 +32,7 @@ extern void RebootScene(Scene&);
 extern void CornellBoxGlossy(Scene&);
 extern void BreakfastRoom(Scene&);
 extern void BistroScene(Scene&);
+extern void SunTempleScene(Scene&);
 
 } // namespace spt
 
@@ -44,10 +45,10 @@ int main()
 
     using namespace spt;
 
-    // Float aspect_ratio = 16.0 / 9.0;
+    Float aspect_ratio = 16.0 / 9.0;
     // Float aspect_ratio = 3.0 / 2.0;
     // Float aspect_ratio = 4.0 / 3.0;
-    Float aspect_ratio = 1.0;
+    // Float aspect_ratio = 1.0;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
     int32 samples_per_pixel = 64;
@@ -60,7 +61,7 @@ int main()
 
     Timer timer;
 
-    switch (2)
+    switch (21)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -380,6 +381,21 @@ int main()
 
         Point3 lookfrom{ -21, 6.0, 0 };
         Point3 lookat{ 0.0, 1, 0.0 };
+
+        Float dist_to_focus = (lookfrom - lookat).Length();
+        Float aperture = 0.0;
+        Float vFov = 54.0;
+
+        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+    }
+    break;
+
+    case 21: // Bistro scene
+    {
+        SunTempleScene(scene);
+
+        Point3 lookfrom{ -4.48045, 9.22976, -7.49469 };
+        Point3 lookat{ 0.0, 8, 0.0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
         Float aperture = 0.0;
