@@ -38,8 +38,8 @@ This is a physically based CPU path tracer written in C++
 ![AntiqueCamera](.github/image/render_1920x1080_s1024_d2147483647_t233.835s.png)
 
 ![Sponza](.github/image/render_1920x1080_s1024_d2147483647_t4680.33s.png)
-![Bistro](.github/image/render_1600x900_s1024_d50_t12223.006625s.png)
-![SunTemple](.github/image/render_1600x900_s1024_d50_t4958.6960501s.png)
+![Bistro](.github/image/render_1600x900_s1024_d50_t6627.5219105s.png)
+![SunTemple](.github/image/render_1600x900_s1024_d50_t1166.8416745s.png)
 
 <!-- ![Ship](.github/image/render_1600x1200_s2048_d2147483647_t2203.37s.png) -->
 |![Volume1](.github/image/render_1000x1000_s1000_d2147483647_t887.5372418s.png)|![Volume2](.github/image/render_1000x1000_s1000_d2147483647_t996.1365369s.png)|
