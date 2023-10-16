@@ -7,10 +7,8 @@ void GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.1f));
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
+                                               ConstantColor::Create(Spectrum(0.1f)));
 
         // auto mat = CreateSharedRef<Dielectric>(1.5f);
 

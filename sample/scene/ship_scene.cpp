@@ -50,11 +50,8 @@ void ShipScene(Scene& scene)
 
     // Floor
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.001f));
-
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.001f)));
         Float size = 9.0f;
         Float y = 2.1f;
 

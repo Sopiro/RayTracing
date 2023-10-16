@@ -7,10 +7,8 @@ void RebootScene(Scene& scene)
 {
     // https://sketchfab.com/3d-models/reboot-dramatic-scene-54ec601a3c4e4f6d8600fd28174c527c
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(0.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.001f));
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.0), ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.001f)));
 
         Material::fallback = mat;
 

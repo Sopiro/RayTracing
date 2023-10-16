@@ -19,51 +19,35 @@ void CornellBoxGlossy(Scene& scene)
     // Cornell box
     {
         // front
-
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = wakgood_texture;
-        mat->roughness = ConstantColor::Create(0.01f);
-        mat->metallic = ConstantColor::Create(0.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        auto mat = CreateSharedRef<Microfacet>(wakgood_texture, ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.01f)));
 
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0) };
         scene.Add(CreateRectXY(tf, mat));
 
         // left
 
-        mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.65f, .05f, .05f);
-        mat->roughness = ConstantColor::Create(0.01f);
-        mat->metallic = ConstantColor::Create(0.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        mat = CreateSharedRef<Microfacet>(ConstantColor::Create(.65f, .05f, .05f), ConstantColor::Create(Spectrum(0.0f)),
+                                          ConstantColor::Create(Spectrum(0.01f)));
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // right
 
-        mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.12f, .45f, .15f);
-        mat->roughness = ConstantColor::Create(0.01f);
-        mat->metallic = ConstantColor::Create(0.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        mat = CreateSharedRef<Microfacet>(ConstantColor::Create(.12f, .45f, .15f), ConstantColor::Create(Spectrum(0.0f)),
+                                          ConstantColor::Create(Spectrum(0.01f)));
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // bottom
-        mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.73f);
-        mat->roughness = ConstantColor::Create(0.01f);
-        mat->metallic = ConstantColor::Create(0.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        mat = CreateSharedRef<Microfacet>(ConstantColor::Create(.73f), ConstantColor::Create(Spectrum(0.0f)),
+                                          ConstantColor::Create(Spectrum(0.01f)));
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
         scene.Add(CreateRectXZ(tf, mat));
 
         // top
-        mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.73f);
-        mat->roughness = ConstantColor::Create(0.01f);
-        mat->metallic = ConstantColor::Create(0.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        mat = CreateSharedRef<Microfacet>(ConstantColor::Create(.73f), ConstantColor::Create(Spectrum(0.0f)),
+                                          ConstantColor::Create(Spectrum(0.01f)));
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
         scene.Add(CreateRectXZ(tf, mat));
     }
@@ -74,12 +58,8 @@ void CornellBoxGlossy(Scene& scene)
         Float hy = 0.26f;
         Float hz = 0.13f;
 
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(1.0f);
-        mat->roughness = ConstantColor::Create(0.1f);
-        mat->metallic = ConstantColor::Create(1.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
-
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
+                                               ConstantColor::Create(Spectrum(0.1f)));
         auto tf = Transform{ 0.3f, hy, -0.6f, Quat(DegToRad(25.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
         auto box = CreateBox(tf, mat);
 
@@ -88,11 +68,8 @@ void CornellBoxGlossy(Scene& scene)
 
     // Right bunny
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(0.7f);
-        mat->roughness = ConstantColor::Create(0.05f);
-        mat->metallic = ConstantColor::Create(1.0f);
-        mat->emissive = ConstantColor::Create(0.0f);
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.7f)), ConstantColor::Create(Spectrum(1.0f)),
+                                               ConstantColor::Create(Spectrum(0.05f)));
 
         // Bunny
         Transform tf{ Point3(0.7f, 0.0f, -0.3f), identity, Vec3(0.3f) };

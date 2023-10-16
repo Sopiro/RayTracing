@@ -7,10 +7,8 @@ void CameraScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(0.5f));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.01f));
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.01f)));
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);

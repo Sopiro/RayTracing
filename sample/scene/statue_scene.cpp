@@ -6,11 +6,8 @@ namespace spt
 void StatueScene(Scene& scene)
 {
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.1f));
-
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(1.0f)),
+                                               ConstantColor::Create(Spectrum(0.1f)));
         // auto mat = CreateSharedRef<Dielectric>(1.5f);
 
         Material::fallback = mat;
@@ -74,11 +71,8 @@ void StatueScene(Scene& scene)
 
     // Floor
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.01f));
-
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.01f)));
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
         auto rect = CreateRectXZ(tf, mat);
 

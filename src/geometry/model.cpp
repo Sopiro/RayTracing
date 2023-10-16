@@ -62,17 +62,21 @@ Ref<Material> Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     auto normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
 
-    Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
-
-    mat->basecolor = basecolor_textures.empty() ? ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)
-                                                : basecolor_textures[0];
-    mat->metallic = metallic_textures.empty() ? ConstantColor::Create(metallic) : metallic_textures[0];
-    mat->roughness = roughness_textures.empty() ? ConstantColor::Create(roughness) : roughness_textures[0];
-    mat->emissive = emissive_textures.empty() ? ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)
-                                              : emissive_textures[0];
-    mat->normalmap = normalmap_textures.empty() ? ConstantColor::Create(0.5, 0.5, 1.0) : normalmap_textures[0];
-
+    // clang-format off
+    Ref<Microfacet> mat = CreateSharedRef<Microfacet>(
+        basecolor_textures.empty() ? 
+            ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
+        metallic_textures.empty() ? 
+            ConstantColor::Create(metallic)                                             : metallic_textures[0],
+        roughness_textures.empty() ? 
+            ConstantColor::Create(roughness)                                            : roughness_textures[0],
+        emissive_textures.empty() ? 
+            ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)    : emissive_textures[0],
+        normalmap_textures.empty() ? 
+            ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
+    );
     return mat;
+    // clang-format on
 }
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)

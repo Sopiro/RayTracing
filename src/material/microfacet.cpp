@@ -4,6 +4,19 @@
 namespace spt
 {
 
+Microfacet::Microfacet(const Ref<Texture> _basecolor,
+                       const Ref<Texture> _metallic,
+                       const Ref<Texture> _roughness,
+                       const Ref<Texture> _emissive,
+                       const Ref<Texture> _normalmap)
+    : basecolor(_basecolor)
+    , metallic(_metallic)
+    , roughness(_roughness)
+    , emissive(_emissive)
+    , normalmap(_normalmap)
+{
+}
+
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
 {
     Spectrum c = basecolor->Evaluate(is.uv);

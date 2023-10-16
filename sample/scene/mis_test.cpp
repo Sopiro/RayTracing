@@ -6,11 +6,8 @@ namespace spt
 void MISTest(Scene& scene)
 {
     {
-        auto floor_mat = RandomMicrofacetMaterial();
-        floor_mat->basecolor = ConstantColor::Create(Spectrum(0.4f));
-        floor_mat->roughness = ConstantColor::Create(Spectrum(1.0f));
-        floor_mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-
+        auto floor_mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(1.0f)),
+                                                     ConstantColor::Create(Spectrum(0.0f)));
         auto floor = CreateSharedRef<Model>("res/veach_mi/floor.obj", Transform{ identity });
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
         scene.Add(floor);
@@ -18,25 +15,21 @@ void MISTest(Scene& scene)
 
     // plates
     {
-        auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m1->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m1->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.005f)));
+        auto m1 = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                              ConstantColor::Create(Spectrum(1.0f)),
+                                              ConstantColor::Create(Spectrum(std::sqrt(0.005f))));
 
-        auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m2->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m2->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.02f)));
+        auto m2 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.02f))));
 
-        auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m3->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m3->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.05f)));
+        auto m3 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.05f))));
 
-        auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m4->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m4->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.1f)));
+        auto m4 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);
@@ -77,11 +70,8 @@ void MISTest(Scene& scene)
 void MISTestWak(Scene& scene)
 {
     {
-        auto floor = RandomMicrofacetMaterial();
-        floor->basecolor = ImageTexture::Create("res/wakdu.jpg");
-        floor->roughness = ConstantColor::Create(Spectrum(1.0));
-        floor->metallic = ConstantColor::Create(Spectrum(0.0));
-
+        auto floor = CreateSharedRef<Microfacet>(ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(1.0f)),
+                                                 ConstantColor::Create(Spectrum(0.0f)));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
         scene.Add(CreateRectXZ(tf, floor));
@@ -92,25 +82,21 @@ void MISTestWak(Scene& scene)
 
     // plates
     {
-        auto m1 = RandomMicrofacetMaterial();
-        m1->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m1->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m1->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.005f)));
+        auto m1 = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                              ConstantColor::Create(Spectrum(1.0f)),
+                                              ConstantColor::Create(Spectrum(std::sqrt(0.005f))));
 
-        auto m2 = RandomMicrofacetMaterial();
-        m2->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m2->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m2->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.02f)));
+        auto m2 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.02f))));
 
-        auto m3 = RandomMicrofacetMaterial();
-        m3->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m3->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m3->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.05f)));
+        auto m3 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.05f))));
 
-        auto m4 = RandomMicrofacetMaterial();
-        m4->basecolor = ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f));
-        m4->metallic = ConstantColor::Create(Spectrum(1.0f));
-        m4->roughness = ConstantColor::Create(Spectrum(std::sqrt(0.1f)));
+        auto m4 =
+            CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+                                        ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
         auto p1 = CreateSharedRef<Model>("res/veach_mi/plate1.obj", Transform{ identity });
         p1->GetMeshes()[0]->SetMaterial(m1);

@@ -7,16 +7,16 @@ namespace spt
 
 Ref<Microfacet> RandomMicrofacetMaterial()
 {
-    Ref<Microfacet> mat = CreateSharedRef<Microfacet>();
-
-    Spectrum basecolor = Vec3(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
-    mat->basecolor = ConstantColor::Create(basecolor);
-    mat->roughness = ConstantColor::Create(Spectrum((Float)std::sqrt(Rand(0.0, 1.0))));
-    mat->metallic = ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0)));
-    mat->emissive = ConstantColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0)));
-    mat->normalmap = ConstantColor::Create(0.5, 0.5, 1.0);
-
-    return mat;
+    // clang-format off
+    Spectrum basecolor = Spectrum(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
+    return CreateSharedRef<Microfacet>(
+        ConstantColor::Create(basecolor),
+        ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0))),
+        ConstantColor::Create(Spectrum((Float)std::sqrt(Rand(0.0, 1.0)))),
+        ConstantColor::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0))),
+        ConstantColor::Create(0.5, 0.5, 1.0)
+    );
+    // clang-format on
 }
 
 Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)

@@ -7,11 +7,11 @@ void StanfordScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg");
-        mat->metallic = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
-        mat->roughness = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
-        mat->normalmap = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png");
+        auto mat = CreateSharedRef<Microfacet>(
+            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
+            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"),
+            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"), ConstantColor::Create(0.0f),
+            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png"));
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat, Point2(4.0f, 4.0f));
@@ -58,9 +58,9 @@ void StanfordScene(Scene& scene)
     // Armadillo
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = RandomMicrofacetMaterial();
-        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.2f));
+        auto mat = CreateSharedRef<Microfacet>(
+            ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
+            ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
         Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);

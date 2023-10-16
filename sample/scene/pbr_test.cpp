@@ -33,12 +33,8 @@ void PBRTest(Scene& scene)
 
     // Ground
     {
-        auto mat = CreateSharedRef<Microfacet>();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f) * 0.9f);
-        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.1f));
-        mat->emissive = ConstantColor::Create(Spectrum(0.0));
-        mat->normalmap = ConstantColor::Create(0.5f, 0.5f, 1.0f);
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
+                                               ConstantColor::Create(Spectrum(0.1f)));
 
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
         auto ground = CreateRectXZ(tf1, mat);

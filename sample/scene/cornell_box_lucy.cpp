@@ -48,10 +48,8 @@ void CornellBoxLucy(Scene& scene)
     {
         // Lucy
         Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.85f) };
-        auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
-        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
-        mat->roughness = ConstantColor::Create(Spectrum(0.2f));
+        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
+                                               ConstantColor::Create(Spectrum(0.2f)));
 
         // auto mat = CreateSharedRef<Dielectric>(1.5f);
 

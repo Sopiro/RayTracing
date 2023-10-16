@@ -10,7 +10,7 @@ void RandomScene(Scene& scene)
     auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000.0f, ground_material));
 
-    Srand(1);
+    Srand(7777);
 
     for (int32 a = -11; a < 11; a++)
     {
@@ -23,9 +23,11 @@ void RandomScene(Scene& scene)
             {
                 if (choose_mat < 0.9f)
                 {
-                    auto mat = RandomMicrofacetMaterial();
-                    mat->roughness = ConstantColor::Create(Rand(0, 1));
-                    mat->emissive = ConstantColor::Create(0);
+                    RandomMicrofacetMaterial();
+                    auto mat = CreateSharedRef<Microfacet>(
+                        ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
+                        ConstantColor::Create(Spectrum(Rand() > 0.5f ? Float(1.0f) : Float(0.0f))),
+                        ConstantColor::Create(Rand(0, 1)));
                     scene.Add(CreateSharedRef<Sphere>(center, 0.2f, mat));
                 }
                 else
