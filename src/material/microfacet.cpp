@@ -30,7 +30,7 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
 Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
-    Vec3 normal = ToVector(normalmap->Evaluate(is.uv)) * 2.0 - Vec3(1.0);
+    Vec3 normal = ToVector(normalmap->Evaluate(is.uv)) * 2 - Vec3(1);
     normal.Normalize();
 
     ONB tbn;
@@ -45,7 +45,7 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Vec3 h = v + l;                           // half
 
     // Resolve back facing shading normal by flipping method
-    if (Dot(n, v) < Float(0.0))
+    if (Dot(n, v) < 0)
     {
         n = Reflect(n, is.shading.normal);
     }
@@ -53,7 +53,7 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Float NoV = Dot(n, v);
     Float NoL = Dot(n, l);
 
-    if (NoV <= Float(0.0) || NoL <= Float(0.0) || h == zero_vec3)
+    if (NoV <= 0 || NoL <= 0 || h == zero_vec3)
     {
         return RGBSpectrum::black;
     }

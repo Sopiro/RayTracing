@@ -8,28 +8,28 @@ void RebootScene(Scene& scene)
     // https://sketchfab.com/3d-models/reboot-dramatic-scene-54ec601a3c4e4f6d8600fd28174c527c
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(0.0));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0));
-        mat->roughness = ConstantColor::Create(Spectrum(0.001));
+        mat->basecolor = ConstantColor::Create(Spectrum(0.0f));
+        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
+        mat->roughness = ConstantColor::Create(Spectrum(0.001f));
 
         Material::fallback = mat;
 
-        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0), y_axis), Vec3(0.01) };
+        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
         auto model = CreateSharedRef<Model>("res/reboot_dramatic_scene/scene.gltf", tf);
 
         scene.Add(model);
     }
 
     {
-        auto red = CreateSharedRef<DiffuseLight>(Spectrum(14.0, 0.0, 0.0));
-        auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 3.0, -4.0), 1.0, red);
+        auto red = CreateSharedRef<DiffuseLight>(Spectrum(14.0f, 0.0f, 0.0f));
+        auto sphere = CreateSharedRef<Sphere>(Vec3(0.0f, 3.0f, -4.0f), 1.0f, red);
 
         scene.AddLight(sphere);
     }
 
     {
-        auto white = CreateSharedRef<DiffuseLight>(Spectrum(8.0));
-        auto tf = Transform{ Vec3(0.0, 8.0, 0.0), Quat(DegToRad(180.0), x_axis), Vec3(3.0) };
+        auto white = CreateSharedRef<DiffuseLight>(Spectrum(8.0f));
+        auto tf = Transform{ Vec3(0.0f, 8.0f, 0.0f), Quat(DegToRad(180.0f), x_axis), Vec3(3.0f) };
         auto rect = CreateRectXZ(tf, white);
 
         scene.AddLight(rect);

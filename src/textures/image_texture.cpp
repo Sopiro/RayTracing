@@ -59,9 +59,9 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
 #pragma omp parallel for
     for (int32 i = 0; i < width * height; ++i)
     {
-        pixels[i].r = std::fmax(0, data[STBI_rgb * i + 0]);
-        pixels[i].g = std::fmax(0, data[STBI_rgb * i + 1]);
-        pixels[i].b = std::fmax(0, data[STBI_rgb * i + 2]);
+        pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
+        pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
+        pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
     }
 
     stbi_image_free(data);

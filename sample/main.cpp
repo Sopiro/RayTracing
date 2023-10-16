@@ -45,14 +45,14 @@ int main()
 
     using namespace spt;
 
-    Float aspect_ratio = 16.0 / 9.0;
-    // Float aspect_ratio = 3.0 / 2.0;
-    // Float aspect_ratio = 4.0 / 3.0;
-    // Float aspect_ratio = 1.0;
+    // Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    Float aspect_ratio = 1.0f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
     int32 samples_per_pixel = 64;
-    Float scale = 1.0 / samples_per_pixel;
+    Float scale = 1.0f / samples_per_pixel;
     int32 max_bounces = 50;
     Bitmap bitmap{ width, height };
 
@@ -61,7 +61,7 @@ int main()
 
     Timer timer;
 
-    switch (21)
+    switch (2)
     {
     case 0: // Raytracing in one weekend final scene
     {
@@ -70,8 +70,8 @@ int main()
         Point3 lookfrom{ 13, 2, 3 };
         Point3 lookat{ 0, 0, 0 };
 
-        Float dist_to_focus = 10.0;
-        Float aperture = 0.1;
+        Float dist_to_focus = 10.0f;
+        Float aperture = 0.1f;
         Float vFov = 20;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
@@ -86,8 +86,8 @@ int main()
         Point3 lookat{ 0, 0, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 71;
+        Float aperture = 0.0f;
+        Float vFov = 71.f;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -97,12 +97,12 @@ int main()
     {
         CornellBox(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.64 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5f, 0.5f, 1.64f };
+        Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 35.0;
+        Float aperture = 0.0f;
+        Float vFov = 35.0f;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -112,20 +112,20 @@ int main()
     {
         Sponza(scene);
 
-        // Point3 lookfrom{ 0.0, 2.5, 4.5 };
-        // Point3 lookat{ 0.0, 1.45, 0.0 };
+        // Point3 lookfrom{ 0.0f, 2.5f, 4.5f };
+        // Point3 lookat{ 0.0f, 1.45f, 0.0f };
 
-        // Point3 lookfrom{ -1.5, 5.5, 10.0 };
-        // Point3 lookat{ 0.0, 3.45, 0.0 };
+        // Point3 lookfrom{ -1.5f, 5.f5, 10.0f };
+        // Point3 lookat{ 0.0f, 3.45f, 0.0f };
 
-        // Point3 lookfrom{ 0.0, 0.5, 7.0 };
-        // Point3 lookat{ 0.0, 3.0, 0.0 };
+        // Point3 lookfrom{ 0.0f, 0.5f, 7.0f };
+        // Point3 lookat{ 0.0f, 3.0f, 0.0f };
 
-        Point3 lookfrom{ 0.0, 5.0, 6.0 };
-        Point3 lookat{ 0.0, 5.0, 0.0 };
+        Point3 lookfrom{ 0, 5, 6 };
+        Point3 lookat{ 0, 5, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
+        Float aperture = 0;
         Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
@@ -139,12 +139,12 @@ int main()
         // Point3 lookfrom{ 10.0, 0.0, 10.0 };
         // Point3 lookat{ 3.0, -2.5, 1.0 };
 
-        Point3 lookfrom = Point3(1.0, 0.5, 4.0) * 1.2;
-        Point3 lookat = Point3(0.0, 0.0, 0.0);
+        Point3 lookfrom = Point3(1, 0.5f, 4) * 1.2f;
+        Point3 lookat = Point3(0, 0, 0);
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -154,12 +154,12 @@ int main()
     {
         PBRTest(scene);
 
-        Point3 lookfrom{ 0.0, 4.0, 5.0 };
-        Point3 lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ 0, 4, 5 };
+        Point3 lookat{ 0, 0, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 71.0;
+        Float aperture = 0;
+        Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -169,12 +169,12 @@ int main()
     {
         EnvironmentMap(scene);
 
-        Point3 lookfrom{ 0.0, 3.0, 5.0 };
-        Point3 lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ 0, 3, 5 };
+        Point3 lookat{ 0, 0, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 71.0;
+        Float aperture = 0;
+        Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -184,12 +184,12 @@ int main()
     {
         BRDFSamplingTest(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.25 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+        Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 45.0;
+        Float aperture = 0;
+        Float vFov = 45;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -199,12 +199,12 @@ int main()
     {
         MISTest(scene);
 
-        Point3 lookfrom{ 0.0, 2, 15 };
-        Point3 lookat{ 0.0, -2, 2.5 };
+        Point3 lookfrom{ 0, 2, 15 };
+        Point3 lookat{ 0, -2, 2.5f };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 28.0;
+        Float aperture = 0;
+        Float vFov = 28;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -214,12 +214,12 @@ int main()
     {
         MISTestWak(scene);
 
-        Point3 lookfrom{ 0.0, 2, 15 };
-        Point3 lookat{ 0.0, -2, 2.5 };
+        Point3 lookfrom{ 0, 2, 15 };
+        Point3 lookat{ 0, -2, 2.5f };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 28.0;
+        Float aperture = 0;
+        Float vFov = 28;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -229,12 +229,12 @@ int main()
     {
         GGXVNDFSamplingTest(scene);
 
-        Point3 lookfrom{ 0.0, 2.0, 10.0 };
-        Point3 lookat{ 0.0, 1.0, 0.0 };
+        Point3 lookfrom{ 0, 2, 10 };
+        Point3 lookat{ 0, 1, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -244,12 +244,12 @@ int main()
     {
         CornellBoxLucy(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.25 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+        Point3 lookat{ 0.5f, 0.5f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 45.0;
+        Float aperture = 0;
+        Float vFov = 45;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -259,12 +259,12 @@ int main()
     {
         CameraScene(scene);
 
-        Point3 lookfrom{ -2.0, 1.0, 2.0 };
-        Point3 lookat{ 0.0, 0.5, 0.0 };
+        Point3 lookfrom{ -2, 1, 2 };
+        Point3 lookat{ 0, 0.5f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -274,12 +274,12 @@ int main()
     {
         StanfordScene(scene);
 
-        Point3 lookfrom{ 0.0, 0.5, 2.0 };
-        Point3 lookat{ 0.0, 0.2, 0.0 };
+        Point3 lookfrom{ 0, 0.5f, 2 };
+        Point3 lookat{ 0, 0.2f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -289,12 +289,12 @@ int main()
     {
         StatueScene(scene);
 
-        Point3 lookfrom{ 0.0, 0.0, 10.0 };
-        Point3 lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ 0, 0, 10 };
+        Point3 lookat{ 0, 0, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -304,12 +304,12 @@ int main()
     {
         ShipScene(scene);
 
-        Point3 lookfrom{ 5.0, 5.0, 10.0 };
-        Point3 lookat{ 0.0, 2.8, 0.0 };
+        Point3 lookfrom{ 5, 5, 10 };
+        Point3 lookat{ 0, 2.8f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 30.0;
+        Float aperture = 0;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -319,12 +319,12 @@ int main()
     {
         CornellBoxBunnyVolume(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.25 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+        Point3 lookat{ 0.5f, 0.5f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 45.0;
+        Float aperture = 0;
+        Float vFov = 45;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -334,12 +334,12 @@ int main()
     {
         RebootScene(scene);
 
-        Point3 lookfrom{ -4.0, 3.5, -4.0 };
-        Point3 lookat{ 0.0, 0.0, 0.0 };
+        Point3 lookfrom{ -4, 3.5f, -4 };
+        Point3 lookat{ 0, 0, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.02;
-        Float vFov = 30.0;
+        Float aperture = 0.02f;
+        Float vFov = 30;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -349,12 +349,12 @@ int main()
     {
         CornellBoxGlossy(scene);
 
-        Point3 lookfrom{ 0.5, 0.5, 1.25 };
-        Point3 lookat{ 0.5, 0.5, 0.0 };
+        Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+        Point3 lookat{ 0.5f, 0.5f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 45.0;
+        Float aperture = 0;
+        Float vFov = 45;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -364,12 +364,12 @@ int main()
     {
         BreakfastRoom(scene);
 
-        Point3 lookfrom{ 0.0, 2.2, 4.5 };
-        Point3 lookat{ 0.0, 1.5, 0.0 };
+        Point3 lookfrom{ 0, 2.2f, 4.5f };
+        Point3 lookat{ 0, 1.5f, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 71.0;
+        Float aperture = 0;
+        Float vFov = 71;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -379,12 +379,12 @@ int main()
     {
         BistroScene(scene);
 
-        Point3 lookfrom{ -21, 6.0, 0 };
-        Point3 lookat{ 0.0, 1, 0.0 };
+        Point3 lookfrom{ -21, 6, 0 };
+        Point3 lookat{ 0, 1, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 54.0;
+        Float aperture = 0;
+        Float vFov = 54;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -394,12 +394,12 @@ int main()
     {
         SunTempleScene(scene);
 
-        Point3 lookfrom{ -4.48045, 9.22976, -7.49469 };
-        Point3 lookat{ 0.0, 8, 0.0 };
+        Point3 lookfrom{ -4.48045f, 9.22976f, -7.49469f };
+        Point3 lookat{ 0, 8, 0 };
 
         Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0.0;
-        Float vFov = 54.0;
+        Float aperture = 0;
+        Float vFov = 54;
 
         camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
     }
@@ -432,7 +432,7 @@ int main()
                 Float u = (x + Rand()) / (width - 1);
                 Float v = (y + Rand()) / (height - 1);
 
-                Ray ray = camera.GetRay(u, v);
+                Ray ray = camera.GenerateRay(u, v);
                 samples += PathTrace(scene, ray, max_bounces);
             }
 
@@ -442,13 +442,13 @@ int main()
             }
 
             // Resolve NaNs
-            if (samples.r != samples.r) samples.r = 0.0;
-            if (samples.g != samples.g) samples.g = 0.0;
-            if (samples.b != samples.b) samples.b = 0.0;
+            if (samples.r != samples.r) samples.r = 0;
+            if (samples.g != samples.g) samples.g = 0;
+            if (samples.b != samples.b) samples.b = 0;
 
             Spectrum color = samples * scale;
             color = Tonemap_ACES(color);
-            color = GammaCorrection(color, 2.2);
+            color = GammaCorrection(color, 2.2f);
 
             bitmap.Set(x, y, color);
         }

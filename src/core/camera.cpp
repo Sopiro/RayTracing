@@ -29,7 +29,7 @@ Camera::Camera(const Point3& look_from,
     lens_radius = aperture / 2;
 }
 
-Ray Camera::GetRay(Float s, Float t) const
+Ray Camera::GenerateRay(Float s, Float t) const
 {
     Vec3 rd = lens_radius * UniformSampleUnitDiskXY();
     Vec3 offset = u * rd.x + v * rd.y;

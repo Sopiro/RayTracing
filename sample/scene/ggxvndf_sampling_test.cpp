@@ -8,15 +8,15 @@ void GGXVNDFSamplingTest(Scene& scene)
     // Bunny
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0));
-        mat->metallic = ConstantColor::Create(Spectrum(1.0));
-        mat->roughness = ConstantColor::Create(Spectrum(0.1));
+        mat->basecolor = ConstantColor::Create(Spectrum(1.0f));
+        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
+        mat->roughness = ConstantColor::Create(Spectrum(0.1f));
 
-        // auto mat = CreateSharedRef<Dielectric>(1.5);
+        // auto mat = CreateSharedRef<Dielectric>(1.5f);
 
         Material::fallback = mat;
 
-        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0), y_axis), Vec3(3.0) };
+        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         auto model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
 
         scene.Add(model);

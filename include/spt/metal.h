@@ -28,7 +28,7 @@ inline bool Metal::Scatter(Interaction* ir, const Intersection& is, const Vec3& 
 {
     Vec3 reflected = Reflect(-wi, is.normal);
 
-    ir->specular_ray = Ray{ is.point, reflected + fuzziness * RandomInUnitSphere() };
+    ir->specular_ray = Ray{ is.point, Normalize(reflected + fuzziness * RandomInUnitSphere()) };
     ir->attenuation = albedo;
     ir->is_specular = true;
 

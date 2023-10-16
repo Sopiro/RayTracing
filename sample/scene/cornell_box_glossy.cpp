@@ -6,15 +6,15 @@ namespace spt
 void CornellBoxGlossy(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
-    auto mirror = CreateSharedRef<Metal>(Spectrum(.73, .73, .73), 0.0);
-    auto glass = CreateSharedRef<Dielectric>(1.5);
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0f));
+    auto mirror = CreateSharedRef<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
+    auto glass = CreateSharedRef<Dielectric>(1.5f);
 
     // Cornell box
     {
@@ -22,65 +22,65 @@ void CornellBoxGlossy(Scene& scene)
 
         auto mat = RandomMicrofacetMaterial();
         mat->basecolor = wakgood_texture;
-        mat->roughness = ConstantColor::Create(0.01);
-        mat->metallic = ConstantColor::Create(0.0);
-        mat->emissive = ConstantColor::Create(0.0);
+        mat->roughness = ConstantColor::Create(0.01f);
+        mat->metallic = ConstantColor::Create(0.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
 
-        auto tf = Transform{ Vec3(0.5, 0.5, -1.0), identity, Vec3(1.0) };
+        auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0) };
         scene.Add(CreateRectXY(tf, mat));
 
         // left
 
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.65, .05, .05);
-        mat->roughness = ConstantColor::Create(0.01);
-        mat->metallic = ConstantColor::Create(0.0);
-        mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(0.0, 0.5, -0.5), identity, Vec3(1.0) };
+        mat->basecolor = ConstantColor::Create(.65f, .05f, .05f);
+        mat->roughness = ConstantColor::Create(0.01f);
+        mat->metallic = ConstantColor::Create(0.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
+        tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // right
 
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.12, .45, .15);
-        mat->roughness = ConstantColor::Create(0.01);
-        mat->metallic = ConstantColor::Create(0.0);
-        mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(1.0, 0.5, -0.5), Quat(pi, y_axis), Vec3(1.0) };
+        mat->basecolor = ConstantColor::Create(.12f, .45f, .15f);
+        mat->roughness = ConstantColor::Create(0.01f);
+        mat->metallic = ConstantColor::Create(0.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
+        tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
         scene.Add(CreateRectYZ(tf, mat));
 
         // bottom
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.73);
-        mat->roughness = ConstantColor::Create(0.01);
-        mat->metallic = ConstantColor::Create(0.0);
-        mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(0.5, 0, -0.5), identity, Vec3(1.0) };
+        mat->basecolor = ConstantColor::Create(.73f);
+        mat->roughness = ConstantColor::Create(0.01f);
+        mat->metallic = ConstantColor::Create(0.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
+        tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
         scene.Add(CreateRectXZ(tf, mat));
 
         // top
         mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(.73);
-        mat->roughness = ConstantColor::Create(0.01);
-        mat->metallic = ConstantColor::Create(0.0);
-        mat->emissive = ConstantColor::Create(0.0);
-        tf = Transform{ Vec3(0.5, 1.0, -0.5), Quat(pi, x_axis), Vec3(1.0) };
+        mat->basecolor = ConstantColor::Create(.73f);
+        mat->roughness = ConstantColor::Create(0.01f);
+        mat->metallic = ConstantColor::Create(0.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
+        tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
         scene.Add(CreateRectXZ(tf, mat));
     }
 
     // Left block
     {
-        Float hx = 0.13;
-        Float hy = 0.26;
-        Float hz = 0.13;
+        Float hx = 0.13f;
+        Float hy = 0.26f;
+        Float hz = 0.13f;
 
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(1.0);
-        mat->roughness = ConstantColor::Create(0.1);
-        mat->metallic = ConstantColor::Create(1.0);
-        mat->emissive = ConstantColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(1.0f);
+        mat->roughness = ConstantColor::Create(0.1f);
+        mat->metallic = ConstantColor::Create(1.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
 
-        auto tf = Transform{ 0.3, hy, -0.6, Quat(DegToRad(25.0), y_axis), Vec3(hx * 2.0, hy * 2.0, hz * 2.0) };
+        auto tf = Transform{ 0.3f, hy, -0.6f, Quat(DegToRad(25.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
         auto box = CreateBox(tf, mat);
 
         scene.Add(box);
@@ -89,13 +89,13 @@ void CornellBoxGlossy(Scene& scene)
     // Right bunny
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(0.7);
-        mat->roughness = ConstantColor::Create(0.05);
-        mat->metallic = ConstantColor::Create(1.0);
-        mat->emissive = ConstantColor::Create(0.0);
+        mat->basecolor = ConstantColor::Create(0.7f);
+        mat->roughness = ConstantColor::Create(0.05f);
+        mat->metallic = ConstantColor::Create(1.0f);
+        mat->emissive = ConstantColor::Create(0.0f);
 
         // Bunny
-        Transform tf{ Point3(0.7, 0.0, -0.3), identity, Vec3(0.3) };
+        Transform tf{ Point3(0.7f, 0.0f, -0.3f), identity, Vec3(0.3f) };
 
         Ref<Model> model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
         model->GetMeshes()[0]->SetMaterial(mat);
@@ -104,7 +104,7 @@ void CornellBoxGlossy(Scene& scene)
 
     // Lights
     {
-        auto tf = Transform{ 0.5, 0.999, -0.5, Quat(pi, x_axis), Vec3(0.25) };
+        auto tf = Transform{ 0.5f, 0.999f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         auto l = CreateRectXZ(tf, light);
 
         scene.AddLight(l);

@@ -31,7 +31,7 @@ inline Spectrum F_Schlick(Spectrum f0, Float cosine_theta)
 inline Float D_GGX(Float NoH, Float alpha2)
 {
     Float b = (NoH * NoH * (alpha2 - 1) + 1);
-    return alpha2 * inv_pi / (b * b + 1e-7);
+    return alpha2 * inv_pi / (b * b + Float(1e-7));
 }
 
 inline Float G1_Smith(Float NoV, Float alpha2)

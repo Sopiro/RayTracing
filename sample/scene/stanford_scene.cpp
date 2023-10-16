@@ -13,17 +13,17 @@ void StanfordScene(Scene& scene)
         mat->roughness = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg");
         mat->normalmap = ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png");
 
-        auto tf = Transform{ zero_vec3, identity, Vec3(8.0) };
-        auto floor = CreateRectXZ(tf, mat, Point2(4.0, 4.0));
+        auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
+        auto floor = CreateRectXZ(tf, mat, Point2(4.0f, 4.0f));
         scene.Add(floor);
     }
 
-    Float scale = 0.3;
-    Float gap = 0.2;
+    Float scale = 0.3f;
+    Float gap = 0.2f;
 
     // Bunny
     {
-        auto tf = Transform{ Vec3(gap * 3.0, 0.0, 0.0), Quat(0.0, y_axis), Vec3(scale) };
+        auto tf = Transform{ Vec3(gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
@@ -33,7 +33,7 @@ void StanfordScene(Scene& scene)
 
     // Lucy
     {
-        auto tf = Transform{ Vec3(gap, 0.0, 0.0), Quat(0.0, y_axis), Vec3(scale) };
+        auto tf = Transform{ Vec3(gap, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
@@ -45,7 +45,7 @@ void StanfordScene(Scene& scene)
 
     // Tyrannosaurus
     {
-        auto tf = Transform{ Vec3(-gap, 0.0, 0.0), Quat(DegToRad(45.0), y_axis), Vec3(scale) };
+        auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
@@ -57,10 +57,10 @@ void StanfordScene(Scene& scene)
 
     // Armadillo
     {
-        auto tf = Transform{ Vec3(-gap * 3.0, 0.0, 0.0), Quat(0.0, y_axis), Vec3(scale) };
+        auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = RandomMicrofacetMaterial();
-        mat->metallic = ConstantColor::Create(Spectrum(1.0));
-        mat->roughness = ConstantColor::Create(Spectrum(0.2));
+        mat->metallic = ConstantColor::Create(Spectrum(1.0f));
+        mat->roughness = ConstantColor::Create(Spectrum(0.2f));
         Material::fallback = mat;
 
         auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
@@ -68,22 +68,22 @@ void StanfordScene(Scene& scene)
     }
 
     {
-        Float w = 0.04;
-        Float h = 0.6;
-        Float cx = 16.0;
-        Float xgap = 0.015;
-        Float xstep = 2.0 * w + xgap;
+        Float w = 0.04f;
+        Float h = 0.6f;
+        Float cx = 16.0f;
+        Float xgap = 0.015f;
+        Float xstep = 2.0f * w + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(3.0));
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(3.0f));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 
-            pos.y = 0.6;
-            pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
-            pos.z = 0.0;
+            pos.y = 0.6f;
+            pos.x = x * xstep - ((cx - 1) * xstep / 2.0f);
+            pos.z = 0.0f;
 
             auto mat = RandomMicrofacetMaterial();
 

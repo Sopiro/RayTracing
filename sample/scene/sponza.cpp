@@ -5,28 +5,28 @@ namespace spt
 
 void Sponza(Scene& scene)
 {
-    // Transform transform{ zero_vec3, Quat(DegToRad(90.0), y_axis), Vec3(0.01) };
+    // Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
     // Ref<Model> sponza = CreateSharedRef<Model>("res/sponza2/sponza.obj", transform);
 
-    Transform transform{ zero_vec3, Quat(DegToRad(90.0), y_axis), Vec3(1.0) };
+    Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
     Ref<Model> sponza = CreateSharedRef<Model>("res/sponza/Sponza.gltf", transform);
 
     scene.Add(sponza);
 
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0));
-    // auto mat = CreateSharedRef<Dielectric>(1.5);
+    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0f));
+    // auto mat = CreateSharedRef<Dielectric>(1.5f);
 
-    Float cx = 8.0;
-    Float cy = 4.0;
-    Float cz = 8.0;
+    Float cx = 8.0f;
+    Float cy = 4.0f;
+    Float cz = 8.0f;
 
-    Float sx = 10.0;
-    Float sy = 10.0;
-    Float sz = 20.0;
+    Float sx = 10.0f;
+    Float sy = 10.0f;
+    Float sz = 20.0f;
 
-    Float xm = -sx / 2.0;
-    Float ym = 0.0;
-    Float zm = -sz / 2.0;
+    Float xm = -sx / 2.0f;
+    Float ym = 0.0f;
+    Float zm = -sz / 2.0f;
 
     // for (int32 z = 0; z < cz; ++z)
     // {
@@ -42,8 +42,8 @@ void Sponza(Scene& scene)
     // }
 
     // {
-    //     auto light2 = CreateSharedRef<DiffuseLight>(Spectrum(20.0));
-    //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.0, 1.5, 0.0), 0.4, light2);
+    //     auto light2 = CreateSharedRef<DiffuseLight>(Spectrum(20.0f));
+    //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.0f, 1.5f, 0.0f), 0.4f, light2);
     //     scene.Add(sphere);
     //     scene.AddLight(sphere);
     // }
@@ -52,8 +52,8 @@ void Sponza(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 
-    Spectrum sky_color(147 / 255.0, 209 / 255.0, 255 / 255.0);
-    scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0, 15.0, -3.0)), Vec3(15.0), 0.02));
+    Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
+    scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
 }
 
 } // namespace spt

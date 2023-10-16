@@ -8,18 +8,18 @@ void CameraScene(Scene& scene)
     // Floor
     {
         auto mat = RandomMicrofacetMaterial();
-        mat->basecolor = ConstantColor::Create(Spectrum(0.5));
-        mat->metallic = ConstantColor::Create(Spectrum(0.0));
-        mat->roughness = ConstantColor::Create(Spectrum(0.01));
+        mat->basecolor = ConstantColor::Create(Spectrum(0.5f));
+        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
+        mat->roughness = ConstantColor::Create(Spectrum(0.01f));
 
-        auto tf = Transform{ zero_vec3, identity, Vec3(8.0) };
+        auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);
         scene.Add(floor);
     }
 
     // Camera
     {
-        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0), y_axis), Vec3(0.11) };
+        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
         auto model = CreateSharedRef<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
 
         scene.Add(model);
@@ -27,25 +27,25 @@ void CameraScene(Scene& scene)
 
     // Lights
     {
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0, 0.9, 0.8) * 3.0);
-        Float w = 0.4;
-        Float h = 1.2;
-        auto tf = Transform{ Point3(1.0, h / 2.0 - 0.01, 0.0), Quat(pi, y_axis), Vec3(1.0, h, w) };
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
+        Float w = 0.4f;
+        Float h = 1.2f;
+        auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };
         auto rect = CreateRectYZ(tf, light);
 
         scene.AddLight(rect);
 
-        tf = Transform{ Point3(0.0, h / 2.0 - 0.01, -1.0), Quat(0.0, y_axis), Vec3(w, h, 1.0) };
+        tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, -1.0f), Quat(0.0f, y_axis), Vec3(w, h, 1.0f) };
         rect = CreateRectXY(tf, light);
 
         scene.AddLight(rect);
 
-        tf = Transform{ Point3(0.0, h / 2.0 - 0.01, 1.0), Quat(pi, y_axis), Vec3(w, h, 1.0) };
+        tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, 1.0f), Quat(pi, y_axis), Vec3(w, h, 1.0f) };
         rect = CreateRectXY(tf, light);
 
         scene.AddLight(rect);
 
-        tf = Transform{ Point3(-1.0, h / 2.0 - 0.01, 0.0), Quat(0.0, y_axis), Vec3(1.0, h, w) };
+        tf = Transform{ Point3(-1.0f, h / 2.0f - 0.01f, 0.0f), Quat(0.0f, y_axis), Vec3(1.0f, h, w) };
         rect = CreateRectYZ(tf, light);
 
         scene.AddLight(rect);

@@ -7,8 +7,8 @@ namespace spt
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 void RandomScene(Scene& scene)
 {
-    auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5, 0.5, 0.5));
-    scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000, ground_material));
+    auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
+    scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000.0f, ground_material));
 
     Srand(1);
 
@@ -17,35 +17,35 @@ void RandomScene(Scene& scene)
         for (int32 b = -11; b < 11; b++)
         {
             auto choose_mat = Rand();
-            Vec3 center(a + 0.9 * Rand(), 0.2, b + 0.9 * Rand());
+            Vec3 center(a + 0.9f * Rand(), 0.2f, b + 0.9f * Rand());
 
-            if ((center - Vec3(4, 0.2, 0)).Length() > 0.9)
+            if ((center - Vec3(4, 0.2f, 0)).Length() > 0.9f)
             {
-                if (choose_mat < 0.9)
+                if (choose_mat < 0.9f)
                 {
                     auto mat = RandomMicrofacetMaterial();
                     mat->roughness = ConstantColor::Create(Rand(0, 1));
                     mat->emissive = ConstantColor::Create(0);
-                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, mat));
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2f, mat));
                 }
                 else
                 {
                     // glass
-                    auto glass = CreateSharedRef<Dielectric>(1.5);
-                    scene.Add(CreateSharedRef<Sphere>(center, 0.2, glass));
+                    auto glass = CreateSharedRef<Dielectric>(1.5f);
+                    scene.Add(CreateSharedRef<Sphere>(center, 0.2f, glass));
                 }
             }
         }
     }
 
-    auto material1 = CreateSharedRef<Dielectric>(1.5);
-    scene.Add(CreateSharedRef<Sphere>(Vec3(0, 1, 0), 1.0, material1));
+    auto material1 = CreateSharedRef<Dielectric>(1.5f);
+    scene.Add(CreateSharedRef<Sphere>(Vec3(0, 1, 0), 1.0f, material1));
 
-    auto material2 = CreateSharedRef<Lambertian>(Spectrum(0.4, 0.2, 0.1));
-    scene.Add(CreateSharedRef<Sphere>(Vec3(-4, 1, 0), 1.0, material2));
+    auto material2 = CreateSharedRef<Lambertian>(Spectrum(0.4f, 0.2f, 0.1f));
+    scene.Add(CreateSharedRef<Sphere>(Vec3(-4, 1, 0), 1.0f, material2));
 
-    auto material3 = CreateSharedRef<Metal>(Spectrum(0.7, 0.6, 0.5), 0.0);
-    scene.Add(CreateSharedRef<Sphere>(Vec3(4, 1, 0), 1.0, material3));
+    auto material3 = CreateSharedRef<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
+    scene.Add(CreateSharedRef<Sphere>(Vec3(4, 1, 0), 1.0f, material3));
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));

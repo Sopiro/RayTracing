@@ -5,17 +5,17 @@ namespace spt
 
 void BVHTest(Scene& scene)
 {
-    auto gray = CreateSharedRef<Lambertian>(Spectrum(0.8, 0.8, 0.8));
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65, .05, .05));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12, .45, .15));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22, .23, .75));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73, .73, .73));
-    auto black = CreateSharedRef<Lambertian>(Spectrum(0.0));
+    auto gray = CreateSharedRef<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
+    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto black = CreateSharedRef<Lambertian>(Spectrum(0.0f));
 
-    Float n = 100.0;
-    Float w = 7.0;
-    Float h = w * 9.0 / 16.0;
-    Float r = 0.05;
+    Float n = 100.0f;
+    Float w = 7.0f;
+    Float h = w * 9.0f / 16.0f;
+    Float r = 0.05f;
 
     for (int32 y = 0; y < n; ++y)
     {

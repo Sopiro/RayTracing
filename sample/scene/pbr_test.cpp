@@ -8,13 +8,13 @@ void PBRTest(Scene& scene)
     // Srand(1234);
 
     // Spheres
-    Float r = 0.3;
-    Float cx = 10.0;
-    Float cz = 7.0;
-    Float xgap = 0.16;
-    Float zgap = 0.14;
-    Float xstep = 2.0 * r + xgap;
-    Float zstep = 2.0 * r + zgap;
+    Float r = 0.3f;
+    Float cx = 10.0f;
+    Float cz = 7.0f;
+    Float xgap = 0.16f;
+    Float zgap = 0.14f;
+    Float xstep = 2.0f * r + xgap;
+    Float zstep = 2.0f * r + zgap;
 
     for (int32 z = 0; z < cz; ++z)
     {
@@ -22,9 +22,9 @@ void PBRTest(Scene& scene)
         {
             Vec3 pos;
 
-            pos.y = 0.0;
-            pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
-            pos.z = z * zstep - ((cz - 1) * zstep / 2.0);
+            pos.y = 0;
+            pos.x = x * xstep - ((cx - 1) * xstep / 2);
+            pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
             auto mat = RandomMicrofacetMaterial();
             scene.Add(CreateSharedRef<Sphere>(pos, r, mat));
@@ -34,13 +34,13 @@ void PBRTest(Scene& scene)
     // Ground
     {
         auto mat = CreateSharedRef<Microfacet>();
-        mat->basecolor = ConstantColor::Create(Spectrum(1.0) * 0.9);
-        mat->metallic = ConstantColor::Create(Spectrum(0.0));
-        mat->roughness = ConstantColor::Create(Spectrum(0.1));
+        mat->basecolor = ConstantColor::Create(Spectrum(1.0f) * 0.9f);
+        mat->metallic = ConstantColor::Create(Spectrum(0.0f));
+        mat->roughness = ConstantColor::Create(Spectrum(0.1f));
         mat->emissive = ConstantColor::Create(Spectrum(0.0));
-        mat->normalmap = ConstantColor::Create(0.5, 0.5, 1.0);
+        mat->normalmap = ConstantColor::Create(0.5f, 0.5f, 1.0f);
 
-        auto tf1 = Transform{ Vec3(0.5, -r, -0.5), identity, Vec3(100.0) };
+        auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
         auto ground = CreateRectXZ(tf1, mat);
 
         scene.Add(ground);
@@ -48,8 +48,8 @@ void PBRTest(Scene& scene)
 
     // Light
     // {
-    //     auto tf = Transform{ Vec3(-4.0, 2.5, 0.0), Quat(DegToRad(-40.0), z_axis), Vec3(1.0, 1.0, 4.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(10.0));
+    //     auto tf = Transform{ Vec3(-4.0f, 2.5f, 0.0f), Quat(DegToRad(-40.0f), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(10.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -57,8 +57,8 @@ void PBRTest(Scene& scene)
     // }
 
     // {
-    //     auto tf = Transform{ Vec3(4.0, 2.5, 0.0), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0, 1.0, 4.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0));
+    //     auto tf = Transform{ Vec3(4.0f, 2.5f, 0.0f), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -66,8 +66,8 @@ void PBRTest(Scene& scene)
     // }
 
     // {
-    //     auto tf = Transform{ Vec3(0.0, 2.5, -4.0), Quat(DegToRad(40), x_axis), Vec3(4.0, 1.0, 1.0) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0));
+    //     auto tf = Transform{ Vec3(0.0f, 2.5f, -4.0f), Quat(DegToRad(40), x_axis), Vec3(4.0f, 1.0f, 1.0f) };
+    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);
@@ -75,25 +75,25 @@ void PBRTest(Scene& scene)
     // }
 
     {
-        Float s = 0.4;
-        Float cx = 10.0;
-        Float xgap = 0.16;
-        Float xstep = 2.0 * s + xgap;
+        Float s = 0.4f;
+        Float cx = 10.0f;
+        Float xgap = 0.16f;
+        Float xstep = 2.0f * s + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(5.0));
+        auto light = CreateSharedRef<DiffuseLight>(Spectrum(5.0f));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
 
-            pos.y = 2.2;
-            pos.x = x * xstep - ((cx - 1) * xstep / 2.0);
-            pos.z = 0.0;
+            pos.y = 2.2f;
+            pos.x = x * xstep - ((cx - 1) * xstep / 2);
+            pos.z = 0.0f;
 
             auto mat = RandomMicrofacetMaterial();
 
-            auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2.0) };
+            auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
             auto rect = CreateRectXZ(tf, light);
 
             scene.AddLight(rect);

@@ -25,7 +25,7 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform
         for (int32 u = 0; u < width; ++u)
         {
             Float up = Float(u) / width;
-            image[u + v * width] = std::fmax(0, sin_theta * l_map->Evaluate(Point2(up, vp)).Luminance());
+            image[u + v * width] = (Float)std::fmax(0, sin_theta * l_map->Evaluate(Point2(up, vp)).Luminance());
         }
     }
 

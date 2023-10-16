@@ -6,7 +6,7 @@ namespace spt
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
 void BistroScene(Scene& scene)
 {
-    Transform tf{ zero_vec3, identity, Vec3(1.0) };
+    Transform tf{ zero_vec3, identity, Vec3(1) };
     Ref<Model> m = CreateSharedRef<Model>("res/bistro/bistro.gltf", tf);
 
     scene.Add(m);

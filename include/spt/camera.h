@@ -18,7 +18,7 @@ public:
            Float aperture,
            Float focus_dist);
 
-    Ray GetRay(Float s, Float t) const;
+    Ray GenerateRay(Float s, Float t) const;
 
     Point3 origin;
     Vec3 dir;
