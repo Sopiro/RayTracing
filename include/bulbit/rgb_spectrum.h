@@ -2,7 +2,7 @@
 
 #include "math.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct RGBSpectrum
@@ -184,4 +184,4 @@ inline Vec3 ToVector(const RGBSpectrum& sp)
     return Vec3(sp.r, sp.g, sp.b);
 }
 
-} // namespace spt
+} // namespace bulbit

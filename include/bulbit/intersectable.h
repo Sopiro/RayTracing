@@ -2,7 +2,7 @@
 
 #include "aabb.h"
 
-namespace spt
+namespace bulbit
 {
 
 using NodeProxy = int32;
@@ -45,4 +45,4 @@ struct Intersection
     } shading;
 };
 
-} // namespace spt
+} // namespace bulbit

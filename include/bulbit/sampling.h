@@ -2,7 +2,7 @@
 
 #include "random.h"
 
-namespace spt
+namespace bulbit
 {
 
 inline Vec3 UniformSampleHemisphere()
@@ -250,4 +250,4 @@ private:
     std::unique_ptr<Distribution1D> marginal;
 };
 
-} // namespace spt
+} // namespace bulbit

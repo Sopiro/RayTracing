@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Inspired by b2GrowableStack in box2d code
@@ -252,4 +252,4 @@ private:
     int32 capacity;
 };
 
-} // namespace spt
+} // namespace bulbit

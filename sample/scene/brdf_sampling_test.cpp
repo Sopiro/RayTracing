@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void BRDFSamplingTest(Scene& scene)
@@ -61,4 +65,4 @@ void BRDFSamplingTest(Scene& scene)
     // std::cout << scene.GetLights().GetCount() << std::endl;
 }
 
-} // namespace spt
+} // namespace bulbit

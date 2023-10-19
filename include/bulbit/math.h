@@ -10,7 +10,7 @@
 
 #include "types.h"
 
-namespace spt
+namespace bulbit
 {
 
 using Float = double;
@@ -1285,4 +1285,4 @@ inline Mat4 Orth(Float left, Float right, Float bottom, Float top, Float zNear, 
 
 // Mat4 functions end
 
-} // namespace spt
+} // namespace bulbit

@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void Sponza(Scene& scene)
@@ -56,4 +60,4 @@ void Sponza(Scene& scene)
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -2,9 +2,9 @@
 
 #include "rgb_spectrum.h"
 
-namespace spt
+namespace bulbit
 {
 
 using Spectrum = RGBSpectrum;
 
-} // namespace spt
+} // namespace bulbit

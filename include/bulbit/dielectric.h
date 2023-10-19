@@ -2,7 +2,7 @@
 
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Dielectric : public Material
@@ -27,4 +27,4 @@ inline Float Dielectric::Reflectance(Float cosine, Float ref_idx)
     return r0 + (1 - r0) * std::pow((1 - cosine), Float(5.0));
 }
 
-} // namespace spt
+} // namespace bulbit

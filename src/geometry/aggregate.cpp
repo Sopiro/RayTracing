@@ -1,6 +1,6 @@
-#include "spt/aggregate.h"
+#include "bulbit/aggregate.h"
 
-namespace spt
+namespace bulbit
 {
 
 bool Aggregate::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
@@ -94,4 +94,4 @@ Float Aggregate::EvaluatePDF(const Ray& ray) const
     return callback.sum / Float(primitives.size());
 }
 
-} // namespace spt
+} // namespace bulbit

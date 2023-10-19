@@ -3,7 +3,7 @@
 #include "brdf.h"
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Microfacet material
@@ -33,4 +33,4 @@ inline Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
     return emissive->Evaluate(is.uv);
 }
 
-} // namespace spt
+} // namespace bulbit

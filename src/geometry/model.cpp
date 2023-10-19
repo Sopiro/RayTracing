@@ -1,11 +1,11 @@
-#include "spt/model.h"
-#include "spt/image_texture.h"
-#include "spt/triangle.h"
-#include "spt/util.h"
+#include "bulbit/model.h"
+#include "bulbit/image_texture.h"
+#include "bulbit/triangle.h"
+#include "bulbit/util.h"
 
 #include <filesystem>
 
-namespace spt
+namespace bulbit
 {
 
 Model::Model(const std::string& filename, const Transform& transform)
@@ -195,4 +195,4 @@ void Model::Load(const std::string& filename, const Transform& transform)
     ProcessAssimpNode(scene->mRootNode, scene, Mat4(transform));
 }
 
-} // namespace spt
+} // namespace bulbit

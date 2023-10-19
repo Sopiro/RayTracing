@@ -4,7 +4,7 @@
 #include "primitive.h"
 #include "ray.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Triangle : public Primitive
@@ -122,4 +122,4 @@ inline Point2 Triangle::GetTexCoord(Float _u, Float _v, Float _w) const
     return uv;
 }
 
-} // namespace spt
+} // namespace bulbit

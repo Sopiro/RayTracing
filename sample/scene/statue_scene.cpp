@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void StatueScene(Scene& scene)
@@ -93,4 +97,4 @@ void StatueScene(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
 }
 
-} // namespace spt
+} // namespace bulbit

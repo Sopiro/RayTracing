@@ -2,7 +2,7 @@
 
 #include "ray.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct AABB
@@ -62,4 +62,4 @@ inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
     return AABB{ min, max };
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -2,7 +2,7 @@
 
 #include "pdf.h"
 
-namespace spt
+namespace bulbit
 {
 
 class MixturePDF : public PDF
@@ -42,4 +42,4 @@ inline Float MixturePDF::Evaluate(const Vec3& wi) const
     return Float(0.5) * (p1->Evaluate(wi) + p2->Evaluate(wi));
 }
 
-} // namespace spt
+} // namespace bulbit

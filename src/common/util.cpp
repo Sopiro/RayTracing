@@ -1,8 +1,8 @@
-#include "spt/util.h"
-#include "spt/mesh.h"
-#include "spt/triangle.h"
+#include "bulbit/util.h"
+#include "bulbit/mesh.h"
+#include "bulbit/triangle.h"
 
-namespace spt
+namespace bulbit
 {
 
 Ref<Microfacet> RandomMicrofacetMaterial()
@@ -140,4 +140,4 @@ Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const Point2& 
     return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
 }
 
-} // namespace spt
+} // namespace bulbit

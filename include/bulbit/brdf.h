@@ -3,7 +3,7 @@
 #include "common.h"
 #include "spectrum.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Functions for microfacet BRDF
@@ -131,4 +131,4 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
     return h;
 }
 
-} // namespace spt
+} // namespace bulbit

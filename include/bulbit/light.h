@@ -3,7 +3,7 @@
 #include "intersectable.h"
 #include "spectrum.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Light
@@ -45,4 +45,4 @@ inline bool Light::IsDeltaLight() const
     return type == Type::point_light || type == Type::directional_light;
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -1,6 +1,6 @@
-#include "spt/scene.h"
+#include "bulbit/scene.h"
 
-namespace spt
+namespace bulbit
 {
 
 bool Scene::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
@@ -64,4 +64,4 @@ bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     return callback.hit_any;
 }
 
-} // namespace spt
+} // namespace bulbit

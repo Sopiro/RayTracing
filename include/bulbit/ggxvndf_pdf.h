@@ -3,7 +3,7 @@
 #include "brdf.h"
 #include "pdf.h"
 
-namespace spt
+namespace bulbit
 {
 
 // GGX visible normal distribution function PDF
@@ -38,4 +38,4 @@ inline GGXVNDFPDF::GGXVNDFPDF(const Vec3& n, const Vec3& wo, Float a, Float t)
 {
 }
 
-} // namespace spt
+} // namespace bulbit

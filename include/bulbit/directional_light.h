@@ -2,7 +2,7 @@
 
 #include "light.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct DirectionalLight : public Light
@@ -24,4 +24,4 @@ inline Float DirectionalLight::EvaluatePDF(const Ray& ray) const
     return Float(0.0);
 }
 
-} // namespace spt
+} // namespace bulbit

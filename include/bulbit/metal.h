@@ -2,7 +2,7 @@
 
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Conductor
@@ -35,4 +35,4 @@ inline bool Metal::Scatter(Interaction* ir, const Intersection& is, const Vec3& 
     return true;
 }
 
-} // namespace spt
+} // namespace bulbit

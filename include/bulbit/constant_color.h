@@ -2,7 +2,7 @@
 
 #include "texture.h"
 
-namespace spt
+namespace bulbit
 {
 
 class ConstantColor : public Texture
@@ -67,4 +67,4 @@ inline Ref<ConstantColor> ConstantColor::Create(Float r, Float g, Float b)
     return Create(Spectrum(r, g, b));
 }
 
-} // namespace spt
+} // namespace bulbit

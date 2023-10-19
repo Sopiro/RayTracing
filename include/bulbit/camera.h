@@ -2,7 +2,7 @@
 
 #include "ray.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Camera
@@ -33,4 +33,4 @@ private:
     Vec3 u, v, w;
 };
 
-} // namespace spt
+} // namespace bulbit

@@ -3,7 +3,7 @@
 #include "intersectable.h"
 #include "isotropic.h"
 
-namespace spt
+namespace bulbit
 {
 
 class ConstantDensityMedium : public Intersectable
@@ -32,4 +32,4 @@ inline void ConstantDensityMedium::GetAABB(AABB* out_aabb) const
     boundary->GetAABB(out_aabb);
 }
 
-} // namespace spt
+} // namespace bulbit

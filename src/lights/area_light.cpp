@@ -1,7 +1,7 @@
-#include "spt/area_light.h"
-#include "spt/material.h"
+#include "bulbit/area_light.h"
+#include "bulbit/material.h"
 
-namespace spt
+namespace bulbit
 {
 
 AreaLight::AreaLight(const Ref<Primitive> prim)
@@ -22,4 +22,4 @@ Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Inters
     return sample.material->Emit(sample, ref2p);
 }
 
-} // namespace spt
+} // namespace bulbit

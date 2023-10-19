@@ -1,6 +1,11 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/metal.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void CornellBox(Scene& scene)
@@ -88,4 +93,4 @@ void CornellBox(Scene& scene)
     // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void PBRTest(Scene& scene)
@@ -103,4 +107,4 @@ void PBRTest(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 }
 
-} // namespace spt
+} // namespace bulbit

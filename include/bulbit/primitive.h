@@ -2,7 +2,7 @@
 
 #include "intersectable.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Represents a geometric primitive
@@ -41,4 +41,4 @@ inline void Primitive::SetFaceNormal(Intersection* is, const Vec3& wi, const Vec
     }
 }
 
-} // namespace spt
+} // namespace bulbit

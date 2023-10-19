@@ -1,7 +1,7 @@
-#include "spt/ggx_pdf.h"
-#include "spt/sampling.h"
+#include "bulbit/ggx_pdf.h"
+#include "bulbit/sampling.h"
 
-namespace spt
+namespace bulbit
 {
 
 Vec3 GGXPDF::Sample() const
@@ -35,4 +35,4 @@ Float GGXPDF::Evaluate(const Vec3& wi) const
     return (1 - t) * diff_w + t * spec_w;
 }
 
-} // namespace spt
+} // namespace bulbit

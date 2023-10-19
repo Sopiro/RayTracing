@@ -2,13 +2,13 @@
 #include <crtdbg.h>
 #endif
 
-#include "spt/spt.h"
+#include "bulbit/bulbit.h"
 
 #include <format>
 #include <omp.h>
 
 // Test scenes
-namespace spt
+namespace bulbit
 {
 
 extern void RandomScene(Scene&);
@@ -17,7 +17,6 @@ extern void CornellBox(Scene&);
 extern void Sponza(Scene&);
 extern void NormalMapping(Scene&);
 extern void PBRTest(Scene&);
-extern void EnvironmentMap(Scene&);
 extern void BRDFSamplingTest(Scene&);
 extern void MISTest(Scene&);
 extern void MISTestWak(Scene&);
@@ -34,7 +33,7 @@ extern void BreakfastRoom(Scene&);
 extern void BistroScene(Scene&);
 extern void SunTempleScene(Scene&);
 
-} // namespace spt
+} // namespace bulbit
 
 int main()
 {
@@ -43,7 +42,7 @@ int main()
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    using namespace spt;
+    using namespace bulbit;
 
     // Float aspect_ratio = 16.0f / 9.0f;
     // Float aspect_ratio = 3.0f / 2.0f;
@@ -165,22 +164,7 @@ int main()
     }
     break;
 
-    case 6: // Environment map test
-    {
-        EnvironmentMap(scene);
-
-        Point3 lookfrom{ 0, 3, 5 };
-        Point3 lookat{ 0, 0, 0 };
-
-        Float dist_to_focus = (lookfrom - lookat).Length();
-        Float aperture = 0;
-        Float vFov = 71;
-
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
-    }
-    break;
-
-    case 7: // BRDF sampling test
+    case 6: // BRDF sampling test
     {
         BRDFSamplingTest(scene);
 
@@ -195,7 +179,7 @@ int main()
     }
     break;
 
-    case 8: // MIS test (original)
+    case 7: // MIS test (original)
     {
         MISTest(scene);
 
@@ -210,7 +194,7 @@ int main()
     }
     break;
 
-    case 9: // MIS test (wakgood)
+    case 8: // MIS test (wakgood)
     {
         MISTestWak(scene);
 
@@ -225,7 +209,7 @@ int main()
     }
     break;
 
-    case 10: // GGXVNDF sampling test
+    case 9: // GGXVNDF sampling test
     {
         GGXVNDFSamplingTest(scene);
 
@@ -240,7 +224,7 @@ int main()
     }
     break;
 
-    case 11: // Lucy
+    case 10: // Lucy
     {
         CornellBoxLucy(scene);
 
@@ -255,7 +239,7 @@ int main()
     }
     break;
 
-    case 12: // Antique camera
+    case 11: // Antique camera
     {
         CameraScene(scene);
 
@@ -270,7 +254,7 @@ int main()
     }
     break;
 
-    case 13: // Stanford models
+    case 12: // Stanford models
     {
         StanfordScene(scene);
 
@@ -285,7 +269,7 @@ int main()
     }
     break;
 
-    case 14: // Statue scene
+    case 13: // Statue scene
     {
         StatueScene(scene);
 
@@ -300,7 +284,7 @@ int main()
     }
     break;
 
-    case 15: // Ship
+    case 14: // Ship
     {
         ShipScene(scene);
 
@@ -315,7 +299,7 @@ int main()
     }
     break;
 
-    case 16: // Constant volume
+    case 15: // Constant volume
     {
         CornellBoxBunnyVolume(scene);
 
@@ -330,7 +314,7 @@ int main()
     }
     break;
 
-    case 17: // Reboot robot scene
+    case 16: // Reboot robot scene
     {
         RebootScene(scene);
 
@@ -345,7 +329,7 @@ int main()
     }
     break;
 
-    case 18: // Glossy cornell box
+    case 17: // Glossy cornell box
     {
         CornellBoxGlossy(scene);
 
@@ -360,7 +344,7 @@ int main()
     }
     break;
 
-    case 19: // Breakfast room
+    case 18: // Breakfast room
     {
         BreakfastRoom(scene);
 
@@ -375,7 +359,7 @@ int main()
     }
     break;
 
-    case 20: // Bistro scene
+    case 19: // Bistro scene
     {
         BistroScene(scene);
 
@@ -390,7 +374,7 @@ int main()
     }
     break;
 
-    case 21: // Sun temple scene
+    case 20: // Sun temple scene
     {
         SunTempleScene(scene);
 
@@ -414,7 +398,7 @@ int main()
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
 
-    // #pragma omp parallel for schedule(dynamic, 1)
+#pragma omp parallel for schedule(dynamic, 1)
     for (int32 y = 0; y < height; ++y)
     {
         if (omp_get_thread_num() == 0)
@@ -422,7 +406,7 @@ int main()
             std::printf("\rScanline: %d / %d", y, height);
         }
 
-#pragma omp parallel for schedule(dynamic, 1)
+        // #pragma omp parallel for schedule(dynamic, 1)
         for (int32 x = 0; x < width; ++x)
         {
             Spectrum samples(0);

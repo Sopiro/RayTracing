@@ -1,11 +1,11 @@
-#include "spt/infinite_area_light.h"
-#include "spt/bitmap.h"
-#include "spt/image_texture.h"
-#include "spt/util.h"
+#include "bulbit/infinite_area_light.h"
+#include "bulbit/bitmap.h"
+#include "bulbit/image_texture.h"
+#include "bulbit/util.h"
 
 #include <memory>
 
-namespace spt
+namespace bulbit
 {
 
 InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform& tf)
@@ -87,4 +87,4 @@ Spectrum InfiniteAreaLight::Emit(const Ray& ray) const
     return l_map->Evaluate(uv);
 }
 
-} // namespace spt
+} // namespace bulbit

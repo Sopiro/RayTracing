@@ -3,7 +3,7 @@
 #include "light.h"
 #include "primitive.h"
 
-namespace spt
+namespace bulbit
 {
 
 class AreaLight : public Light
@@ -30,4 +30,4 @@ inline const Primitive* AreaLight::GetPrimitive() const
     return primitive.get();
 }
 
-} // namespace spt
+} // namespace bulbit

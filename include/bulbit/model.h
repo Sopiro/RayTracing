@@ -3,7 +3,7 @@
 #include "mesh.h"
 #include "transform.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Model
@@ -32,4 +32,4 @@ inline const std::vector<Ref<Mesh>>& Model::GetMeshes()
     return meshes;
 }
 
-} // namespace spt
+} // namespace bulbit

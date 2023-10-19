@@ -3,7 +3,7 @@
 #include "common.h"
 #include "spectrum.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Texture
@@ -13,4 +13,4 @@ public:
     virtual Spectrum Evaluate(const Point2& uv) const = 0;
 };
 
-} // namespace spt
+} // namespace bulbit

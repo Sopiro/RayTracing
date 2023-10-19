@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void BVHTest(Scene& scene)
@@ -36,4 +40,4 @@ void BVHTest(Scene& scene)
     scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
 }
 
-} // namespace spt
+} // namespace bulbit

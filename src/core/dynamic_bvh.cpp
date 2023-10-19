@@ -1,7 +1,7 @@
-#include "spt/dynamic_bvh.h"
-#include "spt/intersectable.h"
+#include "bulbit/dynamic_bvh.h"
+#include "bulbit/intersectable.h"
 
-namespace spt
+namespace bulbit
 {
 
 DynamicBVH::DynamicBVH()
@@ -824,4 +824,4 @@ void DynamicBVH::RayCast(const Ray& r,
     }
 }
 
-} // namespace spt
+} // namespace bulbit

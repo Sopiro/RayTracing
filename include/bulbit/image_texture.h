@@ -4,7 +4,7 @@
 
 #include "texture.h"
 
-namespace spt
+namespace bulbit
 {
 
 enum TexCoordFilter
@@ -46,4 +46,4 @@ inline int32 ImageTexture::GetHeight() const
     return height;
 }
 
-} // namespace spt
+} // namespace bulbit

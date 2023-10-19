@@ -5,7 +5,7 @@
 #include "sampling.h"
 #include "transform.h"
 
-namespace spt
+namespace bulbit
 {
 
 class InfiniteAreaLight : public Light
@@ -24,4 +24,4 @@ private:
     Ref<ImageTexture> l_map; // Environment(Radiance) map
 };
 
-} // namespace spt
+} // namespace bulbit

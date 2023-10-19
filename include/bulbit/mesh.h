@@ -3,7 +3,7 @@
 #include "dynamic_bvh.h"
 #include "microfacet.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct MeshVertex
@@ -65,4 +65,4 @@ inline int32 Mesh::GetTriangleCount() const
     return triangle_count;
 }
 
-} // namespace spt
+} // namespace bulbit

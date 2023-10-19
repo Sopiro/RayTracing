@@ -1,10 +1,10 @@
-#include "spt/infinite_area_light.h"
-#include "spt/light.h"
-#include "spt/pdf.h"
-#include "spt/scene.h"
-#include "spt/util.h"
+#include "bulbit/infinite_area_light.h"
+#include "bulbit/light.h"
+#include "bulbit/pdf.h"
+#include "bulbit/scene.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
@@ -173,4 +173,4 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
     return radiance;
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void CornellBoxLucy(Scene& scene)
@@ -59,4 +63,4 @@ void CornellBoxLucy(Scene& scene)
     }
 }
 
-} // namespace spt
+} // namespace bulbit

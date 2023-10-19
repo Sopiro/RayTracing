@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 // https://casual-effects.com/data/
@@ -24,4 +28,4 @@ void BreakfastRoom(Scene& scene)
     // scene.AddLight(l);
 }
 
-} // namespace spt
+} // namespace bulbit

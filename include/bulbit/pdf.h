@@ -3,7 +3,7 @@
 #include "intersectable.h"
 #include "onb.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Directinal PDF
@@ -19,4 +19,4 @@ public:
     virtual Float Evaluate(const Vec3& wi) const = 0;
 };
 
-} // namespace spt
+} // namespace bulbit

@@ -2,7 +2,7 @@
 
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Isotropic : public Material
@@ -36,4 +36,4 @@ inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Ve
     return true;
 }
 
-} // namespace spt
+} // namespace bulbit

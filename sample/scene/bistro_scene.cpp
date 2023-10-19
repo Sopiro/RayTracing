@@ -1,6 +1,6 @@
-#include "spt/spt.h"
+#include "bulbit/scene.h"
 
-namespace spt
+namespace bulbit
 {
 
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
@@ -22,4 +22,4 @@ void BistroScene(Scene& scene)
     //     0.02));
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -4,7 +4,7 @@
 #include "model.h"
 #include "triangle.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Represents aggregate primitive
@@ -118,4 +118,4 @@ inline void Aggregate::Rebuild()
     bvh.Rebuild();
 }
 
-} // namespace spt
+} // namespace bulbit

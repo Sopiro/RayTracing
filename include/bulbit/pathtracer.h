@@ -2,10 +2,10 @@
 
 #include "scene.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Unidirectional path tracer
 Spectrum PathTrace(const Scene& scene, Ray primary_ray, int32 max_bounces);
 
-} // namespace spt
+} // namespace bulbit

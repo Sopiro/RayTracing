@@ -5,7 +5,7 @@
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
-namespace spt
+namespace bulbit
 {
 
 class Bitmap
@@ -62,4 +62,4 @@ inline void Bitmap::WriteToFile(const char* filename) const
     stbi_write_jpg(filename, width, height, color_channels, pixels, 100);
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -3,7 +3,7 @@
 #include "pdf.h"
 #include "sampling.h"
 
-namespace spt
+namespace bulbit
 {
 
 class CosinePDF : public PDF
@@ -34,4 +34,4 @@ inline Float CosinePDF::Evaluate(const Vec3& wi) const
     return cosine <= 0 ? 0 : cosine * inv_pi;
 }
 
-} // namespace spt
+} // namespace bulbit

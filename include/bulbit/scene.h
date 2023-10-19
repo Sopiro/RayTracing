@@ -1,16 +1,17 @@
 #pragma once
 
 #include "aggregate.h"
-#include "area_light.h"
 #include "constant_color.h"
-#include "directional_light.h"
 #include "image_texture.h"
-#include "infinite_area_light.h"
 #include "intersectable.h"
 #include "model.h"
+
+#include "area_light.h"
+#include "directional_light.h"
+#include "infinite_area_light.h"
 #include "point_light.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Scene : public Intersectable
@@ -137,4 +138,4 @@ inline void Scene::Rebuild()
     bvh.Rebuild();
 }
 
-} // namespace spt
+} // namespace bulbit

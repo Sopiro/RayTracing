@@ -1,9 +1,9 @@
-#include "spt/ggxvndf_pdf.h"
-#include "spt/sampling.h"
+#include "bulbit/ggxvndf_pdf.h"
+#include "bulbit/sampling.h"
 
 #define SPHERICAL_CAPS_VNDF_SAMPLING 1
 
-namespace spt
+namespace bulbit
 {
 
 Vec3 GGXVNDFPDF::Sample() const
@@ -43,4 +43,4 @@ Float GGXVNDFPDF::Evaluate(const Vec3& wi) const
     return (1 - t) * diff_w + t * spec_w;
 }
 
-} // namespace spt
+} // namespace bulbit

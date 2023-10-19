@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct Ray
@@ -30,4 +30,4 @@ inline Point3 Ray::At(Float t) const
     return o + d * t;
 }
 
-} // namespace spt
+} // namespace bulbit

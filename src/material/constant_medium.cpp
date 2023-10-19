@@ -1,6 +1,6 @@
-#include "spt/constant_medium.h"
+#include "bulbit/constant_medium.h"
 
-namespace spt
+namespace bulbit
 {
 
 ConstantDensityMedium::ConstantDensityMedium(const Ref<Intersectable> boundary_object, Float density, const Ref<Texture> albedo)
@@ -66,4 +66,4 @@ bool ConstantDensityMedium::Intersect(Intersection* is, const Ray& ray, Float t_
     return true;
 }
 
-} // namespace spt
+} // namespace bulbit

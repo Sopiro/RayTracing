@@ -1,6 +1,10 @@
-#include "spt/spt.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 // https://developer.nvidia.com/ue4-sun-temple
@@ -29,4 +33,4 @@ void SunTempleScene(Scene& scene)
     scene.AddLight(CreateSharedRef<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f));
 }
 
-} // namespace spt
+} // namespace bulbit

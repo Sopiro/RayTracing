@@ -1,6 +1,12 @@
-#include "spt/spt.h"
+#include "bulbit/dielectric.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/metal.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 // The final scene of Ray Tracing in One Weekend
@@ -60,4 +66,4 @@ void RandomScene(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/earthmap.jpg"));
 }
 
-} // namespace spt
+} // namespace bulbit

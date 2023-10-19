@@ -2,7 +2,7 @@
 
 #include "math.h"
 
-namespace spt
+namespace bulbit
 {
 
 // https://www.pcg-random.org/
@@ -56,4 +56,4 @@ inline Vec3 RandVec3(Float min, Float max)
     return Vec3(Rand(min, max), Rand(min, max), Rand(min, max));
 }
 
-} // namespace spt
+} // namespace bulbit

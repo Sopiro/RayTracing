@@ -1,6 +1,6 @@
-#include "spt/dielectric.h"
+#include "bulbit/dielectric.h"
 
-namespace spt
+namespace bulbit
 {
 
 Dielectric::Dielectric(Float index_of_refraction)
@@ -35,4 +35,4 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     return true;
 }
 
-} // namespace spt
+} // namespace bulbit

@@ -1,6 +1,6 @@
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 class DiffuseLight : public Material
@@ -50,4 +50,4 @@ inline bool DiffuseLight::Scatter(Interaction* ir, const Intersection& is, const
     return false;
 }
 
-} // namespace spt
+} // namespace bulbit

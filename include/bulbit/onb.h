@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Orthonormal basis
@@ -58,4 +58,4 @@ inline void ONB::BuildFromW(const Vec3& n)
     v = Cross(w, u);
 }
 
-} // namespace spt
+} // namespace bulbit

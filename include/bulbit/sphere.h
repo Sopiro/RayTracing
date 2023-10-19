@@ -3,7 +3,7 @@
 #include "primitive.h"
 #include "ray.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Sphere : public Primitive
@@ -79,4 +79,4 @@ inline Point2 Sphere::ComputeTexCoord(const Vec3& v)
     return Point2(phi * inv_two_pi, 1 - theta * inv_pi);
 }
 
-} // namespace spt
+} // namespace bulbit

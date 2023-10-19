@@ -1,7 +1,7 @@
-#include "spt/microfacet.h"
-#include "spt/util.h"
+#include "bulbit/microfacet.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 Microfacet::Microfacet(const Ref<Texture> _basecolor,
@@ -96,4 +96,4 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     return (f_d + f_s) * NoL;
 }
 
-} // namespace spt
+} // namespace bulbit

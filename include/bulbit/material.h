@@ -8,7 +8,7 @@
 #include "constant_color.h"
 #include "ray.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct Intersection;
@@ -71,4 +71,4 @@ inline Spectrum Material::Evaluate(const Intersection& is, const Vec3& wi, const
     return RGBSpectrum::black;
 }
 
-} // namespace spt
+} // namespace bulbit

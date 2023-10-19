@@ -1,6 +1,6 @@
-#include "spt/spt.h"
+#include "bulbit/bulbit.h"
 
-namespace spt
+namespace bulbit
 {
 
 void NormalMapping(Scene& scene)
@@ -22,4 +22,4 @@ void NormalMapping(Scene& scene)
     // scene.SetEnvironmentMap(ConstantColor::Create(zero_vec3));
 }
 
-} // namespace spt
+} // namespace bulbit

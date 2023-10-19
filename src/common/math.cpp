@@ -1,7 +1,7 @@
-#include "spt/math.h"
-#include "spt/transform.h"
+#include "bulbit/math.h"
+#include "bulbit/transform.h"
 
-namespace spt
+namespace bulbit
 {
 
 Mat3::Mat3(const Quat& q)
@@ -268,4 +268,4 @@ Quat::Quat(const Vec3& front, const Vec3& up)
     *this = Quat(rotation);
 }
 
-} // namespace spt
+} // namespace bulbit

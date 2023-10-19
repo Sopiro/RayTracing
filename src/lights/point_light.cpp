@@ -1,6 +1,6 @@
-#include "spt/point_light.h"
+#include "bulbit/point_light.h"
 
-namespace spt
+namespace bulbit
 {
 
 PointLight::PointLight(const Point3& _position, const Spectrum& _intensity)
@@ -22,4 +22,4 @@ Spectrum PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Inter
     return intensity / (distance * distance);
 }
 
-} // namespace spt
+} // namespace bulbit

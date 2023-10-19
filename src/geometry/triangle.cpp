@@ -1,6 +1,6 @@
-#include "spt/triangle.h"
+#include "bulbit/triangle.h"
 
-namespace spt
+namespace bulbit
 {
 
 // Möller-Trumbore algorithm
@@ -199,4 +199,4 @@ void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point
     sample->material = GetMaterial();
 }
 
-} // namespace spt
+} // namespace bulbit

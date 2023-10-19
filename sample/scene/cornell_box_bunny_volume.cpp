@@ -1,6 +1,12 @@
-#include "spt/spt.h"
+#include "bulbit/constant_medium.h"
+#include "bulbit/dielectric.h"
+#include "bulbit/diffuse_light.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/scene.h"
+#include "bulbit/sphere.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 void CornellBoxBunnyVolume(Scene& scene)
@@ -67,4 +73,4 @@ void CornellBoxBunnyVolume(Scene& scene)
     }
 }
 
-} // namespace spt
+} // namespace bulbit

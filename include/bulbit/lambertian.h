@@ -3,7 +3,7 @@
 #include "cosine_pdf.h"
 #include "material.h"
 
-namespace spt
+namespace bulbit
 {
 
 class Lambertian : public Material
@@ -43,4 +43,4 @@ inline Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, con
     return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
 }
 
-} // namespace spt
+} // namespace bulbit

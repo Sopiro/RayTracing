@@ -2,7 +2,7 @@
 
 #include "math.h"
 
-namespace spt
+namespace bulbit
 {
 
 struct Transform
@@ -124,4 +124,4 @@ inline Transform& Transform::operator*=(const Transform& other)
     return *this;
 }
 
-} // namespace spt
+} // namespace bulbit

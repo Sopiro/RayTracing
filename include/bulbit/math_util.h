@@ -3,7 +3,7 @@
 #include "math.h"
 #include "random.h"
 
-namespace spt
+namespace bulbit
 {
 
 constexpr Vec2 zero_vec2{ Float(0.0), Float(0.0) };
@@ -155,4 +155,4 @@ inline int32 FindInterval(int32 size, const Predicate& pred)
     return Clamp(first - 1, 0, size - 2);
 }
 
-} // namespace spt
+} // namespace bulbit

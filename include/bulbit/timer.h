@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace spt
+namespace bulbit
 {
 
 class Timer
@@ -56,4 +56,4 @@ inline double Timer::Get()
     }
 }
 
-} // namespace spt
+} // namespace bulbit

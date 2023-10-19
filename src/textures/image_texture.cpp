@@ -5,9 +5,9 @@
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
-#include "spt/image_texture.h"
+#include "bulbit/image_texture.h"
 
-namespace spt
+namespace bulbit
 {
 
 Ref<ImageTexture> ImageTexture::Create(const std::string& filename, bool srgb)
@@ -126,4 +126,4 @@ void ImageTexture::FilterTexCoord(int32* u, int32* v) const
     }
 }
 
-} // namespace spt
+} // namespace bulbit

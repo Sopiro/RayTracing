@@ -4,7 +4,7 @@
 #include "mesh.h"
 #include "transform.h"
 
-namespace spt
+namespace bulbit
 {
 
 Ref<Microfacet> RandomMicrofacetMaterial();
@@ -65,4 +65,4 @@ inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
     // clang-format on
 }
 
-} // namespace spt
+} // namespace bulbit

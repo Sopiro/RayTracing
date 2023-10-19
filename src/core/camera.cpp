@@ -1,7 +1,7 @@
-#include "spt/camera.h"
-#include "spt/sampling.h"
+#include "bulbit/camera.h"
+#include "bulbit/sampling.h"
 
-namespace spt
+namespace bulbit
 {
 
 Camera::Camera(const Point3& look_from,
@@ -40,4 +40,4 @@ Ray Camera::GenerateRay(Float s, Float t) const
     return Ray{ camera_center, Normalize(pixel_center - camera_center) };
 }
 
-} // namespace spt
+} // namespace bulbit

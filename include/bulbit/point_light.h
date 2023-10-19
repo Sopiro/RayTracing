@@ -2,7 +2,7 @@
 
 #include "light.h"
 
-namespace spt
+namespace bulbit
 {
 
 class PointLight : public Light
@@ -23,4 +23,4 @@ inline Float PointLight::EvaluatePDF(const Ray& ray) const
     return Float(0.0);
 }
 
-} // namespace spt
+} // namespace bulbit

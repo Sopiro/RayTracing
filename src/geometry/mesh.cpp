@@ -1,10 +1,10 @@
-#include "spt/mesh.h"
-#include "spt/lambertian.h"
-#include "spt/triangle.h"
+#include "bulbit/mesh.h"
+#include "bulbit/lambertian.h"
+#include "bulbit/triangle.h"
 
-#include "spt/util.h"
+#include "bulbit/util.h"
 
-namespace spt
+namespace bulbit
 {
 
 Mesh::Mesh(std::vector<Point3> _positions,
@@ -70,4 +70,4 @@ Mesh::Mesh(const std::vector<MeshVertex>& vertices, std::vector<int32> _indices,
     triangle_count = int32(indices.size() / 3);
 }
 
-} // namespace spt
+} // namespace bulbit

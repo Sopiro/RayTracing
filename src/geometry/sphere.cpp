@@ -1,8 +1,8 @@
-#include "spt/sphere.h"
-#include "spt/onb.h"
-#include "spt/sampling.h"
+#include "bulbit/sphere.h"
+#include "bulbit/onb.h"
+#include "bulbit/sampling.h"
 
-namespace spt
+namespace bulbit
 {
 
 bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
@@ -131,4 +131,4 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
     sample->material = GetMaterial();
 }
 
-} // namespace spt
+} // namespace bulbit

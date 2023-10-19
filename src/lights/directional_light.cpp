@@ -1,7 +1,7 @@
-#include "spt/directional_light.h"
-#include "spt/sampling.h"
+#include "bulbit/directional_light.h"
+#include "bulbit/sampling.h"
 
-namespace spt
+namespace bulbit
 {
 
 DirectionalLight::DirectionalLight(const Vec3& _dir, const Spectrum& _intensity, Float _radius)
@@ -21,4 +21,4 @@ Spectrum DirectionalLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const
     return intensity;
 }
 
-} // namespace spt
+} // namespace bulbit

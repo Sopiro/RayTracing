@@ -3,7 +3,7 @@
 #include "common.h"
 #include "spectrum.h"
 
-namespace spt
+namespace bulbit
 {
 
 inline Spectrum ToLinear(const Spectrum& color, Float gamma = Float(2.2))
@@ -58,4 +58,4 @@ inline Spectrum Tonemap_FilmicHejl2015(const Spectrum& hdr, Float whitePt)
     return Spectrum(vf.x / vf.w, vf.y / vf.w, vf.z / vf.w); // white point correction
 }
 
-} // namespace spt
+} // namespace bulbit

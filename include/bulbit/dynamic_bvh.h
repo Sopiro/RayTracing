@@ -4,7 +4,7 @@
 #include "growable_array.h"
 #include "intersectable.h"
 
-namespace spt
+namespace bulbit
 {
 
 constexpr Vec3 aabb_margin{ Float(0.0) };
@@ -318,4 +318,4 @@ inline Float DynamicBVH::SAH(const AABB& aabb)
 #endif
 }
 
-} // namespace spt
+} // namespace bulbit

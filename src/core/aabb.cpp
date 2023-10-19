@@ -1,6 +1,6 @@
-#include "spt/aabb.h"
+#include "bulbit/aabb.h"
 
-namespace spt
+namespace bulbit
 {
 
 bool AABB::Intersect(const Ray& ray, Float t_min, Float t_max) const
@@ -30,4 +30,4 @@ bool AABB::Intersect(const Ray& ray, Float t_min, Float t_max) const
     return true;
 }
 
-} // namespace spt
+} // namespace bulbit
