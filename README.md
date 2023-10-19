@@ -1,6 +1,6 @@
-# Path Tracer
+# Bulbit
 
-This is a physically based CPU path tracer written in C++
+This is a physically based CPU ray tracer written in C++
 
 ## Features
 - Unidirectional path tracing
@@ -18,7 +18,7 @@ This is a physically based CPU path tracer written in C++
 ## Building
 - Install [CMake](https://cmake.org/install/)
 - Ensure CMake is in the system `PATH`
-- Clone the repository `git clone --recursive https://github.com/Sopiro/PathTracer`
+- Clone the repository `git clone --recursive https://github.com/Sopiro/Bulbit`
 - Run CMake build script depend on your system
   - Visual Studio: Run `build.bat`
   - Otherwise: Run `build.sh`
