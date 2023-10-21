@@ -1,11 +1,21 @@
 #pragma once
 
-#include "scene.h"
+#include "integrator.h"
 
 namespace bulbit
 {
 
-// Unidirectional path tracer
-Spectrum PathTrace(const Scene& scene, Ray primary_ray, int32 max_bounces);
+class PathTracer : public Integrator
+{
+public:
+    PathTracer(int32 max_bounces, Float russian_roulette_probability = Float(0.95));
+    virtual ~PathTracer() = default;
+
+    virtual Spectrum Li(const Scene& scene, const Ray& ray) const override;
+
+private:
+    int32 max_bounces;
+    Float rr_probability;
+};
 
 } // namespace bulbit

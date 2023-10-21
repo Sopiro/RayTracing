@@ -1,3 +1,4 @@
+#include "bulbit/pathtracer.h"
 #include "bulbit/infinite_area_light.h"
 #include "bulbit/light.h"
 #include "bulbit/pdf.h"
@@ -7,10 +8,17 @@
 namespace bulbit
 {
 
-Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
+PathTracer::PathTracer(int32 bounces, Float rr)
+    : max_bounces{ bounces }
+    , rr_probability{ rr }
+{
+}
+
+Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
 {
     Spectrum radiance(0), throughput(1);
     bool was_specular_bounce = false;
+    Ray ray = primary_ray;
 
     for (int32 bounce = 0;; ++bounce)
     {
@@ -55,6 +63,7 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
             continue;
         }
 
+        // BSDF
         const PDF* pdf = ir.GetScatteringPDF();
 
         radiance += throughput * mat->Emit(is, ray.d);
@@ -160,7 +169,7 @@ Spectrum PathTrace(const Scene& scene, Ray ray, int32 max_bounces)
         const int32 min_bounces = 3;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(Float(0.95), throughput.Luminance());
+            Float rr = std::fmin(rr_probability, throughput.Luminance());
             if (Rand() > rr)
             {
                 break;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "assert.h"
 #include "math.h"
 
 namespace bulbit
@@ -14,6 +15,7 @@ struct RGBSpectrum
         , g{ s }
         , b{ s }
     {
+        assert(!IsNullish());
     }
 
     constexpr RGBSpectrum(Float red, Float green, Float blue)
@@ -21,6 +23,7 @@ struct RGBSpectrum
         , g{ green }
         , b{ blue }
     {
+        assert(!IsNullish());
     }
 
     constexpr RGBSpectrum(const Vec3& rgb)
@@ -28,6 +31,7 @@ struct RGBSpectrum
         , g{ rgb.y }
         , b{ rgb.z }
     {
+        assert(!IsNullish());
     }
 
     Float operator[](int32 i) const

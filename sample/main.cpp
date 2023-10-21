@@ -394,6 +394,8 @@ int main()
         break;
     }
 
+    PathTracer pt(max_bounces);
+
     timer.Mark();
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
@@ -417,10 +419,10 @@ int main()
                 Float v = (y + Rand()) / (height - 1);
 
                 Ray ray = camera.GenerateRay(u, v);
-                samples += PathTrace(scene, ray, max_bounces);
+                samples += pt.Li(scene, ray);
             }
 
-            if (IsNullish(samples))
+            if (samples.IsNullish())
             {
                 std::cout << "null" << std::endl;
             }
