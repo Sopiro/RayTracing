@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-#include "camera.h"
+#include "perspective_camera.h"
 #include "scene.h"
 
 #include "postprocess.h"

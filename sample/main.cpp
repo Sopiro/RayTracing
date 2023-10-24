@@ -56,7 +56,7 @@ int main()
     Bitmap bitmap{ width, height };
 
     Scene scene;
-    Camera camera;
+    std::unique_ptr<Camera> camera;
 
     Timer timer;
 
@@ -73,7 +73,7 @@ int main()
         Float aperture = 0.1f;
         Float vFov = 20;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -88,7 +88,7 @@ int main()
         Float aperture = 0.0f;
         Float vFov = 71.f;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -103,7 +103,7 @@ int main()
         Float aperture = 0.0f;
         Float vFov = 35.0f;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -127,7 +127,7 @@ int main()
         Float aperture = 0;
         Float vFov = 71;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -145,7 +145,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -160,7 +160,7 @@ int main()
         Float aperture = 0;
         Float vFov = 71;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -175,7 +175,7 @@ int main()
         Float aperture = 0;
         Float vFov = 45;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -190,7 +190,7 @@ int main()
         Float aperture = 0;
         Float vFov = 28;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -205,7 +205,7 @@ int main()
         Float aperture = 0;
         Float vFov = 28;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -220,7 +220,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -235,7 +235,7 @@ int main()
         Float aperture = 0;
         Float vFov = 45;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -250,7 +250,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -265,7 +265,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -280,7 +280,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -295,7 +295,7 @@ int main()
         Float aperture = 0;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -310,7 +310,7 @@ int main()
         Float aperture = 0;
         Float vFov = 45;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -325,7 +325,7 @@ int main()
         Float aperture = 0.02f;
         Float vFov = 30;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -340,7 +340,7 @@ int main()
         Float aperture = 0;
         Float vFov = 45;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -355,7 +355,7 @@ int main()
         Float aperture = 0;
         Float vFov = 71;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -370,7 +370,7 @@ int main()
         Float aperture = 0;
         Float vFov = 54;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -385,7 +385,7 @@ int main()
         Float aperture = 0;
         Float vFov = 54;
 
-        camera = Camera{ lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus };
+        camera = std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
     }
     break;
 
@@ -415,11 +415,13 @@ int main()
 
             for (size_t s = 0; s < samples_per_pixel; ++s)
             {
-                Float u = (x + Rand()) / (width - 1);
-                Float v = (y + Rand()) / (height - 1);
+                Point2 film{ (x + Rand()) / (width - 1), (y + Rand()) / (height - 1) };
+                Point2 aperture{ Rand(), Rand() };
 
-                Ray ray = camera.GenerateRay(u, v);
-                samples += pt.Li(scene, ray);
+                Ray ray;
+                Float weight = camera->SampleRay(&ray, film, aperture);
+
+                samples += weight * pt.Li(scene, ray);
             }
 
             if (samples.IsNullish())

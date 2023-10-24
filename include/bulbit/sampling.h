@@ -87,13 +87,10 @@ inline Vec3 RandomInUnitSphere()
 #endif
 }
 
-inline Vec3 UniformSampleUnitDiskXY()
+inline Vec3 UniformSampleUnitDiskXY(const Point2& u)
 {
-    Float u1 = Rand();
-    Float u2 = Rand();
-
-    Float r = std::sqrt(u1);
-    Float theta = two_pi * u2;
+    Float r = std::sqrt(u.x);
+    Float theta = two_pi * u.y;
     return Vec3(r * std::cos(theta), r * std::sin(theta), Float(0.0));
 }
 

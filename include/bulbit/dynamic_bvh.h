@@ -7,8 +7,8 @@
 namespace bulbit
 {
 
-constexpr Vec3 aabb_margin{ Float(0.0) };
-constexpr Float aabb_multiplier{ Float(1.0) };
+constexpr Vec3 aabb_margin{ 0 };
+constexpr Float aabb_multiplier{ 1 };
 
 class Intersectable;
 
