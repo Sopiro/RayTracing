@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(spt LANGUAGES CXX VERSION 0.0.1)
+project(bulbit LANGUAGES CXX VERSION 0.0.1)
 
 option(SPT_BUILD_SAMPLES "Build samples" ON)
 
