@@ -16,17 +16,17 @@ Mat3::Mat3(const Quat& q)
     Float wy = q.w * q.y;
     Float wz = q.w * q.z;
 
-    ex.x = Float(1) - Float(2) * (yy + zz);
-    ex.y = Float(2) * (xy + wz);
-    ex.z = Float(2) * (xz - wy);
+    ex.x = 1 - 2 * (yy + zz);
+    ex.y = 2 * (xy + wz);
+    ex.z = 2 * (xz - wy);
 
-    ey.x = Float(2) * (xy - wz);
-    ey.y = Float(1) - Float(2) * (xx + zz);
-    ey.z = Float(2) * (yz + wx);
+    ey.x = 2 * (xy - wz);
+    ey.y = 1 - 2 * (xx + zz);
+    ey.z = 2 * (yz + wx);
 
-    ez.x = Float(2) * (xz + wy);
-    ez.y = Float(2) * (yz - wx);
-    ez.z = Float(1) - Float(2) * (xx + yy);
+    ez.x = 2 * (xz + wy);
+    ez.y = 2 * (yz - wx);
+    ez.z = 1 - 2 * (xx + yy);
 }
 
 Mat3 Mat3::GetInverse() const
@@ -37,7 +37,7 @@ Mat3 Mat3::GetInverse() const
 
     if (det != 0)
     {
-        det = Float(1.0) / det;
+        det = 1 / det;
     }
 
     t.ex.x = (ey.y * ez.z - ey.z * ez.y) * det;
@@ -55,7 +55,7 @@ Mat3 Mat3::GetInverse() const
 
 Mat3 Mat3::Scale(Float x, Float y)
 {
-    Mat3 t{ Float(1.0) };
+    Mat3 t{ identity };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -81,7 +81,7 @@ Mat3 Mat3::Rotate(Float z)
 
 Mat3 Mat3::Translate(Float x, Float y)
 {
-    Mat3 t{ Float(1.0) };
+    Mat3 t{ identity };
 
     t.ez.x = x;
     t.ez.y = y;
@@ -91,7 +91,7 @@ Mat3 Mat3::Translate(Float x, Float y)
 
 Mat3 Mat3::Translate(const Vec2& v)
 {
-    Mat3 t{ Float(1.0) };
+    Mat3 t{ identity };
 
     t.ez.x = v.x;
     t.ez.y = v.y;
@@ -109,7 +109,7 @@ Mat4::Mat4(const Transform& t)
 
 Mat4 Mat4::Scale(Float x, Float y, Float z)
 {
-    Mat4 t{ Float(1.0) };
+    Mat4 t{ identity };
 
     t.ex.x = x;
     t.ey.y = y;
@@ -154,7 +154,7 @@ Mat4 Mat4::Rotate(Float x, Float y, Float z)
 
 Mat4 Mat4::Translate(Float x, Float y, Float z)
 {
-    Mat4 t{ Float(1.0) };
+    Mat4 t{ identity };
 
     t.ew.x = x;
     t.ew.y = y;
@@ -165,7 +165,7 @@ Mat4 Mat4::Translate(Float x, Float y, Float z)
 
 Mat4 Mat4::Translate(const Vec3& v)
 {
-    Mat4 t{ Float(1.0) };
+    Mat4 t{ identity };
 
     t.ew.x = v.x;
     t.ew.y = v.y;
@@ -198,9 +198,9 @@ Mat4 Mat4::GetInverse()
     Float det = ex.x * (ey.y * a2323 - ey.z * a1323 + ey.w * a1223) - ex.y * (ey.x * a2323 - ey.z * a0323 + ey.w * a0223) +
                 ex.z * (ey.x * a1323 - ey.y * a0323 + ey.w * a0123) - ex.w * (ey.x * a1223 - ey.y * a0223 + ey.z * a0123);
 
-    if (det != 0.0)
+    if (det != 0)
     {
-        det = Float(1.0) / det;
+        det = 1 / det;
     }
 
     Mat4 t;
@@ -228,16 +228,16 @@ Mat4 Mat4::GetInverse()
 // https://math.stackexchange.com/questions/893984/conversion-of-rotation-matrix-to-quaternion
 Quat::Quat(const Mat3& m)
 {
-    if (m.ez.z < Float(0))
+    if (m.ez.z < 0)
     {
         if (m.ex.x > m.ey.y)
         {
-            Float t = Float(1.0) + m.ex.x - m.ey.y - m.ez.z;
+            Float t = 1 + m.ex.x - m.ey.y - m.ez.z;
             *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Float(0.5) / std::sqrt(t));
         }
         else
         {
-            Float t = Float(1.0) - m.ex.x + m.ey.y - m.ez.z;
+            Float t = 1 - m.ex.x + m.ey.y - m.ez.z;
             *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Float(0.5) / std::sqrt(t));
         }
     }
@@ -245,12 +245,12 @@ Quat::Quat(const Mat3& m)
     {
         if (m.ex.x < -m.ey.y)
         {
-            Float t = Float(1.0) - m.ex.x - m.ey.y + m.ez.z;
+            Float t = 1 - m.ex.x - m.ey.y + m.ez.z;
             *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Float(0.5) / std::sqrt(t));
         }
         else
         {
-            Float t = Float(1.0) + m.ex.x + m.ey.y + m.ez.z;
+            Float t = 1 + m.ex.x + m.ey.y + m.ez.z;
             *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Float(0.5) / std::sqrt(t));
         }
     }

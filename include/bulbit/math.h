@@ -61,8 +61,8 @@ struct Vec2
 
     void SetZero()
     {
-        x = Float(0.0);
-        y = Float(0.0);
+        x = 0;
+        y = 0;
     }
 
     void Set(Float _x, Float _y)
@@ -124,7 +124,7 @@ struct Vec2
 
     void operator/=(Float s)
     {
-        operator*=(Float(1.0) / s);
+        operator*=(1 / s);
     }
 
     void Negate()
@@ -148,10 +148,10 @@ struct Vec2
         Float length = Length();
         if (length < epsilon)
         {
-            return Float(0.0);
+            return 0;
         }
 
-        Float invLength = Float(1.0) / length;
+        Float invLength = 1 / length;
         x *= invLength;
         y *= invLength;
 
@@ -194,15 +194,15 @@ struct Vec3
     Vec3(const Vec2& _v)
         : x{ _v.x }
         , y{ _v.y }
-        , z{ Float(0.0) }
+        , z{ 0 }
     {
     }
 
     void SetZero()
     {
-        x = Float(0.0);
-        y = Float(0.0);
-        z = Float(0.0);
+        x = 0;
+        y = 0;
+        z = 0;
     }
 
     void Set(Float _x, Float _y, Float _z)
@@ -271,7 +271,7 @@ struct Vec3
 
     void operator/=(Float s)
     {
-        operator*=(Float(1.0) / s);
+        operator*=(1 / s);
     }
 
     void Negate()
@@ -296,10 +296,10 @@ struct Vec3
         Float length = Length();
         if (length < epsilon)
         {
-            return Float(0.0);
+            return 0;
         }
 
-        Float invLength = Float(1.0) / length;
+        Float invLength = 1 / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -353,10 +353,10 @@ struct Vec4
 
     void SetZero()
     {
-        x = Float(0.0);
-        y = Float(0.0);
-        z = Float(0.0);
-        w = Float(0.0);
+        x = 0;
+        y = 0;
+        z = 0;
+        w = 0;
     }
 
     void Set(Float _x, Float _y, Float _z, Float _w)
@@ -422,7 +422,7 @@ struct Vec4
 
     void operator/=(Float s)
     {
-        operator*=(Float(1.0) / s);
+        operator*=(1 / s);
     }
 
     Float operator[](int32 i) const
@@ -458,10 +458,10 @@ struct Vec4
         Float length = Length();
         if (length < epsilon)
         {
-            return Float(0.0);
+            return 0;
         }
 
-        Float invLength = Float(1.0) / length;
+        Float invLength = 1 / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -486,15 +486,15 @@ struct Mat2
     Mat2() = default;
 
     Mat2(Identity)
-        : Mat2(Float(1.0))
+        : Mat2(1)
     {
     }
 
     explicit Mat2(Float v)
     {
         // clang-format off
-        ex.x = v;       ey.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = v;
+        ex.x = v;    ey.x = 0;
+        ex.y = 0;    ey.y = v;
         // clang-format on
     }
 
@@ -512,16 +512,16 @@ struct Mat2
     void SetIdentity()
     {
         // clang-format off
-        ex.x = Float(1.0);    ey.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(1.0);
+        ex.x = 1;    ey.x = 0;
+        ex.y = 0;    ey.y = 1;
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = Float(0.0);    ey.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(0.0);
+        ex.x = 0;    ey.x = 0;
+        ex.y = 0;    ey.y = 0;
         // clang-format on
     }
 
@@ -542,9 +542,9 @@ struct Mat2
         Mat2 t;
 
         Float det = ex.x * ey.y - ey.x * ex.y;
-        if (det != Float(0.0))
+        if (det != 0)
         {
-            det = Float(1.0) / det;
+            det = 1 / det;
         }
 
         t.ex.x = det * ey.y;
@@ -568,16 +568,16 @@ struct Mat3
     Mat3() = default;
 
     Mat3(Identity)
-        : Mat3(Float(1.0))
+        : Mat3(1)
     {
     }
 
     explicit Mat3(Float v)
     {
         // clang-format off
-        ex.x = v;       ey.x = Float(0.0);    ez.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = v;       ez.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = v;
+        ex.x = v;    ey.x = 0;    ez.x = 0;
+        ex.y = 0;    ey.y = v;    ez.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = v;
         // clang-format on
     }
 
@@ -598,18 +598,18 @@ struct Mat3
     void SetIdentity()
     {
         // clang-format off
-        ex.x = Float(1.0);    ey.x = Float(0.0);    ez.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(1.0);    ez.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = Float(1.0);
+        ex.x = 1;    ey.x = 0;    ez.x = 0;
+        ex.y = 0;    ey.y = 1;    ez.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = 1;
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = Float(0.0);    ey.x = Float(0.0);    ez.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(0.0);    ez.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = Float(0.0);
+        ex.x = 0;    ey.x = 0;    ez.x = 0;
+        ex.y = 0;    ey.y = 0;    ez.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = 0;
         // clang-format on
     }
 
@@ -640,17 +640,17 @@ struct Mat4
     Mat4() = default;
 
     Mat4(Identity)
-        : Mat4(Float(1.0))
+        : Mat4(1)
     {
     }
 
     explicit Mat4(Float _v)
     {
         // clang-format off
-        ex.x = _v;           ey.x = Float(0.0);    ez.x = Float(0.0);    ew.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = _v;           ez.y = Float(0.0);    ew.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = _v;           ew.z = Float(0.0);
-        ex.w = Float(0.0);    ey.w = Float(0.0);    ez.w = Float(0.0);    ew.w = _v;
+        ex.x = _v;           ey.x = 0;    ez.x = 0;    ew.x = 0;
+        ex.y = 0;    ey.y = _v;           ez.y = 0;    ew.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = _v;           ew.z = 0;
+        ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = _v;
         // clang-format on
     }
 
@@ -663,10 +663,10 @@ struct Mat4
     }
 
     Mat4(const Mat3& r, const Vec3& p)
-        : ex{ r.ex, Float(0.0) }
-        , ey{ r.ey, Float(0.0) }
-        , ez{ r.ez, Float(0.0) }
-        , ew{ p, Float(1.0) }
+        : ex{ r.ex, 0 }
+        , ey{ r.ey, 0 }
+        , ez{ r.ez, 0 }
+        , ew{ p, 1 }
     {
     }
 
@@ -680,20 +680,20 @@ struct Mat4
     void SetIdentity()
     {
         // clang-format off
-        ex.x = Float(1.0);    ey.x = Float(0.0);    ez.x = Float(0.0);    ew.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(1.0);    ez.y = Float(0.0);    ew.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = Float(1.0);    ew.z = Float(0.0);
-        ex.w = Float(0.0);    ey.w = Float(0.0);    ez.w = Float(0.0);    ew.w = Float(1.0);
+        ex.x = 1;    ey.x = 0;    ez.x = 0;    ew.x = 0;
+        ex.y = 0;    ey.y = 1;    ez.y = 0;    ew.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = 1;    ew.z = 0;
+        ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = 1;
         // clang-format on
     }
 
     void SetZero()
     {
         // clang-format off
-        ex.x = Float(0.0);    ey.x = Float(0.0);    ez.x = Float(0.0);    ew.x = Float(0.0);
-        ex.y = Float(0.0);    ey.y = Float(0.0);    ez.y = Float(0.0);    ew.y = Float(0.0);
-        ex.z = Float(0.0);    ey.z = Float(0.0);    ez.z = Float(0.0);    ew.z = Float(0.0);
-        ex.w = Float(0.0);    ey.w = Float(0.0);    ez.w = Float(0.0);    ew.w = Float(0.0);
+        ex.x = 0;    ey.x = 0;    ez.x = 0;    ew.x = 0;
+        ex.y = 0;    ey.y = 0;    ez.y = 0;    ew.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = 0;    ew.z = 0;
+        ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = 0;
         // clang-format on
     }
 
@@ -723,7 +723,7 @@ struct Quat
     Quat() = default;
 
     Quat(Identity)
-        : Quat(Float(1.0))
+        : Quat(1)
     {
     }
 
@@ -736,9 +736,9 @@ struct Quat
     }
 
     explicit Quat(Float _w)
-        : x{ Float(0.0) }
-        , y{ Float(0.0) }
-        , z{ Float(0.0) }
+        : x{ 0 }
+        , y{ 0 }
+        , z{ 0 }
         , w{ _w }
     {
     }
@@ -771,7 +771,7 @@ struct Quat
 
     bool IsIdentity() const
     {
-        return x == Float(0.0) && y == Float(0.0) && z == Float(0.0) && w == Float(1.0);
+        return x == 0 && y == 0 && z == 0 && w == 1;
     }
 
     // Magnitude
@@ -790,10 +790,10 @@ struct Quat
         Float length = Length();
         if (length < epsilon)
         {
-            return Float(0.0);
+            return 0;
         }
 
-        Float invLength = Float(1.0) / length;
+        Float invLength = 1 / length;
         x *= invLength;
         y *= invLength;
         z *= invLength;
@@ -815,9 +815,9 @@ struct Quat
     // Optimized qvq'
     Vec3 Rotate(const Vec3& v) const
     {
-        Float vx = Float(2.0) * v.x;
-        Float vy = Float(2.0) * v.y;
-        Float vz = Float(2.0) * v.z;
+        Float vx = 2 * v.x;
+        Float vy = 2 * v.y;
+        Float vz = 2 * v.z;
         Float w2 = w * w - Float(0.5);
 
         Float dot2 = (x * vx + y * vy + z * vz);
@@ -828,9 +828,9 @@ struct Quat
 
     Vec3 RotateInv(const Vec3& v) const
     {
-        Float vx = Float(2.0) * v.x;
-        Float vy = Float(2.0) * v.y;
-        Float vz = Float(2.0) * v.z;
+        Float vx = 2 * v.x;
+        Float vy = 2 * v.y;
+        Float vz = 2 * v.z;
         Float w2 = w * w - Float(0.5);
 
         Float dot2 = (x * vx + y * vy + z * vz);
@@ -841,37 +841,37 @@ struct Quat
 
     void SetIdentity()
     {
-        x = Float(0.0);
-        y = Float(0.0);
-        z = Float(0.0);
-        w = Float(1.0);
+        x = 0;
+        y = 0;
+        z = 0;
+        w = 1;
     }
 
     // Computes rotation of x-axis
     Vec3 GetBasisX() const
     {
-        Float x2 = x * Float(2.0);
-        Float w2 = w * Float(2.0);
+        Float x2 = x * 2;
+        Float w2 = w * 2;
 
-        return Vec3((w * w2) - Float(1.0) + x * x2, (z * w2) + y * x2, (-y * w2) + z * x2);
+        return Vec3((w * w2) - 1 + x * x2, (z * w2) + y * x2, (-y * w2) + z * x2);
     }
 
     // Computes rotation of y-axis
     Vec3 GetBasisY() const
     {
-        Float y2 = y * Float(2.0);
-        Float w2 = w * Float(2.0);
+        Float y2 = y * 2;
+        Float w2 = w * 2;
 
-        return Vec3((-z * w2) + x * y2, (w * w2) - Float(1.0) + y * y2, (x * w2) + z * y2);
+        return Vec3((-z * w2) + x * y2, (w * w2) - 1 + y * y2, (x * w2) + z * y2);
     }
 
     // Computes rotation of z-axis
     Vec3 GetBasisZ() const
     {
-        Float z2 = z * Float(2.0);
-        Float w2 = w * Float(2.0);
+        Float z2 = z * 2;
+        Float w2 = w * 2;
 
-        return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - Float(1.0) + z * z2);
+        return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - 1 + z * z2);
     }
 
     static inline Quat FromEuler(Float x, Float y, Float z)
@@ -942,7 +942,7 @@ inline Vec2 operator*(const Vec2& a, const Vec2& b)
 
 inline Vec2 operator/(const Vec2& v, Float s)
 {
-    return v * (Float(1.0) / s);
+    return v * (1 / s);
 }
 
 inline bool operator==(const Vec2& a, const Vec2& b)
@@ -1016,12 +1016,12 @@ inline Vec3 operator*(const Vec3& a, const Vec3& b)
 
 inline Vec3 operator/(const Vec3& v, Float s)
 {
-    return v * (Float(1.0) / s);
+    return v * (1 / s);
 }
 
 inline Vec3 operator/(Float s, const Vec3& v)
 {
-    return (Float(1.0) / s) * v;
+    return (1 / s) * v;
 }
 
 inline Vec3 operator/(const Vec3& a, const Vec3& b)
@@ -1085,12 +1085,12 @@ inline Vec4 operator*(const Vec4& a, const Vec4& b)
 
 inline Vec4 operator/(const Vec4& v, Float s)
 {
-    return v * (Float(1.0) / s);
+    return v * (1 / s);
 }
 
 inline Vec4 operator/(Float s, const Vec4& v)
 {
-    return (Float(1.0) / s) * v;
+    return (1 / s) * v;
 }
 
 inline Vec4 operator/(const Vec4& a, const Vec4& b)
@@ -1113,7 +1113,7 @@ inline bool operator!=(const Vec4& a, const Vec4& b)
 template <typename T>
 inline T Normalize(const T& v)
 {
-    Float invLength = Float(1.0) / v.Length();
+    Float invLength = 1 / v.Length();
     return v * invLength;
 }
 
@@ -1153,7 +1153,7 @@ inline Quat operator-(const Quat& a, const Quat& b)
 // Compute angle between two quaternions
 inline Float Angle(const Quat& a, const Quat& b)
 {
-    return std::acos(Dot(a, b)) * Float(2.0);
+    return std::acos(Dot(a, b)) * 2;
 }
 
 // Quat functions end
@@ -1268,12 +1268,12 @@ inline Mat4 MulT(const Mat4& a, const Mat4& b)
 
 inline Mat4 Orth(Float left, Float right, Float bottom, Float top, Float zNear, Float zFar)
 {
-    Mat4 t{ Float(1.0) };
+    Mat4 t{ identity };
 
     // Scale
-    t.ex.x = Float(2.0) / (right - left);
-    t.ey.y = Float(2.0) / (top - bottom);
-    t.ez.z = Float(2.0) / (zFar - zNear);
+    t.ex.x = 2 / (right - left);
+    t.ey.y = 2 / (top - bottom);
+    t.ez.z = 2 / (zFar - zNear);
 
     // Translation
     t.ew.x = -(right + left) / (right - left);
