@@ -17,7 +17,7 @@ class DynamicBVH
 public:
     using Data = Intersectable;
 
-    inline static constexpr NodeProxy null_node = -1;
+    static constexpr inline NodeProxy null_node = -1;
 
     struct Node
     {
