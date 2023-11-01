@@ -9,6 +9,7 @@ class Sampler
 {
 public:
     Sampler(int32 samples_per_pixel);
+    virtual ~Sampler() = default;
 
     virtual void StartPixel();
     virtual bool StartNextPixelSample();
@@ -29,12 +30,12 @@ inline Sampler::Sampler(int32 spp)
 {
 }
 
-void Sampler::StartPixel()
+inline void Sampler::StartPixel()
 {
     current_pixel_sample = 0;
 }
 
-bool Sampler::StartNextPixelSample()
+inline bool Sampler::StartNextPixelSample()
 {
     return ++current_pixel_sample != samples_per_pixel;
 }

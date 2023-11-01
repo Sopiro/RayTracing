@@ -5,26 +5,20 @@
 namespace bulbit
 {
 
-inline Vec3 UniformSampleHemisphere()
+inline Vec3 UniformSampleHemisphere(const Point2& u)
 {
-    Float u1 = Rand();
-    Float u2 = Rand();
-
-    Float z = u1;
-    Float r = std::sqrt(std::fmax(Float(0.0), Float(1.0) - z * z));
-    Float phi = two_pi * u2;
+    Float z = u[0];
+    Float r = std::sqrt(std::fmax(Float(0.0), 1 - z * z));
+    Float phi = two_pi * u[1];
 
     return Vec3(r * std::cos(phi), r * std::sin(phi), z);
 }
 
-inline Vec3 UniformSampleSphere()
+inline Vec3 UniformSampleSphere(const Point2& u)
 {
-    Float u1 = Rand();
-    Float u2 = Rand();
-
-    Float z = 1 - 2 * u1;
+    Float z = 1 - 2 * u[0];
     Float r = std::sqrt(std::fmax(Float(0.0), 1 - z * z));
-    Float phi = two_pi * u2;
+    Float phi = two_pi * u[1];
 
     Float x = r * std::cos(phi);
     Float y = r * std::sin(phi);
@@ -38,15 +32,12 @@ inline Float UniformSampleSpherePDF()
 }
 
 // z > 0
-inline Vec3 CosineSampleHemisphere()
+inline Vec3 CosineSampleHemisphere(const Point2& u)
 {
-    Float u1 = Rand();
-    Float u2 = Rand();
+    Float z = std::sqrt(1 - u[1]);
 
-    Float z = std::sqrt(Float(1.0) - u2);
-
-    Float phi = two_pi * u1;
-    Float su2 = std::sqrt(u2);
+    Float phi = two_pi * u[0];
+    Float su2 = std::sqrt(u[1]);
     Float x = std::cos(phi) * su2;
     Float y = std::sin(phi) * su2;
 
@@ -58,14 +49,11 @@ inline Float CosineSampleHemispherePDF(Float cos_theta)
     return cos_theta * inv_pi;
 }
 
-inline Vec3 RandomInUnitSphere()
+inline Vec3 RandomInUnitSphere(const Point2& u)
 {
-#if 0
-    Float u1 = Rand();
-    Float u2 = Rand();
-
-    Float theta = two_pi * u1;
-    Float phi = std::acos(2.0 * u2 - 1.0);
+#if 1
+    Float theta = two_pi * u[0];
+    Float phi = std::acos(2.0 * u[1] - 1.0);
 
     Float sin_phi = std::sin(phi);
 
@@ -79,9 +67,9 @@ inline Vec3 RandomInUnitSphere()
     Vec3 p;
     do
     {
-        p = RandVec3(Float(-1.0), Float(1.0));
+        p = RandVec3(Float(-1.0), 1);
     }
-    while (p.Length2() >= Float(1.0));
+    while (p.Length2() >= 1);
 
     return p;
 #endif

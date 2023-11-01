@@ -51,9 +51,7 @@ int main()
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
     int32 samples_per_pixel = 64;
-    Float scale = 1.0f / samples_per_pixel;
     int32 max_bounces = 50;
-    Bitmap bitmap{ width, height };
 
     Scene scene;
     std::unique_ptr<Camera> camera;
@@ -394,66 +392,30 @@ int main()
         break;
     }
 
-    PathTracer pt(max_bounces);
+    Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel, 1234);
+    PathTracer pt(sampler, max_bounces);
 
     timer.Mark();
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
 
-#pragma omp parallel for schedule(dynamic, 1)
-    for (int32 y = 0; y < height; ++y)
-    {
-        if (omp_get_thread_num() == 0)
-        {
-            std::printf("\rScanline: %d / %d", y, height);
-        }
-
-        // #pragma omp parallel for schedule(dynamic, 1)
-        for (int32 x = 0; x < width; ++x)
-        {
-            Spectrum samples(0);
-
-            for (size_t s = 0; s < samples_per_pixel; ++s)
-            {
-                Point2 film{ (x + Rand()) / (width - 1), (y + Rand()) / (height - 1) };
-                Point2 aperture{ Rand(), Rand() };
-
-                Ray ray;
-                Float weight = camera->SampleRay(&ray, film, aperture);
-
-                samples += weight * pt.Li(scene, ray);
-            }
-
-            if (samples.IsNullish())
-            {
-                std::cout << "null" << std::endl;
-            }
-
-            // Resolve NaNs
-            if (samples.r != samples.r) samples.r = 0;
-            if (samples.g != samples.g) samples.g = 0;
-            if (samples.b != samples.b) samples.b = 0;
-
-            Spectrum color = samples * scale;
-            color = Tonemap_ACES(color);
-            color = GammaCorrection(color, 2.2f);
-
-            bitmap.Set(x, y, color);
-        }
-    }
+    Film film(width, height);
+    pt.Preprocess(scene, *camera);
+    pt.Render(&film, scene, *camera);
 
     timer.Mark();
     t = timer.Get();
 
     std::cout << "\nDone!: " << t << 's' << std::endl;
 
-    std::string fileName = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
+    Bitmap bitmap = film.ConvertToBitmap();
 
-    bitmap.WriteToFile(fileName.c_str());
+    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
+    bitmap.WriteToFile(filename.c_str());
 
 #if _DEBUG
     return 0;
 #else
-    return system(fileName.c_str());
+    return system(filename.c_str());
 #endif
 }

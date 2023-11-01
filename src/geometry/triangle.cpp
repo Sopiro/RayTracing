@@ -125,7 +125,7 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     return true;
 }
 
-void Triangle::Sample(Intersection* sample, Float* pdf) const
+void Triangle::Sample(Intersection* sample, Float* pdf, const Point2& u0) const
 {
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -135,8 +135,8 @@ void Triangle::Sample(Intersection* sample, Float* pdf) const
     Vec3 e2 = p2 - p0;
 
 #if 1
-    Float u = Rand(0, 1);
-    Float v = Rand(0, 1);
+    Float u = u0[0];
+    Float v = u0[1];
 
     if (u + v > 1)
     {
@@ -173,9 +173,9 @@ void Triangle::Sample(Intersection* sample, Float* pdf) const
 #endif
 }
 
-void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
+void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
 {
-    Sample(sample, pdf);
+    Sample(sample, pdf, u);
 
     Vec3 d = sample->point - ref;
     Float distance_squared = Dot(d, d);

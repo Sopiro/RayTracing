@@ -32,10 +32,10 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform
     distribution.reset(new Distribution2D(image.get(), width, height));
 }
 
-Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
+Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Float map_pdf;
-    Point2 uv = distribution->SampleContinuous(&map_pdf, RandVec2());
+    Point2 uv = distribution->SampleContinuous(&map_pdf, u);
 
     if (map_pdf == 0)
     {

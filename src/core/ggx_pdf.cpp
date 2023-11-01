@@ -4,11 +4,13 @@
 namespace bulbit
 {
 
-Vec3 GGXPDF::Sample() const
+Vec3 GGXPDF::Sample(const Point2& u0) const
 {
-    if (Rand() < t)
+    Point2 u = u0;
+    if (u[0] < t)
     {
-        Vec2 u = RandVec2();
+        u[0] /= t;
+
         Vec3 h = Sample_GGX(wo, alpha2, u);
 
         Vec3 wh = uvw.GetLocal(h);
@@ -18,7 +20,9 @@ Vec3 GGXPDF::Sample() const
     }
     else
     {
-        Vec3 random_cosine = CosineSampleHemisphere();
+        u[0] = (u[0] - t) / (1 - t);
+
+        Vec3 random_cosine = CosineSampleHemisphere(u);
         return uvw.GetLocal(random_cosine);
     }
 }

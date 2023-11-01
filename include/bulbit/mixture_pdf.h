@@ -10,7 +10,7 @@ class MixturePDF : public PDF
 public:
     MixturePDF(PDF* pdf1, PDF* pdf2);
 
-    virtual Vec3 Sample() const override;
+    virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
@@ -24,15 +24,18 @@ inline MixturePDF::MixturePDF(PDF* pdf1, PDF* pdf2)
 {
 }
 
-inline Vec3 MixturePDF::Sample() const
+inline Vec3 MixturePDF::Sample(const Point2& u0) const
 {
-    if (Rand() > Float(0.5))
+    Point2 u = u0;
+    if (u[0] > Float(0.5))
     {
-        return p1->Sample();
+        u[0] = 2 * u[0];
+        return p1->Sample(u);
     }
     else
     {
-        return p2->Sample();
+        u[0] = 2 * (u[0] - Float(0.5));
+        return p2->Sample(u);
     }
 }
 

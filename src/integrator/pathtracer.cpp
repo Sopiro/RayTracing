@@ -8,13 +8,14 @@
 namespace bulbit
 {
 
-PathTracer::PathTracer(int32 bounces, Float rr)
-    : max_bounces{ bounces }
+PathTracer::PathTracer(const Ref<Sampler> sampler, int32 bounces, Float rr)
+    : SamplerIntegrator(sampler)
+    , max_bounces{ bounces }
     , rr_probability{ rr }
 {
 }
 
-Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
+Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
 {
     Spectrum radiance(0), throughput(1);
     bool was_specular_bounce = false;
@@ -51,7 +52,7 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
         }
 
         Interaction ir;
-        if (mat->Scatter(&ir, is, ray.d) == false)
+        if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
         {
             break;
         }
@@ -76,14 +77,14 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
         if (num_lights > 0)
         {
             // Sample one light uniformly
-            size_t index = std::min(size_t(Rand() * num_lights), num_lights - 1);
+            size_t index = std::min(size_t(sampler.Next1D() * num_lights), num_lights - 1);
             Light* light = lights[index].get();
             Float light_weight = Float(num_lights);
 
             Vec3 to_light;
             Float light_pdf;
             Float visibility;
-            Spectrum li = light->Sample(&to_light, &light_pdf, &visibility, is);
+            Spectrum li = light->Sample(&to_light, &light_pdf, &visibility, is, sampler.Next2D());
 
             Ray shadow_ray{ is.point, to_light };
 
@@ -109,7 +110,7 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
             if (light->IsDeltaLight() == false)
             {
                 // Importance sample BRDF
-                Vec3 scattered = pdf->Sample();
+                Vec3 scattered = pdf->Sample(sampler.Next2D());
                 shadow_ray = Ray{ is.point, scattered };
 
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
@@ -147,7 +148,7 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
         }
 
         // Sample new path direction based on BRDF
-        Vec3 wi = pdf->Sample();
+        Vec3 wi = pdf->Sample(sampler.Next2D());
         Float pdf_value;
 
         if (Dot(is.normal, wi) > 0)
@@ -170,7 +171,7 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray) const
         if (bounce > min_bounces)
         {
             Float rr = std::fmin(rr_probability, throughput.Luminance());
-            if (Rand() > rr)
+            if (sampler.Next1D() > rr)
             {
                 break;
             }

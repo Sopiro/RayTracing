@@ -17,8 +17,8 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    virtual void Sample(Intersection* sample, Float* pdf) const override;
-    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const override;
+    virtual void Sample(Intersection* sample, Float* pdf, const Point2& u) const override;
+    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
@@ -48,20 +48,26 @@ inline void Aggregate::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-inline void Aggregate::Sample(Intersection* sample, Float* pdf) const
+inline void Aggregate::Sample(Intersection* sample, Float* pdf, const Point2& u) const
 {
     assert(false);
 }
 
-inline void Aggregate::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
+inline void Aggregate::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u0) const
 {
+    Point2 u = u0;
+
     size_t count = primitives.size();
-    size_t index = std::min(size_t(Rand() * count), count - 1);
+    Float count_f = u[0] * count;
+
+    size_t index = std::min(size_t(count_f), count - 1);
     Primitive* object = primitives[index].get();
 
-    object->Sample(sample, pdf, ref2p, ref);
+    u[0] = count_f - index;
 
-    *pdf = EvaluatePDF(Ray(ref, *ref2p));
+    object->Sample(sample, pdf, ref2p, ref, u);
+
+    *pdf = EvaluatePDF(Ray{ ref, *ref2p });
 }
 
 inline Float Aggregate::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const

@@ -13,7 +13,7 @@ class InfiniteAreaLight : public Light
 public:
     InfiniteAreaLight(const std::string& env_map, const Transform& transform = identity);
 
-    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const override;
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Spectrum Emit(const Ray& ray) const override;
 

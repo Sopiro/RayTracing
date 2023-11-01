@@ -76,30 +76,27 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     return true;
 }
 
-void Sphere::Sample(Intersection* sample, Float* pdf) const
+void Sphere::Sample(Intersection* sample, Float* pdf, const Point2& u) const
 {
     Float area = four_pi * radius * radius;
-    sample->normal = UniformSampleSphere();
+    sample->normal = UniformSampleSphere(u);
     sample->point = center + sample->normal * radius;
     sample->uv = ComputeTexCoord(sample->normal);
     *pdf = 1 / area;
 }
 
-void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref) const
+void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
 {
     Vec3 direction = center - ref;
     Float distance = direction.Normalize();
     Float distance_squared = distance * distance;
 
-    Float u1 = Rand();
-    Float u2 = Rand();
-
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
-    Float z = Float(1.0) + u2 * (cos_theta_max - Float(1.0));
+    Float z = Float(1.0) + u[1] * (cos_theta_max - 1);
 
-    Float phi = two_pi * u1;
+    Float phi = two_pi * u[0];
 
-    Float sin_theta = std::sqrt(Float(1.0) - z * z);
+    Float sin_theta = std::sqrt(1 - z * z);
     Float x = std::cos(phi) * sin_theta;
     Float y = std::sin(phi) * sin_theta;
 

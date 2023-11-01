@@ -11,7 +11,7 @@ class CosinePDF : public PDF
 public:
     CosinePDF(const Vec3& n);
 
-    virtual Vec3 Sample() const override;
+    virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
@@ -23,9 +23,9 @@ inline CosinePDF::CosinePDF(const Vec3& n)
 {
 }
 
-inline Vec3 CosinePDF::Sample() const
+inline Vec3 CosinePDF::Sample(const Point2& u) const
 {
-    return uvw.GetLocal(CosineSampleHemisphere());
+    return uvw.GetLocal(CosineSampleHemisphere(u));
 }
 
 inline Float CosinePDF::Evaluate(const Vec3& wi) const

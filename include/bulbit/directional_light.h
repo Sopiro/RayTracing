@@ -10,7 +10,7 @@ struct DirectionalLight : public Light
 public:
     DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius);
 
-    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const override;
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
 
     Vec3 dir;

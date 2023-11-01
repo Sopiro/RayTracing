@@ -10,7 +10,7 @@ namespace bulbit
 // Microfacet BRDF (Cook-Torrance specular + Lambertian diffuse)
 // GGX normal distribution function
 // Smith-GGX height-correlated visibility function
-// Schlick Fresnel function
+// width Schlick Fresnel blend
 class Microfacet : public Material
 {
 public:
@@ -21,7 +21,7 @@ public:
                const Ref<Texture> normalmap = ConstantColor::Create(Float(0.5), Float(0.5), Float(1.0)));
 
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 private:

@@ -5,13 +5,14 @@
 namespace bulbit
 {
 
+// Phase function
 class Isotropic : public Material
 {
 public:
     Isotropic(const Spectrum& color);
     Isotropic(const Ref<Texture> albedo);
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
 
 public:
     Ref<Texture> albedo;
@@ -27,11 +28,11 @@ inline Isotropic::Isotropic(const Ref<Texture> a)
 {
 }
 
-inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
+inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     ir->is_specular = true;
     ir->attenuation = albedo->Evaluate(is.uv);
-    ir->specular_ray = Ray{ is.point, RandomInUnitSphere() };
+    ir->specular_ray = Ray{ is.point, RandomInUnitSphere(u) };
 
     return true;
 }

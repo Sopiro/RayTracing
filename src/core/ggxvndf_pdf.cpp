@@ -6,11 +6,12 @@
 namespace bulbit
 {
 
-Vec3 GGXVNDFPDF::Sample() const
+Vec3 GGXVNDFPDF::Sample(const Point2& u0) const
 {
-    if (Rand() < t)
+    Point2 u = u0;
+    if (u[0] < t)
     {
-        Vec2 u = RandVec2();
+        u[0] /= t;
 
 #if SPHERICAL_CAPS_VNDF_SAMPLING
         Vec3 h = Sample_GGX_VNDF_Dupuy_Benyoub(wo, alpha, u);
@@ -24,7 +25,9 @@ Vec3 GGXVNDFPDF::Sample() const
     }
     else
     {
-        Vec3 random_cosine = CosineSampleHemisphere();
+        u[0] = (u[0] - t) / (1 - t);
+
+        Vec3 random_cosine = CosineSampleHemisphere(u);
         return uvw.GetLocal(random_cosine);
     }
 }

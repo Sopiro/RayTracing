@@ -12,7 +12,7 @@ public:
     Lambertian(const Spectrum& color);
     Lambertian(const Ref<Texture> albedo);
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
 public:
@@ -29,7 +29,7 @@ inline Lambertian::Lambertian(const Ref<Texture> _albedo)
 {
 }
 
-inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
+inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     ir->is_specular = false;
     ir->attenuation = albedo->Evaluate(is.uv);

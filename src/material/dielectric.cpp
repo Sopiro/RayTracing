@@ -8,7 +8,7 @@ Dielectric::Dielectric(Float index_of_refraction)
 {
 }
 
-bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
+bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Float refraction_ratio = is.front_face ? (1 / ior) : ior;
 
@@ -19,7 +19,7 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     bool refractable = refraction_ratio * sin_theta < 1;
     Vec3 wo;
 
-    if (refractable == false || Reflectance(cos_theta, refraction_ratio) > Rand())
+    if (refractable == false || Reflectance(cos_theta, refraction_ratio) > u[0])
     {
         wo = Reflect(-wi, is.normal);
     }

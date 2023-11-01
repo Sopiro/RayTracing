@@ -10,11 +10,11 @@ AreaLight::AreaLight(const Ref<Primitive> prim)
 {
 }
 
-Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
+Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Intersection sample;
     Vec3 ref2p;
-    primitive->Sample(&sample, pdf, &ref2p, ref.point);
+    primitive->Sample(&sample, pdf, &ref2p, ref.point, u);
 
     *visibility = ref2p.Normalize() - Ray::epsilon;
     *wi = ref2p;

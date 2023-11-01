@@ -17,7 +17,7 @@ Microfacet::Microfacet(const Ref<Texture> _basecolor,
 {
 }
 
-bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi) const
+bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Spectrum c = basecolor->Evaluate(is.uv);
     Float m = metallic->Evaluate(is.uv).b;

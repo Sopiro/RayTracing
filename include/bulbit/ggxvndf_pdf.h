@@ -20,7 +20,7 @@ class GGXVNDFPDF : public PDF
 public:
     GGXVNDFPDF(const Vec3& n, const Vec3& wo, Float a, Float t);
 
-    virtual Vec3 Sample() const override;
+    virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
 private:

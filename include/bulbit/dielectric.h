@@ -10,7 +10,7 @@ class Dielectric : public Material
 public:
     Dielectric(Float index_of_refraction);
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
 
     Float ior; // Index of Refraction
 

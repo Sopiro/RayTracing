@@ -47,7 +47,7 @@ public:
 
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const;
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi) const = 0;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const = 0;
 
     // BRDF + cosine term
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const;

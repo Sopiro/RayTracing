@@ -10,7 +10,7 @@ PointLight::PointLight(const Point3& _position, const Spectrum& _intensity)
 {
 }
 
-Spectrum PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref) const
+Spectrum PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Vec3 d = position - ref.point;
     Float distance = d.Normalize();
