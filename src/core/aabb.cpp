@@ -8,7 +8,7 @@ bool AABB::Intersect(const Ray& ray, Float t_min, Float t_max) const
     // https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
     for (int32 axis = 0; axis < 3; ++axis)
     {
-        Float invD = Float(1.0) / ray.d[axis];
+        Float invD = 1 / ray.d[axis];
 
         Float t0 = (min[axis] - ray.o[axis]) * invD;
         Float t1 = (max[axis] - ray.o[axis]) * invD;

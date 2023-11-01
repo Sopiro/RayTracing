@@ -26,9 +26,9 @@ Mesh::Mesh(std::vector<Point3> _positions,
     // Transform vertices to the world space
     for (size_t i = 0; i < count; ++i)
     {
-        Vec4 vP = Mul(transform, Vec4(positions[i], Float(1.0)));
-        Vec4 vN = Mul(transform, Vec4(normals[i], Float(0.0)));
-        Vec4 vT = Mul(transform, Vec4(tangents[i], Float(0.0)));
+        Vec4 vP = Mul(transform, Vec4(positions[i], 1));
+        Vec4 vN = Mul(transform, Vec4(normals[i], 0));
+        Vec4 vT = Mul(transform, Vec4(tangents[i], 0));
         vN.Normalize();
         vT.Normalize();
 
@@ -54,9 +54,9 @@ Mesh::Mesh(const std::vector<MeshVertex>& vertices, std::vector<int32> _indices,
     // Transform vertices to the world space
     for (size_t i = 0; i < count; ++i)
     {
-        Vec4 vP = Mul(transform, Vec4(vertices[i].position, Float(1.0)));
-        Vec4 vN = Mul(transform, Vec4(vertices[i].normal, Float(0.0)));
-        Vec4 vT = Mul(transform, Vec4(vertices[i].texCoord, Float(0.0)));
+        Vec4 vP = Mul(transform, Vec4(vertices[i].position, 1));
+        Vec4 vN = Mul(transform, Vec4(vertices[i].normal, 0));
+        Vec4 vT = Mul(transform, Vec4(vertices[i].texCoord, 0));
         vN.Normalize();
         vT.Normalize();
 

@@ -11,16 +11,16 @@ Ref<Microfacet> RandomMicrofacetMaterial();
 
 Ref<Mesh> CreateRectXY(const Transform& transform,
                        const Ref<Material> material,
-                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+                       const Point2& texCoord = Point2(1, 1));
 Ref<Mesh> CreateRectXZ(const Transform& transform,
                        const Ref<Material> material,
-                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+                       const Point2& texCoord = Point2(1, 1));
 Ref<Mesh> CreateRectYZ(const Transform& transform,
                        const Ref<Material> material,
-                       const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+                       const Point2& texCoord = Point2(1, 1));
 Ref<Mesh> CreateBox(const Transform& transform,
                     const Ref<Material> material,
-                    const Point2& texCoord = Point2(Float(1.0), Float(1.0)));
+                    const Point2& texCoord = Point2(1, 1));
 
 inline bool IsNullish(Float v)
 {

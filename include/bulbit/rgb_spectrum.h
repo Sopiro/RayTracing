@@ -91,12 +91,12 @@ inline RGBSpectrum operator*(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
 
 inline RGBSpectrum operator/(const RGBSpectrum& sp, Float s)
 {
-    return sp * (Float(1.0) / s);
+    return sp * (1 / s);
 }
 
 inline RGBSpectrum operator/(Float s, const RGBSpectrum& sp)
 {
-    return (Float(1.0) / s) * sp;
+    return (1 / s) * sp;
 }
 
 inline RGBSpectrum operator/(const RGBSpectrum& sp1, const RGBSpectrum& sp2)

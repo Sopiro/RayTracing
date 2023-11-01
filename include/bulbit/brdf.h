@@ -78,7 +78,7 @@ inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
     // sample a spherical cap in (-wo.z, 1]
     Float phi = two_pi * u.x;
     Float z = std::fma((1 - u.y), (1 + wo.z), -wo.z);
-    Float sinTheta = std::sqrt(std::clamp(1 - z * z, Float(0.0), Float(1.0)));
+    Float sinTheta = std::sqrt(std::clamp(1 - z * z, Float(0), Float(1)));
     Float x = sinTheta * std::cos(phi);
     Float y = sinTheta * std::sin(phi);
     Vec3 c = Vec3(x, y, z);
@@ -123,10 +123,10 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
     t2 = Lerp(std::sqrt(1 - t1 * t1), t2, s);
 
     // Section 4.3: reprojection onto hemisphere
-    Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(Float(0.0), 1 - t1 * t1 - t2 * t2)) * Vh;
+    Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(Float(0), 1 - t1 * t1 - t2 * t2)) * Vh;
 
     // Section 3.4: transforming the normal back to the ellipsoid configuration
-    Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(Float(0.0), Nh.z))); // Sampled half vector
+    Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(Float(0), Nh.z))); // Sampled half vector
 
     return h;
 }

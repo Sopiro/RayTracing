@@ -87,7 +87,7 @@ Float Aggregate::EvaluatePDF(const Ray& ray) const
         }
     } callback;
 
-    callback.sum = Float(0.0);
+    callback.sum = 0;
 
     bvh.RayCast(ray, Ray::epsilon, infinity, &callback);
 

@@ -92,7 +92,7 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
     Float distance_squared = distance * distance;
 
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
-    Float z = Float(1.0) + u[1] * (cos_theta_max - 1);
+    Float z = 1 + u[1] * (cos_theta_max - 1);
 
     Float phi = two_pi * u[0];
 

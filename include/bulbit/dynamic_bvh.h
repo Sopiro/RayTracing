@@ -146,7 +146,7 @@ inline DynamicBVH::Data* DynamicBVH::GetData(NodeProxy node) const
 
 inline Float DynamicBVH::GetTreeCost() const
 {
-    Float cost = Float(0.0);
+    Float cost = 0;
 
     Traverse([&cost](const Node* node) -> void { cost += SAH(node->aabb); });
 

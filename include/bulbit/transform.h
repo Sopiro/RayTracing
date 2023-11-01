@@ -96,7 +96,7 @@ inline Vec3 Mul(const Transform& t, const Vec3& v)
 // A^T * V
 inline Vec3 MulT(const Transform& t, const Vec3& v)
 {
-    return t.q.RotateInv(Float(1.0) / t.r * v - t.p);
+    return t.q.RotateInv(1 / t.r * v - t.p);
 }
 
 inline Transform operator*(const Transform& a, const Transform& b)
