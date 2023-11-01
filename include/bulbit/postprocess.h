@@ -6,15 +6,47 @@
 namespace bulbit
 {
 
-inline Spectrum ToLinear(const Spectrum& color, Float gamma = Float(2.2))
+// https://en.wikipedia.org/wiki/SRGB
+inline Spectrum ToLinearRGB(const Spectrum& color)
 {
-    return Spectrum(std::pow(color.r, gamma), std::pow(color.g, gamma), std::pow(color.b, gamma));
+    Spectrum result;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        Float comp = color[i];
+
+        if (comp <= 0.04045f)
+        {
+            result[i] = comp * (1.0f / 12.92f);
+        }
+        else
+        {
+            result[i] = std::pow((comp + 0.055f) * (1.0f / 1.055f), 2.4f);
+        }
+    }
+
+    return result;
 }
 
-inline Spectrum GammaCorrection(const Spectrum& color, Float gamma = Float(2.2))
+inline Spectrum ToSRGB(const Spectrum& color)
 {
-    Float invGamma = 1 / gamma;
-    return Spectrum(std::pow(color.r, invGamma), std::pow(color.g, invGamma), std::pow(color.b, invGamma));
+    Spectrum result;
+
+    for (int i = 0; i < 3; ++i)
+    {
+        Float comp = color[i];
+
+        if (comp <= 0.0031308f)
+        {
+            result[i] = 12.92f * comp;
+        }
+        else
+        {
+            result[i] = (1.0f + 0.055f) * std::pow(comp, 1.0f / 2.4f) - 0.055f;
+        }
+    }
+
+    return result;
 }
 
 // Tone mapping functions
@@ -27,7 +59,7 @@ inline Spectrum Tonemap_Reinhard(const Spectrum& hdr)
 
 inline Spectrum Tonemap_Reinhard2(const Spectrum& hdr)
 {
-    constexpr Spectrum L_white{ 4.0 };
+    const Spectrum L_white{ 4 };
     return (hdr * (Spectrum(1.0) + hdr / (L_white * L_white))) / (Spectrum(1.0) + hdr);
 }
 
