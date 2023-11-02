@@ -101,8 +101,8 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sam
                     }
                     else
                     {
-                        Float mis_weight = 1 / (light_pdf + light_brdf_pdf);
-                        radiance += throughput * light_weight * mis_weight * li * f;
+                        Float mis_weight = PowerHeuristic(1, light_pdf, 1, light_brdf_pdf);
+                        radiance += throughput * light_weight * mis_weight / light_pdf * li * f;
                     }
                 }
             }
@@ -122,13 +122,13 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sam
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
                             Float brdf_pdf = pdf->Evaluate(scattered);
-                            Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
+                            Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
                             if (li.IsBlack() == false)
                             {
                                 Spectrum f = mat->Evaluate(is, ray.d, scattered);
-                                radiance += throughput * light_weight * mis_weight * li * f;
+                                radiance += throughput * light_weight * mis_weight / brdf_pdf * li * f;
                             }
                         }
                     }
@@ -138,9 +138,10 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sam
                         if (li.IsBlack() == false)
                         {
                             Float brdf_pdf = pdf->Evaluate(scattered);
-                            Float mis_weight = 1 / (brdf_pdf + brdf_light_pdf);
+                            Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
+
                             Spectrum f = mat->Evaluate(is, ray.d, scattered);
-                            radiance += throughput * light_weight * mis_weight * li * f;
+                            radiance += throughput * light_weight * mis_weight / brdf_pdf * li * f;
                         }
                     }
                 }

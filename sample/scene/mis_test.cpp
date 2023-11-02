@@ -10,7 +10,7 @@ namespace bulbit
 void MISTest(Scene& scene)
 {
     {
-        auto floor_mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(1.0f)),
+        auto floor_mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(0.0f)),
                                                      ConstantColor::Create(Spectrum(0.0f)));
         auto floor = CreateSharedRef<Model>("res/veach_mi/floor.obj", Transform{ identity });
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
@@ -74,7 +74,7 @@ void MISTest(Scene& scene)
 void MISTestWak(Scene& scene)
 {
     {
-        auto floor = CreateSharedRef<Microfacet>(ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(1.0f)),
+        auto floor = CreateSharedRef<Microfacet>(ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(0.0f)),
                                                  ConstantColor::Create(Spectrum(0.0f)));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
