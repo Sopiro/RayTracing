@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void BRDFSamplingTest(Scene& scene)
+Camera* BRDFSamplingTest(Scene& scene)
 {
     // Materials
     auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
@@ -63,6 +65,19 @@ void BRDFSamplingTest(Scene& scene)
 
     // scene.Rebuild();
     // std::cout << scene.GetLights().GetCount() << std::endl;
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+    Point3 lookat{ 0.5f, 0.5f, 0.0f };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 45;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("brdf-sampling", BRDFSamplingTest);
 
 } // namespace bulbit

@@ -1,7 +1,9 @@
+#include "../samples.h"
 #include "bulbit/dielectric.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
 #include "bulbit/metal.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -11,7 +13,7 @@ namespace bulbit
 
 // The final scene of Ray Tracing in One Weekend
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
-void RandomScene(Scene& scene)
+Camera* RaytracigInOneWeekend(Scene& scene)
 {
     auto ground_material = CreateSharedRef<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
     scene.Add(CreateSharedRef<Sphere>(Vec3(0, -1000, 0), 1000.0f, ground_material));
@@ -64,6 +66,19 @@ void RandomScene(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/earthmap.jpg"));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 13, 2, 3 };
+    Point3 lookat{ 0, 0, 0 };
+
+    Float dist_to_focus = 10.0f;
+    Float aperture = 0.1f;
+    Float vFov = 20;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);
 
 } // namespace bulbit

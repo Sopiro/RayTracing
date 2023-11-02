@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void BVHTest(Scene& scene)
+Camera* BVHTest(Scene& scene)
 {
     auto gray = CreateSharedRef<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
     auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
@@ -38,6 +40,19 @@ void BVHTest(Scene& scene)
     }
 
     scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 0, 5 };
+    Point3 lookat{ 0, 0, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0.0f;
+    Float vFov = 71.f;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("bvh", BVHTest);
 
 } // namespace bulbit

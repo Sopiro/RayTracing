@@ -1,6 +1,8 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
 #include "bulbit/metal.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -8,7 +10,7 @@
 namespace bulbit
 {
 
-void CornellBox(Scene& scene)
+Camera* CornellBox(Scene& scene)
 {
     // Materials
     auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
@@ -91,6 +93,19 @@ void CornellBox(Scene& scene)
 
     // scene.Rebuild();
     // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
+
+    Float aspect_ratio = 1.0f;
+
+    Point3 lookfrom{ 0.5f, 0.5f, 1.64f };
+    Point3 lookat{ 0.5f, 0.5f, 0.0f };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0.0f;
+    Float vFov = 35.0f;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("cornell-box", CornellBox);
 
 } // namespace bulbit

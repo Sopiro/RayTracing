@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void StatueScene(Scene& scene)
+Camera* StatueScene(Scene& scene)
 {
     {
         auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(1.0f)),
@@ -95,6 +97,19 @@ void StatueScene(Scene& scene)
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 0, 10 };
+    Point3 lookat{ 0, 0, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 30;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("statue", StatueScene);
 
 } // namespace bulbit

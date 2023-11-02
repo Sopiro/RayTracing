@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,9 +9,9 @@
 namespace bulbit
 {
 
-void RebootScene(Scene& scene)
+Camera* RebootScene(Scene& scene)
 {
-    // https://sketchfab.com/3d-models/reboot-dramatic-scene-54ec601a3c4e4f6d8600fd28174c527c
+    // https://sketchfab.com/3d-models/reboot-dramatic-54ec601a3c4e4f6d8600fd28174c527c
     {
         auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.0), ConstantColor::Create(Spectrum(0.0f)),
                                                ConstantColor::Create(Spectrum(0.001f)));
@@ -39,6 +41,19 @@ void RebootScene(Scene& scene)
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ -4, 3.5f, -4 };
+    Point3 lookat{ 0, 0, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0.02f;
+    Float vFov = 30;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("reboot", RebootScene);
 
 } // namespace bulbit

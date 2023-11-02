@@ -150,18 +150,12 @@ Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sam
 
         // Sample new path direction based on BRDF
         Vec3 wi = pdf->Sample(sampler.Next2D());
-        Float pdf_value;
-
-        if (Dot(is.normal, wi) > 0)
-        {
-            pdf_value = pdf->Evaluate(wi);
-        }
-        else
+        Float pdf_value = pdf->Evaluate(wi);
+        if (pdf_value <= 0)
         {
             break;
         }
 
-        assert(pdf_value > 0);
         Ray scattered{ is.point, wi };
 
         throughput *= mat->Evaluate(is, ray.d, wi) / pdf_value;

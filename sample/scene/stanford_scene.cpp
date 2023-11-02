@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void StanfordScene(Scene& scene)
+Camera* StanfordScene(Scene& scene)
 {
     // Floor
     {
@@ -99,6 +101,19 @@ void StanfordScene(Scene& scene)
     }
 
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 0.5f, 2 };
+    Point3 lookat{ 0, 0.2f, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 30;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("stanford", StanfordScene);
 
 } // namespace bulbit

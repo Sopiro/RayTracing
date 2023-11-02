@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void MISTest(Scene& scene)
+Camera* MISTest(Scene& scene)
 {
     {
         auto floor_mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(0.0f)),
@@ -69,9 +71,22 @@ void MISTest(Scene& scene)
         scene.AddLight(l4);
         scene.AddLight(l5);
     }
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 2, 15 };
+    Point3 lookat{ 0, -2, 2.5f };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 28;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
 
-void MISTestWak(Scene& scene)
+static int32 index1 = Sample::Register("mis", MISTest);
+
+Camera* MISTestWak(Scene& scene)
 {
     {
         auto floor = CreateSharedRef<Microfacet>(ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(0.0f)),
@@ -136,6 +151,19 @@ void MISTestWak(Scene& scene)
         scene.AddLight(l4);
         scene.AddLight(l5);
     }
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 2, 15 };
+    Point3 lookat{ 0, -2, 2.5f };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 28;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index2 = Sample::Register("mis-wak", MISTestWak);
 
 } // namespace bulbit

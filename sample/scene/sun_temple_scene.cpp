@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -8,7 +10,7 @@ namespace bulbit
 {
 
 // https://developer.nvidia.com/ue4-sun-temple
-void SunTempleScene(Scene& scene)
+Camera* SunTempleScene(Scene& scene)
 {
     Transform tf{ zero_vec3, identity, Vec3(1.0f) };
     Ref<Model> m = CreateSharedRef<Model>("res/sun_temple/sun_temple.gltf", tf);
@@ -31,6 +33,19 @@ void SunTempleScene(Scene& scene)
     Vec3 blender = Quat::FromEuler(DegToRad(-85.4428f), DegToRad(-30.6847f), DegToRad(57.7338f)) * Vec3(0, 0, -1);
     Vec3 dir(blender.x, blender.z, -blender.y);
     scene.AddLight(CreateSharedRef<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ -4.48045f, 9.22976f, -7.49469f };
+    Point3 lookat{ 0, 8, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 54;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("suntemple", SunTempleScene);
 
 } // namespace bulbit

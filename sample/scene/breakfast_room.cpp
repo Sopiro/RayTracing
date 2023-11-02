@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -8,7 +10,7 @@ namespace bulbit
 {
 
 // https://casual-effects.com/data/
-void BreakfastRoom(Scene& scene)
+Camera* BreakfastRoom(Scene& scene)
 {
     Transform tf{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
     Ref<Model> m = CreateSharedRef<Model>("res/breakfast_room/breakfast_room.obj", tf);
@@ -26,6 +28,19 @@ void BreakfastRoom(Scene& scene)
     // auto l = CreateRectYZ(tf, light);
 
     // scene.AddLight(l);
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    Point3 lookfrom{ 0, 2.2f, 4.5f };
+    Point3 lookat{ 0, 1.5f, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 71;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("breakfast-room", BreakfastRoom);
 
 } // namespace bulbit

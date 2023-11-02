@@ -1,5 +1,7 @@
+#include "../samples.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
+#include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
@@ -7,7 +9,7 @@
 namespace bulbit
 {
 
-void Sponza(Scene& scene)
+Camera* Sponza(Scene& scene)
 {
     // Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
     // Ref<Model> sponza = CreateSharedRef<Model>("res/sponza2/sponza.obj", transform);
@@ -58,6 +60,28 @@ void Sponza(Scene& scene)
 
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
+
+    Float aspect_ratio = 16.0f / 9.0f;
+
+    // Point3 lookfrom{ 0.0f, 2.5f, 4.5f };
+    // Point3 lookat{ 0.0f, 1.45f, 0.0f };
+
+    // Point3 lookfrom{ -1.5f, 5.f5, 10.0f };
+    // Point3 lookat{ 0.0f, 3.45f, 0.0f };
+
+    // Point3 lookfrom{ 0.0f, 0.5f, 7.0f };
+    // Point3 lookat{ 0.0f, 3.0f, 0.0f };
+
+    Point3 lookfrom{ 0, 5, 6 };
+    Point3 lookat{ 0, 5, 0 };
+
+    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float aperture = 0;
+    Float vFov = 71;
+
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
 }
+
+static int32 index = Sample::Register("sponza", Sponza);
 
 } // namespace bulbit
