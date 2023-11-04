@@ -64,7 +64,7 @@ Camera* CornellBoxLucy(Scene& scene)
         scene.Add(model);
     }
 
-    Float aspect_ratio = 1.0f;
+    int32 width = 500;
 
     Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
     Point3 lookat{ 0.5f, 0.5f, 0 };
@@ -73,7 +73,7 @@ Camera* CornellBoxLucy(Scene& scene)
     Float aperture = 0;
     Float vFov = 45;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, width, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box-lucy", CornellBoxLucy);

@@ -44,7 +44,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
 
                 do
                 {
-                    Point2 film_sample{ (x + sampler->Next1D()) / (width - 1), (y + sampler->Next1D()) / (height - 1) };
+                    Point2 film_sample((x + sampler->Next1D()) / width, (y + sampler->Next1D()) / height);
                     Point2 aperture_sample = sampler->Next2D();
 
                     Ray ray;

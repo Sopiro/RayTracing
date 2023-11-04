@@ -16,46 +16,38 @@ int main()
 
     using namespace bulbit;
 
-    // Float aspect_ratio = 16.0f / 9.0f;
-    // Float aspect_ratio = 3.0f / 2.0f;
-    // Float aspect_ratio = 4.0f / 3.0f;
-    Float aspect_ratio = 1.0f;
-    int32 width = 500;
-    int32 height = int32(width / aspect_ratio);
-    int32 samples_per_pixel = 64;
-    int32 max_bounces = 50;
-
     Scene scene;
     Camera* camera;
 
     Timer timer;
-
     if (!Sample::Get("cornell-box", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;
     }
 
+    int32 samples_per_pixel = 64;
+    int32 max_bounces = 50;
     Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel);
-    PathIntegrator pt(sampler, max_bounces);
+    PathIntegrator renderer(sampler, max_bounces);
 
     timer.Mark();
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
 
-    Film film(width, height);
-
-    pt.Preprocess(scene, *camera);
-    pt.Render(&film, scene, *camera);
+    Film film(camera);
+    renderer.Preprocess(scene, *camera);
+    renderer.Render(&film, scene, *camera);
 
     timer.Mark();
     t = timer.Get();
 
-    std::cout << "\nDone!: " << t << 's' << std::endl;
+    std::cout << "Done rendering!: " << t << 's' << std::endl;
 
     Bitmap bitmap = film.ConvertToBitmap();
 
-    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
+    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", camera->GetScreenWidth(), camera->GetScreenHeight(),
+                                       samples_per_pixel, max_bounces, t);
     bitmap.WriteToFile(filename.c_str());
 
     delete camera;

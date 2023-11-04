@@ -35,6 +35,11 @@ Camera* SunTempleScene(Scene& scene)
     scene.AddLight(CreateSharedRef<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f));
 
     Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    // Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ -4.48045f, 9.22976f, -7.49469f };
     Point3 lookat{ 0, 8, 0 };
@@ -43,7 +48,7 @@ Camera* SunTempleScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 54;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("suntemple", SunTempleScene);

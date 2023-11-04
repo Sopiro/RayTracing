@@ -10,7 +10,7 @@ namespace bulbit
 class Film
 {
 public:
-    Film(int32 width, int32 height);
+    Film(const Camera* camera);
 
     void Set(int32 x, int32 y, const Spectrum& color);
     Bitmap ConvertToBitmap() const;
@@ -21,9 +21,9 @@ private:
     std::unique_ptr<Spectrum[]> data;
 };
 
-inline Film::Film(int32 w, int32 h)
-    : width{ w }
-    , height{ h }
+inline Film::Film(const Camera* camera)
+    : width{ camera->GetScreenWidth() }
+    , height{ camera->GetScreenHeight() }
 {
     data = std::make_unique<Spectrum[]>(width * height);
 }

@@ -43,6 +43,11 @@ Camera* RebootScene(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
 
     Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    // Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ -4, 3.5f, -4 };
     Point3 lookat{ 0, 0, 0 };
@@ -51,7 +56,7 @@ Camera* RebootScene(Scene& scene)
     Float aperture = 0.02f;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("reboot", RebootScene);

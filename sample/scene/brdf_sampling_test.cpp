@@ -67,6 +67,11 @@ Camera* BRDFSamplingTest(Scene& scene)
     // std::cout << scene.GetLights().GetCount() << std::endl;
 
     Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    // Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
@@ -75,7 +80,7 @@ Camera* BRDFSamplingTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 45;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("brdf-sampling", BRDFSamplingTest);

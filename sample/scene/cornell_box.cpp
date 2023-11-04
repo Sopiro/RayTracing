@@ -94,7 +94,7 @@ Camera* CornellBox(Scene& scene)
     // scene.Rebuild();
     // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
 
-    Float aspect_ratio = 1.0f;
+    int32 width = 500;
 
     Point3 lookfrom{ 0.5f, 0.5f, 1.64f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
@@ -103,7 +103,7 @@ Camera* CornellBox(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 35.0f;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, width, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);

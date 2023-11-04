@@ -23,7 +23,12 @@ Camera* NormalMappingTest(Scene& scene)
     // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0f), 0.01f));
     // scene.SetEnvironmentMap(ConstantColor::Create(zero_vec3));
 
+    // Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
     Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     // Point3 lookfrom{ 10.0, 0.0, 10.0 };
     // Point3 lookat{ 3.0, -2.5, 1.0 };
@@ -35,7 +40,7 @@ Camera* NormalMappingTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("normal-mapping", NormalMappingTest);

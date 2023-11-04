@@ -12,7 +12,8 @@ public:
                       const Point3& look_at,
                       const Vec3& up,
                       Float vfov, // vertical field-of-view. in degrees.
-                      Float aspect_ratio,
+                      int32 screen_width,
+                      int32 screen_height,
                       Float aperture,
                       Float focus_dist);
 

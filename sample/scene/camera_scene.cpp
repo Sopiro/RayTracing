@@ -58,6 +58,11 @@ Camera* CameraScene(Scene& scene)
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
 
     Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    // Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ -2, 1, 2 };
     Point3 lookat{ 0, 0.5f, 0 };
@@ -66,7 +71,7 @@ Camera* CameraScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("camera", CameraScene);

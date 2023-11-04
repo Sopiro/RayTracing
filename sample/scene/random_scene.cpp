@@ -68,6 +68,11 @@ Camera* RaytracigInOneWeekend(Scene& scene)
     // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/earthmap.jpg"));
 
     Float aspect_ratio = 16.0f / 9.0f;
+    // Float aspect_ratio = 3.0f / 2.0f;
+    // Float aspect_ratio = 4.0f / 3.0f;
+    // Float aspect_ratio = 1.0f;
+    int32 width = 500;
+    int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 13, 2, 3 };
     Point3 lookat{ 0, 0, 0 };
@@ -76,7 +81,7 @@ Camera* RaytracigInOneWeekend(Scene& scene)
     Float aperture = 0.1f;
     Float vFov = 20;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, aspect_ratio, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);

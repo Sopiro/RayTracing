@@ -8,13 +8,16 @@ namespace bulbit
 PerspectiveCamera::PerspectiveCamera(const Point3& look_from,
                                      const Point3& look_at,
                                      const Vec3& up,
-                                     Float vfov, // vertical field-of-view in degrees
-                                     Float aspect_ratio,
+                                     Float vfov,
+                                     int32 screen_width,
+                                     int32 screen_height,
                                      Float aperture,
                                      Float focus_dist)
+    : Camera(screen_width, screen_height)
 {
     Float theta = DegToRad(vfov);
     Float h = std::tan(theta / 2);
+    Float aspect_ratio = (Float)width / (Float)height;
     Float viewport_height = 2 * h;
     Float viewport_width = aspect_ratio * viewport_height;
 
