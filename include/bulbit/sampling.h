@@ -53,7 +53,7 @@ inline Vec3 RandomInUnitSphere(const Point2& u)
 {
 #if 1
     Float theta = two_pi * u[0];
-    Float phi = std::acos(2.0 * u[1] - 1.0);
+    Float phi = std::acos(2 * u[1] - 1);
 
     Float sin_phi = std::sin(phi);
 

@@ -36,7 +36,7 @@ int main()
         return 0;
     }
 
-    Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel, 1234);
+    Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel);
     PathIntegrator pt(sampler, max_bounces);
 
     timer.Mark();

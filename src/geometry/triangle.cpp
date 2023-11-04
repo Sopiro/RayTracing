@@ -156,8 +156,8 @@ void Triangle::Sample(Intersection* sample, Float* pdf, const Point2& u0) const
     sample->uv = GetTexCoord(u, v, w);
 
 #else
-    Float u1 = Rand(0.0, 1.0);
-    Float u2 = Rand(0.0, 1.0);
+    Float u1 = u[0];
+    Float u2 = u[1];
 
     Float s = std::sqrt(u1);
     Float u = 1.0 - s;

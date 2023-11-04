@@ -6,18 +6,18 @@
 namespace bulbit
 {
 
-struct MeshVertex
-{
-    Point3 position;
-    Vec3 normal;
-    Vec3 tangent;
-    Point2 texCoord;
-};
-
 // Represents triangle mesh
 class Mesh
 {
 public:
+    struct Vertex
+    {
+        Point3 position;
+        Vec3 normal;
+        Vec3 tangent;
+        Point2 texCoord;
+    };
+
     Mesh(std::vector<Point3> positions,
          std::vector<Vec3> normals,
          std::vector<Vec3> tangents,
@@ -25,10 +25,7 @@ public:
          std::vector<int32> indices,
          const Mat4& transform,
          const Ref<Material> material);
-    Mesh(const std::vector<MeshVertex>& vertices,
-         std::vector<int32> indices,
-         const Mat4& transform,
-         const Ref<Material> material);
+    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Mat4& transform, const Ref<Material> material);
 
     const Material* GetMaterial() const;
     void SetMaterial(const Ref<Material> material);

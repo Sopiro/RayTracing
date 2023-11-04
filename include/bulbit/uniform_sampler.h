@@ -9,7 +9,7 @@ namespace bulbit
 class UniformSampler : public Sampler
 {
 public:
-    UniformSampler(int32 samples_per_pixel, int32 seed);
+    UniformSampler(int32 samples_per_pixel, int32 seed = 0);
     virtual ~UniformSampler() = default;
 
     virtual Float Next1D() override;
