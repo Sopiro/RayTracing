@@ -35,4 +35,4 @@
 
 #include "uniform_sampler.h"
 
-#include "pathtracer.h"
+#include "path_integrator.h"

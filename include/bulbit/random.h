@@ -15,6 +15,11 @@ public:
     {
     }
 
+    RNG(uint64 seed)
+    {
+        Seed(seed);
+    }
+
     // pcg32_srandom(initstate, initseq)
     // pcg32_srandom_r(rng, initstate, initseq):
     //     Seed the rng.  Specified in two parts, state initializer and a
