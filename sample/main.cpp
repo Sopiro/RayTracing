@@ -7,7 +7,7 @@
 
 #include <format>
 
-int main()
+int main(int argc, char* argv[])
 {
 #if defined(_WIN32) && defined(_DEBUG)
     // Enable memory-leak reports
@@ -46,8 +46,9 @@ int main()
 
     Bitmap bitmap = film.ConvertToBitmap();
 
-    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", camera->GetScreenWidth(), camera->GetScreenHeight(),
-                                       samples_per_pixel, max_bounces, t);
+    int32 width = camera->GetScreenWidth();
+    int32 height = camera->GetScreenHeight();
+    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
     bitmap.WriteToFile(filename.c_str());
 
     delete camera;
