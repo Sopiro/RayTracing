@@ -5,11 +5,12 @@
 namespace bulbit
 {
 
-class PathTracer : public SamplerIntegrator
+// Uni-directional path tracer
+class PathIntegrator : public SamplerIntegrator
 {
 public:
-    PathTracer(const Ref<Sampler> sampler, int32 max_bounces, Float russian_roulette_probability = Float(0.95));
-    virtual ~PathTracer() = default;
+    PathIntegrator(const Ref<Sampler> sampler, int32 max_bounces, Float russian_roulette_probability = Float(0.95));
+    virtual ~PathIntegrator() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override;
 

@@ -28,7 +28,6 @@ protected:
 
 inline void Primitive::SetFaceNormal(Intersection* is, const Vec3& wi, const Vec3& outward_normal)
 {
-
     if (Dot(wi, outward_normal) < 0)
     {
         is->front_face = true;

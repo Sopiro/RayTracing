@@ -8,14 +8,14 @@
 namespace bulbit
 {
 
-PathTracer::PathTracer(const Ref<Sampler> sampler, int32 bounces, Float rr)
+PathIntegrator::PathIntegrator(const Ref<Sampler> sampler, int32 bounces, Float rr)
     : SamplerIntegrator(sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
 }
 
-Spectrum PathTracer::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
+Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
 {
     Spectrum radiance(0), throughput(1);
     bool was_specular_bounce = false;

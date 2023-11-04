@@ -37,7 +37,7 @@ int main()
     }
 
     Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel, 1234);
-    PathTracer pt(sampler, max_bounces);
+    PathIntegrator pt(sampler, max_bounces);
 
     timer.Mark();
     double t = timer.Get();
