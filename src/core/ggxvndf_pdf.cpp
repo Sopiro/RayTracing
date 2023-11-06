@@ -1,4 +1,5 @@
 #include "bulbit/ggxvndf_pdf.h"
+#include "bulbit/microfacet.h"
 #include "bulbit/sampling.h"
 
 #define SPHERICAL_CAPS_VNDF_SAMPLING 1

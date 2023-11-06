@@ -1,7 +1,6 @@
 #pragma once
 
 #include "brdf.h"
-#include "pdf.h"
 
 namespace bulbit
 {

@@ -1,11 +1,10 @@
 #pragma once
 
+#include "brdf.h"
+#include "constant_color.h"
 #include "cosine_pdf.h"
 #include "ggx_pdf.h"
 #include "ggxvndf_pdf.h"
-#include "pdf.h"
-
-#include "constant_color.h"
 #include "ray.h"
 
 namespace bulbit

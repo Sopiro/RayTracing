@@ -1,7 +1,7 @@
 #include "bulbit/path_integrator.h"
+#include "bulbit/brdf.h"
 #include "bulbit/infinite_area_light.h"
 #include "bulbit/light.h"
-#include "bulbit/pdf.h"
 #include "bulbit/scene.h"
 #include "bulbit/util.h"
 

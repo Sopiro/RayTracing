@@ -1,4 +1,4 @@
-#include "bulbit/ggx_pdf.h"
+#include "bulbit/microfacet.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit

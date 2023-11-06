@@ -5,6 +5,30 @@
 namespace bulbit
 {
 
+// Heuristic functions for MIS
+inline Float BalanceHeuristic(Float pdf_f, Float pdf_g)
+{
+    return pdf_f / (pdf_f + pdf_g);
+}
+
+inline Float BalanceHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
+{
+    return (nf * pdf_f) / (nf * pdf_f + ng * pdf_g);
+}
+
+inline Float PowerHeuristic(Float pdf_f, Float pdf_g)
+{
+    Float f2 = pdf_f * pdf_f;
+    Float g2 = pdf_g * pdf_g;
+    return f2 / (f2 + g2);
+}
+
+inline Float PowerHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
+{
+    Float f = nf * pdf_f, g = ng * pdf_g;
+    return (f * f) / (f * f + g * g);
+}
+
 inline Vec3 UniformSampleHemisphere(const Point2& u)
 {
     Float z = u[0];
@@ -82,28 +106,82 @@ inline Vec3 UniformSampleUnitDiskXY(const Point2& u)
     return Vec3(r * std::cos(theta), r * std::sin(theta), Float(0.0));
 }
 
-// Heuristic functions for MIS
-inline Float BalanceHeuristic(Float pdf_f, Float pdf_g)
+// Importance sampling codes for microfacet functions
+
+inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 {
-    return pdf_f / (pdf_f + pdf_g);
+    Float theta = std::acos(std::sqrt((1 - u.x) / ((alpha2 - 1) * u.x + 1)));
+    Float phi = two_pi * u.y;
+
+    Float sin_thetha = std::sin(theta);
+    Float x = std::cos(phi) * sin_thetha;
+    Float y = std::sin(phi) * sin_thetha;
+    Float z = std::cos(theta);
+
+    Vec3 h{ x, y, z }; // Sampled half vector
+
+    return h;
 }
 
-inline Float BalanceHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
+// "Sampling Visible GGX Normals with Spherical Caps" by Dupuy & Benyoub
+// https://gist.github.com/jdupuy/4c6e782b62c92b9cb3d13fbb0a5bd7a0
+// https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
+inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
 {
-    return (nf * pdf_f) / (nf * pdf_f + ng * pdf_g);
+    // sample a spherical cap in (-wo.z, 1]
+    Float phi = two_pi * u.x;
+    Float z = std::fma((1 - u.y), (1 + wo.z), -wo.z);
+    Float sinTheta = std::sqrt(std::clamp(1 - z * z, Float(0), Float(1)));
+    Float x = sinTheta * std::cos(phi);
+    Float y = sinTheta * std::sin(phi);
+    Vec3 c = Vec3(x, y, z);
+    // compute halfway direction;
+    Vec3 h = c + wo;
+
+    // return without normalization as this is done later (see line 25)
+    return h;
 }
 
-inline Float PowerHeuristic(Float pdf_f, Float pdf_g)
+inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha, Vec2 u)
 {
-    Float f2 = pdf_f * pdf_f;
-    Float g2 = pdf_g * pdf_g;
-    return f2 / (f2 + g2);
+    // warp to the hemisphere configuration
+    Vec3 woStd = Normalize(Vec3(wo.x * alpha, wo.y * alpha, wo.z));
+    // sample the hemisphere
+    Vec3 wmStd = SampleVNDFHemisphere(woStd, u);
+    // warp back to the ellipsoid configuration
+    Vec3 wm = Normalize(Vec3(wmStd.x * alpha, wmStd.y * alpha, wmStd.z));
+    // return final normal
+    return wm;
 }
 
-inline Float PowerHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
+// Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
+// https://jcgt.org/published/0007/04/01/
+inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
 {
-    Float f = nf * pdf_f, g = ng * pdf_g;
-    return (f * f) / (f * f + g * g);
+    // Section 3.2: transforming the view direction to the hemisphere configuration
+    Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
+    Vh.Normalize();
+
+    // Build an orthonormal basis with v, t1, and t2
+    // Section 4.1: orthonormal basis (with special case if cross product is zero)
+    Vec3 T1 = (Vh.z < Float(0.999)) ? Normalize(Cross(Vh, z_axis)) : x_axis;
+    Vec3 T2 = Cross(T1, Vh);
+
+    // Section 4.2: parameterization of the projected area
+    Float r = std::sqrt(u.x);
+    Float phi = two_pi * u.y;
+    Float t1 = r * std::cos(phi);
+    Float t2 = r * std::sin(phi);
+    Float s = Float(0.5) * (1 + Vh.z);
+    t2 = Lerp(std::sqrt(1 - t1 * t1), t2, s);
+
+    // Section 4.3: reprojection onto hemisphere
+    Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(Float(0), 1 - t1 * t1 - t2 * t2)) * Vh;
+
+    // Section 3.4: transforming the normal back to the ellipsoid configuration
+    Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(Float(0), Nh.z))); // Sampled half vector
+
+    return h;
 }
 
 struct Distribution1D
