@@ -39,7 +39,7 @@ Float PerspectiveCamera::SampleRay(Ray* out_ray, const Point2& film_sample, cons
     Vec3 offset = u * rd.x + v * rd.y;
 
     Vec3 camera_center = origin + offset;
-    Vec3 pixel_center = lower_left + horizontal * film_sample.x + vertical * film_sample.y;
+    Vec3 pixel_center = lower_left + horizontal * (film_sample.x / width) + vertical * (film_sample.y / height);
 
     out_ray->o = camera_center;
     out_ray->d = Normalize(pixel_center - camera_center);

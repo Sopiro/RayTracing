@@ -20,6 +20,14 @@ struct AABB
     Vec3 min, max;
 };
 
+inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
+{
+    Vec3 min = Min(aabb1.min, aabb2.min);
+    Vec3 max = Max(aabb1.max, aabb2.max);
+
+    return AABB{ min, max };
+}
+
 inline Float AABB::GetVolume() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
@@ -52,14 +60,6 @@ inline bool AABB::TestOverlap(const AABB& other) const
     if (min.z > other.max.z || max.z < other.min.z) return false;
 
     return true;
-}
-
-inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
-{
-    Vec3 min = Min(aabb1.min, aabb2.min);
-    Vec3 max = Max(aabb1.max, aabb2.max);
-
-    return AABB{ min, max };
 }
 
 } // namespace bulbit

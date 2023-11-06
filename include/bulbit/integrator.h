@@ -28,7 +28,7 @@ public:
     virtual void Render(Film* film, const Scene& scene, const Camera& camera) override;
 
 private:
-    Ref<Sampler> sampler;
+    Ref<Sampler> sampler_prototype;
 };
 
 } // namespace bulbit

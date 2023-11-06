@@ -149,15 +149,15 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
 
         // Sample new path direction based on BRDF
         Vec3 wi = brdf->Sample(sampler.Next2D());
-        Float pdf_value = brdf->Evaluate(wi);
-        if (pdf_value <= 0)
+        Float pdf = brdf->Evaluate(wi);
+        if (pdf <= 0)
         {
             break;
         }
 
         Ray scattered{ is.point, wi };
 
-        throughput *= mat->Evaluate(is, ray.d, wi) / pdf_value;
+        throughput *= mat->Evaluate(is, ray.d, wi) / pdf;
         ray = scattered;
 
         // Russian roulette

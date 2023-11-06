@@ -8,7 +8,7 @@ namespace bulbit
 {
 
 SamplerIntegrator::SamplerIntegrator(const Ref<Sampler> _sampler)
-    : sampler{ _sampler }
+    : sampler_prototype{ _sampler }
 {
 }
 
@@ -27,7 +27,8 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
         int32 tile_x = i % num_tiles_x;
         int32 tile_y = i / num_tiles_x;
 
-        std::unique_ptr<Sampler> tile_sampler = sampler->Clone(i);
+        // Create thread local sampler from prototype for current tile
+        std::unique_ptr<Sampler> sampler = sampler_prototype->Clone(i);
 
         int32 x0 = tile_x * tile_size;
         int32 x1 = std::min(x0 + tile_size, width);
@@ -38,13 +39,13 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
         {
             for (int32 x = x0; x < x1; ++x)
             {
-                tile_sampler->StartPixel();
+                sampler->StartPixel();
 
                 Spectrum samples(0);
 
                 do
                 {
-                    Point2 film_sample((x + sampler->Next1D()) / width, (y + sampler->Next1D()) / height);
+                    Point2 film_sample = Point2(x, y) + sampler->Next2D();
                     Point2 aperture_sample = sampler->Next2D();
 
                     Ray ray;
@@ -53,7 +54,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                     Spectrum l(0);
                     if (weight > 0)
                     {
-                        l = Li(scene, ray, *tile_sampler);
+                        l = Li(scene, ray, *sampler);
                     }
 
                     if (l.IsNullish())
@@ -63,7 +64,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
 
                     samples += l * weight;
                 }
-                while (tile_sampler->StartNextPixelSample());
+                while (sampler->StartNextPixelSample());
 
                 Spectrum radiance = samples / sampler->samples_per_pixel;
 
