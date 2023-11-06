@@ -8,9 +8,9 @@ namespace bulbit
 PerspectiveCamera::PerspectiveCamera(const Point3& look_from,
                                      const Point3& look_at,
                                      const Vec3& up,
-                                     Float vfov,
                                      int32 screen_width,
                                      int32 screen_height,
+                                     Float vfov,
                                      Float aperture,
                                      Float focus_dist)
     : Camera(screen_width, screen_height)

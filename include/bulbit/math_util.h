@@ -6,22 +6,22 @@
 namespace bulbit
 {
 
-constexpr Vec2 zero_vec2{ Float(0.0), Float(0.0) };
-constexpr Vec3 zero_vec3{ Float(0.0), Float(0.0), Float(0.0) };
-constexpr Vec4 zero_vec4{ Float(0.0), Float(0.0), Float(0.0), Float(0.0) };
+constexpr Vec2 zero_vec2{ 0, 0 };
+constexpr Vec3 zero_vec3{ 0, 0, 0 };
+constexpr Vec4 zero_vec4{ 0, 0, 0, 0 };
 
-constexpr Vec3 x_axis{ Float(1.0), Float(0.0), Float(0.0) };
-constexpr Vec3 y_axis{ Float(0.0), Float(1.0), Float(0.0) };
-constexpr Vec3 z_axis{ Float(0.0), Float(0.0), Float(1.0) };
+constexpr Vec3 x_axis{ 1, 0, 0 };
+constexpr Vec3 y_axis{ 0, 1, 0 };
+constexpr Vec3 z_axis{ 0, 0, 1 };
 
 inline Float DegToRad(Float deg)
 {
-    return Float(deg * pi / Float(180.0));
+    return Float(deg * pi / 180);
 }
 
 inline Float RadToDeg(Float rad)
 {
-    return Float(rad * inv_pi * Float(180.0));
+    return Float(rad * inv_pi * 180);
 }
 
 template <typename T>

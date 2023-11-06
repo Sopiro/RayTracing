@@ -7,6 +7,8 @@ namespace bulbit
 
 struct AABB
 {
+    static AABB Union(const AABB& b1, const AABB& b2);
+
     Float GetVolume() const;
     Float GetSurfaceArea() const;
 
@@ -16,8 +18,6 @@ struct AABB
     bool Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     Vec3 min, max;
-
-    static AABB Union(const AABB& b1, const AABB& b2);
 };
 
 inline Float AABB::GetVolume() const

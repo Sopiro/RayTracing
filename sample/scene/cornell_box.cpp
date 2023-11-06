@@ -103,7 +103,7 @@ Camera* CornellBox(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 35.0f;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, width, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);

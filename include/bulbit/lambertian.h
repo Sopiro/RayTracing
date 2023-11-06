@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cosine_pdf.h"
+#include "lambertian_pdf.h"
 #include "material.h"
 
 namespace bulbit

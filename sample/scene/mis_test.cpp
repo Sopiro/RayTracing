@@ -86,7 +86,7 @@ Camera* MISTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 28;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index1 = Sample::Register("mis", MISTest);
@@ -171,7 +171,7 @@ Camera* MISTestWak(Scene& scene)
     Float aperture = 0;
     Float vFov = 28;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index2 = Sample::Register("mis-wak", MISTestWak);

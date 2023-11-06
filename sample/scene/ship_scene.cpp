@@ -92,7 +92,7 @@ Camera* ShipScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, vFov, width, height, aperture, dist_to_focus);
+    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("ship", ShipScene);
