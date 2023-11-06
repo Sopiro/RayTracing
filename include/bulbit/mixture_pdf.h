@@ -5,20 +5,20 @@
 namespace bulbit
 {
 
-class MixturePDF : public PDF
+class MixturePDF : public BRDF
 {
 public:
-    MixturePDF(PDF* pdf1, PDF* pdf2);
+    MixturePDF(BRDF* pdf1, BRDF* pdf2);
 
     virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
-    PDF* p1;
-    PDF* p2;
+    BRDF* p1;
+    BRDF* p2;
 };
 
-inline MixturePDF::MixturePDF(PDF* pdf1, PDF* pdf2)
+inline MixturePDF::MixturePDF(BRDF* pdf1, BRDF* pdf2)
     : p1{ pdf1 }
     , p2{ pdf2 }
 {

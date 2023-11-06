@@ -33,9 +33,9 @@ bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
     // Float spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
     Float t = Clamp(spec_w / (diff_w + spec_w), Float(0.15), Float(0.9));
 
-    // new (ir->mem) CosinePDF(is.shading.normal);
-    // new (ir->mem) GGXPDF(is.shading.normal, wo, alpha, t);
-    new (ir->mem) GGXVNDFPDF(is.shading.normal, wo, alpha, t);
+    // new (ir->mem) LambertianReflection(is.shading.normal);
+    // new (ir->mem) MicrofacetGGX(is.shading.normal, wo, alpha, t);
+    new (ir->mem) MicrofacetGGXVNDF(is.shading.normal, wo, alpha, t);
     ir->is_specular = false;
 
     return true;

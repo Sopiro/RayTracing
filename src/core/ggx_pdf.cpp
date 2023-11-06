@@ -4,7 +4,7 @@
 namespace bulbit
 {
 
-Vec3 GGXPDF::Sample(const Point2& u0) const
+Vec3 MicrofacetGGX::Sample(const Point2& u0) const
 {
     Point2 u = u0;
     if (u[0] < t)
@@ -27,7 +27,7 @@ Vec3 GGXPDF::Sample(const Point2& u0) const
     }
 }
 
-Float GGXPDF::Evaluate(const Vec3& wi) const
+Float MicrofacetGGX::Evaluate(const Vec3& wi) const
 {
     Vec3 h = Normalize(wo + wi);
     Float NoH = Dot(h, uvw.w);

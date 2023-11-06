@@ -6,7 +6,7 @@
 namespace bulbit
 {
 
-Vec3 GGXVNDFPDF::Sample(const Point2& u0) const
+Vec3 MicrofacetGGXVNDF::Sample(const Point2& u0) const
 {
     Point2 u = u0;
     if (u[0] < t)
@@ -32,7 +32,7 @@ Vec3 GGXVNDFPDF::Sample(const Point2& u0) const
     }
 }
 
-Float GGXVNDFPDF::Evaluate(const Vec3& wi) const
+Float MicrofacetGGXVNDF::Evaluate(const Vec3& wi) const
 {
     Float alpha2 = alpha * alpha;
 

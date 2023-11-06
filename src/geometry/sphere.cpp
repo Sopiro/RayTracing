@@ -88,8 +88,8 @@ void Sphere::Sample(Intersection* sample, Float* pdf, const Point2& u) const
 void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
 {
     Vec3 direction = center - ref;
-    Float distance = direction.Normalize();
-    Float distance_squared = distance * distance;
+    Float distance_squared = Dot(direction, direction);
+    Float distance = std::sqrt(distance_squared);
 
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
     Float z = 1 + u[1] * (cos_theta_max - 1);
@@ -100,19 +100,11 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
     Float x = std::cos(phi) * sin_theta;
     Float y = std::sin(phi) * sin_theta;
 
-    Vec3 d{ x, y, z };
+    Vec3 d(x, y, z);
 
     Float s = distance * z - std::sqrt(radius * radius - distance_squared * sin_theta * sin_theta);
 
-    // Float cosAlpha = (distance * distance + radius * radius - s * s) / (2 * distance * radius);
-    // Float sinAlpha = std::std::sqrt(std::fmax((Float)0, 1 - cosAlpha * cosAlpha));
-
-    // Float xx = std::cos(phi) * sinAlpha;
-    // Float yy = std::sin(phi) * sinAlpha;
-    // Float zz = cosAlpha;
-
-    // Vec3 dd{ -xx, -yy, -zz };
-    ONB uvw{ direction };
+    ONB uvw(direction);
 
     *ref2p = uvw.GetLocal(d) * s;
 

@@ -7,10 +7,10 @@ namespace bulbit
 {
 
 // Directinal PDF
-class PDF
+class BRDF
 {
 public:
-    virtual ~PDF() = default;
+    virtual ~BRDF() = default;
 
     // Given an outgoing direction wo, importance sample an incident direction
     virtual Vec3 Sample(const Point2& u) const = 0;

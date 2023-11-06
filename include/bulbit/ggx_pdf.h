@@ -6,14 +6,11 @@
 namespace bulbit
 {
 
-// GGX normal distribution function PDF
-class GGXPDF : public PDF
+// GGX + Lambertian
+class MicrofacetGGX : public BRDF
 {
-    // https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
-    // https://schuttejoe.github.io/post/ggximportancesamplingpart1/
-
 public:
-    GGXPDF(const Vec3& n, const Vec3& wo, Float a, Float t);
+    MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t);
 
     virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
@@ -25,7 +22,7 @@ private:
     Float t;
 };
 
-inline GGXPDF::GGXPDF(const Vec3& n, const Vec3& wo, Float a, Float t)
+inline MicrofacetGGX::MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t)
     : uvw{ n }
     , wo{ wo }
     , alpha2{ a * a }

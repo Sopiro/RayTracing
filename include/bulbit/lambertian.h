@@ -33,7 +33,7 @@ inline bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const V
 {
     ir->is_specular = false;
     ir->attenuation = albedo->Evaluate(is.uv);
-    new (ir->mem) CosinePDF(is.normal);
+    new (ir->mem) LambertianReflection(is.normal);
 
     return true;
 }

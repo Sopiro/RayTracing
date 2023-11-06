@@ -1,6 +1,6 @@
+#include "bulbit/path_integrator.h"
 #include "bulbit/infinite_area_light.h"
 #include "bulbit/light.h"
-#include "bulbit/path_integrator.h"
 #include "bulbit/pdf.h"
 #include "bulbit/scene.h"
 #include "bulbit/util.h"
@@ -64,8 +64,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             continue;
         }
 
-        // BSDF
-        const PDF* pdf = ir.GetScatteringPDF();
+        const BRDF* brdf = ir.GetScatteringPDF();
 
         radiance += throughput * mat->Emit(is, ray.d);
 
@@ -89,7 +88,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             Ray shadow_ray{ is.point, to_light };
 
             // Importance sample light
-            Float light_brdf_pdf = pdf->Evaluate(to_light);
+            Float light_brdf_pdf = brdf->Evaluate(to_light);
             if (li.IsBlack() == false && light_brdf_pdf > 0)
             {
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
@@ -110,7 +109,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             if (light->IsDeltaLight() == false)
             {
                 // Importance sample BRDF
-                Vec3 scattered = pdf->Sample(sampler.Next2D());
+                Vec3 scattered = brdf->Sample(sampler.Next2D());
                 shadow_ray = Ray{ is.point, scattered };
 
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
@@ -121,7 +120,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                     {
                         if (is2.object == ((AreaLight*)light)->GetPrimitive())
                         {
-                            Float brdf_pdf = pdf->Evaluate(scattered);
+                            Float brdf_pdf = brdf->Evaluate(scattered);
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
                             li = is2.material->Emit(is2, scattered);
@@ -137,7 +136,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                         li = light->Emit(shadow_ray);
                         if (li.IsBlack() == false)
                         {
-                            Float brdf_pdf = pdf->Evaluate(scattered);
+                            Float brdf_pdf = brdf->Evaluate(scattered);
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
                             Spectrum f = mat->Evaluate(is, ray.d, scattered);
@@ -149,8 +148,8 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         }
 
         // Sample new path direction based on BRDF
-        Vec3 wi = pdf->Sample(sampler.Next2D());
-        Float pdf_value = pdf->Evaluate(wi);
+        Vec3 wi = brdf->Sample(sampler.Next2D());
+        Float pdf_value = brdf->Evaluate(wi);
         if (pdf_value <= 0)
         {
             break;

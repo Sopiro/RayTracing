@@ -20,17 +20,18 @@ struct Interaction
     Ray specular_ray;
     Spectrum attenuation;
 
-    const PDF* GetScatteringPDF() const
+    const BRDF* GetScatteringPDF() const
     {
         assert(is_specular == false);
-        return (PDF*)mem;
+        return (BRDF*)mem;
     }
 
 private:
     friend class Lambertian;
     friend class Microfacet;
 
-    inline static constexpr size_t pdf_mem_size = std::max(std::max(sizeof(CosinePDF), sizeof(GGXPDF)), sizeof(GGXVNDFPDF));
+    inline static constexpr size_t pdf_mem_size =
+        std::max(std::max(sizeof(LambertianReflection), sizeof(MicrofacetGGX)), sizeof(MicrofacetGGXVNDF));
     char mem[pdf_mem_size];
 };
 
