@@ -15,14 +15,14 @@ public:
     virtual Float Evaluate(const Vec3& wi) const override;
 
 private:
-    ONB uvw;
+    Frame frame;
     Vec3 wo;
     Float alpha2;
     Float t;
 };
 
 inline MicrofacetGGX::MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t)
-    : uvw{ n }
+    : frame{ n }
     , wo{ wo }
     , alpha2{ a * a }
     , t{ t }

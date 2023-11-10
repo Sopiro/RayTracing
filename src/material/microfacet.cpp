@@ -46,11 +46,8 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Vec3 normal = ToVector(normalmap->Evaluate(is.uv)) * 2 - Vec3(1);
     normal.Normalize();
 
-    ONB tbn;
-    tbn.u = is.shading.tangent;
-    tbn.w = is.shading.normal;
-    tbn.v = Cross(tbn.w, tbn.u);
-    tbn.v.Normalize();
+    Frame tbn = Frame::FromXZ(is.shading.tangent, is.shading.normal);
+    tbn.z.Normalize();
 
     Vec3 n = Normalize(tbn.FromLocal(normal)); // normal
     Vec3 v = -wi;                              // incident

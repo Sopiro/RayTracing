@@ -104,9 +104,9 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     Float s = distance * z - std::sqrt(radius * radius - distance_squared * sin_theta * sin_theta);
 
-    ONB uvw(direction);
+    Frame frame(direction);
 
-    *ref2p = uvw.FromLocal(d) * s;
+    *ref2p = frame.FromLocal(d) * s;
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 

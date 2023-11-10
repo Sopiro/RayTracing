@@ -15,22 +15,22 @@ public:
     virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
-    ONB uvw;
+    Frame frame;
 };
 
 inline LambertianReflection::LambertianReflection(const Vec3& n)
-    : uvw{ n }
+    : frame{ n }
 {
 }
 
 inline Vec3 LambertianReflection::Sample(const Point2& u) const
 {
-    return uvw.FromLocal(CosineSampleHemisphere(u));
+    return frame.FromLocal(CosineSampleHemisphere(u));
 }
 
 inline Float LambertianReflection::Evaluate(const Vec3& wi) const
 {
-    Float cosine = Dot(wi, uvw.w);
+    Float cosine = Dot(wi, frame.z);
     return cosine <= 0 ? 0 : cosine * inv_pi;
 }
 
