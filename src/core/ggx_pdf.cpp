@@ -11,9 +11,9 @@ Vec3 MicrofacetGGX::Sample(const Point2& u0) const
     {
         u[0] /= t;
 
-        Vec3 h = Sample_GGX(wo, alpha2, u);
-
-        Vec3 wh = uvw.GetLocal(h);
+        Vec3 w = uvw.ToLocal(wo);
+        Vec3 h = Sample_GGX(w, alpha2, u);
+        Vec3 wh = uvw.FromLocal(h);
         Vec3 wi = Reflect(wo, wh);
 
         return wi;
@@ -23,7 +23,7 @@ Vec3 MicrofacetGGX::Sample(const Point2& u0) const
         u[0] = (u[0] - t) / (1 - t);
 
         Vec3 random_cosine = CosineSampleHemisphere(u);
-        return uvw.GetLocal(random_cosine);
+        return uvw.FromLocal(random_cosine);
     }
 }
 

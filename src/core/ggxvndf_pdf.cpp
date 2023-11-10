@@ -14,12 +14,14 @@ Vec3 MicrofacetGGXVNDF::Sample(const Point2& u0) const
     {
         u[0] /= t;
 
+        Vec3 w = uvw.ToLocal(wo);
+
 #if SPHERICAL_CAPS_VNDF_SAMPLING
-        Vec3 h = Sample_GGX_VNDF_Dupuy_Benyoub(wo, alpha, u);
+        Vec3 h = Sample_GGX_VNDF_Dupuy_Benyoub(w, alpha, u);
 #else
         Vec3 h = Sample_GGX_VNDF_Heitz(wo, alpha, u);
 #endif
-        Vec3 wh = uvw.GetLocal(h);
+        Vec3 wh = uvw.FromLocal(h);
         Vec3 wi = Reflect(wo, wh);
 
         return wi;
@@ -29,7 +31,7 @@ Vec3 MicrofacetGGXVNDF::Sample(const Point2& u0) const
         u[0] = (u[0] - t) / (1 - t);
 
         Vec3 random_cosine = CosineSampleHemisphere(u);
-        return uvw.GetLocal(random_cosine);
+        return uvw.FromLocal(random_cosine);
     }
 }
 

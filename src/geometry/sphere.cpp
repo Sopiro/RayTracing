@@ -106,7 +106,7 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     ONB uvw(direction);
 
-    *ref2p = uvw.GetLocal(d) * s;
+    *ref2p = uvw.FromLocal(d) * s;
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 

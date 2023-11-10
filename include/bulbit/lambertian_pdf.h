@@ -25,7 +25,7 @@ inline LambertianReflection::LambertianReflection(const Vec3& n)
 
 inline Vec3 LambertianReflection::Sample(const Point2& u) const
 {
-    return uvw.GetLocal(CosineSampleHemisphere(u));
+    return uvw.FromLocal(CosineSampleHemisphere(u));
 }
 
 inline Float LambertianReflection::Evaluate(const Vec3& wi) const
