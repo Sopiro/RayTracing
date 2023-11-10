@@ -1,5 +1,5 @@
 #include "bulbit/sphere.h"
-#include "bulbit/onb.h"
+#include "bulbit/frame.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit

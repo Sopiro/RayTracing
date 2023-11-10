@@ -1,7 +1,7 @@
 #pragma once
 
+#include "frame.h"
 #include "intersectable.h"
-#include "onb.h"
 
 namespace bulbit
 {
