@@ -4,6 +4,14 @@
 namespace bulbit
 {
 
+MicrofacetGGX::MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t)
+    : frame{ n }
+    , wo{ wo }
+    , alpha2{ a * a }
+    , t{ t }
+{
+}
+
 Vec3 MicrofacetGGX::Sample(const Point2& u0) const
 {
     Point2 u = u0;

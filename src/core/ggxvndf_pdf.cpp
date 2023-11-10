@@ -7,6 +7,14 @@
 namespace bulbit
 {
 
+MicrofacetGGXVNDF::MicrofacetGGXVNDF(const Vec3& n, const Vec3& wo, Float a, Float t)
+    : frame{ n }
+    , wo{ wo }
+    , alpha{ a }
+    , t{ t }
+{
+}
+
 Vec3 MicrofacetGGXVNDF::Sample(const Point2& u0) const
 {
     Point2 u = u0;

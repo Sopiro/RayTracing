@@ -21,12 +21,4 @@ private:
     Float t;
 };
 
-inline MicrofacetGGX::MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t)
-    : frame{ n }
-    , wo{ wo }
-    , alpha2{ a * a }
-    , t{ t }
-{
-}
-
 } // namespace bulbit
