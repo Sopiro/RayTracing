@@ -14,7 +14,7 @@ public:
     virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
-public:
+private:
     Frame frame;
 };
 

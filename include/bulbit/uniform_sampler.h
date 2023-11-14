@@ -34,7 +34,7 @@ inline Float UniformSampler::Next1D()
 
 inline Point2 UniformSampler::Next2D()
 {
-    return { rng.NextFloat(), rng.NextFloat() };
+    return Point2{ rng.NextFloat(), rng.NextFloat() };
 }
 
 inline std::unique_ptr<Sampler> UniformSampler::Clone(int32 seed)

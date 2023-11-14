@@ -1,4 +1,5 @@
 #include "../samples.h"
+#include "bulbit/dielectric.h"
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
 #include "bulbit/metal.h"

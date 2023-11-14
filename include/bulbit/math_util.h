@@ -14,6 +14,12 @@ constexpr Vec3 x_axis{ 1, 0, 0 };
 constexpr Vec3 y_axis{ 0, 1, 0 };
 constexpr Vec3 z_axis{ 0, 0, 1 };
 
+template <typename T>
+constexpr inline T Sqr(T v)
+{
+    return v * v;
+}
+
 inline Float DegToRad(Float deg)
 {
     return Float(deg * pi / 180);
@@ -62,21 +68,21 @@ inline Vec3 Max(const Vec3& a, const Vec3& b)
     return Vec3(std::fmax(a.x, b.x), std::fmax(a.y, b.y), std::fmax(a.z, b.z));
 }
 
-inline Float Clamp(Float v, Float _min, Float _max)
+inline Float Clamp(Float val, Float lower, Float upper)
 {
-    return std::fmax(_min, std::fmin(v, _max));
+    return std::fmax(lower, std::fmin(val, upper));
 }
 
 template <typename T>
-inline T Clamp(T v, T _min, T _max)
+inline T Clamp(T val, T lower, T upper)
 {
-    return Max(_min, Min(v, _max));
+    return Max(lower, Min(val, upper));
 }
 
 template <typename T>
 inline T Lerp(const T& a, const T& b, Float t)
 {
-    return a * (Float(1.0) - t) + b * t;
+    return a * (1 - t) + b * t;
 }
 
 template <typename T>

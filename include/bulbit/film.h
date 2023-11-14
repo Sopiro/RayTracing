@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bitmap.h"
+#include "camera.h"
 #include "postprocess.h"
 #include "spectrum.h"
 

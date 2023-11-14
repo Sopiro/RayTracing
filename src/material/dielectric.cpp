@@ -30,7 +30,8 @@ bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi
 
     ir->is_specular = true;
     ir->attenuation = Spectrum(1, 1, 1);
-    ir->specular_ray = Ray{ is.point, wo };
+    ir->specular_ray.o = is.point;
+    ir->specular_ray.d = wo;
 
     return true;
 }

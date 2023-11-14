@@ -19,12 +19,12 @@ public:
 };
 
 inline Isotropic::Isotropic(const Spectrum& c)
-    : albedo(ConstantColor::Create(c))
+    : albedo{ ConstantColor::Create(c) }
 {
 }
 
 inline Isotropic::Isotropic(const Ref<Texture> a)
-    : albedo(a)
+    : albedo{ a }
 {
 }
 
@@ -32,7 +32,8 @@ inline bool Isotropic::Scatter(Interaction* ir, const Intersection& is, const Ve
 {
     ir->is_specular = true;
     ir->attenuation = albedo->Evaluate(is.uv);
-    ir->specular_ray = Ray{ is.point, RandomInUnitSphere(u) };
+    ir->specular_ray.o = is.point;
+    ir->specular_ray.d = RandomInUnitSphere(u);
 
     return true;
 }
