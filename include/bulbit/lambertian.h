@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lambertian_pdf.h"
+#include "brdf.h"
 #include "material.h"
 
 namespace bulbit

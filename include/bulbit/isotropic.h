@@ -1,6 +1,7 @@
 #pragma once
 
 #include "material.h"
+#include "sampling.h"
 
 namespace bulbit
 {

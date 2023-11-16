@@ -2,9 +2,6 @@
 
 #include "brdf.h"
 #include "constant_color.h"
-#include "lambertian_pdf.h"
-#include "ggx_pdf.h"
-#include "ggxvndf_pdf.h"
 #include "ray.h"
 
 namespace bulbit
