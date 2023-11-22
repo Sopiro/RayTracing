@@ -33,6 +33,6 @@
 #include "infinite_area_light.h"
 #include "point_light.h"
 
-#include "uniform_sampler.h"
+#include "independent_sampler.h"
 
 #include "path_integrator.h"
