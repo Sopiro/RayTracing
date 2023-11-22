@@ -6,11 +6,11 @@
 namespace bulbit
 {
 
-class UniformSampler : public Sampler
+class IndependentSampler : public Sampler
 {
 public:
-    UniformSampler(int32 samples_per_pixel, int32 seed = 0);
-    virtual ~UniformSampler() = default;
+    IndependentSampler(int32 samples_per_pixel, int32 seed = 0);
+    virtual ~IndependentSampler() = default;
 
     virtual Float Next1D() override;
     virtual Point2 Next2D() override;
@@ -21,25 +21,25 @@ private:
     RNG rng;
 };
 
-inline UniformSampler::UniformSampler(int32 samples_per_pixel, int32 seed)
+inline IndependentSampler::IndependentSampler(int32 samples_per_pixel, int32 seed)
     : Sampler(samples_per_pixel)
 {
     rng.Seed(seed);
 }
 
-inline Float UniformSampler::Next1D()
+inline Float IndependentSampler::Next1D()
 {
     return rng.NextFloat();
 }
 
-inline Point2 UniformSampler::Next2D()
+inline Point2 IndependentSampler::Next2D()
 {
     return Point2{ rng.NextFloat(), rng.NextFloat() };
 }
 
-inline std::unique_ptr<Sampler> UniformSampler::Clone(int32 seed)
+inline std::unique_ptr<Sampler> IndependentSampler::Clone(int32 seed)
 {
-    return std::make_unique<UniformSampler>(samples_per_pixel, seed);
+    return std::make_unique<IndependentSampler>(samples_per_pixel, seed);
 }
 
 } // namespace bulbit

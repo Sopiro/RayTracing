@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
-    Ref<Sampler> sampler = CreateSharedRef<UniformSampler>(samples_per_pixel);
+    Ref<Sampler> sampler = CreateSharedRef<IndependentSampler>(samples_per_pixel);
     PathIntegrator renderer(sampler, max_bounces);
 
     timer.Mark();

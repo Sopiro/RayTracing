@@ -71,8 +71,8 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
 {
 #if 0
     // Nearest sampling
-    Float w = uv.x * width - epsilon;
-    Float h = uv.y * height - epsilon;
+    Float w = uv.x * width + Float(0.5);
+    Float h = uv.y * height + Float(0.5);
 
     int32 i = int32(w);
     int32 j = int32(h);
@@ -82,8 +82,8 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
     return pixels[i + j * width];
 #else
     // Bilinear sampling
-    Float w = uv.x * width - epsilon;
-    Float h = uv.y * height - epsilon;
+    Float w = uv.x * width + Float(0.5);
+    Float h = uv.y * height + Float(0.5);
 
     int32 i0 = int32(w), i1 = int32(w) + 1;
     int32 j0 = int32(h), j1 = int32(h) + 1;
