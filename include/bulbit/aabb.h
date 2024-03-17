@@ -15,7 +15,8 @@ struct AABB
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
-    bool Intersect(const Ray& ray, Float t_min, Float t_max) const;
+    bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
+    Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     Vec3 min, max;
 };

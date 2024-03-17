@@ -279,7 +279,7 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
             continue;
         }
 
-        if (node->aabb.Intersect(r, t_min, t) == false)
+        if (node->aabb.TestRay(r, t_min, t) == false)
         {
             continue;
         }

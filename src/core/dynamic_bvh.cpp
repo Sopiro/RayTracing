@@ -765,9 +765,9 @@ void DynamicBVH::Rebuild()
 }
 
 void DynamicBVH::RayCast(const Ray& r,
-                  Float t_min,
-                  Float t_max,
-                  const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const
+                         Float t_min,
+                         Float t_max,
+                         const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const
 {
     Vec3 p1 = r.At(t_min);
     Vec3 p2 = r.At(t_max);
@@ -794,7 +794,7 @@ void DynamicBVH::RayCast(const Ray& r,
             continue;
         }
 
-        if (node->aabb.Intersect(r, t_min, t) == false)
+        if (node->aabb.TestRay(r, t_min, t) == false)
         {
             continue;
         }
