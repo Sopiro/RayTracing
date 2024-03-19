@@ -24,6 +24,8 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
 #pragma omp parallel for schedule(dynamic, 1)
     for (int32 i = 0; i < num_tiles_x * num_tiles_y; ++i)
     {
+        std::printf("\rRendering tile %d/%d", i, num_tiles_x * num_tiles_y);
+
         int32 tile_x = i % num_tiles_x;
         int32 tile_y = i / num_tiles_x;
 
@@ -72,6 +74,8 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
             }
         }
     }
+
+    std::printf("\n");
 }
 
 } // namespace bulbit
