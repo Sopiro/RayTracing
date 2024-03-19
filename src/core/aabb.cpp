@@ -9,9 +9,10 @@ bool AABB::TestRay(const Ray& ray, Float t_min, Float t_max) const
     for (int32 axis = 0; axis < 3; ++axis)
     {
         Float invD = 1 / ray.d[axis];
+        Float origin = ray.o[axis];
 
-        Float t0 = (min[axis] - ray.o[axis]) * invD;
-        Float t1 = (max[axis] - ray.o[axis]) * invD;
+        Float t0 = (min[axis] - origin) * invD;
+        Float t1 = (max[axis] - origin) * invD;
 
         if (invD < 0)
         {
@@ -35,9 +36,10 @@ Float AABB::Intersect(const Ray& ray, Float t_min, Float t_max) const
     for (int32 axis = 0; axis < 3; ++axis)
     {
         Float invD = 1 / ray.d[axis];
+        Float origin = ray.o[axis];
 
-        Float t0 = (min[axis] - ray.o[axis]) * invD;
-        Float t1 = (max[axis] - ray.o[axis]) * invD;
+        Float t0 = (min[axis] - origin) * invD;
+        Float t1 = (max[axis] - origin) * invD;
 
         if (invD < 0)
         {

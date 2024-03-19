@@ -99,6 +99,15 @@ private:
     static Float SAH(const AABB& aabb);
 };
 
+inline Float DynamicBVH::SAH(const AABB& aabb)
+{
+#if 0
+    return aabb.GetVolume();
+#else
+    return aabb.GetSurfaceArea();
+#endif
+}
+
 inline bool DynamicBVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
 {
     assert(0 <= nodeA && nodeA < nodeCapacity);
@@ -305,15 +314,6 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
             stack.Emplace(node->child2);
         }
     }
-}
-
-inline Float DynamicBVH::SAH(const AABB& aabb)
-{
-#if 0
-    return aabb.GetVolume();
-#else
-    return aabb.GetSurfaceArea();
-#endif
 }
 
 } // namespace bulbit
