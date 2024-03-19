@@ -61,14 +61,6 @@ public:
     bool WasMoved(NodeProxy node) const;
     Data* GetData(NodeProxy node) const;
 
-    void Traverse(const std::function<void(const Node*)>& callback) const;
-    void Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const;
-    void Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& callback) const;
-    void RayCast(const Ray& r,
-                 Float t_min,
-                 Float t_max,
-                 const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const;
-
     template <typename T>
     void Traverse(T* callback) const;
     template <typename T>
@@ -145,11 +137,18 @@ inline DynamicBVH::Data* DynamicBVH::GetData(NodeProxy node) const
 
 inline Float DynamicBVH::GetTreeCost() const
 {
-    Float cost = 0;
+    struct
+    {
+        Float cost = 0;
+        void TraverseCallback(const Node* node)
+        {
+            cost += SAH(node->aabb);
+        }
+    } temp;
 
-    Traverse([&cost](const Node* node) -> void { cost += SAH(node->aabb); });
+    Traverse(&temp);
 
-    return cost;
+    return temp.cost;
 }
 
 template <typename T>
