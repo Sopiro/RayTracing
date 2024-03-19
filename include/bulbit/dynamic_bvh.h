@@ -265,10 +265,6 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
     Vec3 p2 = r.At(t_max);
     Float t = t_max;
 
-    AABB rayAABB;
-    rayAABB.min = Min(p1, p2);
-    rayAABB.max = Max(p1, p2);
-
     GrowableArray<int32, 256> stack;
     stack.Emplace(root);
 
@@ -281,11 +277,6 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
         }
 
         const Node* node = nodes + nodeID;
-        if (node->aabb.TestOverlap(rayAABB) == false)
-        {
-            continue;
-        }
-
         if (node->aabb.TestRay(r, t_min, t) == false)
         {
             continue;
@@ -302,10 +293,6 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
             {
                 // Update ray AABB
                 t = value;
-                Vec3 newEnd = r.At(t);
-
-                rayAABB.min = Min(p1, newEnd);
-                rayAABB.max = Max(p1, newEnd);
             }
         }
         else
