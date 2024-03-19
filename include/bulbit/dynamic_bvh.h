@@ -61,23 +61,22 @@ public:
     bool WasMoved(NodeProxy node) const;
     Data* GetData(NodeProxy node) const;
 
+    void Traverse(const std::function<void(const Node*)>& callback) const;
     void Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const;
     void Query(const AABB& aabb, const std::function<bool(NodeProxy, Data*)>& callback) const;
-    template <typename T>
-    void Query(const Vec3& point, T* callback) const;
-    template <typename T>
-    void Query(const AABB& aabb, T* callback) const;
-
     void RayCast(const Ray& r,
                  Float t_min,
                  Float t_max,
                  const std::function<Float(const Ray&, Float, Float, Intersectable*)>& callback) const;
-    template <typename T>
-    void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
-    void Traverse(const std::function<void(const Node*)>& callback) const;
     template <typename T>
     void Traverse(T* callback) const;
+    template <typename T>
+    void Query(const Vec3& point, T* callback) const;
+    template <typename T>
+    void Query(const AABB& aabb, T* callback) const;
+    template <typename T>
+    void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
     Float GetTreeCost() const;
 
@@ -154,6 +153,32 @@ inline Float DynamicBVH::GetTreeCost() const
 }
 
 template <typename T>
+void DynamicBVH::Traverse(T* callback) const
+{
+    if (root == null_node)
+    {
+        return;
+    }
+
+    GrowableArray<NodeProxy, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() != 0)
+    {
+        NodeProxy current = stack.Pop();
+
+        if (!nodes[current].IsLeaf())
+        {
+            stack.Emplace(nodes[current].child1);
+            stack.Emplace(nodes[current].child2);
+        }
+
+        const Node* node = nodes + current;
+        callback->TraverseCallback(node);
+    }
+}
+
+template <typename T>
 void DynamicBVH::Query(const Vec3& point, T* callback) const
 {
     if (root == null_node)
@@ -222,32 +247,6 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
             stack.Emplace(nodes[current].child1);
             stack.Emplace(nodes[current].child2);
         }
-    }
-}
-
-template <typename T>
-void DynamicBVH::Traverse(T* callback) const
-{
-    if (root == null_node)
-    {
-        return;
-    }
-
-    GrowableArray<NodeProxy, 256> stack;
-    stack.Emplace(root);
-
-    while (stack.Count() != 0)
-    {
-        NodeProxy current = stack.Pop();
-
-        if (!nodes[current].IsLeaf())
-        {
-            stack.Emplace(nodes[current].child1);
-            stack.Emplace(nodes[current].child2);
-        }
-
-        const Node* node = nodes + current;
-        callback->TraverseCallback(node);
     }
 }
 

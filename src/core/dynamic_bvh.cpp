@@ -523,6 +523,31 @@ void DynamicBVH::Swap(NodeProxy node1, NodeProxy node2)
     nodes[node1].parent = parent2;
 }
 
+void DynamicBVH::Traverse(const std::function<void(const Node*)>& callback) const
+{
+    if (root == null_node)
+    {
+        return;
+    }
+
+    GrowableArray<NodeProxy, 256> stack;
+    stack.Emplace(root);
+
+    while (stack.Count() != 0)
+    {
+        NodeProxy current = stack.Pop();
+
+        if (!nodes[current].IsLeaf())
+        {
+            stack.Emplace(nodes[current].child1);
+            stack.Emplace(nodes[current].child2);
+        }
+
+        const Node* node = nodes + current;
+        callback(node);
+    }
+}
+
 void DynamicBVH::Query(const Vec3& point, const std::function<bool(NodeProxy, Data*)>& callback) const
 {
     if (root == null_node)
@@ -590,31 +615,6 @@ void DynamicBVH::Query(const AABB& aabb, const std::function<bool(NodeProxy, Dat
             stack.Emplace(nodes[current].child1);
             stack.Emplace(nodes[current].child2);
         }
-    }
-}
-
-void DynamicBVH::Traverse(const std::function<void(const Node*)>& callback) const
-{
-    if (root == null_node)
-    {
-        return;
-    }
-
-    GrowableArray<NodeProxy, 256> stack;
-    stack.Emplace(root);
-
-    while (stack.Count() != 0)
-    {
-        NodeProxy current = stack.Pop();
-
-        if (!nodes[current].IsLeaf())
-        {
-            stack.Emplace(nodes[current].child1);
-            stack.Emplace(nodes[current].child2);
-        }
-
-        const Node* node = nodes + current;
-        callback(node);
     }
 }
 
