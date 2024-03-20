@@ -261,10 +261,6 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
 template <typename T>
 void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
-    Vec3 p1 = r.At(t_min);
-    Vec3 p2 = r.At(t_max);
-    Float t = t_max;
-
     GrowableArray<int32, 256> stack;
     stack.Emplace(root);
 
@@ -277,28 +273,47 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
         }
 
         const Node* node = nodes + nodeID;
-        if (node->aabb.TestRay(r, t_min, t) == false)
-        {
-            continue;
-        }
 
         if (node->IsLeaf())
         {
-            Float value = callback->RayCastCallback(r, t_min, t, node->data);
-            if (value <= t_min)
+            Float t = callback->RayCastCallback(r, t_min, t_max, node->data);
+            if (t <= t_min)
             {
                 return;
             }
             else
             {
-                // Update ray AABB
-                t = value;
+                // Shorten the ray
+                t_max = t;
             }
         }
         else
         {
-            stack.Emplace(node->child1);
-            stack.Emplace(node->child2);
+            // Ordered traversal
+            NodeProxy child1 = node->child1;
+            NodeProxy child2 = node->child2;
+
+            Float dist1 = nodes[child1].aabb.Intersect(r, t_min, t_max);
+            Float dist2 = nodes[child2].aabb.Intersect(r, t_min, t_max);
+
+            if (dist2 < dist1)
+            {
+                std::swap(dist1, dist2);
+                std::swap(child1, child2);
+            }
+
+            if (dist1 == infinity)
+            {
+                continue;
+            }
+            else
+            {
+                if (dist2 != infinity)
+                {
+                    stack.Emplace(child2);
+                }
+                stack.Emplace(child1);
+            }
         }
     }
 }
