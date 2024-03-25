@@ -23,10 +23,10 @@ Camera* NormalMappingTest(Scene& scene)
     // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0f), 0.01f));
     // scene.SetEnvironmentMap(ConstantColor::Create(zero_vec3));
 
-    // Float aspect_ratio = 16.0f / 9.0f;
-    // Float aspect_ratio = 3.0f / 2.0f;
-    // Float aspect_ratio = 4.0f / 3.0f;
-    Float aspect_ratio = 1.0f;
+    // Float aspect_ratio = 16 / 9;
+    // Float aspect_ratio = 3. / 2;
+    // Float aspect_ratio = 4 / 3;
+    Float aspect_ratio = 1.;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

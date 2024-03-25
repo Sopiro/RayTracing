@@ -61,10 +61,10 @@ Camera* Sponza(Scene& scene)
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
     scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
 
-    Float aspect_ratio = 16.0f / 9.0f;
-    // Float aspect_ratio = 3.0f / 2.0f;
-    // Float aspect_ratio = 4.0f / 3.0f;
-    // Float aspect_ratio = 1.0f;
+    Float aspect_ratio = 16. / 9.;
+    // Float aspect_ratio = 3. / 2.;
+    // Float aspect_ratio = 4. / 3.;
+    // Float aspect_ratio = 1.;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

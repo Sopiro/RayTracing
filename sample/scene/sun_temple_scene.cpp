@@ -34,10 +34,10 @@ Camera* SunTempleScene(Scene& scene)
     Vec3 dir(blender.x, blender.z, -blender.y);
     scene.AddLight(CreateSharedRef<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f));
 
-    Float aspect_ratio = 16.0f / 9.0f;
-    // Float aspect_ratio = 3.0f / 2.0f;
-    // Float aspect_ratio = 4.0f / 3.0f;
-    // Float aspect_ratio = 1.0f;
+    Float aspect_ratio = 16. / 9.;
+    // Float aspect_ratio = 3. / 2.;
+    // Float aspect_ratio = 4. / 3.;
+    // Float aspect_ratio = 1.;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 
