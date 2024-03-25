@@ -200,6 +200,12 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
     nodes[newParent].data = nullptr;
     nodes[newParent].parent = oldParent;
 
+    // Connect new leaf and sibling to new parent
+    nodes[newParent].child1 = bestSibling;
+    nodes[newParent].child2 = leaf;
+    nodes[bestSibling].parent = newParent;
+    nodes[leaf].parent = newParent;
+
     if (oldParent != null_node)
     {
         if (nodes[oldParent].child1 == bestSibling)
@@ -210,23 +216,14 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
         {
             nodes[oldParent].child2 = newParent;
         }
-
-        nodes[newParent].child1 = bestSibling;
-        nodes[newParent].child2 = leaf;
-        nodes[bestSibling].parent = newParent;
-        nodes[leaf].parent = newParent;
     }
     else
     {
-        nodes[newParent].child1 = bestSibling;
-        nodes[newParent].child2 = leaf;
-        nodes[bestSibling].parent = newParent;
-        nodes[leaf].parent = newParent;
         root = newParent;
     }
 
     // Walk back up the tree refitting ancestors' AABB and applying rotations
-    NodeProxy ancestor = nodes[leaf].parent;
+    NodeProxy ancestor = newParent;
     while (ancestor != null_node)
     {
         NodeProxy child1 = nodes[ancestor].child1;
@@ -249,34 +246,40 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
 
     NodeProxy parent = nodes[leaf].parent;
 
-    if (parent != null_node) // node is not root
+    if (parent == null_node) // node is root
     {
-        NodeProxy sibling = nodes[parent].child1 == leaf ? nodes[parent].child2 : nodes[parent].child1;
+        assert(root == leaf);
+        root = null_node;
+        return;
+    }
 
-        if (nodes[parent].parent != null_node) // sibling has grandparent
+    NodeProxy grandParent = nodes[parent].parent;
+    NodeProxy sibling;
+    if (nodes[parent].child1 == leaf)
+    {
+        sibling = nodes[parent].child2;
+    }
+    else
+    {
+        sibling = nodes[parent].child1;
+    }
+
+    FreeNode(parent);
+
+    if (grandParent != null_node) // node has grandparent
+    {
+        nodes[sibling].parent = grandParent;
+
+        if (nodes[grandParent].child1 == parent)
         {
-            nodes[sibling].parent = nodes[parent].parent;
-
-            NodeProxy grandParent = nodes[parent].parent;
-            if (nodes[grandParent].child1 == parent)
-            {
-                nodes[grandParent].child1 = sibling;
-            }
-            else
-            {
-                nodes[grandParent].child2 = sibling;
-            }
+            nodes[grandParent].child1 = sibling;
         }
-        else // sibling has no grandparent
+        else
         {
-            root = sibling;
-
-            nodes[sibling].parent = null_node;
+            nodes[grandParent].child2 = sibling;
         }
 
-        FreeNode(parent);
-
-        NodeProxy ancestor = nodes[sibling].parent;
+        NodeProxy ancestor = grandParent;
         while (ancestor != null_node)
         {
             NodeProxy child1 = nodes[ancestor].child1;
@@ -284,14 +287,15 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
 
             nodes[ancestor].aabb = AABB::Union(nodes[child1].aabb, nodes[child2].aabb);
 
+            Rotate(ancestor);
+
             ancestor = nodes[ancestor].parent;
         }
     }
-    else // node is root
+    else // node has no grandparent
     {
-        assert(root == leaf);
-
-        root = null_node;
+        root = sibling;
+        nodes[sibling].parent = null_node;
     }
 }
 
@@ -375,41 +379,27 @@ void DynamicBVH::Rotate(NodeProxy node)
         return;
     }
 
-    if (nodes[node].parent == null_node)
+    NodeProxy child1 = nodes[node].child1;
+    NodeProxy child2 = nodes[node].child2;
+
+    Float costDiffs[4] = { 0.0f };
+
+    if (nodes[child1].IsLeaf() == false)
     {
-        return;
+        Float area1 = SAH(nodes[child1].aabb);
+        costDiffs[0] = SAH(AABB::Union(nodes[nodes[child1].child1].aabb, nodes[child2].aabb)) - area1;
+        costDiffs[1] = SAH(AABB::Union(nodes[nodes[child1].child2].aabb, nodes[child2].aabb)) - area1;
     }
 
-    NodeProxy parent = nodes[node].parent;
-
-    NodeProxy sibling;
-    if (nodes[parent].child1 == node)
+    if (nodes[child2].IsLeaf() == false)
     {
-        sibling = nodes[parent].child2;
-    }
-    else
-    {
-        sibling = nodes[parent].child1;
-    }
-
-    int32 count = 2;
-    Float costDiffs[4];
-    Float nodeArea = SAH(nodes[node].aabb);
-
-    costDiffs[0] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb)) - nodeArea;
-    costDiffs[1] = SAH(AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb)) - nodeArea;
-
-    if (nodes[sibling].IsLeaf() == false)
-    {
-        Float siblingArea = SAH(nodes[sibling].aabb);
-        costDiffs[2] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb)) - siblingArea;
-        costDiffs[3] = SAH(AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb)) - siblingArea;
-
-        count += 2;
+        Float area2 = SAH(nodes[child2].aabb);
+        costDiffs[2] = SAH(AABB::Union(nodes[nodes[child2].child1].aabb, nodes[child1].aabb)) - area2;
+        costDiffs[3] = SAH(AABB::Union(nodes[nodes[child2].child2].aabb, nodes[child1].aabb)) - area2;
     }
 
     int32 bestDiffIndex = 0;
-    for (int32 i = 1; i < count; ++i)
+    for (int32 i = 1; i < 4; ++i)
     {
         if (costDiffs[i] < costDiffs[bestDiffIndex])
         {
@@ -418,81 +408,62 @@ void DynamicBVH::Rotate(NodeProxy node)
     }
 
     // Rotate only if it reduce the suface area
-    if (costDiffs[bestDiffIndex] < 0.0f)
+    if (costDiffs[bestDiffIndex] >= 0.0f)
     {
-        // printf("Tree rotation occurred: %d\n", bestDiffIndex);
+        return;
+    }
 
-        switch (bestDiffIndex)
-        {
-        case 0: // Swap(sibling, node->child2);
-            if (nodes[parent].child1 == sibling)
-            {
-                nodes[parent].child1 = nodes[node].child2;
-            }
-            else
-            {
-                nodes[parent].child2 = nodes[node].child2;
-            }
+    // printf("Tree rotation occurred: %d\n", bestDiffIndex);
+    switch (bestDiffIndex)
+    {
+    case 0:
+    {
+        // Swap(child2, nodes[child1].child2);
+        nodes[nodes[child1].child2].parent = node;
+        nodes[node].child2 = nodes[child1].child2;
 
-            nodes[nodes[node].child2].parent = parent;
+        nodes[child1].child2 = child2;
+        nodes[child2].parent = child1;
 
-            nodes[node].child2 = sibling;
-            nodes[sibling].parent = node;
+        nodes[child1].aabb = AABB::Union(nodes[nodes[child1].child1].aabb, nodes[nodes[child1].child2].aabb);
+    }
+    break;
+    case 1:
+    {
+        // Swap(child2, nodes[child1].child1);
+        nodes[nodes[child1].child1].parent = node;
+        nodes[node].child2 = nodes[child1].child1;
 
-            nodes[node].aabb = AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child1].aabb);
-            break;
-        case 1: // Swap(sibling, node->child1);
-            if (nodes[parent].child1 == sibling)
-            {
-                nodes[parent].child1 = nodes[node].child1;
-            }
-            else
-            {
-                nodes[parent].child2 = nodes[node].child1;
-            }
+        nodes[child1].child1 = child2;
+        nodes[child2].parent = child1;
 
-            nodes[nodes[node].child1].parent = parent;
+        nodes[child1].aabb = AABB::Union(nodes[nodes[child1].child1].aabb, nodes[nodes[child1].child2].aabb);
+    }
+    break;
+    case 2:
+    {
+        // Swap(child1, nodes[child2].child2);
+        nodes[nodes[child2].child2].parent = node;
+        nodes[node].child1 = nodes[child2].child2;
 
-            nodes[node].child1 = sibling;
-            nodes[sibling].parent = node;
+        nodes[child2].child2 = child1;
+        nodes[child1].parent = child2;
 
-            nodes[node].aabb = AABB::Union(nodes[sibling].aabb, nodes[nodes[node].child2].aabb);
-            break;
-        case 2: // Swap(node, sibling->child2);
-            if (nodes[parent].child1 == node)
-            {
-                nodes[parent].child1 = nodes[sibling].child2;
-            }
-            else
-            {
-                nodes[parent].child2 = nodes[sibling].child2;
-            }
+        nodes[child2].aabb = AABB::Union(nodes[nodes[child2].child1].aabb, nodes[nodes[child2].child2].aabb);
+    }
+    break;
+    case 3:
+    {
+        // Swap(child1, nodes[child2].child1);
+        nodes[nodes[child2].child1].parent = node;
+        nodes[node].child1 = nodes[child2].child1;
 
-            nodes[nodes[sibling].child2].parent = parent;
+        nodes[child2].child1 = child1;
+        nodes[child1].parent = child2;
 
-            nodes[sibling].child2 = node;
-            nodes[node].parent = sibling;
-
-            nodes[sibling].aabb = AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child2].aabb);
-            break;
-        case 3: // Swap(node, sibling->child1);
-            if (nodes[parent].child1 == node)
-            {
-                nodes[parent].child1 = nodes[sibling].child1;
-            }
-            else
-            {
-                nodes[parent].child2 = nodes[sibling].child1;
-            }
-
-            nodes[nodes[sibling].child1].parent = parent;
-
-            nodes[sibling].child1 = node;
-            nodes[node].parent = sibling;
-
-            nodes[sibling].aabb = AABB::Union(nodes[node].aabb, nodes[nodes[sibling].child1].aabb);
-            break;
-        }
+        nodes[child2].aabb = AABB::Union(nodes[nodes[child2].child1].aabb, nodes[nodes[child2].child2].aabb);
+    }
+    break;
     }
 }
 
@@ -589,6 +560,7 @@ void DynamicBVH::FreeNode(NodeProxy node)
     assert(0 <= node && node <= nodeCapacity);
     assert(0 < nodeCount);
 
+    nodes[node].parent = node;
     nodes[node].next = freeList;
     freeList = node;
     --nodeCount;
@@ -601,7 +573,7 @@ void DynamicBVH::Rebuild()
     NodeProxy* leaves = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
     int32 count = 0;
 
-    // Build an array of leaf node
+    // Collect all leaves
     for (int32 i = 0; i < nodeCapacity; ++i)
     {
         // Already in the free list
