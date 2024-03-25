@@ -31,4 +31,13 @@ private:
     Ref<Sampler> sampler_prototype;
 };
 
+class DebugIntegrator : public SamplerIntegrator
+{
+public:
+    DebugIntegrator(const Ref<Sampler> sampler);
+    virtual ~DebugIntegrator() = default;
+
+    virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override;
+};
+
 } // namespace bulbit
