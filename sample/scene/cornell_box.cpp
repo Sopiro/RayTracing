@@ -85,6 +85,7 @@ Camera* CornellBox(Scene& scene)
         auto tf = Transform{ 0.5f, 0.999f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         scene.AddLight(CreateRectXZ(tf, light));
 
+        // scene.AddLight(CreateSharedRef<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, CreateSharedRef<DiffuseLight>(Spectrum(10.f))));
         // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f)));
         // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0f), 0.05f));
         // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
