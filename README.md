@@ -27,7 +27,7 @@ This is a physically based CPU ray tracer written in C++
 |![CornellBox](.github/image/render_1000x1000_s1024_d50_t266.3692223s.png)|![CornellBox](.github/image/render_1000x1000_s2048_d50_t554.1794322s.png)|
 |--|--|
 
-![RTIOW](.github/image/render_1920x1080_s1024_d50_t570.4936352s.png)
+![RTIOW](.github/image/render_1920x1080_s256_d50_t172.178533s.png)
 <!-- ![Materials](.github/image/render_1920x1080_s2048_d2147483647_t885.34s.png) -->
 ![MIS](.github/image/render_1920x1080_s128_d2147483647_t191.966s.png)
 ![StanfordModels](.github/image/render_1920x1080_s1024_d2147483647_t490.157s.png)
