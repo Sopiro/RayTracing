@@ -88,8 +88,8 @@ void Sphere::Sample(Intersection* sample, Float* pdf, const Point2& u) const
 void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
 {
     Vec3 direction = center - ref;
-    Float distance_squared = Dot(direction, direction);
-    Float distance = std::sqrt(distance_squared);
+    Float distance = direction.Normalize();
+    Float distance_squared = distance * distance;
 
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
     Float z = 1 + u[1] * (cos_theta_max - 1);
