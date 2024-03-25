@@ -9,6 +9,9 @@ struct AABB
 {
     static AABB Union(const AABB& b1, const AABB& b2);
 
+    Vec3 GetCenter() const;
+    Vec3 GetHalfExtents() const;
+
     Float GetVolume() const;
     Float GetSurfaceArea() const;
 
@@ -27,6 +30,16 @@ inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
     Vec3 max = Max(aabb1.max, aabb2.max);
 
     return AABB{ min, max };
+}
+
+inline Vec3 AABB::GetCenter() const
+{
+    return (min + max) * Float(0.5);
+}
+
+inline Vec3 AABB::GetHalfExtents() const
+{
+    return (max - min) * Float(0.5);
 }
 
 inline Float AABB::GetVolume() const

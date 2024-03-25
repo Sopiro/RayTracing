@@ -5,8 +5,7 @@ namespace bulbit
 {
 
 DynamicBVH::DynamicBVH()
-    : nodeID{ 0 }
-    , root{ null_node }
+    : root{ null_node }
     , nodeCapacity{ 32 }
     , nodeCount{ 0 }
 {
@@ -17,8 +16,11 @@ DynamicBVH::DynamicBVH()
     for (int32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
+        nodes[i].parent = i;
     }
     nodes[nodeCapacity - 1].next = null_node;
+    nodes[nodeCapacity - 1].parent = nodeCapacity - 1;
+
     freeList = 0;
 }
 
@@ -33,7 +35,6 @@ DynamicBVH::DynamicBVH(DynamicBVH&& other) noexcept
 {
     // Steal resources
     {
-        nodeID = other.nodeID;
         root = other.root;
 
         nodes = other.nodes;
@@ -45,7 +46,6 @@ DynamicBVH::DynamicBVH(DynamicBVH&& other) noexcept
 
     // Clear moved object
     {
-        other.nodeID = 0;
         other.root = null_node;
 
         other.nodes = nullptr;
@@ -64,7 +64,6 @@ DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
 
     // Steal resources
     {
-        nodeID = other.nodeID;
         root = other.root;
 
         nodes = other.nodes;
@@ -76,7 +75,6 @@ DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
 
     // Clear moved object
     {
-        other.nodeID = 0;
         other.root = null_node;
 
         other.nodes = nullptr;
@@ -511,21 +509,28 @@ void DynamicBVH::Swap(NodeProxy node1, NodeProxy node2)
     }
 
     if (nodes[parent1].child1 == node1)
+    {
         nodes[parent1].child1 = node2;
+    }
     else
+    {
         nodes[parent1].child2 = node2;
+    }
     nodes[node2].parent = parent1;
 
     if (nodes[parent2].child1 == node2)
+    {
         nodes[parent2].child1 = node1;
+    }
     else
+    {
         nodes[parent2].child2 = node1;
+    }
     nodes[node1].parent = parent2;
 }
 
 void DynamicBVH::Reset()
 {
-    nodeID = 0;
     root = null_node;
     nodeCount = 0;
     memset(nodes, 0, nodeCapacity * sizeof(Node));
@@ -534,8 +539,11 @@ void DynamicBVH::Reset()
     for (int32 i = 0; i < nodeCapacity - 1; ++i)
     {
         nodes[i].next = i + 1;
+        nodes[i].parent = i;
     }
     nodes[nodeCapacity - 1].next = null_node;
+    nodes[nodeCapacity - 1].parent = nodeCapacity - 1;
+
     freeList = 0;
 }
 
@@ -557,14 +565,16 @@ NodeProxy DynamicBVH::AllocateNode()
         for (int32 i = nodeCount; i < nodeCapacity - 1; ++i)
         {
             nodes[i].next = i + 1;
+            nodes[i].parent = i;
         }
         nodes[nodeCapacity - 1].next = null_node;
+        nodes[nodeCapacity - 1].parent = nodeCapacity - 1;
+
         freeList = nodeCount;
     }
 
     NodeProxy node = freeList;
     freeList = nodes[node].next;
-    nodes[node].id = ++nodeID;
     nodes[node].parent = null_node;
     nodes[node].child1 = null_node;
     nodes[node].child2 = null_node;
@@ -579,7 +589,6 @@ void DynamicBVH::FreeNode(NodeProxy node)
     assert(0 <= node && node <= nodeCapacity);
     assert(0 < nodeCount);
 
-    nodes[node].id = 0;
     nodes[node].next = freeList;
     freeList = node;
     --nodeCount;
@@ -596,7 +605,7 @@ void DynamicBVH::Rebuild()
     for (int32 i = 0; i < nodeCapacity; ++i)
     {
         // Already in the free list
-        if (nodes[i].id == 0)
+        if (nodes[i].parent == i)
         {
             continue;
         }

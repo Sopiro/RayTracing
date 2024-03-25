@@ -26,7 +26,6 @@ public:
             return child1 == null_node;
         }
 
-        int32 id;
         AABB aabb;
 
         NodeProxy parent;
@@ -78,7 +77,6 @@ private:
     friend class Aggregate;
     friend class Scene;
 
-    NodeProxy nodeID;
     NodeProxy root;
 
     Node* nodes;
