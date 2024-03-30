@@ -3,6 +3,75 @@
 namespace bulbit
 {
 
+void Scene::GetAABB(AABB* out_aabb) const
+{
+    if (bvh.nodeCount == 0)
+    {
+        out_aabb->min.SetZero();
+        out_aabb->max.SetZero();
+    }
+
+    *out_aabb = bvh.nodes[bvh.root].aabb;
+}
+
+void Scene::Add(const Ref<Intersectable> object)
+{
+    objects.push_back(object);
+
+    AABB aabb;
+    object->GetAABB(&aabb);
+    bvh.CreateNode(object.get(), aabb);
+}
+
+void Scene::Add(const Ref<Mesh> mesh)
+{
+    for (int32 i = 0; i < mesh->triangle_count; ++i)
+    {
+        auto tri = CreateSharedRef<Triangle>(mesh, i);
+        objects.push_back(tri);
+
+        AABB aabb;
+        tri->GetAABB(&aabb);
+        bvh.CreateNode(tri.get(), aabb);
+    }
+}
+
+void Scene::Add(const Ref<Model> model)
+{
+    auto& meshes = model->GetMeshes();
+    for (size_t i = 0; i < meshes.size(); ++i)
+    {
+        Add(meshes[i]);
+    }
+}
+
+void Scene::AddLight(const Ref<Light> light)
+{
+    lights.push_back(light);
+
+    if (light->type == Light::Type::infinite_area_light)
+    {
+        infinite_lights.push_back((InfiniteAreaLight*)light.get());
+    }
+}
+
+void Scene::AddLight(const Ref<Primitive> primitive)
+{
+    Add(primitive);
+    lights.push_back(CreateSharedRef<AreaLight>(primitive));
+}
+
+void Scene::AddLight(const Ref<Mesh> mesh)
+{
+    for (int32 i = 0; i < mesh->triangle_count; ++i)
+    {
+        auto tri = CreateSharedRef<Triangle>(mesh, i);
+        Add(tri);
+
+        lights.push_back(CreateSharedRef<AreaLight>(tri));
+    }
+}
+
 bool Scene::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback

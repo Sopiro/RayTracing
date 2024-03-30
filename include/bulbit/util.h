@@ -9,18 +9,10 @@ namespace bulbit
 
 Ref<Microfacet> RandomMicrofacetMaterial();
 
-Ref<Mesh> CreateRectXY(const Transform& transform,
-                       const Ref<Material> material,
-                       const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateRectXZ(const Transform& transform,
-                       const Ref<Material> material,
-                       const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateRectYZ(const Transform& transform,
-                       const Ref<Material> material,
-                       const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateBox(const Transform& transform,
-                    const Ref<Material> material,
-                    const Point2& texCoord = Point2(1, 1));
+Ref<Mesh> CreateRectXY(const Transform& transform, const Ref<Material> material, const Point2& texCoord = Point2(1, 1));
+Ref<Mesh> CreateRectXZ(const Transform& transform, const Ref<Material> material, const Point2& texCoord = Point2(1, 1));
+Ref<Mesh> CreateRectYZ(const Transform& transform, const Ref<Material> material, const Point2& texCoord = Point2(1, 1));
+Ref<Mesh> CreateBox(const Transform& transform, const Ref<Material> material, const Point2& texCoord = Point2(1, 1));
 
 inline bool IsNullish(Float v)
 {
@@ -63,6 +55,11 @@ inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
                << m.ex.w << ' ' << m.ey.w << ' ' << m.ez.w << ' ' << m.ew.w << '\n';
 
     // clang-format on
+}
+
+inline std::ostream& operator<<(std::ostream& out, const AABB& aabb)
+{
+    return out << "min: " << aabb.min << "\nmax: " << aabb.max << '\n';
 }
 
 } // namespace bulbit
