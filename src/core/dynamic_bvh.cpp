@@ -1,5 +1,6 @@
 #include "bulbit/dynamic_bvh.h"
 #include "bulbit/intersectable.h"
+#include "bulbit/util.h"
 
 namespace bulbit
 {
@@ -299,6 +300,22 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
     }
 }
 
+NodeProxy DynamicBVH::PoolNode(Data* data, const AABB& aabb)
+{
+    NodeProxy newNode = AllocateNode();
+
+    // Fatten the aabb
+    nodes[newNode].aabb.max = aabb.max + aabb_margin;
+    nodes[newNode].aabb.min = aabb.min - aabb_margin;
+    nodes[newNode].data = data;
+    nodes[newNode].parent = null_node;
+    nodes[newNode].moved = true;
+
+    data->node = newNode;
+
+    return newNode;
+}
+
 NodeProxy DynamicBVH::CreateNode(Data* data, const AABB& aabb)
 {
     NodeProxy newNode = AllocateNode();
@@ -568,12 +585,10 @@ void DynamicBVH::FreeNode(NodeProxy node)
 
 void DynamicBVH::Rebuild()
 {
-    // Rebuild the tree with bottom up approach
-
-    NodeProxy* leaves = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
+    NodeProxy* primitives = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
     int32 count = 0;
 
-    // Collect all leaves
+    // Collect all primitives
     for (int32 i = 0; i < nodeCapacity; ++i)
     {
         // Already in the free list
@@ -586,8 +601,7 @@ void DynamicBVH::Rebuild()
         if (nodes[i].IsLeaf())
         {
             nodes[i].parent = null_node;
-
-            leaves[count++] = i;
+            primitives[count++] = i;
         }
         else
         {
@@ -596,58 +610,99 @@ void DynamicBVH::Rebuild()
         }
     }
 
-    while (count > 1)
+    struct BuildNode
     {
-        Float minCost = infinity;
-        int32 minI = -1;
-        int32 minJ = -1;
+        NodeProxy node;
+        int32 begin, end;
+    };
 
-        // Find the best aabb pair
-        for (int32 i = 0; i < count; ++i)
+    root = AllocateNode();
+
+    std::vector<BuildNode> stack;
+    stack.reserve(2 * count - 1);
+
+    stack.emplace_back(root, 0, count);
+
+    // Subdivision
+    while (stack.size() > 0)
+    {
+        BuildNode n = stack.back();
+        stack.pop_back();
+
+        NodeProxy node = n.node;
+
+        AABB& aabb = nodes[node].aabb;
+        for (int32 i = n.begin; i < n.end; ++i)
         {
-            AABB aabbI = nodes[leaves[i]].aabb;
+            aabb = AABB::Union(aabb, nodes[primitives[i]].aabb);
+        }
+        nodes[node].aabb = aabb;
 
-            for (int32 j = i + 1; j < count; ++j)
-            {
-                AABB aabbJ = nodes[leaves[j]].aabb;
-
-                AABB combined = AABB::Union(aabbI, aabbJ);
-                Float cost = SAH(combined);
-
-                if (cost < minCost)
-                {
-                    minCost = cost;
-                    minI = i;
-                    minJ = j;
-                }
-            }
+        if (aabb.GetSurfaceArea() == 0.0f)
+        {
+            std::cout << "something went wrong" << std::endl;
         }
 
-        NodeProxy index1 = leaves[minI];
-        NodeProxy index2 = leaves[minJ];
-        Node* child1 = nodes + index1;
-        Node* child2 = nodes + index2;
+        // get longest axis
+        Vec3 extents = aabb.GetExtents();
+        int32 axis = 0;
+        if (extents.y > extents.x)
+        {
+            axis = 1;
+        }
+        if (extents.z > extents[axis])
+        {
+            axis = 2;
+        }
+        Float split_pos = aabb.min[axis] + extents[axis] * 0.5f;
 
-        // Create a parent(internal) node
-        NodeProxy parentIndex = AllocateNode();
-        Node* parent = nodes + parentIndex;
+        NodeProxy* m = std::partition(primitives + n.begin, primitives + n.end,
+                                      [=](NodeProxy n) { return nodes[n].aabb.GetCenter()[axis] < split_pos; });
+        int32 mid = int32(m - primitives);
 
-        parent->child1 = index1;
-        parent->child2 = index2;
-        parent->aabb = AABB::Union(child1->aabb, child2->aabb);
-        parent->parent = null_node;
+        int32 left_count = mid - n.begin;
+        int32 right_count = n.end - mid;
 
-        child1->parent = parentIndex;
-        child2->parent = parentIndex;
+        if (left_count == 0 || right_count == 0)
+        {
+            mid = (n.end + n.begin) / 2;
 
-        leaves[minI] = parentIndex;
+            std::nth_element(primitives + n.begin, primitives + mid, primitives + n.end, [=](NodeProxy a, NodeProxy b) {
+                return nodes[a].aabb.GetCenter()[axis] < nodes[b].aabb.GetCenter()[axis];
+            });
+        }
 
-        leaves[minJ] = leaves[count - 1];
-        --count;
+        left_count = mid - n.begin;
+        right_count = n.end - mid;
+
+        if (left_count == 1)
+        {
+            nodes[node].child1 = primitives[n.begin];
+            nodes[primitives[n.begin]].parent = node;
+        }
+        else
+        {
+            NodeProxy left = AllocateNode();
+            nodes[node].child1 = left;
+            nodes[left].parent = node;
+            stack.emplace_back(left, n.begin, mid);
+        }
+
+        if (right_count == 1)
+        {
+            nodes[node].child2 = primitives[mid];
+            nodes[primitives[mid]].parent = node;
+        }
+        else
+        {
+            NodeProxy right = AllocateNode();
+            nodes[node].child2 = right;
+            nodes[right].parent = node;
+            stack.emplace_back(right, mid, n.end);
+        }
     }
 
-    root = leaves[0];
-    free(leaves);
+    free(primitives);
 }
 
 } // namespace bulbit

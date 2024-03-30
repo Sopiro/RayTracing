@@ -50,6 +50,7 @@ public:
 
     void Reset();
 
+    NodeProxy PoolNode(Data* data, const AABB& aabb);
     NodeProxy CreateNode(Data* data, const AABB& aabb);
     bool MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move);
     void RemoveNode(NodeProxy node);
