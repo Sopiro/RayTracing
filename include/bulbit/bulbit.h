@@ -15,7 +15,6 @@
 #include "constant_color.h"
 #include "image_texture.h"
 
-#include "constant_medium.h"
 #include "dielectric.h"
 #include "lambertian.h"
 #include "material.h"

@@ -34,7 +34,6 @@ private:
 // Lambertian
 // Metal
 // Dielectric
-// Isotropic
 // Microfacet
 // DiffuseLight
 class Material
