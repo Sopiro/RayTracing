@@ -1,6 +1,5 @@
 #pragma once
 
-#include "aggregate.h"
 #include "constant_color.h"
 #include "image_texture.h"
 #include "intersectable.h"
@@ -24,23 +23,25 @@ public:
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    void Add(const Ref<Intersectable> object);
-    void Add(const Ref<Mesh> object);
-    void Add(const Ref<Model> object);
+    void Add(const Ref<Primitive> primitive);
+    void Add(const Ref<Mesh> mesh);
+    void Add(const Ref<Model> model);
 
     void AddLight(const Ref<Light> light);
-    void AddLight(const Ref<Primitive> object);
-    void AddLight(const Ref<Mesh> object);
+    void AddLight(const Ref<Primitive> primitve);
+    void AddLight(const Ref<Mesh> mesh);
 
     const std::vector<Ref<Light>>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
-    void Reset();
-    void Rebuild();
+    void BuildAccelerationStructure();
+    void Clear();
 
 private:
     DynamicBVH bvh; // Acceleration structure
-    std::vector<Ref<Intersectable>> objects;
+
+    std::vector<Ref<Primitive>> primitives;
+    std::vector<Ref<Mesh>> meshes;
 
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
@@ -56,17 +57,17 @@ inline const std::vector<InfiniteAreaLight*>& Scene::GetInfiniteAreaLights() con
     return infinite_lights;
 }
 
-inline void Scene::Reset()
-{
-    bvh.Reset();
-    objects.clear();
-    lights.clear();
-    infinite_lights.clear();
-}
-
-inline void Scene::Rebuild()
+inline void Scene::BuildAccelerationStructure()
 {
     bvh.Rebuild();
+}
+
+inline void Scene::Clear()
+{
+    bvh.Reset();
+    primitives.clear();
+    lights.clear();
+    infinite_lights.clear();
 }
 
 } // namespace bulbit

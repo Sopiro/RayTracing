@@ -1,4 +1,5 @@
 #include "bulbit/scene.h"
+#include "bulbit/triangle.h"
 
 namespace bulbit
 {
@@ -14,21 +15,23 @@ void Scene::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-void Scene::Add(const Ref<Intersectable> object)
+void Scene::Add(const Ref<Primitive> primitive)
 {
-    objects.push_back(object);
+    primitives.push_back(primitive);
 
     AABB aabb;
-    object->GetAABB(&aabb);
-    bvh.CreateNode(object.get(), aabb);
+    primitive->GetAABB(&aabb);
+    bvh.CreateNode(primitive.get(), aabb);
 }
 
 void Scene::Add(const Ref<Mesh> mesh)
 {
+    meshes.push_back(mesh);
+
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
-        objects.push_back(tri);
+        primitives.push_back(tri);
 
         AABB aabb;
         tri->GetAABB(&aabb);
@@ -38,10 +41,19 @@ void Scene::Add(const Ref<Mesh> mesh)
 
 void Scene::Add(const Ref<Model> model)
 {
-    auto& meshes = model->GetMeshes();
-    for (size_t i = 0; i < meshes.size(); ++i)
+    for (Ref<Mesh> mesh : model->GetMeshes())
     {
-        Add(meshes[i]);
+        meshes.push_back(mesh);
+
+        for (int32 i = 0; i < mesh->triangle_count; ++i)
+        {
+            auto tri = CreateSharedRef<Triangle>(mesh, i);
+            primitives.push_back(tri);
+
+            AABB aabb;
+            tri->GetAABB(&aabb);
+            bvh.CreateNode(tri.get(), aabb);
+        };
     }
 }
 
@@ -63,6 +75,8 @@ void Scene::AddLight(const Ref<Primitive> primitive)
 
 void Scene::AddLight(const Ref<Mesh> mesh)
 {
+    meshes.push_back(mesh);
+
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);

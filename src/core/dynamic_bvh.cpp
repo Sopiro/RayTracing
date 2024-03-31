@@ -198,7 +198,7 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
     NodeProxy oldParent = nodes[bestSibling].parent;
     NodeProxy newParent = AllocateNode();
     nodes[newParent].aabb = AABB::Union(aabb, nodes[bestSibling].aabb);
-    nodes[newParent].data = nullptr;
+    nodes[newParent].primitive = nullptr;
     nodes[newParent].parent = oldParent;
 
     // Connect new leaf and sibling to new parent
@@ -300,36 +300,32 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
     }
 }
 
-NodeProxy DynamicBVH::PoolNode(Data* data, const AABB& aabb)
+NodeProxy DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
 {
     NodeProxy newNode = AllocateNode();
 
     // Fatten the aabb
-    nodes[newNode].aabb.max = aabb.max + aabb_margin;
-    nodes[newNode].aabb.min = aabb.min - aabb_margin;
-    nodes[newNode].data = data;
+    nodes[newNode].aabb.max = aabb.max;
+    nodes[newNode].aabb.min = aabb.min;
+    nodes[newNode].primitive = primitive;
     nodes[newNode].parent = null_node;
     nodes[newNode].moved = true;
-
-    data->node = newNode;
 
     return newNode;
 }
 
-NodeProxy DynamicBVH::CreateNode(Data* data, const AABB& aabb)
+NodeProxy DynamicBVH::CreateNode(Primitive* primitive, const AABB& aabb)
 {
     NodeProxy newNode = AllocateNode();
 
     // Fatten the aabb
-    nodes[newNode].aabb.max = aabb.max + aabb_margin;
-    nodes[newNode].aabb.min = aabb.min - aabb_margin;
-    nodes[newNode].data = data;
+    nodes[newNode].aabb.max = aabb.max;
+    nodes[newNode].aabb.min = aabb.min;
+    nodes[newNode].primitive = primitive;
     nodes[newNode].parent = null_node;
     nodes[newNode].moved = true;
 
     InsertLeaf(newNode);
-
-    data->node = newNode;
 
     return newNode;
 }
@@ -345,7 +341,7 @@ bool DynamicBVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, b
         return false;
     }
 
-    Vec3 d = displacement * aabb_multiplier;
+    Vec3 d = displacement;
 
     if (d.x > 0.0f)
     {
@@ -366,8 +362,8 @@ bool DynamicBVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, b
     }
 
     // Fatten the aabb
-    aabb.max += aabb_margin;
-    aabb.min -= aabb_margin;
+    aabb.max;
+    aabb.min;
 
     RemoveLeaf(node);
 

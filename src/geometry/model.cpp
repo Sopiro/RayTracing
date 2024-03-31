@@ -8,6 +8,17 @@
 namespace bulbit
 {
 
+static Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
+{
+    Mat4 t;
+    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
+    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
+    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
+    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
+
+    return t;
+}
+
 Model::Model(const std::string& filename, const Transform& transform)
 {
     Load(filename, transform);
@@ -141,17 +152,6 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
 
     return CreateSharedRef<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
                                  std::move(indices), transform, CreateMaterial(mesh, scene));
-}
-
-static Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
-{
-    Mat4 t;
-    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
-    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
-    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
-    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
-
-    return t;
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

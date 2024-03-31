@@ -2,21 +2,14 @@
 
 #include "aabb.h"
 #include "growable_array.h"
-#include "intersectable.h"
+#include "primitive.h"
 
 namespace bulbit
 {
 
-constexpr Vec3 aabb_margin{ 0 };
-constexpr Float aabb_multiplier{ 1 };
-
-class Intersectable;
-
 class DynamicBVH
 {
 public:
-    using Data = Intersectable;
-
     static constexpr inline NodeProxy null_node = -1;
 
     struct Node
@@ -35,7 +28,7 @@ public:
         NodeProxy next;
         bool moved;
 
-        Data* data; // user data
+        Primitive* primitive;
     };
 
     DynamicBVH();
@@ -50,8 +43,8 @@ public:
 
     void Reset();
 
-    NodeProxy PoolNode(Data* data, const AABB& aabb);
-    NodeProxy CreateNode(Data* data, const AABB& aabb);
+    NodeProxy PoolNode(Primitive* data, const AABB& aabb);
+    NodeProxy CreateNode(Primitive* data, const AABB& aabb);
     bool MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move);
     void RemoveNode(NodeProxy node);
 
@@ -59,7 +52,7 @@ public:
     const AABB& GetAABB(NodeProxy node) const;
     void ClearMoved(NodeProxy node) const;
     bool WasMoved(NodeProxy node) const;
-    Data* GetData(NodeProxy node) const;
+    Primitive* GetData(NodeProxy node) const;
 
     template <typename T>
     void Traverse(T* callback) const;
@@ -136,11 +129,11 @@ inline bool DynamicBVH::WasMoved(NodeProxy node) const
     return nodes[node].moved;
 }
 
-inline DynamicBVH::Data* DynamicBVH::GetData(NodeProxy node) const
+inline Primitive* DynamicBVH::GetData(NodeProxy node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
-    return nodes[node].data;
+    return nodes[node].primitive;
 }
 
 inline Float DynamicBVH::GetTreeCost() const
@@ -207,7 +200,7 @@ void DynamicBVH::Query(const Vec3& point, T* callback) const
 
         if (nodes[current].IsLeaf())
         {
-            bool proceed = callback->QueryCallback(current, nodes[current].data);
+            bool proceed = callback->QueryCallback(current, nodes[current].primitive);
             if (proceed == false)
             {
                 return;
@@ -243,7 +236,7 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
 
         if (nodes[current].IsLeaf())
         {
-            bool proceed = callback->QueryCallback(current, nodes[current].data);
+            bool proceed = callback->QueryCallback(current, nodes[current].primitive);
             if (proceed == false)
             {
                 return;
@@ -275,7 +268,7 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
 
         if (node->IsLeaf())
         {
-            Float t = callback->RayCastCallback(r, t_min, t_max, node->data);
+            Float t = callback->RayCastCallback(r, t_min, t_max, node->primitive);
             if (t <= t_min)
             {
                 return;

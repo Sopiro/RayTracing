@@ -6,6 +6,7 @@
 namespace bulbit
 {
 
+// simply a collection of meshes
 class Model
 {
 public:

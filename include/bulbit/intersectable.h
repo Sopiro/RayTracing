@@ -21,9 +21,6 @@ public:
 
 protected:
     friend class DynamicBVH;
-
-    // BVH node proxy
-    NodeProxy node;
 };
 
 struct Intersection

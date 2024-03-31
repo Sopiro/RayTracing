@@ -32,9 +32,9 @@ private:
 };
 
 // Lambertian
+// Microfacet
 // Metal
 // Dielectric
-// Microfacet
 // DiffuseLight
 class Material
 {
