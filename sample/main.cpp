@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     Ref<Sampler> sampler = CreateSharedRef<IndependentSampler>(samples_per_pixel);
     PathIntegrator renderer(sampler, max_bounces);
     // DebugIntegrator renderer(sampler);
+    // AmbientOcclusion renderer(sampler, 0.5f);
 
     timer.Mark();
     double t = timer.Get();

@@ -77,6 +77,9 @@ Camera* Sponza(Scene& scene)
     // Point3 lookfrom{ 0.0f, 0.5f, 7.0f };
     // Point3 lookat{ 0.0f, 3.0f, 0.0f };
 
+    // Point3 lookfrom{ -4, 4.5, 6 };
+    // Point3 lookat{ -4, 4.5, 0 };
+
     Point3 lookfrom{ 0, 5, 6 };
     Point3 lookat{ 0, 5, 0 };
 

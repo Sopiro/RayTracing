@@ -34,4 +34,5 @@
 
 #include "independent_sampler.h"
 
+#include "ao_integrator.h"
 #include "path_integrator.h"

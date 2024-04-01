@@ -82,7 +82,7 @@ Camera* CornellBox(Scene& scene)
 
     // Lights
     {
-        auto tf = Transform{ 0.5f, 0.999f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
+        auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         scene.AddLight(CreateRectXZ(tf, light));
 
         // scene.AddLight(CreateSharedRef<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, CreateSharedRef<DiffuseLight>(Spectrum(10.f))));
