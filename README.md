@@ -1,19 +1,20 @@
 # Bulbit
 
-This is a physically based CPU ray tracer written in C++
+Bulbit is a physically based ray tracing renderer.
 
 ## Features
-- Unidirectional path tracing
-- BVH accelerated ray tracing
-  - Binary SAH based dynamic BVH
-- Multiple importance sampling
-  - BRDF + NEE
-- Physically based materials
-- Light sources
+- Integrator
+  - Whitted style, Ambient occlusion, Unidirectional path tracing
+- Acceleration structure
+  - SAH based dynamic BVH
+- Material
+  - Lambertian, Dielectic, Metal, Microfacet
+- Light source
   - Point lights, Directional lights, Area lights, Environment lights
-- Simple volume rendering
+- Depth of field
+- Simple volumetric rendering
+- Multi-thread rendering
 - Modeling loading with Assimp
-- Parallel processing with OpenMP
 
 ## Building
 - Install [CMake](https://cmake.org/install/)
