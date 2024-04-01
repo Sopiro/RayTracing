@@ -38,10 +38,11 @@ public:
     void Clear();
 
 private:
-    DynamicBVH bvh; // Acceleration structure
+    // Acceleration structure
+    DynamicBVH bvh;
 
+    // All primitives in this scene
     std::vector<Ref<Primitive>> primitives;
-    std::vector<Ref<Mesh>> meshes;
 
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;

@@ -26,16 +26,10 @@ void Scene::Add(const Ref<Primitive> primitive)
 
 void Scene::Add(const Ref<Mesh> mesh)
 {
-    meshes.push_back(mesh);
-
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);
-        primitives.push_back(tri);
-
-        AABB aabb;
-        tri->GetAABB(&aabb);
-        bvh.CreateNode(tri.get(), aabb);
+        Add(tri);
     }
 }
 
@@ -43,17 +37,7 @@ void Scene::Add(const Ref<Model> model)
 {
     for (Ref<Mesh> mesh : model->GetMeshes())
     {
-        meshes.push_back(mesh);
-
-        for (int32 i = 0; i < mesh->triangle_count; ++i)
-        {
-            auto tri = CreateSharedRef<Triangle>(mesh, i);
-            primitives.push_back(tri);
-
-            AABB aabb;
-            tri->GetAABB(&aabb);
-            bvh.CreateNode(tri.get(), aabb);
-        };
+        Add(mesh);
     }
 }
 
@@ -75,8 +59,6 @@ void Scene::AddLight(const Ref<Primitive> primitive)
 
 void Scene::AddLight(const Ref<Mesh> mesh)
 {
-    meshes.push_back(mesh);
-
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = CreateSharedRef<Triangle>(mesh, i);

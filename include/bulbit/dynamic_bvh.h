@@ -68,7 +68,6 @@ public:
     void Rebuild();
 
 private:
-    friend class Aggregate;
     friend class Scene;
 
     NodeProxy root;

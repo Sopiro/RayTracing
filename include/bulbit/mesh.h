@@ -33,7 +33,6 @@ public:
     int32 GetTriangleCount() const;
 
 private:
-    friend class Aggregate;
     friend class Scene;
     friend class Triangle;
 
