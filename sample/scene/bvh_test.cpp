@@ -9,14 +9,14 @@
 namespace bulbit
 {
 
-Camera* BVHTest(Scene& scene)
+std::unique_ptr<Camera> BVHTest(Scene& scene)
 {
-    auto gray = CreateSharedRef<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
-    auto black = CreateSharedRef<Lambertian>(Spectrum(0.0f));
+    auto gray = std::make_shared<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
+    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto black = std::make_shared<Lambertian>(Spectrum(0.0f));
 
     Float n = 100.0f;
     Float w = 7.0f;
@@ -35,11 +35,11 @@ Camera* BVHTest(Scene& scene)
             pos.y = Rand(-h, h);
             pos.z = -1;
 
-            scene.Add(CreateSharedRef<Sphere>(pos, r, green));
+            scene.Add(std::make_shared<Sphere>(pos, r, green));
         }
     }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
 
     Float aspect_ratio = 16. / 9.;
     // Float aspect_ratio = 3. / 2.;
@@ -55,7 +55,7 @@ Camera* BVHTest(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 71.f;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("bvh", BVHTest);

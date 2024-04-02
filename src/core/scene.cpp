@@ -28,7 +28,7 @@ void Scene::Add(const Ref<Mesh> mesh)
 {
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
-        auto tri = CreateSharedRef<Triangle>(mesh, i);
+        auto tri = std::make_shared<Triangle>(mesh, i);
         Add(tri);
     }
 }
@@ -54,17 +54,17 @@ void Scene::AddLight(const Ref<Light> light)
 void Scene::AddLight(const Ref<Primitive> primitive)
 {
     Add(primitive);
-    lights.push_back(CreateSharedRef<AreaLight>(primitive));
+    lights.push_back(std::make_shared<AreaLight>(primitive));
 }
 
 void Scene::AddLight(const Ref<Mesh> mesh)
 {
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
-        auto tri = CreateSharedRef<Triangle>(mesh, i);
+        auto tri = std::make_shared<Triangle>(mesh, i);
         Add(tri);
 
-        lights.push_back(CreateSharedRef<AreaLight>(tri));
+        lights.push_back(std::make_shared<AreaLight>(tri));
     }
 }
 

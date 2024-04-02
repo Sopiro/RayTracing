@@ -9,12 +9,12 @@
 namespace bulbit
 {
 
-Camera* CameraScene(Scene& scene)
+std::unique_ptr<Camera> CameraScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
-                                               ConstantColor::Create(Spectrum(0.01f)));
+        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
+                                                ConstantColor::Create(Spectrum(0.01f)));
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);
@@ -24,14 +24,14 @@ Camera* CameraScene(Scene& scene)
     // Camera
     {
         auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
-        auto model = CreateSharedRef<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
+        auto model = std::make_shared<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
 
         scene.Add(model);
     }
 
     // Lights
     {
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
+        auto light = std::make_shared<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
         Float w = 0.4f;
         Float h = 1.2f;
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };
@@ -71,7 +71,7 @@ Camera* CameraScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("camera", CameraScene);

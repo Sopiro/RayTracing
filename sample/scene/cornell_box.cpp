@@ -12,18 +12,18 @@
 namespace bulbit
 {
 
-Camera* CornellBox(Scene& scene)
+std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    // auto light = CreateSharedRef<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0f));
-    auto mirror = CreateSharedRef<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
+    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
+    // auto light = std::make_shared<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
+    auto light = std::make_shared<DiffuseLight>(Spectrum(15.0f));
+    auto mirror = std::make_shared<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
 
     // Cornell box
     {
@@ -75,8 +75,8 @@ Camera* CornellBox(Scene& scene)
 
     // Right sphere
     // {
-    //     auto mat = CreateSharedRef<Dielectric>(1.5f);
-    //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
+    //     auto mat = std::make_shared<Dielectric>(1.5f);
+    //     auto sphere = std::make_shared<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
 
     //     scene.Add(sphere);
     // }
@@ -86,12 +86,12 @@ Camera* CornellBox(Scene& scene)
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         scene.AddLight(CreateRectXZ(tf, light));
 
-        // scene.AddLight(CreateSharedRef<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, CreateSharedRef<DiffuseLight>(Spectrum(10.f))));
-        // scene.AddLight(CreateSharedRef<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f)));
-        // scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0f), 0.05f));
-        // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-        // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
-        // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+        // scene.AddLight(std::make_shared<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f,
+        // std::make_shared<DiffuseLight>(Spectrum(10.f)))); scene.AddLight(std::make_shared<PointLight>(Point3(0.5f, 0.9f,
+        // -0.5f), Spectrum(0.25f))); scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0f),
+        // 0.05f)); scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     }
 
     // scene.Rebuild();
@@ -106,8 +106,8 @@ Camera* CornellBox(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 35.0f;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
-    // return new OrthographicCamera(lookfrom, lookat, y_axis, 1.1, 1.1, width);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
+    // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);

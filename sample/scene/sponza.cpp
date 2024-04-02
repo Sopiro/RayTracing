@@ -9,18 +9,18 @@
 namespace bulbit
 {
 
-Camera* Sponza(Scene& scene)
+std::unique_ptr<Camera> Sponza(Scene& scene)
 {
     // Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
-    // Ref<Model> sponza = CreateSharedRef<Model>("res/sponza2/sponza.obj", transform);
+    // Ref<Model> sponza = std::make_shared<Model>("res/sponza2/sponza.obj", transform);
 
     Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
-    Ref<Model> sponza = CreateSharedRef<Model>("res/sponza/Sponza.gltf", transform);
+    Ref<Model> sponza = std::make_shared<Model>("res/sponza/Sponza.gltf", transform);
 
     scene.Add(sponza);
 
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(1.0f));
-    // auto mat = CreateSharedRef<Dielectric>(1.5f);
+    auto light = std::make_shared<DiffuseLight>(Spectrum(1.0f));
+    // auto mat = std::make_shared<Dielectric>(1.5f);
 
     Float cx = 8.0f;
     Float cy = 4.0f;
@@ -40,7 +40,7 @@ Camera* Sponza(Scene& scene)
     //     {
     //         for (int32 x = 0; x < cx; ++x)
     //         {
-    //             auto sphere = CreateSharedRef<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
+    //             auto sphere = std::make_shared<Sphere>(Vec3(x / cx * sx + xm, y / cy * sy + ym, z / cz * sz + zm), 0.1, light);
     //             scene.Add(sphere);
     //             scene.AddLight(sphere);
     //         }
@@ -48,18 +48,18 @@ Camera* Sponza(Scene& scene)
     // }
 
     // {
-    //     auto light2 = CreateSharedRef<DiffuseLight>(Spectrum(20.0f));
-    //     auto sphere = CreateSharedRef<Sphere>(Vec3(0.0f, 1.5f, 0.0f), 0.4f, light2);
+    //     auto light2 = std::make_shared<DiffuseLight>(Spectrum(20.0f));
+    //     auto sphere = std::make_shared<Sphere>(Vec3(0.0f, 1.5f, 0.0f), 0.4f, light2);
     //     scene.Add(sphere);
     //     scene.AddLight(sphere);
     // }
 
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
-    scene.AddLight(CreateSharedRef<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
+    scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f));
 
     Float aspect_ratio = 16. / 9.;
     // Float aspect_ratio = 3. / 2.;
@@ -87,7 +87,7 @@ Camera* Sponza(Scene& scene)
     Float aperture = 0;
     Float vFov = 71;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("sponza", Sponza);

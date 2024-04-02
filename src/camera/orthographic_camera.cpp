@@ -11,7 +11,7 @@ OrthographicCamera::OrthographicCamera(const Point3& look_from,
                                        Float viewport_width,
                                        Float viewport_height,
                                        int32 screen_width)
-    : Camera(screen_width, screen_width * viewport_height / viewport_width)
+    : Camera(screen_width, int32(screen_width * viewport_height / viewport_width))
 {
     w = Normalize(look_from - look_at);
     u = Normalize(Cross(up, w));

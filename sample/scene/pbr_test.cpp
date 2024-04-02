@@ -9,7 +9,7 @@
 namespace bulbit
 {
 
-Camera* PBRTest(Scene& scene)
+std::unique_ptr<Camera> PBRTest(Scene& scene)
 {
     // Srand(1234);
 
@@ -33,14 +33,14 @@ Camera* PBRTest(Scene& scene)
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
             auto mat = RandomMicrofacetMaterial();
-            scene.Add(CreateSharedRef<Sphere>(pos, r, mat));
+            scene.Add(std::make_shared<Sphere>(pos, r, mat));
         }
     }
 
     // Ground
     {
-        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
-                                               ConstantColor::Create(Spectrum(0.1f)));
+        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
+                                                ConstantColor::Create(Spectrum(0.1f)));
 
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
         auto ground = CreateRectXZ(tf1, mat);
@@ -51,7 +51,7 @@ Camera* PBRTest(Scene& scene)
     // Light
     // {
     //     auto tf = Transform{ Vec3(-4.0f, 2.5f, 0.0f), Quat(DegToRad(-40.0f), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(10.0f));
+    //     auto light = std::make_shared<DiffuseLight>(Spectrum(10.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -60,7 +60,7 @@ Camera* PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(4.0f, 2.5f, 0.0f), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0f));
+    //     auto light = std::make_shared<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -69,7 +69,7 @@ Camera* PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(0.0f, 2.5f, -4.0f), Quat(DegToRad(40), x_axis), Vec3(4.0f, 1.0f, 1.0f) };
-    //     auto light = CreateSharedRef<DiffuseLight>(Spectrum(8.0f));
+    //     auto light = std::make_shared<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);
@@ -82,7 +82,7 @@ Camera* PBRTest(Scene& scene)
         Float xgap = 0.16f;
         Float xstep = 2.0f * s + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(5.0f));
+        auto light = std::make_shared<DiffuseLight>(Spectrum(5.0f));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)
@@ -102,11 +102,11 @@ Camera* PBRTest(Scene& scene)
         }
     }
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/sunset.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/sunset.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 
     Float aspect_ratio = 16. / 9.;
     // Float aspect_ratio = 3. / 2.;
@@ -122,7 +122,7 @@ Camera* PBRTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 71;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("pbr", PBRTest);

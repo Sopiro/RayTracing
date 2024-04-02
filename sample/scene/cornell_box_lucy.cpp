@@ -9,16 +9,16 @@
 namespace bulbit
 {
 
-Camera* CornellBoxLucy(Scene& scene)
+std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15));
+    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
+    auto light = std::make_shared<DiffuseLight>(Spectrum(15));
 
     // Cornell box
     {
@@ -54,13 +54,13 @@ Camera* CornellBoxLucy(Scene& scene)
     {
         // Lucy
         Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.85f) };
-        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
-                                               ConstantColor::Create(Spectrum(0.2f)));
+        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
+                                                ConstantColor::Create(Spectrum(0.2f)));
 
-        // auto mat = CreateSharedRef<Dielectric>(1.5f);
+        // auto mat = std::make_shared<Dielectric>(1.5f);
 
         Material::fallback = mat;
-        Ref<Model> model = CreateSharedRef<Model>("res/stanford/lucy.obj", transform);
+        Ref<Model> model = std::make_shared<Model>("res/stanford/lucy.obj", transform);
         scene.Add(model);
     }
 
@@ -73,7 +73,7 @@ Camera* CornellBoxLucy(Scene& scene)
     Float aperture = 0;
     Float vFov = 45;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box-lucy", CornellBoxLucy);

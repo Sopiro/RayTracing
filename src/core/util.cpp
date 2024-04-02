@@ -9,7 +9,7 @@ Ref<Microfacet> RandomMicrofacetMaterial()
 {
     // clang-format off
     Spectrum basecolor = Spectrum(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
-    return CreateSharedRef<Microfacet>(
+    return std::make_shared<Microfacet>(
         ConstantColor::Create(basecolor),
         ConstantColor::Create(Spectrum(Rand() > 0.5 ? Float(1.0) : Float(0.0))),
         ConstantColor::Create(Spectrum((Float)std::sqrt(Rand(0.0, 1.0)))),
@@ -34,7 +34,7 @@ Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const Point
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
+    return std::make_shared<Mesh>(vertices, indices, tf, mat);
 };
 
 Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
@@ -52,7 +52,7 @@ Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const Point
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
+    return std::make_shared<Mesh>(vertices, indices, tf, mat);
 }
 
 Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
@@ -70,7 +70,7 @@ Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const Point
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
+    return std::make_shared<Mesh>(vertices, indices, tf, mat);
 }
 
 Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
@@ -137,7 +137,7 @@ Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const Point2& 
     };
     // clang-format on
 
-    return CreateSharedRef<Mesh>(vertices, indices, tf, mat);
+    return std::make_shared<Mesh>(vertices, indices, tf, mat);
 }
 
 } // namespace bulbit

@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
     using namespace bulbit;
 
     Scene scene;
-    Camera* camera;
+    std::unique_ptr<Camera> camera;
 
     Timer timer;
     if (!Sample::Get("cornell-box", &scene, &camera))
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
-    Ref<Sampler> sampler = CreateSharedRef<IndependentSampler>(samples_per_pixel);
+    Ref<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
     PathIntegrator renderer(sampler, max_bounces);
     // WhittedStyle renderer(sampler, max_bounces);
     // DebugIntegrator renderer(sampler);
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
 
-    Film film(camera);
+    Film film(camera.get());
     renderer.Preprocess(scene, *camera);
     renderer.Render(&film, scene, *camera);
 
@@ -53,8 +53,6 @@ int main(int argc, char* argv[])
     int32 height = camera->GetScreenHeight();
     std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
     bitmap.WriteToFile(filename.c_str());
-
-    delete camera;
 
 #if _DEBUG
     return 0;

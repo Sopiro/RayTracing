@@ -82,7 +82,7 @@ Ref<Material> Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     else
     {
         // clang-format off
-        mat = CreateSharedRef<Microfacet>(
+        mat = std::make_shared<Microfacet>(
             basecolor_textures.empty() ? 
                 ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
             metallic_textures.empty() ? 
@@ -159,8 +159,8 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
         }
     }
 
-    return CreateSharedRef<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                 std::move(indices), transform, CreateMaterial(mesh, scene));
+    return std::make_shared<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
+                                  std::move(indices), transform, CreateMaterial(mesh, scene));
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

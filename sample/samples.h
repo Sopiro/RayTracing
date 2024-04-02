@@ -10,10 +10,10 @@ namespace bulbit
 
 struct Sample
 {
-    typedef Camera* Func(Scene&);
+    typedef std::unique_ptr<Camera> Func(Scene&);
 
     static int32 Register(std::string name, Func* func);
-    static bool Get(std::string name, Scene* scene, Camera** camera);
+    static bool Get(std::string name, Scene* scene, std::unique_ptr<Camera>* camera);
 
     static inline std::unordered_map<std::string, Func*> samples;
     static inline int32 count = 0;
@@ -26,14 +26,15 @@ inline int32 Sample::Register(std::string name, Func* func)
     return ++count;
 }
 
-inline bool Sample::Get(std::string name, Scene* scene, Camera** camera)
+inline bool Sample::Get(std::string name, Scene* scene, std::unique_ptr<Camera>* camera)
 {
     if (!samples.contains(name))
     {
         return false;
     }
 
-    return *camera = samples.at(name)(*scene);
+    *camera = samples.at(name)(*scene);
+    return true;
 }
 
 } // namespace bulbit

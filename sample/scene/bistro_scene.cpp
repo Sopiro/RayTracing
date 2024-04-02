@@ -6,21 +6,21 @@ namespace bulbit
 {
 
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
-Camera* BistroScene(Scene& scene)
+std::unique_ptr<Camera> BistroScene(Scene& scene)
 {
     Transform tf{ zero_vec3, identity, Vec3(1) };
-    Ref<Model> m = CreateSharedRef<Model>("res/bistro/bistro.gltf", tf);
+    Ref<Model> m = std::make_shared<Model>("res/bistro/bistro.gltf", tf);
 
     scene.Add(m);
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr"));
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/harties_4k.hdr"));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-    scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis))));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/harties_4k.hdr"));
+    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis))));
     // scene.AddLight(
-    //     CreateSharedRef<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377),
+    //     std::make_shared<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377),
     //     0.02));
 
     Float aspect_ratio = 16. / 9.;
@@ -37,7 +37,7 @@ Camera* BistroScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 54;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("bistro", BistroScene);

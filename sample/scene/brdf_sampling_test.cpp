@@ -9,16 +9,16 @@
 namespace bulbit
 {
 
-Camera* BRDFSamplingTest(Scene& scene)
+std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
 {
     // Materials
-    auto red = CreateSharedRef<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = CreateSharedRef<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = CreateSharedRef<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = CreateSharedRef<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = CreateSharedRef<Lambertian>(wakgood_texture);
-    auto light = CreateSharedRef<DiffuseLight>(Spectrum(15.0));
+    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
+    auto light = std::make_shared<DiffuseLight>(Spectrum(15.0));
 
     // Cornell box
     {
@@ -53,11 +53,11 @@ Camera* BRDFSamplingTest(Scene& scene)
 
     // Center sphere
     {
-        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(1.0f)),
-                                               ConstantColor::Create(Spectrum(0.2f)));
+        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(1.0f)),
+                                                ConstantColor::Create(Spectrum(0.2f)));
 
         Float r = 0.25;
-        auto sphere = CreateSharedRef<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
+        auto sphere = std::make_shared<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
 
         scene.Add(sphere);
         // scene.AddLight(sphere);
@@ -80,7 +80,7 @@ Camera* BRDFSamplingTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 45;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("brdf-sampling", BRDFSamplingTest);

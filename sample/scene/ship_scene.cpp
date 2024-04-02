@@ -9,12 +9,12 @@
 namespace bulbit
 {
 
-Camera* ShipScene(Scene& scene)
+std::unique_ptr<Camera> ShipScene(Scene& scene)
 {
     // Table
     {
         auto tf = Transform{ Point3(0.0f, -2.2f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(5.0f) };
-        auto model = CreateSharedRef<Model>("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
+        auto model = std::make_shared<Model>("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -22,7 +22,7 @@ Camera* ShipScene(Scene& scene)
     // Ship
     {
         auto tf = Transform{ Point3(0.0f, 2.0f, 0.0f), Quat(DegToRad(90.0f), y_axis), Vec3(0.1f) };
-        auto model = CreateSharedRef<Model>("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
+        auto model = std::make_shared<Model>("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
 
         scene.Add(model);
     }
@@ -31,7 +31,7 @@ Camera* ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = CreateSharedRef<DiffuseLight>(ConstantColor::Create(Spectrum(30.0f)));
+        auto white = std::make_shared<DiffuseLight>(ConstantColor::Create(Spectrum(30.0f)));
         white->two_sided = true;
         auto tf = Transform{ Point3(0.0f, 5.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
@@ -56,8 +56,8 @@ Camera* ShipScene(Scene& scene)
 
     // Floor
     {
-        auto mat = CreateSharedRef<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
-                                               ConstantColor::Create(Spectrum(0.001f)));
+        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
+                                                ConstantColor::Create(Spectrum(0.001f)));
         Float size = 9.0f;
         Float y = 2.1f;
 
@@ -92,7 +92,7 @@ Camera* ShipScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("ship", ShipScene);

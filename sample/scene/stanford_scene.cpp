@@ -9,11 +9,11 @@
 namespace bulbit
 {
 
-Camera* StanfordScene(Scene& scene)
+std::unique_ptr<Camera> StanfordScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = CreateSharedRef<Microfacet>(
+        auto mat = std::make_shared<Microfacet>(
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"), ConstantColor::Create(0.0f),
@@ -33,7 +33,7 @@ Camera* StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = CreateSharedRef<Model>("res/stanford/bunny.obj", tf);
+        auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
         scene.Add(model);
     }
 
@@ -43,7 +43,7 @@ Camera* StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = CreateSharedRef<Model>("res/stanford/lucy.obj", tf);
+        auto model = std::make_shared<Model>("res/stanford/lucy.obj", tf);
         scene.Add(model);
     }
 
@@ -53,19 +53,19 @@ Camera* StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = CreateSharedRef<Model>("res/stanford/tyra.obj", tf);
+        auto model = std::make_shared<Model>("res/stanford/tyra.obj", tf);
         scene.Add(model);
     }
 
     // Armadillo
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = CreateSharedRef<Microfacet>(
+        auto mat = std::make_shared<Microfacet>(
             ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
             ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
         Material::fallback = mat;
 
-        auto model = CreateSharedRef<Model>("res/stanford/arma.obj", tf);
+        auto model = std::make_shared<Model>("res/stanford/arma.obj", tf);
         scene.Add(model);
     }
 
@@ -76,7 +76,7 @@ Camera* StanfordScene(Scene& scene)
         Float xgap = 0.015f;
         Float xstep = 2.0f * w + xgap;
 
-        auto light = CreateSharedRef<DiffuseLight>(Spectrum(3.0f));
+        auto light = std::make_shared<DiffuseLight>(Spectrum(3.0f));
         light->two_sided = true;
 
         for (int32 x = 0; x < cx; ++x)
@@ -96,7 +96,7 @@ Camera* StanfordScene(Scene& scene)
         }
     }
 
-    // scene.AddLight(CreateSharedRef<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
 
     Float aspect_ratio = 16. / 9.;
     // Float aspect_ratio = 3. / 2.;
@@ -112,7 +112,7 @@ Camera* StanfordScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return new PerspectiveCamera(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("stanford", StanfordScene);
