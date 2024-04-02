@@ -11,7 +11,9 @@ Bulbit is a physically based ray tracing renderer.
   - Lambertian, Dielectic, Metal, Microfacet
 - Light source
   - Point lights, Directional lights, Area lights, Environment lights
-- Depth of field
+- Camera
+  - Perspective, Orthographic
+  - Depth of field
 - Simple volumetric rendering
 - Multi-thread rendering
 - Modeling loading with Assimp
