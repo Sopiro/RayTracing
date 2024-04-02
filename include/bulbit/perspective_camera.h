@@ -19,10 +19,8 @@ public:
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
 
-    Point3 origin;
-    Vec3 dir;
-
 private:
+    Point3 origin;
     Point3 lower_left;
     Vec3 horizontal, vertical;
 

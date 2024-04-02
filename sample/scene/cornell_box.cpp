@@ -3,6 +3,7 @@
 #include "bulbit/diffuse_light.h"
 #include "bulbit/lambertian.h"
 #include "bulbit/metal.h"
+#include "bulbit/orthographic_camera.h"
 #include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
@@ -106,6 +107,7 @@ Camera* CornellBox(Scene& scene)
     Float vFov = 35.0f;
 
     return new PerspectiveCamera(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
+    // return new OrthographicCamera(lookfrom, lookat, y_axis, 1.1, 1.1, width);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);

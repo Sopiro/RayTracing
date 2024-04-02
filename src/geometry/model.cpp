@@ -73,21 +73,30 @@ Ref<Material> Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     auto normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
 
-    // clang-format off
-    Ref<Microfacet> mat = CreateSharedRef<Microfacet>(
-        basecolor_textures.empty() ? 
-            ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
-        metallic_textures.empty() ? 
-            ConstantColor::Create(metallic)                                             : metallic_textures[0],
-        roughness_textures.empty() ? 
-            ConstantColor::Create(roughness)                                            : roughness_textures[0],
-        emissive_textures.empty() ? 
-            ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)    : emissive_textures[0],
-        normalmap_textures.empty() ? 
-            ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
-    );
+    Ref<Material> mat;
+
+    if (basecolor_textures.empty() && Material::fallback != nullptr)
+    {
+        mat = Material::fallback;
+    }
+    else
+    {
+        // clang-format off
+        mat = CreateSharedRef<Microfacet>(
+            basecolor_textures.empty() ? 
+                ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
+            metallic_textures.empty() ? 
+                ConstantColor::Create(metallic)                                             : metallic_textures[0],
+            roughness_textures.empty() ? 
+                ConstantColor::Create(roughness)                                            : roughness_textures[0],
+            emissive_textures.empty() ? 
+                ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)    : emissive_textures[0],
+            normalmap_textures.empty() ? 
+                ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
+        );
+        // clang-format on
+    }
     return mat;
-    // clang-format on
 }
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)

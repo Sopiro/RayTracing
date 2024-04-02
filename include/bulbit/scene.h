@@ -31,6 +31,7 @@ public:
     void AddLight(const Ref<Primitive> primitve);
     void AddLight(const Ref<Mesh> mesh);
 
+    const std::vector<Ref<Primitive>>& GetPrimitives() const;
     const std::vector<Ref<Light>>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
@@ -47,6 +48,11 @@ private:
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
+
+inline const std::vector<Ref<Primitive>>& Scene::GetPrimitives() const
+{
+    return primitives;
+}
 
 inline const std::vector<Ref<Light>>& Scene::GetLights() const
 {

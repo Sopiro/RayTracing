@@ -2,6 +2,7 @@
 
 #include "common.h"
 
+#include "orthographic_camera.h"
 #include "perspective_camera.h"
 #include "scene.h"
 

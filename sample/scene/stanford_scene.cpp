@@ -47,8 +47,6 @@ Camera* StanfordScene(Scene& scene)
         scene.Add(model);
     }
 
-    Srand(7777777);
-
     // Tyrannosaurus
     {
         auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
@@ -58,8 +56,6 @@ Camera* StanfordScene(Scene& scene)
         auto model = CreateSharedRef<Model>("res/stanford/tyra.obj", tf);
         scene.Add(model);
     }
-
-    Srand(7654321);
 
     // Armadillo
     {
@@ -106,7 +102,7 @@ Camera* StanfordScene(Scene& scene)
     // Float aspect_ratio = 3. / 2.;
     // Float aspect_ratio = 4. / 3.;
     // Float aspect_ratio = 1.;
-    int32 width = 500;
+    int32 width = 1920;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0, 0.5f, 2 };
