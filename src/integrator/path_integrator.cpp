@@ -115,15 +115,18 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
                 if (brdf_light_pdf > 0)
                 {
-                    Intersection is2;
-                    if (scene.Intersect(&is2, shadow_ray, Ray::epsilon, infinity))
+                    Intersection shadow_is;
+                    if (scene.Intersect(&shadow_is, shadow_ray, Ray::epsilon, infinity))
                     {
-                        if (is2.object == ((AreaLight*)light)->GetPrimitive())
+                        const Material* shadow_mat = shadow_is.material;
+
+                        // Intersects area light
+                        if (shadow_mat->IsLightSource())
                         {
                             Float brdf_pdf = brdf->Evaluate(scattered);
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
-                            li = is2.material->Emit(is2, scattered);
+                            li = shadow_mat->Emit(shadow_is, scattered);
                             if (li.IsBlack() == false)
                             {
                                 Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);

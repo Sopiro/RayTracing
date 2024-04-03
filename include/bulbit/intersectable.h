@@ -5,8 +5,6 @@
 namespace bulbit
 {
 
-using NodeProxy = int32;
-
 class Material;
 struct Intersection;
 
@@ -27,7 +25,6 @@ struct Intersection
 {
     Float t;
 
-    const Intersectable* object;
     const Material* material;
 
     Point3 point;

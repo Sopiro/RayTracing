@@ -31,18 +31,17 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     }
 
     // Found intersection
-    is->object = this;
     is->material = GetMaterial();
     is->t = root;
     is->point = ray.At(root);
-    Vec3 outward_normal = (is->point - center) / radius;
 
-    Vec3 t = (std::fabs(outward_normal.y) > Float(0.999)) ? x_axis : y_axis;
-    Vec3 outward_tangent = Normalize(Cross(t, outward_normal));
+    Vec3 outward_normal = (is->point - center) / radius;
+    Vec3 tangent, bitangent;
+    CoordinateSystem(outward_normal, &tangent, &bitangent);
 
     SetFaceNormal(is, ray.d, outward_normal);
     is->shading.normal = outward_normal;
-    is->shading.tangent = outward_tangent;
+    is->shading.tangent = tangent;
     is->uv = ComputeTexCoord(outward_normal);
 
     return true;
@@ -110,14 +109,12 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
+    sample->material = GetMaterial();
     sample->point = ref + *ref2p;
     sample->normal = Normalize(sample->point - center);
     *pdf = 1 / solid_angle;
 
     sample->front_face = true;
-
-    sample->object = this;
-    sample->material = GetMaterial();
 }
 
 } // namespace bulbit

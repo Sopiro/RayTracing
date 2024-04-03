@@ -16,7 +16,10 @@ namespace bulbit
 std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 {
     auto ground_material = std::make_shared<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
-    scene.Add(std::make_shared<Sphere>(Vec3(0, -1000, 0), 1000.0f, ground_material));
+
+    Transform tf = identity;
+    tf.r *= 30;
+    scene.Add(CreateRectXZ(tf, ground_material));
 
     Srand(7777);
 
@@ -67,11 +70,11 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/earthmap.jpg"));
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
-    int32 width = 1920;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
+    int32 width = 640;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 13, 2, 3 };

@@ -7,6 +7,8 @@
 namespace bulbit
 {
 
+using NodeProxy = int32;
+
 class DynamicBVH
 {
 public:

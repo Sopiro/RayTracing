@@ -47,7 +47,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
 
                 do
                 {
-                    Point2 film_sample = Point2(x, y) + sampler->Next2D();
+                    Point2 film_sample = Point2(Float(x), Float(y)) + sampler->Next2D();
                     Point2 aperture_sample = sampler->Next2D();
 
                     Ray ray;
@@ -68,7 +68,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                 }
                 while (sampler->StartNextPixelSample());
 
-                Spectrum radiance = samples / sampler->samples_per_pixel;
+                Spectrum radiance = samples / Float(sampler->samples_per_pixel);
 
                 film->Set(x, y, radiance);
             }

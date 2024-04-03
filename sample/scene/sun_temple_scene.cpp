@@ -34,10 +34,10 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
     Vec3 dir(blender.x, blender.z, -blender.y);
     scene.AddLight(std::make_shared<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f));
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

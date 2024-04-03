@@ -72,10 +72,10 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
         scene.AddLight(l5);
     }
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 
@@ -157,10 +157,10 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
         scene.AddLight(l5);
     }
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

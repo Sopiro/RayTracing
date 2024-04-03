@@ -56,7 +56,6 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
     Float w = 1 - u - v;
 
     // Found intersection
-    is->object = this;
     is->material = GetMaterial();
     is->t = t;
     is->point = ray.At(t);
@@ -195,7 +194,6 @@ void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point
     *pdf *= distance_squared / cosine; // Convert to solid angle measure
     *ref2p = d;
 
-    sample->object = this;
     sample->material = GetMaterial();
 }
 

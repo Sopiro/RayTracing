@@ -23,10 +23,10 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
     //     std::make_shared<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377),
     //     0.02));
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

@@ -13,7 +13,7 @@
 namespace bulbit
 {
 
-using Float = double;
+using Float = float;
 
 constexpr Float pi = Float(3.14159265358979323846);
 constexpr Float two_pi = Float(2.0 * 3.14159265358979323846);

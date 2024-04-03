@@ -42,10 +42,10 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
 
-    Float aspect_ratio = 16. / 9.;
-    // Float aspect_ratio = 3. / 2.;
-    // Float aspect_ratio = 4. / 3.;
-    // Float aspect_ratio = 1.;
+    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 3.f / 2.f;
+    // Float aspect_ratio = 4.f / 3.f;
+    // Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 
