@@ -88,7 +88,7 @@ DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
     return *this;
 }
 
-NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
+NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
 {
     assert(0 <= leaf && leaf < nodeCapacity);
     assert(nodes[leaf].IsLeaf());
@@ -104,15 +104,15 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
     // Find the best sibling for the new leaf
 
 #if 1
-    NodeProxy bestSibling = root;
+    NodeIndex bestSibling = root;
     Float bestCost = SAH(AABB::Union(nodes[root].aabb, aabb));
 
-    GrowableArray<std::pair<NodeProxy, Float>, 256> stack;
+    GrowableArray<std::pair<NodeIndex, Float>, 256> stack;
     stack.Emplace(root, 0.0f);
 
     while (stack.Count() != 0)
     {
-        NodeProxy current = stack.Back().first;
+        NodeIndex current = stack.Back().first;
         Float inheritedCost = stack.Back().second;
         stack.Pop();
 
@@ -195,8 +195,8 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
 #endif
 
     // Create a new parent
-    NodeProxy oldParent = nodes[bestSibling].parent;
-    NodeProxy newParent = AllocateNode();
+    NodeIndex oldParent = nodes[bestSibling].parent;
+    NodeIndex newParent = AllocateNode();
     nodes[newParent].aabb = AABB::Union(aabb, nodes[bestSibling].aabb);
     nodes[newParent].primitive = nullptr;
     nodes[newParent].parent = oldParent;
@@ -224,11 +224,11 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
     }
 
     // Walk back up the tree refitting ancestors' AABB and applying rotations
-    NodeProxy ancestor = newParent;
+    NodeIndex ancestor = newParent;
     while (ancestor != null_node)
     {
-        NodeProxy child1 = nodes[ancestor].child1;
-        NodeProxy child2 = nodes[ancestor].child2;
+        NodeIndex child1 = nodes[ancestor].child1;
+        NodeIndex child2 = nodes[ancestor].child2;
 
         nodes[ancestor].aabb = AABB::Union(nodes[child1].aabb, nodes[child2].aabb);
 
@@ -240,12 +240,12 @@ NodeProxy DynamicBVH::InsertLeaf(NodeProxy leaf)
     return leaf;
 }
 
-void DynamicBVH::RemoveLeaf(NodeProxy leaf)
+void DynamicBVH::RemoveLeaf(NodeIndex leaf)
 {
     assert(0 <= leaf && leaf < nodeCapacity);
     assert(nodes[leaf].IsLeaf());
 
-    NodeProxy parent = nodes[leaf].parent;
+    NodeIndex parent = nodes[leaf].parent;
 
     if (parent == null_node) // node is root
     {
@@ -254,8 +254,8 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
         return;
     }
 
-    NodeProxy grandParent = nodes[parent].parent;
-    NodeProxy sibling;
+    NodeIndex grandParent = nodes[parent].parent;
+    NodeIndex sibling;
     if (nodes[parent].child1 == leaf)
     {
         sibling = nodes[parent].child2;
@@ -280,11 +280,11 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
             nodes[grandParent].child2 = sibling;
         }
 
-        NodeProxy ancestor = grandParent;
+        NodeIndex ancestor = grandParent;
         while (ancestor != null_node)
         {
-            NodeProxy child1 = nodes[ancestor].child1;
-            NodeProxy child2 = nodes[ancestor].child2;
+            NodeIndex child1 = nodes[ancestor].child1;
+            NodeIndex child2 = nodes[ancestor].child2;
 
             nodes[ancestor].aabb = AABB::Union(nodes[child1].aabb, nodes[child2].aabb);
 
@@ -300,9 +300,9 @@ void DynamicBVH::RemoveLeaf(NodeProxy leaf)
     }
 }
 
-NodeProxy DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
+NodeIndex DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
 {
-    NodeProxy newNode = AllocateNode();
+    NodeIndex newNode = AllocateNode();
 
     // Fatten the aabb
     nodes[newNode].aabb.max = aabb.max;
@@ -314,9 +314,9 @@ NodeProxy DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
     return newNode;
 }
 
-NodeProxy DynamicBVH::CreateNode(Primitive* primitive, const AABB& aabb)
+NodeIndex DynamicBVH::CreateNode(Primitive* primitive, const AABB& aabb)
 {
-    NodeProxy newNode = AllocateNode();
+    NodeIndex newNode = AllocateNode();
 
     // Fatten the aabb
     nodes[newNode].aabb.max = aabb.max;
@@ -330,7 +330,7 @@ NodeProxy DynamicBVH::CreateNode(Primitive* primitive, const AABB& aabb)
     return newNode;
 }
 
-bool DynamicBVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move)
+bool DynamicBVH::MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, bool force_move)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
@@ -376,7 +376,7 @@ bool DynamicBVH::MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, b
     return true;
 }
 
-void DynamicBVH::RemoveNode(NodeProxy node)
+void DynamicBVH::RemoveNode(NodeIndex node)
 {
     assert(0 <= node && node < nodeCapacity);
     assert(nodes[node].IsLeaf());
@@ -385,15 +385,15 @@ void DynamicBVH::RemoveNode(NodeProxy node)
     FreeNode(node);
 }
 
-void DynamicBVH::Rotate(NodeProxy node)
+void DynamicBVH::Rotate(NodeIndex node)
 {
     if (nodes[node].IsLeaf())
     {
         return;
     }
 
-    NodeProxy child1 = nodes[node].child1;
-    NodeProxy child2 = nodes[node].child2;
+    NodeIndex child1 = nodes[node].child1;
+    NodeIndex child2 = nodes[node].child2;
 
     Float costDiffs[4] = { 0.0f };
 
@@ -480,10 +480,10 @@ void DynamicBVH::Rotate(NodeProxy node)
     }
 }
 
-void DynamicBVH::Swap(NodeProxy node1, NodeProxy node2)
+void DynamicBVH::Swap(NodeIndex node1, NodeIndex node2)
 {
-    NodeProxy parent1 = nodes[node1].parent;
-    NodeProxy parent2 = nodes[node2].parent;
+    NodeIndex parent1 = nodes[node1].parent;
+    NodeIndex parent2 = nodes[node2].parent;
 
     if (parent1 == parent2)
     {
@@ -531,7 +531,7 @@ void DynamicBVH::Reset()
     freeList = 0;
 }
 
-NodeProxy DynamicBVH::AllocateNode()
+NodeIndex DynamicBVH::AllocateNode()
 {
     if (freeList == null_node)
     {
@@ -557,7 +557,7 @@ NodeProxy DynamicBVH::AllocateNode()
         freeList = nodeCount;
     }
 
-    NodeProxy node = freeList;
+    NodeIndex node = freeList;
     freeList = nodes[node].next;
     nodes[node].parent = null_node;
     nodes[node].child1 = null_node;
@@ -568,7 +568,7 @@ NodeProxy DynamicBVH::AllocateNode()
     return node;
 }
 
-void DynamicBVH::FreeNode(NodeProxy node)
+void DynamicBVH::FreeNode(NodeIndex node)
 {
     assert(0 <= node && node <= nodeCapacity);
     assert(0 < nodeCount);
@@ -581,7 +581,7 @@ void DynamicBVH::FreeNode(NodeProxy node)
 
 void DynamicBVH::Rebuild()
 {
-    NodeProxy* primitives = (NodeProxy*)malloc(nodeCount * sizeof(NodeProxy));
+    NodeIndex* primitives = (NodeIndex*)malloc(nodeCount * sizeof(NodeIndex));
     int32 count = 0;
 
     // Collect all primitives
@@ -608,7 +608,7 @@ void DynamicBVH::Rebuild()
 
     struct BuildNode
     {
-        NodeProxy node;
+        NodeIndex node;
         int32 begin, end;
     };
 
@@ -625,7 +625,7 @@ void DynamicBVH::Rebuild()
         BuildNode n = stack.back();
         stack.pop_back();
 
-        NodeProxy node = n.node;
+        NodeIndex node = n.node;
 
         AABB& aabb = nodes[node].aabb;
         for (int32 i = n.begin; i < n.end; ++i)
@@ -652,8 +652,8 @@ void DynamicBVH::Rebuild()
         }
         Float split_pos = aabb.min[axis] + extents[axis] * 0.5f;
 
-        NodeProxy* m = std::partition(primitives + n.begin, primitives + n.end,
-                                      [=](NodeProxy n) { return nodes[n].aabb.GetCenter()[axis] < split_pos; });
+        NodeIndex* m = std::partition(primitives + n.begin, primitives + n.end,
+                                      [=](NodeIndex n) { return nodes[n].aabb.GetCenter()[axis] < split_pos; });
         int32 mid = int32(m - primitives);
 
         int32 left_count = mid - n.begin;
@@ -663,7 +663,7 @@ void DynamicBVH::Rebuild()
         {
             mid = (n.end + n.begin) / 2;
 
-            std::nth_element(primitives + n.begin, primitives + mid, primitives + n.end, [=](NodeProxy a, NodeProxy b) {
+            std::nth_element(primitives + n.begin, primitives + mid, primitives + n.end, [=](NodeIndex a, NodeIndex b) {
                 return nodes[a].aabb.GetCenter()[axis] < nodes[b].aabb.GetCenter()[axis];
             });
         }
@@ -678,7 +678,7 @@ void DynamicBVH::Rebuild()
         }
         else
         {
-            NodeProxy left = AllocateNode();
+            NodeIndex left = AllocateNode();
             nodes[node].child1 = left;
             nodes[left].parent = node;
             stack.emplace_back(left, n.begin, mid);
@@ -691,7 +691,7 @@ void DynamicBVH::Rebuild()
         }
         else
         {
-            NodeProxy right = AllocateNode();
+            NodeIndex right = AllocateNode();
             nodes[node].child2 = right;
             nodes[right].parent = node;
             stack.emplace_back(right, mid, n.end);

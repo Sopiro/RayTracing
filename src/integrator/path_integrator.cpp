@@ -17,7 +17,7 @@ PathIntegrator::PathIntegrator(const Ref<Sampler> sampler, int32 bounces, Float 
 
 Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
 {
-    Spectrum radiance(0), throughput(1);
+    Spectrum L(0), throughput(1);
     bool was_specular_bounce = false;
     Ray ray = primary_ray;
 
@@ -34,7 +34,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                 mat = scene.GetMaterial(is.material_index);
                 if (mat->IsLightSource())
                 {
-                    radiance += throughput * mat->Emit(is, ray.d);
+                    L += throughput * mat->Emit(is, ray.d);
                 }
             }
             else
@@ -42,7 +42,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                 const std::vector<InfiniteAreaLight*>& lights = scene.GetInfiniteAreaLights();
                 for (InfiniteAreaLight* light : lights)
                 {
-                    radiance += throughput * light->Emit(ray);
+                    L += throughput * light->Emit(ray);
                 }
             }
         }
@@ -69,7 +69,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
 
         const BRDF* brdf = ir.GetScatteringPDF();
 
-        radiance += throughput * mat->Emit(is, ray.d);
+        L += throughput * mat->Emit(is, ray.d);
 
         // Estimate direct light
         // Multiple importance sampling (Direct light + BRDF)
@@ -99,12 +99,12 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                     Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
                     if (light->IsDeltaLight())
                     {
-                        radiance += throughput * light_weight / light_pdf * li * f_cos;
+                        L += throughput * light_weight / light_pdf * li * f_cos;
                     }
                     else
                     {
                         Float mis_weight = PowerHeuristic(1, light_pdf, 1, light_brdf_pdf);
-                        radiance += throughput * light_weight * mis_weight / light_pdf * li * f_cos;
+                        L += throughput * light_weight * mis_weight / light_pdf * li * f_cos;
                     }
                 }
             }
@@ -133,7 +133,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                             if (li.IsBlack() == false)
                             {
                                 Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
-                                radiance += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
+                                L += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
                             }
                         }
                     }
@@ -146,7 +146,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
                             Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
-                            radiance += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
+                            L += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
                         }
                     }
                 }
@@ -180,7 +180,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         }
     }
 
-    return radiance;
+    return L;
 }
 
 } // namespace bulbit

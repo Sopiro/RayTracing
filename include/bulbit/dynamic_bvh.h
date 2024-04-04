@@ -7,12 +7,12 @@
 namespace bulbit
 {
 
-using NodeProxy = int32;
+using NodeIndex = int32;
 
 class DynamicBVH
 {
 public:
-    static constexpr inline NodeProxy null_node = -1;
+    static constexpr inline NodeIndex null_node = -1;
 
     struct Node
     {
@@ -23,11 +23,11 @@ public:
 
         AABB aabb;
 
-        NodeProxy parent;
-        NodeProxy child1;
-        NodeProxy child2;
+        NodeIndex parent;
+        NodeIndex child1;
+        NodeIndex child2;
 
-        NodeProxy next;
+        NodeIndex next;
         bool moved;
 
         Primitive* primitive;
@@ -45,16 +45,16 @@ public:
 
     void Reset();
 
-    NodeProxy PoolNode(Primitive* data, const AABB& aabb);
-    NodeProxy CreateNode(Primitive* data, const AABB& aabb);
-    bool MoveNode(NodeProxy node, AABB aabb, const Vec3& displacement, bool force_move);
-    void RemoveNode(NodeProxy node);
+    NodeIndex PoolNode(Primitive* data, const AABB& aabb);
+    NodeIndex CreateNode(Primitive* data, const AABB& aabb);
+    bool MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, bool force_move);
+    void RemoveNode(NodeIndex node);
 
-    bool TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const;
-    const AABB& GetAABB(NodeProxy node) const;
-    void ClearMoved(NodeProxy node) const;
-    bool WasMoved(NodeProxy node) const;
-    Primitive* GetData(NodeProxy node) const;
+    bool TestOverlap(NodeIndex nodeA, NodeIndex nodeB) const;
+    const AABB& GetAABB(NodeIndex node) const;
+    void ClearMoved(NodeIndex node) const;
+    bool WasMoved(NodeIndex node) const;
+    Primitive* GetData(NodeIndex node) const;
 
     template <typename T>
     void Traverse(T* callback) const;
@@ -72,22 +72,22 @@ public:
 private:
     friend class Scene;
 
-    NodeProxy root;
+    NodeIndex root;
 
     Node* nodes;
     int32 nodeCount;
     int32 nodeCapacity;
 
-    NodeProxy freeList;
+    NodeIndex freeList;
 
-    NodeProxy AllocateNode();
-    void FreeNode(NodeProxy node);
+    NodeIndex AllocateNode();
+    void FreeNode(NodeIndex node);
 
-    NodeProxy InsertLeaf(NodeProxy leaf);
-    void RemoveLeaf(NodeProxy leaf);
+    NodeIndex InsertLeaf(NodeIndex leaf);
+    void RemoveLeaf(NodeIndex leaf);
 
-    void Rotate(NodeProxy node);
-    void Swap(NodeProxy node1, NodeProxy node2);
+    void Rotate(NodeIndex node);
+    void Swap(NodeIndex node1, NodeIndex node2);
 
     static Float SAH(const AABB& aabb);
 };
@@ -101,7 +101,7 @@ inline Float DynamicBVH::SAH(const AABB& aabb)
 #endif
 }
 
-inline bool DynamicBVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
+inline bool DynamicBVH::TestOverlap(NodeIndex nodeA, NodeIndex nodeB) const
 {
     assert(0 <= nodeA && nodeA < nodeCapacity);
     assert(0 <= nodeB && nodeB < nodeCapacity);
@@ -109,28 +109,28 @@ inline bool DynamicBVH::TestOverlap(NodeProxy nodeA, NodeProxy nodeB) const
     return nodes[nodeA].aabb.TestOverlap(nodes[nodeB].aabb);
 }
 
-inline const AABB& DynamicBVH::GetAABB(NodeProxy node) const
+inline const AABB& DynamicBVH::GetAABB(NodeIndex node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     return nodes[node].aabb;
 }
 
-inline void DynamicBVH::ClearMoved(NodeProxy node) const
+inline void DynamicBVH::ClearMoved(NodeIndex node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     nodes[node].moved = false;
 }
 
-inline bool DynamicBVH::WasMoved(NodeProxy node) const
+inline bool DynamicBVH::WasMoved(NodeIndex node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
     return nodes[node].moved;
 }
 
-inline Primitive* DynamicBVH::GetData(NodeProxy node) const
+inline Primitive* DynamicBVH::GetData(NodeIndex node) const
 {
     assert(0 <= node && node < nodeCapacity);
 
@@ -161,12 +161,12 @@ void DynamicBVH::Traverse(T* callback) const
         return;
     }
 
-    GrowableArray<NodeProxy, 256> stack;
+    GrowableArray<NodeIndex, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
     {
-        NodeProxy current = stack.Pop();
+        NodeIndex current = stack.Pop();
 
         if (!nodes[current].IsLeaf())
         {
@@ -187,12 +187,12 @@ void DynamicBVH::Query(const Vec3& point, T* callback) const
         return;
     }
 
-    GrowableArray<NodeProxy, 256> stack;
+    GrowableArray<NodeIndex, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
     {
-        NodeProxy current = stack.Pop();
+        NodeIndex current = stack.Pop();
 
         if (nodes[current].aabb.TestPoint(point) == false)
         {
@@ -223,12 +223,12 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
         return;
     }
 
-    GrowableArray<NodeProxy, 256> stack;
+    GrowableArray<NodeIndex, 256> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
     {
-        NodeProxy current = stack.Pop();
+        NodeIndex current = stack.Pop();
 
         if (nodes[current].aabb.TestOverlap(aabb) == false)
         {
@@ -283,8 +283,8 @@ void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
         else
         {
             // Ordered traversal
-            NodeProxy child1 = node->child1;
-            NodeProxy child2 = node->child2;
+            NodeIndex child1 = node->child1;
+            NodeIndex child2 = node->child2;
 
             Float dist1 = nodes[child1].aabb.Intersect(r, t_min, t_max);
             Float dist2 = nodes[child2].aabb.Intersect(r, t_min, t_max);

@@ -53,18 +53,18 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                     Ray ray;
                     Float weight = camera.SampleRay(&ray, film_sample, aperture_sample);
 
-                    Spectrum l(0);
+                    Spectrum L(0);
                     if (weight > 0)
                     {
-                        l = Li(scene, ray, *sampler);
+                        L = Li(scene, ray, *sampler);
                     }
 
-                    if (l.IsNullish())
+                    if (L.IsNullish())
                     {
-                        l = RGBSpectrum::black;
+                        L = RGBSpectrum::black;
                     }
 
-                    samples += l * weight;
+                    samples += L * weight;
                 }
                 while (sampler->StartNextPixelSample());
 
