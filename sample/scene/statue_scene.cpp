@@ -36,7 +36,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
         auto rect = CreateRectYZ(tf, red);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
     {
@@ -44,7 +44,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
         auto rect = CreateRectYZ(tf, blue);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
     {
@@ -53,7 +53,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
         auto rect = CreateRectXZ(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
     // {
@@ -95,8 +95,8 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         scene.AddMesh(rect);
     }
 
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

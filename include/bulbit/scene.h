@@ -27,9 +27,9 @@ public:
     void AddMesh(const Ref<Mesh> mesh);
     void AddModel(const Ref<Model> model);
 
+    template <typename T, typename... Args>
+    void CreateLight(Args&&... args);
     void AddLight(const Ref<Light> light);
-    void AddLight(const Ref<Primitive> primitve);
-    void AddLight(const Ref<Mesh> mesh);
 
     template <typename T, typename... Args>
     MaterialIndex CreateMaterial(Args&&... args);
@@ -57,6 +57,24 @@ private:
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
+
+template <typename T, typename... Args>
+inline void Scene::CreateLight(Args&&... args)
+{
+    auto light = std::make_shared<T>(std::forward<Args>(args)...);
+
+    assert(light->type != Light::Type::area_light);
+
+    if (light->type != Light::Type::area_light)
+    {
+        lights.push_back(light);
+    }
+
+    if (light->type == Light::Type::infinite_area_light)
+    {
+        infinite_lights.push_back((InfiniteAreaLight*)light.get());
+    }
+}
 
 template <typename T, typename... Args>
 inline MaterialIndex Scene::CreateMaterial(Args&&... args)

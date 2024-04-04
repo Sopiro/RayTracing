@@ -28,7 +28,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
         auto red = scene.CreateMaterial<DiffuseLight>(Spectrum(14.0f, 0.0f, 0.0f));
         auto sphere = std::make_shared<Sphere>(Vec3(0.0f, 3.0f, -4.0f), 1.0f, red);
 
-        scene.AddLight(sphere);
+        scene.AddPrimitive(sphere);
     }
 
     {
@@ -36,11 +36,11 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
         auto tf = Transform{ Vec3(0.0f, 8.0f, 0.0f), Quat(DegToRad(180.0f), x_axis), Vec3(3.0f) };
         auto rect = CreateRectXZ(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr"));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

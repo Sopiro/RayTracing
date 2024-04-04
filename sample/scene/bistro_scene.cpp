@@ -13,12 +13,12 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
 
     scene.AddModel(m);
 
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/harties_4k.hdr"));
-    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis))));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/harties_4k.hdr");
+    scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    scene.CreateLight<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
     // scene.AddLight(
     //     std::make_shared<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734, 0.583, 0.377),
     //     0.02));

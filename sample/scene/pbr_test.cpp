@@ -97,15 +97,15 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
             auto rect = CreateRectXZ(tf, light);
 
-            scene.AddLight(rect);
+            scene.AddMesh(rect);
         }
     }
 
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/sunset.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/sunset.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

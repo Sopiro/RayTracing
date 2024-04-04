@@ -37,22 +37,22 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };
         auto rect = CreateRectYZ(tf, light);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, -1.0f), Quat(0.0f, y_axis), Vec3(w, h, 1.0f) };
         rect = CreateRectXY(tf, light);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, 1.0f), Quat(pi, y_axis), Vec3(w, h, 1.0f) };
         rect = CreateRectXY(tf, light);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(-1.0f, h / 2.0f - 0.01f, 0.0f), Quat(0.0f, y_axis), Vec3(1.0f, h, w) };
         rect = CreateRectYZ(tf, light);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));

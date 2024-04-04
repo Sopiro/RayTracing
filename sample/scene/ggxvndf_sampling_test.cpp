@@ -27,10 +27,10 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         // scene.AddLight(sphere);
     }
 
-    scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/scythian_tombs_2_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
-    // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    scene.CreateLight<InfiniteAreaLight>("res/HDR/scythian_tombs_2_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

@@ -65,11 +65,11 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
         auto l4 = std::make_shared<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
         auto l5 = std::make_shared<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
 
-        scene.AddLight(l1);
-        scene.AddLight(l2);
-        scene.AddLight(l3);
-        scene.AddLight(l4);
-        scene.AddLight(l5);
+        scene.AddPrimitive(l1);
+        scene.AddPrimitive(l2);
+        scene.AddPrimitive(l3);
+        scene.AddPrimitive(l4);
+        scene.AddPrimitive(l5);
     }
 
     Float aspect_ratio = 16.f / 9.f;
@@ -150,11 +150,11 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
         auto l4 = std::make_shared<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
         auto l5 = std::make_shared<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
 
-        // scene.AddLight(l1);
-        scene.AddLight(l2);
-        scene.AddLight(l3);
-        scene.AddLight(l4);
-        scene.AddLight(l5);
+        // scene.AddPrimitive(l1);
+        scene.AddPrimitive(l2);
+        scene.AddPrimitive(l3);
+        scene.AddPrimitive(l4);
+        scene.AddPrimitive(l5);
     }
 
     Float aspect_ratio = 16.f / 9.f;

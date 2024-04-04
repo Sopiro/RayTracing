@@ -35,22 +35,22 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
         auto tf = Transform{ Point3(0.0f, 5.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(0.0f, 5.0f, 3.0f), Quat(pi - pi / 4.0f, x_axis), Vec3(size) };
         rect = CreateRectXY(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(-3.0f, 5.0f, 0.0f), Quat(-pi / 4.0f, z_axis), Vec3(size) };
         rect = CreateRectYZ(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(3.0f, 5.0f, 0.0f), Quat(pi + pi / 4.0f, z_axis), Vec3(size) };
         rect = CreateRectYZ(tf, white);
 
-        scene.AddLight(rect);
+        scene.AddMesh(rect);
     }
 
     // Floor

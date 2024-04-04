@@ -84,15 +84,14 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        scene.AddLight(CreateRectXZ(tf, light));
+        scene.AddMesh(CreateRectXZ(tf, light));
 
-        // scene.AddLight(std::make_shared<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f,
-        // scene.CreateMaterial<DiffuseLight>(Spectrum(10.f));
-        // scene.AddLight(std::make_shared<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f)));
-        // scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f));
-        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
-        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
-        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+        // scene.AddPrimitive(std::make_shared<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light));
+        // scene.CreateLight<PointLight>Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f)));
+        // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f));
+        // scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+        // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+        // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     }
 
     // scene.Rebuild();

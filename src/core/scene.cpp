@@ -19,6 +19,15 @@ void Scene::AddPrimitive(const Ref<Primitive> primitive)
 {
     primitives.push_back(primitive);
 
+    const Material* mat = GetMaterial(primitive->GetMaterialIndex());
+    if (mat->IsLightSource())
+    {
+        // Create area light
+        auto area_light = std::make_shared<AreaLight>(primitive);
+        area_light->material = mat;
+        lights.push_back(area_light);
+    }
+
     AABB aabb;
     primitive->GetAABB(&aabb);
     bvh.CreateNode(primitive.get(), aabb);
@@ -47,28 +56,16 @@ void Scene::AddModel(const Ref<Model> model)
 
 void Scene::AddLight(const Ref<Light> light)
 {
-    lights.push_back(light);
+    assert(light->type != Light::Type::area_light);
+
+    if (light->type != Light::Type::area_light)
+    {
+        lights.push_back(light);
+    }
 
     if (light->type == Light::Type::infinite_area_light)
     {
         infinite_lights.push_back((InfiniteAreaLight*)light.get());
-    }
-}
-
-void Scene::AddLight(const Ref<Primitive> primitive)
-{
-    AddPrimitive(primitive);
-    auto area_light = std::make_shared<AreaLight>(primitive);
-    area_light->material = GetMaterial(primitive->GetMaterialIndex());
-    lights.push_back(area_light);
-}
-
-void Scene::AddLight(const Ref<Mesh> mesh)
-{
-    for (int32 i = 0; i < mesh->triangle_count; ++i)
-    {
-        auto tri = std::make_shared<Triangle>(mesh, i);
-        AddLight(tri);
     }
 }
 

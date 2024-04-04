@@ -40,7 +40,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        scene.AddLight(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
     }
 
     // Lights
@@ -48,7 +48,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
         auto tf = Transform{ 0.5f, 0.999f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         auto l = CreateRectXZ(tf, light);
 
-        scene.AddLight(l);
+        scene.AddMesh(l);
     }
 
     {
