@@ -13,8 +13,8 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
-                                                ConstantColor::Create(Spectrum(0.01f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
+                                                    ConstantColor::Create(Spectrum(0.01f)));
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);
@@ -31,7 +31,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
 
     // Lights
     {
-        auto light = std::make_shared<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
+        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
         Float w = 0.4f;
         Float h = 1.2f;
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };

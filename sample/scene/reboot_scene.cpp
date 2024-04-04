@@ -25,14 +25,14 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
     }
 
     {
-        auto red = std::make_shared<DiffuseLight>(Spectrum(14.0f, 0.0f, 0.0f));
+        auto red = scene.CreateMaterial<DiffuseLight>(Spectrum(14.0f, 0.0f, 0.0f));
         auto sphere = std::make_shared<Sphere>(Vec3(0.0f, 3.0f, -4.0f), 1.0f, red);
 
         scene.AddLight(sphere);
     }
 
     {
-        auto white = std::make_shared<DiffuseLight>(Spectrum(8.0f));
+        auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(8.0f));
         auto tf = Transform{ Vec3(0.0f, 8.0f, 0.0f), Quat(DegToRad(180.0f), x_axis), Vec3(3.0f) };
         auto rect = CreateRectXZ(tf, white);
 

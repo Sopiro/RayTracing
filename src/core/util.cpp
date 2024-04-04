@@ -19,7 +19,7 @@ Ref<Microfacet> RandomMicrofacetMaterial()
     // clang-format on
 }
 
-Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
+Ref<Mesh> CreateRectXY(const Transform& tf, MaterialIndex mat, const Point2& texCoord)
 {
     Vec3 p0 = { -0.5, -0.5, 0.0 };
     Vec3 p1 = { 0.5, -0.5, 0.0 };
@@ -37,7 +37,7 @@ Ref<Mesh> CreateRectXY(const Transform& tf, const Ref<Material> mat, const Point
     return std::make_shared<Mesh>(vertices, indices, tf, mat);
 };
 
-Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
+Ref<Mesh> CreateRectXZ(const Transform& tf, MaterialIndex mat, const Point2& texCoord)
 {
     Vec3 p0 = { -0.5, 0.0, 0.5 };
     Vec3 p1 = { 0.5, 0.0, 0.5 };
@@ -55,7 +55,7 @@ Ref<Mesh> CreateRectXZ(const Transform& tf, const Ref<Material> mat, const Point
     return std::make_shared<Mesh>(vertices, indices, tf, mat);
 }
 
-Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
+Ref<Mesh> CreateRectYZ(const Transform& tf, MaterialIndex mat, const Point2& texCoord)
 {
     Vec3 p0 = { 0.0, -0.5, 0.5 };
     Vec3 p1 = { 0.0, -0.5, -0.5 };
@@ -73,7 +73,7 @@ Ref<Mesh> CreateRectYZ(const Transform& tf, const Ref<Material> mat, const Point
     return std::make_shared<Mesh>(vertices, indices, tf, mat);
 }
 
-Ref<Mesh> CreateBox(const Transform& tf, const Ref<Material> mat, const Point2& texCoord)
+Ref<Mesh> CreateBox(const Transform& tf, MaterialIndex mat, const Point2& texCoord)
 {
     /*
           7--------6

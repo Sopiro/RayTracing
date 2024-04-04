@@ -35,8 +35,12 @@ void Scene::Add(const Ref<Mesh> mesh)
 
 void Scene::Add(const Ref<Model> model)
 {
+    MaterialIndex offset = (MaterialIndex)materials.size();
+    materials.insert(materials.end(), model->materials.begin(), model->materials.end());
+
     for (Ref<Mesh> mesh : model->GetMeshes())
     {
+        mesh->material += offset;
         Add(mesh);
     }
 }
@@ -54,7 +58,9 @@ void Scene::AddLight(const Ref<Light> light)
 void Scene::AddLight(const Ref<Primitive> primitive)
 {
     Add(primitive);
-    lights.push_back(std::make_shared<AreaLight>(primitive));
+    auto area_light = std::make_shared<AreaLight>(primitive);
+    area_light->material = GetMaterial(primitive->GetMaterialIndex());
+    lights.push_back(area_light);
 }
 
 void Scene::AddLight(const Ref<Mesh> mesh)
@@ -62,9 +68,7 @@ void Scene::AddLight(const Ref<Mesh> mesh)
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = std::make_shared<Triangle>(mesh, i);
-        Add(tri);
-
-        lights.push_back(std::make_shared<AreaLight>(tri));
+        AddLight(tri);
     }
 }
 

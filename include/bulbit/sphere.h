@@ -10,7 +10,7 @@ class Sphere : public Primitive
 {
 public:
     Sphere() = default;
-    Sphere(const Vec3& center, Float radius, const Ref<Material> material);
+    Sphere(const Vec3& center, Float radius, MaterialIndex material);
 
     virtual void GetAABB(AABB* out_aabb) const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -22,7 +22,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
-    virtual const Material* GetMaterial() const override;
+    virtual MaterialIndex GetMaterialIndex() const override;
 
     Vec3 center;
     Float radius;
@@ -30,10 +30,10 @@ public:
 private:
     static inline Point2 ComputeTexCoord(const Vec3& v);
 
-    Ref<Material> material;
+    MaterialIndex material;
 };
 
-inline Sphere::Sphere(const Vec3& _center, Float _radius, const Ref<Material> _material)
+inline Sphere::Sphere(const Vec3& _center, Float _radius, MaterialIndex _material)
     : center{ _center }
     , radius{ _radius }
     , material{ _material }
@@ -65,9 +65,9 @@ inline Float Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     return 1 / solid_angle;
 }
 
-inline const Material* Sphere::GetMaterial() const
+inline MaterialIndex Sphere::GetMaterialIndex() const
 {
-    return material.get();
+    return material;
 }
 
 inline Point2 Sphere::ComputeTexCoord(const Vec3& v)

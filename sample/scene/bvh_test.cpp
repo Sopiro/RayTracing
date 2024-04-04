@@ -11,12 +11,12 @@ namespace bulbit
 
 std::unique_ptr<Camera> BVHTest(Scene& scene)
 {
-    auto gray = std::make_shared<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
-    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
-    auto black = std::make_shared<Lambertian>(Spectrum(0.0f));
+    auto gray = scene.CreateMaterial<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
+    auto red = scene.CreateMaterial<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto black = scene.CreateMaterial<Lambertian>(Spectrum(0.0f));
 
     Float n = 100.0f;
     Float w = 7.0f;

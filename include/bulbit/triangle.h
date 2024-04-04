@@ -23,7 +23,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
-    virtual const Material* GetMaterial() const override;
+    virtual MaterialIndex GetMaterialIndex() const override;
 
 private:
     friend class Scene;
@@ -82,9 +82,9 @@ inline Float Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) 
     return distance_squared / (cosine * area);
 }
 
-inline const Material* Triangle::GetMaterial() const
+inline MaterialIndex Triangle::GetMaterialIndex() const
 {
-    return mesh->material.get();
+    return mesh->material;
 }
 
 inline Vec3 Triangle::GetNormal(Float _u, Float _v, Float _w) const

@@ -15,7 +15,7 @@ namespace bulbit
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 {
-    auto ground_material = std::make_shared<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
+    auto ground_material = scene.CreateMaterial<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
 
     Transform tf = identity;
     tf.r *= 30;
@@ -35,7 +35,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 if (choose_mat < 0.9f)
                 {
                     RandomMicrofacetMaterial();
-                    auto mat = std::make_shared<Microfacet>(
+                    auto mat = scene.CreateMaterial<Microfacet>(
                         ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
                         ConstantColor::Create(Spectrum(Rand() > 0.5f ? Float(1.0f) : Float(0.0f))),
                         ConstantColor::Create(Rand(0, 1)));
@@ -44,20 +44,20 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 else
                 {
                     // glass
-                    auto glass = std::make_shared<Dielectric>(1.5f);
+                    auto glass = scene.CreateMaterial<Dielectric>(1.5f);
                     scene.Add(std::make_shared<Sphere>(center, 0.2f, glass));
                 }
             }
         }
     }
 
-    auto material1 = std::make_shared<Dielectric>(1.5f);
+    auto material1 = scene.CreateMaterial<Dielectric>(1.5f);
     scene.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0f, material1));
 
-    auto material2 = std::make_shared<Lambertian>(Spectrum(0.4f, 0.2f, 0.1f));
+    auto material2 = scene.CreateMaterial<Lambertian>(Spectrum(0.4f, 0.2f, 0.1f));
     scene.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0f, material2));
 
-    auto material3 = std::make_shared<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
+    auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
     scene.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0f, material3));
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));

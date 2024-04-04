@@ -19,7 +19,7 @@ Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Inters
     *visibility = ref2p.Normalize() - Ray::epsilon;
     *wi = ref2p;
 
-    return sample.material->Emit(sample, ref2p);
+    return material->Emit(sample, ref2p);
 }
 
 } // namespace bulbit

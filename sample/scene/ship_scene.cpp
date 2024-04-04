@@ -31,8 +31,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = std::make_shared<DiffuseLight>(ConstantColor::Create(Spectrum(30.0f)));
-        white->two_sided = true;
+        auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(30.0f), true);
         auto tf = Transform{ Point3(0.0f, 5.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
 
@@ -56,8 +55,8 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
     // Floor
     {
-        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
-                                                ConstantColor::Create(Spectrum(0.001f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
+                                                    ConstantColor::Create(Spectrum(0.001f)));
         Float size = 9.0f;
         Float y = 2.1f;
 

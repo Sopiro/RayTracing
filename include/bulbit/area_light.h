@@ -17,7 +17,10 @@ public:
     const Primitive* GetPrimitive() const;
 
 private:
+    friend class Scene;
+
     Ref<Primitive> primitive;
+    const Material* material;
 };
 
 inline Float AreaLight::EvaluatePDF(const Ray& ray) const

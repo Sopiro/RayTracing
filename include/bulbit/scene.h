@@ -31,7 +31,15 @@ public:
     void AddLight(const Ref<Primitive> primitve);
     void AddLight(const Ref<Mesh> mesh);
 
+    template <typename T, typename... Args>
+    MaterialIndex CreateMaterial(Args&&... args);
+    MaterialIndex Add(const Ref<Material> material);
+
+    const Material* GetMaterial(MaterialIndex material) const;
+    Material* GetMaterial(MaterialIndex material);
+
     const std::vector<Ref<Primitive>>& GetPrimitives() const;
+
     const std::vector<Ref<Light>>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
@@ -44,10 +52,34 @@ private:
 
     // All primitives in this scene
     std::vector<Ref<Primitive>> primitives;
+    std::vector<Ref<Material>> materials;
 
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
+
+template <typename T, typename... Args>
+inline MaterialIndex Scene::CreateMaterial(Args&&... args)
+{
+    materials.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+    return MaterialIndex(materials.size() - 1);
+}
+
+inline MaterialIndex Scene::Add(const Ref<Material> material)
+{
+    materials.push_back(material);
+    return MaterialIndex(materials.size() - 1);
+}
+
+inline const Material* Scene::GetMaterial(MaterialIndex material) const
+{
+    return materials[material].get();
+}
+
+inline Material* Scene::GetMaterial(MaterialIndex material)
+{
+    return materials[material].get();
+}
 
 inline const std::vector<Ref<Primitive>>& Scene::GetPrimitives() const
 {

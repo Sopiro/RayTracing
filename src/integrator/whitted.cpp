@@ -25,7 +25,7 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
         return l;
     }
 
-    const Material* mat = is.material;
+    const Material* mat = scene.GetMaterial(is.material_index);
 
     // Evaluate emitted light if ray hit an area light source
     l += mat->Emit(is, ray.d);

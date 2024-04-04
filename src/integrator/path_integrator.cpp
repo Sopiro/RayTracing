@@ -24,13 +24,14 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
     for (int32 bounce = 0;; ++bounce)
     {
         Intersection is;
+        const Material* mat;
         bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
-        const Material* mat = is.material;
 
         if (bounce == 0 || was_specular_bounce)
         {
             if (found_intersection)
             {
+                mat = scene.GetMaterial(is.material_index);
                 if (mat->IsLightSource())
                 {
                     radiance += throughput * mat->Emit(is, ray.d);
@@ -50,6 +51,8 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         {
             break;
         }
+
+        mat = scene.GetMaterial(is.material_index);
 
         Interaction ir;
         if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
@@ -118,7 +121,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                     Intersection shadow_is;
                     if (scene.Intersect(&shadow_is, shadow_ray, Ray::epsilon, infinity))
                     {
-                        const Material* shadow_mat = shadow_is.material;
+                        const Material* shadow_mat = scene.GetMaterial(shadow_is.material_index);
 
                         // Intersects area light
                         if (shadow_mat->IsLightSource())

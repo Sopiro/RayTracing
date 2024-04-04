@@ -15,15 +15,15 @@ namespace bulbit
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
     // Materials
-    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = scene.CreateMaterial<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
-    // auto light = std::make_shared<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
-    auto light = std::make_shared<DiffuseLight>(Spectrum(15.0f));
-    auto mirror = std::make_shared<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
+    auto wakgood_mat = scene.CreateMaterial<Lambertian>(wakgood_texture);
+    // auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
+    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15.0f));
+    auto mirror = scene.CreateMaterial<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
 
     // Cornell box
     {
@@ -75,7 +75,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 
     // Right sphere
     // {
-    //     auto mat = std::make_shared<Dielectric>(1.5f);
+    //     auto mat = scene.CreateMaterial<Dielectric>(1.5f);
     //     auto sphere = std::make_shared<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
 
     //     scene.Add(sphere);
@@ -87,9 +87,10 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         scene.AddLight(CreateRectXZ(tf, light));
 
         // scene.AddLight(std::make_shared<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f,
-        // std::make_shared<DiffuseLight>(Spectrum(10.f)))); scene.AddLight(std::make_shared<PointLight>(Point3(0.5f, 0.9f,
-        // -0.5f), Spectrum(0.25f))); scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(1.0f),
-        // 0.05f)); scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
+        // scene.CreateMaterial<DiffuseLight>(Spectrum(10.f));
+        // scene.AddLight(std::make_shared<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f)));
+        // scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f));
+        // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));
         // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
         // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     }

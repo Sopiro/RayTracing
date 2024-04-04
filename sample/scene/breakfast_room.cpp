@@ -23,7 +23,7 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 
     scene.AddLight(std::make_shared<DirectionalLight>(Normalize(-Vec3(15.0f, 5.0f, 5.0f)), Vec3(8.0f), 0.02f));
 
-    // auto light = std::make_shared<DiffuseLight>(Spectrum(5000.0));
+    // auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(5000.0));
     // tf = Transform{ 30, 10, 15, Quat(pi, z_axis), Vec3(1.0, 1.5, 5.0) };
     // auto l = CreateRectYZ(tf, light);
 

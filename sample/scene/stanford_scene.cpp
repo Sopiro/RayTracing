@@ -13,7 +13,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = std::make_shared<Microfacet>(
+        auto mat = scene.CreateMaterial<Microfacet>(
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"), ConstantColor::Create(0.0f),
@@ -76,8 +76,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Float xgap = 0.015f;
         Float xstep = 2.0f * w + xgap;
 
-        auto light = std::make_shared<DiffuseLight>(Spectrum(3.0f));
-        light->two_sided = true;
+        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(3.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {
@@ -102,7 +101,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 1920;
+    int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0, 0.5f, 2 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "material.h"
 
 namespace bulbit
@@ -6,8 +8,8 @@ namespace bulbit
 class DiffuseLight : public Material
 {
 public:
-    DiffuseLight(const Spectrum& color);
-    DiffuseLight(const Ref<Texture> emission);
+    DiffuseLight(const Spectrum& color, bool two_sided = false);
+    DiffuseLight(const Ref<Texture> emission, bool two_sided = false);
 
     virtual bool IsLightSource() const override;
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
@@ -17,14 +19,15 @@ public:
     bool two_sided;
 };
 
-inline DiffuseLight::DiffuseLight(const Spectrum& color)
+inline DiffuseLight::DiffuseLight(const Spectrum& color, bool two_sided)
     : emission{ ConstantColor::Create(color) }
+    , two_sided{ two_sided }
 {
 }
 
-inline DiffuseLight::DiffuseLight(const Ref<Texture> _emission)
-    : emission{ _emission }
-    , two_sided{ false }
+inline DiffuseLight::DiffuseLight(const Ref<Texture> emission, bool two_sided)
+    : emission{ emission }
+    , two_sided{ two_sided }
 {
 }
 

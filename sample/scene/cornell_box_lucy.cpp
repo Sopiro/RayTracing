@@ -12,13 +12,13 @@ namespace bulbit
 std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 {
     // Materials
-    auto red = std::make_shared<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = std::make_shared<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = std::make_shared<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = std::make_shared<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = scene.CreateMaterial<Lambertian>(Spectrum(.65f, .05f, .05f));
+    auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
+    auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
+    auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = std::make_shared<Lambertian>(wakgood_texture);
-    auto light = std::make_shared<DiffuseLight>(Spectrum(15));
+    auto wakgood_mat = scene.CreateMaterial<Lambertian>(wakgood_texture);
+    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15));
 
     // Cornell box
     {
@@ -57,7 +57,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
         auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
                                                 ConstantColor::Create(Spectrum(0.2f)));
 
-        // auto mat = std::make_shared<Dielectric>(1.5f);
+        // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
         Material::fallback = mat;
         Ref<Model> model = std::make_shared<Model>("res/stanford/lucy.obj", transform);

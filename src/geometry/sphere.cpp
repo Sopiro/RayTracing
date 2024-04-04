@@ -31,7 +31,7 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     }
 
     // Found intersection
-    is->material = GetMaterial();
+    is->material_index = material;
     is->t = root;
     is->point = ray.At(root);
 
@@ -109,7 +109,7 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
-    sample->material = GetMaterial();
+    sample->material_index = material;
     sample->point = ref + *ref2p;
     sample->normal = Normalize(sample->point - center);
     *pdf = 1 / solid_angle;

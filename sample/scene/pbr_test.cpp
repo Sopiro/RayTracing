@@ -33,14 +33,14 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
             auto mat = RandomMicrofacetMaterial();
-            scene.Add(std::make_shared<Sphere>(pos, r, mat));
+            scene.Add(std::make_shared<Sphere>(pos, r, scene.Add(mat)));
         }
     }
 
     // Ground
     {
-        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
-                                                ConstantColor::Create(Spectrum(0.1f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
+                                                    ConstantColor::Create(Spectrum(0.1f)));
 
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
         auto ground = CreateRectXZ(tf1, mat);
@@ -51,7 +51,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // Light
     // {
     //     auto tf = Transform{ Vec3(-4.0f, 2.5f, 0.0f), Quat(DegToRad(-40.0f), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
-    //     auto light = std::make_shared<DiffuseLight>(Spectrum(10.0f));
+    //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(10.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -60,7 +60,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(4.0f, 2.5f, 0.0f), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
-    //     auto light = std::make_shared<DiffuseLight>(Spectrum(8.0f));
+    //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectYZ(tf, light);
 
     //     scene.Add(rect);
@@ -69,7 +69,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
 
     // {
     //     auto tf = Transform{ Vec3(0.0f, 2.5f, -4.0f), Quat(DegToRad(40), x_axis), Vec3(4.0f, 1.0f, 1.0f) };
-    //     auto light = std::make_shared<DiffuseLight>(Spectrum(8.0f));
+    //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(8.0f));
     //     auto rect = RectXY(tf, light);
 
     //     scene.Add(rect);
@@ -82,8 +82,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         Float xgap = 0.16f;
         Float xstep = 2.0f * s + xgap;
 
-        auto light = std::make_shared<DiffuseLight>(Spectrum(5.0f));
-        light->two_sided = true;
+        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(5.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {

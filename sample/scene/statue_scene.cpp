@@ -32,7 +32,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     Float size = 2.0f;
 
     {
-        auto red = std::make_shared<DiffuseLight>(ConstantColor::Create(Spectrum(light, 0.0f, 0.0f)));
+        auto red = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(light, 0.0f, 0.0f)));
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
         auto rect = CreateRectYZ(tf, red);
 
@@ -40,7 +40,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     }
 
     {
-        auto blue = std::make_shared<DiffuseLight>(ConstantColor::Create(Spectrum(0.0f, 0.0f, light)));
+        auto blue = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(0.0f, 0.0f, light)));
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
         auto rect = CreateRectYZ(tf, blue);
 
@@ -48,7 +48,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     }
 
     {
-        auto white = std::make_shared<DiffuseLight>(ConstantColor::Create(Spectrum(0.5f)));
+        auto white = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(0.5f)));
 
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
         auto rect = CreateRectXZ(tf, white);
@@ -57,7 +57,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     }
 
     // {
-    // auto white = std::make_shared<DiffuseLight>(SolidColor::Create(Spectrum(3.0f)));
+    // auto white = scene.CreateMaterial<DiffuseLight>(SolidColor::Create(Spectrum(3.0f)));
 
     //     int32 count = 10;
     //     Float d = two_pi / count;
@@ -77,8 +77,8 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
 
     // Floor
     {
-        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(0.0f)),
-                                                ConstantColor::Create(Spectrum(0.01f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(0.0f)),
+                                                    ConstantColor::Create(Spectrum(0.01f)));
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
         auto rect = CreateRectXZ(tf, mat);
 
@@ -98,10 +98,10 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
 
-    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
-    // Float aspect_ratio = 1.f;
+    Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 

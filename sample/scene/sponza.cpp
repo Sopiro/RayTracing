@@ -19,8 +19,8 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
 
     scene.Add(sponza);
 
-    auto light = std::make_shared<DiffuseLight>(Spectrum(1.0f));
-    // auto mat = std::make_shared<Dielectric>(1.5f);
+    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f));
+    // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
     Float cx = 8.0f;
     Float cy = 4.0f;
@@ -48,7 +48,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // }
 
     // {
-    //     auto light2 = std::make_shared<DiffuseLight>(Spectrum(20.0f));
+    //     auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(20.0f));
     //     auto sphere = std::make_shared<Sphere>(Vec3(0.0f, 1.5f, 0.0f), 0.4f, light2);
     //     scene.Add(sphere);
     //     scene.AddLight(sphere);
@@ -65,7 +65,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 500;
+    int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
     // Point3 lookfrom{ 0.0f, 2.5f, 4.5f };
