@@ -13,7 +13,7 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     Transform transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
     Ref<Model> model = std::make_shared<Model>("res/DamagedHelmet/DamagedHelmet.gltf", transform);
 
-    scene.Add(model);
+    scene.AddModel(model);
 
     scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr"));
 

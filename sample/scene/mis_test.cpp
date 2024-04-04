@@ -16,7 +16,7 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
         auto floor_mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(0.0f)),
                                                           ConstantColor::Create(Spectrum(0.0f)));
         floor->GetMeshes()[0]->SetMaterial(floor_mat);
-        scene.Add(floor);
+        scene.AddModel(floor);
     }
 
     // plates
@@ -38,16 +38,16 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
                                                    ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
         auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
-        scene.Add(p1);
+        scene.AddModel(p1);
         p1->GetMeshes()[0]->SetMaterial(m1);
         auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
-        scene.Add(p2);
+        scene.AddModel(p2);
         p2->GetMeshes()[0]->SetMaterial(m2);
         auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
-        scene.Add(p3);
+        scene.AddModel(p3);
         p3->GetMeshes()[0]->SetMaterial(m3);
         auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
-        scene.Add(p4);
+        scene.AddModel(p4);
         p4->GetMeshes()[0]->SetMaterial(m4);
     }
 
@@ -98,10 +98,10 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
             ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(0.0f)), ConstantColor::Create(Spectrum(0.0f)));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
-        scene.Add(CreateRectXZ(tf, floor));
+        scene.AddMesh(CreateRectXZ(tf, floor));
 
         tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, s, 1.0f) };
-        scene.Add(CreateRectXY(tf, floor));
+        scene.AddMesh(CreateRectXY(tf, floor));
     }
 
     // plates
@@ -123,16 +123,16 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
                                                    ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
         auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
-        scene.Add(p1);
+        scene.AddModel(p1);
         p1->GetMeshes()[0]->SetMaterial(m1);
         auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
-        scene.Add(p2);
+        scene.AddModel(p2);
         p2->GetMeshes()[0]->SetMaterial(m2);
         auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
-        scene.Add(p3);
+        scene.AddModel(p3);
         p3->GetMeshes()[0]->SetMaterial(m3);
         auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
-        scene.Add(p4);
+        scene.AddModel(p4);
         p4->GetMeshes()[0]->SetMaterial(m4);
     }
 

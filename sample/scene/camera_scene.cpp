@@ -18,7 +18,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);
-        scene.Add(floor);
+        scene.AddMesh(floor);
     }
 
     // Camera
@@ -26,7 +26,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
         auto model = std::make_shared<Model>("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
 
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Lights

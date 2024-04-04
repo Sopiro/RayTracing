@@ -23,9 +23,9 @@ public:
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
     virtual void GetAABB(AABB* out_aabb) const override;
 
-    void Add(const Ref<Primitive> primitive);
-    void Add(const Ref<Mesh> mesh);
-    void Add(const Ref<Model> model);
+    void AddPrimitive(const Ref<Primitive> primitive);
+    void AddMesh(const Ref<Mesh> mesh);
+    void AddModel(const Ref<Model> model);
 
     void AddLight(const Ref<Light> light);
     void AddLight(const Ref<Primitive> primitve);
@@ -33,7 +33,7 @@ public:
 
     template <typename T, typename... Args>
     MaterialIndex CreateMaterial(Args&&... args);
-    MaterialIndex Add(const Ref<Material> material);
+    MaterialIndex AddMaterial(const Ref<Material> material);
 
     const Material* GetMaterial(MaterialIndex material) const;
     Material* GetMaterial(MaterialIndex material);
@@ -65,7 +65,7 @@ inline MaterialIndex Scene::CreateMaterial(Args&&... args)
     return MaterialIndex(materials.size() - 1);
 }
 
-inline MaterialIndex Scene::Add(const Ref<Material> material)
+inline MaterialIndex Scene::AddMaterial(const Ref<Material> material)
 {
     materials.push_back(material);
     return MaterialIndex(materials.size() - 1);

@@ -19,7 +19,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 
     Transform tf = identity;
     tf.r *= 30;
-    scene.Add(CreateRectXZ(tf, ground_material));
+    scene.AddMesh(CreateRectXZ(tf, ground_material));
 
     Srand(7777);
 
@@ -39,26 +39,26 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                         ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
                         ConstantColor::Create(Spectrum(Rand() > 0.5f ? Float(1.0f) : Float(0.0f))),
                         ConstantColor::Create(Rand(0, 1)));
-                    scene.Add(std::make_shared<Sphere>(center, 0.2f, mat));
+                    scene.AddPrimitive(std::make_shared<Sphere>(center, 0.2f, mat));
                 }
                 else
                 {
                     // glass
                     auto glass = scene.CreateMaterial<Dielectric>(1.5f);
-                    scene.Add(std::make_shared<Sphere>(center, 0.2f, glass));
+                    scene.AddPrimitive(std::make_shared<Sphere>(center, 0.2f, glass));
                 }
             }
         }
     }
 
     auto material1 = scene.CreateMaterial<Dielectric>(1.5f);
-    scene.Add(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0f, material1));
+    scene.AddPrimitive(std::make_shared<Sphere>(Vec3(0, 1, 0), 1.0f, material1));
 
     auto material2 = scene.CreateMaterial<Lambertian>(Spectrum(0.4f, 0.2f, 0.1f));
-    scene.Add(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0f, material2));
+    scene.AddPrimitive(std::make_shared<Sphere>(Vec3(-4, 1, 0), 1.0f, material2));
 
     auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
-    scene.Add(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0f, material3));
+    scene.AddPrimitive(std::make_shared<Sphere>(Vec3(4, 1, 0), 1.0f, material3));
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));

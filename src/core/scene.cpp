@@ -15,7 +15,7 @@ void Scene::GetAABB(AABB* out_aabb) const
     *out_aabb = bvh.nodes[bvh.root].aabb;
 }
 
-void Scene::Add(const Ref<Primitive> primitive)
+void Scene::AddPrimitive(const Ref<Primitive> primitive)
 {
     primitives.push_back(primitive);
 
@@ -24,16 +24,16 @@ void Scene::Add(const Ref<Primitive> primitive)
     bvh.CreateNode(primitive.get(), aabb);
 }
 
-void Scene::Add(const Ref<Mesh> mesh)
+void Scene::AddMesh(const Ref<Mesh> mesh)
 {
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
         auto tri = std::make_shared<Triangle>(mesh, i);
-        Add(tri);
+        AddPrimitive(tri);
     }
 }
 
-void Scene::Add(const Ref<Model> model)
+void Scene::AddModel(const Ref<Model> model)
 {
     MaterialIndex offset = (MaterialIndex)materials.size();
     materials.insert(materials.end(), model->materials.begin(), model->materials.end());
@@ -41,7 +41,7 @@ void Scene::Add(const Ref<Model> model)
     for (Ref<Mesh> mesh : model->GetMeshes())
     {
         mesh->material += offset;
-        Add(mesh);
+        AddMesh(mesh);
     }
 }
 
@@ -57,7 +57,7 @@ void Scene::AddLight(const Ref<Light> light)
 
 void Scene::AddLight(const Ref<Primitive> primitive)
 {
-    Add(primitive);
+    AddPrimitive(primitive);
     auto area_light = std::make_shared<AreaLight>(primitive);
     area_light->material = GetMaterial(primitive->GetMaterialIndex());
     lights.push_back(area_light);

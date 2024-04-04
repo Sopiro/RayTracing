@@ -24,19 +24,19 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXY(tf, wakgood_mat));
+        scene.AddMesh(CreateRectXY(tf, wakgood_mat));
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, red));
+        scene.AddMesh(CreateRectYZ(tf, red));
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, green));
+        scene.AddMesh(CreateRectYZ(tf, green));
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
@@ -61,7 +61,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 
         Material::fallback = mat;
         Ref<Model> model = std::make_shared<Model>("res/stanford/lucy.obj", transform);
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     int32 width = 500;

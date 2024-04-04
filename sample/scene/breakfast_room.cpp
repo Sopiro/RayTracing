@@ -15,7 +15,7 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
     Transform tf{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
     Ref<Model> m = std::make_shared<Model>("res/breakfast_room/breakfast_room.obj", tf);
 
-    scene.Add(m);
+    scene.AddModel(m);
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
     scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr"));

@@ -33,7 +33,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
             auto mat = RandomMicrofacetMaterial();
-            scene.Add(std::make_shared<Sphere>(pos, r, scene.Add(mat)));
+            scene.AddPrimitive(std::make_shared<Sphere>(pos, r, scene.AddMaterial(mat)));
         }
     }
 
@@ -45,7 +45,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
         auto ground = CreateRectXZ(tf1, mat);
 
-        scene.Add(ground);
+        scene.AddMesh(ground);
     }
 
     // Light

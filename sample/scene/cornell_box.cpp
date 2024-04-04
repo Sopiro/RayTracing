@@ -29,23 +29,23 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXY(tf, wakgood_mat));
+        scene.AddMesh(CreateRectXY(tf, wakgood_mat));
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, red));
+        scene.AddMesh(CreateRectYZ(tf, red));
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, green));
+        scene.AddMesh(CreateRectYZ(tf, green));
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
     }
 
     // Left block
@@ -58,7 +58,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto box = Box(tf, white);
         auto box = CreateBox(tf, white);
 
-        scene.Add(box);
+        scene.AddMesh(box);
     }
 
     // Right block
@@ -70,7 +70,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
         auto box = CreateBox(tf, white);
 
-        scene.Add(box);
+        scene.AddMesh(box);
     }
 
     // Right sphere

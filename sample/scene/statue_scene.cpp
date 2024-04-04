@@ -24,7 +24,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         // auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(8.0f) };
         // auto model = std::make_shared<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
 
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     Float light = 8.0f;
@@ -82,7 +82,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
         auto rect = CreateRectXZ(tf, mat);
 
-        scene.Add(rect);
+        scene.AddMesh(rect);
 
         // mat = RandomPBRMaterial();
         // mat->basecolor_map = SolidColor::Create(Vec3(1.0f));
@@ -92,7 +92,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         tf = Transform{ Point3(0.0f, 0.0f, -4.0f), identity, Vec3(8.0f, 8.0f, 1.0f) };
         rect = CreateRectXY(tf, mat);
 
-        scene.Add(rect);
+        scene.AddMesh(rect);
     }
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");

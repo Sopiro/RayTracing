@@ -21,7 +21,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
         auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
         auto model = std::make_shared<Model>("res/reboot_dramatic_scene/scene.gltf", tf);
 
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     {

@@ -24,23 +24,23 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXY(tf, wakgood_mat));
+        scene.AddMesh(CreateRectXY(tf, wakgood_mat));
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, red));
+        scene.AddMesh(CreateRectYZ(tf, red));
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        scene.Add(CreateRectYZ(tf, green));
+        scene.AddMesh(CreateRectYZ(tf, green));
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        scene.Add(CreateRectXZ(tf, white));
+        scene.AddMesh(CreateRectXZ(tf, white));
     }
 
     // Lights
@@ -59,7 +59,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
         Float r = 0.25;
         auto sphere = std::make_shared<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
 
-        scene.Add(sphere);
+        scene.AddPrimitive(sphere);
         // scene.AddLight(sphere);
     }
 

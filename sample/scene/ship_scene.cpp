@@ -16,7 +16,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
         auto tf = Transform{ Point3(0.0f, -2.2f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(5.0f) };
         auto model = std::make_shared<Model>("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
 
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Ship
@@ -24,7 +24,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
         auto tf = Transform{ Point3(0.0f, 2.0f, 0.0f), Quat(DegToRad(90.0f), y_axis), Vec3(0.1f) };
         auto model = std::make_shared<Model>("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
 
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Light
@@ -62,19 +62,19 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
         auto tf = Transform{ Point3(0.0f, y - size / 2.0f, 0.0f), identity, Vec3(size) };
         auto rect = CreateRectXZ(tf, mat);
-        scene.Add(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(-size / 2.0f, y, 0.0f), identity, Vec3(size) };
         rect = CreateRectYZ(tf, mat);
-        scene.Add(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(0.0f, y, -size / 2.0f), identity, Vec3(size) };
         rect = CreateRectXY(tf, mat);
-        scene.Add(rect);
+        scene.AddMesh(rect);
 
         tf = Transform{ Point3(0.0f, y - size / 2.0f, 0.0f), identity, Vec3(size) };
         rect = CreateRectXZ(tf, mat);
-        scene.Add(rect);
+        scene.AddMesh(rect);
     }
 
     Float aspect_ratio = 16.f / 9.f;

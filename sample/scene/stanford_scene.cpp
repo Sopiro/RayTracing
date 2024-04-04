@@ -21,7 +21,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
 
         auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat, Point2(4.0f, 4.0f));
-        scene.Add(floor);
+        scene.AddMesh(floor);
     }
 
     Float scale = 0.3f;
@@ -34,7 +34,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Material::fallback = mat;
 
         auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Lucy
@@ -44,7 +44,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Material::fallback = mat;
 
         auto model = std::make_shared<Model>("res/stanford/lucy.obj", tf);
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Tyrannosaurus
@@ -54,7 +54,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Material::fallback = mat;
 
         auto model = std::make_shared<Model>("res/stanford/tyra.obj", tf);
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     // Armadillo
@@ -66,7 +66,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Material::fallback = mat;
 
         auto model = std::make_shared<Model>("res/stanford/arma.obj", tf);
-        scene.Add(model);
+        scene.AddModel(model);
     }
 
     {

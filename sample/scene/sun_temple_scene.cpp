@@ -14,7 +14,7 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
 {
     Transform tf{ zero_vec3, identity, Vec3(1.0f) };
     Ref<Model> m = std::make_shared<Model>("res/sun_temple/sun_temple.gltf", tf);
-    scene.Add(m);
+    scene.AddModel(m);
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/SunTemple_Skybox.hdr"));
 

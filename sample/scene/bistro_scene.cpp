@@ -11,7 +11,7 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
     Transform tf{ zero_vec3, identity, Vec3(1) };
     Ref<Model> m = std::make_shared<Model>("res/bistro/bistro.gltf", tf);
 
-    scene.Add(m);
+    scene.AddModel(m);
 
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
     // scene.AddLight(std::make_shared<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
