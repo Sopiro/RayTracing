@@ -1,7 +1,7 @@
 #pragma once
 
-#include "brdf.h"
 #include "constant_color.h"
+#include "pdf.h"
 #include "ray.h"
 
 namespace bulbit
@@ -16,10 +16,10 @@ struct Interaction
     Ray specular_ray;
     Spectrum attenuation;
 
-    const BRDF* GetScatteringPDF() const
+    const PDF* GetScatteringPDF() const
     {
         assert(is_specular == false);
-        return (BRDF*)mem;
+        return (PDF*)mem;
     }
 
 private:

@@ -1,5 +1,5 @@
-#include "bulbit/brdf.h"
 #include "bulbit/microfacet.h"
+#include "bulbit/pdf.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit

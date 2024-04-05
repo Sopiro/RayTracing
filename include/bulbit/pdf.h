@@ -7,10 +7,10 @@ namespace bulbit
 {
 
 // Directinal PDF
-class BRDF
+class PDF
 {
 public:
-    virtual ~BRDF() = default;
+    virtual ~PDF() = default;
 
     // Given an outgoing direction wo, importance sample an incident direction
     virtual Vec3 Sample(const Point2& u) const = 0;
@@ -20,7 +20,7 @@ public:
 };
 
 // Cosine weighted sampling
-class LambertianReflection : public BRDF
+class LambertianReflection : public PDF
 {
 public:
     LambertianReflection(const Vec3& n);
@@ -33,7 +33,7 @@ private:
 };
 
 // GGX importance sampling
-class MicrofacetGGX : public BRDF
+class MicrofacetGGX : public PDF
 {
 public:
     MicrofacetGGX(const Vec3& n, const Vec3& wo, Float a, Float t);
@@ -49,7 +49,7 @@ private:
 };
 
 // GGX VNDF importance sampling
-class MicrofacetGGXVNDF : public BRDF
+class MicrofacetGGXVNDF : public PDF
 {
 public:
     MicrofacetGGXVNDF(const Vec3& n, const Vec3& wo, Float a, Float t);

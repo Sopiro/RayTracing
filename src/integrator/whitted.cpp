@@ -41,8 +41,6 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
         return ir.attenuation * Li(scene, ir.specular_ray, sampler, depth + 1);
     }
 
-    const BRDF* brdf = ir.GetScatteringPDF();
-
     // Evaluate direct light
     const std::vector<Ref<Light>>& lights = scene.GetLights();
     for (auto light : lights)

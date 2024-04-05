@@ -1,24 +1,24 @@
 #pragma once
 
-#include "brdf.h"
+#include "pdf.h"
 
 namespace bulbit
 {
 
-class MixturePDF : public BRDF
+class MixturePDF : public PDF
 {
 public:
-    MixturePDF(BRDF* pdf1, BRDF* pdf2);
+    MixturePDF(PDF* pdf1, PDF* pdf2);
 
     virtual Vec3 Sample(const Point2& u) const override;
     virtual Float Evaluate(const Vec3& wi) const override;
 
 public:
-    BRDF* p1;
-    BRDF* p2;
+    PDF* p1;
+    PDF* p2;
 };
 
-inline MixturePDF::MixturePDF(BRDF* pdf1, BRDF* pdf2)
+inline MixturePDF::MixturePDF(PDF* pdf1, PDF* pdf2)
     : p1{ pdf1 }
     , p2{ pdf2 }
 {

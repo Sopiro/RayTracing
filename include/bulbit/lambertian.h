@@ -1,7 +1,7 @@
 #pragma once
 
-#include "brdf.h"
 #include "material.h"
+#include "pdf.h"
 
 namespace bulbit
 {
