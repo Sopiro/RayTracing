@@ -1,8 +1,4 @@
 #include "../samples.h"
-#include "bulbit/dielectric.h"
-#include "bulbit/diffuse_light.h"
-#include "bulbit/lambertian.h"
-#include "bulbit/metal.h"
 #include "bulbit/orthographic_camera.h"
 #include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"

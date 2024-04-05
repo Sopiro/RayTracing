@@ -6,6 +6,8 @@
 namespace bulbit
 {
 
+class Texture;
+
 // simply a collection of meshes
 class Model
 {

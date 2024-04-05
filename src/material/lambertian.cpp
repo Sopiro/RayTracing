@@ -1,4 +1,4 @@
-#include "bulbit/lambertian.h"
+#include "bulbit/material.h"
 
 namespace bulbit
 {

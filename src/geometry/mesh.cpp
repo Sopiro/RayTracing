@@ -1,5 +1,4 @@
 #include "bulbit/mesh.h"
-#include "bulbit/lambertian.h"
 #include "bulbit/triangle.h"
 
 #include "bulbit/util.h"

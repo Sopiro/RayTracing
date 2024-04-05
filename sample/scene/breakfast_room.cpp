@@ -1,6 +1,4 @@
 #include "../samples.h"
-#include "bulbit/diffuse_light.h"
-#include "bulbit/lambertian.h"
 #include "bulbit/perspective_camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"

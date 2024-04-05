@@ -1,4 +1,5 @@
 #include "bulbit/scene.h"
+#include "bulbit/material.h"
 #include "bulbit/triangle.h"
 
 namespace bulbit

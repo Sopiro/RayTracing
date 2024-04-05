@@ -1,4 +1,5 @@
 #include "bulbit/whitted.h"
+#include "bulbit/material.h"
 
 namespace bulbit
 {

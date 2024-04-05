@@ -1,4 +1,4 @@
-#include "bulbit/metal.h"
+#include "bulbit/material.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit

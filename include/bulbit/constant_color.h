@@ -1,5 +1,6 @@
 #pragma once
 
+#include "spectrum.h"
 #include "texture.h"
 
 namespace bulbit

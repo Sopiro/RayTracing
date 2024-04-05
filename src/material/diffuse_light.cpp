@@ -1,4 +1,4 @@
-#include "bulbit/diffuse_light.h"
+#include "bulbit/material.h"
 
 namespace bulbit
 {

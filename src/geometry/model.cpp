@@ -1,5 +1,6 @@
 #include "bulbit/model.h"
 #include "bulbit/image_texture.h"
+#include "bulbit/material.h"
 #include "bulbit/triangle.h"
 #include "bulbit/util.h"
 
