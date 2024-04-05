@@ -6,7 +6,7 @@
 namespace bulbit
 {
 
-// Directinal PDF
+// Directional PDF
 class PDF
 {
 public:

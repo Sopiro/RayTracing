@@ -74,9 +74,4 @@ private:
     Ref<Texture> basecolor, metallic, roughness, emissive, normalmap;
 };
 
-inline Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
-{
-    return emissive->Evaluate(is.uv);
-}
-
 } // namespace bulbit

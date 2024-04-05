@@ -17,6 +17,11 @@ Microfacet::Microfacet(const Ref<Texture> _basecolor,
 {
 }
 
+Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
+{
+    return emissive->Evaluate(is.uv);
+}
+
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Spectrum c = basecolor->Evaluate(is.uv);
