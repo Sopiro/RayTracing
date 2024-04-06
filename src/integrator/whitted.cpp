@@ -12,7 +12,12 @@ WhittedStyle::WhittedStyle(const Ref<Sampler> sampler, int32 max_depth)
 
 Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, int32 depth) const
 {
-    Spectrum l(0);
+    Spectrum L(0);
+
+    if (depth > max_depth)
+    {
+        return L;
+    }
 
     Intersection is;
     bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
@@ -20,21 +25,21 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
     {
         for (auto& light : scene.GetInfiniteAreaLights())
         {
-            l += light->Emit(ray);
+            L += light->Emit(ray);
         }
 
-        return l;
+        return L;
     }
 
     const Material* mat = scene.GetMaterial(is.material_index);
 
     // Evaluate emitted light if ray hit an area light source
-    l += mat->Emit(is, ray.d);
+    L += mat->Emit(is, ray.d);
 
     Interaction ir;
     if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
     {
-        return l;
+        return L;
     }
 
     if (ir.is_specular)
@@ -58,29 +63,22 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
             if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
             {
                 Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
-                l += li * f_cos / light_pdf;
+                L += li * f_cos / light_pdf;
             }
         }
     }
 
-    if (depth + 1 < max_depth)
-    {
-        // Evaluate indirect light only in the perfect reflection direction
-        Vec3 wi = Reflect(-ray.d, is.normal);
+    // Evaluate indirect light only in the perfect reflection direction
+    Vec3 wi = Reflect(-ray.d, is.normal);
 
-        if (Dot(is.normal, wi) > 0)
-        {
-            Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
-            return l + Li(scene, Ray(is.point, wi), sampler, depth + 1) * f_cos;
-        }
-        else
-        {
-            return l;
-        }
+    if (Dot(is.normal, wi) > 0)
+    {
+        Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
+        return L + Li(scene, Ray(is.point, wi), sampler, depth + 1) * f_cos;
     }
     else
     {
-        return l;
+        return L;
     }
 }
 
