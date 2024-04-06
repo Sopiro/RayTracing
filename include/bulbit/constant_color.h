@@ -20,14 +20,14 @@ public:
     ConstantColor() = default;
     ConstantColor(const Spectrum& color);
 
+    virtual Spectrum Evaluate(const Point2& uv) const override;
+
     inline static int32 color_count = 0;
     inline static std::unordered_map<Spectrum, Ref<ConstantColor>, ColorHash> loaded_colors;
 
     static Ref<ConstantColor> Create(const Spectrum& color);
     static Ref<ConstantColor> Create(Float rgb);
     static Ref<ConstantColor> Create(Float red, Float green, Float blue);
-
-    virtual Spectrum Evaluate(const Point2& uv) const override;
 
 protected:
     Spectrum color;

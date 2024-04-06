@@ -29,23 +29,23 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(30.0f), true);
-        auto tf = Transform{ Point3(0.0f, 5.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
+        auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(50.0f), true);
+        auto tf = Transform{ Point3(0.0f, 6.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         auto rect = CreateRectXY(tf, white);
 
         scene.AddMesh(rect);
 
-        tf = Transform{ Point3(0.0f, 5.0f, 3.0f), Quat(pi - pi / 4.0f, x_axis), Vec3(size) };
+        tf = Transform{ Point3(0.0f, 6.0f, 3.0f), Quat(pi - pi / 4.0f, x_axis), Vec3(size) };
         rect = CreateRectXY(tf, white);
 
         scene.AddMesh(rect);
 
-        tf = Transform{ Point3(-3.0f, 5.0f, 0.0f), Quat(-pi / 4.0f, z_axis), Vec3(size) };
+        tf = Transform{ Point3(-3.0f, 6.0f, 0.0f), Quat(-pi / 4.0f, z_axis), Vec3(size) };
         rect = CreateRectYZ(tf, white);
 
         scene.AddMesh(rect);
 
-        tf = Transform{ Point3(3.0f, 5.0f, 0.0f), Quat(pi + pi / 4.0f, z_axis), Vec3(size) };
+        tf = Transform{ Point3(3.0f, 6.0f, 0.0f), Quat(pi + pi / 4.0f, z_axis), Vec3(size) };
         rect = CreateRectYZ(tf, white);
 
         scene.AddMesh(rect);
@@ -76,18 +76,19 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     }
 
     Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 500;
+    int32 width = 1920;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 5, 5, 10 };
-    Point3 lookat{ 0, 2.8f, 0 };
+    Point3 lookat{ 0, 2.9f, 0 };
 
     Float dist_to_focus = (lookfrom - lookat).Length();
     Float aperture = 0;
-    Float vFov = 30;
+    Float vFov = 25;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }

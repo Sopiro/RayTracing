@@ -25,16 +25,17 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         // scene.AddLight(sphere);
     }
 
-    scene.CreateLight<InfiniteAreaLight>("res/HDR/scythian_tombs_2_4k.hdr");
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/scythian_tombs_2_4k.hdr");
     // scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr");
     // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
     // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    scene.CreateLight<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 500;
+    int32 width = 1920;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0, 2, 10 };

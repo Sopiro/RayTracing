@@ -40,7 +40,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
                                                     ConstantColor::Create(Spectrum(0.1f)));
 
-        auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(100.0f) };
+        auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(50.0f) };
         auto ground = CreateRectXZ(tf1, mat);
 
         scene.AddMesh(ground);
@@ -104,12 +104,13 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // scene.CreateLight<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
     // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
+    // scene.CreateLight<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 500;
+    int32 width = 1920;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0, 4, 5 };
