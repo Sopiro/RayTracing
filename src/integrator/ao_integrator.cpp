@@ -1,5 +1,5 @@
-#include "bulbit/ao_integrator.h"
 #include "bulbit/frame.h"
+#include "bulbit/integrator.h"
 
 namespace bulbit
 {

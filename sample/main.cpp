@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
 
     timer.Mark();
     t = timer.Get();
-
     std::cout << "Rendering: " << t << 's' << std::endl;
 
     Bitmap bitmap = film.ConvertToBitmap();

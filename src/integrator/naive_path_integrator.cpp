@@ -1,5 +1,5 @@
+#include "bulbit/integrator.h"
 #include "bulbit/material.h"
-#include "bulbit/path_integrator.h"
 
 namespace bulbit
 {
@@ -9,11 +9,6 @@ NaivePathIntegrator::NaivePathIntegrator(const Ref<Sampler> sampler, int32 bounc
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
-}
-
-Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sampler) const
-{
-    return Li(scene, ray, sampler, 0);
 }
 
 Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sampler, int32 depth) const
