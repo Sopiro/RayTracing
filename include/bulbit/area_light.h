@@ -6,6 +6,8 @@
 namespace bulbit
 {
 
+class Material;
+
 class AreaLight : public Light
 {
 public:

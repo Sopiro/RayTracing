@@ -19,7 +19,7 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         Material::fallback = mat;
 
         auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
-        auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
+        auto model = Model("res/stanford/bunny.obj", tf);
 
         scene.AddModel(model);
         // scene.AddLight(sphere);

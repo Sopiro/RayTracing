@@ -8,10 +8,10 @@ namespace bulbit
 std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
 {
     // Transform transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
-    // Ref<Model> model = std::make_shared<Model>("res/pbr_kabuto_samurai_helmet/scene.gltf", transform);
+    // Model model = Model("res/pbr_kabuto_samurai_helmet/scene.gltf", transform);
 
     Transform transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
-    Ref<Model> model = std::make_shared<Model>("res/DamagedHelmet/DamagedHelmet.gltf", transform);
+    Model model = Model("res/DamagedHelmet/DamagedHelmet.gltf", transform);
 
     scene.AddModel(model);
 

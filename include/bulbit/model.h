@@ -7,6 +7,7 @@ namespace bulbit
 {
 
 class Texture;
+class Material;
 
 // simply a collection of meshes
 class Model
@@ -15,7 +16,7 @@ public:
     Model(const std::string& filename, const Transform& transform);
     virtual ~Model() = default;
 
-    const std::vector<Ref<Mesh>>& GetMeshes();
+    const std::vector<Ref<Mesh>>& GetMeshes() const;
 
 private:
     friend class Scene;
@@ -32,7 +33,7 @@ private:
     std::vector<Ref<Material>> materials;
 };
 
-inline const std::vector<Ref<Mesh>>& Model::GetMeshes()
+inline const std::vector<Ref<Mesh>>& Model::GetMeshes() const
 {
     return meshes;
 }

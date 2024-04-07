@@ -58,7 +58,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
         Material::fallback = mat;
-        Ref<Model> model = std::make_shared<Model>("res/stanford/lucy.obj", transform);
+        Model model = Model("res/stanford/lucy.obj", transform);
         scene.AddModel(model);
     }
 

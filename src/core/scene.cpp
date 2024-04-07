@@ -28,12 +28,12 @@ void Scene::AddMesh(const Ref<Mesh> mesh)
     }
 }
 
-void Scene::AddModel(const Ref<Model> model)
+void Scene::AddModel(Model& model)
 {
     MaterialIndex offset = (MaterialIndex)materials.size();
-    materials.insert(materials.end(), model->materials.begin(), model->materials.end());
+    materials.insert(materials.end(), model.materials.begin(), model.materials.end());
 
-    for (Ref<Mesh> mesh : model->GetMeshes())
+    for (Ref<Mesh> mesh : model.meshes)
     {
         mesh->material += offset;
         AddMesh(mesh);

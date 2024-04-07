@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
     timer.Mark();
     double t = timer.Get();
     std::cout << "Scene construction: " << t << "s" << std::endl;
+    std::cout << "Primitives: " << scene.GetPrimitives().size() << std::endl;
 
     scene.BuildAccelerationStructure();
     timer.Mark();

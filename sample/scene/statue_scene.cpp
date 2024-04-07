@@ -17,10 +17,10 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         Material::fallback = mat;
 
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(20.0f) };
-        auto model = std::make_shared<Model>("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
+        auto model = Model("res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
 
         // auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(8.0f) };
-        // auto model = std::make_shared<Model>("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
+        // auto model = Model("res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
 
         scene.AddModel(model);
     }

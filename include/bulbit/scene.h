@@ -25,7 +25,7 @@ public:
 
     void AddPrimitive(const Ref<Primitive> primitive);
     void AddMesh(const Ref<Mesh> mesh);
-    void AddModel(const Ref<Model> model);
+    void AddModel(Model& model);
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);

@@ -9,7 +9,7 @@ namespace bulbit
 std::unique_ptr<Camera> BistroScene(Scene& scene)
 {
     Transform tf{ zero_vec3, identity, Vec3(1) };
-    Ref<Model> m = std::make_shared<Model>("res/bistro/bistro.gltf", tf);
+    Model m = Model("res/bistro/bistro.gltf", tf);
 
     scene.AddModel(m);
 

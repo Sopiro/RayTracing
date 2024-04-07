@@ -31,7 +31,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/bunny.obj", tf);
+        auto model = Model("res/stanford/bunny.obj", tf);
         scene.AddModel(model);
     }
 
@@ -41,7 +41,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/lucy.obj", tf);
+        auto model = Model("res/stanford/lucy.obj", tf);
         scene.AddModel(model);
     }
 
@@ -51,7 +51,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto mat = RandomMicrofacetMaterial();
         Material::fallback = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/tyra.obj", tf);
+        auto model = Model("res/stanford/tyra.obj", tf);
         scene.AddModel(model);
     }
 
@@ -63,7 +63,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
         Material::fallback = mat;
 
-        auto model = std::make_shared<Model>("res/stanford/arma.obj", tf);
+        auto model = Model("res/stanford/arma.obj", tf);
         scene.AddModel(model);
     }
 

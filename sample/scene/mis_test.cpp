@@ -10,10 +10,10 @@ namespace bulbit
 std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
-        auto floor = std::make_shared<Model>("res/veach_mi/floor.obj", Transform{ identity });
+        auto floor = Model("res/veach_mi/floor.obj", Transform{ identity });
         auto floor_mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.4f), ConstantColor::Create(Spectrum(0.0f)),
                                                           ConstantColor::Create(Spectrum(0.0f)));
-        floor->GetMeshes()[0]->SetMaterial(floor_mat);
+        floor.GetMeshes()[0]->SetMaterial(floor_mat);
         scene.AddModel(floor);
     }
 
@@ -35,18 +35,18 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
                                                    ConstantColor::Create(Spectrum(1.0f)),
                                                    ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
-        auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
+        auto p1 = Model("res/veach_mi/plate1.obj", Transform{ identity });
         scene.AddModel(p1);
-        p1->GetMeshes()[0]->SetMaterial(m1);
-        auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
+        p1.GetMeshes()[0]->SetMaterial(m1);
+        auto p2 = Model("res/veach_mi/plate2.obj", Transform{ identity });
         scene.AddModel(p2);
-        p2->GetMeshes()[0]->SetMaterial(m2);
-        auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
+        p2.GetMeshes()[0]->SetMaterial(m2);
+        auto p3 = Model("res/veach_mi/plate3.obj", Transform{ identity });
         scene.AddModel(p3);
-        p3->GetMeshes()[0]->SetMaterial(m3);
-        auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
+        p3.GetMeshes()[0]->SetMaterial(m3);
+        auto p4 = Model("res/veach_mi/plate4.obj", Transform{ identity });
         scene.AddModel(p4);
-        p4->GetMeshes()[0]->SetMaterial(m4);
+        p4.GetMeshes()[0]->SetMaterial(m4);
     }
 
     // Lights
@@ -120,18 +120,18 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
                                                    ConstantColor::Create(Spectrum(1.0f)),
                                                    ConstantColor::Create(Spectrum(std::sqrt(0.1f))));
 
-        auto p1 = std::make_shared<Model>("res/veach_mi/plate1.obj", Transform{ identity });
+        auto p1 = Model("res/veach_mi/plate1.obj", Transform{ identity });
         scene.AddModel(p1);
-        p1->GetMeshes()[0]->SetMaterial(m1);
-        auto p2 = std::make_shared<Model>("res/veach_mi/plate2.obj", Transform{ identity });
+        p1.GetMeshes()[0]->SetMaterial(m1);
+        auto p2 = Model("res/veach_mi/plate2.obj", Transform{ identity });
         scene.AddModel(p2);
-        p2->GetMeshes()[0]->SetMaterial(m2);
-        auto p3 = std::make_shared<Model>("res/veach_mi/plate3.obj", Transform{ identity });
+        p2.GetMeshes()[0]->SetMaterial(m2);
+        auto p3 = Model("res/veach_mi/plate3.obj", Transform{ identity });
         scene.AddModel(p3);
-        p3->GetMeshes()[0]->SetMaterial(m3);
-        auto p4 = std::make_shared<Model>("res/veach_mi/plate4.obj", Transform{ identity });
+        p3.GetMeshes()[0]->SetMaterial(m3);
+        auto p4 = Model("res/veach_mi/plate4.obj", Transform{ identity });
         scene.AddModel(p4);
-        p4->GetMeshes()[0]->SetMaterial(m4);
+        p4.GetMeshes()[0]->SetMaterial(m4);
     }
 
     // Lights

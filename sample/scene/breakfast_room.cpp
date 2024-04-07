@@ -11,7 +11,7 @@ namespace bulbit
 std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 {
     Transform tf{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
-    Ref<Model> m = std::make_shared<Model>("res/breakfast_room/breakfast_room.obj", tf);
+    Model m = Model("res/breakfast_room/breakfast_room.obj", tf);
 
     scene.AddModel(m);
 
