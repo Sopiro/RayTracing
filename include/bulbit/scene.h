@@ -13,15 +13,15 @@
 namespace bulbit
 {
 
-class Scene : public Intersectable
+class Scene
 {
 public:
     Scene() = default;
     virtual ~Scene() = default;
 
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
-    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
-    virtual void GetAABB(AABB* out_aabb) const override;
+    void GetAABB(AABB* out_aabb) const;
+    bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
+    bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
     void AddPrimitive(const Ref<Primitive> primitive);
     void AddMesh(const Ref<Mesh> mesh);
@@ -48,7 +48,7 @@ public:
 
 private:
     // Acceleration structure
-    DynamicBVH bvh;
+    std::unique_ptr<Intersectable> accel;
 
     // All primitives in this scene
     std::vector<Ref<Primitive>> primitives;
@@ -57,6 +57,20 @@ private:
     std::vector<Ref<Light>> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
+
+inline void Scene::GetAABB(AABB* out_aabb) const
+{
+    accel->GetAABB(out_aabb);
+}
+
+inline bool Scene::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+{
+    return accel->Intersect(out_is, ray, t_min, t_max);
+}
+inline bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
+{
+    return accel->IntersectAny(ray, t_min, t_max);
+}
 
 template <typename T, typename... Args>
 inline void Scene::CreateLight(Args&&... args)
@@ -116,12 +130,12 @@ inline const std::vector<InfiniteAreaLight*>& Scene::GetInfiniteAreaLights() con
 
 inline void Scene::BuildAccelerationStructure()
 {
-    bvh.Rebuild();
+    accel.reset(new DynamicBVH(primitives));
 }
 
 inline void Scene::Clear()
 {
-    bvh.Reset();
+    accel.reset();
     primitives.clear();
     lights.clear();
     infinite_lights.clear();

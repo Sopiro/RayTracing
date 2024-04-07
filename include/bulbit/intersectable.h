@@ -18,9 +18,6 @@ public:
     virtual void GetAABB(AABB* out_aabb) const = 0;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const = 0;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const = 0;
-
-protected:
-    friend class DynamicBVH;
 };
 
 struct Intersection

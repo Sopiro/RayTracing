@@ -26,6 +26,15 @@ int main(int argc, char* argv[])
         return 0;
     }
 
+    timer.Mark();
+    double t = timer.Get();
+    std::cout << "Scene construction: " << t << "s" << std::endl;
+
+    scene.BuildAccelerationStructure();
+    timer.Mark();
+    t = timer.Get();
+    std::cout << "Acceleration structure build: " << t << "s" << std::endl;
+
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
     Ref<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
@@ -34,10 +43,6 @@ int main(int argc, char* argv[])
     // DebugIntegrator renderer(sampler);
     // AmbientOcclusion renderer(sampler, 0.5f);
 
-    timer.Mark();
-    double t = timer.Get();
-    std::cout << "Scene construction: " << t << "s" << std::endl;
-
     Film film(camera.get());
     renderer.Preprocess(scene, *camera);
     renderer.Render(&film, scene, *camera);
@@ -45,7 +50,7 @@ int main(int argc, char* argv[])
     timer.Mark();
     t = timer.Get();
 
-    std::cout << "Done rendering!: " << t << 's' << std::endl;
+    std::cout << "Rendering: " << t << 's' << std::endl;
 
     Bitmap bitmap = film.ConvertToBitmap();
 

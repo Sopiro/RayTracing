@@ -25,6 +25,18 @@ DynamicBVH::DynamicBVH()
     freeList = 0;
 }
 
+DynamicBVH::DynamicBVH(const std::vector<Ref<Primitive>>& primitives)
+    : DynamicBVH()
+{
+    // Build incrementally
+    for (const Ref<Primitive>& primitive : primitives)
+    {
+        AABB aabb;
+        primitive->GetAABB(&aabb);
+        CreateNode(primitive.get(), aabb);
+    }
+}
+
 DynamicBVH::~DynamicBVH() noexcept
 {
     free(nodes);
@@ -86,6 +98,78 @@ DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
     }
 
     return *this;
+}
+
+void DynamicBVH::GetAABB(AABB* out_aabb) const
+{
+    if (nodeCount == 0)
+    {
+        out_aabb->min.SetZero();
+        out_aabb->max.SetZero();
+    }
+
+    *out_aabb = nodes[root].aabb;
+}
+
+bool DynamicBVH::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
+{
+    struct Callback
+    {
+        Intersection* is;
+        bool hit_closest;
+        Float t;
+
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
+        {
+            bool hit = object->Intersect(is, ray, t_min, t_max);
+
+            if (hit)
+            {
+                hit_closest = true;
+                t = is->t;
+            }
+
+            // Keep traverse with smaller bounds
+            return t;
+        }
+    } callback;
+
+    callback.is = is;
+    callback.hit_closest = false;
+    callback.t = t_max;
+
+    RayCast(ray, t_min, t_max, &callback);
+
+    return callback.hit_closest;
+}
+
+bool DynamicBVH::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
+{
+    struct Callback
+    {
+        bool hit_any;
+
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
+        {
+            bool hit = object->IntersectAny(ray, t_min, t_max);
+
+            if (hit)
+            {
+                hit_any = true;
+
+                // Stop traversal
+                return t_min;
+            }
+
+            return t_max;
+        }
+    } callback;
+
+    callback.hit_any = false;
+
+    RayCast(ray, t_min, t_max, &callback);
+
+    return callback.hit_any;
 }
 
 NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
