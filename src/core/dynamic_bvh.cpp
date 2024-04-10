@@ -690,6 +690,13 @@ void DynamicBVH::Rebuild()
     {
         NodeIndex node;
         int32 begin, end;
+
+        BuildNode(NodeIndex node, int32 begin, int32 end)
+            : node{ node }
+            , begin{ begin }
+            , end{ end }
+        {
+        }
     };
 
     root = AllocateNode();

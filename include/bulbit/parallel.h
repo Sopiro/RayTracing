@@ -1,12 +1,16 @@
 #pragma once
 
 #include "common.h"
+
+#include <condition_variable>
 #include <mutex>
 #include <optional>
 #include <thread>
 
 namespace bulbit
 {
+
+class ThreadPool;
 
 class ParallelJob
 {

@@ -8,6 +8,13 @@ target_link_libraries(sample PUBLIC
     bulbit
 )
 
+set_target_properties(sample PROPERTIES
+    CMAKE_COMPILE_WARNING_AS_ERROR ON
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
+)
+
 # add_custom_command(
 #     TARGET sample POST_BUILD
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different

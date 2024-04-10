@@ -11,9 +11,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern
 )
 
-find_package(OpenMP REQUIRED)
-
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    OpenMP::OpenMP_CXX
     assimp::assimp
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    CMAKE_COMPILE_WARNING_AS_ERROR ON
+    CXX_STANDARD 20
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
 )
