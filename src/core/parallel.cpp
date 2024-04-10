@@ -1,10 +1,15 @@
 #include "bulbit/parallel.h"
+#include "bulbit/parallel_for.h"
+
+#include <latch>
 
 namespace bulbit
 {
 
 ThreadPool::ThreadPool(int32 thread_count)
 {
+    // Calling thread also participates in executing parallel work,
+    // so we launches one fewer than the requested number of threads.
     for (int32 i = 0; i < thread_count - 1; ++i)
     {
         threads.emplace_back(&ThreadPool::Worker, this);
@@ -18,9 +23,11 @@ ThreadPool::~ThreadPool()
         return;
     }
 
-    std::lock_guard<std::mutex> lock(mutex);
-    shutdown = true;
-    job_list_condition.notify_all();
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        shutdown = true;
+        job_list_condition.notify_all();
+    }
 
     for (std::thread& thread : threads)
     {
@@ -34,11 +41,11 @@ void ThreadPool::Worker()
 
     while (!shutdown)
     {
-        WorkOrWait(&lock, false);
+        WorkOrWait(&lock);
     }
 }
 
-void ThreadPool::WorkOrWait(std::unique_lock<std::mutex>* lock, bool is_enqueing_thread)
+void ThreadPool::WorkOrWait(std::unique_lock<std::mutex>* lock)
 {
     assert(lock->owns_lock() == true);
 
@@ -51,7 +58,7 @@ void ThreadPool::WorkOrWait(std::unique_lock<std::mutex>* lock, bool is_enqueing
 
     if (job)
     {
-        // Work on this job
+        // Execute work for this job
         job->active_workers++;
         job->RunStep(lock);
 
@@ -109,6 +116,8 @@ bool ThreadPool::WorkOrReturn()
 
 std::unique_lock<std::mutex> ThreadPool::AddJob(ParallelJob* job)
 {
+    job->thread_pool = this;
+
     std::unique_lock<std::mutex> lock(mutex);
 
     // Link job to head of list
@@ -130,7 +139,7 @@ std::unique_lock<std::mutex> ThreadPool::AddJob(ParallelJob* job)
 
 void ThreadPool::RemoveJob(ParallelJob* job)
 {
-    // The lock must be held
+    // The lock must be held before calling this function
     if (job->prev)
     {
         job->prev->next = job->next;
@@ -144,6 +153,19 @@ void ThreadPool::RemoveJob(ParallelJob* job)
     {
         job->next->prev = job->prev;
     }
+}
+
+void ThreadPool::ForEachThread(std::function<void(void)> func)
+{
+    std::latch latch(threads.size() + 1);
+
+    ParallelFor(
+        0, threads.size() + 1,
+        [&](int32) {
+            func();
+            latch.arrive_and_wait();
+        },
+        this);
 }
 
 } // namespace bulbit

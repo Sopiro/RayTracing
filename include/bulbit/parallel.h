@@ -21,9 +21,11 @@ public:
         return !HaveWork() && active_workers == 0;
     }
 
-private:
+protected:
     friend class ThreadPool;
+    ThreadPool* thread_pool;
 
+private:
     // Active threads working on this job
     int32 active_workers = 0;
 
@@ -38,11 +40,18 @@ public:
     explicit ThreadPool(int32 thread_count);
     ~ThreadPool();
 
-    void WorkOrWait(std::unique_lock<std::mutex>* lock, bool is_enqueing_thread);
+    void WorkOrWait(std::unique_lock<std::mutex>* lock);
     bool WorkOrReturn();
 
     std::unique_lock<std::mutex> AddJob(ParallelJob* job);
     void RemoveJob(ParallelJob* job);
+
+    void ForEachThread(std::function<void(void)> func);
+
+    size_t ThreadCount() const
+    {
+        return threads.size();
+    }
 
 private:
     void Worker();
@@ -55,5 +64,7 @@ private:
 
     ParallelJob* job_list = nullptr;
 };
+
+inline ThreadPool* g_thread_pool;
 
 } // namespace bulbit
