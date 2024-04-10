@@ -30,8 +30,12 @@ private:
     int32 chunk_size;
 };
 
-void ParallelFor(int32 begin, int32 end, std::function<void(int32 begin, int32 end)> func, ThreadPool* thread_pool);
-inline void ParallelFor(int32 begin, int32 end, std::function<void(int32 i)> func, ThreadPool* thread_pool)
+void ParallelFor(int32 begin,
+                 int32 end,
+                 std::function<void(int32 begin, int32 end)> func,
+                 ThreadPool* thread_pool = g_thread_pool.get());
+
+inline void ParallelFor(int32 begin, int32 end, std::function<void(int32 i)> func, ThreadPool* thread_pool = g_thread_pool.get())
 {
     ParallelFor(
         begin, end,

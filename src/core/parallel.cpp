@@ -6,11 +6,11 @@
 namespace bulbit
 {
 
-ThreadPool::ThreadPool(int32 thread_count)
+ThreadPool::ThreadPool(int32 worker_count)
 {
     // Calling thread also participates in executing parallel work,
     // so we launches one fewer than the requested number of threads.
-    for (int32 i = 0; i < thread_count - 1; ++i)
+    for (int32 i = 0; i < worker_count - 1; ++i)
     {
         threads.emplace_back(&ThreadPool::Worker, this);
     }
@@ -157,10 +157,11 @@ void ThreadPool::RemoveJob(ParallelJob* job)
 
 void ThreadPool::ForEachThread(std::function<void(void)> func)
 {
-    std::latch latch(threads.size() + 1);
+    int32 worker_count = WorkerCount();
+    std::latch latch(worker_count);
 
     ParallelFor(
-        0, threads.size() + 1,
+        0, worker_count,
         [&](int32) {
             func();
             latch.arrive_and_wait();

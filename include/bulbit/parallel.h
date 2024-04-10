@@ -37,7 +37,7 @@ private:
 class ThreadPool
 {
 public:
-    explicit ThreadPool(int32 thread_count);
+    explicit ThreadPool(int32 worker_count);
     ~ThreadPool();
 
     void WorkOrWait(std::unique_lock<std::mutex>* lock);
@@ -48,9 +48,9 @@ public:
 
     void ForEachThread(std::function<void(void)> func);
 
-    size_t ThreadCount() const
+    size_t WorkerCount() const
     {
-        return threads.size();
+        return threads.size() + 1;
     }
 
 private:
@@ -65,6 +65,6 @@ private:
     ParallelJob* job_list = nullptr;
 };
 
-inline ThreadPool* g_thread_pool;
+inline std::unique_ptr<ThreadPool> g_thread_pool = nullptr;
 
 } // namespace bulbit

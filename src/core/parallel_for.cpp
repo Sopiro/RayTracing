@@ -35,7 +35,7 @@ void ParallelFor(int32 begin, int32 end, std::function<void(int32, int32)> func,
 
     // Compute chunk size for parallel loop
     const int32 balance = 8;
-    int32 chunk_size = std::max<int32>(1, (end - begin) / (balance * (1 + (int32)thread_pool->ThreadCount())));
+    int32 chunk_size = std::max<int32>(1, (end - begin) / (balance * int32(thread_pool->WorkerCount())));
 
     // It's safe to allocate loop on the stack
     // Because this ParallelFor() call does not return until all work for the loop is done.

@@ -7,6 +7,8 @@
 
 #include "bulbit/image_texture.h"
 
+#include "bulbit/parallel_for.h"
+
 namespace bulbit
 {
 
@@ -56,13 +58,11 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
 
     pixels = std::make_unique<Spectrum[]>(width * height);
 
-#pragma omp parallel for
-    for (int32 i = 0; i < width * height; ++i)
-    {
+    ParallelFor(0, width * height, [=](int32 i) {
         pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
         pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
         pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
-    }
+    });
 
     stbi_image_free(data);
 }

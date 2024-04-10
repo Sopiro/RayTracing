@@ -16,6 +16,8 @@ int main(int argc, char* argv[])
 
     using namespace bulbit;
 
+    g_thread_pool.reset(new ThreadPool(std::thread::hardware_concurrency()));
+
     Scene scene;
     std::unique_ptr<Camera> camera;
 

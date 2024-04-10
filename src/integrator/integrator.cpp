@@ -2,7 +2,7 @@
 #include "bulbit/bitmap.h"
 #include "bulbit/postprocess.h"
 
-#include <omp.h>
+#include "bulbit/parallel_for.h"
 
 namespace bulbit
 {
@@ -20,11 +20,18 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
     const int32 tile_size = 16;
     const int32 num_tiles_x = (width + tile_size - 1) / tile_size;
     const int32 num_tiles_y = (height + tile_size - 1) / tile_size;
+    const int32 tile_count = num_tiles_x * num_tiles_y;
 
-#pragma omp parallel for schedule(dynamic, 1)
-    for (int32 i = 0; i < num_tiles_x * num_tiles_y; ++i)
-    {
-        std::printf("\rRendering tile %d/%d", i, num_tiles_x * num_tiles_y);
+    int32 p = 0;
+    std::thread::id tid = std::this_thread::get_id();
+    int32 worker_count = g_thread_pool->WorkerCount();
+
+    ParallelFor(0, tile_count, [&](int32 i) {
+        if (tid == std::this_thread::get_id())
+        {
+            // Log progress if it's calling thread
+            std::printf("\rRendering.. %d/%d", p++ * worker_count, tile_count);
+        }
 
         int32 tile_x = i % num_tiles_x;
         int32 tile_y = i / num_tiles_x;
@@ -73,7 +80,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                 film->Set(x, y, radiance);
             }
         }
-    }
+    });
 
     std::printf("\n");
 }

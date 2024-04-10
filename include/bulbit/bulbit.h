@@ -31,3 +31,5 @@
 #include "independent_sampler.h"
 
 #include "integrator.h"
+
+#include "parallel_for.h"
