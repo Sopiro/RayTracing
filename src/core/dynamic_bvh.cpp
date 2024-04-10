@@ -445,10 +445,6 @@ bool DynamicBVH::MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, b
         aabb.min.y += d.y;
     }
 
-    // Fatten the aabb
-    aabb.max;
-    aabb.min;
-
     RemoveLeaf(node);
 
     nodes[node].aabb = aabb;

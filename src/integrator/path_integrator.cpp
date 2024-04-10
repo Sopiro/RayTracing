@@ -61,7 +61,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             break;
         }
 
-        if (was_specular_bounce = ir.is_specular)
+        if ((was_specular_bounce = ir.is_specular))
         {
             throughput *= ir.attenuation;
             ray = ir.specular_ray;
