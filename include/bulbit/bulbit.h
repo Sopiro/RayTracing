@@ -32,4 +32,5 @@
 
 #include "integrator.h"
 
+#include "async_job.h"
 #include "parallel_for.h"
