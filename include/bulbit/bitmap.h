@@ -19,6 +19,7 @@ public:
     int32 GetHeight() const;
 
     void Set(int32 x, int32 y, const Spectrum& color);
+    void Set(int32 i, const Spectrum& color);
     void WriteToFile(const char* filename) const;
 
     inline static constexpr int32 color_channels = 3;
@@ -52,13 +53,22 @@ inline int32 Bitmap::GetHeight() const
 
 inline void Bitmap::Set(int32 x, int32 y, const Spectrum& color)
 {
-    pixels[(x + (height - y - 1) * width) * color_channels + 0] = int32(std::fmin(Clamp(color.r, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * color_channels + 1] = int32(std::fmin(Clamp(color.g, 0.0, 1.0) * 256.0, 255.0));
-    pixels[(x + (height - y - 1) * width) * color_channels + 2] = int32(std::fmin(Clamp(color.b, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + y * width) * color_channels + 0] = int32(std::fmin(Clamp(color.r, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + y * width) * color_channels + 1] = int32(std::fmin(Clamp(color.g, 0.0, 1.0) * 256.0, 255.0));
+    pixels[(x + y * width) * color_channels + 2] = int32(std::fmin(Clamp(color.b, 0.0, 1.0) * 256.0, 255.0));
+}
+
+inline void Bitmap::Set(int32 i, const Spectrum& color)
+{
+    pixels[i * color_channels + 0] = int32(std::fmin(Clamp(color.r, 0.0, 1.0) * 256.0, 255.0));
+    pixels[i * color_channels + 1] = int32(std::fmin(Clamp(color.g, 0.0, 1.0) * 256.0, 255.0));
+    pixels[i * color_channels + 2] = int32(std::fmin(Clamp(color.b, 0.0, 1.0) * 256.0, 255.0));
 }
 
 inline void Bitmap::WriteToFile(const char* filename) const
 {
+    stbi_flip_vertically_on_write(true);
+
     // stbi_write_png(filename, width, height, color_channels, pixels, width * color_channels);
     stbi_write_jpg(filename, width, height, color_channels, pixels, 100);
 }

@@ -36,7 +36,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
         int32 tile_x = i % num_tiles_x;
         int32 tile_y = i / num_tiles_x;
 
-        // Create thread local sampler from prototype for current tile
+        // Create thread local sampler for current tile
         std::unique_ptr<Sampler> sampler = sampler_prototype->Clone(i);
 
         int32 x0 = tile_x * tile_size;
@@ -50,8 +50,6 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
             {
                 sampler->StartPixel();
 
-                Spectrum samples(0);
-
                 do
                 {
                     Point2 film_sample = Point2(Float(x), Float(y)) + sampler->Next2D();
@@ -60,24 +58,14 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                     Ray ray;
                     Float weight = camera.SampleRay(&ray, film_sample, aperture_sample);
 
-                    Spectrum L(0);
-                    if (weight > 0)
-                    {
-                        L = Li(scene, ray, *sampler);
-                    }
+                    Spectrum L = weight * Li(scene, ray, *sampler);
 
-                    if (L.IsNullish())
+                    if (L.IsNullish() == false)
                     {
-                        L = RGBSpectrum::black;
+                        film->AddSample(x, y, L, Float(1));
                     }
-
-                    samples += L * weight;
                 }
                 while (sampler->StartNextPixelSample());
-
-                Spectrum radiance = samples / Float(sampler->samples_per_pixel);
-
-                film->Set(x, y, radiance);
             }
         }
     });
