@@ -14,6 +14,7 @@ public:
         , chunk_size{ chunk_size }
         , func{ std::move(func) }
     {
+        assert(begin_index < end_index);
     }
 
     virtual bool HaveWork() const override
