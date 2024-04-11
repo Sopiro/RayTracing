@@ -34,9 +34,12 @@ private:
 void ParallelFor(int32 begin,
                  int32 end,
                  std::function<void(int32 begin, int32 end)> func,
-                 ThreadPool* thread_pool = g_thread_pool.get());
+                 ThreadPool* thread_pool = ThreadPool::global_thread_pool.get());
 
-inline void ParallelFor(int32 begin, int32 end, std::function<void(int32 i)> func, ThreadPool* thread_pool = g_thread_pool.get())
+inline void ParallelFor(int32 begin,
+                        int32 end,
+                        std::function<void(int32 i)> func,
+                        ThreadPool* thread_pool = ThreadPool::global_thread_pool.get())
 {
     ParallelFor(
         begin, end,

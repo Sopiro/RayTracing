@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     using namespace bulbit;
 
-    g_thread_pool.reset(new ThreadPool(std::thread::hardware_concurrency()));
+    ThreadPool::global_thread_pool.reset(new ThreadPool(std::thread::hardware_concurrency()));
 
     Scene scene;
     std::unique_ptr<Camera> camera;
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
     timer.Mark();
     double t = timer.Get();
-    std::cout << "Scene construction: " << t << "s" << std::endl;
+    std::cout << "Scene loading: " << t << "s" << std::endl;
     std::cout << "Primitives: " << scene.GetPrimitives().size() << std::endl;
 
     scene.BuildAccelerationStructure();
@@ -42,7 +42,6 @@ int main(int argc, char* argv[])
     int32 max_bounces = 50;
     Ref<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
     PathIntegrator renderer(sampler, max_bounces);
-    // WhittedStyle renderer(sampler, max_bounces);
     // DebugIntegrator renderer(sampler);
     // AmbientOcclusion renderer(sampler, 0.5f);
 
@@ -52,7 +51,7 @@ int main(int argc, char* argv[])
 
     timer.Mark();
     t = timer.Get();
-    std::cout << "Rendering: " << t << 's' << std::endl;
+    std::cout << "Complete: " << t << 's' << std::endl;
 
     Bitmap bitmap = film.ConvertToBitmap();
 

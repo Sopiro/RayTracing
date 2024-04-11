@@ -7,8 +7,8 @@
 namespace bulbit
 {
 
-SamplerIntegrator::SamplerIntegrator(const Ref<Sampler> _sampler)
-    : sampler_prototype{ _sampler }
+SamplerIntegrator::SamplerIntegrator(const Ref<Sampler> sampler)
+    : sampler_prototype{ sampler }
 {
 }
 
@@ -18,19 +18,19 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
     int32 height = film->height;
 
     const int32 tile_size = 16;
-    const int32 num_tiles_x = (width + tile_size - 1) / tile_size;
-    const int32 num_tiles_y = (height + tile_size - 1) / tile_size;
-    const int32 tile_count = num_tiles_x * num_tiles_y;
+    int32 num_tiles_x = (width + tile_size - 1) / tile_size;
+    int32 num_tiles_y = (height + tile_size - 1) / tile_size;
+    int32 tile_count = num_tiles_x * num_tiles_y;
 
-    int32 p = 0;
+    int32 t = 0;
     std::thread::id tid = std::this_thread::get_id();
-    int32 worker_count = g_thread_pool->WorkerCount();
+    int32 worker_count = ThreadPool::global_thread_pool ? ThreadPool::global_thread_pool->WorkerCount() : 1;
 
     ParallelFor(0, tile_count, [&](int32 i) {
         if (tid == std::this_thread::get_id())
         {
             // Log progress if it's calling thread
-            std::printf("\rRendering.. %d/%d", p++ * worker_count, tile_count);
+            std::printf("\rRendering.. %d/%d", t++ * worker_count, tile_count);
         }
 
         int32 tile_x = i % num_tiles_x;

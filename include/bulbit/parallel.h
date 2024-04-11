@@ -42,6 +42,8 @@ private:
 class ThreadPool
 {
 public:
+    inline static std::unique_ptr<ThreadPool> global_thread_pool = nullptr;
+
     explicit ThreadPool(int32 worker_count);
     ~ThreadPool();
 
@@ -70,8 +72,6 @@ private:
     ParallelJob* job_list = nullptr;
 };
 
-inline std::unique_ptr<ThreadPool> g_thread_pool = nullptr;
-
 template <typename T>
 class ThreadLocal
 {
@@ -90,6 +90,8 @@ public:
 
     T& Get();
 
+    void ForEach(std::function<void(std::thread::id tid, T& value)>&& callback);
+
 private:
     struct Entry
     {
@@ -105,7 +107,7 @@ private:
 template <typename T>
 inline T& ThreadLocal<T>::Get()
 {
-    std::thread::id tid = std::this_thread::get_id();
+    const std::thread::id tid = std::this_thread::get_id();
     size_t hash = std::hash<std::thread::id>()(tid);
     hash %= hash_table.size();
 
@@ -113,11 +115,9 @@ inline T& ThreadLocal<T>::Get()
     int32 tries = 0;
 
     mutex.lock_shared();
-
     while (true)
     {
-        ++tries;
-        assert(tries != hash_table.size());
+        assert(tries < hash_table.size());
 
         if (hash_table[hash].has_value())
         {
@@ -139,6 +139,7 @@ inline T& ThreadLocal<T>::Get()
                     hash %= hash_table.size();
                 }
 
+                ++tries;
                 continue;
             }
         }
@@ -166,7 +167,7 @@ inline T& ThreadLocal<T>::Get()
                         hash %= hash_table.size();
                     }
 
-                    if (!hash_table[hash].hash_value())
+                    if (!hash_table[hash].has_value())
                     {
                         break;
                     }
@@ -181,6 +182,20 @@ inline T& ThreadLocal<T>::Get()
             return local_value;
         }
     }
+}
+
+template <typename T>
+inline void ThreadLocal<T>::ForEach(std::function<void(std::thread::id tid, T& value)>&& callback)
+{
+    mutex.lock();
+    for (auto& entry : hash_table)
+    {
+        if (entry.has_value())
+        {
+            callback(entry->tid, entry->value);
+        }
+    }
+    mutex.unlock();
 }
 
 } // namespace bulbit
