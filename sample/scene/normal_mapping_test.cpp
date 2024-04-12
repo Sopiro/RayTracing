@@ -22,10 +22,10 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
 
     // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0f), 0.01f);
 
-    // Float aspect_ratio = 16 / 9;
+    // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3. / 2;
     // Float aspect_ratio = 4 / 3;
-    Float aspect_ratio = 1.;
+    Float aspect_ratio = 1.f;
     int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
@@ -40,6 +40,7 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     Float vFov = 30;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    // return std::make_unique<SphericalCamera>(lookfrom, width, height);
 }
 
 static int32 index = Sample::Register("normal-mapping", NormalMappingTest);

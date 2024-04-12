@@ -81,6 +81,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     Float vFov = 20;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    // return std::make_unique<SphericalCamera>(lookfrom, width, height);
 }
 
 static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);

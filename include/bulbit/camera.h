@@ -78,4 +78,15 @@ private:
     Vec3 u, v, w;
 };
 
+class SphericalCamera : public Camera
+{
+public:
+    SphericalCamera(const Point3& position, int32 screen_width, int32 screen_height);
+
+    virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
+
+private:
+    Point3 origin;
+};
+
 } // namespace bulbit

@@ -101,8 +101,9 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 35.0f;
 
-    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
     // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
+    // return std::make_unique<SphericalCamera>(lookfrom, width, width);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);
