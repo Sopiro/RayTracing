@@ -22,7 +22,7 @@ public:
     Scene() = default;
     virtual ~Scene() = default;
 
-    void GetAABB(AABB* out_aabb) const;
+    AABB GetAABB() const;
     bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
     bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
@@ -61,9 +61,9 @@ private:
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
 
-inline void Scene::GetAABB(AABB* out_aabb) const
+inline AABB Scene::GetAABB() const
 {
-    accel->GetAABB(out_aabb);
+    return accel->GetAABB();
 }
 
 inline bool Scene::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const

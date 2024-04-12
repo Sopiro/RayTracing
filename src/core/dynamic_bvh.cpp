@@ -31,9 +31,7 @@ DynamicBVH::DynamicBVH(const std::vector<Ref<Primitive>>& primitives)
     // Build incrementally
     for (const Ref<Primitive>& primitive : primitives)
     {
-        AABB aabb;
-        primitive->GetAABB(&aabb);
-        CreateNode(primitive.get(), aabb);
+        CreateNode(primitive.get(), primitive->GetAABB());
     }
 }
 
@@ -100,15 +98,16 @@ DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
     return *this;
 }
 
-void DynamicBVH::GetAABB(AABB* out_aabb) const
+AABB DynamicBVH::GetAABB() const
 {
     if (nodeCount == 0)
     {
-        out_aabb->min.SetZero();
-        out_aabb->max.SetZero();
+        return AABB();
     }
-
-    *out_aabb = nodes[root].aabb;
+    else
+    {
+        return nodes[root].aabb;
+    }
 }
 
 bool DynamicBVH::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const

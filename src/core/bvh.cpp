@@ -56,9 +56,7 @@ BVH::BVH(const std::vector<Ref<Primitive>>& _primitives)
     std::vector<BVHPrimitive> bvh_primitives(primitive_count);
     for (size_t i = 0; i < primitive_count; ++i)
     {
-        AABB aabb;
-        primitives[i]->GetAABB(&aabb);
-        bvh_primitives[i] = BVHPrimitive(i, aabb);
+        bvh_primitives[i] = BVHPrimitive(i, primitives[i]->GetAABB());
     }
 
     std::vector<Ref<Primitive>> ordered_prims(primitive_count);
@@ -161,26 +159,27 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         BVHNode* child1;
         BVHNode* child2;
 
-        std::span<BVHPrimitive> span1 = primitive_span.subspan(0, mid);
-        std::span<BVHPrimitive> span2 = primitive_span.subspan(mid);
-
         if (primitive_count > 64 * 1024)
         {
             ParallelFor(0, 2, [&](int i) {
                 if (i == 0)
                 {
-                    child1 = BuildRecursive(thread_allocators, span1, total_nodes, ordered_prims_offset, ordered_prims);
+                    child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
+                                            ordered_prims);
                 }
                 else
                 {
-                    child2 = BuildRecursive(thread_allocators, span2, total_nodes, ordered_prims_offset, ordered_prims);
+                    child2 = BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset,
+                                            ordered_prims);
                 }
             });
         }
         else
         {
-            child1 = BuildRecursive(thread_allocators, span1, total_nodes, ordered_prims_offset, ordered_prims);
-            child2 = BuildRecursive(thread_allocators, span2, total_nodes, ordered_prims_offset, ordered_prims);
+            child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
+                                    ordered_prims);
+            child2 =
+                BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset, ordered_prims);
         }
 
         node->InitInternal(axis, child1, child2);
@@ -189,9 +188,9 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
     return node;
 }
 
-void BVH::GetAABB(AABB* out_aabb) const
+AABB BVH::GetAABB() const
 {
-    *out_aabb = root->aabb;
+    return root->aabb;
 }
 
 bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const

@@ -12,7 +12,7 @@ public:
     Sphere() = default;
     Sphere(const Vec3& center, Float radius, MaterialIndex material);
 
-    virtual void GetAABB(AABB* out_aabb) const override;
+    virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
@@ -40,10 +40,9 @@ inline Sphere::Sphere(const Vec3& _center, Float _radius, MaterialIndex _materia
 {
 }
 
-inline void Sphere::GetAABB(AABB* out_aabb) const
+inline AABB Sphere::GetAABB() const
 {
-    out_aabb->min = center - Vec3(radius);
-    out_aabb->max = center + Vec3(radius);
+    return AABB(center - Vec3(radius), center + Vec3(radius));
 }
 
 inline Float Sphere::EvaluatePDF(const Ray& ray) const

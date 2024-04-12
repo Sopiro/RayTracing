@@ -13,7 +13,7 @@ public:
     Triangle() = default;
     Triangle(const Ref<Mesh> mesh, size_t tri_index);
 
-    virtual void GetAABB(AABB* out_aabb) const override;
+    virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
@@ -42,7 +42,7 @@ inline Triangle::Triangle(const Ref<Mesh> _mesh, size_t tri_index)
     v = &mesh->indices[tri_index * 3];
 }
 
-inline void Triangle::GetAABB(AABB* out_aabb) const
+inline AABB Triangle::GetAABB() const
 {
     const Vec3 aabb_offset{ epsilon * 10.0 };
 
@@ -50,8 +50,10 @@ inline void Triangle::GetAABB(AABB* out_aabb) const
     const Point3& p1 = mesh->positions[v[1]];
     const Point3& p2 = mesh->positions[v[2]];
 
-    out_aabb->min = Min(Min(p0, p1), p2) - aabb_offset;
-    out_aabb->max = Max(Max(p0, p1), p2) + aabb_offset;
+    Vec3 min = Min(Min(p0, p1), p2) - aabb_offset;
+    Vec3 max = Max(Max(p0, p1), p2) + aabb_offset;
+
+    return AABB(min, max);
 }
 
 inline Float Triangle::EvaluatePDF(const Ray& ray) const
