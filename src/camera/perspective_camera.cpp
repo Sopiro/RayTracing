@@ -1,4 +1,4 @@
-#include "bulbit/perspective_camera.h"
+#include "bulbit/camera.h"
 #include "bulbit/ray.h"
 #include "bulbit/sampling.h"
 

@@ -1,6 +1,6 @@
 #include "../samples.h"
 #include "bulbit/bulbit.h"
-#include "bulbit/perspective_camera.h"
+#include "bulbit/camera.h"
 
 namespace bulbit
 {

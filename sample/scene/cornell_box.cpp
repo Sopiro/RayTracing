@@ -1,6 +1,5 @@
 #include "../samples.h"
-#include "bulbit/orthographic_camera.h"
-#include "bulbit/perspective_camera.h"
+#include "bulbit/camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"

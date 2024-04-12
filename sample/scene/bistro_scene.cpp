@@ -1,5 +1,5 @@
 #include "../samples.h"
-#include "bulbit/perspective_camera.h"
+#include "bulbit/camera.h"
 #include "bulbit/scene.h"
 
 namespace bulbit
