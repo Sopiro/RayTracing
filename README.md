@@ -1,18 +1,18 @@
 # Bulbit
 
-Bulbit is a physically based ray tracing renderer.
+Bulbit is a physically based raytracing renderer.
 
 ## Features
 - Integrator
-  - Whitted style, Ambient occlusion, Unidirectional path tracing
+  - Whitted style, Ambient occlusion and Unidirectional path tracing
 - Acceleration structure
   - SAH based dynamic BVH
 - Material
-  - Lambertian, Dielectic, Metal, Microfacet
+  - Lambertian, Dielectic, Metal and Microfacet
 - Light source
-  - Point lights, Directional lights, Area lights, Environment lights
+  - Point, Directional, Area and Environment lights
 - Camera
-  - Perspective, Orthographic
+  - Perspective, Orthographic and Spherical camera
   - Depth of field
 - Simple volumetric rendering
 - Multi-thread rendering
@@ -51,7 +51,6 @@ Bulbit is a physically based ray tracing renderer.
 <!-- |![Volume5](.github/image/render_1000x1000_s1000_d2147483647_t400.2025311s.png)|![Volume6](.github/image/render_1000x1000_s1000_d2147483647_t989.787817s.png)| -->
 
 ## Todo
-- Better memory management
 - More materials
 - Raytracing on GPU
 
