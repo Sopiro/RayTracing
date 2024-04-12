@@ -1,5 +1,8 @@
 #pragma once
 
+#include "bvh.h"
+#include "dynamic_bvh.h"
+
 #include "constant_color.h"
 #include "image_texture.h"
 #include "intersectable.h"
@@ -126,19 +129,6 @@ inline const std::vector<Ref<Light>>& Scene::GetLights() const
 inline const std::vector<InfiniteAreaLight*>& Scene::GetInfiniteAreaLights() const
 {
     return infinite_lights;
-}
-
-inline void Scene::BuildAccelerationStructure()
-{
-    accel.reset(new DynamicBVH(primitives));
-}
-
-inline void Scene::Clear()
-{
-    accel.reset();
-    primitives.clear();
-    lights.clear();
-    infinite_lights.clear();
 }
 
 } // namespace bulbit

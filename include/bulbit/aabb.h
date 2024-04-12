@@ -7,7 +7,17 @@ namespace bulbit
 
 struct AABB
 {
-    static AABB Union(const AABB& b1, const AABB& b2);
+    AABB()
+        : min{ max_value }
+        , max{ -max_value }
+    {
+    }
+
+    AABB(const Vec3& min, const Vec3& max)
+        : min{ min }
+        , max{ max }
+    {
+    }
 
     Vec3 GetCenter() const;
     Vec3 GetExtents() const;
@@ -22,12 +32,23 @@ struct AABB
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     Vec3 min, max;
+
+    static AABB Union(const AABB& b1, const AABB& b2);
+    static AABB Union(const AABB& aabb, const Vec3& p);
 };
 
 inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
 {
     Vec3 min = Min(aabb1.min, aabb2.min);
     Vec3 max = Max(aabb1.max, aabb2.max);
+
+    return AABB{ min, max };
+}
+
+inline AABB AABB::Union(const AABB& aabb, const Vec3& point)
+{
+    Vec3 min = Min(aabb.min, point);
+    Vec3 max = Max(aabb.max, point);
 
     return AABB{ min, max };
 }

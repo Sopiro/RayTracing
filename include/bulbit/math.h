@@ -23,6 +23,7 @@ constexpr Float inv_two_pi = Float(1.0 / (2.0 * 3.14159265358979323846));
 constexpr Float inv_four_pi = Float(1.0 / (4.0 * 3.14159265358979323846));
 constexpr Float epsilon = std::numeric_limits<Float>::epsilon();
 constexpr Float infinity = std::numeric_limits<Float>::infinity();
+constexpr Float max_value = std::numeric_limits<Float>::max();
 
 struct Vec2;
 struct Vec3;

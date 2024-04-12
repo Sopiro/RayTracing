@@ -1,6 +1,6 @@
 #pragma once
 
-#include "dynamic_bvh.h"
+#include "intersectable.h"
 #include "microfacet.h"
 
 namespace bulbit

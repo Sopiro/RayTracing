@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
     Scene scene;
     std::unique_ptr<Camera> camera;
 
+    std::cout << "Loading scene.." << std::endl;
     Timer timer;
     if (!Sample::Get("cornell-box", &scene, &camera))
     {
@@ -33,6 +34,7 @@ int main(int argc, char* argv[])
     std::cout << "Scene loading: " << t << "s" << std::endl;
     std::cout << "Primitives: " << scene.GetPrimitives().size() << std::endl;
 
+    std::cout << "Building Acceleration structure.." << std::endl;
     scene.BuildAccelerationStructure();
     timer.Mark();
     t = timer.Get();

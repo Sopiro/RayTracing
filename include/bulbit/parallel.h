@@ -174,7 +174,7 @@ inline T& ThreadLocal<T>::Get()
                 }
             }
 
-            hash_table[hash] = Entry{ tid, std::move(new_value) };
+            hash_table[hash].emplace(tid, std::move(new_value));
             T& local_value = hash_table[hash]->value;
 
             mutex.unlock();
