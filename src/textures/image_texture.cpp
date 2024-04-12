@@ -50,21 +50,25 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
 
     if (!data)
     {
-        std::cerr << "ERROR: Could not load texture file '" << filename << std::endl;
-        width = 0;
-        height = 0;
-        return;
+        std::cerr << "ERROR: Could not load texture '" << filename << std::endl;
+        width = 1;
+        height = 1;
+        pixels = std::make_unique<Spectrum[]>(width * height);
+
+        pixels[0] = Spectrum(1, 0, 1);
     }
+    else
+    {
+        pixels = std::make_unique<Spectrum[]>(width * height);
 
-    pixels = std::make_unique<Spectrum[]>(width * height);
+        ParallelFor(0, width * height, [=](int32 i) {
+            pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
+            pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
+            pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
+        });
 
-    ParallelFor(0, width * height, [=](int32 i) {
-        pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
-        pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
-        pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
-    });
-
-    stbi_image_free(data);
+        stbi_image_free(data);
+    }
 }
 
 Spectrum ImageTexture::Evaluate(const Point2& uv) const

@@ -5,48 +5,6 @@
 namespace bulbit
 {
 
-struct BVHPrimitive
-{
-    BVHPrimitive() = default;
-    BVHPrimitive(size_t index, const AABB& aabb)
-        : index{ index }
-        , aabb{ aabb }
-    {
-    }
-
-    size_t index;
-    AABB aabb;
-};
-
-struct BVHNode
-{
-    void InitLeaf(int32 _offset, int32 _count, const AABB& _aabb)
-    {
-        offset = _offset;
-        count = _count;
-        aabb = _aabb;
-        child1 = nullptr;
-        child2 = nullptr;
-    }
-
-    void InitInternal(int32 _axis, BVHNode* _child1, BVHNode* _child2)
-    {
-        axis = _axis;
-        child1 = _child1;
-        child2 = _child2;
-        aabb = AABB::Union(child1->aabb, child2->aabb);
-        count = 0;
-    }
-
-    AABB aabb;
-    int32 axis, offset, count;
-
-    BVHNode* child1;
-    BVHNode* child2;
-};
-
-BVH::Resource resource;
-BVH::Allocator allocator(&resource);
 std::vector<std::unique_ptr<BVH::Resource>> thread_buffer_resources;
 
 BVH::BVH(const std::vector<Ref<Primitive>>& _primitives)
