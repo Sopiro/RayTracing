@@ -5,9 +5,9 @@
 namespace bulbit
 {
 
-std::vector<std::unique_ptr<BVH::Resource>> thread_buffer_resources;
+std::vector<std::unique_ptr<Resource>> thread_buffer_resources;
 
-BVH::BVH(const std::vector<Ref<Primitive>>& _primitives)
+BVH::BVH(const std::vector<Primitive*>& _primitives)
     : primitives{ std::move(_primitives) }
 {
     size_t primitive_count = primitives.size();
@@ -17,7 +17,7 @@ BVH::BVH(const std::vector<Ref<Primitive>>& _primitives)
         bvh_primitives[i] = BVHPrimitive(i, primitives[i]->GetAABB());
     }
 
-    std::vector<Ref<Primitive>> ordered_prims(primitive_count);
+    std::vector<Primitive*> ordered_prims(primitive_count);
 
     std::atomic<int32> total_nodes(0);
     std::atomic<int32> ordered_prims_offset(0);
@@ -40,7 +40,7 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
                              std::span<BVHPrimitive> primitive_span,
                              std::atomic<int32>* total_nodes,
                              std::atomic<int32>* ordered_prims_offset,
-                             std::vector<Ref<Primitive>>& ordered_prims)
+                             std::vector<Primitive*>& ordered_prims)
 {
     Allocator allocator = thread_allocators.Get();
     BVHNode* node = allocator.new_object<BVHNode>();

@@ -4,9 +4,9 @@
 namespace bulbit
 {
 
-AreaLight::AreaLight(const Ref<Primitive> prim)
+AreaLight::AreaLight(const Primitive* primitive)
     : Light{ Light::Type::area_light }
-    , primitive{ prim }
+    , primitive{ primitive }
 {
 }
 

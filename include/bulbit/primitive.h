@@ -11,6 +11,8 @@ class Primitive : public Intersectable
 public:
     virtual ~Primitive() = default;
 
+    virtual Primitive* Clone(Allocator* allocator) const = 0;
+
     // Returns random point on the surface
     virtual void Sample(Intersection* sample, Float* pdf, const Point2& u) const = 0;
 

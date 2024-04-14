@@ -7,6 +7,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <memory_resource>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -24,3 +25,6 @@
 
 template <typename T>
 using Ref = std::shared_ptr<T>;
+using Resource = std::pmr::monotonic_buffer_resource;
+using PoolResource = std::pmr::unsynchronized_pool_resource;
+using Allocator = std::pmr::polymorphic_allocator<std::byte>;

@@ -52,12 +52,8 @@ struct BVHNode
 
 class BVH : public Intersectable
 {
-
 public:
-    using Resource = std::pmr::monotonic_buffer_resource;
-    using Allocator = std::pmr::polymorphic_allocator<std::byte>;
-
-    BVH(const std::vector<Ref<Primitive>>& primitives);
+    BVH(const std::vector<Primitive*>& primitives);
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -70,12 +66,12 @@ private:
                             std::span<BVHPrimitive> primitive_span,
                             std::atomic<int32>* total_nodes,
                             std::atomic<int32>* ordered_prims_offset,
-                            std::vector<Ref<Primitive>>& ordered_prims);
+                            std::vector<Primitive*>& ordered_prims);
 
     template <typename T>
     void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
-    std::vector<Ref<Primitive>> primitives;
+    std::vector<Primitive*> primitives;
     BVHNode* root;
 };
 
@@ -97,7 +93,7 @@ void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
         {
             for (int32 i = 0; i < node->count; ++i)
             {
-                Float t = callback->RayCastCallback(r, t_min, t_max, primitives[node->offset + i].get());
+                Float t = callback->RayCastCallback(r, t_min, t_max, primitives[node->offset + i]);
                 if (t <= t_min)
                 {
                     return;

@@ -1,19 +1,36 @@
 #include "bulbit/scene.h"
 #include "bulbit/material.h"
+#include "bulbit/sphere.h"
 #include "bulbit/triangle.h"
 
 namespace bulbit
 {
 
+Scene::Scene()
+    : resource{ 64 * 1024 }
+    , pool{ &resource }
+    , allocator{ &pool }
+{
+}
+
+Scene::~Scene()
+{
+    for (Primitive* p : primitives)
+    {
+        allocator.delete_object(p);
+    }
+}
+
 void Scene::AddPrimitive(const Ref<Primitive> primitive)
 {
-    primitives.push_back(primitive);
+    Primitive* p = primitive->Clone(&allocator);
+    primitives.push_back(p);
 
-    const Material* mat = GetMaterial(primitive->GetMaterialIndex());
+    const Material* mat = GetMaterial(p->GetMaterialIndex());
     if (mat->IsLightSource())
     {
         // Create area light
-        auto area_light = std::make_shared<AreaLight>(primitive);
+        auto area_light = std::make_shared<AreaLight>(p);
         area_light->material = mat;
         lights.push_back(area_light);
     }

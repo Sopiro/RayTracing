@@ -19,8 +19,11 @@ namespace bulbit
 class Scene
 {
 public:
-    Scene() = default;
-    virtual ~Scene() = default;
+    Scene();
+    ~Scene() noexcept;
+
+    Scene(const Scene&) = delete;
+    Scene& operator=(const Scene&) = delete;
 
     AABB GetAABB() const;
     bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
@@ -41,7 +44,7 @@ public:
     const Material* GetMaterial(MaterialIndex material) const;
     Material* GetMaterial(MaterialIndex material);
 
-    const std::vector<Ref<Primitive>>& GetPrimitives() const;
+    const std::vector<Primitive*>& GetPrimitives() const;
 
     const std::vector<Ref<Light>>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
@@ -50,11 +53,15 @@ public:
     void Clear();
 
 private:
+    Resource resource;
+    PoolResource pool;
+    Allocator allocator;
+
     // Acceleration structure
     std::unique_ptr<Intersectable> accel;
 
     // All primitives in this scene
-    std::vector<Ref<Primitive>> primitives;
+    std::vector<Primitive*> primitives;
     std::vector<Ref<Material>> materials;
 
     std::vector<Ref<Light>> lights;
@@ -116,7 +123,7 @@ inline Material* Scene::GetMaterial(MaterialIndex material)
     return materials[material].get();
 }
 
-inline const std::vector<Ref<Primitive>>& Scene::GetPrimitives() const
+inline const std::vector<Primitive*>& Scene::GetPrimitives() const
 {
     return primitives;
 }
