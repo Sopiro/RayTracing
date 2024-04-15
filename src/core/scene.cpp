@@ -21,7 +21,7 @@ Scene::~Scene()
     }
 }
 
-void Scene::AddPrimitive(const Ref<Primitive> primitive)
+void Scene::AddPrimitive(const std::unique_ptr<Primitive> primitive)
 {
     Primitive* p = primitive->Clone(&allocator);
     primitives.push_back(p);
@@ -40,12 +40,11 @@ void Scene::AddMesh(const Ref<Mesh> mesh)
 {
     for (int32 i = 0; i < mesh->triangle_count; ++i)
     {
-        auto tri = std::make_shared<Triangle>(mesh, i);
-        AddPrimitive(tri);
+        CreatePrimitive<Triangle>(mesh, i);
     }
 }
 
-void Scene::AddModel(Model& model)
+void Scene::AddModel(const Model& model)
 {
     MaterialIndex offset = (MaterialIndex)materials.size();
     materials.insert(materials.end(), model.materials.begin(), model.materials.end());

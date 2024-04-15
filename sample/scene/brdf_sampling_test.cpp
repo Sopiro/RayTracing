@@ -55,10 +55,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
                                                     ConstantColor::Create(Spectrum(0.2f)));
 
         Float r = 0.25;
-        auto sphere = std::make_shared<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
-
-        scene.AddPrimitive(sphere);
-        // scene.AddLight(sphere);
+        scene.CreatePrimitive<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
     }
 
     // scene.Rebuild();

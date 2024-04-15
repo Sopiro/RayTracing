@@ -81,7 +81,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         scene.AddMesh(CreateRectXZ(tf, light));
 
-        // scene.AddPrimitive(std::make_shared<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light));
+        // scene.CreatePrimitive<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
         // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f);
         // scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr");

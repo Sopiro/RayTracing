@@ -33,7 +33,7 @@ std::unique_ptr<Camera> BVHTest(Scene& scene)
             pos.y = Rand(-h, h);
             pos.z = -1;
 
-            scene.AddPrimitive(std::make_shared<Sphere>(pos, r, green));
+            scene.CreatePrimitive<Sphere>(pos, r, green);
         }
     }
 

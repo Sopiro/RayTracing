@@ -31,7 +31,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
             auto mat = RandomMicrofacetMaterial();
-            scene.AddPrimitive(std::make_shared<Sphere>(pos, r, scene.AddMaterial(mat)));
+            scene.CreatePrimitive<Sphere>(pos, r, scene.AddMaterial(mat));
         }
     }
 
@@ -123,6 +123,6 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
 
-static int32 index = Sample::Register("pbr", PBRTest);
+static int32 index = Sample::Register("pbr-spheres", PBRTest);
 
 } // namespace bulbit

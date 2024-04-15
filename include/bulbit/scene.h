@@ -29,9 +29,12 @@ public:
     bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
     bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
-    void AddPrimitive(const Ref<Primitive> primitive);
+    template <typename T, typename... Args>
+    void CreatePrimitive(Args&&... args);
+    void AddPrimitive(const std::unique_ptr<Primitive> primitive);
+
     void AddMesh(const Ref<Mesh> mesh);
-    void AddModel(Model& model);
+    void AddModel(const Model& model);
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);
@@ -83,6 +86,22 @@ inline bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 }
 
 template <typename T, typename... Args>
+inline void Scene::CreatePrimitive(Args&&... args)
+{
+    Primitive* p = allocator.new_object<T>(std::forward<Args>(args)...);
+    primitives.push_back(p);
+
+    const Material* mat = GetMaterial(p->GetMaterialIndex());
+    if (mat->IsLightSource())
+    {
+        // Create area light
+        auto area_light = std::make_shared<AreaLight>(p);
+        area_light->material = mat;
+        lights.push_back(area_light);
+    }
+}
+
+template <typename T, typename... Args>
 inline void Scene::CreateLight(Args&&... args)
 {
     auto light = std::make_shared<T>(std::forward<Args>(args)...);
@@ -103,7 +122,8 @@ inline void Scene::CreateLight(Args&&... args)
 template <typename T, typename... Args>
 inline MaterialIndex Scene::CreateMaterial(Args&&... args)
 {
-    materials.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+    Ref<Material> m = std::make_shared<T>(std::forward<Args>(args)...);
+    materials.push_back(m);
     return MaterialIndex(materials.size() - 1);
 }
 
