@@ -48,8 +48,8 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
     }
 
     // Evaluate direct light
-    const std::vector<Ref<Light>>& lights = scene.GetLights();
-    for (auto light : lights)
+    const std::vector<Light*>& lights = scene.GetLights();
+    for (const Light* light : lights)
     {
         Vec3 to_light;
         Float light_pdf;

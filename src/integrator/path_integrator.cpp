@@ -75,13 +75,13 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         // Estimate direct light
         // Multiple importance sampling (Direct light + BRDF)
 
-        const std::vector<Ref<Light>>& lights = scene.GetLights();
+        const std::vector<Light*>& lights = scene.GetLights();
         size_t num_lights = lights.size();
         if (num_lights > 0)
         {
             // Sample one light uniformly
             size_t index = std::min(size_t(sampler.Next1D() * num_lights), num_lights - 1);
-            Light* light = lights[index].get();
+            const Light* light = lights[index];
             Float light_weight = Float(num_lights);
 
             Vec3 to_light;

@@ -19,6 +19,11 @@ Scene::~Scene()
     {
         allocator.delete_object(p);
     }
+
+    for (Light* l : lights)
+    {
+        allocator.delete_object(l);
+    }
 }
 
 void Scene::AddPrimitive(const std::unique_ptr<Primitive> primitive)
@@ -30,7 +35,7 @@ void Scene::AddPrimitive(const std::unique_ptr<Primitive> primitive)
     if (mat->IsLightSource())
     {
         // Create area light
-        auto area_light = std::make_shared<AreaLight>(p);
+        AreaLight* area_light = allocator.new_object<AreaLight>(p);
         area_light->material = mat;
         lights.push_back(area_light);
     }
@@ -56,18 +61,20 @@ void Scene::AddModel(const Model& model)
     }
 }
 
-void Scene::AddLight(const Ref<Light> light)
+void Scene::AddLight(const std::unique_ptr<Light> light)
 {
     assert(light->type != Light::Type::area_light);
 
-    if (light->type != Light::Type::area_light)
+    Light* l = light->Clone(&allocator);
+
+    if (l->type != Light::Type::area_light)
     {
-        lights.push_back(light);
+        lights.push_back(l);
     }
 
-    if (light->type == Light::Type::infinite_area_light)
+    if (l->type == Light::Type::infinite_area_light)
     {
-        infinite_lights.push_back((InfiniteAreaLight*)light.get());
+        infinite_lights.push_back((InfiniteAreaLight*)l);
     }
 }
 

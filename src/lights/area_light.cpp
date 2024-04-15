@@ -10,6 +10,12 @@ AreaLight::AreaLight(const Primitive* primitive)
 {
 }
 
+Light* AreaLight::Clone(Allocator* allocator) const
+{
+    assert(false);
+    return nullptr;
+}
+
 Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Intersection sample;

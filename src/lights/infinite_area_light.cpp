@@ -9,8 +9,13 @@ namespace bulbit
 {
 
 InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform& tf)
+    : InfiniteAreaLight(ImageTexture::Create(env_map, false), tf)
+{
+}
+
+InfiniteAreaLight::InfiniteAreaLight(const Ref<ImageTexture> l_map, const Transform& tf)
     : Light(Light::Type::infinite_area_light)
-    , l_map{ ImageTexture::Create(env_map, false) }
+    , l_map{ l_map }
     , transform{ tf }
 {
     int32 width = l_map->GetWidth();
@@ -30,6 +35,11 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform
     }
 
     distribution.reset(new Distribution2D(image.get(), width, height));
+}
+
+Light* InfiniteAreaLight::Clone(Allocator* allocator) const
+{
+    return allocator->new_object<InfiniteAreaLight>(l_map, transform);
 }
 
 Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const

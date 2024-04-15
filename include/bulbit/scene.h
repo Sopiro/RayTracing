@@ -38,7 +38,7 @@ public:
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);
-    void AddLight(const Ref<Light> light);
+    void AddLight(const std::unique_ptr<Light> light);
 
     template <typename T, typename... Args>
     MaterialIndex CreateMaterial(Args&&... args);
@@ -49,7 +49,7 @@ public:
 
     const std::vector<Primitive*>& GetPrimitives() const;
 
-    const std::vector<Ref<Light>>& GetLights() const;
+    const std::vector<Light*>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
     void BuildAccelerationStructure();
@@ -67,7 +67,7 @@ private:
     std::vector<Primitive*> primitives;
     std::vector<Ref<Material>> materials;
 
-    std::vector<Ref<Light>> lights;
+    std::vector<Light*> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };
 
@@ -95,7 +95,7 @@ inline void Scene::CreatePrimitive(Args&&... args)
     if (mat->IsLightSource())
     {
         // Create area light
-        auto area_light = std::make_shared<AreaLight>(p);
+        AreaLight* area_light = allocator.new_object<AreaLight>(p);
         area_light->material = mat;
         lights.push_back(area_light);
     }
@@ -104,7 +104,7 @@ inline void Scene::CreatePrimitive(Args&&... args)
 template <typename T, typename... Args>
 inline void Scene::CreateLight(Args&&... args)
 {
-    auto light = std::make_shared<T>(std::forward<Args>(args)...);
+    Light* light = allocator.new_object<T>(std::forward<Args>(args)...);
 
     assert(light->type != Light::Type::area_light);
 
@@ -115,7 +115,7 @@ inline void Scene::CreateLight(Args&&... args)
 
     if (light->type == Light::Type::infinite_area_light)
     {
-        infinite_lights.push_back((InfiniteAreaLight*)light.get());
+        infinite_lights.push_back((InfiniteAreaLight*)light);
     }
 }
 
@@ -148,7 +148,7 @@ inline const std::vector<Primitive*>& Scene::GetPrimitives() const
     return primitives;
 }
 
-inline const std::vector<Ref<Light>>& Scene::GetLights() const
+inline const std::vector<Light*>& Scene::GetLights() const
 {
     return lights;
 }
