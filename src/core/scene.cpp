@@ -33,21 +33,6 @@ Scene::~Scene()
     }
 }
 
-void Scene::AddPrimitive(const std::unique_ptr<Primitive> primitive)
-{
-    Primitive* p = primitive->Clone(&allocator);
-    primitives.push_back(p);
-
-    const Material* mat = p->GetMaterial();
-    if (mat->IsLightSource())
-    {
-        // Create area light
-        AreaLight* area_light = allocator.new_object<AreaLight>(p);
-        area_light->material = mat;
-        lights.push_back(area_light);
-    }
-}
-
 void Scene::AddMesh(const Ref<Mesh> mesh)
 {
     for (int32 i = 0; i < mesh->triangle_count; ++i)
@@ -61,23 +46,6 @@ void Scene::AddModel(const Model& model)
     for (Ref<Mesh> mesh : model.meshes)
     {
         AddMesh(mesh);
-    }
-}
-
-void Scene::AddLight(const std::unique_ptr<Light> light)
-{
-    assert(light->type != Light::Type::area_light);
-
-    Light* l = light->Clone(&allocator);
-
-    if (l->type != Light::Type::area_light)
-    {
-        lights.push_back(l);
-    }
-
-    if (l->type == Light::Type::infinite_area_light)
-    {
-        infinite_lights.push_back((InfiniteAreaLight*)l);
     }
 }
 

@@ -20,8 +20,6 @@ public:
     Light(Type type);
     virtual ~Light() = default;
 
-    virtual Light* Clone(Allocator* allocator) const = 0;
-
     virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
     virtual Spectrum Emit(const Ray& ray) const;

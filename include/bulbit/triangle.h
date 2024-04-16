@@ -13,8 +13,6 @@ public:
     Triangle() = default;
     Triangle(const Ref<Mesh> mesh, size_t tri_index);
 
-    virtual Primitive* Clone(Allocator* allocator) const;
-
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
@@ -42,11 +40,6 @@ inline Triangle::Triangle(const Ref<Mesh> _mesh, size_t tri_index)
     : mesh{ _mesh }
 {
     v = &mesh->indices[tri_index * 3];
-}
-
-inline Primitive* Triangle::Clone(Allocator* allocator) const
-{
-    return allocator->new_object<Triangle>(*this);
 }
 
 inline AABB Triangle::GetAABB() const

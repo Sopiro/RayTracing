@@ -10,11 +10,6 @@ PointLight::PointLight(const Point3& _position, const Spectrum& _intensity)
 {
 }
 
-Light* PointLight::Clone(Allocator* allocator) const
-{
-    return allocator->new_object<PointLight>(*this);
-}
-
 Spectrum PointLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Vec3 d = position - ref.point;

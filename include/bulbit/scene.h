@@ -31,20 +31,17 @@ public:
 
     template <typename T, typename... Args>
     void CreatePrimitive(Args&&... args);
-    void AddPrimitive(const std::unique_ptr<Primitive> primitive);
 
     void AddMesh(const Ref<Mesh> mesh);
     void AddModel(const Model& model);
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);
-    void AddLight(const std::unique_ptr<Light> light);
 
     template <typename T, typename... Args>
     const Material* CreateMaterial(Args&&... args);
 
     const std::vector<Primitive*>& GetPrimitives() const;
-
     const std::vector<Light*>& GetLights() const;
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 

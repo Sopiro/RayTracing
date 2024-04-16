@@ -12,8 +12,6 @@ public:
     Sphere() = default;
     Sphere(const Vec3& center, Float radius, const Material* material);
 
-    virtual Primitive* Clone(Allocator* allocator) const override;
-
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
@@ -40,11 +38,6 @@ inline Sphere::Sphere(const Vec3& _center, Float _radius, const Material* _mater
     , radius{ _radius }
     , material{ _material }
 {
-}
-
-inline Primitive* Sphere::Clone(Allocator* allocator) const
-{
-    return allocator->new_object<Sphere>(*this);
 }
 
 inline AABB Sphere::GetAABB() const
