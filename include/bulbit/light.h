@@ -1,7 +1,11 @@
 #pragma once
 
+#include "image_texture.h"
 #include "intersectable.h"
+#include "primitive.h"
+#include "sampling.h"
 #include "spectrum.h"
+#include "transform.h"
 
 namespace bulbit
 {
@@ -17,31 +21,102 @@ public:
         infinite_area_light,
     };
 
-    Light(Type type);
+    Light(Type type)
+        : type{ type }
+    {
+    }
     virtual ~Light() = default;
 
     virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
-    virtual Spectrum Emit(const Ray& ray) const;
 
-    bool IsDeltaLight() const;
+    virtual Spectrum Emit(const Ray& ray) const
+    {
+        return RGBSpectrum::black;
+    }
+
+    bool IsDeltaLight() const
+    {
+        return type == Type::point_light || type == Type::directional_light;
+    }
 
     const Type type;
 };
 
-inline Light::Light(Type _type)
-    : type{ _type }
+class PointLight : public Light
 {
-}
+public:
+    PointLight(const Point3& position, const Spectrum& intensity);
 
-inline Spectrum Light::Emit(const Ray& ray) const
-{
-    return RGBSpectrum::black;
-}
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
 
-inline bool Light::IsDeltaLight() const
+    virtual Float EvaluatePDF(const Ray& ray) const override
+    {
+        assert(false);
+        return Float(0.0);
+    }
+
+    Point3 position;
+    Spectrum intensity; // radiance
+};
+
+struct DirectionalLight : public Light
 {
-    return type == Type::point_light || type == Type::directional_light;
-}
+public:
+    DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius);
+
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
+
+    virtual Float EvaluatePDF(const Ray& ray) const override
+    {
+        assert(false);
+        return Float(0.0);
+    }
+
+    Vec3 dir;
+    Spectrum intensity; // radiance
+    Float radius;       // visible radius
+};
+
+class AreaLight : public Light
+{
+public:
+    AreaLight(const Primitive* primitive);
+
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
+
+    virtual Float EvaluatePDF(const Ray& ray) const override
+    {
+        return primitive->EvaluatePDF(ray);
+    }
+
+    const Primitive* GetPrimitive() const
+    {
+        return primitive;
+    }
+
+private:
+    friend class Scene;
+
+    const Primitive* primitive;
+    const Material* material;
+};
+
+class InfiniteAreaLight : public Light
+{
+public:
+    InfiniteAreaLight(const std::string& env_map, const Transform& transform = identity);
+    InfiniteAreaLight(const Ref<ImageTexture> l_map, const Transform& transform = identity);
+
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
+    virtual Float EvaluatePDF(const Ray& ray) const override;
+    virtual Spectrum Emit(const Ray& ray) const override;
+
+private:
+    Transform transform;
+
+    std::unique_ptr<Distribution2D> distribution;
+    Ref<ImageTexture> l_map; // Environment(Radiance) map
+};
 
 } // namespace bulbit

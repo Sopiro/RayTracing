@@ -1,6 +1,6 @@
-#include "bulbit/infinite_area_light.h"
 #include "bulbit/bitmap.h"
 #include "bulbit/image_texture.h"
+#include "bulbit/light.h"
 #include "bulbit/util.h"
 
 #include <memory>

@@ -1,4 +1,4 @@
-#include "bulbit/area_light.h"
+#include "bulbit/light.h"
 #include "bulbit/material.h"
 
 namespace bulbit

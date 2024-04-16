@@ -1,4 +1,4 @@
-#include "bulbit/point_light.h"
+#include "bulbit/light.h"
 
 namespace bulbit
 {

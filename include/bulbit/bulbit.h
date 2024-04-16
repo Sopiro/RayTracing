@@ -18,14 +18,10 @@
 #include "material.h"
 
 #include "model.h"
-
-#include "primitive.h"
 #include "sphere.h"
 #include "triangle.h"
 
-#include "directional_light.h"
-#include "infinite_area_light.h"
-#include "point_light.h"
+#include "light.h"
 
 #include "independent_sampler.h"
 
