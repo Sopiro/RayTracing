@@ -41,11 +41,8 @@ public:
     void AddLight(const std::unique_ptr<Light> light);
 
     template <typename T, typename... Args>
-    MaterialIndex CreateMaterial(Args&&... args);
-    MaterialIndex AddMaterial(const Ref<Material> material);
-
-    const Material* GetMaterial(MaterialIndex material) const;
-    Material* GetMaterial(MaterialIndex material);
+    const Material* CreateMaterial(Args&&... args);
+    const Material* AddMaterial(const Ref<Material> material);
 
     const std::vector<Primitive*>& GetPrimitives() const;
 
@@ -65,7 +62,7 @@ private:
 
     // All primitives in this scene
     std::vector<Primitive*> primitives;
-    std::vector<Ref<Material>> materials;
+    std::vector<Material*> materials;
 
     std::vector<Light*> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
@@ -91,7 +88,7 @@ inline void Scene::CreatePrimitive(Args&&... args)
     Primitive* p = allocator.new_object<T>(std::forward<Args>(args)...);
     primitives.push_back(p);
 
-    const Material* mat = GetMaterial(p->GetMaterialIndex());
+    const Material* mat = p->GetMaterial();
     if (mat->IsLightSource())
     {
         // Create area light
@@ -120,27 +117,18 @@ inline void Scene::CreateLight(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline MaterialIndex Scene::CreateMaterial(Args&&... args)
+inline const Material* Scene::CreateMaterial(Args&&... args)
 {
-    Ref<Material> m = std::make_shared<T>(std::forward<Args>(args)...);
+    Material* m = allocator.new_object<T>(std::forward<Args>(args)...);
     materials.push_back(m);
-    return MaterialIndex(materials.size() - 1);
+    return m;
 }
 
-inline MaterialIndex Scene::AddMaterial(const Ref<Material> material)
+inline const Material* Scene::AddMaterial(const Ref<Material> material)
 {
-    materials.push_back(material);
-    return MaterialIndex(materials.size() - 1);
-}
-
-inline const Material* Scene::GetMaterial(MaterialIndex material) const
-{
-    return materials[material].get();
-}
-
-inline Material* Scene::GetMaterial(MaterialIndex material)
-{
-    return materials[material].get();
+    Material* m = material->Clone(&allocator);
+    materials.push_back(m);
+    return m;
 }
 
 inline const std::vector<Primitive*>& Scene::GetPrimitives() const

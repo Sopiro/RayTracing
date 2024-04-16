@@ -39,6 +39,10 @@ private:
 class Material
 {
 public:
+    virtual ~Material() = default;
+
+    virtual Material* Clone(Allocator* allocator) const = 0;
+
     virtual bool IsLightSource() const
     {
         return false;
@@ -67,6 +71,8 @@ public:
     Lambertian(const Spectrum& color);
     Lambertian(const Ref<Texture> albedo);
 
+    virtual Material* Clone(Allocator* allocator) const override;
+
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
 
@@ -78,6 +84,8 @@ class Dielectric : public Material
 {
 public:
     Dielectric(Float index_of_refraction);
+
+    virtual Material* Clone(Allocator* allocator) const override;
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
 
@@ -97,6 +105,8 @@ class Metal : public Material
 {
 public:
     Metal(const Spectrum& albedo, Float fuzziness);
+
+    virtual Material* Clone(Allocator* allocator) const override;
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
 
@@ -119,6 +129,8 @@ public:
                const Ref<Texture> emissive = ConstantColor::Create(Float(0.0)),
                const Ref<Texture> normalmap = ConstantColor::Create(Float(0.5), Float(0.5), Float(1.0)));
 
+    virtual Material* Clone(Allocator* allocator) const override;
+
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
@@ -132,6 +144,8 @@ class DiffuseLight : public Material
 public:
     DiffuseLight(const Spectrum& color, bool two_sided = false);
     DiffuseLight(const Ref<Texture> emission, bool two_sided = false);
+
+    virtual Material* Clone(Allocator* allocator) const override;
 
     virtual bool IsLightSource() const override;
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;

@@ -42,7 +42,7 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
     return textures;
 }
 
-MaterialIndex Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
+Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
 {
     assert(mesh->mMaterialIndex >= 0);
 
@@ -100,7 +100,7 @@ MaterialIndex Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
 
     materials.push_back(mat);
 
-    return MaterialIndex(materials.size() - 1);
+    return mat.get();
 }
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)

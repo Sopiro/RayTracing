@@ -5,7 +5,7 @@
 namespace bulbit
 {
 
-using MaterialIndex = int32;
+class Material;
 
 struct Intersection
 {
@@ -14,7 +14,7 @@ struct Intersection
     Point3 point;
     Vec3 normal; // Geometric normal
     Point2 uv;
-    MaterialIndex material_index;
+    const Material* material;
 
     bool front_face;
 

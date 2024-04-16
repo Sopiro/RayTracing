@@ -8,6 +8,11 @@ Dielectric::Dielectric(Float index_of_refraction)
 {
 }
 
+Material* Dielectric::Clone(Allocator* allocator) const
+{
+    return allocator->new_object<Dielectric>(*this);
+}
+
 bool Dielectric::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Float refraction_ratio = is.front_face ? (1 / ior) : ior;

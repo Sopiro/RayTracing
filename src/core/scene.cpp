@@ -15,9 +15,16 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+    // Free all pooled scene objects
+
     for (Primitive* p : primitives)
     {
         allocator.delete_object(p);
+    }
+
+    for (Material* m : materials)
+    {
+        allocator.delete_object(m);
     }
 
     for (Light* l : lights)
@@ -31,7 +38,7 @@ void Scene::AddPrimitive(const std::unique_ptr<Primitive> primitive)
     Primitive* p = primitive->Clone(&allocator);
     primitives.push_back(p);
 
-    const Material* mat = GetMaterial(p->GetMaterialIndex());
+    const Material* mat = p->GetMaterial();
     if (mat->IsLightSource())
     {
         // Create area light
@@ -51,12 +58,8 @@ void Scene::AddMesh(const Ref<Mesh> mesh)
 
 void Scene::AddModel(const Model& model)
 {
-    MaterialIndex offset = (MaterialIndex)materials.size();
-    materials.insert(materials.end(), model.materials.begin(), model.materials.end());
-
     for (Ref<Mesh> mesh : model.meshes)
     {
-        mesh->material += offset;
         AddMesh(mesh);
     }
 }

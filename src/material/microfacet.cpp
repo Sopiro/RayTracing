@@ -17,6 +17,11 @@ Microfacet::Microfacet(const Ref<Texture> _basecolor,
 {
 }
 
+Material* Microfacet::Clone(Allocator* allocator) const
+{
+    return allocator->new_object<Microfacet>(*this);
+}
+
 Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
 {
     return emissive->Evaluate(is.uv);

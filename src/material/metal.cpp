@@ -10,6 +10,11 @@ Metal::Metal(const Spectrum& albedo, Float fuzziness)
 {
 }
 
+Material* Metal::Clone(Allocator* allocator) const
+{
+    return allocator->new_object<Metal>(*this);
+}
+
 bool Metal::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Vec3 reflected = Reflect(-wi, is.normal);

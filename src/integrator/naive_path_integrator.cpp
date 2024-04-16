@@ -32,7 +32,7 @@ Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sa
         return L;
     }
 
-    const Material* mat = scene.GetMaterial(is.material_index);
+    const Material* mat = is.material;
 
     L += mat->Emit(is, ray.d);
 

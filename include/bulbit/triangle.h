@@ -25,7 +25,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
-    virtual MaterialIndex GetMaterialIndex() const override;
+    virtual const Material* GetMaterial() const override;
 
 private:
     friend class Scene;
@@ -91,7 +91,7 @@ inline Float Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) 
     return distance_squared / (cosine * area);
 }
 
-inline MaterialIndex Triangle::GetMaterialIndex() const
+inline const Material* Triangle::GetMaterial() const
 {
     return mesh->material;
 }

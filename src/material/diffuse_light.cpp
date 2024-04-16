@@ -15,6 +15,11 @@ DiffuseLight::DiffuseLight(const Ref<Texture> emission, bool two_sided)
 {
 }
 
+Material* DiffuseLight::Clone(Allocator* allocator) const
+{
+    return allocator->new_object<DiffuseLight>(*this);
+}
+
 bool DiffuseLight::IsLightSource() const
 {
     return true;

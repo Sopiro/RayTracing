@@ -10,7 +10,7 @@ class Sphere : public Primitive
 {
 public:
     Sphere() = default;
-    Sphere(const Vec3& center, Float radius, MaterialIndex material);
+    Sphere(const Vec3& center, Float radius, const Material* material);
 
     virtual Primitive* Clone(Allocator* allocator) const override;
 
@@ -24,7 +24,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
 
-    virtual MaterialIndex GetMaterialIndex() const override;
+    virtual const Material* GetMaterial() const override;
 
     Vec3 center;
     Float radius;
@@ -32,10 +32,10 @@ public:
 private:
     static inline Point2 ComputeTexCoord(const Vec3& v);
 
-    MaterialIndex material;
+    const Material* material;
 };
 
-inline Sphere::Sphere(const Vec3& _center, Float _radius, MaterialIndex _material)
+inline Sphere::Sphere(const Vec3& _center, Float _radius, const Material* _material)
     : center{ _center }
     , radius{ _radius }
     , material{ _material }
@@ -71,7 +71,7 @@ inline Float Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) co
     return 1 / solid_angle;
 }
 
-inline MaterialIndex Sphere::GetMaterialIndex() const
+inline const Material* Sphere::GetMaterial() const
 {
     return material;
 }

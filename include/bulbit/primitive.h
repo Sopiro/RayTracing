@@ -22,7 +22,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;
 
-    virtual MaterialIndex GetMaterialIndex() const = 0;
+    virtual const Material* GetMaterial() const = 0;
 
 protected:
     static void SetFaceNormal(Intersection* is, const Vec3& wi, const Vec3& outward_normal);

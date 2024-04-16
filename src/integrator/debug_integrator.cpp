@@ -18,7 +18,7 @@ Spectrum DebugIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler
         return Spectrum::black;
     }
 
-    const Material* mat = scene.GetMaterial(is.material_index);
+    const Material* mat = is.material;
 
     Vec3 wi = Normalize(primary_ray.d);
     Vec3 wo = Normalize(Reflect(wi, is.normal));
