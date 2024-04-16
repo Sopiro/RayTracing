@@ -30,8 +30,8 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2);
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
-            auto mat = RandomMicrofacetMaterial();
-            scene.CreatePrimitive<Sphere>(pos, r, scene.AddMaterial(mat));
+            auto mat = CreateRandomMicrofacetMaterial(scene);
+            scene.CreatePrimitive<Sphere>(pos, r, mat);
         }
     }
 
@@ -89,8 +89,6 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.y = 2.2f;
             pos.x = x * xstep - ((cx - 1) * xstep / 2);
             pos.z = 0.0f;
-
-            auto mat = RandomMicrofacetMaterial();
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
             auto rect = CreateRectXZ(tf, light);

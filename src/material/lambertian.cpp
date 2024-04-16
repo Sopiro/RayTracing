@@ -13,11 +13,6 @@ Lambertian::Lambertian(const Ref<Texture> albedo)
 {
 }
 
-Material* Lambertian::Clone(Allocator* allocator) const
-{
-    return allocator->new_object<Lambertian>(*this);
-}
-
 bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     ir->is_specular = false;

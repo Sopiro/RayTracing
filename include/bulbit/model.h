@@ -22,7 +22,7 @@ private:
     friend class Scene;
 
     std::vector<Ref<Texture>> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb);
-    Material* CreateMaterial(const aiMesh* mesh, const aiScene* scene);
+    const Material* CreateMaterial(const aiMesh* mesh, const aiScene* scene);
     Ref<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform);
     void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform);
     void Load(const std::string& filename, const Transform& transform);

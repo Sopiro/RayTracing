@@ -42,7 +42,7 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
     return textures;
 }
 
-Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
+const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
 {
     assert(mesh->mMaterialIndex >= 0);
 
@@ -74,16 +74,14 @@ Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     auto normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
 
-    Ref<Material> mat;
-
     if (basecolor_textures.empty() && Material::fallback != nullptr)
     {
-        mat = Material::fallback;
+        return Material::fallback;
     }
     else
     {
         // clang-format off
-        mat = std::make_shared<Microfacet>(
+        auto mat = std::make_shared<Microfacet>(
             basecolor_textures.empty() ? 
                 ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
             metallic_textures.empty() ? 
@@ -96,11 +94,11 @@ Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
                 ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
         );
         // clang-format on
+
+        materials.push_back(mat);
+
+        return mat.get();
     }
-
-    materials.push_back(mat);
-
-    return mat.get();
 }
 
 Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)

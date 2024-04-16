@@ -8,8 +8,9 @@ namespace bulbit
 {
 
 class Microfacet;
+class Scene;
 
-Ref<Microfacet> RandomMicrofacetMaterial();
+const Material* CreateRandomMicrofacetMaterial(Scene& scene);
 
 Ref<Mesh> CreateRectXY(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
 Ref<Mesh> CreateRectXZ(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));

@@ -42,7 +42,6 @@ public:
 
     template <typename T, typename... Args>
     const Material* CreateMaterial(Args&&... args);
-    const Material* AddMaterial(const Ref<Material> material);
 
     const std::vector<Primitive*>& GetPrimitives() const;
 
@@ -120,13 +119,6 @@ template <typename T, typename... Args>
 inline const Material* Scene::CreateMaterial(Args&&... args)
 {
     Material* m = allocator.new_object<T>(std::forward<Args>(args)...);
-    materials.push_back(m);
-    return m;
-}
-
-inline const Material* Scene::AddMaterial(const Ref<Material> material)
-{
-    Material* m = material->Clone(&allocator);
     materials.push_back(m);
     return m;
 }

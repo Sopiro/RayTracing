@@ -28,7 +28,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Bunny
     {
         auto tf = Transform{ Vec3(gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = RandomMicrofacetMaterial();
+        auto mat = CreateRandomMicrofacetMaterial(scene);
         Material::fallback = mat;
 
         auto model = Model("res/stanford/bunny.obj", tf);
@@ -38,7 +38,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Lucy
     {
         auto tf = Transform{ Vec3(gap, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = RandomMicrofacetMaterial();
+        auto mat = CreateRandomMicrofacetMaterial(scene);
         Material::fallback = mat;
 
         auto model = Model("res/stanford/lucy.obj", tf);
@@ -48,7 +48,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Tyrannosaurus
     {
         auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
-        auto mat = RandomMicrofacetMaterial();
+        auto mat = CreateRandomMicrofacetMaterial(scene);
         Material::fallback = mat;
 
         auto model = Model("res/stanford/tyra.obj", tf);
@@ -58,7 +58,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Armadillo
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = std::make_shared<Microfacet>(
+        auto mat = scene.CreateMaterial<Microfacet>(
             ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
             ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
         Material::fallback = mat;
@@ -84,7 +84,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2.0f);
             pos.z = 0.0f;
 
-            auto mat = RandomMicrofacetMaterial();
+            auto mat = CreateRandomMicrofacetMaterial(scene);
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(w, w, h) };
             auto rect = CreateRectXZ(tf, light);

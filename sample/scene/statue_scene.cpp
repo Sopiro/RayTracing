@@ -10,9 +10,9 @@ namespace bulbit
 std::unique_ptr<Camera> StatueScene(Scene& scene)
 {
     {
-        auto mat = std::make_shared<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(1.0f)),
-                                                ConstantColor::Create(Spectrum(0.1f)));
-        // auto mat = std::make_shared<Dielectric>(1.5f);
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(1.0f)),
+                                                    ConstantColor::Create(Spectrum(0.1f)));
+        // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
         Material::fallback = mat;
 
