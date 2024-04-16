@@ -10,7 +10,7 @@ namespace bulbit
 // https://developer.nvidia.com/ue4-sun-temple
 std::unique_ptr<Camera> SunTempleScene(Scene& scene)
 {
-    Transform tf{ zero_vec3, identity, Vec3(1.0f) };
+    Transform tf{ Vec3::zero, identity, Vec3(1.0f) };
     Model m = Model("res/sun_temple/sun_temple.gltf", tf);
     scene.AddModel(m);
 

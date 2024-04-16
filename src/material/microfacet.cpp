@@ -68,7 +68,7 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Float NoV = Dot(n, v);
     Float NoL = Dot(n, l);
 
-    if (NoV <= 0 || NoL <= 0 || h == zero_vec3)
+    if (NoV <= 0 || NoL <= 0 || h == Vec3::zero)
     {
         return RGBSpectrum::black;
     }

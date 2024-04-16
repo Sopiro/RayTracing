@@ -26,11 +26,11 @@ public:
     bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
     bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
-    template <typename T, typename... Args>
-    void CreatePrimitive(Args&&... args);
-
     void AddMesh(const Ref<Mesh> mesh);
     void AddModel(const Model& model);
+
+    template <typename T, typename... Args>
+    void CreatePrimitive(Args&&... args);
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);
@@ -43,7 +43,6 @@ public:
     const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
 
     void BuildAccelerationStructure();
-    void Clear();
 
 private:
     Resource resource;

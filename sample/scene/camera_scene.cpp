@@ -14,14 +14,14 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.5f)), ConstantColor::Create(Spectrum(0.0f)),
                                                     ConstantColor::Create(Spectrum(0.01f)));
 
-        auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
+        auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat);
         scene.AddMesh(floor);
     }
 
     // Camera
     {
-        auto tf = Transform{ zero_vec3, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
+        auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
         auto model = Model("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
 
         scene.AddModel(model);

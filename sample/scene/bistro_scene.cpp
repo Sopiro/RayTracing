@@ -8,7 +8,7 @@ namespace bulbit
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
 std::unique_ptr<Camera> BistroScene(Scene& scene)
 {
-    Transform tf{ zero_vec3, identity, Vec3(1) };
+    Transform tf{ Vec3::zero, identity, Vec3(1) };
     Model m = Model("res/bistro/bistro.gltf", tf);
 
     scene.AddModel(m);

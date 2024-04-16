@@ -9,11 +9,11 @@ namespace bulbit
 
 std::unique_ptr<Camera> Sponza(Scene& scene)
 {
-    // Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
+    // Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
     // Model sponza = Model("res/sponza2/sponza.obj", transform);
 
-    Transform transform{ zero_vec3, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
-    Model sponza = Model("res/sponza/Sponza.gltf", transform);
+    Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
+    Model sponza = Model("res/sponza/glTF/Sponza.gltf", transform);
 
     scene.AddModel(sponza);
 

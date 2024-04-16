@@ -55,12 +55,4 @@ void Scene::BuildAccelerationStructure()
     accel.reset(new BVH(primitives));
 }
 
-void Scene::Clear()
-{
-    accel.reset();
-    primitives.clear();
-    lights.clear();
-    infinite_lights.clear();
-}
-
 } // namespace bulbit

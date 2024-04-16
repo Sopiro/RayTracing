@@ -170,7 +170,11 @@ struct Vec2
     {
         return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y);
     }
+
+    static const Vec2 zero;
 };
+
+constexpr inline Vec2 Vec2::zero = Vec2(0, 0);
 
 struct Vec3
 {
@@ -312,7 +316,11 @@ struct Vec3
     {
         return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y) || std::isnan(z) || std::isinf(z);
     }
+
+    static const Vec3 zero;
 };
+
+constexpr inline Vec3 Vec3::zero = Vec3(0, 0, 0);
 
 struct Vec4
 {
@@ -476,7 +484,11 @@ struct Vec4
         return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y) || std::isnan(z) || std::isinf(z) ||
                std::isnan(w) || std::isinf(w);
     }
+
+    static const Vec4 zero;
 };
+
+constexpr inline Vec4 Vec4::zero = Vec4(0, 0, 0, 0);
 
 // Column major matrices
 

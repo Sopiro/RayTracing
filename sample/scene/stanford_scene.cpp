@@ -17,7 +17,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"), ConstantColor::Create(0.0f),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png"));
 
-        auto tf = Transform{ zero_vec3, identity, Vec3(8.0f) };
+        auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
         auto floor = CreateRectXZ(tf, mat, Point2(4.0f, 4.0f));
         scene.AddMesh(floor);
     }
