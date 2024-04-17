@@ -24,7 +24,10 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
-    scene.AddMesh(mesh);
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    {
+        scene.CreatePrimitive<Triangle>(mesh, i);
+    }
 };
 
 void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -43,7 +46,10 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
-    scene.AddMesh(mesh);
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    {
+        scene.CreatePrimitive<Triangle>(mesh, i);
+    }
 }
 
 void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -62,7 +68,10 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
-    scene.AddMesh(mesh);
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    {
+        scene.CreatePrimitive<Triangle>(mesh, i);
+    }
 }
 
 void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -130,7 +139,10 @@ void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Poi
     // clang-format on
 
     Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
-    scene.AddMesh(mesh);
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    {
+        scene.CreatePrimitive<Triangle>(mesh, i);
+    }
 }
 
 } // namespace bulbit

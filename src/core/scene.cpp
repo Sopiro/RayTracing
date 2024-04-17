@@ -33,19 +33,14 @@ Scene::~Scene()
     }
 }
 
-void Scene::AddMesh(const Ref<Mesh> mesh)
-{
-    for (int32 i = 0; i < mesh->triangle_count; ++i)
-    {
-        CreatePrimitive<Triangle>(mesh, i);
-    }
-}
-
 void Scene::AddModel(const Model& model)
 {
     for (Ref<Mesh> mesh : model.meshes)
     {
-        AddMesh(mesh);
+        for (int32 i = 0; i < mesh->triangle_count; ++i)
+        {
+            CreatePrimitive<Triangle>(mesh, i);
+        }
     }
 }
 

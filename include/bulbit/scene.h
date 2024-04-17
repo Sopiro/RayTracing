@@ -26,9 +26,6 @@ public:
     bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
     bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
-    void AddMesh(const Ref<Mesh> mesh);
-    void AddModel(const Model& model);
-
     template <typename T, typename... Args>
     void CreatePrimitive(Args&&... args);
 
@@ -37,6 +34,8 @@ public:
 
     template <typename T, typename... Args>
     const Material* CreateMaterial(Args&&... args);
+
+    void AddModel(const Model& model);
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
