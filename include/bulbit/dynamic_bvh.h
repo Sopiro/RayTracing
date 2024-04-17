@@ -30,11 +30,11 @@ public:
         NodeIndex next;
         bool moved;
 
-        Primitive* primitive;
+        const Primitive* primitive;
     };
 
     DynamicBVH();
-    DynamicBVH(const std::vector<Ref<Primitive>>& primitives);
+    DynamicBVH(const std::vector<Primitive*>& primitives);
 
     virtual ~DynamicBVH() noexcept;
 
@@ -50,8 +50,8 @@ public:
 
     void Reset();
 
-    NodeIndex PoolNode(Primitive* data, const AABB& aabb);
-    NodeIndex CreateNode(Primitive* data, const AABB& aabb);
+    NodeIndex PoolNode(const Primitive* data, const AABB& aabb);
+    NodeIndex CreateNode(const Primitive* data, const AABB& aabb);
     bool MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, bool force_move);
     void RemoveNode(NodeIndex node);
 
@@ -59,7 +59,7 @@ public:
     const AABB& GetAABB(NodeIndex node) const;
     void ClearMoved(NodeIndex node) const;
     bool WasMoved(NodeIndex node) const;
-    Primitive* GetData(NodeIndex node) const;
+    const Primitive* GetData(NodeIndex node) const;
 
     template <typename T>
     void Traverse(T* callback) const;
@@ -135,7 +135,7 @@ inline bool DynamicBVH::WasMoved(NodeIndex node) const
     return nodes[node].moved;
 }
 
-inline Primitive* DynamicBVH::GetData(NodeIndex node) const
+inline const Primitive* DynamicBVH::GetData(NodeIndex node) const
 {
     assert(0 <= node && node < nodeCapacity);
 

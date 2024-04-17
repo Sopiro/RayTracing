@@ -1,4 +1,3 @@
-#include "bulbit/infinite_area_light.h"
 #include "bulbit/integrator.h"
 #include "bulbit/light.h"
 #include "bulbit/material.h"

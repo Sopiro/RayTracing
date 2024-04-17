@@ -17,7 +17,6 @@ public:
         }
     };
 
-    ConstantColor() = default;
     ConstantColor(const Spectrum& color);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;

@@ -10,7 +10,6 @@ namespace bulbit
 class Triangle : public Primitive
 {
 public:
-    Triangle() = default;
     Triangle(const Ref<Mesh> mesh, size_t tri_index);
 
     virtual AABB GetAABB() const override;

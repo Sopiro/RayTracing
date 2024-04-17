@@ -25,13 +25,13 @@ DynamicBVH::DynamicBVH()
     freeList = 0;
 }
 
-DynamicBVH::DynamicBVH(const std::vector<Ref<Primitive>>& primitives)
+DynamicBVH::DynamicBVH(const std::vector<Primitive*>& primitives)
     : DynamicBVH()
 {
     // Build incrementally
-    for (const Ref<Primitive>& primitive : primitives)
+    for (const Primitive* primitive : primitives)
     {
-        CreateNode(primitive.get(), primitive->GetAABB());
+        CreateNode(primitive, primitive->GetAABB());
     }
 }
 
@@ -118,7 +118,7 @@ bool DynamicBVH::Intersect(Intersection* is, const Ray& ray, Float t_min, Float 
         bool hit_closest;
         Float t;
 
-        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, const Intersectable* object)
         {
             bool hit = object->Intersect(is, ray, t_min, t_max);
 
@@ -148,7 +148,7 @@ bool DynamicBVH::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     {
         bool hit_any;
 
-        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, const Intersectable* object)
         {
             bool hit = object->IntersectAny(ray, t_min, t_max);
 
@@ -383,7 +383,7 @@ void DynamicBVH::RemoveLeaf(NodeIndex leaf)
     }
 }
 
-NodeIndex DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
+NodeIndex DynamicBVH::PoolNode(const Primitive* primitive, const AABB& aabb)
 {
     NodeIndex newNode = AllocateNode();
 
@@ -397,7 +397,7 @@ NodeIndex DynamicBVH::PoolNode(Primitive* primitive, const AABB& aabb)
     return newNode;
 }
 
-NodeIndex DynamicBVH::CreateNode(Primitive* primitive, const AABB& aabb)
+NodeIndex DynamicBVH::CreateNode(const Primitive* primitive, const AABB& aabb)
 {
     NodeIndex newNode = AllocateNode();
 

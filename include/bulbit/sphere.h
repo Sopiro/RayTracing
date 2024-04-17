@@ -9,7 +9,6 @@ namespace bulbit
 class Sphere : public Primitive
 {
 public:
-    Sphere() = default;
     Sphere(const Vec3& center, Float radius, const Material* material);
 
     virtual AABB GetAABB() const override;
