@@ -32,26 +32,20 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     {
         auto red = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(light, 0.0f, 0.0f)));
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
-        auto rect = CreateRectYZ(tf, red);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, red);
     }
 
     {
         auto blue = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(0.0f, 0.0f, light)));
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
-        auto rect = CreateRectYZ(tf, blue);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, blue);
     }
 
     {
         auto white = scene.CreateMaterial<DiffuseLight>(ConstantColor::Create(Spectrum(0.5f)));
 
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
-        auto rect = CreateRectXZ(tf, white);
-
-        scene.AddMesh(rect);
+        CreateRectXZ(scene, tf, white);
     }
 
     // {
@@ -78,9 +72,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(0.0f)),
                                                     ConstantColor::Create(Spectrum(0.01f)));
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
-        auto rect = CreateRectXZ(tf, mat);
-
-        scene.AddMesh(rect);
+        CreateRectXZ(scene, tf, mat);
 
         // mat = RandomPBRMaterial();
         // mat->basecolor_map = SolidColor::Create(Vec3(1.0f));
@@ -88,9 +80,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         // mat->roughness_map = SolidColor::Create(Vec3(0.05));
 
         tf = Transform{ Point3(0.0f, 0.0f, -4.0f), identity, Vec3(8.0f, 8.0f, 1.0f) };
-        rect = CreateRectXY(tf, mat);
-
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, mat);
     }
 
     // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");

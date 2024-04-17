@@ -31,24 +31,16 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
         auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(50.0f), true);
         auto tf = Transform{ Point3(0.0f, 6.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
-        auto rect = CreateRectXY(tf, white);
-
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, white);
 
         tf = Transform{ Point3(0.0f, 6.0f, 3.0f), Quat(pi - pi / 4.0f, x_axis), Vec3(size) };
-        rect = CreateRectXY(tf, white);
-
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, white);
 
         tf = Transform{ Point3(-3.0f, 6.0f, 0.0f), Quat(-pi / 4.0f, z_axis), Vec3(size) };
-        rect = CreateRectYZ(tf, white);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, white);
 
         tf = Transform{ Point3(3.0f, 6.0f, 0.0f), Quat(pi + pi / 4.0f, z_axis), Vec3(size) };
-        rect = CreateRectYZ(tf, white);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, white);
     }
 
     // Floor
@@ -59,20 +51,16 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
         Float y = 2.1f;
 
         auto tf = Transform{ Point3(0.0f, y - size / 2.0f, 0.0f), identity, Vec3(size) };
-        auto rect = CreateRectXZ(tf, mat);
-        scene.AddMesh(rect);
+        CreateRectXZ(scene, tf, mat);
 
         tf = Transform{ Point3(-size / 2.0f, y, 0.0f), identity, Vec3(size) };
-        rect = CreateRectYZ(tf, mat);
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, mat);
 
         tf = Transform{ Point3(0.0f, y, -size / 2.0f), identity, Vec3(size) };
-        rect = CreateRectXY(tf, mat);
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, mat);
 
         tf = Transform{ Point3(0.0f, y - size / 2.0f, 0.0f), identity, Vec3(size) };
-        rect = CreateRectXZ(tf, mat);
-        scene.AddMesh(rect);
+        CreateRectXZ(scene, tf, mat);
     }
 
     Float aspect_ratio = 16.f / 9.f;

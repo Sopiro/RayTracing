@@ -15,8 +15,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
                                                     ConstantColor::Create(Spectrum(0.01f)));
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
-        auto floor = CreateRectXZ(tf, mat);
-        scene.AddMesh(floor);
+        CreateRectXZ(scene, tf, mat);
     }
 
     // Camera
@@ -33,24 +32,16 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         Float w = 0.4f;
         Float h = 1.2f;
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };
-        auto rect = CreateRectYZ(tf, light);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, light);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, -1.0f), Quat(0.0f, y_axis), Vec3(w, h, 1.0f) };
-        rect = CreateRectXY(tf, light);
-
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, light);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, 1.0f), Quat(pi, y_axis), Vec3(w, h, 1.0f) };
-        rect = CreateRectXY(tf, light);
-
-        scene.AddMesh(rect);
+        CreateRectXY(scene, tf, light);
 
         tf = Transform{ Point3(-1.0f, h / 2.0f - 0.01f, 0.0f), Quat(0.0f, y_axis), Vec3(1.0f, h, w) };
-        rect = CreateRectYZ(tf, light);
-
-        scene.AddMesh(rect);
+        CreateRectYZ(scene, tf, light);
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));

@@ -90,10 +90,10 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
             ImageTexture::Create("res/wakdu.jpg"), ConstantColor::Create(Spectrum(0.0f)), ConstantColor::Create(Spectrum(0.0f)));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
-        scene.AddMesh(CreateRectXZ(tf, floor));
+        CreateRectXZ(scene, tf, floor);
 
         tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, s, 1.0f) };
-        scene.AddMesh(CreateRectXY(tf, floor));
+        CreateRectXY(scene, tf, floor);
     }
 
     // plates

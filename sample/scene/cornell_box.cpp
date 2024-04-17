@@ -24,23 +24,23 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        scene.AddMesh(CreateRectXY(tf, wakgood_mat));
+        CreateRectXY(scene, tf, wakgood_mat);
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        scene.AddMesh(CreateRectYZ(tf, red));
+        CreateRectYZ(scene, tf, red);
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        scene.AddMesh(CreateRectYZ(tf, green));
+        CreateRectYZ(scene, tf, green);
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        scene.AddMesh(CreateRectXZ(tf, white));
+        CreateRectXZ(scene, tf, white);
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        scene.AddMesh(CreateRectXZ(tf, white));
+        CreateRectXZ(scene, tf, white);
     }
 
     // Left block
@@ -50,10 +50,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        // auto box = Box(tf, white);
-        auto box = CreateBox(tf, white);
-
-        scene.AddMesh(box);
+        CreateBox(scene, tf, white);
     }
 
     // Right block
@@ -63,9 +60,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        auto box = CreateBox(tf, white);
-
-        scene.AddMesh(box);
+        CreateBox(scene, tf, white);
     }
 
     // Right sphere
@@ -79,7 +74,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        scene.AddMesh(CreateRectXZ(tf, light));
+        CreateRectXZ(scene, tf, light);
 
         // scene.CreatePrimitive<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));

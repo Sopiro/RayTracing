@@ -41,9 +41,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
                                                     ConstantColor::Create(Spectrum(0.1f)));
 
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(50.0f) };
-        auto ground = CreateRectXZ(tf1, mat);
-
-        scene.AddMesh(ground);
+        CreateRectXZ(scene, tf1, mat);
     }
 
     // Light
@@ -91,9 +89,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = 0.0f;
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
-            auto rect = CreateRectXZ(tf, light);
-
-            scene.AddMesh(rect);
+            CreateRectXZ(scene, tf, light);
         }
     }
 

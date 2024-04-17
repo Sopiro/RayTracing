@@ -15,7 +15,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 
     Transform tf = identity;
     tf.r *= 30;
-    scene.AddMesh(CreateRectXZ(tf, ground_material));
+    CreateRectXZ(scene, tf, ground_material);
 
     Srand(7777);
 

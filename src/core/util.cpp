@@ -21,7 +21,7 @@ const Material* CreateRandomMicrofacetMaterial(Scene& scene)
     // clang-format on
 }
 
-Ref<Mesh> CreateRectXY(const Transform& tf, const Material* mat, const Point2& texCoord)
+void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
 {
     Vec3 p0 = { -0.5, -0.5, 0.0 };
     Vec3 p1 = { 0.5, -0.5, 0.0 };
@@ -36,10 +36,11 @@ Ref<Mesh> CreateRectXY(const Transform& tf, const Material* mat, const Point2& t
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return std::make_shared<Mesh>(vertices, indices, tf, mat);
+    Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
+    scene.AddMesh(mesh);
 };
 
-Ref<Mesh> CreateRectXZ(const Transform& tf, const Material* mat, const Point2& texCoord)
+void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
 {
     Vec3 p0 = { -0.5, 0.0, 0.5 };
     Vec3 p1 = { 0.5, 0.0, 0.5 };
@@ -54,10 +55,11 @@ Ref<Mesh> CreateRectXZ(const Transform& tf, const Material* mat, const Point2& t
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return std::make_shared<Mesh>(vertices, indices, tf, mat);
+    Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
+    scene.AddMesh(mesh);
 }
 
-Ref<Mesh> CreateRectYZ(const Transform& tf, const Material* mat, const Point2& texCoord)
+void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
 {
     Vec3 p0 = { 0.0, -0.5, 0.5 };
     Vec3 p1 = { 0.0, -0.5, -0.5 };
@@ -72,10 +74,11 @@ Ref<Mesh> CreateRectYZ(const Transform& tf, const Material* mat, const Point2& t
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    return std::make_shared<Mesh>(vertices, indices, tf, mat);
+    Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
+    scene.AddMesh(mesh);
 }
 
-Ref<Mesh> CreateBox(const Transform& tf, const Material* mat, const Point2& texCoord)
+void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
 {
     /*
           7--------6
@@ -139,7 +142,8 @@ Ref<Mesh> CreateBox(const Transform& tf, const Material* mat, const Point2& texC
     };
     // clang-format on
 
-    return std::make_shared<Mesh>(vertices, indices, tf, mat);
+    Ref<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, tf, mat);
+    scene.AddMesh(mesh);
 }
 
 } // namespace bulbit

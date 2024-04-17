@@ -18,8 +18,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png"));
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
-        auto floor = CreateRectXZ(tf, mat, Point2(4.0f, 4.0f));
-        scene.AddMesh(floor);
+        CreateRectXZ(scene, tf, mat, Point2(4.0f, 4.0f));
     }
 
     Float scale = 0.3f;
@@ -87,9 +86,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             auto mat = CreateRandomMicrofacetMaterial(scene);
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(w, w, h) };
-            auto rect = CreateRectXZ(tf, light);
-
-            scene.AddMesh(rect);
+            CreateRectXZ(scene, tf, light);
         }
     }
 

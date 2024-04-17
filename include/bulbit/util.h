@@ -12,10 +12,10 @@ class Scene;
 
 const Material* CreateRandomMicrofacetMaterial(Scene& scene);
 
-Ref<Mesh> CreateRectXY(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateRectXZ(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateRectYZ(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
-Ref<Mesh> CreateBox(const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
+void CreateRectXY(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
+void CreateRectXZ(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
+void CreateRectYZ(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
+void CreateBox(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
 
 inline bool IsNullish(Float v)
 {
