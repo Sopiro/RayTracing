@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
@@ -49,5 +46,3 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 }
 
 static int32 index = Sample::Register("ggxvndf", GGXVNDFSamplingTest);
-
-} // namespace bulbit

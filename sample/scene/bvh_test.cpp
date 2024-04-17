@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> BVHTest(Scene& scene)
 {
     auto gray = scene.CreateMaterial<Lambertian>(Spectrum(0.8f, 0.8f, 0.8f));
@@ -57,5 +54,3 @@ std::unique_ptr<Camera> BVHTest(Scene& scene)
 }
 
 static int32 index = Sample::Register("bvh", BVHTest);
-
-} // namespace bulbit

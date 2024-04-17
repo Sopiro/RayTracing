@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> RebootScene(Scene& scene)
 {
     // https://sketchfab.com/3d-models/reboot-dramatic-54ec601a3c4e4f6d8600fd28174c527c
@@ -54,5 +51,3 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
 }
 
 static int32 index = Sample::Register("reboot", RebootScene);
-
-} // namespace bulbit

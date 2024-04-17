@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> PBRTest(Scene& scene)
 {
     // Srand(1234);
@@ -118,5 +115,3 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
 }
 
 static int32 index = Sample::Register("pbr-spheres", PBRTest);
-
-} // namespace bulbit

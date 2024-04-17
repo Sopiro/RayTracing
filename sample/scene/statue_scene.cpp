@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> StatueScene(Scene& scene)
 {
     {
@@ -104,5 +101,3 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
 }
 
 static int32 index = Sample::Register("statue", StatueScene);
-
-} // namespace bulbit

@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 // https://casual-effects.com/data/
 std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 {
@@ -45,5 +42,3 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 }
 
 static int32 index = Sample::Register("breakfast-room", BreakfastRoom);
-
-} // namespace bulbit

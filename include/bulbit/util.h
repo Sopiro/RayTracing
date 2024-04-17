@@ -1,14 +1,12 @@
 #pragma once
 
-#include "constant_color.h"
-#include "mesh.h"
 #include "transform.h"
 
 namespace bulbit
 {
 
-class Microfacet;
 class Scene;
+class Material;
 
 void CreateRectXY(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
 void CreateRectXZ(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));

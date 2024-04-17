@@ -2,9 +2,6 @@
 #include "bulbit/bulbit.h"
 #include "bulbit/camera.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
 {
     // Transform transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
@@ -44,5 +41,3 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
 }
 
 static int32 index = Sample::Register("normal-mapping", NormalMappingTest);
-
-} // namespace bulbit

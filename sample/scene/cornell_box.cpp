@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
     // Materials
@@ -102,5 +99,3 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);
-
-} // namespace bulbit

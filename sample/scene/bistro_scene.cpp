@@ -2,9 +2,6 @@
 #include "bulbit/camera.h"
 #include "bulbit/scene.h"
 
-namespace bulbit
-{
-
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
 std::unique_ptr<Camera> BistroScene(Scene& scene)
 {
@@ -39,5 +36,3 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
 }
 
 static int32 index = Sample::Register("bistro", BistroScene);
-
-} // namespace bulbit

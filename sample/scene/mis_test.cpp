@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
@@ -161,5 +158,3 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
 }
 
 static int32 index2 = Sample::Register("mis-wak", MISTestWak);
-
-} // namespace bulbit

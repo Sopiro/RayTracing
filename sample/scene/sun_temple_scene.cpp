@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 // https://developer.nvidia.com/ue4-sun-temple
 std::unique_ptr<Camera> SunTempleScene(Scene& scene)
 {
@@ -50,5 +47,3 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
 }
 
 static int32 index = Sample::Register("suntemple", SunTempleScene);
-
-} // namespace bulbit

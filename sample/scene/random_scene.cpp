@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 // The final scene of Ray Tracing in One Weekend
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
@@ -84,5 +81,3 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 }
 
 static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);
-
-} // namespace bulbit

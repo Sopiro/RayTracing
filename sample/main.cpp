@@ -14,8 +14,6 @@ int main(int argc, char* argv[])
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-    using namespace bulbit;
-
     ThreadPool::global_thread_pool.reset(new ThreadPool(std::thread::hardware_concurrency()));
 
     Scene scene;

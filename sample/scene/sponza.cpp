@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> Sponza(Scene& scene)
 {
     // Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
@@ -90,5 +87,3 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
 }
 
 static int32 index = Sample::Register("sponza", Sponza);
-
-} // namespace bulbit

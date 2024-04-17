@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> ShipScene(Scene& scene)
 {
     // Table
@@ -82,5 +79,3 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 }
 
 static int32 index = Sample::Register("ship", ShipScene);
-
-} // namespace bulbit

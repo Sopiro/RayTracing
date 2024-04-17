@@ -4,9 +4,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/util.h"
 
-namespace bulbit
-{
-
 std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
 {
     // Materials
@@ -77,5 +74,3 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
 }
 
 static int32 index = Sample::Register("brdf-sampling", BRDFSamplingTest);
-
-} // namespace bulbit

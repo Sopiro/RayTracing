@@ -1,8 +1,7 @@
 #include "bulbit/material.h"
 #include "bulbit/scene.h"
 
-namespace bulbit
-{
+using namespace bulbit;
 
 inline const Material* CreateRandomMicrofacetMaterial(Scene& scene)
 {
@@ -17,5 +16,3 @@ inline const Material* CreateRandomMicrofacetMaterial(Scene& scene)
     );
     // clang-format on
 }
-
-} // namespace bulbit

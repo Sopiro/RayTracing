@@ -8,8 +8,7 @@
 
 #include <unordered_map>
 
-namespace bulbit
-{
+using namespace bulbit;
 
 struct Sample
 {
@@ -39,5 +38,3 @@ inline bool Sample::Get(std::string name, Scene* scene, std::unique_ptr<Camera>*
     *camera = samples.at(name)(*scene);
     return true;
 }
-
-} // namespace bulbit
