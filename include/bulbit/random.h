@@ -99,7 +99,7 @@ private:
                   // selected. Must *always* be odd.
 };
 
-// Global thread local rng
+// Global thread-local RNG
 inline thread_local RNG rng;
 
 inline void Srand(uint32 new_seed)

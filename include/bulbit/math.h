@@ -6,6 +6,7 @@
 #include <cfloat>
 #include <cmath>
 #include <cstdint>
+#include <format>
 #include <limits>
 
 #include "types.h"
@@ -171,6 +172,11 @@ struct Vec2
         return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y);
     }
 
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}", x, y);
+    }
+
     static const Vec2 zero;
 };
 
@@ -315,6 +321,11 @@ struct Vec3
     bool IsNullish() const
     {
         return std::isnan(x) || std::isinf(x) || std::isnan(y) || std::isinf(y) || std::isnan(z) || std::isinf(z);
+    }
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}", x, y, z);
     }
 
     static const Vec3 zero;
@@ -485,6 +496,11 @@ struct Vec4
                std::isnan(w) || std::isinf(w);
     }
 
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+    }
+
     static const Vec4 zero;
 };
 
@@ -572,6 +588,11 @@ struct Mat2
     {
         return ex.x * ey.y - ey.x * ex.y;
     }
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}", ex.x, ey.x, ex.y, ey.y);
+    }
 };
 
 struct Mat3
@@ -644,6 +665,12 @@ struct Mat3
     Mat3 Rotate(Float z);
     Mat3 Translate(Float x, Float y);
     Mat3 Translate(const Vec2& v);
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n", ex.x, ey.x, ez.x, ex.y,
+                           ey.y, ez.y, ex.z, ey.z, ez.z);
+    }
 };
 
 struct Mat4
@@ -729,6 +756,13 @@ struct Mat4
     Mat4 Rotate(Float x, Float y, Float z);
     Mat4 Translate(Float x, Float y, Float z);
     Mat4 Translate(const Vec3& v);
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:."
+                           "4f}\t{:.4f}\t{:.4f}\t{:.4f}\n",
+                           ex.x, ey.x, ez.x, ew.x, ex.y, ey.y, ez.y, ew.y, ex.z, ey.z, ez.z, ew.z, ex.w, ey.w, ez.w, ew.w);
+    }
 };
 
 struct Quat
@@ -885,6 +919,11 @@ struct Quat
         Float w2 = w * 2;
 
         return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - 1 + z * z2);
+    }
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
     }
 
     static inline Quat FromEuler(Float x, Float y, Float z)

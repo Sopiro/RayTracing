@@ -10,8 +10,6 @@ namespace bulbit
 class Microfacet;
 class Scene;
 
-const Material* CreateRandomMicrofacetMaterial(Scene& scene);
-
 void CreateRectXY(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
 void CreateRectXZ(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
 void CreateRectYZ(Scene& scene, const Transform& transform, const Material* material, const Point2& texCoord = Point2(1, 1));
@@ -34,35 +32,5 @@ inline bool IsNullish(const T& v)
         std::cout << #v;                                                                                                         \
         std::cout << " null" << std::endl;                                                                                       \
     }
-
-inline std::ostream& operator<<(std::ostream& out, const Vec3& v)
-{
-    return out << v.x << ' ' << v.y << ' ' << v.z;
-}
-
-inline std::ostream& operator<<(std::ostream& out, const Mat3& m)
-{
-    // clang-format off
-    return out << m.ex.x << ' ' << m.ey.x << ' ' << m.ez.x << '\n'
-               << m.ex.y << ' ' << m.ey.y << ' ' << m.ez.y << '\n'
-               << m.ex.z << ' ' << m.ey.z << ' ' << m.ez.z << '\n';
-    // clang-format on
-}
-
-inline std::ostream& operator<<(std::ostream& out, const Mat4& m)
-{
-    // clang-format off
-    return out << m.ex.x << ' ' << m.ey.x << ' ' << m.ez.x << ' ' << m.ew.x << '\n'
-               << m.ex.y << ' ' << m.ey.y << ' ' << m.ez.y << ' ' << m.ew.y << '\n'
-               << m.ex.z << ' ' << m.ey.z << ' ' << m.ez.z << ' ' << m.ew.z << '\n'
-               << m.ex.w << ' ' << m.ey.w << ' ' << m.ez.w << ' ' << m.ew.w << '\n';
-
-    // clang-format on
-}
-
-inline std::ostream& operator<<(std::ostream& out, const AABB& aabb)
-{
-    return out << "min: " << aabb.min << "\nmax: " << aabb.max << '\n';
-}
 
 } // namespace bulbit

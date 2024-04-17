@@ -4,6 +4,8 @@
 #include "bulbit/material.h"
 #include "bulbit/scene.h"
 
+#include "util.h"
+
 #include <unordered_map>
 
 namespace bulbit

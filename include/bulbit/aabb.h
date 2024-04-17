@@ -7,17 +7,8 @@ namespace bulbit
 
 struct AABB
 {
-    AABB()
-        : min{ max_value }
-        , max{ -max_value }
-    {
-    }
-
-    AABB(const Vec3& min, const Vec3& max)
-        : min{ min }
-        , max{ max }
-    {
-    }
+    AABB();
+    AABB(const Vec3& min, const Vec3& max);
 
     Vec3 GetCenter() const;
     Vec3 GetExtents() const;
@@ -30,6 +21,8 @@ struct AABB
     bool TestOverlap(const AABB& other) const;
     bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
+
+    std::string ToString() const;
 
     Vec3 min, max;
 
@@ -51,6 +44,18 @@ inline AABB AABB::Union(const AABB& aabb, const Vec3& point)
     Vec3 max = Max(aabb.max, point);
 
     return AABB{ min, max };
+}
+
+inline AABB::AABB()
+    : min{ max_value }
+    , max{ -max_value }
+{
+}
+
+inline AABB::AABB(const Vec3& min, const Vec3& max)
+    : min{ min }
+    , max{ max }
+{
 }
 
 inline Vec3 AABB::GetCenter() const
@@ -95,6 +100,11 @@ inline bool AABB::TestOverlap(const AABB& other) const
     if (min.z > other.max.z || max.z < other.min.z) return false;
 
     return true;
+}
+
+inline std::string AABB::ToString() const
+{
+    return std::format("min:\t{}\nmax:\t{}", min.ToString(), max.ToString());
 }
 
 } // namespace bulbit
