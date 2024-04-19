@@ -30,7 +30,7 @@ private:
     std::string folder;
 
     std::vector<std::shared_ptr<Mesh>> meshes;
-    std::vector<std::shared_ptr<Material>> materials;
+    std::vector<std::unique_ptr<Material>> materials;
 };
 
 inline const std::vector<std::shared_ptr<Mesh>>& Model::GetMeshes() const

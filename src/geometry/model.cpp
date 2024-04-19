@@ -81,7 +81,7 @@ const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     else
     {
         // clang-format off
-        auto mat = std::make_shared<Microfacet>(
+        auto mat = std::make_unique<Microfacet>(
             basecolor_textures.empty() ? 
                 ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
             metallic_textures.empty() ? 
@@ -95,9 +95,10 @@ const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
         );
         // clang-format on
 
-        materials.push_back(mat);
+        Material* ptr = mat.get();
+        materials.push_back(std::move(mat));
 
-        return mat.get();
+        return ptr;
     }
 }
 

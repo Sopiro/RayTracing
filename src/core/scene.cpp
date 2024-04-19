@@ -15,7 +15,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    // Free all pooled scene objects
+    // Free all pooled resources
 
     for (Primitive* p : primitives)
     {

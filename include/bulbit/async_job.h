@@ -50,7 +50,7 @@ public:
         {
             if (thread_pool->WorkOrReturn() == false)
             {
-                // Other thread is running the this job
+                // Other thread is running this job
                 break;
             }
         }
