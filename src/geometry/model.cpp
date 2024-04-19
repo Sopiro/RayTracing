@@ -25,9 +25,9 @@ Model::Model(const std::string& filename, const Transform& transform)
     Load(filename, transform);
 }
 
-std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
+std::vector<Texture*> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
 {
-    std::vector<Ref<Texture>> textures;
+    std::vector<Texture*> textures;
 
     for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
     {
@@ -35,7 +35,7 @@ std::vector<Ref<Texture>> Model::LoadMaterialTextures(const aiMaterial* mat, aiT
         mat->GetTexture(type, i, &str);
         // std::cout << str.C_Str() << std::endl;
 
-        Ref<Texture> texture = ImageTexture::Create(folder + str.C_Str(), srgb);
+        Texture* texture = ImageTexture::Create(folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }
 
@@ -101,7 +101,7 @@ const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     }
 }
 
-Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+std::shared_ptr<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     assert(mesh->HasPositions());
     assert(mesh->HasNormals());

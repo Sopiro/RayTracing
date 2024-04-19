@@ -8,7 +8,7 @@
 namespace bulbit
 {
 
-PathIntegrator::PathIntegrator(const Ref<Sampler> sampler, int32 bounces, Float rr)
+PathIntegrator::PathIntegrator(const std::shared_ptr<Sampler> sampler, int32 bounces, Float rr)
     : SamplerIntegrator(sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }

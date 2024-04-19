@@ -53,7 +53,6 @@ private:
 
     std::vector<Primitive*> primitives;
     std::vector<Material*> materials;
-
     std::vector<Light*> lights;
     std::vector<InfiniteAreaLight*> infinite_lights;
 };

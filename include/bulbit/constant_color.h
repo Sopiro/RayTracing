@@ -5,35 +5,34 @@
 
 namespace bulbit
 {
+struct ColorHash
+{
+    size_t operator()(const Spectrum& v) const
+    {
+        return std::hash<Float>()(v.r) ^ std::hash<Float>()(v.g) ^ std::hash<Float>()(v.b);
+    }
+};
 
 class ConstantColor : public Texture
 {
 public:
-    struct ColorHash
-    {
-        size_t operator()(const Spectrum& v) const
-        {
-            return std::hash<Float>()(v.r) ^ std::hash<Float>()(v.g) ^ std::hash<Float>()(v.b);
-        }
-    };
-
-    ConstantColor(const Spectrum& color);
+    ConstantColor(const Spectrum& rgb);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
 
     inline static int32 color_count = 0;
-    inline static std::unordered_map<Spectrum, Ref<ConstantColor>, ColorHash> loaded_colors;
+    inline static std::unordered_map<Spectrum, std::unique_ptr<ConstantColor>, ColorHash> loaded_colors;
 
-    static Ref<ConstantColor> Create(const Spectrum& color);
-    static Ref<ConstantColor> Create(Float rgb);
-    static Ref<ConstantColor> Create(Float red, Float green, Float blue);
+    static ConstantColor* Create(const Spectrum& rgb);
+    static ConstantColor* Create(Float rgb);
+    static ConstantColor* Create(Float red, Float green, Float blue);
 
 protected:
     Spectrum color;
 };
 
-inline ConstantColor::ConstantColor(const Spectrum& color)
-    : color{ color }
+inline ConstantColor::ConstantColor(const Spectrum& rgb)
+    : color{ rgb }
 {
 }
 
@@ -42,27 +41,29 @@ inline Spectrum ConstantColor::Evaluate(const Point2& uv) const
     return color;
 }
 
-inline Ref<ConstantColor> ConstantColor::Create(const Spectrum& color)
+inline ConstantColor* ConstantColor::Create(const Spectrum& rgb)
 {
-    auto loaded = loaded_colors.find(color);
+    auto loaded = loaded_colors.find(rgb);
     if (loaded != loaded_colors.end())
     {
-        return loaded->second;
+        return loaded->second.get();
     }
 
-    Ref<ConstantColor> ptr{ new ConstantColor(color) };
-    loaded_colors.emplace(color, ptr);
+    std::unique_ptr<ConstantColor> color = std::make_unique<ConstantColor>(rgb);
+    ConstantColor* ptr = color.get();
+
+    loaded_colors.emplace(rgb, std::move(color));
     ++color_count;
 
     return ptr;
 }
 
-inline Ref<ConstantColor> ConstantColor::Create(Float rgb)
+inline ConstantColor* ConstantColor::Create(Float rgb)
 {
     return Create(Spectrum(rgb));
 }
 
-inline Ref<ConstantColor> ConstantColor::Create(Float r, Float g, Float b)
+inline ConstantColor* ConstantColor::Create(Float r, Float g, Float b)
 {
     return Create(Spectrum(r, g, b));
 }

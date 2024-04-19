@@ -10,7 +10,7 @@ namespace bulbit
 class Triangle : public Primitive
 {
 public:
-    Triangle(const Ref<Mesh> mesh, size_t tri_index);
+    Triangle(const std::shared_ptr<Mesh> mesh, size_t tri_index);
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -31,11 +31,11 @@ private:
     Vec3 GetTangent(Float u, Float v, Float w) const;
     Point2 GetTexCoord(Float u, Float v, Float w) const;
 
-    const Ref<Mesh> mesh;
+    const std::shared_ptr<Mesh> mesh;
     const int32* v;
 };
 
-inline Triangle::Triangle(const Ref<Mesh> mesh, size_t tri_index)
+inline Triangle::Triangle(const std::shared_ptr<Mesh> mesh, size_t tri_index)
     : mesh{ mesh }
 {
     v = &mesh->indices[tri_index * 3];

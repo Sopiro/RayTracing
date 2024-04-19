@@ -4,7 +4,7 @@
 namespace bulbit
 {
 
-WhittedStyle::WhittedStyle(const Ref<Sampler> sampler, int32 max_depth)
+WhittedStyle::WhittedStyle(const std::shared_ptr<Sampler> sampler, int32 max_depth)
     : SamplerIntegrator(sampler)
     , max_depth{ max_depth }
 {

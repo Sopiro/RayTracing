@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
-    Ref<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
+    std::shared_ptr<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
     PathIntegrator renderer(sampler, max_bounces);
     // DebugIntegrator renderer(sampler);
     // AmbientOcclusion renderer(sampler, 0.5f);

@@ -12,20 +12,21 @@
 namespace bulbit
 {
 
-Ref<ImageTexture> ImageTexture::Create(const std::string& filename, bool srgb)
+ImageTexture* ImageTexture::Create(const std::string& filename, bool srgb)
 {
     auto loaded = loaded_textures.find(filename);
     if (loaded != loaded_textures.end())
     {
-        return loaded->second;
+        return loaded->second.get();
     }
 
-    auto image = Ref<ImageTexture>(new ImageTexture(filename, srgb));
+    std::unique_ptr<ImageTexture> image = std::make_unique<ImageTexture>(filename, srgb);
+    ImageTexture* ptr = image.get();
 
-    loaded_textures.emplace(filename, image);
+    loaded_textures.emplace(filename, std::move(image));
     ++texture_count;
 
-    return image;
+    return ptr;
 }
 
 ImageTexture::ImageTexture()

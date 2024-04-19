@@ -13,7 +13,7 @@ InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform
 {
 }
 
-InfiniteAreaLight::InfiniteAreaLight(const Ref<ImageTexture> l_map, const Transform& tf)
+InfiniteAreaLight::InfiniteAreaLight(const ImageTexture* l_map, const Transform& tf)
     : Light(Light::Type::infinite_area_light)
     , l_map{ l_map }
     , transform{ tf }

@@ -16,24 +16,24 @@ public:
     Model(const std::string& filename, const Transform& transform);
     virtual ~Model() = default;
 
-    const std::vector<Ref<Mesh>>& GetMeshes() const;
+    const std::vector<std::shared_ptr<Mesh>>& GetMeshes() const;
 
 private:
     friend class Scene;
 
-    std::vector<Ref<Texture>> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb);
+    std::vector<Texture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb);
     const Material* CreateMaterial(const aiMesh* mesh, const aiScene* scene);
-    Ref<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform);
+    std::shared_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform);
     void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform);
     void Load(const std::string& filename, const Transform& transform);
 
     std::string folder;
 
-    std::vector<Ref<Mesh>> meshes;
-    std::vector<Ref<Material>> materials;
+    std::vector<std::shared_ptr<Mesh>> meshes;
+    std::vector<std::shared_ptr<Material>> materials;
 };
 
-inline const std::vector<Ref<Mesh>>& Model::GetMeshes() const
+inline const std::vector<std::shared_ptr<Mesh>>& Model::GetMeshes() const
 {
     return meshes;
 }

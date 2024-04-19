@@ -3,7 +3,7 @@
 namespace bulbit
 {
 
-DebugIntegrator::DebugIntegrator(const Ref<Sampler> sampler)
+DebugIntegrator::DebugIntegrator(const std::shared_ptr<Sampler> sampler)
     : SamplerIntegrator(sampler)
 {
 }

@@ -4,7 +4,7 @@
 namespace bulbit
 {
 
-AmbientOcclusion::AmbientOcclusion(const Ref<Sampler> sampler, Float ao_range)
+AmbientOcclusion::AmbientOcclusion(const std::shared_ptr<Sampler> sampler, Float ao_range)
     : SamplerIntegrator(sampler)
     , range{ ao_range }
 {

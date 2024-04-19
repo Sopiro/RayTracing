@@ -19,7 +19,7 @@ public:
 class SamplerIntegrator : public Integrator
 {
 public:
-    SamplerIntegrator(const Ref<Sampler> sampler);
+    SamplerIntegrator(const std::shared_ptr<Sampler> sampler);
     virtual ~SamplerIntegrator() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const = 0;
@@ -28,13 +28,13 @@ public:
     virtual void Render(Film* film, const Scene& scene, const Camera& camera) override;
 
 private:
-    Ref<Sampler> sampler_prototype;
+    std::shared_ptr<Sampler> sampler_prototype;
 };
 
 class DebugIntegrator : public SamplerIntegrator
 {
 public:
-    DebugIntegrator(const Ref<Sampler> sampler);
+    DebugIntegrator(const std::shared_ptr<Sampler> sampler);
     virtual ~DebugIntegrator() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override;
@@ -44,7 +44,7 @@ public:
 class WhittedStyle : public SamplerIntegrator
 {
 public:
-    WhittedStyle(const Ref<Sampler> sampler, int32 max_depth);
+    WhittedStyle(const std::shared_ptr<Sampler> sampler, int32 max_depth);
     virtual ~WhittedStyle() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override
@@ -62,7 +62,7 @@ private:
 class AmbientOcclusion : public SamplerIntegrator
 {
 public:
-    AmbientOcclusion(const Ref<Sampler> sampler, Float ao_range);
+    AmbientOcclusion(const std::shared_ptr<Sampler> sampler, Float ao_range);
     virtual ~AmbientOcclusion() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override;
@@ -75,7 +75,9 @@ private:
 class NaivePathIntegrator : public SamplerIntegrator
 {
 public:
-    NaivePathIntegrator(const Ref<Sampler> sampler, int32 max_bounces, Float russian_roulette_probability = Float(0.95));
+    NaivePathIntegrator(const std::shared_ptr<Sampler> sampler,
+                        int32 max_bounces,
+                        Float russian_roulette_probability = Float(0.95));
     virtual ~NaivePathIntegrator() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override
@@ -94,7 +96,7 @@ private:
 class PathIntegrator : public SamplerIntegrator
 {
 public:
-    PathIntegrator(const Ref<Sampler> sampler, int32 max_bounces, Float russian_roulette_probability = Float(0.95));
+    PathIntegrator(const std::shared_ptr<Sampler> sampler, int32 max_bounces, Float russian_roulette_probability = Float(0.95));
     virtual ~PathIntegrator() = default;
 
     virtual Spectrum Li(const Scene& scene, const Ray& ray, Sampler& sampler) const override;

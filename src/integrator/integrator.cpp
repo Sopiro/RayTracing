@@ -7,7 +7,7 @@
 namespace bulbit
 {
 
-SamplerIntegrator::SamplerIntegrator(const Ref<Sampler> sampler)
+SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler> sampler)
     : sampler_prototype{ sampler }
 {
 }

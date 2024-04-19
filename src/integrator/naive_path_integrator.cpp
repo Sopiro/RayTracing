@@ -4,7 +4,7 @@
 namespace bulbit
 {
 
-NaivePathIntegrator::NaivePathIntegrator(const Ref<Sampler> sampler, int32 bounces, Float rr)
+NaivePathIntegrator::NaivePathIntegrator(const std::shared_ptr<Sampler> sampler, int32 bounces, Float rr)
     : SamplerIntegrator(sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
