@@ -5,16 +5,16 @@
 namespace bulbit
 {
 
-Microfacet::Microfacet(const Ref<Texture> _basecolor,
-                       const Ref<Texture> _metallic,
-                       const Ref<Texture> _roughness,
-                       const Ref<Texture> _emissive,
-                       const Ref<Texture> _normalmap)
-    : basecolor(_basecolor)
-    , metallic(_metallic)
-    , roughness(_roughness)
-    , emissive(_emissive)
-    , normalmap(_normalmap)
+Microfacet::Microfacet(const Ref<Texture> basecolor,
+                       const Ref<Texture> metallic,
+                       const Ref<Texture> roughness,
+                       const Ref<Texture> emissive,
+                       const Ref<Texture> normalmap)
+    : basecolor{ basecolor }
+    , metallic{ metallic }
+    , roughness{ roughness }
+    , emissive{ emissive }
+    , normalmap{ normalmap }
 {
 }
 

@@ -35,8 +35,8 @@ private:
     const int32* v;
 };
 
-inline Triangle::Triangle(const Ref<Mesh> _mesh, size_t tri_index)
-    : mesh{ _mesh }
+inline Triangle::Triangle(const Ref<Mesh> mesh, size_t tri_index)
+    : mesh{ mesh }
 {
     v = &mesh->indices[tri_index * 3];
 }

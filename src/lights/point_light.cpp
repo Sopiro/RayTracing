@@ -3,10 +3,10 @@
 namespace bulbit
 {
 
-PointLight::PointLight(const Point3& _position, const Spectrum& _intensity)
+PointLight::PointLight(const Point3& position, const Spectrum& intensity)
     : Light(Light::Type::point_light)
-    , position{ _position }
-    , intensity{ _intensity }
+    , position{ position }
+    , intensity{ intensity }
 {
 }
 

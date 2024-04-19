@@ -11,8 +11,8 @@ Mesh::Mesh(std::vector<Point3> _positions,
            std::vector<Vec3> _tangents,
            std::vector<Point2> _texCoords,
            std::vector<int32> _indices,
-           const Mat4& transform,
-           const Material* _material)
+           const Material* _material,
+           const Mat4& transform)
     : positions{ std::move(_positions) }
     , normals{ std::move(_normals) }
     , tangents{ std::move(_tangents) }
@@ -39,7 +39,7 @@ Mesh::Mesh(std::vector<Point3> _positions,
     triangle_count = int32(indices.size() / 3);
 }
 
-Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<int32> _indices, const Mat4& transform, const Material* _material)
+Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<int32> _indices, const Material* _material, const Mat4& transform)
     : indices{ std::move(_indices) }
     , material{ _material }
 {

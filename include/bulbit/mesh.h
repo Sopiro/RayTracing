@@ -24,9 +24,9 @@ public:
          std::vector<Vec3> tangents,
          std::vector<Point2> texCoords,
          std::vector<int32> indices,
-         const Mat4& transform,
-         const Material* material);
-    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Mat4& transform, const Material* material);
+         const Material* material,
+         const Mat4& transform);
+    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Material* material, const Mat4& transform);
 
     const Material* GetMaterial() const;
     void SetMaterial(const Material* material);

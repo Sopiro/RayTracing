@@ -162,7 +162,7 @@ Ref<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, con
     }
 
     return std::make_shared<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                  std::move(indices), transform, CreateMaterial(mesh, scene));
+                                  std::move(indices), CreateMaterial(mesh, scene), transform);
 }
 
 void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

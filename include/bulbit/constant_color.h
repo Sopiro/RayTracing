@@ -32,8 +32,8 @@ protected:
     Spectrum color;
 };
 
-inline ConstantColor::ConstantColor(const Spectrum& _color)
-    : color{ _color }
+inline ConstantColor::ConstantColor(const Spectrum& color)
+    : color{ color }
 {
 }
 

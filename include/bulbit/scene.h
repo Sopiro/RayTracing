@@ -51,7 +51,6 @@ private:
     // Acceleration structure
     std::unique_ptr<Intersectable> accel;
 
-    // All primitives in this scene
     std::vector<Primitive*> primitives;
     std::vector<Material*> materials;
 

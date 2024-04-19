@@ -32,10 +32,10 @@ private:
     const Material* material;
 };
 
-inline Sphere::Sphere(const Vec3& _center, Float _radius, const Material* _material)
-    : center{ _center }
-    , radius{ _radius }
-    , material{ _material }
+inline Sphere::Sphere(const Vec3& center, Float radius, const Material* material)
+    : center{ center }
+    , radius{ radius }
+    , material{ material }
 {
 }
 
