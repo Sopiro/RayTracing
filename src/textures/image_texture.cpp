@@ -12,23 +12,6 @@
 namespace bulbit
 {
 
-ImageTexture* ImageTexture::Create(const std::string& filename, bool srgb)
-{
-    auto loaded = loaded_textures.find(filename);
-    if (loaded != loaded_textures.end())
-    {
-        return loaded->second.get();
-    }
-
-    std::unique_ptr<ImageTexture> image = std::make_unique<ImageTexture>(filename, srgb);
-    ImageTexture* ptr = image.get();
-
-    loaded_textures.emplace(filename, std::move(image));
-    ++texture_count;
-
-    return ptr;
-}
-
 ImageTexture::ImageTexture()
     : pixels{ nullptr }
     , width{ 0 }
@@ -52,21 +35,36 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
     if (!data)
     {
         std::cerr << "ERROR: Could not load texture '" << filename << std::endl;
-        width = 1;
-        height = 1;
+        width = 2;
+        height = 2;
         pixels = std::make_unique<Spectrum[]>(width * height);
 
-        pixels[0] = Spectrum(1, 0, 1);
+        pixels[0] = Spectrum(1, 0, 0);
+        pixels[1] = Spectrum(0, 1, 0);
+        pixels[2] = Spectrum(0, 0, 1);
+        pixels[3] = Spectrum(1, 0, 1);
     }
     else
     {
         pixels = std::make_unique<Spectrum[]>(width * height);
 
-        ParallelFor(0, width * height, [=](int32 i) {
-            pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
-            pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
-            pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
-        });
+        if (width * height > 64 * 1024)
+        {
+            ParallelFor(0, width * height, [=](int32 i) {
+                pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
+                pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
+                pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
+            });
+        }
+        else
+        {
+            for (int32 i = 0; i < width * height; ++i)
+            {
+                pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
+                pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
+                pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
+            }
+        }
 
         stbi_image_free(data);
     }

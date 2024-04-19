@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+#include "pool.h"
 #include "texture.h"
 
 namespace bulbit
@@ -16,8 +17,6 @@ enum TexCoordFilter
 class ImageTexture : public Texture
 {
 public:
-    inline static int32 texture_count = 0;
-    inline static std::unordered_map<std::string, std::unique_ptr<ImageTexture>> loaded_textures;
     static ImageTexture* Create(const std::string& filename, bool srgb = false);
 
     ImageTexture();
@@ -34,7 +33,15 @@ protected:
     std::unique_ptr<Spectrum[]> pixels;
     int32 width, height;
     TexCoordFilter texcoord_filter;
+
+private:
+    static inline Pool<std::string, ImageTexture> pool;
 };
+
+inline ImageTexture* ImageTexture::Create(const std::string& filename, bool srgb)
+{
+    return pool.Create(filename, srgb);
+}
 
 inline int32 ImageTexture::GetWidth() const
 {
