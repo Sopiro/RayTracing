@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bulbit/camera.h"
+#include "bulbit/loader.h"
 #include "bulbit/material.h"
 #include "bulbit/scene.h"
 

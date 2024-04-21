@@ -5,8 +5,18 @@
 #include "bulbit/scene.h"
 #include "bulbit/triangle.h"
 
+#include <filesystem>
+
 namespace bulbit
 {
+
+void AddMesh(Scene& scene, std::shared_ptr<Mesh> mesh)
+{
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    {
+        scene.CreatePrimitive<Triangle>(mesh, i);
+    }
+}
 
 void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
 {
@@ -23,11 +33,7 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mat, tf);
-    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
-    {
-        scene.CreatePrimitive<Triangle>(mesh, i);
-    }
+    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
 };
 
 void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -45,11 +51,7 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mat, tf);
-    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
-    {
-        scene.CreatePrimitive<Triangle>(mesh, i);
-    }
+    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
 }
 
 void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -67,11 +69,7 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mat, tf);
-    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
-    {
-        scene.CreatePrimitive<Triangle>(mesh, i);
-    }
+    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
 }
 
 void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -138,11 +136,7 @@ void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Poi
     };
     // clang-format on
 
-    std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(vertices, indices, mat, tf);
-    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
-    {
-        scene.CreatePrimitive<Triangle>(mesh, i);
-    }
+    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
 }
 
 } // namespace bulbit

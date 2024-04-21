@@ -1,7 +1,4 @@
-#include "bulbit/model.h"
-#include "bulbit/image_texture.h"
-#include "bulbit/material.h"
-#include "bulbit/triangle.h"
+#include "bulbit/loader.h"
 #include "bulbit/util.h"
 
 #include <filesystem>
@@ -9,14 +6,26 @@
 namespace bulbit
 {
 
-Model::Model(const std::string& filename, const Transform& transform)
+static std::string g_folder;
+static Scene* g_scene;
+
+extern void AddMesh(Scene& scene, std::shared_ptr<Mesh> mesh);
+
+Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
 {
-    Load(filename, transform);
+    Mat4 t;
+    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
+    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
+    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
+    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
+
+    return t;
 }
 
-std::vector<Texture*> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
+static std::vector<Texture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
 {
     std::vector<Texture*> textures;
+    textures.reserve(mat->GetTextureCount(type));
 
     for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
     {
@@ -24,34 +33,34 @@ std::vector<Texture*> Model::LoadMaterialTextures(const aiMaterial* mat, aiTextu
         mat->GetTexture(type, i, &str);
         // std::cout << str.C_Str() << std::endl;
 
-        Texture* texture = ImageTexture::Create(folder + str.C_Str(), srgb);
+        Texture* texture = ImageTexture::Create(g_folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }
 
     return textures;
 }
 
-const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
+static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 {
     assert(mesh->mMaterialIndex >= 0);
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
     aiString name;
-    ai_int illumModel;
-    aiColor3D diffuseColor;
-    aiColor3D specularColor;
-    aiColor3D emissiveColor;
+    ai_int illum_model;
+    aiColor3D diffuse_color;
+    aiColor3D specular_color;
+    aiColor3D emissive_color;
     ai_real metallic = 0;
     ai_real roughness = 1;
     ai_real aniso = 0;
     ai_real ior;
 
     material->Get(AI_MATKEY_NAME, name);
-    material->Get(AI_MATKEY_SHADING_MODEL, illumModel);
-    material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
-    material->Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
-    material->Get(AI_MATKEY_COLOR_EMISSIVE, emissiveColor);
+    material->Get(AI_MATKEY_SHADING_MODEL, illum_model);
+    material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color);
+    material->Get(AI_MATKEY_COLOR_SPECULAR, specular_color);
+    material->Get(AI_MATKEY_COLOR_EMISSIVE, emissive_color);
     material->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
     material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
     material->Get(AI_MATKEY_ANISOTROPY_FACTOR, aniso);
@@ -67,31 +76,28 @@ const Material* Model::CreateMaterial(const aiMesh* mesh, const aiScene* scene)
     {
         return Material::fallback;
     }
-    else
-    {
-        // clang-format off
-        auto mat = std::make_unique<Microfacet>(
-            basecolor_textures.empty() ? 
-                ConstantColor::Create(diffuseColor.r, diffuseColor.g, diffuseColor.b)       : basecolor_textures[0],
-            metallic_textures.empty() ? 
-                ConstantColor::Create(metallic)                                             : metallic_textures[0],
-            roughness_textures.empty() ? 
-                ConstantColor::Create(roughness)                                            : roughness_textures[0],
-            emissive_textures.empty() ? 
-                ConstantColor::Create(emissiveColor.r, emissiveColor.g, emissiveColor.b)    : emissive_textures[0],
-            normalmap_textures.empty() ? 
-                ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
-        );
-        // clang-format on
 
-        Material* ptr = mat.get();
-        materials.push_back(std::move(mat));
+    // Create material from scene
 
-        return ptr;
-    }
+    // clang-format off
+    auto mat = g_scene->CreateMaterial<Microfacet>(
+        basecolor_textures.empty() ? 
+            ConstantColor::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)    : basecolor_textures[0],
+        metallic_textures.empty() ? 
+            ConstantColor::Create(metallic)                                             : metallic_textures[0],
+        roughness_textures.empty() ? 
+            ConstantColor::Create(roughness)                                            : roughness_textures[0],
+        emissive_textures.empty() ? 
+            ConstantColor::Create(emissive_color.r, emissive_color.g, emissive_color.b) : emissive_textures[0],
+        normalmap_textures.empty() ? 
+            ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
+    );
+    // clang-format on
+
+    return mat;
 }
 
-std::shared_ptr<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+static std::shared_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     assert(mesh->HasPositions());
     assert(mesh->HasNormals());
@@ -152,48 +158,49 @@ std::shared_ptr<Mesh> Model::ProcessAssimpMesh(const aiMesh* mesh, const aiScene
     }
 
     return std::make_shared<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                  std::move(indices), CreateMaterial(mesh, scene), transform);
+                                  std::move(indices), LoadMaterial(mesh, scene), transform);
 }
 
-extern Mat4 ConvertAssimpMatrix(const aiMatrix4x4&);
-
-void Model::ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
+static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
 {
     Mat4 transform = Mul(parent_transform, ConvertAssimpMatrix(node->mTransformation));
 
+    // Process all the node's meshes
     for (uint32 i = 0; i < node->mNumMeshes; ++i)
     {
         const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(ProcessAssimpMesh(mesh, scene, transform));
+        AddMesh(*g_scene, ProcessAssimpMesh(mesh, scene, transform));
     }
 
+    // Do the same for each of its children
     for (uint32 i = 0; i < node->mNumChildren; ++i)
     {
         ProcessAssimpNode(node->mChildren[i], scene, transform);
     }
 }
 
-void Model::Load(const std::string& filename, const Transform& transform)
+void LoadModel(Scene& scene, const std::string& filename, const Transform& transform)
 {
-    folder = std::move(std::filesystem::path(filename).remove_filename().string());
+    g_folder = std::filesystem::path(filename).remove_filename().string();
+    g_scene = &scene;
 
     Assimp::Importer importer;
 
     // clang-format off
-    const aiScene* scene = importer.ReadFile(
+    const aiScene* assimp_scene = importer.ReadFile(
         filename, 
         aiProcessPreset_TargetRealtime_MaxQuality
     );
     // clang-format on
 
-    if (scene == nullptr)
+    if (assimp_scene == nullptr)
     {
         std::cout << "Faild to load model: " << filename << std::endl;
         std::cout << "Assimp error: " << importer.GetErrorString() << std::endl;
         return;
     }
 
-    ProcessAssimpNode(scene->mRootNode, scene, Mat4(transform));
+    ProcessAssimpNode(assimp_scene->mRootNode, assimp_scene, Mat4(transform));
 }
 
 } // namespace bulbit
