@@ -8,9 +8,7 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     // Model model = Model("res/pbr_kabuto_samurai_helmet/scene.gltf", transform);
 
     Transform transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
-    Model model = Model("res/DamagedHelmet/DamagedHelmet.gltf", transform);
-
-    scene.AddModel(model);
+    LoadModel(scene, "res/DamagedHelmet/DamagedHelmet.gltf", transform);
 
     scene.CreateLight<InfiniteAreaLight>("res/HDR/peppermint_powerplant_4k.hdr");
 

@@ -52,9 +52,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
-        Material::fallback = mat;
-        Model model = Model("res/stanford/lucy.obj", transform);
-        scene.AddModel(model);
+        LoadModel(scene, "res/stanford/lucy.obj", transform, mat);
     }
 
     int32 width = 500;

@@ -6,7 +6,6 @@
 #include "constant_color.h"
 #include "image_texture.h"
 #include "intersectable.h"
-#include "model.h"
 
 #include "light.h"
 
@@ -34,8 +33,6 @@ public:
 
     template <typename T, typename... Args>
     const Material* CreateMaterial(Args&&... args);
-
-    void AddModel(const Model& model);
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;

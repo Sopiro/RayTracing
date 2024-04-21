@@ -11,12 +11,8 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
         auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.0), ConstantColor::Create(Spectrum(0.0f)),
                                                     ConstantColor::Create(Spectrum(0.001f)));
 
-        Material::fallback = mat;
-
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
-        auto model = Model("res/reboot_dramatic_scene/scene.gltf", tf);
-
-        scene.AddModel(model);
+        LoadModel(scene, "res/reboot_dramatic_scene/scene.gltf", tf, mat);
     }
 
     {

@@ -6,9 +6,7 @@
 std::unique_ptr<Camera> BistroScene(Scene& scene)
 {
     Transform tf{ Vec3::zero, identity, Vec3(1) };
-    Model m = Model("res/bistro/bistro.gltf", tf);
-
-    scene.AddModel(m);
+    LoadModel(scene, "res/bistro/bistro.gltf", tf);
 
     // scene.CreateLight<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
     // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");

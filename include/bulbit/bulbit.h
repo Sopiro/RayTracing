@@ -17,7 +17,6 @@
 
 #include "material.h"
 
-#include "model.h"
 #include "sphere.h"
 #include "triangle.h"
 

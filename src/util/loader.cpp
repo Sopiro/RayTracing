@@ -1,4 +1,5 @@
 #include "bulbit/loader.h"
+#include "bulbit/mesh.h"
 #include "bulbit/util.h"
 
 #include <filesystem>
@@ -7,7 +8,8 @@ namespace bulbit
 {
 
 static std::string g_folder;
-static Scene* g_scene;
+static Scene* g_scene = nullptr;
+static const Material* g_fallback_material = nullptr;
 
 extern void AddMesh(Scene& scene, std::shared_ptr<Mesh> mesh);
 
@@ -72,9 +74,9 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     auto emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     auto normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
 
-    if (basecolor_textures.empty() && Material::fallback != nullptr)
+    if (basecolor_textures.empty() && g_fallback_material != nullptr)
     {
-        return Material::fallback;
+        return g_fallback_material;
     }
 
     // Create material from scene
@@ -179,10 +181,11 @@ static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Ma
     }
 }
 
-void LoadModel(Scene& scene, const std::string& filename, const Transform& transform)
+void LoadModel(Scene& scene, const std::string& filename, const Transform& transform, const Material* fallback_material)
 {
     g_folder = std::filesystem::path(filename).remove_filename().string();
     g_scene = &scene;
+    g_fallback_material = fallback_material;
 
     Assimp::Importer importer;
 

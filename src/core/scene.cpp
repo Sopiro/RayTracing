@@ -33,17 +33,6 @@ Scene::~Scene()
     }
 }
 
-void Scene::AddModel(const Model& model)
-{
-    for (std::shared_ptr<Mesh> mesh : model.meshes)
-    {
-        for (int32 i = 0; i < mesh->triangle_count; ++i)
-        {
-            CreatePrimitive<Triangle>(mesh, i);
-        }
-    }
-}
-
 void Scene::BuildAccelerationStructure()
 {
     // accel.reset(new DynamicBVH(primitives));

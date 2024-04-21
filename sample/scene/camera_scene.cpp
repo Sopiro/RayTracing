@@ -18,9 +18,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
     // Camera
     {
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.11f) };
-        auto model = Model("res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
-
-        scene.AddModel(model);
+        LoadModel(scene, "res/AntiqueCamera/glTF/AntiqueCamera.gltf", tf);
     }
 
     // Lights

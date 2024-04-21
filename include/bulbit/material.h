@@ -59,8 +59,6 @@ public:
     }
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const = 0;
-
-    inline static const Material* fallback = nullptr;
 };
 
 class Lambertian : public Material

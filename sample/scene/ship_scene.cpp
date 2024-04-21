@@ -9,17 +9,13 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     // Table
     {
         auto tf = Transform{ Point3(0.0f, -2.2f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(5.0f) };
-        auto model = Model("res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
-
-        scene.AddModel(model);
+        LoadModel(scene, "res/wooden_table_02_4k/wooden_table_02_4k.gltf", tf);
     }
 
     // Ship
     {
         auto tf = Transform{ Point3(0.0f, 2.0f, 0.0f), Quat(DegToRad(90.0f), y_axis), Vec3(0.1f) };
-        auto model = Model("res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
-
-        scene.AddModel(model);
+        LoadModel(scene, "res/ship_pinnace_4k/ship_pinnace_4k.gltf", tf);
     }
 
     // Light

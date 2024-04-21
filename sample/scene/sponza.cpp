@@ -10,9 +10,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // Model sponza = Model("res/sponza2/sponza.obj", transform);
 
     Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
-    Model sponza = Model("res/sponza/glTF/Sponza.gltf", transform);
-
-    scene.AddModel(sponza);
+    LoadModel(scene, "res/sponza/glTF/Sponza.gltf", transform);
 
     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f));
     // auto mat = scene.CreateMaterial<Dielectric>(1.5f);

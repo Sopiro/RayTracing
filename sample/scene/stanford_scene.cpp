@@ -25,30 +25,24 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = CreateRandomMicrofacetMaterial(scene);
-        Material::fallback = mat;
 
-        auto model = Model("res/stanford/bunny.obj", tf);
-        scene.AddModel(model);
+        LoadModel(scene, "res/stanford/bunny.obj", tf, mat);
     }
 
     // Lucy
     {
         auto tf = Transform{ Vec3(gap, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = CreateRandomMicrofacetMaterial(scene);
-        Material::fallback = mat;
 
-        auto model = Model("res/stanford/lucy.obj", tf);
-        scene.AddModel(model);
+        LoadModel(scene, "res/stanford/lucy.obj", tf, mat);
     }
 
     // Tyrannosaurus
     {
         auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
         auto mat = CreateRandomMicrofacetMaterial(scene);
-        Material::fallback = mat;
 
-        auto model = Model("res/stanford/tyra.obj", tf);
-        scene.AddModel(model);
+        LoadModel(scene, "res/stanford/tyra.obj", tf, mat);
     }
 
     // Armadillo
@@ -57,10 +51,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto mat = scene.CreateMaterial<Microfacet>(
             ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
             ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
-        Material::fallback = mat;
 
-        auto model = Model("res/stanford/arma.obj", tf);
-        scene.AddModel(model);
+        LoadModel(scene, "res/stanford/arma.obj", tf, mat);
     }
 
     {

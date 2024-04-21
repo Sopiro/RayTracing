@@ -13,12 +13,9 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
-        Material::fallback = mat;
-
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
-        auto model = Model("res/stanford/bunny.obj", tf);
+        LoadModel(scene, "res/stanford/bunny.obj", tf, mat);
 
-        scene.AddModel(model);
         // scene.AddLight(sphere);
     }
 
