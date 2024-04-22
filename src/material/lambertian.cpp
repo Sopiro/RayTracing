@@ -26,4 +26,9 @@ Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
 }
 
+bool Lambertian::TestAlpha(const Point2& uv) const
+{
+    return albedo->EvaluateAlpha(uv) > epsilon;
+}
+
 } // namespace bulbit

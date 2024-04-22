@@ -53,9 +53,17 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
         return false;
     }
 
-    Float w = 1 - u - v;
-
     // Found intersection
+
+    Float w = 1 - u - v;
+    Point2 uv = GetTexCoord(u, v, w);
+
+    if (mesh->material->TestAlpha(uv) == false)
+    {
+        return false;
+    }
+
+    is->uv = uv;
     is->material = mesh->material;
     is->t = t;
     is->point = ray.At(t);
@@ -66,8 +74,6 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
     SetFaceNormal(is, ray.d, normal);
     is->shading.normal = shading_normal;
     is->shading.tangent = shading_tangent;
-
-    is->uv = GetTexCoord(u, v, w);
 
     return true;
 }
@@ -121,7 +127,10 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
         return false;
     }
 
-    return true;
+    Float w = 1 - u - v;
+    Point2 uv = GetTexCoord(u, v, w);
+
+    return mesh->material->TestAlpha(uv);
 }
 
 void Triangle::Sample(Intersection* sample, Float* pdf, const Point2& u0) const

@@ -10,7 +10,13 @@ class Texture
 {
 public:
     virtual ~Texture() = default;
+
     virtual Spectrum Evaluate(const Point2& uv) const = 0;
+
+    virtual Float EvaluateAlpha(const Point2& uv) const
+    {
+        return 1;
+    }
 };
 
 } // namespace bulbit

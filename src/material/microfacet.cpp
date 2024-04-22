@@ -99,4 +99,9 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     return (f_d + f_s) * NoL;
 }
 
+bool Microfacet::TestAlpha(const Point2& uv) const
+{
+    return basecolor->EvaluateAlpha(uv) > epsilon;
+}
+
 } // namespace bulbit

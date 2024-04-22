@@ -58,6 +58,11 @@ public:
         return RGBSpectrum::black;
     }
 
+    virtual bool TestAlpha(const Point2& uv) const
+    {
+        return true;
+    }
+
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const = 0;
 };
 
@@ -69,6 +74,7 @@ public:
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
+    virtual bool TestAlpha(const Point2& uv) const override;
 
 public:
     const Texture* albedo;
@@ -122,6 +128,7 @@ public:
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
+    virtual bool TestAlpha(const Point2& uv) const override;
 
 private:
     const Texture* basecolor;

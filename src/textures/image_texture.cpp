@@ -14,6 +14,7 @@ namespace bulbit
 
 ImageTexture::ImageTexture()
     : pixels{ nullptr }
+    , alphas{ nullptr }
     , width{ 0 }
     , height{ 0 }
     , texcoord_filter{ repeat }
@@ -27,47 +28,51 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
     stbi_ldr_to_hdr_scale(1.0f);
     stbi_ldr_to_hdr_gamma(srgb ? 2.2f : 1.0f);
 
-    assert(STBI_rgb == 3);
-
     int32 components_per_pixel;
-    float* data = stbi_loadf(filename.data(), &width, &height, &components_per_pixel, STBI_rgb);
+    float* data = stbi_loadf(filename.data(), &width, &height, &components_per_pixel, STBI_rgb_alpha);
 
     if (!data)
     {
         std::cerr << "ERROR: Could not load texture '" << filename << std::endl;
-        width = 2;
-        height = 2;
+        width = 1;
+        height = 1;
         pixels = std::make_unique<Spectrum[]>(width * height);
 
-        pixels[0] = Spectrum(1, 0, 0);
-        pixels[1] = Spectrum(0, 1, 0);
-        pixels[2] = Spectrum(0, 0, 1);
-        pixels[3] = Spectrum(1, 0, 1);
+        pixels[0] = Spectrum(1, 0, 1);
+        return;
+    }
+
+    pixels = std::make_unique<Spectrum[]>(width * height);
+
+    if (width * height > 64 * 1024)
+    {
+        ParallelFor(0, width * height, [=](int32 i) {
+            pixels[i].r = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 0]);
+            pixels[i].g = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 1]);
+            pixels[i].b = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 2]);
+        });
     }
     else
     {
-        pixels = std::make_unique<Spectrum[]>(width * height);
-
-        if (width * height > 64 * 1024)
+        for (int32 i = 0; i < width * height; ++i)
         {
-            ParallelFor(0, width * height, [=](int32 i) {
-                pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
-                pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
-                pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
-            });
+            pixels[i].r = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 0]);
+            pixels[i].g = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 1]);
+            pixels[i].b = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 2]);
         }
-        else
-        {
-            for (int32 i = 0; i < width * height; ++i)
-            {
-                pixels[i].r = (Float)std::fmax(0, data[STBI_rgb * i + 0]);
-                pixels[i].g = (Float)std::fmax(0, data[STBI_rgb * i + 1]);
-                pixels[i].b = (Float)std::fmax(0, data[STBI_rgb * i + 2]);
-            }
-        }
-
-        stbi_image_free(data);
     }
+
+    if (components_per_pixel == STBI_rgb_alpha)
+    {
+        alphas = std::make_unique<Float[]>(width * height);
+
+        for (int32 i = 0; i < width * height; ++i)
+        {
+            alphas[i] = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 3]);
+        }
+    }
+
+    stbi_image_free(data);
 }
 
 Spectrum ImageTexture::Evaluate(const Point2& uv) const
@@ -99,6 +104,48 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
 
     Spectrum sp00 = pixels[i0 + j0 * width], sp10 = pixels[i1 + j0 * width];
     Spectrum sp01 = pixels[i0 + j1 * width], sp11 = pixels[i1 + j1 * width];
+
+    // clang-format off
+    return (1-fu) * (1-fv) * sp00 + (1-fu) * (fv) * sp01 +
+           (  fu) * (1-fv) * sp10 + (  fu) * (fv) * sp11;
+    // clang-format on
+#endif
+}
+
+Float ImageTexture::EvaluateAlpha(const Point2& uv) const
+{
+    if (alphas == nullptr)
+    {
+        return 1;
+    }
+
+#if 1
+    // Nearest sampling
+    Float w = uv.x * width + Float(0.5);
+    Float h = uv.y * height + Float(0.5);
+
+    int32 i = int32(w);
+    int32 j = int32(h);
+
+    FilterTexCoord(&i, &j);
+
+    return alphas[i + j * width];
+#else
+    // Bilinear sampling
+    Float w = uv.x * width + Float(0.5);
+    Float h = uv.y * height + Float(0.5);
+
+    int32 i0 = int32(w), i1 = int32(w) + 1;
+    int32 j0 = int32(h), j1 = int32(h) + 1;
+
+    FilterTexCoord(&i0, &j0);
+    FilterTexCoord(&i1, &j1);
+
+    Float fu = w - std::floor(w);
+    Float fv = h - std::floor(h);
+
+    Float sp00 = alphas[i0 + j0 * width], sp10 = alphas[i1 + j0 * width];
+    Float sp01 = alphas[i0 + j1 * width], sp11 = alphas[i1 + j1 * width];
 
     // clang-format off
     return (1-fu) * (1-fv) * sp00 + (1-fu) * (fv) * sp01 +

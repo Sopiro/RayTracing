@@ -1,5 +1,6 @@
 #include "bulbit/sphere.h"
 #include "bulbit/frame.h"
+#include "bulbit/material.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit
@@ -31,18 +32,27 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
     }
 
     // Found intersection
+
+    Point3 point = ray.At(root);
+    Vec3 outward_normal = (point - center) / radius;
+
+    Point2 uv = ComputeTexCoord(outward_normal);
+    if (material->TestAlpha(uv) == false)
+    {
+        return false;
+    }
+
+    is->point = point;
+    is->uv = uv;
     is->material = material;
     is->t = root;
-    is->point = ray.At(root);
 
-    Vec3 outward_normal = (is->point - center) / radius;
     Vec3 tangent, bitangent;
     CoordinateSystem(outward_normal, &tangent, &bitangent);
 
     SetFaceNormal(is, ray.d, outward_normal);
     is->shading.normal = outward_normal;
     is->shading.tangent = tangent;
-    is->uv = ComputeTexCoord(outward_normal);
 
     return true;
 }
@@ -72,7 +82,11 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
         }
     }
 
-    return true;
+    Point3 point = ray.At(root);
+    Vec3 outward_normal = (point - center) / radius;
+    Point2 uv = ComputeTexCoord(outward_normal);
+
+    return material->TestAlpha(uv);
 }
 
 void Sphere::Sample(Intersection* sample, Float* pdf, const Point2& u) const

@@ -23,6 +23,7 @@ public:
     ImageTexture(const std::string& filename, bool srgb);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
+    virtual Float EvaluateAlpha(const Point2& uv) const override;
 
     int32 GetWidth() const;
     int32 GetHeight() const;
@@ -31,6 +32,8 @@ protected:
     void FilterTexCoord(int32* u, int32* v) const;
 
     std::unique_ptr<Spectrum[]> pixels;
+    std::unique_ptr<Float[]> alphas;
+
     int32 width, height;
     TexCoordFilter texcoord_filter;
 
