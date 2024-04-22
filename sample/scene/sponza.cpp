@@ -12,7 +12,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
     LoadModel(scene, "res/sponza/glTF/Sponza.gltf", transform);
 
-    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f));
+    // auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f));
     // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
     Float cx = 8.0f;
@@ -72,6 +72,9 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
 
     // Point3 lookfrom{ -4, 4.5, 6 };
     // Point3 lookat{ -4, 4.5, 0 };
+
+    // Point3 lookfrom{ 0, 1, 6 };
+    // Point3 lookat{ 0, 1, 0 };
 
     Point3 lookfrom{ 0, 5, 6 };
     Point3 lookat{ 0, 5, 0 };

@@ -23,30 +23,6 @@ Spectrum Microfacet::Emit(const Intersection& is, const Vec3& wi) const
     return emissive->Evaluate(is.uv);
 }
 
-bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
-{
-    Spectrum c = basecolor->Evaluate(is.uv);
-    Float m = metallic->Evaluate(is.uv).b;
-    Float r = roughness->Evaluate(is.uv).g;
-
-    Float alpha = RoughnessToAlpha(r);
-    Vec3 wo = -wi;
-
-    Spectrum f0 = F0(c, m);
-    Spectrum F = F_Schlick(f0, Dot(wo, is.shading.normal));
-    Float diff_w = (1 - m);
-    Float spec_w = F.Luminance();
-    // Float spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
-    Float t = Clamp(spec_w / (diff_w + spec_w), Float(0.15), Float(0.9));
-
-    // new (ir->mem) LambertianReflection(is.shading.normal);
-    // new (ir->mem) MicrofacetGGX(is.shading.normal, wo, alpha, t);
-    new (ir->mem) MicrofacetGGXVNDF(is.shading.normal, wo, alpha, t);
-    ir->is_specular = false;
-
-    return true;
-}
-
 Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
 {
     Vec3 normal = ToVector(normalmap->Evaluate(is.uv)) * 2 - Vec3(1);
@@ -97,6 +73,30 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Spectrum f_d = (Spectrum(1) - F) * (1 - m) * (c * inv_pi);
 
     return (f_d + f_s) * NoL;
+}
+
+bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
+{
+    Spectrum c = basecolor->Evaluate(is.uv);
+    Float m = metallic->Evaluate(is.uv).b;
+    Float r = roughness->Evaluate(is.uv).g;
+
+    Float alpha = RoughnessToAlpha(r);
+    Vec3 wo = -wi;
+
+    Spectrum f0 = F0(c, m);
+    Spectrum F = F_Schlick(f0, Dot(wo, is.shading.normal));
+    Float diff_w = (1 - m);
+    Float spec_w = F.Luminance();
+    // Float spec_w = std::fmax(F.x, std::fmax(F.y, F.z));
+    Float t = Clamp(spec_w / (diff_w + spec_w), Float(0.15), Float(0.9));
+
+    // new (ir->mem) LambertianReflection(is.shading.normal);
+    // new (ir->mem) MicrofacetGGX(is.shading.normal, wo, alpha, t);
+    new (ir->mem) MicrofacetGGXVNDF(is.shading.normal, wo, alpha, t);
+    ir->is_specular = false;
+
+    return true;
 }
 
 bool Microfacet::TestAlpha(const Point2& uv) const

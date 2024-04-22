@@ -31,8 +31,8 @@ public:
 protected:
     void FilterTexCoord(int32* u, int32* v) const;
 
-    std::unique_ptr<Spectrum[]> pixels;
-    std::unique_ptr<Float[]> alphas;
+    std::unique_ptr<RGBSpectrum[]> rgb;
+    std::unique_ptr<Float[]> alpha;
 
     int32 width, height;
     TexCoordFilter texcoord_filter;

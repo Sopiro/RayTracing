@@ -13,17 +13,17 @@ Lambertian::Lambertian(const Texture* albedo)
 {
 }
 
+Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
+{
+    return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
+}
+
 bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     ir->is_specular = false;
     new (ir->mem) LambertianReflection(is.normal);
 
     return true;
-}
-
-Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
-{
-    return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
 }
 
 bool Lambertian::TestAlpha(const Point2& uv) const
