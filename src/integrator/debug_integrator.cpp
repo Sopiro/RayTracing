@@ -23,8 +23,8 @@ Spectrum DebugIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler
     Vec3 wi = Normalize(primary_ray.d);
     Vec3 wo = Normalize(Reflect(wi, is.normal));
 
-    return Spectrum(1 / (1 + is.t));
-    // return Spectrum(is.shading.normal) * 0.5 + Spectrum(0.5);
+    // return Spectrum(1 / (1 + is.t));
+    return Spectrum(is.shading.normal) * 0.5 + Spectrum(0.5);
 }
 
 } // namespace bulbit
