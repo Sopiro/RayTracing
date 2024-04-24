@@ -99,6 +99,9 @@ inline void BVH::BuildNode::InitInternal(int32 _axis, BuildNode* _child1, BuildN
 template <typename T>
 inline void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
+    const Vec3 inv_dir(1 / r.d.x, 1 / r.d.y, 1 / r.d.z);
+    const int32 is_dir_neg[3] = { int32(inv_dir.x < 0), int32(inv_dir.y < 0), int32(inv_dir.z < 0) };
+
     GrowableArray<int32, 64> stack;
     stack.Emplace(0);
 
@@ -106,49 +109,44 @@ inline void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) co
     {
         int32 index = stack.Pop();
 
-        // Leaf node
-        if (nodes[index].primitive_count > 0)
+        if (nodes[index].aabb.TestRay(r.o, t_min, t_max, inv_dir, is_dir_neg))
         {
-            for (int32 i = 0; i < nodes[index].primitive_count; ++i)
+            if (nodes[index].primitive_count > 0)
             {
-                Float t = callback->RayCastCallback(r, t_min, t_max, primitives[nodes[index].primitives_offset + i]);
-                if (t <= t_min)
+                // Leaf node
+                for (int32 i = 0; i < nodes[index].primitive_count; ++i)
                 {
-                    return;
+                    Float t = callback->RayCastCallback(r, t_min, t_max, primitives[nodes[index].primitives_offset + i]);
+                    if (t <= t_min)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        // Shorten the ray
+                        t_max = t;
+                    }
                 }
-                else
-                {
-                    // Shorten the ray
-                    t_max = t;
-                }
-            }
-        }
-        else
-        {
-            // Ordered traversal
-            int32 child1 = index + 1;
-            int32 child2 = nodes[index].child2_offset;
-
-            Float dist1 = nodes[child1].aabb.Intersect(r, t_min, t_max);
-            Float dist2 = nodes[child2].aabb.Intersect(r, t_min, t_max);
-
-            if (dist2 < dist1)
-            {
-                std::swap(dist1, dist2);
-                std::swap(child1, child2);
-            }
-
-            if (dist1 == infinity)
-            {
-                continue;
             }
             else
             {
-                if (dist2 != infinity)
+                // Internal node
+
+                // Ordered traversal
+                // Put far child on stack first
+                int32 child1 = index + 1;
+                int32 child2 = nodes[index].child2_offset;
+
+                if (is_dir_neg[nodes[index].axis])
                 {
+                    stack.Emplace(child1);
                     stack.Emplace(child2);
                 }
-                stack.Emplace(child1);
+                else
+                {
+                    stack.Emplace(child2);
+                    stack.Emplace(child1);
+                }
             }
         }
     }

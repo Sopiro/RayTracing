@@ -10,6 +10,9 @@ struct AABB
     AABB();
     AABB(const Vec3& min, const Vec3& max);
 
+    Vec3 operator[](int32 i) const;
+    Vec3& operator[](int32 i);
+
     Vec3 GetCenter() const;
     Vec3 GetExtents() const;
 
@@ -20,6 +23,7 @@ struct AABB
     bool TestPoint(const Vec3& point) const;
     bool TestOverlap(const AABB& other) const;
     bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
+    bool TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     std::string ToString() const;
@@ -56,6 +60,18 @@ inline AABB::AABB(const Vec3& min, const Vec3& max)
     : min{ min }
     , max{ max }
 {
+}
+
+inline Vec3& AABB::operator[](int32 i)
+{
+    assert(i == 0 || i == 1);
+    return (i == 0) ? min : max;
+}
+
+inline Vec3 AABB::operator[](int32 i) const
+{
+    assert(i == 0 || i == 1);
+    return (i == 0) ? min : max;
 }
 
 inline Vec3 AABB::GetCenter() const
