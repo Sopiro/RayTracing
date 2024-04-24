@@ -27,14 +27,14 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
         return Allocator(ptr);
     });
 
-    BVHNode* root = BuildRecursive(thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes,
-                                   &ordered_prims_offset, ordered_prims);
+    BuildNode* root = BuildRecursive(thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes,
+                                     &ordered_prims_offset, ordered_prims);
 
     assert(ordered_prims_offset.load() == primitive_count);
 
     primitives.swap(ordered_prims);
 
-    // Release temporary primitives
+    // Release temporary data
     bvh_primitives.resize(0);
     bvh_primitives.shrink_to_fit();
 
@@ -47,14 +47,14 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
     assert(offset == total_nodes);
 }
 
-BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
-                             std::span<BVHPrimitive> primitive_span,
-                             std::atomic<int32>* total_nodes,
-                             std::atomic<int32>* ordered_prims_offset,
-                             std::vector<Primitive*>& ordered_prims)
+BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
+                                    std::span<BVHPrimitive> primitive_span,
+                                    std::atomic<int32>* total_nodes,
+                                    std::atomic<int32>* ordered_prims_offset,
+                                    std::vector<Primitive*>& ordered_prims)
 {
     Allocator allocator = thread_allocators.Get();
-    BVHNode* node = allocator.new_object<BVHNode>();
+    BuildNode* node = allocator.new_object<BuildNode>();
 
     total_nodes->fetch_add(1);
     int32 primitive_count = primitive_span.size();
@@ -125,8 +125,8 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
                              });
         }
 
-        BVHNode* child1;
-        BVHNode* child2;
+        BuildNode* child1;
+        BuildNode* child2;
 
         if (primitive_count > 64 * 1024)
         {
@@ -157,7 +157,7 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
     return node;
 }
 
-int32 BVH::FlattenBVH(BVHNode* node, int32* offset)
+int32 BVH::FlattenBVH(BuildNode* node, int32* offset)
 {
     LinearBVHNode* linear_node = &nodes[*offset];
     linear_node->aabb = node->aabb;
