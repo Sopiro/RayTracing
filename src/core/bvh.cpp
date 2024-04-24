@@ -84,11 +84,23 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         centroid_bounds = AABB::Union(centroid_bounds, prim.aabb.GetCenter());
     }
 
-    // Get longest axis
-    int32 axis = centroid_bounds.GetMaxDimension();
+    // Get the longest extent
+    int32 axis = 0;
+
+    Vec3 extents = centroid_bounds.GetExtents();
+    if (extents.y > extents.x)
+    {
+        axis = 1;
+    }
+    if (extents.z > extents[axis])
+    {
+        axis = 2;
+    }
+
+    const Float extent = extents[axis];
 
     // Invalid bounds
-    if (centroid_bounds.min[axis] == centroid_bounds.max[axis])
+    if (extent == 0)
     {
         int32 offset = ordered_prims_offset->fetch_add(primitive_count);
         for (size_t i = 0; i < primitive_count; ++i)
@@ -101,12 +113,15 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         return node;
     }
 
+    int32 mid;
+
+#if 0
     // Mid point split
     Float split_pos = (span_bounds.min[axis] + span_bounds.max[axis]) / 2;
     auto mid_iter = std::partition(primitive_span.begin(), primitive_span.end(),
                                    [=](const BVHPrimitive& prim) { return prim.aabb.GetCenter()[axis] < split_pos; });
 
-    int32 mid = mid_iter - primitive_span.begin();
+    mid = mid_iter - primitive_span.begin();
 
     if (mid_iter == primitive_span.begin() || mid_iter == primitive_span.end())
     {
@@ -115,6 +130,104 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
             primitive_span.begin(), primitive_span.begin() + mid, primitive_span.end(),
             [axis](const BVHPrimitive& a, const BVHPrimitive& b) { return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis]; });
     }
+#else
+    // SAH based construction
+
+    if (primitive_count <= 2)
+    {
+        mid = primitive_count / 2;
+        std::nth_element(
+            primitive_span.begin(), primitive_span.begin() + mid, primitive_span.end(),
+            [axis](const BVHPrimitive& a, const BVHPrimitive& b) { return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis]; });
+    }
+    else
+    {
+        struct BVHSplitBucket
+        {
+            int count = 0;
+            AABB bounds;
+        };
+
+        constexpr int bucket_size = 12;
+        constexpr int32 split_planes = bucket_size - 1;
+        BVHSplitBucket buckets[bucket_size];
+
+        // Fill the buckets for
+        for (const BVHPrimitive& primitive : primitive_span)
+        {
+            int32 bucket_index = bucket_size * (primitive.aabb.GetCenter() - centroid_bounds.min)[axis] / extent;
+            if (bucket_index == bucket_size)
+            {
+                bucket_index = bucket_index - 1;
+            }
+
+            buckets[bucket_index].count++;
+            buckets[bucket_index].bounds = AABB::Union(buckets[bucket_index].bounds, primitive.aabb);
+        }
+
+        AABB left_bound, right_bound;
+        int32 left_count[split_planes], right_count[split_planes];
+        Float left_area[split_planes], right_area[split_planes];
+        int32 left_sum = 0, right_sum = 0;
+
+        for (int32 i = 0; i < split_planes; ++i)
+        {
+            left_sum += buckets[i].count;
+            left_count[i] = left_sum;
+            left_bound = AABB::Union(left_bound, buckets[i].bounds);
+            left_area[i] = left_bound.GetSurfaceArea();
+
+            right_sum += buckets[split_planes - i].count;
+            right_count[split_planes - 1 - i] = right_sum;
+            right_bound = AABB::Union(right_bound, buckets[split_planes - i].bounds);
+            right_area[split_planes - 1 - i] = right_bound.GetSurfaceArea();
+        }
+
+        int32 min_cost_split_bucket = -1;
+        Float min_cost = infinity;
+        for (int32 i = 0; i < split_planes; ++i)
+        {
+            Float cost = left_count[i] * left_area[i] + right_count[i] * right_area[i];
+            if (cost < min_cost)
+            {
+                min_cost = cost;
+                min_cost_split_bucket = i;
+            }
+        }
+
+        constexpr Float traverse_cost = Float(0.5);
+        min_cost = traverse_cost + min_cost / span_bounds.GetSurfaceArea();
+
+        const Float direct_leaf_cost = primitive_count;
+
+        if (min_cost < direct_leaf_cost)
+        {
+            auto mid_iter = std::partition(primitive_span.begin(), primitive_span.end(), [=](const BVHPrimitive& prim) {
+                int32 bucket_index = bucket_size * (prim.aabb.GetCenter() - centroid_bounds.min)[axis] / extent;
+                if (bucket_index == bucket_size)
+                {
+                    bucket_index = bucket_size - 1;
+                }
+
+                return bucket_index <= min_cost_split_bucket;
+            });
+
+            mid = mid_iter - primitive_span.begin();
+        }
+        else
+        {
+            int32 offset = ordered_prims_offset->fetch_add(primitive_count);
+            for (size_t i = 0; i < primitive_count; ++i)
+            {
+                int32 index = primitive_span[i].index;
+                ordered_prims[offset + i] = primitives[index];
+            }
+
+            node->InitLeaf(offset, primitive_count, span_bounds);
+            return node;
+        }
+    }
+#endif
 
     BuildNode* child1;
     BuildNode* child2;
