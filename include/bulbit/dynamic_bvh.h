@@ -166,7 +166,7 @@ void DynamicBVH::Traverse(T* callback) const
         return;
     }
 
-    GrowableArray<NodeIndex, 256> stack;
+    GrowableArray<NodeIndex, 64> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
@@ -192,7 +192,7 @@ void DynamicBVH::Query(const Vec3& point, T* callback) const
         return;
     }
 
-    GrowableArray<NodeIndex, 256> stack;
+    GrowableArray<NodeIndex, 64> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
@@ -228,7 +228,7 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
         return;
     }
 
-    GrowableArray<NodeIndex, 256> stack;
+    GrowableArray<NodeIndex, 64> stack;
     stack.Emplace(root);
 
     while (stack.Count() != 0)
@@ -259,7 +259,7 @@ void DynamicBVH::Query(const AABB& aabb, T* callback) const
 template <typename T>
 void DynamicBVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
-    GrowableArray<int32, 256> stack;
+    GrowableArray<int32, 64> stack;
     stack.Emplace(root);
 
     while (stack.Count() > 0)

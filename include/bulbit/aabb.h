@@ -18,6 +18,7 @@ struct AABB
 
     Float GetVolume() const;
     Float GetSurfaceArea() const;
+    int32 GetMaxDimension() const;
 
     bool Contains(const AABB& other) const;
     bool TestPoint(const Vec3& point) const;
@@ -93,6 +94,23 @@ inline Float AABB::GetSurfaceArea() const
 {
     Vec3 w = max - min;
     return 2 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
+}
+
+inline int32 AABB::GetMaxDimension() const
+{
+    int32 axis = 0;
+
+    Vec3 extents = GetExtents();
+    if (extents.y > extents.x)
+    {
+        axis = 1;
+    }
+    if (extents.z > extents[axis])
+    {
+        axis = 2;
+    }
+
+    return axis;
 }
 
 inline bool AABB::Contains(const AABB& other) const

@@ -77,82 +77,71 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         node->InitLeaf(offset, primitive_count, span_bounds);
         return node;
     }
+
+    AABB centroid_bounds;
+    for (const BVHPrimitive& prim : primitive_span)
+    {
+        centroid_bounds = AABB::Union(centroid_bounds, prim.aabb.GetCenter());
+    }
+
+    // Get longest axis
+    int32 axis = centroid_bounds.GetMaxDimension();
+
+    // Invalid bounds
+    if (centroid_bounds.min[axis] == centroid_bounds.max[axis])
+    {
+        int32 offset = ordered_prims_offset->fetch_add(primitive_count);
+        for (size_t i = 0; i < primitive_count; ++i)
+        {
+            int32 index = primitive_span[i].index;
+            ordered_prims[offset + i] = primitives[index];
+        }
+
+        node->InitLeaf(offset, primitive_count, span_bounds);
+        return node;
+    }
+
+    // Mid point split
+    Float split_pos = (span_bounds.min[axis] + span_bounds.max[axis]) / 2;
+    auto mid_iter = std::partition(primitive_span.begin(), primitive_span.end(),
+                                   [=](const BVHPrimitive& prim) { return prim.aabb.GetCenter()[axis] < split_pos; });
+
+    int32 mid = mid_iter - primitive_span.begin();
+
+    if (mid_iter == primitive_span.begin() || mid_iter == primitive_span.end())
+    {
+        mid = primitive_count / 2;
+        std::nth_element(
+            primitive_span.begin(), primitive_span.begin() + mid, primitive_span.end(),
+            [axis](const BVHPrimitive& a, const BVHPrimitive& b) { return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis]; });
+    }
+
+    BuildNode* child1;
+    BuildNode* child2;
+
+    if (primitive_count > 64 * 1024)
+    {
+        ParallelFor(0, 2, [&](int i) {
+            if (i == 0)
+            {
+                child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
+                                        ordered_prims);
+            }
+            else
+            {
+                child2 = BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset,
+                                        ordered_prims);
+            }
+        });
+    }
     else
     {
-        AABB centroid_bounds;
-        for (const BVHPrimitive& prim : primitive_span)
-        {
-            centroid_bounds = AABB::Union(centroid_bounds, prim.aabb.GetCenter());
-        }
-
-        // Find longest axis
-        int32 axis = 0;
-        Vec3 extents = centroid_bounds.GetExtents();
-        if (extents.y > extents.x)
-        {
-            axis = 1;
-        }
-        if (extents.z > extents[axis])
-        {
-            axis = 2;
-        }
-
-        if (extents[axis] == 0)
-        {
-            int32 offset = ordered_prims_offset->fetch_add(primitive_count);
-            for (size_t i = 0; i < primitive_count; ++i)
-            {
-                int32 index = primitive_span[i].index;
-                ordered_prims[offset + i] = primitives[index];
-            }
-
-            node->InitLeaf(offset, primitive_count, span_bounds);
-            return node;
-        }
-
-        Float split_pos = (span_bounds.min[axis] + span_bounds.max[axis]) / 2;
-        auto mid_iter = std::partition(primitive_span.begin(), primitive_span.end(),
-                                       [=](const BVHPrimitive& prim) { return prim.aabb.GetCenter()[axis] < split_pos; });
-
-        int32 mid = mid_iter - primitive_span.begin();
-
-        if (mid_iter == primitive_span.begin() || mid_iter == primitive_span.end())
-        {
-            mid = primitive_count / 2;
-            std::nth_element(primitive_span.begin(), primitive_span.begin() + mid, primitive_span.end(),
-                             [axis](const BVHPrimitive& a, const BVHPrimitive& b) {
-                                 return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis];
-                             });
-        }
-
-        BuildNode* child1;
-        BuildNode* child2;
-
-        if (primitive_count > 64 * 1024)
-        {
-            ParallelFor(0, 2, [&](int i) {
-                if (i == 0)
-                {
-                    child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
-                                            ordered_prims);
-                }
-                else
-                {
-                    child2 = BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset,
-                                            ordered_prims);
-                }
-            });
-        }
-        else
-        {
-            child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
-                                    ordered_prims);
-            child2 =
-                BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset, ordered_prims);
-        }
-
-        node->InitInternal(axis, child1, child2);
+        child1 =
+            BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset, ordered_prims);
+        child2 = BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset, ordered_prims);
     }
+
+    node->InitInternal(axis, child1, child2);
 
     return node;
 }
@@ -183,11 +172,6 @@ int32 BVH::FlattenBVH(BuildNode* node, int32* offset)
     return node_offset;
 }
 
-AABB BVH::GetAABB() const
-{
-    return nodes[0].aabb;
-}
-
 bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
@@ -202,8 +186,9 @@ bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_m
 
             if (hit)
             {
+                assert(is->t <= t);
                 hit_closest = true;
-                t = std::min(t, is->t);
+                t = is->t;
             }
 
             // Keep traverse with smaller bounds
@@ -247,6 +232,11 @@ bool BVH::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     RayCast(ray, t_min, t_max, &callback);
 
     return callback.hit_any;
+}
+
+AABB BVH::GetAABB() const
+{
+    return nodes[0].aabb;
 }
 
 } // namespace bulbit
