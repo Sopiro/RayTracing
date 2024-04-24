@@ -5,8 +5,6 @@
 namespace bulbit
 {
 
-std::vector<std::unique_ptr<Resource>> thread_buffer_resources;
-
 BVH::BVH(const std::vector<Primitive*>& _primitives)
     : primitives{ std::move(_primitives) }
 {
@@ -22,18 +20,31 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
     std::atomic<int32> total_nodes(0);
     std::atomic<int32> ordered_prims_offset(0);
 
-    ThreadLocal<Allocator> thread_allocators([]() {
+    std::vector<std::unique_ptr<Resource>> thread_buffer_resources;
+    ThreadLocal<Allocator> thread_allocators([&thread_buffer_resources]() {
         thread_buffer_resources.push_back(std::make_unique<Resource>());
         Resource* ptr = thread_buffer_resources.back().get();
         return Allocator(ptr);
     });
 
-    root = BuildRecursive(thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes, &ordered_prims_offset,
-                          ordered_prims);
+    BVHNode* root = BuildRecursive(thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes,
+                                   &ordered_prims_offset, ordered_prims);
 
     assert(ordered_prims_offset.load() == primitive_count);
 
     primitives.swap(ordered_prims);
+
+    // Release temporary primitives
+    bvh_primitives.resize(0);
+    bvh_primitives.shrink_to_fit();
+
+    nodes = std::make_unique<LinearBVHNode[]>(total_nodes);
+    int32 offset = 0;
+
+    // Flatten out to linear BVH representation
+    FlattenBVH(root, &offset);
+
+    assert(offset == total_nodes);
 }
 
 BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
@@ -146,9 +157,35 @@ BVHNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
     return node;
 }
 
+int32 BVH::FlattenBVH(BVHNode* node, int32* offset)
+{
+    LinearBVHNode* linear_node = &nodes[*offset];
+    linear_node->aabb = node->aabb;
+
+    int32 node_offset = (*offset)++;
+    if (node->count > 0)
+    {
+        // Leaf node
+        linear_node->primitives_offset = node->offset;
+        linear_node->primitive_count = node->count;
+    }
+    else
+    {
+        // Internal node
+        linear_node->axis = node->axis;
+        linear_node->primitive_count = 0;
+
+        // Order matters!
+        FlattenBVH(node->child1, offset);
+        linear_node->child2_offset = FlattenBVH(node->child2, offset);
+    }
+
+    return node_offset;
+}
+
 AABB BVH::GetAABB() const
 {
-    return root->aabb;
+    return nodes[0].aabb;
 }
 
 bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const

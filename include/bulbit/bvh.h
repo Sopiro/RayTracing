@@ -50,6 +50,20 @@ struct BVHNode
     BVHNode* child2;
 };
 
+struct alignas(32) LinearBVHNode
+{
+    AABB aabb;
+
+    union
+    {
+        int32 primitives_offset;
+        int32 child2_offset;
+    };
+
+    uint16 primitive_count;
+    uint8 axis;
+};
+
 class BVH : public Intersectable
 {
 public:
@@ -68,32 +82,31 @@ private:
                             std::atomic<int32>* ordered_prims_offset,
                             std::vector<Primitive*>& ordered_prims);
 
+    int32 FlattenBVH(BVHNode* node, int32* offset);
+
     template <typename T>
     void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
     std::vector<Primitive*> primitives;
-    BVHNode* root;
+    std::unique_ptr<LinearBVHNode[]> nodes;
 };
 
 template <typename T>
 void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
 {
-    GrowableArray<BVHNode*, 256> stack;
-    stack.Emplace(root);
+    GrowableArray<int32, 256> stack;
+    stack.Emplace(0);
 
     while (stack.Count() > 0)
     {
-        BVHNode* node = stack.Pop();
-        if (node == nullptr)
-        {
-            continue;
-        }
+        int32 index = stack.Pop();
 
-        if (node->count > 0)
+        // Leaf node
+        if (nodes[index].primitive_count > 0)
         {
-            for (int32 i = 0; i < node->count; ++i)
+            for (int32 i = 0; i < nodes[index].primitive_count; ++i)
             {
-                Float t = callback->RayCastCallback(r, t_min, t_max, primitives[node->offset + i]);
+                Float t = callback->RayCastCallback(r, t_min, t_max, primitives[nodes[index].primitives_offset + i]);
                 if (t <= t_min)
                 {
                     return;
@@ -108,11 +121,11 @@ void BVH::RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const
         else
         {
             // Ordered traversal
-            BVHNode* child1 = node->child1;
-            BVHNode* child2 = node->child2;
+            int32 child1 = index + 1;
+            int32 child2 = nodes[index].child2_offset;
 
-            Float dist1 = child1->aabb.Intersect(r, t_min, t_max);
-            Float dist2 = child2->aabb.Intersect(r, t_min, t_max);
+            Float dist1 = nodes[child1].aabb.Intersect(r, t_min, t_max);
+            Float dist2 = nodes[child2].aabb.Intersect(r, t_min, t_max);
 
             if (dist2 < dist1)
             {
