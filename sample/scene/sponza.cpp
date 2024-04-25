@@ -53,6 +53,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
 
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
     scene.CreateLight<DirectionalLight>(Normalize(-Vec3(-3.0f, 15.0f, -3.0f)), Vec3(15.0f), 0.02f);
+    // scene.CreateLight<UniformInfiniteLight>(sky_color, 15.0f);
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

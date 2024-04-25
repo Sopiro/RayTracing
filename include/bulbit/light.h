@@ -119,4 +119,18 @@ private:
     const ImageTexture* l_map; // Environment(Radiance) map
 };
 
+class UniformInfiniteLight : public Light
+{
+public:
+    UniformInfiniteLight(const Spectrum& l, Float scale = 1);
+
+    virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
+    virtual Float EvaluatePDF(const Ray& ray) const override;
+    virtual Spectrum Emit(const Ray& ray) const override;
+
+private:
+    Spectrum l;
+    Float scale;
+};
+
 } // namespace bulbit

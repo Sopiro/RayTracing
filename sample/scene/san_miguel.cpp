@@ -19,6 +19,8 @@ std::unique_ptr<Camera> SanMiguel(Scene& scene)
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
     scene.CreateLight<DirectionalLight>(Normalize(-Vec3(2.0f, 10.0f, 3.f)), Spectrum(25.0f), 0.01f);
 
+    // scene.CreateLight<UniformInfiniteLight>(sky_color, 15.0f);
+
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
