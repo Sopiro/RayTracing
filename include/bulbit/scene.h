@@ -36,7 +36,7 @@ public:
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
-    const std::vector<InfiniteAreaLight*>& GetInfiniteAreaLights() const;
+    const std::vector<Light*>& GetInfiniteLights() const;
 
     void BuildAccelerationStructure();
 
@@ -51,7 +51,7 @@ private:
     std::vector<Primitive*> primitives;
     std::vector<Material*> materials;
     std::vector<Light*> lights;
-    std::vector<InfiniteAreaLight*> infinite_lights;
+    std::vector<Light*> infinite_lights;
 };
 
 inline AABB Scene::GetAABB() const
@@ -96,9 +96,9 @@ inline void Scene::CreateLight(Args&&... args)
         lights.push_back(light);
     }
 
-    if (light->type == Light::Type::infinite_area_light)
+    if (light->type == Light::Type::infinite_light)
     {
-        infinite_lights.push_back((InfiniteAreaLight*)light);
+        infinite_lights.push_back(light);
     }
 }
 
@@ -120,7 +120,7 @@ inline const std::vector<Light*>& Scene::GetLights() const
     return lights;
 }
 
-inline const std::vector<InfiniteAreaLight*>& Scene::GetInfiniteAreaLights() const
+inline const std::vector<Light*>& Scene::GetInfiniteLights() const
 {
     return infinite_lights;
 }

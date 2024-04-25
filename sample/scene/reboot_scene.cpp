@@ -26,8 +26,8 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
         CreateRectXZ(scene, tf, white);
     }
 
-    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

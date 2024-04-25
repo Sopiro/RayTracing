@@ -52,15 +52,15 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
     scene.CreatePrimitive<Sphere>(Vec3(4, 1, 0), 1.0f, material3);
 
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/quarry_04_puresky_1k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/photo_studio_01_1k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/pizzo_pernice_1k.hdr");
-    scene.CreateLight<InfiniteAreaLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<InfiniteAreaLight>("res/HDR/harties_4k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.CreateLight<InfiniteAreaLight>("res/earthmap.jpg");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/pizzo_pernice_1k.hdr");
+    scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/harties_4k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/earthmap.jpg");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

@@ -24,7 +24,7 @@ Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sa
     bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
-        for (auto& light : scene.GetInfiniteAreaLights())
+        for (auto& light : scene.GetInfiniteLights())
         {
             L += light->Emit(ray);
         }

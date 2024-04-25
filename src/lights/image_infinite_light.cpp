@@ -8,13 +8,13 @@
 namespace bulbit
 {
 
-InfiniteAreaLight::InfiniteAreaLight(const std::string& env_map, const Transform& tf)
-    : InfiniteAreaLight(ImageTexture::Create(env_map, false), tf)
+ImageInfiniteLight::ImageInfiniteLight(const std::string& env_map, const Transform& tf)
+    : ImageInfiniteLight(ImageTexture::Create(env_map, false), tf)
 {
 }
 
-InfiniteAreaLight::InfiniteAreaLight(const ImageTexture* l_map, const Transform& tf)
-    : Light(Light::Type::infinite_area_light)
+ImageInfiniteLight::ImageInfiniteLight(const ImageTexture* l_map, const Transform& tf)
+    : Light(Light::Type::infinite_light)
     , l_map{ l_map }
     , transform{ tf }
 {
@@ -37,7 +37,7 @@ InfiniteAreaLight::InfiniteAreaLight(const ImageTexture* l_map, const Transform&
     distribution.reset(new Distribution2D(image.get(), width, height));
 }
 
-Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
+Spectrum ImageInfiniteLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
 {
     Float map_pdf;
     Point2 uv = distribution->SampleContinuous(&map_pdf, u);
@@ -69,7 +69,7 @@ Spectrum InfiniteAreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, cons
     return l_map->Evaluate(uv);
 }
 
-Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
+Float ImageInfiniteLight::EvaluatePDF(const Ray& ray) const
 {
     Vec3 w = MulT(transform, Normalize(ray.d));
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
@@ -83,7 +83,7 @@ Float InfiniteAreaLight::EvaluatePDF(const Ray& ray) const
     return distribution->Pdf(uv) / (2 * pi * pi * sin_theta);
 }
 
-Spectrum InfiniteAreaLight::Emit(const Ray& ray) const
+Spectrum ImageInfiniteLight::Emit(const Ray& ray) const
 {
     Vec3 w = MulT(transform, Normalize(ray.d));
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);

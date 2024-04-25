@@ -38,8 +38,8 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             }
             else
             {
-                const std::vector<InfiniteAreaLight*>& lights = scene.GetInfiniteAreaLights();
-                for (InfiniteAreaLight* light : lights)
+                const std::vector<Light*>& lights = scene.GetInfiniteLights();
+                for (Light* light : lights)
                 {
                     L += throughput * light->Emit(ray);
                 }
