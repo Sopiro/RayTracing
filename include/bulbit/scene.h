@@ -63,6 +63,7 @@ inline bool Scene::Intersect(Intersection* out_is, const Ray& ray, Float t_min, 
 {
     return accel->Intersect(out_is, ray, t_min, t_max);
 }
+
 inline bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
     return accel->IntersectAny(ray, t_min, t_max);

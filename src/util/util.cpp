@@ -10,11 +10,16 @@
 namespace bulbit
 {
 
-void AddMesh(Scene& scene, std::shared_ptr<Mesh> mesh)
+static std::vector<std::unique_ptr<Mesh>> meshes;
+
+void CreateTriangles(Scene& scene, std::unique_ptr<Mesh> mesh)
 {
-    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
+    const Mesh* m = mesh.get();
+    meshes.push_back(std::move(mesh));
+
+    for (int32 i = 0; i < m->GetTriangleCount(); ++i)
     {
-        scene.CreatePrimitive<Triangle>(mesh, i);
+        scene.CreatePrimitive<Triangle>(m, i);
     }
 }
 
@@ -33,7 +38,7 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
+    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf));
 };
 
 void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -51,7 +56,7 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
+    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf));
 }
 
 void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -69,7 +74,7 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto vertices = std::vector<Mesh::Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
+    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf));
 }
 
 void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Point2& texCoord)
@@ -136,7 +141,7 @@ void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Poi
     };
     // clang-format on
 
-    AddMesh(scene, std::make_shared<Mesh>(vertices, indices, mat, tf));
+    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf));
 }
 
 } // namespace bulbit

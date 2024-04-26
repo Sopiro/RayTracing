@@ -12,14 +12,13 @@ std::unique_ptr<Camera> SanMiguel(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/symmetrical_garden_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/pizzo_pernice_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/harties_4k.hdr");
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
     // scene.CreateLight<DirectionalLight>(Quat(DegToRad(119), -x_axis) * Vec3(0, 0, -1), 15 * Vec3(0.734f, 0.583f, 0.377f),
     // 0.02f);
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
     scene.CreateLight<DirectionalLight>(Normalize(-Vec3(2.0f, 10.0f, 3.f)), Spectrum(25.0f), 0.01f);
-
-    // scene.CreateLight<UniformInfiniteLight>(sky_color, 15.0f);
+    scene.CreateLight<UniformInfiniteLight>(sky_color, 20.0f);
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

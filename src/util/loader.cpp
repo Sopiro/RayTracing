@@ -1,5 +1,6 @@
 #include "bulbit/loader.h"
 #include "bulbit/mesh.h"
+#include "bulbit/triangle.h"
 #include "bulbit/util.h"
 
 #include <filesystem>
@@ -10,8 +11,6 @@ namespace bulbit
 static std::string g_folder;
 static Scene* g_scene = nullptr;
 static const Material* g_fallback_material = nullptr;
-
-extern void AddMesh(Scene& scene, std::shared_ptr<Mesh> mesh);
 
 Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
 {
@@ -99,7 +98,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     return mat;
 }
 
-static std::shared_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+static std::unique_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     assert(mesh->HasPositions());
     assert(mesh->HasNormals());
@@ -159,7 +158,7 @@ static std::shared_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene
         }
     }
 
-    return std::make_shared<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
+    return std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
                                   std::move(indices), LoadMaterial(mesh, scene), transform);
 }
 
@@ -171,7 +170,7 @@ static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Ma
     for (uint32 i = 0; i < node->mNumMeshes; ++i)
     {
         const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        AddMesh(*g_scene, ProcessAssimpMesh(mesh, scene, transform));
+        CreateTriangles(*g_scene, ProcessAssimpMesh(mesh, scene, transform));
     }
 
     // Do the same for each of its children

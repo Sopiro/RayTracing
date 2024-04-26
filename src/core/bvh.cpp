@@ -38,13 +38,18 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
     bvh_primitives.resize(0);
     bvh_primitives.shrink_to_fit();
 
-    nodes = std::make_unique<LinearBVHNode[]>(total_nodes);
+    nodes = new LinearBVHNode[total_nodes];
     int32 offset = 0;
 
     // Flatten out to linear BVH representation
     FlattenBVH(root, &offset);
 
     assert(offset == total_nodes);
+}
+
+BVH::~BVH()
+{
+    delete nodes;
 }
 
 BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,

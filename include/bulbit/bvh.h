@@ -14,6 +14,7 @@ class BVH : public Intersectable
 {
 public:
     BVH(const std::vector<Primitive*>& primitives);
+    ~BVH() noexcept;
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -69,7 +70,7 @@ private:
     void RayCast(const Ray& r, Float t_min, Float t_max, T* callback) const;
 
     std::vector<Primitive*> primitives;
-    std::unique_ptr<LinearBVHNode[]> nodes;
+    LinearBVHNode* nodes;
 };
 
 inline BVH::BVHPrimitive::BVHPrimitive(size_t index, const AABB& aabb)
