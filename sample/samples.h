@@ -4,6 +4,7 @@
 #include "bulbit/loader.h"
 #include "bulbit/material.h"
 #include "bulbit/scene.h"
+#include "bulbit/scene_builder.h"
 
 #include "util.h"
 

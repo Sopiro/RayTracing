@@ -1,7 +1,7 @@
 #include "bulbit/loader.h"
 #include "bulbit/mesh.h"
+#include "bulbit/scene_builder.h"
 #include "bulbit/triangle.h"
-#include "bulbit/util.h"
 
 #include <filesystem>
 
