@@ -6,7 +6,7 @@ Bulbit is a physically based raytracing renderer.
 - Integrator
   - Whitted style, Ambient occlusion and Unidirectional path tracing
 - Acceleration structure
-  - SAH based dynamic BVH
+  - SAH based BVH and dynamic BVH
 - Material
   - Lambertian, Dielectic, Metal and Microfacet
 - Light source
@@ -49,20 +49,3 @@ Bulbit is a physically based raytracing renderer.
 |--|--|
 |![Volume3](.github/image/render_1000x1000_s1000_d2147483647_t1909.5677176s.png)|![Volume4](.github/image/render_1000x1000_s1000_d2147483647_t3018.2762476s.png)|
 <!-- |![Volume5](.github/image/render_1000x1000_s1000_d2147483647_t400.2025311s.png)|![Volume6](.github/image/render_1000x1000_s1000_d2147483647_t989.787817s.png)| -->
-
-## Todo
-- More materials
-- Raytracing on GPU
-
-## References
-- https://raytracing.github.io
-- https://www.pbr-book.org
-- https://learnopengl.com
-- https://boksajak.github.io/blog/BRDF
-- https://google.github.io/filament/Filament.html
-- https://agraphicsguynotes.com/posts/sample_microfacet_brdf/
-- https://schuttejoe.github.io/post/ggximportancesamplingpart2/
-- https://simonstechblog.blogspot.com/2020/01/note-on-sampling-ggx-distribution-of.html
-- https://hal.inria.fr/hal-01024289/file/Heitz2014Slides.pdf
-- https://jcgt.org/published/0007/04/01/
-- https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
