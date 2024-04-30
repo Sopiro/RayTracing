@@ -61,12 +61,10 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     }
 
     // Right sphere
-    // {
-    //     auto mat = scene.CreateMaterial<Dielectric>(1.5f);
-    //     auto sphere = std::make_shared<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
-
-    //     scene.Add(sphere);
-    // }
+    {
+        // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
+        // scene.CreatePrimitive<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
+    }
 
     // Lights
     {

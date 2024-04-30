@@ -1,9 +1,9 @@
-#include "bulbit/util.h"
 #include "bulbit/material.h"
 #include "bulbit/mesh.h"
 #include "bulbit/microfacet.h"
 #include "bulbit/scene.h"
 #include "bulbit/triangle.h"
+#include "bulbit/util.h"
 
 #include <filesystem>
 

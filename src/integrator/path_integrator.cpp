@@ -85,12 +85,11 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             Float visibility;
             Spectrum li = light->Sample(&to_light, &light_pdf, &visibility, is, sampler.Next2D());
 
-            Ray shadow_ray{ is.point, to_light };
-
             // Importance sample light
             Float light_brdf_pdf = spdf->Evaluate(to_light);
             if (li.IsBlack() == false && light_brdf_pdf > 0)
             {
+                Ray shadow_ray(is.point, to_light);
                 if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
                     Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
@@ -110,7 +109,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             {
                 // Importance sample BRDF
                 Vec3 scattered = spdf->Sample(sampler.Next2D());
-                shadow_ray = Ray{ is.point, scattered };
+                Ray shadow_ray(is.point, scattered);
 
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
                 if (brdf_light_pdf > 0)
