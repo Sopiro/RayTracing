@@ -2,6 +2,8 @@
 #include "bulbit/intersectable.h"
 #include "bulbit/util.h"
 
+#include <algorithm>
+
 namespace bulbit
 {
 

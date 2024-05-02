@@ -1,4 +1,5 @@
 #include "bulbit/camera.h"
+#include "bulbit/frame.h"
 
 namespace bulbit
 {

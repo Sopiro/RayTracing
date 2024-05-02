@@ -1,6 +1,6 @@
 #pragma once
 
-#include "random.h"
+#include "common.h"
 
 namespace bulbit
 {
@@ -131,7 +131,7 @@ inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
     // sample a spherical cap in (-wo.z, 1]
     Float phi = two_pi * u.x;
     Float z = std::fma((1 - u.y), (1 + wo.z), -wo.z);
-    Float sinTheta = std::sqrt(std::clamp(1 - z * z, Float(0), Float(1)));
+    Float sinTheta = std::sqrt(Clamp(1 - z * z, 0, 1));
     Float x = sinTheta * std::cos(phi);
     Float y = sinTheta * std::sin(phi);
     Vec3 c = Vec3(x, y, z);

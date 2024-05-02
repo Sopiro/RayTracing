@@ -97,6 +97,16 @@ private:
 
         return r0 + (1 - r0) * std::pow((1 - cosine), Float(5.0));
     }
+
+    static Vec3 Refract(const Vec3& uv, const Vec3& n, Float eta_p /*== eta_i / eta_t*/)
+    {
+        Float cos_theta = std::fmin(Dot(-uv, n), 1);
+
+        Vec3 r_out_perp = eta_p * (uv + cos_theta * n);
+        Vec3 r_out_parl = -std::sqrt(std::fabs(1 - r_out_perp.Length2())) * n;
+
+        return r_out_perp + r_out_parl;
+    }
 };
 
 class Metal : public Material

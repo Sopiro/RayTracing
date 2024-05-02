@@ -1,11 +1,8 @@
 #pragma once
 
-#include "bulbit/growable_array.h"
-#include "bulbit/parallel.h"
+#include "growable_array.h"
+#include "parallel.h"
 #include "primitive.h"
-
-#include <memory_resource>
-#include <span>
 
 namespace bulbit
 {

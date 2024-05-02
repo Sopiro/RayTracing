@@ -86,7 +86,7 @@ public:
     // [0, 1)
     Float NextFloat()
     {
-        return std::min(1 - epsilon, Float(NextUint() * 0x1p-32f));
+        return std::fmin(1 - epsilon, Float(NextUint() * 0x1p-32f));
     }
 
 private:

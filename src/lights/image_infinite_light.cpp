@@ -1,4 +1,5 @@
 #include "bulbit/bitmap.h"
+#include "bulbit/frame.h"
 #include "bulbit/image_texture.h"
 #include "bulbit/light.h"
 #include "bulbit/util.h"

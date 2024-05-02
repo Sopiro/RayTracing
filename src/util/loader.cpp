@@ -3,6 +3,10 @@
 #include "bulbit/scene_builder.h"
 #include "bulbit/triangle.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
+
 #include <filesystem>
 
 namespace bulbit
