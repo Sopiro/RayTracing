@@ -7,20 +7,32 @@
 namespace bulbit
 {
 
+template <typename T>
 class Texture
 {
 public:
     virtual ~Texture() = default;
 
-    virtual Spectrum Evaluate(const Point2& uv) const = 0;
+    virtual T Evaluate(const Point2& uv) const = 0;
+};
 
+class FloatTexture : public Texture<Float>
+{
+public:
+    virtual ~FloatTexture() = default;
+};
+
+class SpectrumTexture : public Texture<Spectrum>
+{
+public:
+    virtual ~SpectrumTexture() = default;
     virtual Float EvaluateAlpha(const Point2& uv) const
     {
         return 1;
-    }
+    };
 };
 
-class ConstantColor : public Texture
+class ConstantColor : public SpectrumTexture
 {
 public:
     static ConstantColor* Create(const Spectrum& rgb)
@@ -63,13 +75,102 @@ private:
     static inline Pool<Spectrum, ConstantColor, ColorHash> pool;
 };
 
+class ConstantFloatTexture : public FloatTexture
+{
+public:
+    static ConstantFloatTexture* Create(Float value)
+    {
+        return pool.Create(value);
+    }
+
+    ConstantFloatTexture(Float value)
+        : value{ value }
+    {
+    }
+
+    virtual Float Evaluate(const Point2& uv) const override
+    {
+        return value;
+    }
+
+private:
+    Float value;
+
+    static inline Pool<Float, ConstantFloatTexture> pool;
+};
+
 enum TexCoordFilter
 {
     repeat,
     clamp,
 };
 
-class ImageTexture : public Texture
+inline void FilterTexCoord(int32* u, int32* v, int32 width, int32 height, TexCoordFilter texcoord_filter)
+{
+    switch (texcoord_filter)
+    {
+    case TexCoordFilter::repeat:
+    {
+        *u = *u >= 0 ? *u % width : width - (-(*u) % width) - 1;
+        *v = *v >= 0 ? *v % height : height - (-(*v) % height) - 1;
+    }
+    break;
+    case TexCoordFilter::clamp:
+    {
+        *u = Clamp(*u, 0, width - 1);
+        *v = Clamp(*v, 0, height - 1);
+    }
+    break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
+class FloatImageTexture : public FloatTexture
+{
+public:
+    static FloatImageTexture* Create(const std::string& filename, int32 channel, bool srgb = false)
+    {
+        return pool.Create({ filename, channel }, srgb);
+    }
+
+    FloatImageTexture();
+    FloatImageTexture(const std::string& filename, int32 channel, bool srgb);
+    FloatImageTexture(const std::pair<std::string, int32>& filename_channel, bool srgb);
+
+    virtual Float Evaluate(const Point2& uv) const override;
+
+    int32 GetWidth() const
+    {
+        return width;
+    }
+
+    int32 GetHeight() const
+    {
+        return height;
+    }
+
+protected:
+    std::unique_ptr<Float[]> floats;
+
+    int32 channel;
+    int32 width, height;
+    TexCoordFilter texcoord_filter;
+
+private:
+    struct StringIntHash
+    {
+        size_t operator()(const std::pair<std::string, int32>& string_float) const
+        {
+            return std::hash<std::string>()(string_float.first) ^ std::hash<int32>()(string_float.second);
+        }
+    };
+
+    static inline Pool<std::pair<std::string, int32>, FloatImageTexture, StringIntHash> pool;
+};
+
+class ImageTexture : public SpectrumTexture
 {
 public:
     static ImageTexture* Create(const std::string& filename, bool srgb = false)
@@ -87,14 +188,13 @@ public:
     {
         return width;
     }
+
     int32 GetHeight() const
     {
         return height;
     }
 
 protected:
-    void FilterTexCoord(int32* u, int32* v) const;
-
     std::unique_ptr<RGBSpectrum[]> rgb;
     std::unique_ptr<Float[]> alpha;
 

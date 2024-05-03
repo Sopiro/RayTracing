@@ -9,7 +9,7 @@ DiffuseLight::DiffuseLight(const Spectrum& color, bool two_sided)
 {
 }
 
-DiffuseLight::DiffuseLight(const Texture* emission, bool two_sided)
+DiffuseLight::DiffuseLight(const SpectrumTexture* emission, bool two_sided)
     : emission{ emission }
     , two_sided{ two_sided }
 {

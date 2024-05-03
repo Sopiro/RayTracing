@@ -8,7 +8,7 @@ Lambertian::Lambertian(const Spectrum& color)
 {
 }
 
-Lambertian::Lambertian(const Texture* albedo)
+Lambertian::Lambertian(const SpectrumTexture* albedo)
     : albedo{ albedo }
 {
 }

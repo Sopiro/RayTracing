@@ -10,8 +10,9 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     {
         auto mat = scene.CreateMaterial<Microfacet>(
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
-            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"),
-            ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg"), ConstantColor::Create(0.0f),
+            FloatImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel),
+            FloatImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel),
+            ConstantColor::Create(Spectrum(0.0f)),
             ImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png"));
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
@@ -50,7 +51,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = scene.CreateMaterial<Microfacet>(
             ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
-            ConstantColor::Create(Spectrum(1.0f)), ConstantColor::Create(Spectrum(0.2f)));
+            ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f));
 
         LoadModel(scene, "res/stanford/arma.obj", tf, mat);
     }

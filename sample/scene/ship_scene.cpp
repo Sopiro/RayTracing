@@ -38,8 +38,8 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
     // Floor
     {
-        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0), ConstantColor::Create(Spectrum(0.0f)),
-                                                    ConstantColor::Create(Spectrum(0.001f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0), ConstantFloatTexture::Create(0.0f),
+                                                    ConstantFloatTexture::Create(0.001f));
         Float size = 9.0f;
         Float y = 2.1f;
 

@@ -47,8 +47,8 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
     {
         // Lucy
         Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.85f) };
-        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0f), ConstantColor::Create(Spectrum(1.0f)),
-                                                    ConstantColor::Create(Spectrum(0.2f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(1.0f), ConstantFloatTexture::Create(1.0f),
+                                                    ConstantFloatTexture::Create(0.2f));
 
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 

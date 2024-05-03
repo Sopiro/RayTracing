@@ -70,14 +70,14 @@ class Lambertian : public Material
 {
 public:
     Lambertian(const Spectrum& color);
-    Lambertian(const Texture* albedo);
+    Lambertian(const SpectrumTexture* albedo);
 
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual bool TestAlpha(const Point2& uv) const override;
 
 public:
-    const Texture* albedo;
+    const SpectrumTexture* albedo;
 };
 
 class Dielectric : public Material
@@ -129,11 +129,11 @@ public:
 class Microfacet : public Material
 {
 public:
-    Microfacet(const Texture* basecolor,
-               const Texture* metallic,
-               const Texture* roughness,
-               const Texture* emissive = ConstantColor::Create(Float(0.0)),
-               const Texture* normalmap = ConstantColor::Create(Float(0.5), Float(0.5), Float(1.0)));
+    Microfacet(const SpectrumTexture* basecolor,
+               const FloatTexture* metallic,
+               const FloatTexture* roughness,
+               const SpectrumTexture* emissive = ConstantColor::Create(Float(0.0)),
+               const SpectrumTexture* normalmap = ConstantColor::Create(Float(0.5), Float(0.5), Float(1.0)));
 
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;
@@ -141,25 +141,25 @@ public:
     virtual bool TestAlpha(const Point2& uv) const override;
 
 private:
-    const Texture* basecolor;
-    const Texture* metallic;
-    const Texture* roughness;
-    const Texture* emissive;
-    const Texture* normalmap;
+    const SpectrumTexture* basecolor;
+    const FloatTexture* metallic;
+    const FloatTexture* roughness;
+    const SpectrumTexture* emissive;
+    const SpectrumTexture* normalmap;
 };
 
 class DiffuseLight : public Material
 {
 public:
     DiffuseLight(const Spectrum& color, bool two_sided = false);
-    DiffuseLight(const Texture* emission, bool two_sided = false);
+    DiffuseLight(const SpectrumTexture* emission, bool two_sided = false);
 
     virtual bool IsLightSource() const override;
 
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
 
-    const Texture* emission;
+    const SpectrumTexture* emission;
     bool two_sided;
 };
 

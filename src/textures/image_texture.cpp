@@ -94,8 +94,8 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
     int32 i0 = int32(w), i1 = int32(w) + 1;
     int32 j0 = int32(h), j1 = int32(h) + 1;
 
-    FilterTexCoord(&i0, &j0);
-    FilterTexCoord(&i1, &j1);
+    FilterTexCoord(&i0, &j0, width, height, texcoord_filter);
+    FilterTexCoord(&i1, &j1, width, height, texcoord_filter);
 
     Float fu = w - std::floor(w);
     Float fv = h - std::floor(h);
@@ -136,8 +136,8 @@ Float ImageTexture::EvaluateAlpha(const Point2& uv) const
     int32 i0 = int32(w), i1 = int32(w) + 1;
     int32 j0 = int32(h), j1 = int32(h) + 1;
 
-    FilterTexCoord(&i0, &j0);
-    FilterTexCoord(&i1, &j1);
+    FilterTexCoord(&i0, &j0, width, height, texcoord_filter);
+    FilterTexCoord(&i1, &j1, width, height, texcoord_filter);
 
     Float fu = w - std::floor(w);
     Float fv = h - std::floor(h);
@@ -150,28 +150,6 @@ Float ImageTexture::EvaluateAlpha(const Point2& uv) const
            (  fu) * (1-fv) * sp10 + (  fu) * (fv) * sp11;
     // clang-format on
 #endif
-}
-
-void ImageTexture::FilterTexCoord(int32* u, int32* v) const
-{
-    switch (texcoord_filter)
-    {
-    case TexCoordFilter::repeat:
-    {
-        *u = *u >= 0 ? *u % width : width - (-(*u) % width) - 1;
-        *v = *v >= 0 ? *v % height : height - (-(*v) % height) - 1;
-    }
-    break;
-    case TexCoordFilter::clamp:
-    {
-        *u = Clamp(*u, 0, width - 1);
-        *v = Clamp(*v, 0, height - 1);
-    }
-    break;
-    default:
-        assert(false);
-        break;
-    }
 }
 
 } // namespace bulbit

@@ -5,11 +5,11 @@
 namespace bulbit
 {
 
-Microfacet::Microfacet(const Texture* basecolor,
-                       const Texture* metallic,
-                       const Texture* roughness,
-                       const Texture* emissive,
-                       const Texture* normalmap)
+Microfacet::Microfacet(const SpectrumTexture* basecolor,
+                       const FloatTexture* metallic,
+                       const FloatTexture* roughness,
+                       const SpectrumTexture* emissive,
+                       const SpectrumTexture* normalmap)
     : basecolor{ basecolor }
     , metallic{ metallic }
     , roughness{ roughness }
@@ -56,8 +56,8 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
     Float VoH = Dot(v, h);
 
     Spectrum c = basecolor->Evaluate(is.uv);
-    Float m = metallic->Evaluate(is.uv).b;
-    Float r = roughness->Evaluate(is.uv).g;
+    Float m = metallic->Evaluate(is.uv);
+    Float r = roughness->Evaluate(is.uv);
 
     Float alpha = RoughnessToAlpha(r);
     Float alpha2 = alpha * alpha;
@@ -78,8 +78,8 @@ Spectrum Microfacet::Evaluate(const Intersection& is, const Vec3& wi, const Vec3
 bool Microfacet::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
 {
     Spectrum c = basecolor->Evaluate(is.uv);
-    Float m = metallic->Evaluate(is.uv).b;
-    Float r = roughness->Evaluate(is.uv).g;
+    Float m = metallic->Evaluate(is.uv);
+    Float r = roughness->Evaluate(is.uv);
 
     Float alpha = RoughnessToAlpha(r);
     Vec3 wo = -wi;

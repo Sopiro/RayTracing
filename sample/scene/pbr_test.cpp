@@ -34,8 +34,8 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
 
     // Ground
     {
-        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.9f), ConstantColor::Create(Spectrum(0.0f)),
-                                                    ConstantColor::Create(Spectrum(0.1f)));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.9f), ConstantFloatTexture::Create(0.0f),
+                                                    ConstantFloatTexture::Create(0.1f));
 
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(50.0f) };
         CreateRectXZ(scene, tf1, mat);
