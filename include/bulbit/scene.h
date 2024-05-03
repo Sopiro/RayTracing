@@ -3,9 +3,8 @@
 #include "bvh.h"
 #include "dynamic_bvh.h"
 
-#include "constant_color.h"
-#include "image_texture.h"
 #include "intersectable.h"
+#include "texture.h"
 
 #include "light.h"
 

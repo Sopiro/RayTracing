@@ -1,10 +1,10 @@
 #pragma once
 
-#include "image_texture.h"
 #include "intersectable.h"
 #include "primitive.h"
 #include "sampling.h"
 #include "spectrum.h"
+#include "texture.h"
 #include "transform.h"
 
 namespace bulbit

@@ -12,8 +12,7 @@
 #include "util.h"
 
 #include "bitmap.h"
-#include "constant_color.h"
-#include "image_texture.h"
+#include "texture.h"
 
 #include "material.h"
 

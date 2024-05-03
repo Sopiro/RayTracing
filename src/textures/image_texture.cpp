@@ -5,9 +5,8 @@
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
-#include "bulbit/image_texture.h"
-
 #include "bulbit/parallel_for.h"
+#include "bulbit/texture.h"
 
 namespace bulbit
 {

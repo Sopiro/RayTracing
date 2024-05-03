@@ -1,8 +1,8 @@
 #pragma once
 
-#include "constant_color.h"
 #include "pdf.h"
 #include "ray.h"
+#include "texture.h"
 
 namespace bulbit
 {

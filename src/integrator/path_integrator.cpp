@@ -95,12 +95,12 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                     Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
                     if (light->IsDeltaLight())
                     {
-                        L += throughput * light_weight / light_pdf * li * f_cos;
+                        L += throughput * light_weight * li * f_cos / light_pdf;
                     }
                     else
                     {
                         Float mis_weight = PowerHeuristic(1, light_pdf, 1, light_brdf_pdf);
-                        L += throughput * light_weight * mis_weight / light_pdf * li * f_cos;
+                        L += throughput * light_weight * mis_weight * li * f_cos / light_pdf;
                     }
                 }
             }
@@ -127,7 +127,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                             if (li.IsBlack() == false)
                             {
                                 Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
-                                L += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
+                                L += throughput * light_weight * mis_weight * li * f_cos / brdf_pdf;
                             }
                         }
                     }
@@ -140,7 +140,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
                             Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
-                            L += throughput * light_weight * mis_weight / brdf_pdf * li * f_cos;
+                            L += throughput * light_weight * mis_weight * li * f_cos / brdf_pdf;
                         }
                     }
                 }
@@ -161,7 +161,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         ray = scattered;
 
         // Russian roulette
-        const int32 min_bounces = 3;
+        const int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
             Float rr = std::fmin(rr_probability, throughput.Luminance());
