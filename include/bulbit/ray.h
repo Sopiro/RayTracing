@@ -16,7 +16,7 @@ struct Ray
     Vec3 d;
 
     // todo: http://www.pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error.html
-    inline static constexpr Float epsilon = Float(1e-4);
+    static constexpr Float epsilon = Float(1e-4);
 };
 
 inline Ray::Ray(const Point3& origin, const Vec3& direction)

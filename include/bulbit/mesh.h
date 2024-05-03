@@ -7,18 +7,18 @@
 namespace bulbit
 {
 
+struct Vertex
+{
+    Point3 position;
+    Vec3 normal;
+    Vec3 tangent;
+    Point2 texCoord;
+};
+
 // Represents triangle mesh
 class Mesh
 {
 public:
-    struct Vertex
-    {
-        Point3 position;
-        Vec3 normal;
-        Vec3 tangent;
-        Point2 texCoord;
-    };
-
     Mesh(std::vector<Point3> positions,
          std::vector<Vec3> normals,
          std::vector<Vec3> tangents,
