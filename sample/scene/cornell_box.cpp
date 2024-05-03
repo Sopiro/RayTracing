@@ -11,7 +11,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
     auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
+    auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<Lambertian>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15.0f));
     // auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));

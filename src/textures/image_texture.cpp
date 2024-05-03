@@ -11,7 +11,7 @@
 namespace bulbit
 {
 
-ImageTexture::ImageTexture()
+ColorImageTexture::ColorImageTexture()
     : rgb{ nullptr }
     , alpha{ nullptr }
     , width{ 0 }
@@ -20,7 +20,7 @@ ImageTexture::ImageTexture()
 {
 }
 
-ImageTexture::ImageTexture(const std::string& filename, bool srgb)
+ColorImageTexture::ColorImageTexture(const std::string& filename, bool srgb)
     : texcoord_filter{ repeat }
 {
     stbi_set_flip_vertically_on_load(true);
@@ -73,7 +73,7 @@ ImageTexture::ImageTexture(const std::string& filename, bool srgb)
     stbi_image_free(data);
 }
 
-Spectrum ImageTexture::Evaluate(const Point2& uv) const
+Spectrum ColorImageTexture::Evaluate(const Point2& uv) const
 {
 #if 0
     // Nearest sampling
@@ -110,7 +110,7 @@ Spectrum ImageTexture::Evaluate(const Point2& uv) const
 #endif
 }
 
-Float ImageTexture::EvaluateAlpha(const Point2& uv) const
+Float ColorImageTexture::EvaluateAlpha(const Point2& uv) const
 {
     if (alpha == nullptr)
     {

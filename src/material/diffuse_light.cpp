@@ -4,7 +4,7 @@ namespace bulbit
 {
 
 DiffuseLight::DiffuseLight(const Spectrum& color, bool two_sided)
-    : emission{ ConstantColor::Create(color) }
+    : emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }

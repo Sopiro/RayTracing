@@ -25,6 +25,7 @@ public:
         : type{ type }
     {
     }
+
     virtual ~Light() = default;
 
     virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const = 0;
@@ -106,7 +107,7 @@ class ImageInfiniteLight : public Light
 {
 public:
     ImageInfiniteLight(const std::string& env_map, const Transform& transform = identity);
-    ImageInfiniteLight(const ImageTexture* l_map, const Transform& transform = identity);
+    ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& transform = identity);
 
     virtual Spectrum Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
@@ -116,7 +117,7 @@ private:
     Transform transform;
 
     std::unique_ptr<Distribution2D> distribution;
-    const ImageTexture* l_map; // Environment(Radiance) map
+    const ColorImageTexture* l_map; // Environment(Radiance) map
 };
 
 class UniformInfiniteLight : public Light

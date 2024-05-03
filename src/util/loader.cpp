@@ -38,7 +38,7 @@ static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat,
         mat->GetTexture(type, i, &str);
         // std::cout << str.C_Str() << std::endl;
 
-        SpectrumTexture* texture = ImageTexture::Create(g_folder + str.C_Str(), srgb);
+        SpectrumTexture* texture = ColorImageTexture::Create(g_folder + str.C_Str(), srgb);
         textures.push_back(texture);
     }
 
@@ -107,15 +107,15 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     // clang-format off
     auto mat = g_scene->CreateMaterial<Microfacet>(
         basecolor_textures.empty() ? 
-            ConstantColor::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)    : basecolor_textures[0],
+            ConstantColorTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)    : basecolor_textures[0],
         metallic_textures.empty() ? 
-            ConstantFloatTexture::Create(metallic)                                      : metallic_textures[0],
+            ConstantFloatTexture::Create(metallic)                                             : metallic_textures[0],
         roughness_textures.empty() ? 
-            ConstantFloatTexture::Create(roughness)                                     : roughness_textures[0],
+            ConstantFloatTexture::Create(roughness)                                            : roughness_textures[0],
         emissive_textures.empty() ? 
-            ConstantColor::Create(emissive_color.r, emissive_color.g, emissive_color.b) : emissive_textures[0],
+            ConstantColorTexture::Create(emissive_color.r, emissive_color.g, emissive_color.b) : emissive_textures[0],
         normalmap_textures.empty() ? 
-            ConstantColor::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
+            ConstantColorTexture::Create(0.5, 0.5, 1.0)                                        : normalmap_textures[0]
     );
     // clang-format on
 

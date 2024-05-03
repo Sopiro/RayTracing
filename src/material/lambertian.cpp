@@ -4,7 +4,7 @@ namespace bulbit
 {
 
 Lambertian::Lambertian(const Spectrum& color)
-    : albedo{ ConstantColor::Create(color) }
+    : albedo{ ConstantColorTexture::Create(color) }
 {
 }
 

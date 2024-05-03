@@ -28,7 +28,8 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 if (choose_mat < 0.9f)
                 {
                     auto mat = scene.CreateMaterial<Microfacet>(
-                        ConstantColor::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
+                        ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) *
+                                                     Float(0.7f)),
                         ConstantFloatTexture::Create(Rand() > 0.5f ? Float(1.0f) : Float(0.0f)),
                         ConstantFloatTexture::Create(Rand(0, 1)));
                     scene.CreatePrimitive<Sphere>(center, 0.2f, mat);

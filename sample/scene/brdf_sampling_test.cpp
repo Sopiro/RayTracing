@@ -11,7 +11,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
     auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = ImageTexture::Create("res/wakdu.jpg");
+    auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<Lambertian>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15.0));
 
@@ -46,8 +46,8 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
 
     // Center sphere
     {
-        auto mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(1.0f)), ConstantFloatTexture::Create(1.0f),
-                                                    ConstantFloatTexture::Create(0.2f));
+        auto mat = scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(1.0f)),
+                                                    ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f));
 
         Float r = 0.25;
         scene.CreatePrimitive<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);

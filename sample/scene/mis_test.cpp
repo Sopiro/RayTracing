@@ -7,7 +7,7 @@
 std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
-        auto floor_mat = scene.CreateMaterial<Microfacet>(ConstantColor::Create(0.4f), ConstantFloatTexture::Create(0.0f),
+        auto floor_mat = scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(0.4f), ConstantFloatTexture::Create(0.0f),
                                                           ConstantFloatTexture::Create(0.0f));
         LoadModel(scene, "res/veach_mi/floor.obj", Transform{ identity }, floor_mat);
     }
@@ -15,19 +15,19 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
     // plates
     {
         auto m1 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.005f)));
 
         auto m2 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.02f)));
 
         auto m3 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.05f)));
 
         auto m4 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.1f)));
 
         LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity }, m1);
@@ -73,8 +73,8 @@ static int32 index1 = Sample::Register("mis", MISTest);
 std::unique_ptr<Camera> MISTestWak(Scene& scene)
 {
     {
-        auto floor = scene.CreateMaterial<Microfacet>(ImageTexture::Create("res/wakdu.jpg"), ConstantFloatTexture::Create(0.0f),
-                                                      ConstantFloatTexture::Create(0.0f));
+        auto floor = scene.CreateMaterial<Microfacet>(ColorImageTexture::Create("res/wakdu.jpg"),
+                                                      ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.0f));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
         CreateRectXZ(scene, tf, floor);
@@ -86,19 +86,19 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
     // plates
     {
         auto m1 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.005f)));
 
         auto m2 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.02f)));
 
         auto m3 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.05f)));
 
         auto m4 =
-            scene.CreateMaterial<Microfacet>(ConstantColor::Create(Spectrum(0.07f, 0.09f, 0.13f)),
+            scene.CreateMaterial<Microfacet>(ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)),
                                              ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(std::sqrt(0.1f)));
 
         LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity }, m1);

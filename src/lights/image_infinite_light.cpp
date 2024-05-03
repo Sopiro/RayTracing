@@ -1,6 +1,5 @@
 #include "bulbit/bitmap.h"
 #include "bulbit/frame.h"
-#include "bulbit/image_texture.h"
 #include "bulbit/light.h"
 #include "bulbit/util.h"
 
@@ -10,11 +9,11 @@ namespace bulbit
 {
 
 ImageInfiniteLight::ImageInfiniteLight(const std::string& env_map, const Transform& tf)
-    : ImageInfiniteLight(ImageTexture::Create(env_map, false), tf)
+    : ImageInfiniteLight(ColorImageTexture::Create(env_map, false), tf)
 {
 }
 
-ImageInfiniteLight::ImageInfiniteLight(const ImageTexture* l_map, const Transform& tf)
+ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& tf)
     : Light(Light::Type::infinite_light)
     , l_map{ l_map }
     , transform{ tf }

@@ -132,8 +132,8 @@ public:
     Microfacet(const SpectrumTexture* basecolor,
                const FloatTexture* metallic,
                const FloatTexture* roughness,
-               const SpectrumTexture* emissive = ConstantColor::Create(Float(0.0)),
-               const SpectrumTexture* normalmap = ConstantColor::Create(Float(0.5), Float(0.5), Float(1.0)));
+               const SpectrumTexture* emissive = ConstantColorTexture::Create(Float(0.0)),
+               const SpectrumTexture* normalmap = ConstantColorTexture::Create(Float(0.5), Float(0.5), Float(1.0)));
 
     virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
     virtual Spectrum Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const override;

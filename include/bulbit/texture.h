@@ -26,31 +26,32 @@ class SpectrumTexture : public Texture<Spectrum>
 {
 public:
     virtual ~SpectrumTexture() = default;
+
     virtual Float EvaluateAlpha(const Point2& uv) const
     {
         return 1;
     };
 };
 
-class ConstantColor : public SpectrumTexture
+class ConstantColorTexture : public SpectrumTexture
 {
 public:
-    static ConstantColor* Create(const Spectrum& rgb)
+    static ConstantColorTexture* Create(const Spectrum& rgb)
     {
         return pool.Create(rgb);
     }
 
-    static ConstantColor* Create(Float rgb)
+    static ConstantColorTexture* Create(Float rgb)
     {
         return Create(Spectrum(rgb));
     }
 
-    static ConstantColor* Create(Float red, Float green, Float blue)
+    static ConstantColorTexture* Create(Float red, Float green, Float blue)
     {
         return Create(Spectrum(red, green, blue));
     }
 
-    ConstantColor(const Spectrum& rgb)
+    ConstantColorTexture(const Spectrum& rgb)
         : color{ rgb }
     {
     }
@@ -60,10 +61,9 @@ public:
         return color;
     }
 
-protected:
+private:
     Spectrum color;
 
-private:
     struct ColorHash
     {
         size_t operator()(const Spectrum& rgb) const
@@ -72,7 +72,7 @@ private:
         }
     };
 
-    static inline Pool<Spectrum, ConstantColor, ColorHash> pool;
+    static inline Pool<Spectrum, ConstantColorTexture, ColorHash> pool;
 };
 
 class ConstantFloatTexture : public FloatTexture
@@ -151,14 +151,13 @@ public:
         return height;
     }
 
-protected:
+private:
     std::unique_ptr<Float[]> floats;
 
     int32 channel;
     int32 width, height;
     TexCoordFilter texcoord_filter;
 
-private:
     struct StringIntHash
     {
         size_t operator()(const std::pair<std::string, int32>& string_float) const
@@ -170,16 +169,16 @@ private:
     static inline Pool<std::pair<std::string, int32>, FloatImageTexture, StringIntHash> pool;
 };
 
-class ImageTexture : public SpectrumTexture
+class ColorImageTexture : public SpectrumTexture
 {
 public:
-    static ImageTexture* Create(const std::string& filename, bool srgb = false)
+    static ColorImageTexture* Create(const std::string& filename, bool srgb = false)
     {
         return pool.Create(filename, srgb);
     }
 
-    ImageTexture();
-    ImageTexture(const std::string& filename, bool srgb);
+    ColorImageTexture();
+    ColorImageTexture(const std::string& filename, bool srgb);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
     virtual Float EvaluateAlpha(const Point2& uv) const override;
@@ -194,15 +193,14 @@ public:
         return height;
     }
 
-protected:
+private:
     std::unique_ptr<RGBSpectrum[]> rgb;
     std::unique_ptr<Float[]> alpha;
 
     int32 width, height;
     TexCoordFilter texcoord_filter;
 
-private:
-    static inline Pool<std::string, ImageTexture> pool;
+    static inline Pool<std::string, ColorImageTexture> pool;
 };
 
 } // namespace bulbit
