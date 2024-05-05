@@ -4,13 +4,13 @@
 namespace bulbit
 {
 
-WhittedStyle::WhittedStyle(const std::shared_ptr<Sampler> sampler, int32 max_depth)
-    : SamplerIntegrator(sampler)
+WhittedStyle::WhittedStyle(const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 max_depth)
+    : SamplerIntegrator(scene, accel, sampler)
     , max_depth{ max_depth }
 {
 }
 
-Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, int32 depth) const
+Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 {
     Spectrum L(0);
 
@@ -20,10 +20,10 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
     }
 
     Intersection is;
-    bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
+    bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
-        for (auto& light : scene.GetInfiniteLights())
+        for (auto& light : scene->GetInfiniteLights())
         {
             L += light->Emit(ray);
         }
@@ -44,11 +44,11 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
 
     if (ir.is_specular)
     {
-        return ir.attenuation * Li(scene, ir.specular_ray, sampler, depth + 1);
+        return ir.attenuation * Li(ir.specular_ray, sampler, depth + 1);
     }
 
     // Evaluate direct light
-    const std::vector<Light*>& lights = scene.GetLights();
+    const std::vector<Light*>& lights = scene->GetLights();
     for (const Light* light : lights)
     {
         Vec3 to_light;
@@ -60,7 +60,7 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
 
         if (li.IsBlack() == false && light_pdf > 0)
         {
-            if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
+            if (IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
             {
                 Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
                 L += li * f_cos / light_pdf;
@@ -74,7 +74,7 @@ Spectrum WhittedStyle::Li(const Scene& scene, const Ray& ray, Sampler& sampler, 
     if (Dot(is.normal, wi) > 0)
     {
         Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
-        return L + Li(scene, Ray(is.point, wi), sampler, depth + 1) * f_cos;
+        return L + Li(Ray(is.point, wi), sampler, depth + 1) * f_cos;
     }
     else
     {

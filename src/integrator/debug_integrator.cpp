@@ -3,15 +3,15 @@
 namespace bulbit
 {
 
-DebugIntegrator::DebugIntegrator(const std::shared_ptr<Sampler> sampler)
-    : SamplerIntegrator(sampler)
+DebugIntegrator::DebugIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler)
+    : SamplerIntegrator(scene, accel, sampler)
 {
 }
 
-Spectrum DebugIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
+Spectrum DebugIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     Intersection is;
-    bool found_intersection = scene.Intersect(&is, primary_ray, Ray::epsilon, infinity);
+    bool found_intersection = Intersect(&is, primary_ray, Ray::epsilon, infinity);
 
     if (found_intersection == false)
     {

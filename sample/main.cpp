@@ -33,21 +33,20 @@ int main(int argc, char* argv[])
     std::cout << "Primitives: " << scene.GetPrimitives().size() << std::endl;
 
     std::cout << "Building Acceleration structure.." << std::endl;
-    scene.BuildAccelerationStructure();
+    BVH accel(scene.GetPrimitives());
     timer.Mark();
     t = timer.Get();
     std::cout << "Acceleration structure build: " << t << "s" << std::endl;
 
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
-    std::shared_ptr<Sampler> sampler = std::make_shared<IndependentSampler>(samples_per_pixel);
-    PathIntegrator renderer(sampler, max_bounces);
-    // DebugIntegrator renderer(sampler);
-    // AmbientOcclusion renderer(sampler, 0.5f);
+    IndependentSampler sampler(samples_per_pixel);
+    PathIntegrator renderer(&scene, &accel, &sampler, max_bounces);
+    // DebugIntegrator renderer(&scene, &accel, &sampler);
+    // AmbientOcclusion renderer(&scene, &accel, &sampler, 0.5f);
 
     Film film(camera.get());
-    renderer.Preprocess(scene, *camera);
-    renderer.Render(&film, scene, *camera);
+    renderer.Render(&film, *camera);
 
     timer.Mark();
     t = timer.Get();

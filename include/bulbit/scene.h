@@ -1,12 +1,7 @@
 #pragma once
 
-#include "bvh.h"
-#include "dynamic_bvh.h"
-
-#include "intersectable.h"
-#include "texture.h"
-
 #include "light.h"
+#include "material.h"
 
 namespace bulbit
 {
@@ -19,10 +14,6 @@ public:
 
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
-
-    AABB GetAABB() const;
-    bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const;
-    bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const;
 
     template <typename T, typename... Args>
     void CreatePrimitive(Args&&... args);
@@ -37,15 +28,10 @@ public:
     const std::vector<Light*>& GetLights() const;
     const std::vector<Light*>& GetInfiniteLights() const;
 
-    void BuildAccelerationStructure();
-
 private:
     Resource resource;
     PoolResource pool;
     Allocator allocator;
-
-    // Acceleration structure
-    std::unique_ptr<Intersectable> accel;
 
     std::vector<Primitive*> primitives;
     std::vector<Material*> materials;
@@ -53,19 +39,31 @@ private:
     std::vector<Light*> infinite_lights;
 };
 
-inline AABB Scene::GetAABB() const
+inline Scene::Scene()
+    : resource{ 64 * 1024 }
+    , pool{ &resource }
+    , allocator{ &pool }
 {
-    return accel->GetAABB();
 }
 
-inline bool Scene::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+inline Scene::~Scene()
 {
-    return accel->Intersect(out_is, ray, t_min, t_max);
-}
+    // Free all pooled resources
 
-inline bool Scene::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
-{
-    return accel->IntersectAny(ray, t_min, t_max);
+    for (Primitive* p : primitives)
+    {
+        allocator.delete_object(p);
+    }
+
+    for (Material* m : materials)
+    {
+        allocator.delete_object(m);
+    }
+
+    for (Light* l : lights)
+    {
+        allocator.delete_object(l);
+    }
 }
 
 template <typename T, typename... Args>

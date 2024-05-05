@@ -7,12 +7,13 @@
 namespace bulbit
 {
 
-SamplerIntegrator::SamplerIntegrator(const std::shared_ptr<Sampler> sampler)
-    : sampler_prototype{ sampler }
+SamplerIntegrator::SamplerIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler)
+    : Integrator(scene, accel)
+    , sampler_prototype{ sampler }
 {
 }
 
-void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& camera)
+void SamplerIntegrator::Render(Film* film, const Camera& camera)
 {
     int32 width = film->width;
     int32 height = film->height;
@@ -58,7 +59,7 @@ void SamplerIntegrator::Render(Film* film, const Scene& scene, const Camera& cam
                     Ray ray;
                     Float weight = camera.SampleRay(&ray, film_sample, aperture_sample);
 
-                    Spectrum L = weight * Li(scene, ray, *sampler);
+                    Spectrum L = weight * Li(ray, *sampler);
 
                     if (L.IsNullish() == false)
                     {

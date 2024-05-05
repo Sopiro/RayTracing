@@ -25,5 +25,8 @@
 
 #include "integrator.h"
 
+#include "bvh.h"
+#include "dynamic_bvh.h"
+
 #include "async_job.h"
 #include "parallel_for.h"

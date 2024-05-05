@@ -17,7 +17,7 @@ public:
     virtual Float Next1D() = 0;
     virtual Point2 Next2D() = 0;
 
-    virtual std::unique_ptr<Sampler> Clone(int32 seed) = 0;
+    virtual std::unique_ptr<Sampler> Clone(int32 seed) const = 0;
 
     const int32 samples_per_pixel;
 

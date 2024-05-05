@@ -2,20 +2,19 @@
 #include "bulbit/light.h"
 #include "bulbit/material.h"
 #include "bulbit/pdf.h"
-#include "bulbit/scene.h"
 #include "bulbit/util.h"
 
 namespace bulbit
 {
 
-PathIntegrator::PathIntegrator(const std::shared_ptr<Sampler> sampler, int32 bounces, Float rr)
-    : SamplerIntegrator(sampler)
+PathIntegrator::PathIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 bounces, Float rr)
+    : SamplerIntegrator(scene, accel, sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
 }
 
-Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
+Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     Spectrum L(0), throughput(1);
     bool was_specular_bounce = false;
@@ -24,7 +23,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
     for (int32 bounce = 0;; ++bounce)
     {
         Intersection is;
-        bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
+        bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
         const Material* mat = is.material;
 
         if (bounce == 0 || was_specular_bounce)
@@ -38,7 +37,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             }
             else
             {
-                const std::vector<Light*>& lights = scene.GetInfiniteLights();
+                const std::vector<Light*>& lights = scene->GetInfiniteLights();
                 for (Light* light : lights)
                 {
                     L += throughput * light->Emit(ray);
@@ -71,7 +70,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
         // Estimate direct light
         // Multiple importance sampling (Direct light + BRDF)
 
-        const std::vector<Light*>& lights = scene.GetLights();
+        const std::vector<Light*>& lights = scene->GetLights();
         size_t num_lights = lights.size();
         if (num_lights > 0)
         {
@@ -90,7 +89,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
             if (li.IsBlack() == false && light_brdf_pdf > 0)
             {
                 Ray shadow_ray(is.point, to_light);
-                if (scene.IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
+                if (IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
                 {
                     Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
                     if (light->IsDeltaLight())
@@ -115,7 +114,7 @@ Spectrum PathIntegrator::Li(const Scene& scene, const Ray& primary_ray, Sampler&
                 if (brdf_light_pdf > 0)
                 {
                     Intersection shadow_is;
-                    if (scene.Intersect(&shadow_is, shadow_ray, Ray::epsilon, infinity))
+                    if (Intersect(&shadow_is, shadow_ray, Ray::epsilon, infinity))
                     {
                         // Intersects area light
                         if (shadow_is.material->IsLightSource())

@@ -4,14 +4,15 @@
 namespace bulbit
 {
 
-NaivePathIntegrator::NaivePathIntegrator(const std::shared_ptr<Sampler> sampler, int32 bounces, Float rr)
-    : SamplerIntegrator(sampler)
+NaivePathIntegrator::NaivePathIntegrator(
+    const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 bounces, Float rr)
+    : SamplerIntegrator(scene, accel, sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
 }
 
-Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sampler, int32 depth) const
+Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 {
     Spectrum L(0);
 
@@ -21,10 +22,10 @@ Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sa
     }
 
     Intersection is;
-    bool found_intersection = scene.Intersect(&is, ray, Ray::epsilon, infinity);
+    bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
-        for (auto& light : scene.GetInfiniteLights())
+        for (auto& light : scene->GetInfiniteLights())
         {
             L += light->Emit(ray);
         }
@@ -44,7 +45,7 @@ Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sa
 
     if (ir.is_specular)
     {
-        return ir.attenuation * Li(scene, ir.specular_ray, sampler, depth + 1);
+        return ir.attenuation * Li(ir.specular_ray, sampler, depth + 1);
     }
 
     Frame frame(is.normal);
@@ -56,7 +57,7 @@ Spectrum NaivePathIntegrator::Li(const Scene& scene, const Ray& ray, Sampler& sa
     if (pdf > 0)
     {
         Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
-        return L + Li(scene, Ray(is.point, wi), sampler, depth + 1) * f_cos / pdf;
+        return L + Li(Ray(is.point, wi), sampler, depth + 1) * f_cos / pdf;
     }
     else
     {

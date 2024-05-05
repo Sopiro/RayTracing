@@ -4,16 +4,16 @@
 namespace bulbit
 {
 
-AmbientOcclusion::AmbientOcclusion(const std::shared_ptr<Sampler> sampler, Float ao_range)
-    : SamplerIntegrator(sampler)
+AmbientOcclusion::AmbientOcclusion(const Scene* scene, const Intersectable* accel, const Sampler* sampler, Float ao_range)
+    : SamplerIntegrator(scene, accel, sampler)
     , range{ ao_range }
 {
 }
 
-Spectrum AmbientOcclusion::Li(const Scene& scene, const Ray& primary_ray, Sampler& sampler) const
+Spectrum AmbientOcclusion::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     Intersection is;
-    bool found_intersection = scene.Intersect(&is, primary_ray, Ray::epsilon, infinity);
+    bool found_intersection = Intersect(&is, primary_ray, Ray::epsilon, infinity);
 
     if (found_intersection == false)
     {
@@ -32,7 +32,7 @@ Spectrum AmbientOcclusion::Li(const Scene& scene, const Ray& primary_ray, Sample
     Vec3 wi = frame.FromLocal(wi_local);
 
     Ray ao_ray(is.point, wi);
-    if (scene.IntersectAny(ao_ray, Ray::epsilon, range) == false)
+    if (IntersectAny(ao_ray, Ray::epsilon, range) == false)
     {
 #if 0
         return Spectrum(wi_local.z * inv_pi / pdf);

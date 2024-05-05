@@ -15,7 +15,7 @@ public:
     virtual Float Next1D() override;
     virtual Point2 Next2D() override;
 
-    virtual std::unique_ptr<Sampler> Clone(int32 seed) override;
+    virtual std::unique_ptr<Sampler> Clone(int32 seed) const override;
 
 private:
     RNG rng;
@@ -37,7 +37,7 @@ inline Point2 IndependentSampler::Next2D()
     return Point2{ rng.NextFloat(), rng.NextFloat() };
 }
 
-inline std::unique_ptr<Sampler> IndependentSampler::Clone(int32 seed)
+inline std::unique_ptr<Sampler> IndependentSampler::Clone(int32 seed) const
 {
     return std::make_unique<IndependentSampler>(samples_per_pixel, seed);
 }
