@@ -74,6 +74,8 @@ public:
 private:
     Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
 
+    std::vector<Light*> infinite_lights;
+
     int32 max_depth;
 };
 
@@ -109,6 +111,8 @@ public:
 private:
     Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
 
+    std::vector<Light*> infinite_lights;
+
     int32 max_bounces;
     Float rr_probability;
 };
@@ -127,6 +131,8 @@ public:
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
 
 private:
+    std::vector<Light*> infinite_lights;
+
     int32 max_bounces;
     Float rr_probability;
 };

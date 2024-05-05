@@ -8,6 +8,13 @@ WhittedStyle::WhittedStyle(const Scene* scene, const Intersectable* accel, const
     : SamplerIntegrator(scene, accel, sampler)
     , max_depth{ max_depth }
 {
+    for (Light* light : scene->GetLights())
+    {
+        if (light->type == Light::Type::infinite_light)
+        {
+            infinite_lights.push_back(light);
+        }
+    }
 }
 
 Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
@@ -23,7 +30,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
-        for (auto& light : scene->GetInfiniteLights())
+        for (auto& light : infinite_lights)
         {
             L += light->Emit(ray);
         }

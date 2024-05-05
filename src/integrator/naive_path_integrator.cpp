@@ -10,6 +10,13 @@ NaivePathIntegrator::NaivePathIntegrator(
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
+    for (Light* light : scene->GetLights())
+    {
+        if (light->type == Light::Type::infinite_light)
+        {
+            infinite_lights.push_back(light);
+        }
+    }
 }
 
 Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) const
@@ -25,7 +32,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
     bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
-        for (auto& light : scene->GetInfiniteLights())
+        for (auto& light : infinite_lights)
         {
             L += light->Emit(ray);
         }

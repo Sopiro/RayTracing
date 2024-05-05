@@ -16,27 +16,25 @@ public:
     Scene& operator=(const Scene&) = delete;
 
     template <typename T, typename... Args>
+    const Material* CreateMaterial(Args&&... args);
+
+    template <typename T, typename... Args>
     void CreatePrimitive(Args&&... args);
 
     template <typename T, typename... Args>
     void CreateLight(Args&&... args);
 
-    template <typename T, typename... Args>
-    const Material* CreateMaterial(Args&&... args);
-
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
-    const std::vector<Light*>& GetInfiniteLights() const;
 
 private:
     Resource resource;
     PoolResource pool;
     Allocator allocator;
 
-    std::vector<Primitive*> primitives;
     std::vector<Material*> materials;
+    std::vector<Primitive*> primitives;
     std::vector<Light*> lights;
-    std::vector<Light*> infinite_lights;
 };
 
 inline Scene::Scene()
@@ -67,6 +65,14 @@ inline Scene::~Scene()
 }
 
 template <typename T, typename... Args>
+inline const Material* Scene::CreateMaterial(Args&&... args)
+{
+    Material* m = allocator.new_object<T>(std::forward<Args>(args)...);
+    materials.push_back(m);
+    return m;
+}
+
+template <typename T, typename... Args>
 inline void Scene::CreatePrimitive(Args&&... args)
 {
     Primitive* p = allocator.new_object<T>(std::forward<Args>(args)...);
@@ -93,19 +99,6 @@ inline void Scene::CreateLight(Args&&... args)
     {
         lights.push_back(light);
     }
-
-    if (light->type == Light::Type::infinite_light)
-    {
-        infinite_lights.push_back(light);
-    }
-}
-
-template <typename T, typename... Args>
-inline const Material* Scene::CreateMaterial(Args&&... args)
-{
-    Material* m = allocator.new_object<T>(std::forward<Args>(args)...);
-    materials.push_back(m);
-    return m;
 }
 
 inline const std::vector<Primitive*>& Scene::GetPrimitives() const
@@ -116,11 +109,6 @@ inline const std::vector<Primitive*>& Scene::GetPrimitives() const
 inline const std::vector<Light*>& Scene::GetLights() const
 {
     return lights;
-}
-
-inline const std::vector<Light*>& Scene::GetInfiniteLights() const
-{
-    return infinite_lights;
 }
 
 } // namespace bulbit

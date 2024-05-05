@@ -12,6 +12,13 @@ PathIntegrator::PathIntegrator(const Scene* scene, const Intersectable* accel, c
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
+    for (Light* light : scene->GetLights())
+    {
+        if (light->type == Light::Type::infinite_light)
+        {
+            infinite_lights.push_back(light);
+        }
+    }
 }
 
 Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
@@ -37,8 +44,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             }
             else
             {
-                const std::vector<Light*>& lights = scene->GetInfiniteLights();
-                for (Light* light : lights)
+                for (Light* light : infinite_lights)
                 {
                     L += throughput * light->Emit(ray);
                 }
