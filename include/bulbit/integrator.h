@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "film.h"
+#include "light_sampler.h"
 #include "sampler.h"
 #include "scene.h"
 
@@ -132,6 +133,7 @@ public:
 
 private:
     std::vector<Light*> infinite_lights;
+    UniformLightSampler light_sampler;
 
     int32 max_bounces;
     Float rr_probability;

@@ -11,6 +11,7 @@ PathIntegrator::PathIntegrator(const Scene* scene, const Intersectable* accel, c
     : SamplerIntegrator(scene, accel, sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
+    , light_sampler{ scene->GetLights() }
 {
     for (Light* light : scene->GetLights())
     {
@@ -75,15 +76,11 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         // Estimate direct light
         // Multiple importance sampling (Direct light + BRDF)
-
-        const std::vector<Light*>& lights = scene->GetLights();
-        size_t num_lights = lights.size();
-        if (num_lights > 0)
+        SampledLight sampled_light;
+        if (light_sampler.Sample(&sampled_light, is, sampler.Next1D()))
         {
-            // Sample one light uniformly
-            size_t index = std::min(size_t(sampler.Next1D() * num_lights), num_lights - 1);
-            const Light* light = lights[index];
-            Float light_weight = Float(num_lights);
+            const Light* light = sampled_light.light;
+            Float light_weight = sampled_light.weight;
 
             Vec3 to_light;
             Float light_pdf;
