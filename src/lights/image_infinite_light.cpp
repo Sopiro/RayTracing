@@ -37,14 +37,14 @@ ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Tra
     distribution.reset(new Distribution2D(image.get(), width, height));
 }
 
-Spectrum ImageInfiniteLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
+LightSample ImageInfiniteLight::Sample(const Intersection& ref, const Point2& u) const
 {
     Float map_pdf;
     Point2 uv = distribution->SampleContinuous(&map_pdf, u);
 
     if (map_pdf == 0)
     {
-        return RGBSpectrum::black;
+        return LightSample{ Vec3::zero, 0, 0, RGBSpectrum::black };
     }
 
     Float theta = (1 - uv[1]) * pi;
@@ -53,20 +53,22 @@ Spectrum ImageInfiniteLight::Sample(Vec3* wi, Float* pdf, Float* visibility, con
     Float cos_theta = std::cos(theta), sin_theta = std::sin(theta);
     Float sin_phi = std::sin(phi), cos_phi = std::cos(phi);
 
-    *wi = Mul(transform, Vec3(sin_theta * cos_phi, cos_theta, sin_theta * sin_phi));
+    LightSample ls;
+    ls.wi = Mul(transform, SphericalDirection(sin_theta, cos_theta, sin_phi, cos_phi));
 
     if (sin_theta == 0)
     {
-        *pdf = 0;
+        ls.pdf = 0;
     }
     else
     {
-        *pdf = map_pdf / (2 * pi * pi * sin_theta);
+        ls.pdf = map_pdf / (2 * pi * pi * sin_theta);
     }
 
-    *visibility = infinity;
+    ls.visibility = infinity;
+    ls.li = l_map->Evaluate(uv);
 
-    return l_map->Evaluate(uv);
+    return ls;
 }
 
 Float ImageInfiniteLight::EvaluatePDF(const Ray& ray) const

@@ -5,6 +5,13 @@
 namespace bulbit
 {
 
+struct PrimitiveSample
+{
+    Point3 point;
+    Vec3 normal;
+    Float pdf;
+};
+
 // Represents a geometric primitive
 class Primitive : public Intersectable
 {
@@ -12,10 +19,10 @@ public:
     virtual ~Primitive() = default;
 
     // Returns random point on the surface
-    virtual void Sample(Intersection* sample, Float* pdf, const Point2& u) const = 0;
+    virtual PrimitiveSample Sample(const Point2& u) const = 0;
 
     // Returns random point relative to the reference point
-    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const = 0;
+    virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const = 0;
 
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const = 0;

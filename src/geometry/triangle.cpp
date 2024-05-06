@@ -133,7 +133,7 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     return mesh->material->TestAlpha(uv);
 }
 
-void Triangle::Sample(Intersection* sample, Float* pdf, const Point2& u0) const
+PrimitiveSample Triangle::Sample(const Point2& u0) const
 {
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -152,58 +152,53 @@ void Triangle::Sample(Intersection* sample, Float* pdf, const Point2& u0) const
         v = 1 - v;
     }
 
-    Vec3 normal = Cross(e1, e2);
-    Float area = normal.Normalize() * Float(0.5);
-    Point3 point = p0 + e1 * u + e2 * v;
+    PrimitiveSample sample;
+    sample.normal = Cross(e1, e2);
+    sample.point = p0 + e1 * u + e2 * v;
 
-    sample->normal = normal;
-    sample->point = point;
-    *pdf = 1 / area;
+    Float area = sample.normal.Normalize() * Float(0.5);
+    sample.pdf = 1 / area;
 
-    Float w = 1 - u - v;
-    sample->uv = GetTexCoord(u, v, w);
-
+    // Float w = 1 - u - v;
+    // sample.uv = GetTexCoord(u, v, w);
+    return sample;
 #else
-    Float u1 = u[0];
-    Float u2 = u[1];
+    Float u1 = u0[0];
+    Float u2 = u0[1];
 
     Float s = std::sqrt(u1);
     Float u = 1.0 - s;
     Float v = u2 * s;
 
-    Vec3 normal = Cross(e1, e2);
-    Float area = normal.Normalize() * 0.5;
-    Point3 point = p0 + e1 * u + e2 * v;
+    PrimitiveSample sample;
+    sample.normal = Cross(e1, e2);
+    sample.point = p0 + e1 * u + e2 * v;
 
-    sample->n = normal;
-    sample->p = point;
-    sample->pdf = 1.0 / area;
+    Float area = sample.normal.Normalize() * Float(0.5);
+    sample.pdf = 1 / area;
+
+    // Float w = 1 - u - v;
+    // sample.uv = GetTexCoord(u, v, w);
+    return sample;
 #endif
 }
 
-void Triangle::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
+PrimitiveSample Triangle::Sample(const Point3& ref, const Point2& u) const
 {
-    Sample(sample, pdf, u);
+    PrimitiveSample sample = Sample(u);
 
-    Vec3 d = sample->point - ref;
+    Vec3 d = sample.point - ref;
     Float distance_squared = Dot(d, d);
 
-    Float cosine = Dot(d, sample->normal) / std::sqrt(distance_squared);
-    if (cosine > 0)
+    Float cosine = Dot(d, sample.normal) / std::sqrt(distance_squared);
+    if (cosine < 0)
     {
-        sample->front_face = false;
-        sample->normal.Negate();
-    }
-    else
-    {
-        sample->front_face = true;
         cosine = -cosine;
     }
 
-    *pdf *= distance_squared / cosine; // Convert to solid angle measure
-    *ref2p = d;
+    sample.pdf *= distance_squared / cosine; // Convert to solid angle measure
 
-    sample->material = mesh->material;
+    return sample;
 }
 
 } // namespace bulbit

@@ -12,13 +12,15 @@ DirectionalLight::DirectionalLight(const Vec3& dir, const Spectrum& intensity, F
 {
 }
 
-Spectrum DirectionalLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
+LightSample DirectionalLight::Sample(const Intersection& ref, const Point2& u) const
 {
-    *wi = -dir + RandomInUnitSphere(u) * radius;
-    *pdf = Float(1.0);
-    *visibility = infinity;
+    LightSample ls;
+    ls.wi = -dir + RandomInUnitSphere(u) * radius;
+    ls.pdf = 1;
+    ls.visibility = infinity;
+    ls.li = intensity;
 
-    return intensity;
+    return ls;
 }
 
 } // namespace bulbit

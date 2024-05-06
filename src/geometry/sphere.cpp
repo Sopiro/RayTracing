@@ -89,16 +89,20 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     return material->TestAlpha(uv);
 }
 
-void Sphere::Sample(Intersection* sample, Float* pdf, const Point2& u) const
+PrimitiveSample Sphere::Sample(const Point2& u) const
 {
+    PrimitiveSample sample;
+    sample.normal = UniformSampleSphere(u);
+    sample.point = center + sample.normal * radius;
+
     Float area = four_pi * radius * radius;
-    sample->normal = UniformSampleSphere(u);
-    sample->point = center + sample->normal * radius;
-    sample->uv = ComputeTexCoord(sample->normal);
-    *pdf = 1 / area;
+    sample.pdf = 1 / area;
+    // sample.uv = ComputeTexCoord(sample.normal);
+
+    return sample;
 }
 
-void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const
+PrimitiveSample Sphere::Sample(const Point3& ref, const Point2& u) const
 {
     Vec3 direction = center - ref;
     Float distance = direction.Normalize();
@@ -119,16 +123,16 @@ void Sphere::Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3&
 
     Frame frame(direction);
 
-    *ref2p = frame.FromLocal(d) * s;
+    Vec3 ref2p = frame.FromLocal(d) * s;
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
-    sample->material = material;
-    sample->point = ref + *ref2p;
-    sample->normal = Normalize(sample->point - center);
-    *pdf = 1 / solid_angle;
+    PrimitiveSample sample;
+    sample.point = ref + ref2p;
+    sample.normal = Normalize(sample.point - center);
+    sample.pdf = 1 / solid_angle;
 
-    sample->front_face = true;
+    return sample;
 }
 
 } // namespace bulbit

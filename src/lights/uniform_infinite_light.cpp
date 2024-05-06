@@ -10,13 +10,15 @@ UniformInfiniteLight::UniformInfiniteLight(const Spectrum& l, Float scale)
 {
 }
 
-Spectrum UniformInfiniteLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
+LightSample UniformInfiniteLight::Sample(const Intersection& ref, const Point2& u) const
 {
-    *wi = UniformSampleSphere(u);
-    *pdf = UniformSampleSpherePDF();
-    *visibility = infinity;
+    LightSample ls;
+    ls.wi = UniformSampleSphere(u);
+    ls.pdf = UniformSampleSpherePDF();
+    ls.visibility = infinity;
+    ls.li = scale * l;
 
-    return scale * l;
+    return ls;
 }
 
 Float UniformInfiniteLight::EvaluatePDF(const Ray& ray) const

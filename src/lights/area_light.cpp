@@ -10,16 +10,22 @@ AreaLight::AreaLight(const Primitive* primitive)
 {
 }
 
-Spectrum AreaLight::Sample(Vec3* wi, Float* pdf, Float* visibility, const Intersection& ref, const Point2& u) const
+LightSample AreaLight::Sample(const Intersection& ref, const Point2& u) const
 {
-    Intersection sample;
-    Vec3 ref2p;
-    primitive->Sample(&sample, pdf, &ref2p, ref.point, u);
+    PrimitiveSample ps = primitive->Sample(ref.point, u);
+    Vec3 ref2p = ps.point - ref.point;
 
-    *visibility = ref2p.Normalize() - Ray::epsilon;
-    *wi = ref2p;
+    LightSample ls;
+    ls.visibility = ref2p.Normalize() - Ray::epsilon;
+    ls.wi = ref2p;
+    ls.pdf = ps.pdf;
 
-    return material->Emit(sample, ref2p);
+    Intersection is;
+    is.point = ps.point;
+    is.front_face = Dot(ps.normal, ref2p) < 0;
+    ls.li = material->Emit(is, ref2p);
+
+    return ls;
 }
 
 } // namespace bulbit

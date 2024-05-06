@@ -16,8 +16,8 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    virtual void Sample(Intersection* sample, Float* pdf, const Point2& u) const override;
-    virtual void Sample(Intersection* sample, Float* pdf, Vec3* ref2p, const Point3& ref, const Point2& u) const override;
+    virtual PrimitiveSample Sample(const Point2& u) const override;
+    virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;

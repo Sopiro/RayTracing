@@ -30,9 +30,9 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
     for (int32 bounce = 0;; ++bounce)
     {
-        Intersection is;
-        bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
-        const Material* mat = is.material;
+        Intersection isect;
+        bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
+        const Material* mat = isect.material;
 
         if (bounce == 0 || was_specular_bounce)
         {
@@ -40,7 +40,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             {
                 if (mat->IsLightSource())
                 {
-                    L += throughput * mat->Emit(is, ray.d);
+                    L += throughput * mat->Emit(isect, ray.d);
                 }
             }
             else
@@ -58,7 +58,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         }
 
         Interaction ir;
-        if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
+        if (mat->Scatter(&ir, isect, ray.d, sampler.Next2D()) == false)
         {
             break;
         }
@@ -72,37 +72,34 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         const PDF* spdf = ir.GetScatteringPDF();
 
-        L += throughput * mat->Emit(is, ray.d);
+        L += throughput * mat->Emit(isect, ray.d);
 
         // Estimate direct light
         // Multiple importance sampling (Direct light + BRDF)
         SampledLight sampled_light;
-        if (light_sampler.Sample(&sampled_light, is, sampler.Next1D()))
+        if (light_sampler.Sample(&sampled_light, isect, sampler.Next1D()))
         {
             const Light* light = sampled_light.light;
             Float light_weight = sampled_light.weight;
 
-            Vec3 to_light;
-            Float light_pdf;
-            Float visibility;
-            Spectrum li = light->Sample(&to_light, &light_pdf, &visibility, is, sampler.Next2D());
+            LightSample ls = light->Sample(isect, sampler.Next2D());
 
             // Importance sample light
-            Float light_brdf_pdf = spdf->Evaluate(to_light);
-            if (li.IsBlack() == false && light_brdf_pdf > 0)
+            Float light_brdf_pdf = spdf->Evaluate(ls.wi);
+            if (ls.li.IsBlack() == false && light_brdf_pdf > 0)
             {
-                Ray shadow_ray(is.point, to_light);
-                if (IntersectAny(shadow_ray, Ray::epsilon, visibility) == false)
+                Ray shadow_ray(isect.point, ls.wi);
+                if (IntersectAny(shadow_ray, Ray::epsilon, ls.visibility) == false)
                 {
-                    Spectrum f_cos = mat->Evaluate(is, ray.d, to_light);
+                    Spectrum f_cos = mat->Evaluate(isect, ray.d, ls.wi);
                     if (light->IsDeltaLight())
                     {
-                        L += throughput * light_weight * li * f_cos / light_pdf;
+                        L += throughput * light_weight * ls.li * f_cos / ls.pdf;
                     }
                     else
                     {
-                        Float mis_weight = PowerHeuristic(1, light_pdf, 1, light_brdf_pdf);
-                        L += throughput * light_weight * mis_weight * li * f_cos / light_pdf;
+                        Float mis_weight = PowerHeuristic(1, ls.pdf, 1, light_brdf_pdf);
+                        L += throughput * light_weight * mis_weight * ls.li * f_cos / ls.pdf;
                     }
                 }
             }
@@ -111,7 +108,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             {
                 // Importance sample BRDF
                 Vec3 scattered = spdf->Sample(sampler.Next2D());
-                Ray shadow_ray(is.point, scattered);
+                Ray shadow_ray(isect.point, scattered);
 
                 Float brdf_light_pdf = light->EvaluatePDF(shadow_ray);
                 if (brdf_light_pdf > 0)
@@ -125,23 +122,23 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                             Float brdf_pdf = spdf->Evaluate(scattered);
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
-                            li = shadow_is.material->Emit(shadow_is, scattered);
+                            Spectrum li = shadow_is.material->Emit(shadow_is, scattered);
                             if (li.IsBlack() == false)
                             {
-                                Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
+                                Spectrum f_cos = mat->Evaluate(isect, ray.d, scattered);
                                 L += throughput * light_weight * mis_weight * li * f_cos / brdf_pdf;
                             }
                         }
                     }
                     else
                     {
-                        li = light->Emit(shadow_ray);
+                        Spectrum li = light->Emit(shadow_ray);
                         if (li.IsBlack() == false)
                         {
                             Float brdf_pdf = spdf->Evaluate(scattered);
                             Float mis_weight = PowerHeuristic(1, brdf_pdf, 1, brdf_light_pdf);
 
-                            Spectrum f_cos = mat->Evaluate(is, ray.d, scattered);
+                            Spectrum f_cos = mat->Evaluate(isect, ray.d, scattered);
                             L += throughput * light_weight * mis_weight * li * f_cos / brdf_pdf;
                         }
                     }
@@ -157,10 +154,8 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             break;
         }
 
-        Ray scattered(is.point, wi);
-
-        throughput *= mat->Evaluate(is, ray.d, wi) / pdf;
-        ray = scattered;
+        throughput *= mat->Evaluate(isect, ray.d, wi) / pdf;
+        ray = Ray(isect.point, wi);
 
         // Russian roulette
         const int32 min_bounces = 2;
