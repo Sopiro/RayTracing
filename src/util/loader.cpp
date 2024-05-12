@@ -105,7 +105,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     // Create material from scene
 
     // clang-format off
-    auto mat = g_scene->CreateMaterial<Microfacet>(
+    auto mat = g_scene->CreateMaterial<UnrealishMaterial>(
         basecolor_textures.empty() ? 
             ConstantColorTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)    : basecolor_textures[0],
         metallic_textures.empty() ? 

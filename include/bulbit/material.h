@@ -15,7 +15,7 @@ struct Interaction
 
 private:
     friend class DiffuseMaterial;
-    friend class Microfacet;
+    friend class UnrealishMaterial;
 
     int8 mem[128];
 };
@@ -56,19 +56,14 @@ public:
     const SpectrumTexture* albedo;
 };
 
-// Microfacet material model
-// BRDF (Cook-Torrance specular + Lambertian diffuse)
-// - GGX normal distribution function
-// - Smith-GGX height-correlated visibility function
-// - width Schlick Fresnel blend
-class Microfacet : public Material
+class UnrealishMaterial : public Material
 {
 public:
-    Microfacet(const SpectrumTexture* basecolor,
-               const FloatTexture* metallic,
-               const FloatTexture* roughness,
-               const SpectrumTexture* emissive = ConstantColorTexture::Create(Float(0.0)),
-               const SpectrumTexture* normalmap = ConstantColorTexture::Create(Float(0.5), Float(0.5), Float(1.0)));
+    UnrealishMaterial(const SpectrumTexture* basecolor,
+                      const FloatTexture* metallic,
+                      const FloatTexture* roughness,
+                      const SpectrumTexture* emissive = ConstantColorTexture::Create(Float(0.0)),
+                      const SpectrumTexture* normalmap = ConstantColorTexture::Create(Float(0.5), Float(0.5), Float(1.0)));
 
     virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
     virtual bool TestAlpha(const Point2& uv) const override;

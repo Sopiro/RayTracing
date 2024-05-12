@@ -15,9 +15,9 @@ Spectrum DiffuseBxDF::f(const Vec3& wo, const Vec3& wi) const
     return r * inv_pi;
 }
 
-bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sampleFlags) const
+bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags) const
 {
-    if (!(sampleFlags & BxDF_SamplingFlags::Reflection))
+    if (!(sample_flags & BxDF_SamplingFlags::Reflection))
     {
         return false;
     }
@@ -33,9 +33,9 @@ bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, Bx
     return true;
 }
 
-Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags) const
+Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
 {
-    if (!(sampleFlags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
+    if (!(sample_flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
     {
         return 0;
     }
