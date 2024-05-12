@@ -142,24 +142,24 @@ inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
     return h;
 }
 
-inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha, Vec2 u)
+inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
 {
     // warp to the hemisphere configuration
-    Vec3 woStd = Normalize(Vec3(wo.x * alpha, wo.y * alpha, wo.z));
+    Vec3 woStd = Normalize(Vec3(wo.x * alpha_x, wo.y * alpha_y, wo.z));
     // sample the hemisphere
     Vec3 wmStd = SampleVNDFHemisphere(woStd, u);
     // warp back to the ellipsoid configuration
-    Vec3 wm = Normalize(Vec3(wmStd.x * alpha, wmStd.y * alpha, wmStd.z));
+    Vec3 wm = Normalize(Vec3(wmStd.x * alpha_x, wmStd.y * alpha_y, wmStd.z));
     // return final normal
     return wm;
 }
 
 // Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
 // https://jcgt.org/published/0007/04/01/
-inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
+inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
 {
     // Section 3.2: transforming the view direction to the hemisphere configuration
-    Vec3 Vh{ alpha * wo.x, alpha * wo.y, wo.z };
+    Vec3 Vh{ alpha_x * wo.x, alpha_y * wo.y, wo.z };
     Vh.Normalize();
 
     // Build an orthonormal basis with v, t1, and t2
@@ -179,7 +179,7 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha, Vec2 u)
     Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(Float(0), 1 - t1 * t1 - t2 * t2)) * Vh;
 
     // Section 3.4: transforming the normal back to the ellipsoid configuration
-    Vec3 h = Normalize(Vec3(alpha * Nh.x, alpha * Nh.y, std::fmax(Float(0), Nh.z))); // Sampled half vector
+    Vec3 h = Normalize(Vec3(alpha_x * Nh.x, alpha_y * Nh.y, std::fmax(Float(0), Nh.z))); // Sampled half vector
 
     return h;
 }

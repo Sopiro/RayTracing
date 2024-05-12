@@ -33,6 +33,12 @@ constexpr inline T Abs(T a)
 }
 
 template <typename T>
+constexpr inline Float AbsDot(T a, T b)
+{
+    return std::abs(Dot(a, b));
+}
+
+template <typename T>
 constexpr inline T Min(T a, T b)
 {
     return a < b ? a : b;
