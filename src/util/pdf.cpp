@@ -1,5 +1,5 @@
-#include "bulbit/microfacet.h"
 #include "bulbit/pdf.h"
+#include "bulbit/microfacet.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit
@@ -84,9 +84,9 @@ Vec3 MicrofacetGGXVNDF::Sample(const Point2& u0) const
         Vec3 w = frame.ToLocal(wo);
 
 #if SPHERICAL_CAPS_VNDF_SAMPLING
-        Vec3 h = Sample_GGX_VNDF_Dupuy_Benyoub(w, alpha, u);
+        Vec3 h = Sample_GGX_VNDF_Dupuy_Benyoub(w, alpha, alpha, u);
 #else
-        Vec3 h = Sample_GGX_VNDF_Heitz(wo, alpha, u);
+        Vec3 h = Sample_GGX_VNDF_Heitz(wo, alpha, alpha, u);
 #endif
         Vec3 wh = frame.FromLocal(h);
         Vec3 wi = Reflect(wo, wh);

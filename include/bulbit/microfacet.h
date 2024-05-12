@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "frame.h"
 #include "sampling.h"
 #include "spectrum.h"
 

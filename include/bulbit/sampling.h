@@ -38,6 +38,11 @@ inline Vec3 UniformSampleHemisphere(const Point2& u)
     return Vec3(r * std::cos(phi), r * std::sin(phi), z);
 }
 
+inline Float UniformHemispherePDF()
+{
+    return inv_two_pi;
+}
+
 inline Vec3 UniformSampleSphere(const Point2& u)
 {
     Float z = 1 - 2 * u[0];
