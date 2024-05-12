@@ -49,15 +49,15 @@ struct Vec2
 
     Vec2() = default;
 
-    explicit constexpr Vec2(Float _v)
-        : x{ _v }
-        , y{ _v }
+    explicit constexpr Vec2(Float v)
+        : x{ v }
+        , y{ v }
     {
     }
 
-    constexpr Vec2(Float _x, Float _y)
-        : x{ _x }
-        , y{ _y }
+    constexpr Vec2(Float x, Float y)
+        : x{ x }
+        , y{ y }
     {
     }
 
@@ -67,10 +67,10 @@ struct Vec2
         y = 0;
     }
 
-    void Set(Float _x, Float _y)
+    void Set(Float nx, Float ny)
     {
-        x = _x;
-        y = _y;
+        x = nx;
+        y = ny;
     }
 
     Float operator[](int32 i) const
@@ -188,23 +188,23 @@ struct Vec3
 
     Vec3() = default;
 
-    explicit constexpr Vec3(Float _v)
-        : x{ _v }
-        , y{ _v }
-        , z{ _v }
+    explicit constexpr Vec3(Float v)
+        : x{ v }
+        , y{ v }
+        , z{ v }
     {
     }
 
-    constexpr Vec3(Float _x, Float _y, Float _z)
-        : x{ _x }
-        , y{ _y }
-        , z{ _z }
+    constexpr Vec3(Float x, Float y, Float z)
+        : x{ x }
+        , y{ y }
+        , z{ z }
     {
     }
 
-    Vec3(const Vec2& _v)
-        : x{ _v.x }
-        , y{ _v.y }
+    Vec3(const Vec2& v)
+        : x{ v.x }
+        , y{ v.y }
         , z{ 0 }
     {
     }
@@ -216,11 +216,11 @@ struct Vec3
         z = 0;
     }
 
-    void Set(Float _x, Float _y, Float _z)
+    void Set(Float nx, Float ny, Float nz)
     {
-        x = _x;
-        y = _y;
-        z = _z;
+        x = nx;
+        y = ny;
+        z = nz;
     }
 
     Float operator[](int32 i) const
@@ -347,27 +347,27 @@ struct Vec4
     {
     }
 
-    constexpr Vec4(Float _v, Float _w)
-        : x{ _v }
-        , y{ _v }
-        , z{ _v }
-        , w{ _w }
+    constexpr Vec4(Float v, Float w)
+        : x{ v }
+        , y{ v }
+        , z{ v }
+        , w{ w }
     {
     }
 
-    constexpr Vec4(Float _x, Float _y, Float _z, Float _w)
-        : x{ _x }
-        , y{ _y }
-        , z{ _z }
-        , w{ _w }
+    constexpr Vec4(Float x, Float y, Float z, Float w)
+        : x{ x }
+        , y{ y }
+        , z{ z }
+        , w{ w }
     {
     }
 
-    constexpr Vec4(const Vec3& _v, Float _w)
-        : x{ _v.x }
-        , z{ _v.z }
-        , y{ _v.y }
-        , w{ _w }
+    constexpr Vec4(const Vec3& v, Float w)
+        : x{ v.x }
+        , z{ v.z }
+        , y{ v.y }
+        , w{ w }
     {
     }
 
@@ -379,12 +379,12 @@ struct Vec4
         w = 0;
     }
 
-    void Set(Float _x, Float _y, Float _z, Float _w)
+    void Set(Float nx, Float ny, Float nz, Float nw)
     {
-        x = _x;
-        y = _y;
-        z = _z;
-        w = _w;
+        x = nx;
+        y = ny;
+        z = nz;
+        w = nw;
     }
 
     Vec4 operator-() const
@@ -684,13 +684,13 @@ struct Mat4
     {
     }
 
-    explicit Mat4(Float _v)
+    explicit Mat4(Float v)
     {
         // clang-format off
-        ex.x = _v;           ey.x = 0;    ez.x = 0;    ew.x = 0;
-        ex.y = 0;    ey.y = _v;           ez.y = 0;    ew.y = 0;
-        ex.z = 0;    ey.z = 0;    ez.z = _v;           ew.z = 0;
-        ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = _v;
+        ex.x = v;    ey.x = 0;    ez.x = 0;    ew.x = 0;
+        ex.y = 0;    ey.y = v;    ez.y = 0;    ew.y = 0;
+        ex.z = 0;    ey.z = 0;    ez.z = v;    ew.z = 0;
+        ex.w = 0;    ey.w = 0;    ez.w = 0;    ew.w = v;
         // clang-format on
     }
 
@@ -774,19 +774,19 @@ struct Quat
     {
     }
 
-    Quat(Float _x, Float _y, Float _z, Float _w)
-        : x{ _x }
-        , y{ _y }
-        , z{ _z }
-        , w{ _w }
+    Quat(Float x, Float y, Float z, Float w)
+        : x{ x }
+        , y{ y }
+        , z{ z }
+        , w{ w }
     {
     }
 
-    explicit Quat(Float _w)
+    explicit Quat(Float w)
         : x{ 0 }
         , y{ 0 }
         , z{ 0 }
-        , w{ _w }
+        , w{ w }
     {
     }
 
