@@ -55,7 +55,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, std::vector<int32> _indices, con
     {
         Vec4 vP = Mul(transform, Vec4(vertices[i].position, 1));
         Vec4 vN = Mul(transform, Vec4(vertices[i].normal, 0));
-        Vec4 vT = Mul(transform, Vec4(vertices[i].texCoord, 0));
+        Vec4 vT = Mul(transform, Vec4(vertices[i].tangent, 0));
         vN.Normalize();
         vT.Normalize();
 

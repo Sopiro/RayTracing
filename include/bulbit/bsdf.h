@@ -20,8 +20,8 @@ public:
 
     Spectrum f(Vec3 wo, Vec3 wi) const
     {
-        wi = ToLocal(wi);
-        wo = ToLocal(wo);
+        wi = WorldToLocal(wi);
+        wo = WorldToLocal(wo);
 
         if (wo.z == 0)
         {
@@ -36,8 +36,8 @@ public:
     {
         assert(sample != nullptr);
 
-        Vec3 wo = ToLocal(wo);
-        if (wo.z == 0 || !(Flags() & sampleFlags))
+        wo = WorldToLocal(wo);
+        if (wo.z == 0 || !(bxdf->Flags() & sampleFlags))
         {
             return false;
         }
@@ -52,15 +52,14 @@ public:
             return false;
         }
 
-        sample->wi = FromLocal(sample->wi);
-
-        return sample;
+        sample->wi = LocalToWorld(sample->wi);
+        return true;
     }
 
     Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const
     {
-        wo = ToLocal(wo);
-        wi = ToLocal(wi);
+        wo = WorldToLocal(wo);
+        wi = WorldToLocal(wi);
 
         if (wo.z == 0)
         {
@@ -75,12 +74,12 @@ public:
         return bxdf->Flags();
     }
 
-    Vec3 ToLocal(const Vec3& v) const
+    Vec3 WorldToLocal(const Vec3& v) const
     {
         return frame.ToLocal(v);
     }
 
-    Vec3 FromLocal(const Vec3& v) const
+    Vec3 LocalToWorld(const Vec3& v) const
     {
         return frame.FromLocal(v);
     }

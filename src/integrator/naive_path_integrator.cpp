@@ -50,21 +50,12 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
         return L;
     }
 
-    if (ir.is_specular)
+    BSDFSample bsdf_sample;
+    if (ir.bsdf.Sample_f(&bsdf_sample, -ray.d, sampler.Next1D(), sampler.Next2D()))
     {
-        return ir.attenuation * Li(ir.specular_ray, sampler, depth + 1);
-    }
+        Spectrum f_cos = bsdf_sample.f * Dot(is.normal, bsdf_sample.wi);
 
-    Frame frame(is.normal);
-    Vec3 wi_local = CosineSampleHemisphere(sampler.Next2D());
-    Vec3 wi = frame.FromLocal(wi_local);
-
-    Float pdf = CosineSampleHemispherePDF(wi_local.z);
-
-    if (pdf > 0)
-    {
-        Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
-        return L + Li(Ray(is.point, wi), sampler, depth + 1) * f_cos / pdf;
+        return L + Li(Ray(is.point, bsdf_sample.wi), sampler, depth + 1) * f_cos / bsdf_sample.pdf;
     }
     else
     {

@@ -3,6 +3,8 @@
 #include "assert.h"
 #include "math.h"
 
+#include <format>
+
 namespace bulbit
 {
 
@@ -55,6 +57,11 @@ struct RGBSpectrum
     bool IsNullish() const
     {
         return std::isnan(r) || std::isinf(r) || std::isnan(g) || std::isinf(g) || std::isnan(b) || std::isinf(b);
+    }
+
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}", r, g, b);
     }
 
     static const int32 num_spectral_samples;

@@ -49,11 +49,6 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
         return L;
     }
 
-    if (ir.is_specular)
-    {
-        return ir.attenuation * Li(ir.specular_ray, sampler, depth + 1);
-    }
-
     // Evaluate direct light
     const std::vector<Light*>& lights = scene->GetLights();
     for (const Light* light : lights)
@@ -64,7 +59,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
             Ray shadow_ray{ is.point, ls.wi };
             if (IntersectAny(shadow_ray, Ray::epsilon, ls.visibility) == false)
             {
-                Spectrum f_cos = mat->Evaluate(is, ray.d, ls.wi);
+                Spectrum f_cos = ir.bsdf.f(-ray.d, ls.wi);
                 L += ls.li * f_cos / ls.pdf;
             }
         }
@@ -75,7 +70,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 
     if (Dot(is.normal, wi) > 0)
     {
-        Spectrum f_cos = mat->Evaluate(is, ray.d, wi);
+        Spectrum f_cos = ir.bsdf.f(-ray.d, wi);
         return L + Li(Ray(is.point, wi), sampler, depth + 1) * f_cos;
     }
     else

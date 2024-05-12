@@ -8,7 +8,7 @@
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 {
-    auto ground_material = scene.CreateMaterial<Lambertian>(Spectrum(0.5f, 0.5f, 0.5f));
+    auto ground_material = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.5f, 0.5f, 0.5f));
 
     Transform tf = identity;
     tf.r *= 30;
@@ -37,21 +37,21 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 else
                 {
                     // glass
-                    auto glass = scene.CreateMaterial<Dielectric>(1.5f);
-                    scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
+                    // auto glass = scene.CreateMaterial<Dielectric>(1.5f);
+                    // scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
                 }
             }
         }
     }
 
-    auto material1 = scene.CreateMaterial<Dielectric>(1.5f);
-    scene.CreatePrimitive<Sphere>(Vec3(0, 1, 0), 1.0f, material1);
+    // auto material1 = scene.CreateMaterial<Dielectric>(1.5f);
+    // scene.CreatePrimitive<Sphere>(Vec3(0, 1, 0), 1.0f, material1);
 
-    auto material2 = scene.CreateMaterial<Lambertian>(Spectrum(0.4f, 0.2f, 0.1f));
+    auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
     scene.CreatePrimitive<Sphere>(Vec3(-4, 1, 0), 1.0f, material2);
 
-    auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
-    scene.CreatePrimitive<Sphere>(Vec3(4, 1, 0), 1.0f, material3);
+    // auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
+    // scene.CreatePrimitive<Sphere>(Vec3(4, 1, 0), 1.0f, material3);
 
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");

@@ -1,32 +1,29 @@
+#include "bulbit/bxdfs.h"
 #include "bulbit/material.h"
 
 namespace bulbit
 {
 
-Lambertian::Lambertian(const Spectrum& color)
+DiffuseMaterial::DiffuseMaterial(const Spectrum& color)
     : albedo{ ConstantColorTexture::Create(color) }
 {
 }
 
-Lambertian::Lambertian(const SpectrumTexture* albedo)
+DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
     : albedo{ albedo }
 {
 }
 
-Spectrum Lambertian::Evaluate(const Intersection& is, const Vec3& wi, const Vec3& wo) const
+bool DiffuseMaterial::Scatter(Interaction* ir, const Intersection& is, const Vec3& wo, const Point2& u) const
 {
-    return albedo->Evaluate(is.uv) * Dot(is.normal, wo) * inv_pi;
-}
+    ir->bsdf = BSDF(is.shading.normal, is.shading.tangent, new (ir->mem) DiffuseBxDF(albedo->Evaluate(is.uv)));
 
-bool Lambertian::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
-{
-    ir->is_specular = false;
-    new (ir->mem) LambertianReflection(is.normal);
+    // std::cout << Dot(is.shading.normal, is.shading.tangent) << std::endl;
 
     return true;
 }
 
-bool Lambertian::TestAlpha(const Point2& uv) const
+bool DiffuseMaterial::TestAlpha(const Point2& uv) const
 {
     return albedo->EvaluateAlpha(uv) > epsilon;
 }

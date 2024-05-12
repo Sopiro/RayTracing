@@ -23,13 +23,13 @@ bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, Bx
     }
 
     Vec3 wi = CosineSampleHemisphere(u12);
-    if (wi.z < 0)
+    Float pdf = CosineSampleHemispherePDF(CosTheta(wi));
+    if (wo.z < 0)
     {
         wi.z = -wi.z;
     }
-    Float pdf = AbsCosTheta(wi);
 
-    *sample = BSDFSample(r, wi, pdf, BxDF_Flags::DiffuseReflection);
+    *sample = BSDFSample(r * inv_pi, wi, pdf, BxDF_Flags::DiffuseReflection);
     return true;
 }
 

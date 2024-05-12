@@ -7,15 +7,15 @@
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
     // Materials
-    auto red = scene.CreateMaterial<Lambertian>(Spectrum(.65f, .05f, .05f));
-    auto green = scene.CreateMaterial<Lambertian>(Spectrum(.12f, .45f, .15f));
-    auto blue = scene.CreateMaterial<Lambertian>(Spectrum(.22f, .23f, .75f));
-    auto white = scene.CreateMaterial<Lambertian>(Spectrum(.73f, .73f, .73f));
+    auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
+    auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
+    auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
+    auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = scene.CreateMaterial<Lambertian>(wakgood_texture);
+    auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15.0f));
     // auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
-    auto mirror = scene.CreateMaterial<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
+    // auto mirror = scene.CreateMaterial<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
 
     // Cornell box
     {
