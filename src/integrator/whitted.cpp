@@ -26,25 +26,25 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
         return L;
     }
 
-    Intersection is;
-    bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
+    Intersection isect;
+    bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
         for (auto& light : infinite_lights)
         {
-            L += light->Emit(ray);
+            L += light->Le(ray);
         }
 
         return L;
     }
 
-    const Material* mat = is.material;
+    const Material* mat = isect.primitive->GetMaterial();
 
     // Evaluate emitted light if ray hit an area light source
-    L += mat->Emit(is, ray.d);
+    L += mat->Le(isect, ray.d);
 
     Interaction ir;
-    if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
+    if (mat->Scatter(&ir, isect, ray.d, sampler.Next2D()) == false)
     {
         return L;
     }
@@ -53,10 +53,10 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     const std::vector<Light*>& lights = scene->GetLights();
     for (const Light* light : lights)
     {
-        LightSample ls = light->Sample(is, sampler.Next2D());
+        LightSample ls = light->Sample(isect, sampler.Next2D());
         if (ls.li.IsBlack() == false && ls.pdf > 0)
         {
-            Ray shadow_ray{ is.point, ls.wi };
+            Ray shadow_ray{ isect.point, ls.wi };
             if (IntersectAny(shadow_ray, Ray::epsilon, ls.visibility) == false)
             {
                 Spectrum f_cos = ir.bsdf.f(-ray.d, ls.wi);
@@ -66,12 +66,12 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     }
 
     // Evaluate indirect light only in the perfect reflection direction
-    Vec3 wi = Reflect(-ray.d, is.normal);
+    Vec3 wi = Reflect(-ray.d, isect.normal);
 
-    if (Dot(is.normal, wi) > 0)
+    if (Dot(isect.normal, wi) > 0)
     {
         Spectrum f_cos = ir.bsdf.f(-ray.d, wi);
-        return L + Li(Ray(is.point, wi), sampler, depth + 1) * f_cos;
+        return L + Li(Ray(isect.point, wi), sampler, depth + 1) * f_cos;
     }
     else
     {

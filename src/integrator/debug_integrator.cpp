@@ -10,21 +10,21 @@ DebugIntegrator::DebugIntegrator(const Scene* scene, const Intersectable* accel,
 
 Spectrum DebugIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
-    Intersection is;
-    bool found_intersection = Intersect(&is, primary_ray, Ray::epsilon, infinity);
+    Intersection isect;
+    bool found_intersection = Intersect(&isect, primary_ray, Ray::epsilon, infinity);
 
     if (found_intersection == false)
     {
         return Spectrum::black;
     }
 
-    const Material* mat = is.material;
+    const Material* mat = isect.primitive->GetMaterial();
 
     Vec3 wi = Normalize(primary_ray.d);
-    Vec3 wo = Normalize(Reflect(wi, is.normal));
+    Vec3 wo = Normalize(Reflect(wi, isect.normal));
 
-    // return Spectrum(1 / (1 + is.t));
-    return Spectrum(is.shading.normal) * 0.5 + Spectrum(0.5);
+    // return Spectrum(1 / (1 + isect.t));
+    return Spectrum(isect.shading.normal) * 0.5 + Spectrum(0.5);
 }
 
 } // namespace bulbit

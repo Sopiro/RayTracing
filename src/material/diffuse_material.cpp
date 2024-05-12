@@ -14,9 +14,9 @@ DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
 {
 }
 
-bool DiffuseMaterial::Scatter(Interaction* ir, const Intersection& is, const Vec3& wo, const Point2& u) const
+bool DiffuseMaterial::Scatter(Interaction* ir, const Intersection& isect, const Vec3& wo, const Point2& u) const
 {
-    ir->bsdf = BSDF(is.shading.normal, is.shading.tangent, new (ir->mem) DiffuseBxDF(albedo->Evaluate(is.uv)));
+    ir->bsdf = BSDF(isect.shading.normal, isect.shading.tangent, new (ir->mem) DiffuseBxDF(albedo->Evaluate(isect.uv)));
     return true;
 }
 

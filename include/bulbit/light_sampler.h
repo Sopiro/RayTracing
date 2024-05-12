@@ -22,7 +22,7 @@ public:
 
     virtual ~LightSampler() = default;
 
-    virtual bool Sample(SampledLight* sampled_light, const Intersection& is, Float u) const = 0;
+    virtual bool Sample(SampledLight* sampled_light, const Intersection& isect, Float u) const = 0;
     virtual Float EvaluatePMF(Light* light) const = 0;
 
 protected:
@@ -35,7 +35,7 @@ public:
     UniformLightSampler(const std::vector<Light*>& lights);
     virtual ~UniformLightSampler() = default;
 
-    virtual bool Sample(SampledLight* sampled_light, const Intersection& is, Float u) const override;
+    virtual bool Sample(SampledLight* sampled_light, const Intersection& isect, Float u) const override;
     virtual Float EvaluatePMF(Light* light) const override;
 };
 

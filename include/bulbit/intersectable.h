@@ -6,15 +6,16 @@ namespace bulbit
 {
 
 class Material;
+class Primitive;
 
 struct Intersection
 {
-    Float t;
+    const Primitive* primitive;
 
+    Float t;
     Point3 point;
     Vec3 normal; // Geometric normal
     Point2 uv;
-    const Material* material;
 
     bool front_face;
 

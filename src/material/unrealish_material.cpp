@@ -1,6 +1,6 @@
-#include "bulbit/microfacet.h"
 #include "bulbit/bxdfs.h"
 #include "bulbit/material.h"
+#include "bulbit/microfacet.h"
 #include "bulbit/util.h"
 
 namespace bulbit
@@ -19,9 +19,9 @@ UnrealishMaterial::UnrealishMaterial(const SpectrumTexture* basecolor,
 {
 }
 
-bool UnrealishMaterial::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
+bool UnrealishMaterial::Scatter(Interaction* ir, const Intersection& isect, const Vec3& wi, const Point2& u) const
 {
-    ir->bsdf = BSDF(is.shading.normal, is.shading.tangent, new (ir->mem) DiffuseBxDF(basecolor->Evaluate(is.uv)));
+    ir->bsdf = BSDF(isect.shading.normal, isect.shading.tangent, new (ir->mem) DiffuseBxDF(basecolor->Evaluate(isect.uv)));
     return true;
 }
 

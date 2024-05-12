@@ -20,19 +20,19 @@ bool DiffuseLight::IsLightSource() const
     return true;
 }
 
-Spectrum DiffuseLight::Emit(const Intersection& is, const Vec3& wi) const
+Spectrum DiffuseLight::Le(const Intersection& isect, const Vec3& wi) const
 {
-    if (is.front_face || two_sided)
+    if (isect.front_face || two_sided)
     {
-        return emission->Evaluate(is.uv);
+        return emission->Evaluate(isect.uv);
     }
     else
     {
-        return RGBSpectrum::black;
+        return Spectrum::black;
     }
 }
 
-bool DiffuseLight::Scatter(Interaction* ir, const Intersection& is, const Vec3& wi, const Point2& u) const
+bool DiffuseLight::Scatter(Interaction* ir, const Intersection& isect, const Vec3& wi, const Point2& u) const
 {
     return false;
 }

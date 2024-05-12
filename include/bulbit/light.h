@@ -39,9 +39,9 @@ public:
     virtual LightSample Sample(const Intersection& ref, const Point2& u) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
 
-    virtual Spectrum Emit(const Ray& ray) const
+    virtual Spectrum Le(const Ray& ray) const
     {
-        return RGBSpectrum::black;
+        return Spectrum::black;
     }
 
     bool IsDeltaLight() const
@@ -119,7 +119,7 @@ public:
 
     virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
-    virtual Spectrum Emit(const Ray& ray) const override;
+    virtual Spectrum Le(const Ray& ray) const override;
 
 private:
     Transform transform;
@@ -135,7 +135,7 @@ public:
 
     virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
-    virtual Spectrum Emit(const Ray& ray) const override;
+    virtual Spectrum Le(const Ray& ray) const override;
 
 private:
     Spectrum l;

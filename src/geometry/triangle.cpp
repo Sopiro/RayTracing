@@ -18,12 +18,7 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
     Vec3 pvec = Cross(d, e2);
 
     Float det = Dot(e1, pvec);
-
     // bool backface = det < epsilon;
-    // if (backface)
-    // {
-    //     return false;
-    // }
 
     // Ray and triangle are parallel
     if (std::fabs(det) < epsilon)
@@ -63,17 +58,15 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
         return false;
     }
 
-    is->uv = uv;
-    is->material = mesh->material;
+    is->primitive = this;
     is->t = t;
     is->point = ray.At(t);
+    is->uv = uv;
 
     Vec3 normal = Normalize(Cross(e1, e2));
-    Vec3 shading_normal = GetNormal(u, v, w);
-    Vec3 shading_tangent = GetTangent(u, v, w);
     SetFaceNormal(is, ray.d, normal);
-    is->shading.normal = shading_normal;
-    is->shading.tangent = shading_tangent;
+    is->shading.normal = GetNormal(u, v, w);
+    is->shading.tangent = GetTangent(u, v, w);
 
     return true;
 }
@@ -92,12 +85,7 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     Vec3 pvec = Cross(d, e2);
 
     Float det = Dot(e1, pvec);
-
     // bool backface = det < epsilon;
-    // if (backface)
-    // {
-    //     return false;
-    // }
 
     // Ray and triangle are parallel
     if (std::fabs(det) < epsilon)

@@ -23,7 +23,7 @@ LightSample AreaLight::Sample(const Intersection& ref, const Point2& u) const
     Intersection is;
     is.point = ps.point;
     is.front_face = Dot(ps.normal, ref2p) < 0;
-    ls.li = material->Emit(is, ref2p);
+    ls.li = material->Le(is, ref2p);
 
     return ls;
 }

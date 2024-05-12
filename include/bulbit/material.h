@@ -30,12 +30,12 @@ public:
         return false;
     }
 
-    virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const
     {
-        return RGBSpectrum::black;
+        return Spectrum::black;
     }
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const = 0;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& isect, const Vec3& wi, const Point2& u) const = 0;
 
     virtual bool TestAlpha(const Point2& uv) const
     {
@@ -49,7 +49,7 @@ public:
     DiffuseMaterial(const Spectrum& color);
     DiffuseMaterial(const SpectrumTexture* albedo);
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& isect, const Vec3& wi, const Point2& u) const override;
     virtual bool TestAlpha(const Point2& uv) const override;
 
 public:
@@ -65,7 +65,7 @@ public:
                       const SpectrumTexture* emissive = ConstantColorTexture::Create(Float(0.0)),
                       const SpectrumTexture* normalmap = ConstantColorTexture::Create(Float(0.5), Float(0.5), Float(1.0)));
 
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& isect, const Vec3& wi, const Point2& u) const override;
     virtual bool TestAlpha(const Point2& uv) const override;
 
 private:
@@ -84,8 +84,8 @@ public:
 
     virtual bool IsLightSource() const override;
 
-    virtual Spectrum Emit(const Intersection& is, const Vec3& wi) const override;
-    virtual bool Scatter(Interaction* out_ir, const Intersection& is, const Vec3& wi, const Point2& u) const override;
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const override;
+    virtual bool Scatter(Interaction* out_ir, const Intersection& isect, const Vec3& wi, const Point2& u) const override;
 
     const SpectrumTexture* emission;
     bool two_sided;

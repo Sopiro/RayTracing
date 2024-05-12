@@ -42,10 +42,10 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
         return false;
     }
 
+    is->primitive = this;
+    is->t = root;
     is->point = point;
     is->uv = uv;
-    is->material = material;
-    is->t = root;
 
     Vec3 tangent, bitangent;
     CoordinateSystem(outward_normal, &tangent, &bitangent);

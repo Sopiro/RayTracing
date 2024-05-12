@@ -12,8 +12,8 @@ AmbientOcclusion::AmbientOcclusion(const Scene* scene, const Intersectable* acce
 
 Spectrum AmbientOcclusion::Li(const Ray& primary_ray, Sampler& sampler) const
 {
-    Intersection is;
-    bool found_intersection = Intersect(&is, primary_ray, Ray::epsilon, infinity);
+    Intersection isect;
+    bool found_intersection = Intersect(&isect, primary_ray, Ray::epsilon, infinity);
 
     if (found_intersection == false)
     {
@@ -28,10 +28,10 @@ Spectrum AmbientOcclusion::Li(const Ray& primary_ray, Sampler& sampler) const
         return Spectrum::black;
     }
 
-    Frame frame(is.normal);
+    Frame frame(isect.normal);
     Vec3 wi = frame.FromLocal(wi_local);
 
-    Ray ao_ray(is.point, wi);
+    Ray ao_ray(isect.point, wi);
     if (IntersectAny(ao_ray, Ray::epsilon, range) == false)
     {
 #if 0

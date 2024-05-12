@@ -28,24 +28,24 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
         return L;
     }
 
-    Intersection is;
-    bool found_intersection = Intersect(&is, ray, Ray::epsilon, infinity);
+    Intersection isect;
+    bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
     if (found_intersection == false)
     {
         for (auto& light : infinite_lights)
         {
-            L += light->Emit(ray);
+            L += light->Le(ray);
         }
 
         return L;
     }
 
-    const Material* mat = is.material;
+    const Material* mat = isect.primitive->GetMaterial();
 
-    L += mat->Emit(is, ray.d);
+    L += mat->Le(isect, ray.d);
 
     Interaction ir;
-    if (mat->Scatter(&ir, is, ray.d, sampler.Next2D()) == false)
+    if (mat->Scatter(&ir, isect, ray.d, sampler.Next2D()) == false)
     {
         return L;
     }
@@ -53,9 +53,9 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
     BSDFSample bsdf_sample;
     if (ir.bsdf.Sample_f(&bsdf_sample, -ray.d, sampler.Next1D(), sampler.Next2D()))
     {
-        Spectrum f_cos = bsdf_sample.f * Dot(is.normal, bsdf_sample.wi);
+        Spectrum f_cos = bsdf_sample.f * Dot(isect.normal, bsdf_sample.wi);
 
-        return L + Li(Ray(is.point, bsdf_sample.wi), sampler, depth + 1) * f_cos / bsdf_sample.pdf;
+        return L + Li(Ray(isect.point, bsdf_sample.wi), sampler, depth + 1) * f_cos / bsdf_sample.pdf;
     }
     else
     {

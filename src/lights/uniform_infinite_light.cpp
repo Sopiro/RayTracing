@@ -26,7 +26,7 @@ Float UniformInfiniteLight::EvaluatePDF(const Ray& ray) const
     return UniformSampleSpherePDF();
 }
 
-Spectrum UniformInfiniteLight::Emit(const Ray& ray) const
+Spectrum UniformInfiniteLight::Le(const Ray& ray) const
 {
     return scale * l;
 }

@@ -8,7 +8,7 @@ UniformLightSampler::UniformLightSampler(const std::vector<Light*>& lights)
 {
 }
 
-bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& is, Float u) const
+bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& isect, Float u) const
 {
     size_t count = lights.size();
     if (count == 0)

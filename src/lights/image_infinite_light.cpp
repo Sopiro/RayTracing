@@ -44,7 +44,7 @@ LightSample ImageInfiniteLight::Sample(const Intersection& ref, const Point2& u)
 
     if (map_pdf == 0)
     {
-        return LightSample{ Vec3::zero, 0, 0, RGBSpectrum::black };
+        return LightSample{ Vec3::zero, 0, 0, Spectrum::black };
     }
 
     Float theta = (1 - uv[1]) * pi;
@@ -85,7 +85,7 @@ Float ImageInfiniteLight::EvaluatePDF(const Ray& ray) const
     return distribution->Pdf(uv) / (2 * pi * pi * sin_theta);
 }
 
-Spectrum ImageInfiniteLight::Emit(const Ray& ray) const
+Spectrum ImageInfiniteLight::Le(const Ray& ray) const
 {
     Vec3 w = MulT(transform, Normalize(ray.d));
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
