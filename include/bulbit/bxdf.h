@@ -32,56 +32,22 @@ enum class BxDF_SamplingFlags
     All = Reflection | Transmission
 };
 
-inline BxDF_Flags operator|(BxDF_Flags a, BxDF_Flags b)
-{
-    return BxDF_Flags((int32)a | (int32)b);
-}
+// clang-format off
+inline bool IsReflective(BxDF_Flags f) { return f & BxDF_Flags::Reflection; }
+inline bool IsTransmissive(BxDF_Flags f) { return f & BxDF_Flags::Transmission; }
+inline bool IsDiffuse(BxDF_Flags f) { return f & BxDF_Flags::Diffuse; }
+inline bool IsGlossy(BxDF_Flags f) { return f & BxDF_Flags::Glossy; }
+inline bool IsSpecular(BxDF_Flags f) { return f & BxDF_Flags::Specular; }
+inline bool IsNonSpecular(BxDF_Flags f) { return f & (BxDF_Flags::Diffuse | BxDF_Flags::Glossy); }
 
-inline int32 operator&(BxDF_Flags a, BxDF_Flags b)
-{
-    return ((int32)a & (int32)b);
-}
-
-inline int32 operator&(BxDF_Flags a, BxDF_SamplingFlags b)
-{
-    return ((int32)a & (int32)b);
-}
-
-inline BxDF_Flags& operator|=(BxDF_Flags& a, BxDF_Flags b)
-{
-    (int32&)a |= int32(b);
-    return a;
-}
-
-bool IsReflective(BxDF_Flags f)
-{
-    return f & BxDF_Flags::Reflection;
-}
-
-bool IsTransmissive(BxDF_Flags f)
-{
-    return f & BxDF_Flags::Transmission;
-}
-
-bool IsDiffuse(BxDF_Flags f)
-{
-    return f & BxDF_Flags::Diffuse;
-}
-
-bool IsGlossy(BxDF_Flags f)
-{
-    return f & BxDF_Flags::Glossy;
-}
-
-bool IsSpecular(BxDF_Flags f)
-{
-    return f & BxDF_Flags::Specular;
-}
-
-bool IsNonSpecular(BxDF_Flags f)
-{
-    return f & (BxDF_Flags::Diffuse | BxDF_Flags::Glossy);
-}
+inline BxDF_Flags operator|(BxDF_Flags a, BxDF_Flags b) { return BxDF_Flags((int32)a | (int32)b); }
+inline int32 operator&(BxDF_Flags a, BxDF_Flags b) { return ((int32)a & (int32)b); }
+inline int32 operator&(BxDF_Flags a, BxDF_SamplingFlags b) { return ((int32)a & (int32)b); }
+inline BxDF_Flags& operator|=(BxDF_Flags& a, BxDF_Flags b) { (int32&)a |= int32(b); return a; }
+inline BxDF_SamplingFlags operator|(BxDF_SamplingFlags a, BxDF_SamplingFlags b) { return BxDF_SamplingFlags((int)a | (int)b); }
+inline int operator&(BxDF_SamplingFlags a, BxDF_SamplingFlags b) { return ((int)a & (int)b); }
+inline BxDF_SamplingFlags& operator|=(BxDF_SamplingFlags& a, BxDF_SamplingFlags b) { (int&)a |= int(b); return a;}
+// clang-format on
 
 struct BSDFSample
 {
@@ -138,7 +104,7 @@ public:
     virtual Spectrum f(const Vec3& wo, const Vec3& wi) const = 0;
 
     virtual bool Sample_f(
-        BSDFSample* sample, Vec3 wo, Float u0, Point2 u1, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const = 0;
+        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const = 0;
 
     virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const = 0;
 
