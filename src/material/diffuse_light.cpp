@@ -32,7 +32,7 @@ Spectrum DiffuseLight::Le(const Intersection& isect, const Vec3& wi) const
     }
 }
 
-bool DiffuseLight::Scatter(Interaction* ir, const Intersection& isect, const Vec3& wi, const Point2& u) const
+bool DiffuseLight::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wi, const Point2& u, Allocator& alloc) const
 {
     return false;
 }

@@ -29,8 +29,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
     }
 
     Intersection isect;
-    bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
-    if (found_intersection == false)
+    if (!Intersect(&isect, ray, Ray::epsilon, infinity))
     {
         for (auto& light : infinite_lights)
         {
@@ -44,17 +43,19 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
 
     L += mat->Le(isect, ray.d);
 
-    Interaction ir;
-    if (mat->Scatter(&ir, isect, ray.d, sampler.Next2D()) == false)
+    int8 mem[128];
+    Resource res(mem, sizeof(mem));
+    Allocator alloc(&res);
+    BSDF bsdf;
+    if (mat->GetBSDF(&bsdf, isect, ray.d, sampler.Next2D(), alloc) == false)
     {
         return L;
     }
 
     BSDFSample bsdf_sample;
-    if (ir.bsdf.Sample_f(&bsdf_sample, -ray.d, sampler.Next1D(), sampler.Next2D()))
+    if (bsdf.Sample_f(&bsdf_sample, -ray.d, sampler.Next1D(), sampler.Next2D()))
     {
         Spectrum f_cos = bsdf_sample.f * Dot(isect.normal, bsdf_sample.wi);
-
         return L + Li(Ray(isect.point, bsdf_sample.wi), sampler, depth + 1) * f_cos / bsdf_sample.pdf;
     }
     else

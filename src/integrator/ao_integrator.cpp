@@ -13,9 +13,7 @@ AmbientOcclusion::AmbientOcclusion(const Scene* scene, const Intersectable* acce
 Spectrum AmbientOcclusion::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     Intersection isect;
-    bool found_intersection = Intersect(&isect, primary_ray, Ray::epsilon, infinity);
-
-    if (found_intersection == false)
+    if (!Intersect(&isect, primary_ray, Ray::epsilon, infinity))
     {
         return Spectrum::black;
     }

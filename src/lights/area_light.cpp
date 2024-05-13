@@ -28,4 +28,22 @@ LightSample AreaLight::Sample(const Intersection& ref, const Point2& u) const
     return ls;
 }
 
+Float AreaLight::EvaluatePDF(const Ray& ray) const
+{
+    return primitive->EvaluatePDF(ray);
+}
+
+Spectrum AreaLight::Le(const Ray& ray) const
+{
+    assert(false);
+
+    Intersection isect;
+    if (!primitive->Intersect(&isect, ray, epsilon, infinity))
+    {
+        return Spectrum::black;
+    }
+
+    return primitive->GetMaterial()->Le(isect, -ray.d);
+}
+
 } // namespace bulbit

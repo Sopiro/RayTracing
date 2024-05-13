@@ -19,9 +19,9 @@ UnrealishMaterial::UnrealishMaterial(const SpectrumTexture* basecolor,
 {
 }
 
-bool UnrealishMaterial::Scatter(Interaction* ir, const Intersection& isect, const Vec3& wi, const Point2& u) const
+bool UnrealishMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wi, const Point2& u, Allocator& alloc) const
 {
-    ir->bsdf = BSDF(isect.shading.normal, isect.shading.tangent, new (ir->mem) DiffuseBxDF(basecolor->Evaluate(isect.uv)));
+    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<DiffuseBxDF>(basecolor->Evaluate(isect.uv)));
     return true;
 }
 

@@ -94,10 +94,9 @@ public:
 
     virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
 
-    virtual Float EvaluatePDF(const Ray& ray) const override
-    {
-        return primitive->EvaluatePDF(ray);
-    }
+    virtual Float EvaluatePDF(const Ray& ray) const override;
+
+    virtual Spectrum Le(const Ray& ray) const override;
 
     const Primitive* GetPrimitive() const
     {

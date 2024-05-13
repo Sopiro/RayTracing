@@ -24,46 +24,50 @@ PathIntegrator::PathIntegrator(const Scene* scene, const Intersectable* accel, c
 
 Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
+    int32 bounce = 0;
     Spectrum L(0), throughput(1);
     bool specular_bounce = false;
     Ray ray = primary_ray;
 
-    for (int32 bounce = 0;; ++bounce)
+    while (true)
     {
         Intersection isect;
-        bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
-        Vec3 wo = Normalize(-ray.d);
-
-        if (bounce == 0 || specular_bounce)
+        if (!Intersect(&isect, ray, Ray::epsilon, infinity))
         {
-            if (found_intersection)
-            {
-                L += throughput * isect.primitive->GetMaterial()->Le(isect, wo);
-            }
-            else
+            if (bounce == 0 || specular_bounce)
             {
                 for (Light* light : infinite_lights)
                 {
                     L += throughput * light->Le(ray);
                 }
             }
+
+            break;
         }
 
-        if (found_intersection == false || bounce >= max_bounces)
+        const Material* mat = isect.primitive->GetMaterial();
+        Vec3 wo = Normalize(-ray.d);
+        if (!mat->IsLightSource() || bounce == 0)
+        {
+            L += throughput * mat->Le(isect, wo);
+        }
+
+        if (bounce++ >= max_bounces)
         {
             break;
         }
 
-        Interaction ir;
-        if (!isect.primitive->GetMaterial()->Scatter(&ir, isect, wo, sampler.Next2D()))
+        int8 mem[128];
+        Resource res(mem, sizeof(mem));
+        Allocator alloc(&res);
+        BSDF bsdf;
+        if (!mat->GetBSDF(&bsdf, isect, wo, sampler.Next2D(), alloc))
         {
             break;
         }
-
-        BSDF* bsdf = &ir.bsdf;
 
         BSDFSample bsdf_sample;
-        if (bsdf->Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
+        if (bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
         {
             specular_bounce = IsSpecular(bsdf_sample.flags);
             ray = Ray(isect.point, bsdf_sample.wi);
@@ -84,12 +88,12 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             LightSample light_sample = light->Sample(isect, sampler.Next2D());
 
             // Importance sample light
-            Float bsdf_pdf = bsdf->PDF(wo, light_sample.wi);
+            Float bsdf_pdf = bsdf.PDF(wo, light_sample.wi);
             if (light_sample.li.IsBlack() == false && bsdf_pdf > 0)
             {
                 if (IntersectAny(Ray(isect.point, light_sample.wi), Ray::epsilon, light_sample.visibility) == false)
                 {
-                    Spectrum f_cos = bsdf->f(wo, light_sample.wi) * Dot(isect.normal, light_sample.wi);
+                    Spectrum f_cos = bsdf.f(wo, light_sample.wi) * Dot(isect.normal, light_sample.wi);
                     if (light->IsDeltaLight())
                     {
                         L += throughput * light_weight * light_sample.li * f_cos / light_sample.pdf;
@@ -104,7 +108,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
             if (light->IsDeltaLight() == false)
             {
-                // Importance sample BRDF
+                // Importance sample BSDF
                 Float light_pdf = light->EvaluatePDF(ray);
                 if (light_pdf > 0)
                 {

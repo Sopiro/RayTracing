@@ -27,8 +27,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     }
 
     Intersection isect;
-    bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
-    if (found_intersection == false)
+    if (!Intersect(&isect, ray, Ray::epsilon, infinity))
     {
         for (auto& light : infinite_lights)
         {
@@ -40,11 +39,14 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 
     const Material* mat = isect.primitive->GetMaterial();
 
-    // Evaluate emitted light if ray hit an area light source
+    // Evaluate emitted light
     L += mat->Le(isect, ray.d);
 
-    Interaction ir;
-    if (mat->Scatter(&ir, isect, ray.d, sampler.Next2D()) == false)
+    int8 mem[128];
+    Resource res(mem, sizeof(mem));
+    Allocator alloc(&res);
+    BSDF bsdf;
+    if (mat->GetBSDF(&bsdf, isect, ray.d, sampler.Next2D(), alloc) == false)
     {
         return L;
     }
@@ -59,7 +61,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
             Ray shadow_ray{ isect.point, ls.wi };
             if (IntersectAny(shadow_ray, Ray::epsilon, ls.visibility) == false)
             {
-                Spectrum f_cos = ir.bsdf.f(-ray.d, ls.wi);
+                Spectrum f_cos = bsdf.f(-ray.d, ls.wi);
                 L += ls.li * f_cos / ls.pdf;
             }
         }
@@ -70,7 +72,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 
     if (Dot(isect.normal, wi) > 0)
     {
-        Spectrum f_cos = ir.bsdf.f(-ray.d, wi);
+        Spectrum f_cos = bsdf.f(-ray.d, wi);
         return L + Li(Ray(isect.point, wi), sampler, depth + 1) * f_cos;
     }
     else
