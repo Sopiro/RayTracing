@@ -9,7 +9,7 @@ Spectrum DiffuseBxDF::f(const Vec3& wo, const Vec3& wi) const
 {
     if (!SameHemisphere(wo, wi))
     {
-        return Spectrum(0);
+        return Spectrum::black;
     }
 
     return r * inv_pi;

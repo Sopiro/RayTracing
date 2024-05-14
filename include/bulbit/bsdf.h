@@ -11,6 +11,7 @@ class BSDF
 {
 public:
     BSDF() = default;
+    BSDF(Vec3 n, BxDF* bxdf);
     BSDF(Vec3 n, Vec3 t, BxDF* bxdf);
 
     Spectrum f(Vec3 wo, Vec3 wi) const;
@@ -33,9 +34,15 @@ private:
     BxDF* bxdf;
 };
 
+inline BSDF::BSDF(Vec3 n, BxDF* bxdf)
+    : bxdf{ bxdf }
+    , frame{ Frame::FromZ(n) }
+{
+}
+
 inline BSDF::BSDF(Vec3 n, Vec3 t, BxDF* bxdf)
     : bxdf{ bxdf }
-    , frame{ Frame::FromXZ(Normalize(t), n) }
+    , frame{ Frame::FromXZ(t, n) }
 {
 }
 

@@ -49,6 +49,8 @@ public:
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 
 private:
+    void NormalMapping(Vec3* normal, Vec3* tangent, const Intersection& isect) const;
+
     const SpectrumTexture* basecolor;
     const FloatTexture* metallic;
     const FloatTexture* roughness;
