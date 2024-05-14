@@ -8,8 +8,8 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
     {
-        auto mat = scene.CreateMaterial<UnrealishMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
-                                                           ConstantFloatTexture::Create(0.1f));
+        auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
+                                                        ConstantFloatTexture::Create(0.1f));
 
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 

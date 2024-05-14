@@ -7,7 +7,7 @@ inline const Material* CreateRandomMicrofacetMaterial(Scene& scene)
 {
     // clang-format off
     Spectrum basecolor = Spectrum(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
-    return scene.CreateMaterial<UnrealishMaterial>(
+    return scene.CreateMaterial<UnrealMaterial>(
         ConstantColorTexture::Create(basecolor),
         ConstantFloatTexture::Create(Rand() > 0.5 ? Float(1.0) : Float(0.0)),
         ConstantFloatTexture::Create((Float)std::sqrt(Rand(0.0, 1.0))),

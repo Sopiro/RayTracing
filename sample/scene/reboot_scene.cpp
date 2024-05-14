@@ -8,8 +8,8 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
 {
     // https://sketchfab.com/3d-models/reboot-dramatic-54ec601a3c4e4f6d8600fd28174c527c
     {
-        auto mat = scene.CreateMaterial<UnrealishMaterial>(ConstantColorTexture::Create(0.0), ConstantFloatTexture::Create(0.0f),
-                                                           ConstantFloatTexture::Create(0.001f));
+        auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(0.0), ConstantFloatTexture::Create(0.0f),
+                                                        ConstantFloatTexture::Create(0.001f));
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
         LoadModel(scene, "res/reboot_dramatic_scene/scene.gltf", tf, mat);

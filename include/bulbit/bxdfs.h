@@ -34,4 +34,36 @@ private:
     Spectrum r;
 };
 
+class UnrealBxDF : public BxDF
+{
+public:
+    UnrealBxDF(Spectrum basecolor, Float metallic, Float alpha, Float t)
+        : basecolor{ basecolor }
+        , metallic{ metallic }
+        , alpha{ alpha }
+        , t{ t }
+    {
+    }
+
+    virtual BxDF_Flags Flags() const override
+    {
+        return BxDF_Flags::Diffuse | BxDF_Flags::Glossy | BxDF_Flags::Reflection;
+    }
+
+    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
+
+    virtual bool Sample_f(BSDFSample* sample,
+                          Vec3 wo,
+                          Float u0,
+                          Point2 u12,
+                          BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const override;
+
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const override;
+
+private:
+    Spectrum basecolor;
+    Float metallic, alpha;
+    Float t;
+};
+
 } // namespace bulbit
