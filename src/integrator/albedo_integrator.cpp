@@ -51,7 +51,7 @@ Spectrum AlbedoIntegrator::Li(const Ray& ray, Sampler& sampler) const
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;
-    if (!mat->GetBSDF(&bsdf, isect, wo, sampler.Next2D(), alloc))
+    if (!mat->GetBSDF(&bsdf, isect, wo, alloc))
     {
         return L;
     }

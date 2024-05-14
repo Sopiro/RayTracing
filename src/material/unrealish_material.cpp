@@ -24,7 +24,7 @@ bool UnrealishMaterial::TestAlpha(const Point2& uv) const
     return basecolor->EvaluateAlpha(uv) > epsilon;
 }
 
-bool UnrealishMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wi, const Point2& u, Allocator& alloc) const
+bool UnrealishMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wi, Allocator& alloc) const
 {
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<DiffuseBxDF>(basecolor->Evaluate(isect.uv)));
     return true;

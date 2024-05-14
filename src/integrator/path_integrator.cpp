@@ -61,21 +61,19 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         Resource res(mem, sizeof(mem));
         Allocator alloc(&res);
         BSDF bsdf;
-        if (!mat->GetBSDF(&bsdf, isect, wo, sampler.Next2D(), alloc))
+        if (!mat->GetBSDF(&bsdf, isect, wo, alloc))
         {
             break;
         }
 
         BSDFSample bsdf_sample;
-        if (bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
-        {
-            specular_bounce = IsSpecular(bsdf_sample.flags);
-            ray = Ray(isect.point, bsdf_sample.wi);
-        }
-        else
+        if (!bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
         {
             break;
         }
+
+        specular_bounce = IsSpecular(bsdf_sample.flags);
+        ray = Ray(isect.point, bsdf_sample.wi);
 
         // Estimate direct light
         // Multiple importance sampling (Li + BSDF)
