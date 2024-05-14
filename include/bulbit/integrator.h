@@ -94,6 +94,18 @@ private:
     Float range;
 };
 
+class AlbedoIntegrator : public SamplerIntegrator
+{
+public:
+    AlbedoIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler);
+    virtual ~AlbedoIntegrator() = default;
+
+    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+
+private:
+    std::vector<Light*> infinite_lights;
+};
+
 class NaivePathIntegrator : public SamplerIntegrator
 {
 public:

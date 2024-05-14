@@ -5,13 +5,13 @@
 namespace bulbit
 {
 
-Spectrum BxDF::rho(Vec3 wo, std::span<const Float> uc, std::span<const Point2> u2) const
+Spectrum BxDF::rho(Vec3 wo, std::span<const Float> uc, std::span<const Point2> u) const
 {
     Spectrum r(0);
     for (size_t i = 0; i < uc.size(); ++i)
     {
         BSDFSample sample;
-        if (Sample_f(&sample, wo, uc[i], u2[i]))
+        if (Sample_f(&sample, wo, uc[i], u[i]))
         {
             r += sample.f * AbsCosTheta(sample.wi) / sample.pdf;
         }

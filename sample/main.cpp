@@ -44,6 +44,7 @@ int main(int argc, char* argv[])
     PathIntegrator renderer(&scene, &accel, &sampler, max_bounces);
     // DebugIntegrator renderer(&scene, &accel, &sampler);
     // AmbientOcclusion renderer(&scene, &accel, &sampler, 0.5f);
+    // AlbedoIntegrator renderer(&scene, &accel, &sampler);
 
     Film film(camera.get());
     renderer.Render(&film, *camera);

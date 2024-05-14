@@ -14,15 +14,15 @@ DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
 {
 }
 
+bool DiffuseMaterial::TestAlpha(const Point2& uv) const
+{
+    return albedo->EvaluateAlpha(uv) > epsilon;
+}
+
 bool DiffuseMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, const Point2& u, Allocator& alloc) const
 {
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<DiffuseBxDF>(albedo->Evaluate(isect.uv)));
     return true;
-}
-
-bool DiffuseMaterial::TestAlpha(const Point2& uv) const
-{
-    return albedo->EvaluateAlpha(uv) > epsilon;
 }
 
 } // namespace bulbit
