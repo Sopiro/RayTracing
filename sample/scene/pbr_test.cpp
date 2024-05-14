@@ -27,7 +27,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2);
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
-            auto mat = CreateRandomMicrofacetMaterial(scene);
+            auto mat = CreateUnrealMaterial(scene);
             scene.CreatePrimitive<Sphere>(pos, r, mat);
         }
     }

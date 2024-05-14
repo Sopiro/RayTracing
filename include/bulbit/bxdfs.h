@@ -66,4 +66,6 @@ private:
     Float t;
 };
 
+constexpr size_t max_bxdf_size = std::max({ sizeof(DiffuseBxDF), sizeof(UnrealBxDF) });
+
 } // namespace bulbit

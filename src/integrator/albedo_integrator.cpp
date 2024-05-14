@@ -1,3 +1,4 @@
+#include "bulbit/bxdfs.h"
 #include "bulbit/frame.h"
 #include "bulbit/integrator.h"
 
@@ -31,6 +32,7 @@ Spectrum AlbedoIntegrator::Li(const Ray& ray, Sampler& sampler) const
         return L;
     }
 
+    // Precomputed Halton samples from pbrt4 code
     constexpr int rho_samples = 16;
     const Float uc_rho[rho_samples] = { 0.75741637, 0.37870818, 0.7083487, 0.18935409, 0.9149363, 0.35417435,
                                         0.5990858,  0.09467703, 0.8578725, 0.45746812, 0.686759,  0.17708716,
@@ -47,7 +49,7 @@ Spectrum AlbedoIntegrator::Li(const Ray& ray, Sampler& sampler) const
 
     L += mat->Le(isect, wo);
 
-    int8 mem[128];
+    int8 mem[max_bxdf_size];
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;

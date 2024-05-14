@@ -52,7 +52,7 @@ inline double Timer::Get()
     }
     else
     {
-        return double(0.0);
+        return 0;
     }
 }
 

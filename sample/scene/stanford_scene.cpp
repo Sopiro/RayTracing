@@ -25,7 +25,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Bunny
     {
         auto tf = Transform{ Vec3(gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = CreateRandomMicrofacetMaterial(scene);
+        auto mat = CreateUnrealMaterial(scene);
 
         LoadModel(scene, "res/stanford/bunny.obj", tf, mat);
     }
@@ -33,7 +33,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Lucy
     {
         auto tf = Transform{ Vec3(gap, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = CreateRandomMicrofacetMaterial(scene);
+        auto mat = CreateUnrealMaterial(scene);
 
         LoadModel(scene, "res/stanford/lucy.obj", tf, mat);
     }
@@ -41,7 +41,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Tyrannosaurus
     {
         auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
-        auto mat = CreateRandomMicrofacetMaterial(scene);
+        auto mat = CreateUnrealMaterial(scene);
 
         LoadModel(scene, "res/stanford/tyra.obj", tf, mat);
     }
@@ -73,7 +73,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2.0f);
             pos.z = 0.0f;
 
-            auto mat = CreateRandomMicrofacetMaterial(scene);
+            auto mat = CreateUnrealMaterial(scene);
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(w, w, h) };
             CreateRectXZ(scene, tf, light);

@@ -62,7 +62,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override
     {
         assert(false);
-        return Float(0.0);
+        return 0;
     }
 
     Point3 position;
@@ -79,7 +79,7 @@ public:
     virtual Float EvaluatePDF(const Ray& ray) const override
     {
         assert(false);
-        return Float(0.0);
+        return 0;
     }
 
     Vec3 dir;

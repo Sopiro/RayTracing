@@ -1,3 +1,4 @@
+#include "bulbit/bxdfs.h"
 #include "bulbit/integrator.h"
 #include "bulbit/material.h"
 
@@ -43,7 +44,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     // Evaluate emitted light
     L += mat->Le(isect, wo);
 
-    int8 mem[128];
+    int8 mem[max_bxdf_size];
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;

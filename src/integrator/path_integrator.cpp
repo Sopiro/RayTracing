@@ -1,7 +1,7 @@
+#include "bulbit/bxdfs.h"
 #include "bulbit/integrator.h"
 #include "bulbit/light.h"
 #include "bulbit/material.h"
-#include "bulbit/pdf.h"
 #include "bulbit/util.h"
 
 namespace bulbit
@@ -57,7 +57,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             break;
         }
 
-        int8 mem[128];
+        int8 mem[max_bxdf_size];
         Resource res(mem, sizeof(mem));
         Allocator alloc(&res);
         BSDF bsdf;

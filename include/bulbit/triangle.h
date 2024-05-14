@@ -43,7 +43,7 @@ inline Triangle::Triangle(const Mesh* mesh, size_t tri_index)
 
 inline AABB Triangle::GetAABB() const
 {
-    const Vec3 aabb_offset{ epsilon * 10.0 };
+    const Vec3 aabb_offset{ epsilon * 10 };
 
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -60,7 +60,7 @@ inline Float Triangle::EvaluatePDF(const Ray& ray) const
     Intersection is;
     if (Intersect(&is, ray, Ray::epsilon, infinity) == false)
     {
-        return 0.0;
+        return 0;
     }
 
     return PDFValue(is, ray);

@@ -30,14 +30,14 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
 
     Vec3 tvec = ray.o - p0;
     Float u = Dot(tvec, pvec) * invDet;
-    if (u < 0.0 || u > 1.0)
+    if (u < 0 || u > 1)
     {
         return false;
     }
 
     Vec3 qvec = Cross(tvec, e1);
     Float v = Dot(d, qvec) * invDet;
-    if (v < 0.0 || u + v > 1.0)
+    if (v < 0 || u + v > 1)
     {
         return false;
     }
@@ -97,14 +97,14 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 
     Vec3 tvec = ray.o - p0;
     Float u = Dot(tvec, pvec) * invDet;
-    if (u < 0.0 || u > 1.0)
+    if (u < 0 || u > 1)
     {
         return false;
     }
 
     Vec3 qvec = Cross(tvec, e1);
     Float v = Dot(d, qvec) * invDet;
-    if (v < 0.0 || u + v > 1.0)
+    if (v < 0 || u + v > 1)
     {
         return false;
     }

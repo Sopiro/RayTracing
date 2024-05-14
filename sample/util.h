@@ -3,7 +3,7 @@
 
 using namespace bulbit;
 
-inline const Material* CreateRandomMicrofacetMaterial(Scene& scene)
+inline const Material* CreateUnrealMaterial(Scene& scene)
 {
     // clang-format off
     Spectrum basecolor = Spectrum(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
