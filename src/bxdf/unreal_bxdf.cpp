@@ -37,7 +37,7 @@ Spectrum UnrealBxDF::f(const Vec3& wo, const Vec3& wi) const
     Float V = V_Smith_Correlated(NoV, NoL, alpha2);
 
     Spectrum f_s = F * (D * V);
-    // Spectrum f_s = F * (D * G) / (Float(4.0) * NoV * NoL);
+    // Spectrum f_s = F * (D * G) / (4.0f * NoV * NoL);
     Spectrum f_d = (Spectrum(1) - F) * (1 - metallic) * (basecolor * inv_pi);
 
     return f_d + f_s;
@@ -90,7 +90,7 @@ Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
     Vec3 h = Normalize(wo + wi);
     Float NoH = CosTheta(h);
     Float LoH = CosTheta(wi);
-    Float spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4 * LoH, Float(0.0));
+    Float spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4 * LoH, 0.0f);
 
     Float diff_w = LoH * inv_pi;
 
@@ -99,7 +99,7 @@ Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
 
 void UnrealBxDF::Regularize()
 {
-    if (alpha < Float(0.3)) alpha = Clamp(2 * alpha, Float(0.1), Float(0.3));
+    if (alpha < 0.3f) alpha = Clamp(2 * alpha, 0.1f, 0.3f);
 }
 
 } // namespace bulbit

@@ -78,7 +78,7 @@ inline Float Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) 
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-    Float area = Float(0.5) * Cross(e1, e2).Length();
+    Float area = 0.5f * Cross(e1, e2).Length();
 
     return distance_squared / (cosine * area);
 }

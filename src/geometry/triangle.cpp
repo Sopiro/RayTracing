@@ -144,7 +144,7 @@ PrimitiveSample Triangle::Sample(const Point2& u0) const
     sample.normal = Cross(e1, e2);
     sample.point = p0 + e1 * u + e2 * v;
 
-    Float area = sample.normal.Normalize() * Float(0.5);
+    Float area = sample.normal.Normalize() * 0.5f;
     sample.pdf = 1 / area;
 
     // Float w = 1 - u - v;
@@ -162,7 +162,7 @@ PrimitiveSample Triangle::Sample(const Point2& u0) const
     sample.normal = Cross(e1, e2);
     sample.point = p0 + e1 * u + e2 * v;
 
-    Float area = sample.normal.Normalize() * Float(0.5);
+    Float area = sample.normal.Normalize() * 0.5f;
     sample.pdf = 1 / area;
 
     // Float w = 1 - u - v;

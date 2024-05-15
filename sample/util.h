@@ -6,13 +6,13 @@ using namespace bulbit;
 inline const Material* CreateUnrealMaterial(Scene& scene)
 {
     // clang-format off
-    Spectrum basecolor = Spectrum(Rand(0.0, 1.0), Rand(0.0, 1.0), Rand(0.0, 1.0)) * Float(0.7);
+    Spectrum basecolor = Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f;
     return scene.CreateMaterial<UnrealMaterial>(
         ConstantColorTexture::Create(basecolor),
-        ConstantFloatTexture::Create(Rand() > 0.5 ? Float(1.0) : Float(0.0)),
-        ConstantFloatTexture::Create((Float)std::sqrt(Rand(0.0, 1.0))),
-        ConstantColorTexture::Create(basecolor * (Rand() < 0.08 ? Rand(0.0, Float(0.3)) : Float(0.0))),
-        ConstantColorTexture::Create(0.5, 0.5, 1.0)
+        ConstantFloatTexture::Create(Rand() > 0.5f ? 1.0f : 0.0f),
+        ConstantFloatTexture::Create((Float)std::sqrt(Rand(0.0f, 1.0f))),
+        ConstantColorTexture::Create(basecolor * (Rand() < 0.08f ? Rand(0.0f, 0.3f) : 0.0f)),
+        ConstantColorTexture::Create(0.5f, 0.5f, 1.0f)
     );
     // clang-format on
 }

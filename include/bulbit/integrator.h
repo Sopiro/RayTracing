@@ -113,7 +113,7 @@ public:
                         const Intersectable* accel,
                         const Sampler* sampler,
                         int32 max_bounces,
-                        Float russian_roulette_probability = Float(0.95));
+                        Float russian_roulette_probability = 0.95f);
     virtual ~NaivePathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
@@ -139,7 +139,7 @@ public:
                    const Sampler* sampler,
                    int32 max_bounces,
                    bool regularize_bsdf = false,
-                   Float russian_roulette_probability = Float(0.95));
+                   Float russian_roulette_probability = 0.95f);
     virtual ~PathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;

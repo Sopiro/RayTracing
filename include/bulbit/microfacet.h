@@ -11,8 +11,8 @@ namespace bulbit
 // Functions for microfacet BRDF
 
 // Default reflectance of dielectrics
-constexpr Vec3 default_reflectance(Float(0.04));
-constexpr Float min_alpha = Float(0.002);
+constexpr Vec3 default_reflectance(0.04f);
+constexpr Float min_alpha = 0.002f;
 
 inline Float RoughnessToAlpha(Float roughness)
 {
@@ -26,14 +26,14 @@ inline Spectrum F0(Spectrum basecolor, Float metallic)
 
 inline Spectrum F_Schlick(Spectrum f0, Float cosine_theta)
 {
-    return f0 + (/*f90*/ Spectrum(1) - f0) * std::pow(1 - cosine_theta, Float(5.0));
+    return f0 + (/*f90*/ Spectrum(1) - f0) * std::pow(1 - cosine_theta, 5.0f);
 }
 
 // Trowbridge-Reitz distribution
 inline Float D_GGX(Float NoH, Float alpha2)
 {
     Float b = (NoH * NoH * (alpha2 - 1) + 1);
-    return alpha2 * inv_pi / (b * b + Float(1e-7));
+    return alpha2 * inv_pi / (b * b + 1e-7f);
 }
 
 inline Float G1_Smith(Float NoV, Float alpha2)
@@ -52,7 +52,7 @@ inline Float V_Smith_Correlated(Float NoV, Float NoL, Float alpha2)
 {
     Float g1 = NoV * std::sqrt(alpha2 + (1 - alpha2) * NoL * NoL);
     Float g2 = NoL * std::sqrt(alpha2 + (1 - alpha2) * NoV * NoV);
-    return Float(0.5) / (g1 + g2);
+    return 0.5f / (g1 + g2);
 }
 
 class TrowbridgeReitzDistribution
@@ -71,7 +71,7 @@ public:
 
     bool EffectivelySmooth() const
     {
-        return std::max(alpha_x, alpha_y) < Float(1e-3);
+        return std::max(alpha_x, alpha_y) < 1e-3f;
     }
 
     Float D(const Vec3& wm) const
@@ -142,8 +142,8 @@ public:
 
     void Regularize()
     {
-        if (alpha_x < Float(0.3)) alpha_x = Clamp(2 * alpha_x, Float(0.1f), Float(0.3f));
-        if (alpha_y < Float(0.3)) alpha_y = Clamp(2 * alpha_y, Float(0.1f), Float(0.3f));
+        if (alpha_x < 0.3) alpha_x = Clamp(2 * alpha_x, 0.1f, 0.3f);
+        if (alpha_y < 0.3f) alpha_y = Clamp(2 * alpha_y, 0.1f, 0.3f);
     }
 
 private:

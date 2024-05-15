@@ -24,7 +24,7 @@ ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Tra
     std::unique_ptr<Float[]> image(new Float[width * height]);
     for (int32 v = 0; v < height; ++v)
     {
-        Float vp = (v + Float(0.5)) / height;
+        Float vp = (v + 0.5f) / height;
         Float sin_theta = std::sin(pi * vp);
 
         for (int32 u = 0; u < width; ++u)

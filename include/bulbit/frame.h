@@ -82,7 +82,7 @@ constexpr inline bool SameHemisphere(const Vec3& a, const Vec3& b)
 
 inline void CoordinateSystem(const Vec3& v1, Vec3* v2, Vec3* v3)
 {
-    Float sign = std::copysign(Float(1), v1.z);
+    Float sign = std::copysign(1.0f, v1.z);
     Float a = -1 / (sign + v1.z);
     Float b = v1.x * v1.y * a;
     *v2 = Vec3(1 + sign * (v1.x * v1.x) * a, sign * b, -sign * v1.x);

@@ -26,7 +26,7 @@ bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& isect, Fl
 
 Float UniformLightSampler::EvaluatePMF(Light* light) const
 {
-    return Float(1) / lights.size();
+    return 1.0f / lights.size();
 }
 
 } // namespace bulbit

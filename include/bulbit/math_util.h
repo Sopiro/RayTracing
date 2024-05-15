@@ -18,12 +18,12 @@ constexpr inline T Sqr(T v)
 
 constexpr inline Float DegToRad(Float deg)
 {
-    return Float(deg * pi / 180);
+    return deg * pi / 180;
 }
 
 constexpr inline Float RadToDeg(Float rad)
 {
-    return Float(rad * inv_pi * 180);
+    return rad * inv_pi * 180;
 }
 
 template <typename T>
@@ -96,7 +96,7 @@ constexpr inline T Lerp(const T& a, const T& b, Float t)
 template <typename T>
 constexpr inline T Slerp(const T& start, const T& end, Float percent)
 {
-    Float dot = Clamp(Dot(start, end), -Float(1.0), Float(1.0));
+    Float dot = Clamp(Dot(start, end), -1.0f, 1.0f);
     Float angle = std::acos(dot) * percent;
 
     T rv = end - start * dot;

@@ -44,7 +44,7 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     Float diff_weight = (1 - m);
     Float spec_weight = F.Luminance();
     // Float spec_weight = std::fmax(F.x, std::fmax(F.y, F.z));
-    Float t = Clamp(spec_weight / (diff_weight + spec_weight), Float(0.15), Float(0.9));
+    Float t = Clamp(spec_weight / (diff_weight + spec_weight), 0.15f, 0.9f);
 
     *bsdf = BSDF(normal, tangent, alloc.new_object<UnrealBxDF>(b, m, alpha, t));
     return true;

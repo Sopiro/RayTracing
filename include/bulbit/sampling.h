@@ -32,7 +32,7 @@ inline Float PowerHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
 inline Vec3 UniformSampleHemisphere(const Point2& u)
 {
     Float z = u[0];
-    Float r = std::sqrt(std::fmax(Float(0.0), 1 - z * z));
+    Float r = std::sqrt(std::fmax(0.0f, 1 - z * z));
     Float phi = two_pi * u[1];
 
     return Vec3(r * std::cos(phi), r * std::sin(phi), z);
@@ -46,7 +46,7 @@ inline Float UniformHemispherePDF()
 inline Vec3 UniformSampleSphere(const Point2& u)
 {
     Float z = 1 - 2 * u[0];
-    Float r = std::sqrt(std::fmax(Float(0.0), 1 - z * z));
+    Float r = std::sqrt(std::fmax(0.0f, 1 - z * z));
     Float phi = two_pi * u[1];
 
     Float x = r * std::cos(phi);
@@ -96,7 +96,7 @@ inline Vec3 RandomInUnitSphere(const Point2& u)
     Vec3 p;
     do
     {
-        p = RandVec3(Float(-1.0), 1);
+        p = RandVec3(-1.0f, 1.0f);
     }
     while (p.Length2() >= 1);
 
@@ -108,7 +108,7 @@ inline Vec3 UniformSampleUnitDiskXY(const Point2& u)
 {
     Float r = std::sqrt(u.x);
     Float theta = two_pi * u.y;
-    return Vec3(r * std::cos(theta), r * std::sin(theta), Float(0.0));
+    return Vec3(r * std::cos(theta), r * std::sin(theta), 0.0f);
 }
 
 // Importance sampling codes for microfacet functions
@@ -169,7 +169,7 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
 
     // Build an orthonormal basis with v, t1, and t2
     // Section 4.1: orthonormal basis (with special case if cross product is zero)
-    Vec3 T1 = (Vh.z < Float(0.999)) ? Normalize(Cross(Vh, z_axis)) : x_axis;
+    Vec3 T1 = (Vh.z < 0.999f) ? Normalize(Cross(Vh, z_axis)) : x_axis;
     Vec3 T2 = Cross(T1, Vh);
 
     // Section 4.2: parameterization of the projected area
@@ -177,14 +177,14 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
     Float phi = two_pi * u.y;
     Float t1 = r * std::cos(phi);
     Float t2 = r * std::sin(phi);
-    Float s = Float(0.5) * (1 + Vh.z);
+    Float s = 0.5f * (1 + Vh.z);
     t2 = Lerp(std::sqrt(1 - t1 * t1), t2, s);
 
     // Section 4.3: reprojection onto hemisphere
-    Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(Float(0), 1 - t1 * t1 - t2 * t2)) * Vh;
+    Vec3 Nh = t1 * T1 + t2 * T2 + std::sqrt(std::fmax(0.0f, 1 - t1 * t1 - t2 * t2)) * Vh;
 
     // Section 3.4: transforming the normal back to the ellipsoid configuration
-    Vec3 h = Normalize(Vec3(alpha_x * Nh.x, alpha_y * Nh.y, std::fmax(Float(0), Nh.z))); // Sampled half vector
+    Vec3 h = Normalize(Vec3(alpha_x * Nh.x, alpha_y * Nh.y, std::fmax(0.0f, Nh.z))); // Sampled half vector
 
     return h;
 }

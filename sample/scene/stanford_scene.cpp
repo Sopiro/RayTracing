@@ -50,7 +50,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * Float(0.7f)),
+            ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
             ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f));
 
         LoadModel(scene, "res/stanford/arma.obj", tf, mat);

@@ -77,8 +77,8 @@ Spectrum ColorImageTexture::Evaluate(const Point2& uv) const
 {
 #if 0
     // Nearest sampling
-    Float w = uv.x * width + Float(0.5);
-    Float h = uv.y * height + Float(0.5);
+    Float w = uv.x * width + 0.5f;
+    Float h = uv.y * height + 0.5f;
 
     int32 i = int32(w);
     int32 j = int32(h);
@@ -88,8 +88,8 @@ Spectrum ColorImageTexture::Evaluate(const Point2& uv) const
     return rgb[i + j * width];
 #else
     // Bilinear sampling
-    Float w = uv.x * width + Float(0.5);
-    Float h = uv.y * height + Float(0.5);
+    Float w = uv.x * width + 0.5f;
+    Float h = uv.y * height + 0.5f;
 
     int32 i0 = int32(w), i1 = int32(w) + 1;
     int32 j0 = int32(h), j1 = int32(h) + 1;
@@ -119,8 +119,8 @@ Float ColorImageTexture::EvaluateAlpha(const Point2& uv) const
 
 #if 0
     // Nearest sampling
-    Float w = uv.x * width + Float(0.5);
-    Float h = uv.y * height + Float(0.5);
+    Float w = uv.x * width + 0.5f;
+    Float h = uv.y * height + 0.5f;
 
     int32 i = int32(w);
     int32 j = int32(h);
@@ -130,8 +130,8 @@ Float ColorImageTexture::EvaluateAlpha(const Point2& uv) const
     return alpha[i + j * width];
 #else
     // Bilinear sampling
-    Float w = uv.x * width + Float(0.5);
-    Float h = uv.y * height + Float(0.5);
+    Float w = uv.x * width + 0.5f;
+    Float h = uv.y * height + 0.5f;
 
     int32 i0 = int32(w), i1 = int32(w) + 1;
     int32 j0 = int32(h), j1 = int32(h) + 1;

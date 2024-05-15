@@ -63,7 +63,7 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
 
                     if (L.IsNullish() == false)
                     {
-                        film->AddSample(x, y, L, Float(1));
+                        film->AddSample(x, y, L, 1.0f);
                     }
                 }
                 while (sampler->StartNextPixelSample());

@@ -27,14 +27,14 @@ inline MixturePDF::MixturePDF(PDF* pdf1, PDF* pdf2)
 inline Vec3 MixturePDF::Sample(const Point2& u0) const
 {
     Point2 u = u0;
-    if (u[0] > Float(0.5))
+    if (u[0] > 0.5f)
     {
         u[0] = 2 * u[0];
         return p1->Sample(u);
     }
     else
     {
-        u[0] = 2 * (u[0] - Float(0.5));
+        u[0] = 2 * (u[0] - 0.5f);
         return p2->Sample(u);
     }
 }
@@ -42,7 +42,7 @@ inline Vec3 MixturePDF::Sample(const Point2& u0) const
 inline Float MixturePDF::Evaluate(const Vec3& wi) const
 {
     // Mixing two pdfs
-    return Float(0.5) * (p1->Evaluate(wi) + p2->Evaluate(wi));
+    return 0.5f * (p1->Evaluate(wi) + p2->Evaluate(wi));
 }
 
 } // namespace bulbit

@@ -49,7 +49,7 @@ inline Float Sphere::EvaluatePDF(const Ray& ray) const
     Intersection is;
     if (Intersect(&is, ray, Ray::epsilon, infinity) == false)
     {
-        return Float(0.0);
+        return 0.0f;
     }
 
     return PDFValue(is, ray);

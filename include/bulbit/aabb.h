@@ -76,7 +76,7 @@ inline Vec3 AABB::operator[](int32 i) const
 
 inline Vec3 AABB::GetCenter() const
 {
-    return (min + max) * Float(0.5);
+    return (min + max) * 0.5f;
 }
 
 inline Vec3 AABB::GetExtents() const

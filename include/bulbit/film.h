@@ -33,7 +33,7 @@ inline Film::Film(const Camera* camera)
     for (int32 i = 0; i < width * height; ++i)
     {
         samples[i] = Spectrum::black;
-        weights[i] = Float(0);
+        weights[i] = 0.0f;
     }
 }
 

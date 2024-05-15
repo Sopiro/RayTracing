@@ -14,30 +14,30 @@ struct Transform
     Transform() = default;
 
     Transform(Identity)
-        : p{ Float(0.0) }
+        : p{ 0.0f }
         , q{ identity }
-        , r{ Float(1.0) }
+        , r{ 1.0f }
     {
     }
 
     Transform(const Vec3& position)
         : p{ position }
         , q{ identity }
-        , r{ Float(1.0) }
+        , r{ 1.0f }
     {
     }
 
     Transform(const Quat& orientation)
-        : p{ Float(0.0) }
+        : p{ 0.0f }
         , q{ orientation }
-        , r{ Float(1.0) }
+        , r{ 1.0f }
     {
     }
 
     Transform(const Vec3& position, const Quat& orientation)
         : p{ position }
         , q{ orientation }
-        , r{ Float(1.0) }
+        , r{ 1.0f }
     {
     }
 
@@ -48,7 +48,7 @@ struct Transform
     {
     }
 
-    Transform(Float x, Float y, Float z, const Quat& orientation = Quat(Float(1.0)), const Vec3& scale = Vec3(Float(1.0)))
+    Transform(Float x, Float y, Float z, const Quat& orientation = Quat(1.0f), const Vec3& scale = Vec3(1.0f))
         : p{ x, y, z }
         , q{ orientation }
         , r{ scale }
@@ -66,14 +66,14 @@ struct Transform
     {
         p.SetZero();
         q.SetIdentity();
-        r.Set(Float(1.0), Float(1.0), Float(1.0));
+        r.Set(1.0f, 1.0f, 1.0f);
     }
 
     Transform& operator*=(const Transform& other);
 
     Transform GetInverse() const
     {
-        return Transform{ q.RotateInv(-p), q.GetConjugate(), Float(1.0) / r };
+        return Transform{ q.RotateInv(-p), q.GetConjugate(), 1.0f / r };
     }
 };
 
@@ -115,7 +115,7 @@ inline Transform MulT(const Transform& a, const Transform& b)
 {
     Quat invQ = a.q.GetConjugate();
 
-    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (Float(1.0) / a.r) * b.r };
+    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (1.0f / a.r) * b.r };
 }
 
 inline Transform& Transform::operator*=(const Transform& other)

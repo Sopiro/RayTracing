@@ -14,8 +14,6 @@
 namespace bulbit
 {
 
-using Float = float;
-
 constexpr Float pi = Float(3.14159265358979323846);
 constexpr Float two_pi = Float(2.0 * 3.14159265358979323846);
 constexpr Float four_pi = Float(4.0 * 3.14159265358979323846);
@@ -797,7 +795,7 @@ struct Quat
     // Axis must be normalized
     Quat(Float angle, const Vec3& unitAxis)
     {
-        Float halfAngle = angle * Float(0.5);
+        Float halfAngle = angle * 0.5f;
 
         Float s = std::sin(halfAngle);
         x = unitAxis.x * s;
@@ -865,7 +863,7 @@ struct Quat
         Float vx = 2 * v.x;
         Float vy = 2 * v.y;
         Float vz = 2 * v.z;
-        Float w2 = w * w - Float(0.5);
+        Float w2 = w * w - 0.5f;
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
@@ -878,7 +876,7 @@ struct Quat
         Float vx = 2 * v.x;
         Float vy = 2 * v.y;
         Float vz = 2 * v.z;
-        Float w2 = w * w - Float(0.5);
+        Float w2 = w * w - 0.5f;
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
@@ -928,12 +926,12 @@ struct Quat
 
     static inline Quat FromEuler(Float x, Float y, Float z)
     {
-        Float cr = std::cos(x * Float(0.5));
-        Float sr = std::sin(x * Float(0.5));
-        Float cp = std::cos(y * Float(0.5));
-        Float sp = std::sin(y * Float(0.5));
-        Float cy = std::cos(z * Float(0.5));
-        Float sy = std::sin(z * Float(0.5));
+        Float cr = std::cos(x * 0.5f);
+        Float sr = std::sin(x * 0.5f);
+        Float cp = std::cos(y * 0.5f);
+        Float sp = std::sin(y * 0.5f);
+        Float cy = std::cos(z * 0.5f);
+        Float sy = std::sin(z * 0.5f);
 
         Quat q;
         q.w = cr * cp * cy + sr * sp * sy;

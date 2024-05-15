@@ -202,7 +202,7 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
             }
         }
 
-        constexpr Float traverse_cost = Float(0.5);
+        constexpr Float traverse_cost = 0.5f;
         min_cost = traverse_cost + min_cost / span_bounds.GetSurfaceArea();
 
         const Float direct_leaf_cost = primitive_count;

@@ -45,12 +45,12 @@ struct RGBSpectrum
 
     bool IsBlack() const
     {
-        return r == Float(0.0) && g == Float(0.0) && b == Float(0.0);
+        return r == 0.0f && g == 0.0f && b == 0.0f;
     }
 
     Float Luminance() const
     {
-        constexpr Vec3 coefficient(Float(0.2126), Float(0.7152), Float(0.0722));
+        constexpr Vec3 coefficient(0.2126f, 0.7152f, 0.0722f);
         return r * coefficient.x + g * coefficient.y + b * coefficient.z;
     }
 

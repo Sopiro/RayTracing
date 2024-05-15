@@ -233,12 +233,12 @@ Quat::Quat(const Mat3& m)
         if (m.ex.x > m.ey.y)
         {
             Float t = 1 + m.ex.x - m.ey.y - m.ez.z;
-            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (Float(0.5) / std::sqrt(t));
+            *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (0.5f / std::sqrt(t));
         }
         else
         {
             Float t = 1 - m.ex.x + m.ey.y - m.ez.z;
-            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (Float(0.5) / std::sqrt(t));
+            *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (0.5f / std::sqrt(t));
         }
     }
     else
@@ -246,12 +246,12 @@ Quat::Quat(const Mat3& m)
         if (m.ex.x < -m.ey.y)
         {
             Float t = 1 - m.ex.x - m.ey.y + m.ez.z;
-            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (Float(0.5) / std::sqrt(t));
+            *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (0.5f / std::sqrt(t));
         }
         else
         {
             Float t = 1 + m.ex.x + m.ey.y + m.ez.z;
-            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (Float(0.5) / std::sqrt(t));
+            *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (0.5f / std::sqrt(t));
         }
     }
 }
