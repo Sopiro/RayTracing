@@ -97,4 +97,9 @@ Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
     return (1 - t) * diff_w + t * spec_w;
 }
 
+void UnrealBxDF::Regularize()
+{
+    if (alpha < Float(0.3)) alpha = Clamp(2 * alpha, Float(0.1), Float(0.3));
+}
+
 } // namespace bulbit

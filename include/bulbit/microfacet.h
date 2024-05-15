@@ -140,6 +140,12 @@ public:
         return std::sqrt(roughness);
     }
 
+    void Regularize()
+    {
+        if (alpha_x < Float(0.3)) alpha_x = Clamp(2 * alpha_x, Float(0.1f), Float(0.3f));
+        if (alpha_y < Float(0.3)) alpha_y = Clamp(2 * alpha_y, Float(0.1f), Float(0.3f));
+    }
+
 private:
     Float alpha_x, alpha_y;
 };

@@ -27,6 +27,8 @@ public:
     Vec3 WorldToLocal(const Vec3& v) const;
     Vec3 LocalToWorld(const Vec3& v) const;
 
+    void Regularize();
+
     BxDF_Flags Flags() const;
 
 private:
@@ -120,6 +122,11 @@ inline Vec3 BSDF::LocalToWorld(const Vec3& v) const
 inline BxDF_Flags BSDF::Flags() const
 {
     return bxdf->Flags();
+}
+
+inline void BSDF::Regularize()
+{
+    bxdf->Regularize();
 }
 
 } // namespace bulbit

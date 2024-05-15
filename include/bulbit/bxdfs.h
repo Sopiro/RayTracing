@@ -60,6 +60,8 @@ public:
 
     virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const override;
 
+    virtual void Regularize() override;
+
 private:
     Spectrum basecolor;
     Float metallic, alpha;

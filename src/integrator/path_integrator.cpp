@@ -7,10 +7,16 @@
 namespace bulbit
 {
 
-PathIntegrator::PathIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 bounces, Float rr)
+PathIntegrator::PathIntegrator(const Scene* scene,
+                               const Intersectable* accel,
+                               const Sampler* sampler,
+                               int32 bounces,
+                               bool regularize_bsdf,
+                               Float rr_probability)
     : SamplerIntegrator(scene, accel, sampler)
     , max_bounces{ bounces }
-    , rr_probability{ rr }
+    , rr_probability{ rr_probability }
+    , regularize_bsdf{ regularize_bsdf }
     , light_sampler{ scene->GetLights() }
 {
     for (Light* light : scene->GetLights())
@@ -27,6 +33,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
     int32 bounce = 0;
     Spectrum L(0), throughput(1);
     bool specular_bounce = false;
+    bool any_non_specular_bounces = false;
     Ray ray = primary_ray;
 
     while (true)
@@ -66,13 +73,19 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             break;
         }
 
+        if (regularize_bsdf && any_non_specular_bounces)
+        {
+            bsdf.Regularize();
+        }
+
         BSDFSample bsdf_sample;
         if (!bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
         {
             break;
         }
 
-        specular_bounce = IsSpecular(bsdf_sample.flags);
+        specular_bounce = bsdf_sample.IsSpecular();
+        any_non_specular_bounces |= !bsdf_sample.IsSpecular();
         ray = Ray(isect.point, bsdf_sample.wi);
 
         // Estimate direct light

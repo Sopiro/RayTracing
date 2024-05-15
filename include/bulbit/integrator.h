@@ -138,6 +138,7 @@ public:
                    const Intersectable* accel,
                    const Sampler* sampler,
                    int32 max_bounces,
+                   bool regularize_bsdf = false,
                    Float russian_roulette_probability = Float(0.95));
     virtual ~PathIntegrator() = default;
 
@@ -149,6 +150,7 @@ private:
 
     int32 max_bounces;
     Float rr_probability;
+    bool regularize_bsdf;
 };
 
 } // namespace bulbit

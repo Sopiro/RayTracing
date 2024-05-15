@@ -108,6 +108,8 @@ public:
 
     virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const = 0;
 
+    virtual void Regularize() {};
+
     // Compute Hemispherical reflectance (albedo)
     Spectrum rho(Vec3 wo, std::span<const Float> uc, std::span<const Point2> u2) const;
 
