@@ -1,5 +1,6 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/microfacet.h"
+#include "bulbit/frame.h"
+#include "bulbit/sampling.h"
 
 namespace bulbit
 {
@@ -11,9 +12,9 @@ Spectrum UnrealBxDF::f(const Vec3& wo, const Vec3& wi) const
         return Spectrum::black;
     }
 
-    Vec3 v = wi;    // incident
-    Vec3 l = wo;    // outgoing
-    Vec3 h = v + l; // half
+    Vec3 v = wi;
+    Vec3 l = wo;
+    Vec3 h = v + l;
 
     Float NoV = CosTheta(v);
     Float NoL = CosTheta(l);

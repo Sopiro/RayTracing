@@ -1,6 +1,5 @@
 #include "bulbit/bxdfs.h"
 #include "bulbit/material.h"
-#include "bulbit/microfacet.h"
 #include "bulbit/util.h"
 
 namespace bulbit
@@ -37,10 +36,10 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     Spectrum b = basecolor->Evaluate(isect.uv);
     Float m = metallic->Evaluate(isect.uv);
     Float r = roughness->Evaluate(isect.uv);
-    Float alpha = RoughnessToAlpha(r);
+    Float alpha = UnrealBxDF::RoughnessToAlpha(r);
 
-    Spectrum f0 = F0(b, m);
-    Spectrum F = F_Schlick(f0, Dot(wo, isect.normal));
+    Spectrum f0 = UnrealBxDF::F0(b, m);
+    Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, isect.normal));
     Float diff_weight = (1 - m);
     Float spec_weight = F.Luminance();
     // Float spec_weight = std::fmax(F.x, std::fmax(F.y, F.z));
