@@ -45,7 +45,7 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     Float alpha = UnrealBxDF::RoughnessToAlpha(r);
 
     Spectrum f0 = UnrealBxDF::F0(b, m);
-    Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, isect.shading.normal));
+    Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, normal));
     Float diff_weight = (1 - m);
     Float spec_weight = F.Luminance();
     // Float spec_weight = std::fmax(F.x, std::fmax(F.y, F.z));

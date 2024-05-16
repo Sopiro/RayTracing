@@ -7,8 +7,7 @@
 std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
-        auto floor_mat = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(0.4f), ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.0f));
+        auto floor_mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f));
         LoadModel(scene, "res/veach_mi/floor.obj", Transform{ identity }, floor_mat);
     }
 
@@ -73,8 +72,7 @@ static int32 index1 = Sample::Register("mis", MISTest);
 std::unique_ptr<Camera> MISTestWak(Scene& scene)
 {
     {
-        auto floor = scene.CreateMaterial<UnrealMaterial>(ColorImageTexture::Create("res/wakdu.jpg"),
-                                                          ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.0f));
+        auto floor = scene.CreateMaterial<DiffuseMaterial>(ColorImageTexture::Create("res/wakdu.jpg"));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
         CreateRectXZ(scene, tf, floor);
@@ -115,7 +113,7 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
         auto light4 = scene.CreateMaterial<DiffuseLight>(Spectrum(11.1111f, 11.1111f, 0));
         auto light5 = scene.CreateMaterial<DiffuseLight>(Spectrum(0, 1.23457f, 0));
 
-        // scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
+        scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
         scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
         scene.CreatePrimitive<Sphere>(Vec3(-1.25f, 0, 0), 0.1f, light2);
         scene.CreatePrimitive<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);

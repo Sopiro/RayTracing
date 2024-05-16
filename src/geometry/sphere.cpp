@@ -50,9 +50,7 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
     Vec3 tangent, bitangent;
     CoordinateSystem(outward_normal, &tangent, &bitangent);
 
-    SetFaceNormal(isect, ray.d, outward_normal);
-    isect->shading.normal = outward_normal;
-    isect->shading.tangent = tangent;
+    SetFaceNormal(isect, ray.d, outward_normal, outward_normal, tangent);
 
     return true;
 }
