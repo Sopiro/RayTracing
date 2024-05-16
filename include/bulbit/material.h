@@ -41,8 +41,8 @@ public:
     UnrealMaterial(const SpectrumTexture* basecolor,
                       const FloatTexture* metallic,
                       const FloatTexture* roughness,
-                      const SpectrumTexture* emissive = ConstantColorTexture::Create(0.0f),
-                      const SpectrumTexture* normalmap = ConstantColorTexture::Create(0.5f, 0.5f, 1.0f));
+                      const SpectrumTexture* emissive = nullptr,
+                      const SpectrumTexture* normalmap = nullptr);
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const override;

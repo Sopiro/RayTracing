@@ -1167,6 +1167,19 @@ inline T Normalize(const T& v)
     return v * invLength;
 }
 
+template <typename T>
+inline T NormalizeSafe(const T& v)
+{
+    float length = v.Length();
+    if (length < epsilon)
+    {
+        return T::zero;
+    }
+
+    float invLength = 1 / length;
+    return v * invLength;
+}
+
 // Quat functions begin
 
 inline bool operator==(const Quat& a, const Quat& b)

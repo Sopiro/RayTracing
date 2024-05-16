@@ -6,7 +6,7 @@
 namespace bulbit
 {
 
-bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
+bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_max) const
 {
     Vec3 oc = ray.o - center;
     Float a = ray.d.Length2();
@@ -42,17 +42,17 @@ bool Sphere::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_ma
         return false;
     }
 
-    is->primitive = this;
-    is->t = root;
-    is->point = point;
-    is->uv = uv;
+    isect->primitive = this;
+    isect->t = root;
+    isect->point = point;
+    isect->uv = uv;
 
     Vec3 tangent, bitangent;
     CoordinateSystem(outward_normal, &tangent, &bitangent);
 
-    SetFaceNormal(is, ray.d, outward_normal);
-    is->shading.normal = outward_normal;
-    is->shading.tangent = tangent;
+    SetFaceNormal(isect, ray.d, outward_normal);
+    isect->shading.normal = outward_normal;
+    isect->shading.tangent = tangent;
 
     return true;
 }

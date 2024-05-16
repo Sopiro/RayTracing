@@ -25,7 +25,7 @@ bool UnrealMaterial::TestAlpha(const Point2& uv) const
 
 Spectrum UnrealMaterial::Le(const Intersection& isect, const Vec3& wi) const
 {
-    return emissive->Evaluate(isect.uv);
+    return emissive ? emissive->Evaluate(isect.uv) : Spectrum::black;
 }
 
 bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
@@ -33,29 +33,41 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     Vec3 normal, tangent;
     NormalMapping(&normal, &tangent, isect);
 
+    if (Dot(normal, wo) < 0)
+    {
+        // Resolve back facing normal by flipping method
+        normal = Reflect(normal, isect.normal);
+    }
+
     Spectrum b = basecolor->Evaluate(isect.uv);
     Float m = metallic->Evaluate(isect.uv);
     Float r = roughness->Evaluate(isect.uv);
     Float alpha = UnrealBxDF::RoughnessToAlpha(r);
 
     Spectrum f0 = UnrealBxDF::F0(b, m);
-    Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, isect.normal));
+    Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, isect.shading.normal));
     Float diff_weight = (1 - m);
     Float spec_weight = F.Luminance();
     // Float spec_weight = std::fmax(F.x, std::fmax(F.y, F.z));
     Float t = Clamp(spec_weight / (diff_weight + spec_weight), 0.15f, 0.9f);
 
-    *bsdf = BSDF(normal, tangent, alloc.new_object<UnrealBxDF>(b, m, alpha, t));
+    *bsdf = BSDF(normal, alloc.new_object<UnrealBxDF>(b, m, alpha, t));
     return true;
 }
 
 void UnrealMaterial::NormalMapping(Vec3* normal, Vec3* tangent, const Intersection& isect) const
 {
+    if (normalmap == nullptr)
+    {
+        *normal = isect.shading.normal;
+        *tangent = isect.shading.tangent;
+        return;
+    }
+
     Vec3 sn = ToVector(normalmap->Evaluate(isect.uv)) * 2 - Vec3(1);
     sn.Normalize();
 
     Frame tbn = Frame::FromZ(isect.shading.normal);
-    tbn.z.Normalize();
 
     *normal = Normalize(tbn.FromLocal(sn));
     *tangent = Cross(tbn.y, *normal);

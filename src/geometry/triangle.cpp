@@ -4,7 +4,7 @@ namespace bulbit
 {
 
 // Möller-Trumbore algorithm
-bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_max) const
+bool Triangle::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_max) const
 {
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -58,15 +58,15 @@ bool Triangle::Intersect(Intersection* is, const Ray& ray, Float t_min, Float t_
         return false;
     }
 
-    is->primitive = this;
-    is->t = t;
-    is->point = ray.At(t);
-    is->uv = uv;
+    isect->primitive = this;
+    isect->t = t;
+    isect->point = ray.At(t);
+    isect->uv = uv;
 
     Vec3 normal = Normalize(Cross(e1, e2));
-    SetFaceNormal(is, ray.d, normal);
-    is->shading.normal = GetNormal(u, v, w);
-    is->shading.tangent = GetTangent(u, v, w);
+    SetFaceNormal(isect, ray.d, normal);
+    isect->shading.normal = GetNormal(u, v, w);
+    isect->shading.tangent = GetTangent(u, v, w);
 
     return true;
 }
