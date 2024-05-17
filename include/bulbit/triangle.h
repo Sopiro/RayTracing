@@ -20,7 +20,7 @@ public:
     virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
-    virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+    virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const override;
 
     virtual const Material* GetMaterial() const override;
 
@@ -63,10 +63,10 @@ inline Float Triangle::EvaluatePDF(const Ray& ray) const
         return 0;
     }
 
-    return PDFValue(is, ray);
+    return PDF(is, ray);
 }
 
-inline Float Triangle::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
+inline Float Triangle::PDF(const Intersection& hit_is, const Ray& hit_ray) const
 {
     Float distance_squared = hit_is.t * hit_is.t * hit_ray.d.Length2();
     Float cosine = std::fabs(Dot(hit_ray.d, hit_is.normal) / hit_ray.d.Length());

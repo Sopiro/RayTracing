@@ -45,7 +45,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // {
     //     auto tf = Transform{ Vec3(-4.0f, 2.5f, 0.0f), Quat(DegToRad(-40.0f), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
     //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(10.0f));
-    //     auto rect = RectYZ(tf, light);
+    //     auto rect = RectYZ(tf, light, true);
 
     //     scene.Add(rect);
     //     scene.AddLight(rect);
@@ -54,7 +54,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // {
     //     auto tf = Transform{ Vec3(4.0f, 2.5f, 0.0f), Quat(DegToRad(180 + 50), z_axis), Vec3(1.0f, 1.0f, 4.0f) };
     //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(8.0f));
-    //     auto rect = RectYZ(tf, light);
+    //     auto rect = RectYZ(tf, light, true);
 
     //     scene.Add(rect);
     //     scene.AddLight(rect);
@@ -63,7 +63,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // {
     //     auto tf = Transform{ Vec3(0.0f, 2.5f, -4.0f), Quat(DegToRad(40), x_axis), Vec3(4.0f, 1.0f, 1.0f) };
     //     auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(8.0f));
-    //     auto rect = RectXY(tf, light);
+    //     auto rect = RectXY(tf, light, true);
 
     //     scene.Add(rect);
     //     scene.AddLight(rect);
@@ -86,7 +86,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = 0.0f;
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
-            CreateRectXZ(scene, tf, light);
+            CreateRectXZ(scene, tf, light, true);
         }
     }
 

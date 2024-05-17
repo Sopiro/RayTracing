@@ -14,12 +14,17 @@ class Material
 public:
     virtual ~Material() = default;
 
-    // clang-format off
-    virtual bool IsLightSource() const { return false; }
-    virtual bool TestAlpha(const Point2& uv) const { return true; }
-    virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const { return Spectrum::black; }
+    virtual bool TestAlpha(const Point2& uv) const
+    {
+        return true;
+    }
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const
+    {
+        return Spectrum::black;
+    }
+
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const = 0;
-    // clang-format off
 };
 
 class DiffuseMaterial : public Material
@@ -39,10 +44,10 @@ class UnrealMaterial : public Material
 {
 public:
     UnrealMaterial(const SpectrumTexture* basecolor,
-                      const FloatTexture* metallic,
-                      const FloatTexture* roughness,
-                      const SpectrumTexture* emissive = nullptr,
-                      const SpectrumTexture* normalmap = nullptr);
+                   const FloatTexture* metallic,
+                   const FloatTexture* roughness,
+                   const SpectrumTexture* emissive = nullptr,
+                   const SpectrumTexture* normalmap = nullptr);
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const override;
@@ -64,8 +69,7 @@ public:
     DiffuseLight(const Spectrum& color, bool two_sided = false);
     DiffuseLight(const SpectrumTexture* emission, bool two_sided = false);
 
-    virtual bool IsLightSource() const override;
-
+    virtual bool TestAlpha(const Point2& uv) const override;
     virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const override;
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 

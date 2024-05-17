@@ -10,7 +10,7 @@ UniformInfiniteLight::UniformInfiniteLight(const Spectrum& l, Float scale)
 {
 }
 
-LightSample UniformInfiniteLight::Sample(const Intersection& ref, const Point2& u) const
+LightSample UniformInfiniteLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
     LightSample ls;
     ls.wi = UniformSampleSphere(u);

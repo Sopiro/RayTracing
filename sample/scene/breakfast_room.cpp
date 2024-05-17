@@ -18,7 +18,7 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 
     // auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(5000.0));
     // tf = Transform{ 30, 10, 15, Quat(pi, z_axis), Vec3(1.0, 1.5, 5.0) };
-    // auto l = CreateRectYZ(tf, light);
+    // auto l = CreateRectYZ(tf, light, true);
 
     // scene.AddLight(l);
 

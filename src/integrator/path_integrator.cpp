@@ -21,9 +21,15 @@ PathIntegrator::PathIntegrator(const Scene* scene,
 {
     for (Light* light : scene->GetLights())
     {
-        if (light->type == Light::Type::infinite_light)
+        switch (light->type)
         {
+        case Light::Type::infinite_light:
             infinite_lights.push_back(light);
+            break;
+        case Light::Type::area_light:
+            AreaLight* area_light = (AreaLight*)light;
+            area_lights.emplace(area_light->GetPrimitive(), area_light);
+            break;
         }
     }
 }
@@ -54,7 +60,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         const Material* mat = isect.primitive->GetMaterial();
         Vec3 wo = Normalize(-ray.d);
-        if (!mat->IsLightSource() || bounce == 0)
+        if (bounce == 0 || specular_bounce || !area_lights.contains(isect.primitive))
         {
             L += throughput * mat->Le(isect, wo);
         }
@@ -96,7 +102,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             const Light* light = sampled_light.light;
             Float light_weight = sampled_light.weight;
 
-            LightSample light_sample = light->Sample(isect, sampler.Next2D());
+            LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
 
             // Importance sample light
             Float bsdf_pdf = bsdf.PDF(wo, light_sample.wi);

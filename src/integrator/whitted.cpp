@@ -57,7 +57,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     const std::vector<Light*>& lights = scene->GetLights();
     for (const Light* light : lights)
     {
-        LightSample ls = light->Sample(isect, sampler.Next2D());
+        LightSample ls = light->Sample_Li(isect, sampler.Next2D());
         if (ls.li.IsBlack() == false && ls.pdf > 0)
         {
             Ray shadow_ray{ isect.point, ls.wi };

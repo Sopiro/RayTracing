@@ -146,6 +146,7 @@ public:
 
 private:
     std::vector<Light*> infinite_lights;
+    std::unordered_map<const Primitive*, AreaLight*> area_lights;
     UniformLightSampler light_sampler;
 
     int32 max_bounces;

@@ -43,11 +43,16 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
         auto light4 = scene.CreateMaterial<DiffuseLight>(Spectrum(11.1111f));
         auto light5 = scene.CreateMaterial<DiffuseLight>(Spectrum(1.23457f));
 
-        scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
-        scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
-        scene.CreatePrimitive<Sphere>(Vec3(-1.25f, 0, 0), 0.1f, light2);
-        scene.CreatePrimitive<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
-        scene.CreatePrimitive<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
+        auto s1 = scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
+        auto s3 = scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
+        auto s2 = scene.CreatePrimitive<Sphere>(Vec3(-1.25f, 0, 0), 0.1f, light2);
+        auto s4 = scene.CreatePrimitive<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
+        auto s5 = scene.CreatePrimitive<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
+        scene.CreateLight<AreaLight>(s1);
+        scene.CreateLight<AreaLight>(s3);
+        scene.CreateLight<AreaLight>(s2);
+        scene.CreateLight<AreaLight>(s4);
+        scene.CreateLight<AreaLight>(s5);
     }
 
     Float aspect_ratio = 16.f / 9.f;
@@ -113,11 +118,16 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
         auto light4 = scene.CreateMaterial<DiffuseLight>(Spectrum(11.1111f, 11.1111f, 0));
         auto light5 = scene.CreateMaterial<DiffuseLight>(Spectrum(0, 1.23457f, 0));
 
-        scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
-        scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
-        scene.CreatePrimitive<Sphere>(Vec3(-1.25f, 0, 0), 0.1f, light2);
-        scene.CreatePrimitive<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
-        scene.CreatePrimitive<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
+        auto s1 = scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
+        auto s3 = scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
+        auto s2 = scene.CreatePrimitive<Sphere>(Vec3(-1.25f, 0, 0), 0.1f, light2);
+        auto s4 = scene.CreatePrimitive<Sphere>(Vec3(1.25f, 0, 0), 0.3f, light4);
+        auto s5 = scene.CreatePrimitive<Sphere>(Vec3(3.75f, 0, 0), 0.9f, light5);
+        scene.CreateLight<AreaLight>(s1);
+        scene.CreateLight<AreaLight>(s3);
+        scene.CreateLight<AreaLight>(s2);
+        scene.CreateLight<AreaLight>(s4);
+        scene.CreateLight<AreaLight>(s5);
     }
 
     Float aspect_ratio = 16.f / 9.f;

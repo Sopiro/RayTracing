@@ -15,13 +15,18 @@ DiffuseLight::DiffuseLight(const SpectrumTexture* emission, bool two_sided)
 {
 }
 
-bool DiffuseLight::IsLightSource() const
+bool DiffuseLight::TestAlpha(const Point2& uv) const
 {
-    return true;
+    return emission->EvaluateAlpha(uv) > epsilon;
 }
 
 Spectrum DiffuseLight::Le(const Intersection& isect, const Vec3& wi) const
 {
+    if (!TestAlpha(isect.uv))
+    {
+        return Spectrum::black;
+    }
+
     if (isect.front_face || two_sided)
     {
         return emission->Evaluate(isect.uv);

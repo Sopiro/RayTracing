@@ -10,7 +10,7 @@ AreaLight::AreaLight(const Primitive* primitive)
 {
 }
 
-LightSample AreaLight::Sample(const Intersection& ref, const Point2& u) const
+LightSample AreaLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
     PrimitiveSample ps = primitive->Sample(ref.point, u);
     Vec3 ref2p = ps.point - ref.point;
@@ -23,7 +23,7 @@ LightSample AreaLight::Sample(const Intersection& ref, const Point2& u) const
     Intersection is;
     is.point = ps.point;
     is.front_face = Dot(ps.normal, ref2p) < 0;
-    ls.li = material->Le(is, ref2p);
+    ls.li = primitive->GetMaterial()->Le(is, ref2p);
 
     return ls;
 }

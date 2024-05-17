@@ -19,7 +19,7 @@ public:
     virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
-    virtual Float PDFValue(const Intersection& hit_is, const Ray& hit_ray) const override;
+    virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const override;
 
     virtual const Material* GetMaterial() const override;
 
@@ -52,9 +52,10 @@ inline Float Sphere::EvaluatePDF(const Ray& ray) const
         return 0.0f;
     }
 
-    return PDFValue(is, ray);
+    return PDF(is, ray);
 }
-inline Float Sphere::PDFValue(const Intersection& hit_is, const Ray& hit_ray) const
+
+inline Float Sphere::PDF(const Intersection& hit_is, const Ray& hit_ray) const
 {
     Float distance_squared = (center - hit_ray.o).Length2();
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);

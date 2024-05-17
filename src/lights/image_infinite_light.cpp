@@ -37,7 +37,7 @@ ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Tra
     distribution.reset(new Distribution2D(image.get(), width, height));
 }
 
-LightSample ImageInfiniteLight::Sample(const Intersection& ref, const Point2& u) const
+LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
     Float map_pdf;
     Point2 uv = distribution->SampleContinuous(&map_pdf, u);

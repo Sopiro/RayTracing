@@ -12,6 +12,15 @@ namespace bulbit
 
 struct LightSample
 {
+    LightSample() = default;
+
+    LightSample(Vec3 wi, Float pdf, Float visibility, Spectrum li)
+        : wi{ wi }
+        , pdf{ pdf }
+        , visibility{ visibility }
+    {
+    }
+
     Vec3 wi;
     Float pdf;
     Float visibility;
@@ -36,7 +45,7 @@ public:
 
     virtual ~Light() = default;
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const = 0;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const = 0;
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
 
     virtual Spectrum Le(const Ray& ray) const
@@ -57,7 +66,7 @@ class PointLight : public Light
 public:
     PointLight(const Point3& position, const Spectrum& intensity);
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override
     {
@@ -74,7 +83,7 @@ struct DirectionalLight : public Light
 public:
     DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius);
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override
     {
@@ -92,7 +101,7 @@ class AreaLight : public Light
 public:
     AreaLight(const Primitive* primitive);
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
 
@@ -104,10 +113,7 @@ public:
     }
 
 private:
-    friend class Scene;
-
     const Primitive* primitive;
-    const Material* material;
 };
 
 class ImageInfiniteLight : public Light
@@ -116,7 +122,7 @@ public:
     ImageInfiniteLight(const std::string& env_map, const Transform& transform = identity);
     ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& transform = identity);
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Spectrum Le(const Ray& ray) const override;
 
@@ -132,7 +138,7 @@ class UniformInfiniteLight : public Light
 public:
     UniformInfiniteLight(const Spectrum& l, Float scale = 1);
 
-    virtual LightSample Sample(const Intersection& ref, const Point2& u) const override;
+    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Spectrum Le(const Ray& ray) const override;
 
