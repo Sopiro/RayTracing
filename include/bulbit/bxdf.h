@@ -53,13 +53,12 @@ struct BSDFSample
 {
     BSDFSample() = default;
 
-    BSDFSample(Spectrum f, Vec3 wi, Float pdf, BxDF_Flags flags, Float eta = 1, bool pdf_is_proportional = false)
+    BSDFSample(Spectrum f, Vec3 wi, Float pdf, BxDF_Flags flags, Float eta = 1)
         : f{ f }
         , wi{ wi }
         , pdf{ pdf }
         , flags{ flags }
         , eta{ eta }
-        , pdf_is_proportional{ pdf_is_proportional }
     {
     }
 
@@ -93,7 +92,6 @@ struct BSDFSample
     Float pdf = 0;
     BxDF_Flags flags;
     Float eta = 1;
-    bool pdf_is_proportional = false;
 };
 
 class BxDF

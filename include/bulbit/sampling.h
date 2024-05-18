@@ -25,7 +25,8 @@ inline Float PowerHeuristic(Float pdf_f, Float pdf_g)
 
 inline Float PowerHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
 {
-    Float f = nf * pdf_f, g = ng * pdf_g;
+    Float f = nf * pdf_f;
+    Float g = ng * pdf_g;
     return (f * f) / (f * f + g * g);
 }
 

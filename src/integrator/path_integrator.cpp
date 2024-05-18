@@ -10,11 +10,11 @@ namespace bulbit
 PathIntegrator::PathIntegrator(const Scene* scene,
                                const Intersectable* accel,
                                const Sampler* sampler,
-                               int32 bounces,
+                               int32 max_bounces,
                                bool regularize_bsdf,
                                Float rr_probability)
     : SamplerIntegrator(scene, accel, sampler)
-    , max_bounces{ bounces }
+    , max_bounces{ max_bounces }
     , rr_probability{ rr_probability }
     , regularize_bsdf{ regularize_bsdf }
     , light_sampler{ scene->GetLights() }
@@ -41,6 +41,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
     bool specular_bounce = false;
     bool any_non_specular_bounces = false;
     Ray ray = primary_ray;
+    Float prev_bsdf_pdf = 0;
 
     while (true)
     {
@@ -54,15 +55,41 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     L += throughput * light->Le(ray);
                 }
             }
+            else
+            {
+                for (Light* light : infinite_lights)
+                {
+                    Float light_pdf = light->EvaluatePDF(ray) * light_sampler.EvaluatePMF(light);
+                    Float mis_weight = PowerHeuristic(1, prev_bsdf_pdf, 1, light_pdf);
+
+                    L += throughput * mis_weight * light->Le(ray);
+                }
+            }
 
             break;
         }
 
         const Material* mat = isect.primitive->GetMaterial();
         Vec3 wo = Normalize(-ray.d);
-        if (bounce == 0 || specular_bounce || !area_lights.contains(isect.primitive))
+
+        Spectrum Le = mat->Le(isect, wo);
+
+        if (!Le.IsBlack())
         {
-            L += throughput * mat->Le(isect, wo);
+            bool has_area_light = area_lights.contains(isect.primitive);
+            if (bounce == 0 || specular_bounce || !has_area_light)
+            {
+                L += throughput * Le;
+            }
+            else if (has_area_light)
+            {
+                AreaLight* area_light = area_lights.at(isect.primitive);
+
+                Float light_pdf = isect.primitive->PDF(isect, ray) * light_sampler.EvaluatePMF(area_light);
+                Float mis_weight = PowerHeuristic(1, prev_bsdf_pdf, 1, light_pdf);
+
+                L += throughput * mis_weight * Le;
+            }
         }
 
         if (bounce++ >= max_bounces)
@@ -92,16 +119,12 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         specular_bounce = bsdf_sample.IsSpecular();
         any_non_specular_bounces |= !bsdf_sample.IsSpecular();
-        ray = Ray(isect.point, bsdf_sample.wi);
 
         // Estimate direct light
-        // Multiple importance sampling (Li + BSDF)
         SampledLight sampled_light;
         if (!specular_bounce && light_sampler.Sample(&sampled_light, isect, sampler.Next1D()))
         {
             const Light* light = sampled_light.light;
-            Float light_weight = sampled_light.weight;
-
             LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
 
             // Importance sample light
@@ -110,61 +133,27 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             {
                 if (!IntersectAny(Ray(isect.point, light_sample.wi), Ray::epsilon, light_sample.visibility))
                 {
-                    Spectrum f_cos = bsdf.f(wo, light_sample.wi) * Dot(isect.shading.normal, light_sample.wi);
+                    Float light_pdf = light_sample.pdf / sampled_light.weight;
+                    Spectrum f_cos = bsdf.f(wo, light_sample.wi) * AbsDot(isect.shading.normal, light_sample.wi);
                     if (light->IsDeltaLight())
                     {
-                        L += throughput * light_weight * light_sample.li * f_cos / light_sample.pdf;
+                        L += throughput * light_sample.li * f_cos / light_pdf;
                     }
                     else
                     {
-                        Float mis_weight = PowerHeuristic(1, light_sample.pdf, 1, bsdf_pdf);
-                        L += throughput * light_weight * mis_weight * light_sample.li * f_cos / light_sample.pdf;
-                    }
-                }
-            }
-
-            if (!light->IsDeltaLight())
-            {
-                // Importance sample BSDF
-                Float light_pdf = light->EvaluatePDF(ray);
-                if (light_pdf > 0)
-                {
-                    Intersection shadow_isect;
-                    if (Intersect(&shadow_isect, ray, Ray::epsilon, infinity))
-                    {
-                        // Intersects area light
-                        if (shadow_isect.primitive == ((AreaLight*)light)->GetPrimitive())
-                        {
-                            Float mis_weight = PowerHeuristic(1, bsdf_sample.pdf, 1, light_pdf);
-
-                            Spectrum li = shadow_isect.primitive->GetMaterial()->Le(shadow_isect, bsdf_sample.wi);
-                            if (li.IsBlack() == false)
-                            {
-                                Spectrum f_cos = bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi);
-                                L += throughput * light_weight * mis_weight * li * f_cos / bsdf_sample.pdf;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Intersects infinite light
-                        Spectrum li = light->Le(ray);
-                        if (li.IsBlack() == false)
-                        {
-                            Float mis_weight = PowerHeuristic(1, bsdf_sample.pdf, 1, light_pdf);
-
-                            Spectrum f_cos = bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi);
-                            L += throughput * light_weight * mis_weight * li * f_cos / bsdf_sample.pdf;
-                        }
+                        Float mis_weight = PowerHeuristic(1, light_pdf, 1, bsdf_pdf);
+                        L += throughput * mis_weight * light_sample.li * f_cos / light_pdf;
                     }
                 }
             }
         }
 
-        throughput *= bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        prev_bsdf_pdf = bsdf_sample.pdf;
+        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        ray = Ray(isect.point, bsdf_sample.wi);
 
         // Russian roulette
-        const int32 min_bounces = 2;
+        constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
             Float rr = std::fmin(rr_probability, throughput.Luminance());
