@@ -57,14 +57,14 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     const std::vector<Light*>& lights = scene->GetLights();
     for (const Light* light : lights)
     {
-        LightSample ls = light->Sample_Li(isect, sampler.Next2D());
-        if (ls.li.IsBlack() == false && ls.pdf > 0)
+        LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
+        if (light_sample.Li.IsBlack() == false && light_sample.pdf > 0)
         {
-            Ray shadow_ray{ isect.point, ls.wi };
-            if (IntersectAny(shadow_ray, Ray::epsilon, ls.visibility) == false)
+            Ray shadow_ray{ isect.point, light_sample.wi };
+            if (IntersectAny(shadow_ray, Ray::epsilon, light_sample.visibility) == false)
             {
-                Spectrum f_cos = bsdf.f(wo, ls.wi);
-                L += ls.li * f_cos / ls.pdf;
+                Spectrum f_cos = bsdf.f(wo, light_sample.wi);
+                L += light_sample.Li * f_cos / light_sample.pdf;
             }
         }
     }

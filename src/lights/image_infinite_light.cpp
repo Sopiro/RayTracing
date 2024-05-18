@@ -66,7 +66,7 @@ LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2&
     }
 
     ls.visibility = infinity;
-    ls.li = l_map->Evaluate(uv);
+    ls.Li = l_map->Evaluate(uv);
 
     return ls;
 }

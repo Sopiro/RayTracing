@@ -24,7 +24,7 @@ struct LightSample
     Vec3 wi;
     Float pdf;
     Float visibility;
-    Spectrum li;
+    Spectrum Li;
 };
 
 class Light

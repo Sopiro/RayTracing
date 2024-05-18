@@ -18,7 +18,7 @@ LightSample DirectionalLight::Sample_Li(const Intersection& ref, const Point2& u
     ls.wi = -dir + RandomInUnitSphere(u) * radius;
     ls.pdf = 1;
     ls.visibility = infinity;
-    ls.li = intensity;
+    ls.Li = intensity;
 
     return ls;
 }

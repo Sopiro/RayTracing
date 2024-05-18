@@ -19,7 +19,7 @@ LightSample PointLight::Sample_Li(const Intersection& ref, const Point2& u) cons
     ls.wi = d;
     ls.visibility = distance;
     ls.pdf = 1;
-    ls.li = intensity / (distance * distance);
+    ls.Li = intensity / (distance * distance);
 
     return ls;
 }

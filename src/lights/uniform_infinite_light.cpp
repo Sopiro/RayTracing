@@ -16,7 +16,7 @@ LightSample UniformInfiniteLight::Sample_Li(const Intersection& ref, const Point
     ls.wi = UniformSampleSphere(u);
     ls.pdf = UniformSampleSpherePDF();
     ls.visibility = infinity;
-    ls.li = scale * l;
+    ls.Li = scale * l;
 
     return ls;
 }

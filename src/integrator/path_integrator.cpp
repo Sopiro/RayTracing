@@ -57,6 +57,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             }
             else
             {
+                // Evaluate BSDF sample MIS for infinite light
                 for (Light* light : infinite_lights)
                 {
                     Float light_pdf = light->EvaluatePDF(ray) * light_sampler.EvaluatePMF(light);
@@ -73,7 +74,6 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         Vec3 wo = Normalize(-ray.d);
 
         Spectrum Le = mat->Le(isect, wo);
-
         if (!Le.IsBlack())
         {
             bool has_area_light = area_lights.contains(isect.primitive);
@@ -83,6 +83,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             }
             else if (has_area_light)
             {
+                // Evaluate BSDF sample MIS for area light
                 AreaLight* area_light = area_lights.at(isect.primitive);
 
                 Float light_pdf = isect.primitive->PDF(isect, ray) * light_sampler.EvaluatePMF(area_light);
@@ -106,6 +107,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             break;
         }
 
+        // Blur bsdf if possible
         if (regularize_bsdf && any_non_specular_bounces)
         {
             bsdf.Regularize();
@@ -121,38 +123,40 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         any_non_specular_bounces |= !bsdf_sample.IsSpecular();
 
         // Estimate direct light
-        SampledLight sampled_light;
-        if (!specular_bounce && light_sampler.Sample(&sampled_light, isect, sampler.Next1D()))
+        if (!specular_bounce)
         {
-            const Light* light = sampled_light.light;
-            LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
-
-            // Importance sample light
-            Float bsdf_pdf = bsdf.PDF(wo, light_sample.wi);
-            if (light_sample.li.IsBlack() == false && bsdf_pdf > 0)
+            SampledLight sampled_light;
+            if (light_sampler.Sample(&sampled_light, isect, sampler.Next1D()))
             {
-                if (!IntersectAny(Ray(isect.point, light_sample.wi), Ray::epsilon, light_sample.visibility))
+                const Light* light = sampled_light.light;
+                LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
+                Float bsdf_pdf = bsdf.PDF(wo, light_sample.wi);
+                if (!light_sample.Li.IsBlack() && bsdf_pdf > 0)
                 {
-                    Float light_pdf = light_sample.pdf / sampled_light.weight;
-                    Spectrum f_cos = bsdf.f(wo, light_sample.wi) * AbsDot(isect.shading.normal, light_sample.wi);
-                    if (light->IsDeltaLight())
+                    if (!IntersectAny(Ray(isect.point, light_sample.wi), Ray::epsilon, light_sample.visibility))
                     {
-                        L += throughput * light_sample.li * f_cos / light_pdf;
-                    }
-                    else
-                    {
-                        Float mis_weight = PowerHeuristic(1, light_pdf, 1, bsdf_pdf);
-                        L += throughput * mis_weight * light_sample.li * f_cos / light_pdf;
+                        Float light_pdf = light_sample.pdf / sampled_light.weight;
+                        Spectrum f_cos = bsdf.f(wo, light_sample.wi) * Dot(isect.shading.normal, light_sample.wi);
+                        if (light->IsDeltaLight())
+                        {
+                            L += throughput * light_sample.Li * f_cos / light_pdf;
+                        }
+                        else
+                        {
+                            Float mis_weight = PowerHeuristic(1, light_pdf, 1, bsdf_pdf);
+                            L += throughput * mis_weight * light_sample.Li * f_cos / light_pdf;
+                        }
                     }
                 }
             }
         }
 
+        // Save bsdf pdf for MIS
         prev_bsdf_pdf = bsdf_sample.pdf;
-        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        throughput *= bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         ray = Ray(isect.point, bsdf_sample.wi);
 
-        // Russian roulette
+        // Terminate path by russian roulette
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
