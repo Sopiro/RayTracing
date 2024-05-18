@@ -12,10 +12,11 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(20.0f) };
-        LoadModel(scene, "res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        LoadModel(scene, "res/horse_statue_01_4k/horse_statue_01_4k.gltf", tf);
 
         // auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(8.0f) };
-        // LoadModel(scene, "res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf, mat);
+        // LoadModel(scene, "res/marble_bust_01_4k/marble_bust_01_4k.gltf", tf);
     }
 
     Float light = 8.0f;

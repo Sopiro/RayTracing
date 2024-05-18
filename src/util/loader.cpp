@@ -15,6 +15,17 @@ namespace bulbit
 static std::string g_folder;
 static Scene* g_scene = nullptr;
 static const Material* g_fallback_material = nullptr;
+static int32 g_flip_normal = 1;
+
+void SetLoaderFlipNormal(bool flip_normal)
+{
+    g_flip_normal = flip_normal ? -1 : 1;
+}
+
+void SetLoaderFallbackMaterial(const Material* fallback_material)
+{
+    g_fallback_material = fallback_material;
+}
 
 Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
 {
@@ -143,7 +154,8 @@ static std::unique_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene
     for (uint32 i = 0; i < vertexCount; ++i)
     {
         positions[i].Set(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-        normals[i].Set(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+        normals[i].Set(mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal,
+                       mesh->mNormals[i].z * g_flip_normal);
 
         if (mesh->HasTangentsAndBitangents())
         {
@@ -204,11 +216,10 @@ static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Ma
     }
 }
 
-void LoadModel(Scene& scene, const std::string& filename, const Transform& transform, const Material* fallback_material)
+void LoadModel(Scene& scene, const std::string& filename, const Transform& transform)
 {
     g_folder = std::filesystem::path(filename).remove_filename().string();
     g_scene = &scene;
-    g_fallback_material = fallback_material;
 
     Assimp::Importer importer;
 

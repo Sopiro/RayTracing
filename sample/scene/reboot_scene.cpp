@@ -12,7 +12,8 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
                                                         ConstantFloatTexture::Create(0.001f));
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };
-        LoadModel(scene, "res/reboot_dramatic_scene/scene.gltf", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        LoadModel(scene, "res/reboot_dramatic_scene/scene.gltf", tf);
     }
 
     {

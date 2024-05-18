@@ -8,7 +8,8 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
         auto floor_mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f));
-        LoadModel(scene, "res/veach_mi/floor.obj", Transform{ identity }, floor_mat);
+        SetLoaderFallbackMaterial(floor_mat);
+        LoadModel(scene, "res/veach_mi/floor.obj", Transform{ identity });
     }
 
     // plates
@@ -29,10 +30,14 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
                                                        ConstantFloatTexture::Create(1.0f),
                                                        ConstantFloatTexture::Create(std::sqrt(0.1f)));
 
-        LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity }, m1);
-        LoadModel(scene, "res/veach_mi/plate2.obj", Transform{ identity }, m2);
-        LoadModel(scene, "res/veach_mi/plate3.obj", Transform{ identity }, m3);
-        LoadModel(scene, "res/veach_mi/plate4.obj", Transform{ identity }, m4);
+        SetLoaderFallbackMaterial(m1);
+        LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m2);
+        LoadModel(scene, "res/veach_mi/plate2.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m3);
+        LoadModel(scene, "res/veach_mi/plate3.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m4);
+        LoadModel(scene, "res/veach_mi/plate4.obj", Transform{ identity });
     }
 
     // Lights
@@ -104,10 +109,14 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
                                                        ConstantFloatTexture::Create(1.0f),
                                                        ConstantFloatTexture::Create(std::sqrt(0.1f)));
 
-        LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity }, m1);
-        LoadModel(scene, "res/veach_mi/plate2.obj", Transform{ identity }, m2);
-        LoadModel(scene, "res/veach_mi/plate3.obj", Transform{ identity }, m3);
-        LoadModel(scene, "res/veach_mi/plate4.obj", Transform{ identity }, m4);
+        SetLoaderFallbackMaterial(m1);
+        LoadModel(scene, "res/veach_mi/plate1.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m2);
+        LoadModel(scene, "res/veach_mi/plate2.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m3);
+        LoadModel(scene, "res/veach_mi/plate3.obj", Transform{ identity });
+        SetLoaderFallbackMaterial(m4);
+        LoadModel(scene, "res/veach_mi/plate4.obj", Transform{ identity });
     }
 
     // Lights

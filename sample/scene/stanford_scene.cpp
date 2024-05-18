@@ -27,7 +27,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto tf = Transform{ Vec3(gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = CreateUnrealMaterial(scene);
 
-        LoadModel(scene, "res/stanford/bunny.obj", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        LoadModel(scene, "res/stanford/bunny.obj", tf);
     }
 
     // Lucy
@@ -35,7 +36,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto tf = Transform{ Vec3(gap, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = CreateUnrealMaterial(scene);
 
-        LoadModel(scene, "res/stanford/lucy.obj", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        LoadModel(scene, "res/stanford/lucy.obj", tf);
     }
 
     // Tyrannosaurus
@@ -43,7 +45,10 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         auto tf = Transform{ Vec3(-gap, 0.0f, 0.0f), Quat(DegToRad(45.0f), y_axis), Vec3(scale) };
         auto mat = CreateUnrealMaterial(scene);
 
-        LoadModel(scene, "res/stanford/tyra.obj", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        SetLoaderFlipNormal(true);
+        LoadModel(scene, "res/stanford/tyra.obj", tf);
+        SetLoaderFlipNormal(false);
     }
 
     // Armadillo
@@ -53,7 +58,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
             ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f));
 
-        LoadModel(scene, "res/stanford/arma.obj", tf, mat);
+        SetLoaderFallbackMaterial(mat);
+        LoadModel(scene, "res/stanford/arma.obj", tf);
     }
 
     {
