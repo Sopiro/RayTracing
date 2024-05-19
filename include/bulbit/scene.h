@@ -16,13 +16,11 @@ public:
     Scene& operator=(const Scene&) = delete;
 
     template <typename T, typename... Args>
-    const T* CreateMaterial(Args&&... args);
-
+    T* CreateMaterial(Args&&... args);
     template <typename T, typename... Args>
-    const T* CreatePrimitive(Args&&... args);
-
+    T* CreatePrimitive(Args&&... args);
     template <typename T, typename... Args>
-    const T* CreateLight(Args&&... args);
+    T* CreateLight(Args&&... args);
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
@@ -65,7 +63,7 @@ inline Scene::~Scene()
 }
 
 template <typename T, typename... Args>
-inline const T* Scene::CreateMaterial(Args&&... args)
+inline T* Scene::CreateMaterial(Args&&... args)
 {
     T* m = allocator.new_object<T>(std::forward<Args>(args)...);
     materials.push_back(m);
@@ -73,7 +71,7 @@ inline const T* Scene::CreateMaterial(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline const T* Scene::CreatePrimitive(Args&&... args)
+inline T* Scene::CreatePrimitive(Args&&... args)
 {
     T* p = allocator.new_object<T>(std::forward<Args>(args)...);
     primitives.push_back(p);
@@ -81,7 +79,7 @@ inline const T* Scene::CreatePrimitive(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline const T* Scene::CreateLight(Args&&... args)
+inline T* Scene::CreateLight(Args&&... args)
 {
     T* l = allocator.new_object<T>(std::forward<Args>(args)...);
     lights.push_back(l);

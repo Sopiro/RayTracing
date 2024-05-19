@@ -9,7 +9,6 @@ target_link_libraries(sample PUBLIC
 )
 
 set_target_properties(sample PROPERTIES
-    CMAKE_COMPILE_WARNING_AS_ERROR ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO

@@ -62,30 +62,13 @@ struct BSDFSample
     {
     }
 
-    bool IsReflection() const
-    {
-        return bulbit::IsReflective(flags);
-    }
-
-    bool IsTransmission() const
-    {
-        return bulbit::IsTransmissive(flags);
-    }
-
-    bool IsDiffuse() const
-    {
-        return bulbit::IsDiffuse(flags);
-    }
-
-    bool IsGlossy() const
-    {
-        return bulbit::IsGlossy(flags);
-    }
-
-    bool IsSpecular() const
-    {
-        return bulbit::IsSpecular(flags);
-    }
+    // clang-format off
+    bool IsReflection() const { return bulbit::IsReflective(flags); }
+    bool IsTransmission() const { return bulbit::IsTransmissive(flags); }
+    bool IsDiffuse() const { return bulbit::IsDiffuse(flags); }
+    bool IsGlossy() const { return bulbit::IsGlossy(flags); }
+    bool IsSpecular() const { return bulbit::IsSpecular(flags); }
+    // clang-format on
 
     Spectrum f;
     Vec3 wi;
