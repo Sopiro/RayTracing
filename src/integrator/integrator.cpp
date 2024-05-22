@@ -7,8 +7,8 @@
 namespace bulbit
 {
 
-SamplerIntegrator::SamplerIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler)
-    : Integrator(scene, accel)
+SamplerIntegrator::SamplerIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler)
+    : Integrator(accel, std::move(lights))
     , sampler_prototype{ sampler }
 {
 }

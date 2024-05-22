@@ -5,11 +5,11 @@
 namespace bulbit
 {
 
-WhittedStyle::WhittedStyle(const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 max_depth)
-    : SamplerIntegrator(scene, accel, sampler)
+WhittedStyle::WhittedStyle(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_depth)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_depth{ max_depth }
 {
-    for (Light* light : scene->GetLights())
+    for (Light* light : all_lights)
     {
         if (light->type == Light::Type::infinite_light)
         {
@@ -54,8 +54,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     }
 
     // Evaluate direct light
-    const std::vector<Light*>& lights = scene->GetLights();
-    for (const Light* light : lights)
+    for (const Light* light : all_lights)
     {
         LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
         if (light_sample.Li.IsBlack() == false && light_sample.pdf > 0)
@@ -74,7 +73,7 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 
     if (Dot(isect.normal, wi) > 0)
     {
-        Spectrum f_cos = bsdf.f(wo, wi);
+        Spectrum f_cos = bsdf.f(wo, wi) * Dot(isect.shading.normal, wi);
         return L + Li(Ray(isect.point, wi), sampler, depth + 1) * f_cos;
     }
     else

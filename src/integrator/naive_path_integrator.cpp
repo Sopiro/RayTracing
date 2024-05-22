@@ -6,12 +6,12 @@ namespace bulbit
 {
 
 NaivePathIntegrator::NaivePathIntegrator(
-    const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 bounces, Float rr)
-    : SamplerIntegrator(scene, accel, sampler)
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 bounces, Float rr)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }
 {
-    for (Light* light : scene->GetLights())
+    for (Light* light : all_lights)
     {
         if (light->type == Light::Type::infinite_light)
         {

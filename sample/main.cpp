@@ -41,10 +41,10 @@ int main(int argc, char* argv[])
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
     IndependentSampler sampler(samples_per_pixel);
-    PathIntegrator renderer(&scene, &accel, &sampler, max_bounces);
-    // DebugIntegrator renderer(&scene, &accel, &sampler);
-    // AmbientOcclusion renderer(&scene, &accel, &sampler, 0.5f);
-    // AlbedoIntegrator renderer(&scene, &accel, &sampler);
+    PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
+    // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);
+    // AmbientOcclusion renderer(&accel, scene.GetLights(), &sampler, 0.5f);
+    // AlbedoIntegrator renderer(&accel, scene.GetLights(), &sampler);
 
     Film film(camera.get());
     renderer.Render(&film, *camera);

@@ -3,7 +3,7 @@
 namespace bulbit
 {
 
-UniformLightSampler::UniformLightSampler(const std::vector<Light*>& lights)
+UniformLightSampler::UniformLightSampler(std::span<Light*> lights)
     : LightSampler(lights)
 {
 }
@@ -24,7 +24,7 @@ bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& isect, Fl
     return true;
 }
 
-Float UniformLightSampler::EvaluatePMF(Light* light) const
+Float UniformLightSampler::EvaluatePMF(const Light* light) const
 {
     if (lights.size() > 0)
     {

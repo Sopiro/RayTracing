@@ -4,8 +4,8 @@
 namespace bulbit
 {
 
-AmbientOcclusion::AmbientOcclusion(const Scene* scene, const Intersectable* accel, const Sampler* sampler, Float ao_range)
-    : SamplerIntegrator(scene, accel, sampler)
+AmbientOcclusion::AmbientOcclusion(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, Float ao_range)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
     , range{ ao_range }
 {
 }

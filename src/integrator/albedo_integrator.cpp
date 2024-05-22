@@ -5,10 +5,10 @@
 namespace bulbit
 {
 
-AlbedoIntegrator::AlbedoIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler)
-    : SamplerIntegrator(scene, accel, sampler)
+AlbedoIntegrator::AlbedoIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
 {
-    for (Light* light : scene->GetLights())
+    for (Light* light : all_lights)
     {
         if (light->type == Light::Type::infinite_light)
         {

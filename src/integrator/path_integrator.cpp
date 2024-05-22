@@ -7,19 +7,19 @@
 namespace bulbit
 {
 
-PathIntegrator::PathIntegrator(const Scene* scene,
-                               const Intersectable* accel,
+PathIntegrator::PathIntegrator(const Intersectable* accel,
+                               std::vector<Light*> lights,
                                const Sampler* sampler,
                                int32 max_bounces,
                                bool regularize_bsdf,
                                Float rr_probability)
-    : SamplerIntegrator(scene, accel, sampler)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
     , rr_probability{ rr_probability }
     , regularize_bsdf{ regularize_bsdf }
-    , light_sampler{ scene->GetLights() }
+    , light_sampler{ all_lights }
 {
-    for (Light* light : scene->GetLights())
+    for (Light* light : all_lights)
     {
         switch (light->type)
         {

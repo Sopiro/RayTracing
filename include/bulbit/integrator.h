@@ -17,9 +17,9 @@ public:
     virtual void Render(Film* film, const Camera& camera) = 0;
 
 protected:
-    Integrator(const Scene* scene, const Intersectable* accel)
-        : scene{ scene }
-        , accel{ accel }
+    Integrator(const Intersectable* accel, std::vector<Light*> lights)
+        : accel{ accel }
+        , all_lights{ std::move(lights) }
     {
     }
 
@@ -33,14 +33,14 @@ protected:
         return accel->IntersectAny(ray, t_min, t_max);
     }
 
-    const Scene* scene;
     const Intersectable* accel;
+    std::vector<Light*> all_lights;
 };
 
 class SamplerIntegrator : public Integrator
 {
 public:
-    SamplerIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler);
+    SamplerIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~SamplerIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const = 0;
@@ -54,7 +54,7 @@ private:
 class DebugIntegrator : public SamplerIntegrator
 {
 public:
-    DebugIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler);
+    DebugIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~DebugIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -64,7 +64,7 @@ public:
 class WhittedStyle : public SamplerIntegrator
 {
 public:
-    WhittedStyle(const Scene* scene, const Intersectable* accel, const Sampler* sampler, int32 max_depth);
+    WhittedStyle(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_depth);
     virtual ~WhittedStyle() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
@@ -84,7 +84,7 @@ private:
 class AmbientOcclusion : public SamplerIntegrator
 {
 public:
-    AmbientOcclusion(const Scene* scene, const Intersectable* accel, const Sampler* sampler, Float ao_range);
+    AmbientOcclusion(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, Float ao_range);
     virtual ~AmbientOcclusion() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -97,7 +97,7 @@ private:
 class AlbedoIntegrator : public SamplerIntegrator
 {
 public:
-    AlbedoIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler);
+    AlbedoIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~AlbedoIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -109,8 +109,8 @@ private:
 class NaivePathIntegrator : public SamplerIntegrator
 {
 public:
-    NaivePathIntegrator(const Scene* scene,
-                        const Intersectable* accel,
+    NaivePathIntegrator(const Intersectable* accel,
+                        std::vector<Light*> lights,
                         const Sampler* sampler,
                         int32 max_bounces,
                         Float russian_roulette_probability = 0.95f);
@@ -134,8 +134,8 @@ private:
 class PathIntegrator : public SamplerIntegrator
 {
 public:
-    PathIntegrator(const Scene* scene,
-                   const Intersectable* accel,
+    PathIntegrator(const Intersectable* accel,
+                   std::vector<Light*> lights,
                    const Sampler* sampler,
                    int32 max_bounces,
                    bool regularize_bsdf = false,

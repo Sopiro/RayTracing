@@ -15,7 +15,7 @@ struct SampledLight
 class LightSampler
 {
 public:
-    LightSampler(const std::vector<Light*>& lights)
+    LightSampler(std::span<Light*> lights)
         : lights{ lights }
     {
     }
@@ -23,20 +23,20 @@ public:
     virtual ~LightSampler() = default;
 
     virtual bool Sample(SampledLight* sampled_light, const Intersection& isect, Float u) const = 0;
-    virtual Float EvaluatePMF(Light* light) const = 0;
+    virtual Float EvaluatePMF(const Light* light) const = 0;
 
 protected:
-    const std::vector<Light*>& lights;
+    std::span<Light*> lights;
 };
 
 class UniformLightSampler : public LightSampler
 {
 public:
-    UniformLightSampler(const std::vector<Light*>& lights);
+    UniformLightSampler(std::span<Light*> lights);
     virtual ~UniformLightSampler() = default;
 
     virtual bool Sample(SampledLight* sampled_light, const Intersection& isect, Float u) const override;
-    virtual Float EvaluatePMF(Light* light) const override;
+    virtual Float EvaluatePMF(const Light* light) const override;
 };
 
 } // namespace bulbit

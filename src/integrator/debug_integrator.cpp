@@ -3,8 +3,8 @@
 namespace bulbit
 {
 
-DebugIntegrator::DebugIntegrator(const Scene* scene, const Intersectable* accel, const Sampler* sampler)
-    : SamplerIntegrator(scene, accel, sampler)
+DebugIntegrator::DebugIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler)
+    : SamplerIntegrator(accel, std::move(lights), sampler)
 {
 }
 
