@@ -44,7 +44,7 @@ ColorImageTexture::ColorImageTexture(const std::string& filename, bool srgb)
 
     if (width * height > 64 * 1024)
     {
-        ParallelFor(0, width * height, [=](int32 i) {
+        ParallelFor(0, width * height, [=, this](int32 i) {
             rgb[i].r = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 0]);
             rgb[i].g = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 1]);
             rgb[i].b = (Float)std::fmax(0, data[STBI_rgb_alpha * i + 2]);

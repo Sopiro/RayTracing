@@ -2,6 +2,7 @@
 
 #include <array>
 #include <assert.h>
+#include <cstring>
 #include <functional>
 #include <iostream>
 #include <limits>

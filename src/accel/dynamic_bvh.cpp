@@ -740,7 +740,7 @@ void DynamicBVH::Rebuild()
         Float split_pos = aabb.min[axis] + extents[axis] * 0.5f;
 
         NodeIndex* m = std::partition(primitives + n.begin, primitives + n.end,
-                                      [=](NodeIndex n) { return nodes[n].aabb.GetCenter()[axis] < split_pos; });
+                                      [=, this](NodeIndex n) { return nodes[n].aabb.GetCenter()[axis] < split_pos; });
         int32 mid = int32(m - primitives);
 
         int32 left_count = mid - n.begin;
@@ -750,7 +750,7 @@ void DynamicBVH::Rebuild()
         {
             mid = (n.end + n.begin) / 2;
 
-            std::nth_element(primitives + n.begin, primitives + mid, primitives + n.end, [=](NodeIndex a, NodeIndex b) {
+            std::nth_element(primitives + n.begin, primitives + mid, primitives + n.end, [=, this](NodeIndex a, NodeIndex b) {
                 return nodes[a].aabb.GetCenter()[axis] < nodes[b].aabb.GetCenter()[axis];
             });
         }
