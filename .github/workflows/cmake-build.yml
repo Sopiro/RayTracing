@@ -43,10 +43,14 @@ jobs:
       with: 
         submodules: true
 
-    # - name: Install dependencies
-    #   run: |
-    #       sudo apt update
-    #       sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl-dev libpthread-stubs0-dev libx11-dev
+    - name: Update dependencies
+      run: |
+            sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+            sudo apt-get update
+            sudo apt-get install -y g++-13
+            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
+            sudo update-alternatives --config g++
+  
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBULBIT_BUILD_SAMPLES=OFF
 
