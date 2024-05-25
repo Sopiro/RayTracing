@@ -2,7 +2,6 @@
 #include "bulbit/integrator.h"
 #include "bulbit/light.h"
 #include "bulbit/material.h"
-#include "bulbit/util.h"
 
 namespace bulbit
 {

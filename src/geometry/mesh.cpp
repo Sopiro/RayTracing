@@ -1,8 +1,6 @@
 #include "bulbit/mesh.h"
 #include "bulbit/triangle.h"
 
-#include "bulbit/util.h"
-
 namespace bulbit
 {
 

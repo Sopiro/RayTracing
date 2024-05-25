@@ -1,11 +1,11 @@
 #pragma once
 
 #include "bulbit/camera.h"
-#include "bulbit/loader.h"
 #include "bulbit/material.h"
 #include "bulbit/scene.h"
-#include "bulbit/scene_builder.h"
 
+#include "loader.h"
+#include "scene_builder.h"
 #include "util.h"
 
 #include <unordered_map>

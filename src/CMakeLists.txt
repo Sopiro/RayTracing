@@ -1,3 +1,12 @@
+# Download stb library
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG ae721c50eaf761660b4f90cc590453cdb0c2acd0
+)
+
+FetchContent_MakeAvailable(stb)
+
 file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../include/bulbit/*.h)
 
@@ -14,12 +23,7 @@ target_precompile_headers(bulbit
 target_include_directories(bulbit 
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
-        ${CMAKE_CURRENT_SOURCE_DIR}/../extern
-)
-
-target_link_libraries(bulbit
-    PUBLIC
-        assimp::assimp
+        ${stb_SOURCE_DIR}
 )
 
 set_target_properties(bulbit PROPERTIES

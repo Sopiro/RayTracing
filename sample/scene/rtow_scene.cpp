@@ -2,7 +2,6 @@
 #include "bulbit/camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
-#include "bulbit/util.h"
 
 // The final scene of Ray Tracing in One Weekend
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender

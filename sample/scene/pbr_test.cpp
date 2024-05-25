@@ -2,7 +2,6 @@
 #include "bulbit/camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
-#include "bulbit/util.h"
 
 std::unique_ptr<Camera> PBRTest(Scene& scene)
 {

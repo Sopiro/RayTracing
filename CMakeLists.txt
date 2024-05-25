@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
+include(FetchContent)
+
 project(bulbit LANGUAGES CXX VERSION 0.0.1)
 
 option(BULBIT_BUILD_SAMPLES "Build Samples" ON)
@@ -16,7 +18,6 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
-add_subdirectory(extern)
 add_subdirectory(src)
 
 if(BULBIT_BUILD_SAMPLES)

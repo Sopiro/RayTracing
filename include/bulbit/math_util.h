@@ -6,6 +6,24 @@
 namespace bulbit
 {
 
+inline bool IsNullish(Float v)
+{
+    return std::isnan(v) || std::isinf(v);
+}
+
+template <typename T>
+inline bool IsNullish(const T& v)
+{
+    return v.IsNullish();
+}
+
+#define checkNull(v)                                                                                                             \
+    if (IsNullish(v))                                                                                                            \
+    {                                                                                                                            \
+        std::cout << #v;                                                                                                         \
+        std::cout << " null" << std::endl;                                                                                       \
+    }
+
 constexpr Vec3 x_axis{ 1, 0, 0 };
 constexpr Vec3 y_axis{ 0, 1, 0 };
 constexpr Vec3 z_axis{ 0, 0, 1 };

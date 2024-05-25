@@ -1,6 +1,5 @@
 #include "bulbit/integrator.h"
 #include "bulbit/bitmap.h"
-#include "bulbit/postprocess.h"
 
 #include "bulbit/parallel_for.h"
 

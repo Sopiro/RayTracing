@@ -5,11 +5,9 @@
 #include "camera.h"
 #include "scene.h"
 
-#include "postprocess.h"
 #include "spectrum.h"
 #include "timer.h"
 #include "transform.h"
-#include "util.h"
 
 #include "bitmap.h"
 #include "texture.h"

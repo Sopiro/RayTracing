@@ -1,7 +1,6 @@
 #include "bulbit/bitmap.h"
 #include "bulbit/frame.h"
 #include "bulbit/light.h"
-#include "bulbit/util.h"
 
 #include <memory>
 

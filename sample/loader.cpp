@@ -1,7 +1,8 @@
-#include "bulbit/loader.h"
 #include "bulbit/mesh.h"
-#include "bulbit/scene_builder.h"
 #include "bulbit/triangle.h"
+
+#include "loader.h"
+#include "scene_builder.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>

@@ -2,7 +2,6 @@
 #include "bulbit/camera.h"
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
-#include "bulbit/util.h"
 
 // https://developer.nvidia.com/ue4-sun-temple
 std::unique_ptr<Camera> SunTempleScene(Scene& scene)
