@@ -14,14 +14,12 @@ Bulbit is a physically based raytracing renderer.
 - Camera
   - Perspective, Orthographic and Spherical camera
   - Depth of field
-- Simple volumetric rendering
 - Multi-thread rendering
-- Modeling loading with Assimp
 
 ## Building
 - Install [CMake](https://cmake.org/install/)
 - Ensure CMake is in the system `PATH`
-- Clone the repository `git clone --recursive https://github.com/Sopiro/Bulbit`
+- Clone the repository `git clone https://github.com/Sopiro/Bulbit`
 - Run CMake build script depend on your system
   - Visual Studio: Run `build.bat`
   - Otherwise: Run `build.sh`
