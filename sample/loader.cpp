@@ -134,7 +134,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     return mat;
 }
 
-static std::unique_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
+static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
     assert(mesh->HasPositions());
     assert(mesh->HasNormals());
@@ -195,8 +195,9 @@ static std::unique_ptr<Mesh> ProcessAssimpMesh(const aiMesh* mesh, const aiScene
         }
     }
 
-    return std::make_unique<Mesh>(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
+    Mesh* m = g_scene->CreateMesh(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
                                   std::move(indices), LoadMaterial(mesh, scene), transform);
+    CreateTriangles(*g_scene, m, false);
 }
 
 static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
@@ -207,7 +208,7 @@ static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Ma
     for (uint32 i = 0; i < node->mNumMeshes; ++i)
     {
         const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        CreateTriangles(*g_scene, ProcessAssimpMesh(mesh, scene, transform));
+        ProcessAssimpMesh(mesh, scene, transform);
     }
 
     // Do the same for each of its children

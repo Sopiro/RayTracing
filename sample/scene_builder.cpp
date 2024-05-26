@@ -9,16 +9,11 @@
 namespace bulbit
 {
 
-static std::vector<std::unique_ptr<Mesh>> meshes;
-
-void CreateTriangles(Scene& scene, std::unique_ptr<Mesh> mesh, bool area_light)
+void CreateTriangles(Scene& scene, const Mesh* mesh, bool area_light)
 {
-    const Mesh* m = mesh.get();
-    meshes.push_back(std::move(mesh));
-
-    for (int32 i = 0; i < m->GetTriangleCount(); ++i)
+    for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
     {
-        const Triangle* triangle = scene.CreatePrimitive<Triangle>(m, i);
+        const Triangle* triangle = scene.CreatePrimitive<Triangle>(mesh, i);
         if (area_light)
         {
             scene.CreateLight<AreaLight>(triangle);
@@ -41,7 +36,8 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, bool a
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf), area_light);
+    Mesh* m = scene.CreateMesh(vertices, indices, mat, tf);
+    CreateTriangles(scene, m, area_light);
 };
 
 void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, bool area_light, const Point2& texCoord)
@@ -59,7 +55,8 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, bool a
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf), area_light);
+    Mesh* m = scene.CreateMesh(vertices, indices, mat, tf);
+    CreateTriangles(scene, m, area_light);
 }
 
 void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, bool area_light, const Point2& texCoord)
@@ -77,7 +74,8 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, bool a
     auto vertices = std::vector<Vertex>{ v0, v1, v2, v3 };
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
-    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf), area_light);
+    Mesh* m = scene.CreateMesh(vertices, indices, mat, tf);
+    CreateTriangles(scene, m, area_light);
 }
 
 void CreateBox(Scene& scene, const Transform& tf, const Material* mat, bool area_light, const Point2& texCoord)
@@ -144,7 +142,8 @@ void CreateBox(Scene& scene, const Transform& tf, const Material* mat, bool area
     };
     // clang-format on
 
-    CreateTriangles(scene, std::make_unique<Mesh>(vertices, indices, mat, tf), area_light);
+    Mesh* m = scene.CreateMesh(vertices, indices, mat, tf);
+    CreateTriangles(scene, m, area_light);
 }
 
 } // namespace bulbit

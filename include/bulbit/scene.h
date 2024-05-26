@@ -2,6 +2,7 @@
 
 #include "light.h"
 #include "material.h"
+#include "mesh.h"
 
 namespace bulbit
 {
@@ -18,9 +19,11 @@ public:
     template <typename T, typename... Args>
     T* CreateMaterial(Args&&... args);
     template <typename T, typename... Args>
-    T* CreatePrimitive(Args&&... args);
-    template <typename T, typename... Args>
     T* CreateLight(Args&&... args);
+    template <typename T, typename... Args>
+    T* CreatePrimitive(Args&&... args);
+    template <typename... Args>
+    Mesh* CreateMesh(Args&&... args);
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
@@ -31,8 +34,9 @@ private:
     Allocator allocator;
 
     std::vector<Material*> materials;
-    std::vector<Primitive*> primitives;
     std::vector<Light*> lights;
+    std::vector<Primitive*> primitives;
+    std::vector<std::unique_ptr<Mesh>> meshes;
 };
 
 inline Scene::Scene()
@@ -71,6 +75,14 @@ inline T* Scene::CreateMaterial(Args&&... args)
 }
 
 template <typename T, typename... Args>
+inline T* Scene::CreateLight(Args&&... args)
+{
+    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
+    lights.push_back(l);
+    return l;
+}
+
+template <typename T, typename... Args>
 inline T* Scene::CreatePrimitive(Args&&... args)
 {
     T* p = allocator.new_object<T>(std::forward<Args>(args)...);
@@ -78,12 +90,13 @@ inline T* Scene::CreatePrimitive(Args&&... args)
     return p;
 }
 
-template <typename T, typename... Args>
-inline T* Scene::CreateLight(Args&&... args)
+template <typename... Args>
+inline Mesh* Scene::CreateMesh(Args&&... args)
 {
-    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
-    lights.push_back(l);
-    return l;
+    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(std::forward<Args>(args)...);
+    Mesh* m = mesh.get();
+    meshes.push_back(std::move(mesh));
+    return m;
 }
 
 inline const std::vector<Primitive*>& Scene::GetPrimitives() const

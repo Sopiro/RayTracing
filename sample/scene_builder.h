@@ -9,7 +9,7 @@ class Mesh;
 class Material;
 class Scene;
 
-void CreateTriangles(Scene& scene, std::unique_ptr<Mesh> mesh, bool area_light = false);
+void CreateTriangles(Scene& scene, const Mesh* mesh, bool area_light = false);
 
 void CreateRectXY(Scene& scene,
                   const Transform& transform,
