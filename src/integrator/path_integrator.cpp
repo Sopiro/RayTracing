@@ -23,14 +23,17 @@ PathIntegrator::PathIntegrator(const Intersectable* accel,
         switch (light->type)
         {
         case Light::Type::infinite_light:
+        {
             infinite_lights.push_back(light);
-            break;
+        }
+        break;
         case Light::Type::area_light:
+        {
             AreaLight* area_light = (AreaLight*)light;
             area_lights.emplace(area_light->GetPrimitive(), area_light);
-            break;
+        }
+        break;
         default:
-            assert(false);
             break;
         }
     }
