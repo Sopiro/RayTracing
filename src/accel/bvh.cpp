@@ -49,7 +49,7 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
     assert(offset == total_nodes);
 }
 
-BVH::~BVH()
+BVH::~BVH() noexcept
 {
     delete nodes;
 }

@@ -46,7 +46,7 @@ inline Scene::Scene()
 {
 }
 
-inline Scene::~Scene()
+inline Scene::~Scene() noexcept
 {
     // Free all pooled resources
 

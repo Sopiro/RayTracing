@@ -29,6 +29,9 @@ PathIntegrator::PathIntegrator(const Intersectable* accel,
             AreaLight* area_light = (AreaLight*)light;
             area_lights.emplace(area_light->GetPrimitive(), area_light);
             break;
+        default:
+            assert(false);
+            break;
         }
     }
 }
