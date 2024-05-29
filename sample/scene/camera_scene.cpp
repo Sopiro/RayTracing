@@ -22,7 +22,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
 
     // Lights
     {
-        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
+        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(1.0f, 0.9f, 0.8f) * 3);
         Float w = 0.4f;
         Float h = 1.2f;
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };

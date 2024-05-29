@@ -12,7 +12,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15));
+    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15));
 
     // Cornell box
     {

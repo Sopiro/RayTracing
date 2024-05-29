@@ -3,24 +3,24 @@
 namespace bulbit
 {
 
-DiffuseLight::DiffuseLight(const Spectrum& color, bool two_sided)
+DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
     : emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
-DiffuseLight::DiffuseLight(const SpectrumTexture* emission, bool two_sided)
+DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
     : emission{ emission }
     , two_sided{ two_sided }
 {
 }
 
-bool DiffuseLight::TestAlpha(const Point2& uv) const
+bool DiffuseLightMaterial::TestAlpha(const Point2& uv) const
 {
     return emission->EvaluateAlpha(uv) > epsilon;
 }
 
-Spectrum DiffuseLight::Le(const Intersection& isect, const Vec3& wi) const
+Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wi) const
 {
     if (!TestAlpha(isect.uv))
     {
@@ -37,7 +37,7 @@ Spectrum DiffuseLight::Le(const Intersection& isect, const Vec3& wi) const
     }
 }
 
-bool DiffuseLight::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool DiffuseLightMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     return false;
 }

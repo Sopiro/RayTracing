@@ -21,7 +21,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = scene.CreateMaterial<DiffuseLight>(Spectrum(50.0f), true);
+        auto white = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(50.0f), true);
         auto tf = Transform{ Point3(0.0f, 6.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         CreateRectXY(scene, tf, white, true);
 

@@ -63,11 +63,11 @@ private:
     const SpectrumTexture* normalmap;
 };
 
-class DiffuseLight : public Material
+class DiffuseLightMaterial : public Material
 {
 public:
-    DiffuseLight(const Spectrum& color, bool two_sided = false);
-    DiffuseLight(const SpectrumTexture* emission, bool two_sided = false);
+    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false);
+    DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided = false);
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual Spectrum Le(const Intersection& isect, const Vec3& wi) const override;

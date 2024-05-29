@@ -72,7 +72,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         Float xgap = 0.16f;
         Float xstep = 2.0f * s + xgap;
 
-        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(5.0f), true);
+        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(5.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {

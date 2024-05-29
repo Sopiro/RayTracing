@@ -68,7 +68,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Float xgap = 0.015f;
         Float xstep = 2.0f * w + xgap;
 
-        auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(3.0f), true);
+        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(3.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {

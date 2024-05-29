@@ -41,11 +41,11 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
 
     // Lights
     {
-        auto light1 = scene.CreateMaterial<DiffuseLight>(Spectrum(800.f));
-        auto light3 = scene.CreateMaterial<DiffuseLight>(Spectrum(901.803f));
-        auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(100.f));
-        auto light4 = scene.CreateMaterial<DiffuseLight>(Spectrum(11.1111f));
-        auto light5 = scene.CreateMaterial<DiffuseLight>(Spectrum(1.23457f));
+        auto light1 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(800.f));
+        auto light3 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(901.803f));
+        auto light2 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(100.f));
+        auto light4 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(11.1111f));
+        auto light5 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(1.23457f));
 
         auto s1 = scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
         auto s3 = scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);
@@ -120,11 +120,11 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
 
     // Lights
     {
-        auto light1 = scene.CreateMaterial<DiffuseLight>(Spectrum(800));
-        auto light3 = scene.CreateMaterial<DiffuseLight>(Spectrum(901.803f, 0, 0));
-        auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(100, 100 / 5, 0));
-        auto light4 = scene.CreateMaterial<DiffuseLight>(Spectrum(11.1111f, 11.1111f, 0));
-        auto light5 = scene.CreateMaterial<DiffuseLight>(Spectrum(0, 1.23457f, 0));
+        auto light1 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(800));
+        auto light3 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(901.803f, 0, 0));
+        auto light2 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(100, 100 / 5, 0));
+        auto light4 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(11.1111f, 11.1111f, 0));
+        auto light5 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(0, 1.23457f, 0));
 
         auto s1 = scene.CreatePrimitive<Sphere>(Vec3(10, 10, 4), 0.5f, light1);
         auto s3 = scene.CreatePrimitive<Sphere>(Vec3(-3.75f, 0, 0), 0.03333f, light3);

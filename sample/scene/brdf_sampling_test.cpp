@@ -12,7 +12,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(15.0));
+    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0));
 
     // Cornell box
     {
