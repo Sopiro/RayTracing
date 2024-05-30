@@ -15,6 +15,7 @@ public:
     template <typename... Args>
     Type* Create(const Key& key, Args&&... args);
     bool Delete(const Key& key);
+    void Clear();
 
     std::unordered_map<Key, Type*, Hash>& GetObjectMap();
     int32 PoolCount() const;
@@ -37,10 +38,7 @@ inline Pool<Key, Type, Hash>::Pool()
 template <typename Key, typename Type, typename Hash>
 inline Pool<Key, Type, Hash>::~Pool()
 {
-    for (auto& p : objects)
-    {
-        allocator.delete_object(p.second);
-    }
+    Clear();
 }
 
 template <typename Key, typename Type, typename Hash>
@@ -79,7 +77,18 @@ inline bool Pool<Key, Type, Hash>::Delete(const Key& key)
 }
 
 template <typename Key, typename Type, typename Hash>
-std::unordered_map<Key, Type*, Hash>& Pool<Key, Type, Hash>::GetObjectMap()
+inline void Pool<Key, Type, Hash>::Clear()
+{
+    for (auto& kv : objects)
+    {
+        allocator.delete_object(kv.second);
+    }
+
+    objects.clear();
+}
+
+template <typename Key, typename Type, typename Hash>
+inline std::unordered_map<Key, Type*, Hash>& Pool<Key, Type, Hash>::GetObjectMap()
 {
     return objects;
 }
