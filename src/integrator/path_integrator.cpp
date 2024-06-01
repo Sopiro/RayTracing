@@ -45,6 +45,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
     Spectrum L(0), throughput(1);
     bool specular_bounce = false;
     bool any_non_specular_bounces = false;
+    Float eta_scale = 1;
     Ray ray = primary_ray;
     Float prev_bsdf_pdf = 0;
 
@@ -126,6 +127,10 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         specular_bounce = bsdf_sample.IsSpecular();
         any_non_specular_bounces |= !bsdf_sample.IsSpecular();
+        if (bsdf_sample.IsTransmission())
+        {
+            eta_scale *= Sqr(bsdf_sample.eta);
+        }
 
         // Estimate direct light
         if (!specular_bounce)
@@ -165,7 +170,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(rr_probability, throughput.Luminance());
+            Float rr = std::fmin(rr_probability, throughput.Luminance() * eta_scale);
             if (sampler.Next1D() > rr)
             {
                 break;

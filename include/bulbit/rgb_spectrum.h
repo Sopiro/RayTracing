@@ -50,8 +50,22 @@ struct RGBSpectrum
 
     Float Luminance() const
     {
-        constexpr Vec3 coefficient(0.2126f, 0.7152f, 0.0722f);
-        return r * coefficient.x + g * coefficient.y + b * coefficient.z;
+        constexpr RGBSpectrum coefficient(0.2126f, 0.7152f, 0.0722f);
+        return r * coefficient.r + g * coefficient.g + b * coefficient.b;
+    }
+
+    Float Average() const
+    {
+#if 0
+        Float sp = 0;
+        for (int32 i = 0; i < num_spectral_samples; ++i)
+        {
+            sp += (*this)[i];
+        }
+        return sp / num_spectral_samples;
+#else
+        return (r + g + b) / 3;
+#endif
     }
 
     bool IsNullish() const
