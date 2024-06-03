@@ -119,27 +119,15 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             bsdf.Regularize();
         }
 
-        BSDFSample bsdf_sample;
-        if (!bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
-        {
-            break;
-        }
-
-        specular_bounce = bsdf_sample.IsSpecular();
-        any_non_specular_bounces |= !bsdf_sample.IsSpecular();
-        if (bsdf_sample.IsTransmission())
-        {
-            eta_scale *= Sqr(bsdf_sample.eta);
-        }
-
         // Estimate direct light
-        if (!specular_bounce)
+        if (IsNonSpecular(bsdf.Flags()))
         {
+            Float u0 = sampler.Next1D();
+            Point2 u12 = sampler.Next2D();
             SampledLight sampled_light;
-            if (light_sampler.Sample(&sampled_light, isect, sampler.Next1D()))
+            if (light_sampler.Sample(&sampled_light, isect, u0))
             {
-                const Light* light = sampled_light.light;
-                LightSample light_sample = light->Sample_Li(isect, sampler.Next2D());
+                LightSample light_sample = sampled_light.light->Sample_Li(isect, u12);
                 Float bsdf_pdf = bsdf.PDF(wo, light_sample.wi);
                 if (!light_sample.Li.IsBlack() && bsdf_pdf > 0)
                 {
@@ -147,7 +135,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     {
                         Float light_pdf = light_sample.pdf / sampled_light.weight;
                         Spectrum f_cos = bsdf.f(wo, light_sample.wi) * Dot(isect.shading.normal, light_sample.wi);
-                        if (light->IsDeltaLight())
+                        if (sampled_light.light->IsDeltaLight())
                         {
                             L += throughput * light_sample.Li * f_cos / light_pdf;
                         }
@@ -159,6 +147,19 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     }
                 }
             }
+        }
+
+        BSDFSample bsdf_sample;
+        if (!bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
+        {
+            break;
+        }
+
+        specular_bounce = bsdf_sample.IsSpecular();
+        any_non_specular_bounces |= !bsdf_sample.IsSpecular();
+        if (bsdf_sample.IsTransmission())
+        {
+            eta_scale *= Sqr(bsdf_sample.eta);
         }
 
         // Save bsdf pdf for MIS
