@@ -44,16 +44,15 @@ Spectrum AlbedoIntegrator::Li(const Ray& ray, Sampler& sampler) const
                                         Point2(0.756135, 0.731258), Point2(0.516165, 0.152852), Point2(0.180888, 0.214174),
                                         Point2(0.898579, 0.503897) };
 
-    const Material* mat = isect.primitive->GetMaterial();
     Vec3 wo = Normalize(-ray.d);
 
-    L += mat->Le(isect, wo);
+    L += isect.Le(wo);
 
     int8 mem[max_bxdf_size];
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;
-    if (!mat->GetBSDF(&bsdf, isect, wo, alloc))
+    if (!isect.GetBSDF(&bsdf, wo, alloc))
     {
         return L;
     }

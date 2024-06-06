@@ -42,13 +42,13 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
     Vec3 wo = Normalize(-ray.d);
 
     // Evaluate emitted light
-    L += mat->Le(isect, wo);
+    L += isect.Le(wo);
 
     int8 mem[max_bxdf_size];
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;
-    if (mat->GetBSDF(&bsdf, isect, wo, alloc) == false)
+    if (isect.GetBSDF(&bsdf, wo, alloc) == false)
     {
         return L;
     }

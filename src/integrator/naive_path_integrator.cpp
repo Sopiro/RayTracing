@@ -40,16 +40,15 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
         return L;
     }
 
-    const Material* mat = isect.primitive->GetMaterial();
     Vec3 wo = Normalize(-ray.d);
 
-    L += mat->Le(isect, wo);
+    L += isect.Le(wo);
 
     int8 mem[max_bxdf_size];
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;
-    if (mat->GetBSDF(&bsdf, isect, wo, alloc) == false)
+    if (isect.GetBSDF(&bsdf, wo, alloc) == false)
     {
         return L;
     }
