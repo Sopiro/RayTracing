@@ -1,12 +1,14 @@
 #pragma once
 
 #include "aabb.h"
+#include "spectrum.h"
 
 namespace bulbit
 {
 
 class Material;
 class Primitive;
+class BSDF;
 
 struct Intersection
 {
@@ -23,6 +25,9 @@ struct Intersection
     {
         Vec3 normal, tangent;
     } shading;
+
+    Spectrum Le(const Vec3& wo) const;
+    bool GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc) const;
 };
 
 class Intersectable

@@ -76,10 +76,9 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             break;
         }
 
-        const Material* mat = isect.primitive->GetMaterial();
         Vec3 wo = Normalize(-ray.d);
 
-        Spectrum Le = mat->Le(isect, wo);
+        Spectrum Le = isect.Le(wo);
         if (!Le.IsBlack())
         {
             bool has_area_light = area_lights.contains(isect.primitive);
@@ -108,7 +107,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         Resource res(mem, sizeof(mem));
         Allocator alloc(&res);
         BSDF bsdf;
-        if (!mat->GetBSDF(&bsdf, isect, wo, alloc))
+        if (!isect.GetBSDF(&bsdf, wo, alloc))
         {
             break;
         }
