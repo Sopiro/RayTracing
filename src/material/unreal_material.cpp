@@ -22,7 +22,7 @@ bool UnrealMaterial::TestAlpha(const Point2& uv) const
     return basecolor->EvaluateAlpha(uv) > epsilon;
 }
 
-Spectrum UnrealMaterial::Le(const Intersection& isect, const Vec3& wi) const
+Spectrum UnrealMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
     return emissive ? emissive->Evaluate(isect.uv) : Spectrum::black;
 }

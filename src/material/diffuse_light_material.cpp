@@ -20,7 +20,7 @@ bool DiffuseLightMaterial::TestAlpha(const Point2& uv) const
     return emission->EvaluateAlpha(uv) > epsilon;
 }
 
-Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wi) const
+Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
     if (!TestAlpha(isect.uv))
     {
