@@ -20,6 +20,11 @@ bool DiffuseLightMaterial::TestAlpha(const Point2& uv) const
     return emission->EvaluateAlpha(uv) > epsilon;
 }
 
+const SpectrumTexture* DiffuseLightMaterial::GetNormalMap() const
+{
+    return nullptr;
+}
+
 Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
     if (!TestAlpha(isect.uv))

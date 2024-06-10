@@ -27,7 +27,7 @@ struct Intersection
     } shading;
 
     Spectrum Le(const Vec3& wo) const;
-    bool GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc) const;
+    bool GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc);
 };
 
 class Intersectable

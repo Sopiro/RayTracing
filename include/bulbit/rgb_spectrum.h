@@ -204,9 +204,4 @@ inline RGBSpectrum Lerp(const RGBSpectrum& sp1, const RGBSpectrum& sp2, Float t)
     return (1 - t) * sp1 + t * sp2;
 }
 
-inline Vec3 ToVector(const RGBSpectrum& sp)
-{
-    return Vec3(sp.r, sp.g, sp.b);
-}
-
 } // namespace bulbit
