@@ -166,7 +166,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         throughput *= bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         ray = Ray(isect.point, bsdf_sample.wi);
 
-        // Terminate path by russian roulette
+        // Terminate path with russian roulette
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {

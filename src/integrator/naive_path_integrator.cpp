@@ -20,6 +20,78 @@ NaivePathIntegrator::NaivePathIntegrator(
     }
 }
 
+Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+{
+    // return Li(ray, sampler, 0);
+
+    int32 bounce = 0;
+    Spectrum L(0), throughput(1);
+    Float eta_scale = 1;
+    Ray ray = primary_ray;
+
+    while (true)
+    {
+        Intersection isect;
+        if (!Intersect(&isect, ray, Ray::epsilon, infinity))
+        {
+            for (Light* light : infinite_lights)
+            {
+                L += throughput * light->Le(ray);
+            }
+
+            break;
+        }
+
+        if (bounce++ >= max_bounces)
+        {
+            break;
+        }
+
+        Vec3 wo = Normalize(-ray.d);
+
+        // Incorporate surface emission
+        L += throughput * isect.Le(wo);
+
+        int8 mem[max_bxdf_size];
+        Resource res(mem, sizeof(mem));
+        Allocator alloc(&res);
+        BSDF bsdf;
+        if (isect.GetBSDF(&bsdf, wo, alloc) == false)
+        {
+            break;
+        }
+
+        BSDFSample bsdf_sample;
+        if (!bsdf.Sample_f(&bsdf_sample, wo, sampler.Next1D(), sampler.Next2D()))
+        {
+            break;
+        }
+
+        if (bsdf_sample.IsTransmission())
+        {
+            eta_scale *= Sqr(bsdf_sample.eta);
+        }
+
+        throughput *= bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        ray = Ray(isect.point, bsdf_sample.wi);
+
+        // Terminate path with russian roulette
+        constexpr int32 min_bounces = 2;
+        if (bounce > min_bounces)
+        {
+            Float rr = std::fmin(rr_probability, throughput.Luminance() * eta_scale);
+            if (sampler.Next1D() > rr)
+            {
+                break;
+            }
+
+            throughput *= 1 / rr;
+        }
+    }
+
+    return L;
+}
+
 Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) const
 {
     Spectrum L(0);

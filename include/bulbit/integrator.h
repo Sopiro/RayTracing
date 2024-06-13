@@ -116,10 +116,7 @@ public:
                         Float russian_roulette_probability = 0.95f);
     virtual ~NaivePathIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
-    {
-        return Li(ray, sampler, 0);
-    }
+    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
 
 private:
     Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
