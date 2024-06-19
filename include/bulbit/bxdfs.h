@@ -63,6 +63,32 @@ private:
     TrowbridgeReitzDistribution mf;
 };
 
+class ThinDielectricBxDF : public BxDF
+{
+public:
+    ThinDielectricBxDF(Float eta)
+        : eta{ eta }
+    {
+    }
+
+    virtual BxDF_Flags Flags() const override
+    {
+        return BxDF_Flags::Specular | BxDF_Flags::Reflection | BxDF_Flags::Transmission;
+    }
+
+    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
+
+    virtual bool Sample_f(BSDFSample* sample,
+                          Vec3 wo,
+                          Float u0,
+                          Point2 u12,
+                          BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
+
+private:
+    Float eta;
+};
+
 class UnrealBxDF : public BxDF
 {
 public:

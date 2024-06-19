@@ -10,7 +10,8 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
                                                         ConstantFloatTexture::Create(0.1f));
 
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.01f));
+        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
+        // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         SetLoaderFallbackMaterial(mat);

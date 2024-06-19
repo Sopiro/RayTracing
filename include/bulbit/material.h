@@ -56,6 +56,21 @@ private:
     Float eta;
 };
 
+class ThinDielectricMaterial : public Material
+{
+public:
+    ThinDielectricMaterial(Float eta);
+
+    virtual bool TestAlpha(const Point2& uv) const override;
+    virtual const SpectrumTexture* GetNormalMap() const override;
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
+    virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+
+private:
+    Float eta;
+};
+
 class UnrealMaterial : public Material
 {
 public:

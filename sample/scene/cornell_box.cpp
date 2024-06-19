@@ -55,6 +55,8 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hy = 0.14f;
         Float hz = 0.14f;
 
+        // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
+
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
         CreateBox(scene, tf, white);
     }
@@ -62,8 +64,9 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Right sphere
     {
         // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.1f));
+        // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // scene.CreatePrimitive<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.15f, mat);
-        // // scene.CreatePrimitive<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.09f, wakgood_mat);
+        // scene.CreatePrimitive<Sphere>(Vec3(0.65f, 0.15f, -0.3f), 0.09f, wakgood_mat);
     }
 
     // Lights
