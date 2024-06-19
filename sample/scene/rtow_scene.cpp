@@ -34,15 +34,15 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 else
                 {
                     // glass
-                    // auto glass = scene.CreateMaterial<Dielectric>(1.5f);
-                    // scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
+                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f);
+                    scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
                 }
             }
         }
     }
 
-    // auto material1 = scene.CreateMaterial<Dielectric>(1.5f);
-    // scene.CreatePrimitive<Sphere>(Vec3(0, 1, 0), 1.0f, material1);
+    auto material1 = scene.CreateMaterial<DielectricMaterial>(1.5f);
+    scene.CreatePrimitive<Sphere>(Vec3(0, 1, 0), 1.0f, material1);
 
     auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
     scene.CreatePrimitive<Sphere>(Vec3(-4, 1, 0), 1.0f, material2);

@@ -37,6 +37,25 @@ public:
     const SpectrumTexture* albedo;
 };
 
+class DielectricMaterial : public Material
+{
+public:
+    DielectricMaterial(Float eta);
+    DielectricMaterial(Float eta, const FloatTexture* roughness);
+    DielectricMaterial(Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness);
+
+    virtual bool TestAlpha(const Point2& uv) const override;
+    virtual const SpectrumTexture* GetNormalMap() const override;
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
+    virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+
+private:
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
+    Float eta;
+};
+
 class UnrealMaterial : public Material
 {
 public:
