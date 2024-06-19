@@ -44,6 +44,25 @@ Spectrum UnrealBxDF::f(const Vec3& wo, const Vec3& wi) const
     return f_d + f_s;
 }
 
+Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
+{
+    if (!(sample_flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
+    {
+        return 0;
+    }
+
+    Float alpha2 = alpha * alpha;
+
+    Vec3 h = Normalize(wo + wi);
+    Float NoH = CosTheta(h);
+    Float LoH = CosTheta(wi);
+    Float spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4 * LoH, 0.0f);
+
+    Float diff_w = LoH * inv_pi;
+
+    return (1 - t) * diff_w + t * spec_w;
+}
+
 bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags) const
 {
     if (!(sample_flags & BxDF_SamplingFlags::Reflection))
@@ -77,25 +96,6 @@ bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxD
 
     *sample = BSDFSample(f(wo, wi), wi, PDF(wo, wi, sample_flags), flag);
     return true;
-}
-
-Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
-{
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
-    {
-        return 0;
-    }
-
-    Float alpha2 = alpha * alpha;
-
-    Vec3 h = Normalize(wo + wi);
-    Float NoH = CosTheta(h);
-    Float LoH = CosTheta(wi);
-    Float spec_w = D_GGX(NoH, alpha2) * G1_Smith(LoH, alpha2) / std::fmax(4 * LoH, 0.0f);
-
-    Float diff_w = LoH * inv_pi;
-
-    return (1 - t) * diff_w + t * spec_w;
 }
 
 void UnrealBxDF::Regularize()
