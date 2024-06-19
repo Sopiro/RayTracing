@@ -133,7 +133,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     if (!IntersectAny(Ray(isect.point, light_sample.wi), Ray::epsilon, light_sample.visibility))
                     {
                         Float light_pdf = light_sample.pdf / sampled_light.weight;
-                        Spectrum f_cos = bsdf.f(wo, light_sample.wi) * Dot(isect.shading.normal, light_sample.wi);
+                        Spectrum f_cos = bsdf.f(wo, light_sample.wi) * AbsDot(isect.shading.normal, light_sample.wi);
                         if (sampled_light.light->IsDeltaLight())
                         {
                             L += throughput * light_sample.Li * f_cos / light_pdf;
@@ -163,7 +163,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         // Save bsdf pdf for MIS
         prev_bsdf_pdf = bsdf_sample.pdf;
-        throughput *= bsdf_sample.f * Dot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         ray = Ray(isect.point, bsdf_sample.wi);
 
         // Terminate path with russian roulette

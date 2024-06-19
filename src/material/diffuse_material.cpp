@@ -31,7 +31,7 @@ Spectrum DiffuseMaterial::Le(const Intersection& isect, const Vec3& wo) const
 
 bool DiffuseMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    *bsdf = BSDF(isect.shading.normal, alloc.new_object<DiffuseBxDF>(albedo->Evaluate(isect.uv)));
+    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<DiffuseBxDF>(albedo->Evaluate(isect.uv)));
     return true;
 }
 

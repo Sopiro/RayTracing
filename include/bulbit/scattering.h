@@ -63,6 +63,7 @@ inline Float FresnelDielectric(Float cos_theta_i, Float eta)
     Float sin2_theta_t = sin2_theta_i / Sqr(eta);
     if (sin2_theta_t >= 1)
     {
+        // Total internal reflection
         return 1;
     }
 

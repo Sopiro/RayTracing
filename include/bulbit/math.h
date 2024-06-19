@@ -1015,16 +1015,6 @@ inline Float Dist2(const Vec2& a, const Vec2& b)
     return (a - b).Length2();
 }
 
-inline Float Length(const Vec2& v)
-{
-    return v.Length();
-}
-
-inline Float Length2(const Vec2& v)
-{
-    return v.Length2();
-}
-
 // Vec2 functions end
 
 // Vec3 functions begin

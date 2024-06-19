@@ -164,7 +164,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
         }
         else
         {
-            tangents[i].SetZero();
+            Vec3 biTangent;
+            CoordinateSystem(normals[i], &tangents[i], &biTangent);
         }
 
         if (mesh->HasTextureCoords(0))

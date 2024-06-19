@@ -22,11 +22,24 @@ inline bool IsNullish(const T& v)
     {                                                                                                                            \
         std::cout << #v;                                                                                                         \
         std::cout << " null" << std::endl;                                                                                       \
+        assert(false);                                                                                                           \
     }
 
 constexpr Vec3 x_axis{ 1, 0, 0 };
 constexpr Vec3 y_axis{ 0, 1, 0 };
 constexpr Vec3 z_axis{ 0, 0, 1 };
+
+template <typename T>
+constexpr inline Float Length(const T& v)
+{
+    return v.Length();
+}
+
+template <typename T>
+constexpr inline Float Length2(const T& v)
+{
+    return v.Length2();
+}
 
 template <typename T>
 constexpr inline T Sqr(T v)
