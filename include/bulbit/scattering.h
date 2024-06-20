@@ -42,6 +42,11 @@ inline bool Refract(Vec3* wt, Vec3 wi, Vec3 n, Float eta, Float* eta_p)
     return true;
 }
 
+inline Float SchlickR0(Float eta)
+{
+    return Sqr(eta - 1) / Sqr(eta + 1);
+}
+
 inline Spectrum FresnelSchlick(const Spectrum& r0, Float cos_theta)
 {
     return r0 + (Spectrum(1) - r0) * std::pow<Float>(1 - cos_theta, 5);

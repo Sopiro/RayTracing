@@ -74,6 +74,7 @@ private:
 class ConductorMaterial : public Material
 {
 public:
+    ConductorMaterial(const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* roughness);
     ConductorMaterial(const SpectrumTexture* eta,
                       const SpectrumTexture* k,
                       const FloatTexture* u_roughness,
