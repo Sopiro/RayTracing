@@ -89,6 +89,35 @@ private:
     Float eta;
 };
 
+class ConductorBxDF : public BxDF
+{
+public:
+    ConductorBxDF(Spectrum eta, Spectrum k, TrowbridgeReitzDistribution mf)
+        : eta{ eta }
+        , k{ k }
+        , mf{ mf }
+    {
+    }
+
+    virtual BxDF_Flags Flags() const override
+    {
+        return mf.EffectivelySmooth() ? BxDF_Flags::SpecularReflection : BxDF_Flags::GlossyReflection;
+    }
+
+    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
+
+    virtual bool Sample_f(BSDFSample* sample,
+                          Vec3 wo,
+                          Float u0,
+                          Point2 u12,
+                          BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
+
+private:
+    TrowbridgeReitzDistribution mf;
+    Spectrum eta, k;
+};
+
 class UnrealBxDF : public BxDF
 {
 public:
@@ -169,6 +198,7 @@ private:
     Float t;
 };
 
-constexpr size_t max_bxdf_size = std::max({ sizeof(DiffuseBxDF), sizeof(UnrealBxDF), sizeof(DielectricBxDF) });
+constexpr size_t max_bxdf_size = std::max(
+    { sizeof(DiffuseBxDF), sizeof(UnrealBxDF), sizeof(DielectricBxDF), sizeof(ThinDielectricBxDF), sizeof(ConductorBxDF) });
 
 } // namespace bulbit

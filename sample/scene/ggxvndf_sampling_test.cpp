@@ -7,11 +7,14 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
     {
-        auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
-                                                        ConstantFloatTexture::Create(0.1f));
+        // auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
+        //                                                 ConstantFloatTexture::Create(0.1f));
 
         // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
+        auto mat = scene.CreateMaterial<ConductorMaterial>(
+            ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
+            ConstantFloatTexture::Create(0.1f), ConstantFloatTexture::Create(0.3f));
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         SetLoaderFallbackMaterial(mat);
