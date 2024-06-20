@@ -105,4 +105,9 @@ bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, 
     return true;
 }
 
+void ConductorBxDF::Regularize()
+{
+    mf.Regularize();
+}
+
 } // namespace bulbit

@@ -243,4 +243,9 @@ bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
     }
 }
 
+void DielectricBxDF::Regularize()
+{
+    mf.Regularize();
+}
+
 } // namespace bulbit

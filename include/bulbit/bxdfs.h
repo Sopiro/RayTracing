@@ -58,6 +58,8 @@ public:
                           Point2 u12,
                           BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
 
+    virtual void Regularize() override;
+
 private:
     Float eta;
     TrowbridgeReitzDistribution mf;
@@ -112,6 +114,8 @@ public:
                           Float u0,
                           Point2 u12,
                           BxDF_SamplingFlags sampleFlags = BxDF_SamplingFlags::All) const override;
+
+    virtual void Regularize() override;
 
 private:
     TrowbridgeReitzDistribution mf;
