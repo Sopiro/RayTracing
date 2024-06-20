@@ -9,12 +9,12 @@ Spectrum ThinDielectricBxDF::f(const Vec3& wo, const Vec3& wi) const
     return Spectrum::black;
 }
 
-Float ThinDielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags) const
+Float ThinDielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
     return 0;
 }
 
-bool ThinDielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sampleFlags) const
+bool ThinDielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
     Float R = FresnelDielectric(AbsCosTheta(wo), eta);
     Float T = 1 - R;
@@ -28,8 +28,8 @@ bool ThinDielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 
 
     Float pr = R;
     Float pt = T;
-    if (!(sampleFlags & BxDF_SamplingFlags::Reflection)) pr = 0;
-    if (!(sampleFlags & BxDF_SamplingFlags::Transmission)) pt = 0;
+    if (!(flags & BxDF_SamplingFlags::Reflection)) pr = 0;
+    if (!(flags & BxDF_SamplingFlags::Transmission)) pt = 0;
     if (pr == 0 && pt == 0)
     {
         return false;

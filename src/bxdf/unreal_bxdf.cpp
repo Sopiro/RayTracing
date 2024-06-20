@@ -44,9 +44,9 @@ Spectrum UnrealBxDF::f(const Vec3& wo, const Vec3& wi) const
     return f_d + f_s;
 }
 
-Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
+Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
+    if (!(flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
     {
         return 0;
     }
@@ -63,9 +63,9 @@ Float UnrealBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
     return (1 - t) * diff_w + t * spec_w;
 }
 
-bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags) const
+bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection))
+    if (!(flags & BxDF_SamplingFlags::Reflection))
     {
         return false;
     }
@@ -94,7 +94,7 @@ bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxD
         return false;
     }
 
-    *sample = BSDFSample(f(wo, wi), wi, PDF(wo, wi, sample_flags), flag);
+    *sample = BSDFSample(f(wo, wi), wi, PDF(wo, wi, flags), flag);
     return true;
 }
 

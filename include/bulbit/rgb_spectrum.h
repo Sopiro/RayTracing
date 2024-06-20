@@ -2,6 +2,7 @@
 
 #include "assert.h"
 #include "math.h"
+#include "math_util.h"
 
 #include <format>
 
@@ -202,6 +203,29 @@ inline RGBSpectrum operator/=(RGBSpectrum& sp1, const RGBSpectrum& sp2)
 inline RGBSpectrum Lerp(const RGBSpectrum& sp1, const RGBSpectrum& sp2, Float t)
 {
     return (1 - t) * sp1 + t * sp2;
+}
+
+inline RGBSpectrum Sqrt(const RGBSpectrum& sp)
+{
+    return RGBSpectrum(std::sqrt(sp.r), std::sqrt(sp.g), std::sqrt(sp.b));
+}
+
+template <typename T>
+inline RGBSpectrum Min(const RGBSpectrum& sp, T val)
+{
+    return RGBSpectrum(std::min<Float>(val, sp.r), std::min<Float>(val, sp.g), std::min<Float>(val, sp.b));
+}
+
+template <typename T>
+inline RGBSpectrum Max(const RGBSpectrum& sp, T val)
+{
+    return RGBSpectrum(std::max<Float>(val, sp.r), std::max<Float>(val, sp.g), std::max<Float>(val, sp.b));
+}
+
+template <typename U, typename V>
+inline RGBSpectrum Clamp(const RGBSpectrum& sp, U left, V right)
+{
+    return RGBSpectrum(Clamp(sp.r, left, right), Clamp(sp.g, left, right), Clamp(sp.b, left, right));
 }
 
 } // namespace bulbit

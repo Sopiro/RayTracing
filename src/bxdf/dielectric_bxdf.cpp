@@ -64,7 +64,7 @@ Spectrum DielectricBxDF::f(const Vec3& wo, const Vec3& wi) const
     }
 }
 
-Float DielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
+Float DielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
     if (eta == 1 || mf.EffectivelySmooth())
     {
@@ -108,8 +108,8 @@ Float DielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) con
     // Compute sampling probabilities for reflection and transmission
     Float pr = R;
     Float pt = T;
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection)) pr = 0;
-    if (!(sample_flags & BxDF_SamplingFlags::Transmission)) pt = 0;
+    if (!(flags & BxDF_SamplingFlags::Reflection)) pr = 0;
+    if (!(flags & BxDF_SamplingFlags::Transmission)) pt = 0;
     if (pr == 0 && pt == 0)
     {
         return 0;
@@ -131,7 +131,7 @@ Float DielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) con
     return pdf;
 }
 
-bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags) const
+bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
     if (eta == 1 || mf.EffectivelySmooth())
     {
@@ -142,8 +142,8 @@ bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
         // Compute sampling probabilities for reflection and transmission
         Float pr = R;
         Float pt = T;
-        if (!(sample_flags & BxDF_SamplingFlags::Reflection)) pr = 0;
-        if (!(sample_flags & BxDF_SamplingFlags::Transmission)) pt = 0;
+        if (!(flags & BxDF_SamplingFlags::Reflection)) pr = 0;
+        if (!(flags & BxDF_SamplingFlags::Transmission)) pt = 0;
         if (pr == 0 && pt == 0)
         {
             return false;
@@ -189,8 +189,8 @@ bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
         // Compute sampling probabilities for reflection and transmission
         Float pr = R;
         Float pt = T;
-        if (!(sample_flags & BxDF_SamplingFlags::Reflection)) pr = 0;
-        if (!(sample_flags & BxDF_SamplingFlags::Transmission)) pt = 0;
+        if (!(flags & BxDF_SamplingFlags::Reflection)) pr = 0;
+        if (!(flags & BxDF_SamplingFlags::Transmission)) pt = 0;
         if (pr == 0 && pt == 0)
         {
             return false;

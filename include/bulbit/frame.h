@@ -22,7 +22,7 @@ inline Float AbsCosTheta(const Vec3& w)
 
 constexpr inline Float Sin2Theta(const Vec3& w)
 {
-    return Max(Float(0), 1 - Cos2Theta(w));
+    return std::max(Float(0), 1 - Cos2Theta(w));
 }
 
 inline Float SinTheta(const Vec3& w)

@@ -83,10 +83,10 @@ public:
     virtual BxDF_Flags Flags() const = 0;
 
     virtual Spectrum f(const Vec3& wo, const Vec3& wi) const = 0;
-    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const = 0;
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const = 0;
 
     virtual bool Sample_f(
-        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const = 0;
+        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const = 0;
 
     virtual void Regularize() {};
 

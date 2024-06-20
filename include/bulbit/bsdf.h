@@ -15,11 +15,9 @@ public:
     BSDF(Vec3 n, Vec3 t, BxDF* bxdf);
 
     Spectrum f(Vec3 wo, Vec3 wi) const;
+    Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const;
 
-    bool Sample_f(
-        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const;
-
-    Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags = BxDF_SamplingFlags::All) const;
+    bool Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const;
 
     Spectrum rho(Vec3 wo, std::span<const Float> uc, std::span<const Point2> u) const;
     Spectrum rho(std::span<const Point2> u1, std::span<const Float> uc, std::span<const Point2> u2) const;
@@ -61,17 +59,30 @@ inline Spectrum BSDF::f(Vec3 wo, Vec3 wi) const
     return bxdf->f(wo, wi);
 }
 
-inline bool BSDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sampleFlags) const
+inline Float BSDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
+{
+    wo = WorldToLocal(wo);
+    wi = WorldToLocal(wi);
+
+    if (wo.z == 0)
+    {
+        return 0;
+    }
+
+    return bxdf->PDF(wo, wi, flags);
+}
+
+inline bool BSDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
     assert(sample != nullptr);
 
     wo = WorldToLocal(wo);
-    if (wo.z == 0 || !(bxdf->Flags() & sampleFlags))
+    if (wo.z == 0 || !(bxdf->Flags() & flags))
     {
         return false;
     }
 
-    if (!bxdf->Sample_f(sample, wo, u0, u12, sampleFlags))
+    if (!bxdf->Sample_f(sample, wo, u0, u12, flags))
     {
         return false;
     }
@@ -83,19 +94,6 @@ inline bool BSDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, Bx
 
     sample->wi = LocalToWorld(sample->wi);
     return true;
-}
-
-inline Float BSDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags) const
-{
-    wo = WorldToLocal(wo);
-    wi = WorldToLocal(wi);
-
-    if (wo.z == 0)
-    {
-        return 0;
-    }
-
-    return bxdf->PDF(wo, wi, sampleFlags);
 }
 
 inline Spectrum BSDF::rho(std::span<const Point2> u1, std::span<const Float> uc, std::span<const Point2> u2) const

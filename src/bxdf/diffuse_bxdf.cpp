@@ -15,9 +15,9 @@ Spectrum DiffuseBxDF::f(const Vec3& wo, const Vec3& wi) const
     return r * inv_pi;
 }
 
-Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
+Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
+    if (!(flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
     {
         return 0;
     }
@@ -25,9 +25,9 @@ Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sample_flags) const
     return CosineSampleHemispherePDF(AbsCosTheta(wi));
 }
 
-bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sample_flags) const
+bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
-    if (!(sample_flags & BxDF_SamplingFlags::Reflection))
+    if (!(flags & BxDF_SamplingFlags::Reflection))
     {
         return false;
     }

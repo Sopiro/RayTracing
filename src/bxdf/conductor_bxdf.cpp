@@ -32,9 +32,9 @@ Spectrum ConductorBxDF::f(const Vec3& wo, const Vec3& wi) const
     return mf.D(wm) * F * mf.G(wo, wi) / (4 * cos_theta_i * cos_theta_o);
 }
 
-Float ConductorBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags) const
+Float ConductorBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
-    if (!(sampleFlags & BxDF_SamplingFlags::Reflection))
+    if (!(flags & BxDF_SamplingFlags::Reflection))
     {
         return 0;
     }
@@ -59,9 +59,9 @@ Float ConductorBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags sampleFlags) const
     return mf.PDF(wo, wm) / (4 * AbsDot(wo, wm));
 }
 
-bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags sampleFlags) const
+bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
-    if (!(sampleFlags & BxDF_SamplingFlags::Reflection))
+    if (!(flags & BxDF_SamplingFlags::Reflection))
     {
         return false;
     }
