@@ -79,6 +79,8 @@ public:
                       const SpectrumTexture* k,
                       const FloatTexture* u_roughness,
                       const FloatTexture* v_roughness);
+    ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* roughness);
+    ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* u_roughness, const FloatTexture* v_roughness);
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual const SpectrumTexture* GetNormalMap() const override;
