@@ -8,9 +8,11 @@ namespace bulbit
 
 bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_max) const
 {
-    Vec3 oc = ray.o - center;
-    Float a = ray.d.Length2();
-    Float half_b = Dot(oc, ray.d);
+    Ray r = MulT(transform, ray);
+
+    Vec3 oc = r.o;
+    Float a = r.d.Length2();
+    Float half_b = Dot(oc, r.d);
     Float c = oc.Length2() - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
@@ -33,10 +35,10 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
 
     // Found intersection
 
-    Point3 point = ray.At(root);
-    Vec3 outward_normal = (point - center) / radius;
+    Point3 point = r.At(root);
+    Vec3 normal = point / radius;
 
-    Point2 uv = ComputeTexCoord(outward_normal);
+    Point2 uv = ComputeTexCoord(normal);
     if (material->TestAlpha(uv) == false)
     {
         return false;
@@ -44,22 +46,23 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
 
     isect->primitive = this;
     isect->t = root;
-    isect->point = point;
+    isect->point = Mul(transform, point);
     isect->uv = uv;
 
-    Vec3 tangent, bitangent;
-    CoordinateSystem(outward_normal, &tangent, &bitangent);
-
-    SetFaceNormal(isect, ray.d, outward_normal, outward_normal, tangent);
+    Vec3 n = transform.q.Rotate(normal);
+    Vec3 t = transform.q.Rotate(Normalize(Cross(y_axis, normal)));
+    SetFaceNormal(isect, ray.d, n, n, t);
 
     return true;
 }
 
 bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
-    Vec3 oc = ray.o - center;
-    Float a = ray.d.Length2();
-    Float half_b = Dot(oc, ray.d);
+    Ray r = MulT(transform, ray);
+
+    Vec3 oc = r.o;
+    Float a = r.d.Length2();
+    Float half_b = Dot(oc, r.d);
     Float c = oc.Length2() - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
@@ -80,9 +83,9 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
         }
     }
 
-    Point3 point = ray.At(root);
-    Vec3 outward_normal = (point - center) / radius;
-    Point2 uv = ComputeTexCoord(outward_normal);
+    Point3 point = r.At(root);
+    Vec3 normal = point / radius;
+    Point2 uv = ComputeTexCoord(normal);
 
     return material->TestAlpha(uv);
 }
@@ -91,7 +94,7 @@ PrimitiveSample Sphere::Sample(const Point2& u) const
 {
     PrimitiveSample sample;
     sample.normal = UniformSampleSphere(u);
-    sample.point = center + sample.normal * radius;
+    sample.point = transform.p + sample.normal * radius;
 
     Float area = four_pi * radius * radius;
     sample.pdf = 1 / area;
@@ -102,7 +105,7 @@ PrimitiveSample Sphere::Sample(const Point2& u) const
 
 PrimitiveSample Sphere::Sample(const Point3& ref, const Point2& u) const
 {
-    Vec3 direction = center - ref;
+    Vec3 direction = transform.p - ref;
     Float distance = direction.Normalize();
     Float distance_squared = distance * distance;
 
@@ -127,7 +130,7 @@ PrimitiveSample Sphere::Sample(const Point3& ref, const Point2& u) const
 
     PrimitiveSample sample;
     sample.point = ref + ref2p;
-    sample.normal = Normalize(sample.point - center);
+    sample.normal = Normalize(sample.point - transform.p);
     sample.pdf = 1 / solid_angle;
 
     return sample;

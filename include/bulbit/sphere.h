@@ -10,6 +10,7 @@ class Sphere : public Primitive
 {
 public:
     Sphere(const Vec3& center, Float radius, const Material* material);
+    Sphere(const Transform& transform, Float radius, const Material* material);
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
@@ -23,7 +24,7 @@ public:
 
     virtual const Material* GetMaterial() const override;
 
-    Vec3 center;
+    Transform transform;
     Float radius;
 
 private:
@@ -33,7 +34,14 @@ private:
 };
 
 inline Sphere::Sphere(const Vec3& center, Float radius, const Material* material)
-    : center{ center }
+    : transform{ center, identity }
+    , radius{ radius }
+    , material{ material }
+{
+}
+
+inline Sphere::Sphere(const Transform& transform, Float radius, const Material* material)
+    : transform{ transform }
     , radius{ radius }
     , material{ material }
 {
@@ -41,7 +49,7 @@ inline Sphere::Sphere(const Vec3& center, Float radius, const Material* material
 
 inline AABB Sphere::GetAABB() const
 {
-    return AABB(center - Vec3(radius), center + Vec3(radius));
+    return AABB(transform.p - Vec3(radius), transform.p + Vec3(radius));
 }
 
 inline Float Sphere::EvaluatePDF(const Ray& ray) const
@@ -57,7 +65,7 @@ inline Float Sphere::EvaluatePDF(const Ray& ray) const
 
 inline Float Sphere::PDF(const Intersection& hit_is, const Ray& hit_ray) const
 {
-    Float distance_squared = (center - hit_ray.o).Length2();
+    Float distance_squared = (transform.p - hit_ray.o).Length2();
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
@@ -71,7 +79,7 @@ inline const Material* Sphere::GetMaterial() const
 
 inline Point2 Sphere::ComputeTexCoord(const Vec3& v)
 {
-    Float theta = std::acos(v.y);
+    Float theta = std::acos(Clamp(v.y, -1, 1));
     Float r = std::atan2(v.z, v.x);
     Float phi = r < 0 ? r + two_pi : r;
 

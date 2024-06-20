@@ -26,15 +26,16 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
             {
                 if (choose_mat < 0.9f)
                 {
-                    auto mat = scene.CreateMaterial<UnrealMaterial>(
-                        ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
-                        ConstantFloatTexture::Create(Rand() > 0.5f ? 1.0f : 0.0f), ConstantFloatTexture::Create(Rand(0, 1)));
-                    scene.CreatePrimitive<Sphere>(center, 0.2f, mat);
+                    auto mat = scene.CreateMaterial<ConductorMaterial>(
+                        ConstantColorTexture::Create(1.0), ConstantColorTexture::Create(RandVec3(0.0f, 3.0f)),
+                        ConstantFloatTexture::Create(Rand(0.2f, 1.0f)), ConstantFloatTexture::Create(Rand(0.2f, 1.0f)));
+                    scene.CreatePrimitive<Sphere>(
+                        Transform(center, Quat(DegToRad(Rand(0, 180)), UniformSampleSphere(RandVec2()))), 0.2f, mat);
                 }
                 else
                 {
                     // glass
-                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f);
+                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(Rand(0.001f, 0.3f)));
                     scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
                 }
             }
@@ -47,8 +48,10 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
     scene.CreatePrimitive<Sphere>(Vec3(-4, 1, 0), 1.0f, material2);
 
-    // auto material3 = scene.CreateMaterial<Metal>(Spectrum(0.7f, 0.6f, 0.5f), 0.0f);
-    // scene.CreatePrimitive<Sphere>(Vec3(4, 1, 0), 1.0f, material3);
+    auto material3 = scene.CreateMaterial<ConductorMaterial>(
+        ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2), ConstantFloatTexture::Create(0.2f),
+        ConstantFloatTexture::Create(0.02f));
+    scene.CreatePrimitive<Sphere>(Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3);
 
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
