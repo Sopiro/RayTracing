@@ -26,9 +26,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
             {
                 if (choose_mat < 0.9f)
                 {
-                    auto mat = scene.CreateMaterial<ConductorMaterial>(
-                        ConstantColorTexture::Create(1.0), ConstantColorTexture::Create(RandVec3(0.0f, 3.0f)),
-                        ConstantFloatTexture::Create(Rand(0.2f, 1.0f)), ConstantFloatTexture::Create(Rand(0.2f, 1.0f)));
+                    auto mat = CreateRandomUnrealMaterial(scene);
                     scene.CreatePrimitive<Sphere>(
                         Transform(center, Quat(DegToRad(Rand(0, 180)), UniformSampleSphere(RandVec2()))), 0.2f, mat);
                 }
@@ -67,7 +65,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 640;
+    int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 13, 2, 3 };

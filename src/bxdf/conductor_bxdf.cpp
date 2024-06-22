@@ -89,14 +89,14 @@ bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, 
         return false;
     }
 
-    Float pdf = mf.PDF(wo, wm) / (4 * AbsDot(wo, wm));
-
     Float cos_theta_o = AbsCosTheta(wo);
     Float cos_theta_i = AbsCosTheta(wi);
     if (cos_theta_i == 0 || cos_theta_o == 0)
     {
         false;
     }
+
+    Float pdf = mf.PDF(wo, wm) / (4 * AbsDot(wo, wm));
 
     // Evaluate Fresnel term for conductor
     Spectrum F = FresnelComplex(AbsDot(wo, wm), eta, k);
