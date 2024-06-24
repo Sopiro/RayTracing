@@ -78,7 +78,7 @@ public:
         return (std::sqrt(1 + alpha2 * tan2_theta) - 1) / 2;
     }
 
-    Vec3 SampleWm(const Vec3& w, const Point2& u) const
+    Vec3 Sample_Wm(const Vec3& w, const Point2& u) const
     {
 #if 1
         Vec3 wm = Sample_GGX_VNDF_Dupuy_Benyoub(w, alpha_x, alpha_y, u);

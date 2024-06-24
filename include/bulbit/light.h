@@ -67,30 +67,22 @@ public:
     PointLight(const Point3& position, const Spectrum& intensity);
 
     virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
+    virtual Float EvaluatePDF(const Ray& ray) const override;
 
-    virtual Float EvaluatePDF(const Ray& ray) const override
-    {
-        assert(false);
-        return 0;
-    }
-
+private:
     Point3 position;
     Spectrum intensity; // radiance
 };
 
-struct DirectionalLight : public Light
+class DirectionalLight : public Light
 {
 public:
     DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius);
 
     virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
+    virtual Float EvaluatePDF(const Ray& ray) const override;
 
-    virtual Float EvaluatePDF(const Ray& ray) const override
-    {
-        assert(false);
-        return 0;
-    }
-
+private:
     Vec3 dir;
     Spectrum intensity; // radiance
     Float radius;       // visible radius
@@ -102,7 +94,6 @@ public:
     AreaLight(const Primitive* primitive);
 
     virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
-
     virtual Float EvaluatePDF(const Ray& ray) const override;
 
     virtual Spectrum Le(const Ray& ray) const override;
@@ -124,6 +115,7 @@ public:
 
     virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
+
     virtual Spectrum Le(const Ray& ray) const override;
 
 private:
@@ -140,6 +132,7 @@ public:
 
     virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const override;
     virtual Float EvaluatePDF(const Ray& ray) const override;
+
     virtual Spectrum Le(const Ray& ray) const override;
 
 private:

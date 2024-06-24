@@ -130,8 +130,10 @@ public:
     virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 
-    const SpectrumTexture* emission;
     bool two_sided;
+
+private:
+    const SpectrumTexture* emission;
 };
 
 } // namespace bulbit

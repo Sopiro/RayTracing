@@ -26,6 +26,8 @@ struct AABB
     bool TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
+    void ComputeBoundingSphere(Point3* center, Float* radius) const;
+
     std::string ToString() const;
 
     Vec3 min, max;
@@ -116,6 +118,12 @@ inline bool AABB::TestOverlap(const AABB& other) const
     if (min.z > other.max.z || max.z < other.min.z) return false;
 
     return true;
+}
+
+inline void AABB::ComputeBoundingSphere(Point3* center, Float* radius) const
+{
+    *center = GetCenter();
+    *radius = TestPoint(*center) ? Dist(*center, max) : 0;
 }
 
 inline std::string AABB::ToString() const

@@ -24,4 +24,10 @@ LightSample PointLight::Sample_Li(const Intersection& ref, const Point2& u) cons
     return ls;
 }
 
+Float PointLight::EvaluatePDF(const Ray& ray) const
+{
+    assert(false);
+    return 0;
+}
+
 } // namespace bulbit

@@ -181,7 +181,7 @@ bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
     else
     {
         // Sample rough dielectric BSDF
-        Vec3 wm = mf.SampleWm(wo, u12);
+        Vec3 wm = mf.Sample_Wm(wo, u12);
 
         Float R = FresnelDielectric(Dot(wo, wm), eta);
         Float T = 1 - R;

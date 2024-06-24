@@ -81,7 +81,7 @@ bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, 
         return false;
     }
 
-    Vec3 wm = mf.SampleWm(wo, u12);
+    Vec3 wm = mf.Sample_Wm(wo, u12);
     Vec3 wi = Reflect(wo, wm);
 
     if (!SameHemisphere(wo, wi))
