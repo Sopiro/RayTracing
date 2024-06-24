@@ -11,7 +11,23 @@ UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
                                const SpectrumTexture* normalmap)
     : basecolor{ basecolor }
     , metallic{ metallic }
-    , roughness{ roughness }
+    , u_roughness{ roughness }
+    , v_roughness{ roughness }
+    , emissive{ emissive }
+    , normalmap{ normalmap }
+{
+}
+
+UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
+                               const FloatTexture* metallic,
+                               const FloatTexture* u_roughness,
+                               const FloatTexture* v_roughness,
+                               const SpectrumTexture* emissive,
+                               const SpectrumTexture* normalmap)
+    : basecolor{ basecolor }
+    , metallic{ metallic }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
     , emissive{ emissive }
     , normalmap{ normalmap }
 {
@@ -43,8 +59,8 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
 
     Spectrum b = basecolor->Evaluate(isect.uv);
     Float m = metallic->Evaluate(isect.uv);
-    Float r = roughness->Evaluate(isect.uv);
-    Float alpha = UnrealBxDF::RoughnessToAlpha(r);
+    Float alpha_x = UnrealBxDF::RoughnessToAlpha(u_roughness->Evaluate(isect.uv));
+    Float alpha_y = UnrealBxDF::RoughnessToAlpha(v_roughness->Evaluate(isect.uv));
 
     Spectrum f0 = UnrealBxDF::F0(b, m);
     Spectrum F = UnrealBxDF::F_Schlick(f0, Dot(wo, n));
@@ -53,7 +69,7 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     // Float spec_weight = std::fmax(F.x, std::fmax(F.y, F.z));
     Float t = Clamp(spec_weight / (diff_weight + spec_weight), 0.15f, 0.9f);
 
-    *bsdf = BSDF(n, isect.shading.tangent, alloc.new_object<UnrealBxDF>(b, m, alpha, t));
+    *bsdf = BSDF(n, isect.shading.tangent, alloc.new_object<UnrealBxDF>(b, m, TrowbridgeReitzDistribution(alpha_x, alpha_y), t));
     return true;
 }
 

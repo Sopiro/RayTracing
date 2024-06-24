@@ -38,7 +38,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0), ConstantFloatTexture::Create(0.0f),
-                                                        ConstantFloatTexture::Create(0.001f));
+                                                        ConstantFloatTexture::Create(0.1f));
         Float size = 9.0f;
         Float y = 2.1f;
 
@@ -60,7 +60,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 1920;
+    int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 5, 5, 10 };

@@ -103,6 +103,12 @@ public:
                    const FloatTexture* roughness,
                    const SpectrumTexture* emissive = nullptr,
                    const SpectrumTexture* normalmap = nullptr);
+    UnrealMaterial(const SpectrumTexture* basecolor,
+                   const FloatTexture* metallic,
+                   const FloatTexture* u_roughness,
+                   const FloatTexture* v_roughness,
+                   const SpectrumTexture* emissive = nullptr,
+                   const SpectrumTexture* normalmap = nullptr);
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual const SpectrumTexture* GetNormalMap() const override;
@@ -113,7 +119,8 @@ public:
 private:
     const SpectrumTexture* basecolor;
     const FloatTexture* metallic;
-    const FloatTexture* roughness;
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
     const SpectrumTexture* emissive;
     const SpectrumTexture* normalmap;
 };

@@ -113,10 +113,10 @@ private:
 class UnrealBxDF : public BxDF
 {
 public:
-    UnrealBxDF(Spectrum basecolor, Float metallic, Float alpha, Float t)
+    UnrealBxDF(Spectrum basecolor, Float metallic, TrowbridgeReitzDistribution mf, Float t)
         : basecolor{ basecolor }
         , metallic{ metallic }
-        , alpha{ alpha }
+        , mf{ mf }
         , t{ t }
     {
     }
@@ -138,7 +138,7 @@ public:
 
     // Default reflectance of dielectrics
     static const inline Vec3 default_reflectance = Vec3(0.04f);
-    static const inline Float min_alpha = 0.002f;
+    static const inline Float min_alpha = 0.003f;
 
     static Float RoughnessToAlpha(Float roughness)
     {
@@ -155,35 +155,10 @@ public:
         return f0 + (/*f90*/ Spectrum(1) - f0) * std::pow(1 - cosine_theta, 5.0f);
     }
 
-    // Trowbridge-Reitz distribution
-    static Float D_GGX(Float NoH, Float alpha2)
-    {
-        Float b = (NoH * NoH * (alpha2 - 1) + 1);
-        return alpha2 * inv_pi / (b * b + 1e-7f);
-    }
-
-    static Float G1_Smith(Float NoV, Float alpha2)
-    {
-        return 2 * NoV / (NoV + std::sqrt(alpha2 + (1 - alpha2) * NoV * NoV));
-    }
-
-    static Float G2_Smith_Correlated(Float NoV, Float NoL, Float alpha2)
-    {
-        Float g1 = NoV * std::sqrt(alpha2 + (1 - alpha2) * NoL * NoL);
-        Float g2 = NoL * std::sqrt(alpha2 + (1 - alpha2) * NoV * NoV);
-        return 2 * NoL * NoV / (g1 + g2);
-    }
-
-    static Float V_Smith_Correlated(Float NoV, Float NoL, Float alpha2)
-    {
-        Float g1 = NoV * std::sqrt(alpha2 + (1 - alpha2) * NoL * NoL);
-        Float g2 = NoL * std::sqrt(alpha2 + (1 - alpha2) * NoV * NoV);
-        return 0.5f / (g1 + g2);
-    }
-
 private:
     Spectrum basecolor;
-    Float metallic, alpha;
+    Float metallic;
+    TrowbridgeReitzDistribution mf;
     Float t;
 };
 

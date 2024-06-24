@@ -7,14 +7,13 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
 {
     // Bunny
     {
-        // auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f),
-        //                                                 ConstantFloatTexture::Create(0.1f));
-
+        Srand(123123);
+        auto mat = CreateRandomUnrealMaterial(scene);
         // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
-        auto mat = scene.CreateMaterial<ConductorMaterial>(
-            ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
-            ConstantFloatTexture::Create(0.1f), ConstantFloatTexture::Create(0.3f));
+        // auto mat = scene.CreateMaterial<ConductorMaterial>(
+        //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
+        //     ConstantFloatTexture::Create(0.1f), ConstantFloatTexture::Create(0.3f));
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         SetLoaderFallbackMaterial(mat);
@@ -27,7 +26,7 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
+    scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
