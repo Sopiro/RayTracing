@@ -6,7 +6,6 @@
 namespace bulbit
 {
 
-// Lambertian BRDF
 class DiffuseBxDF : public BxDF
 {
 public:
@@ -18,6 +17,30 @@ public:
     virtual BxDF_Flags Flags() const override
     {
         return !r.IsBlack() ? BxDF_Flags::DiffuseReflection : BxDF_Flags::Unset;
+    }
+
+    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const override;
+
+    virtual bool Sample_f(
+        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const override;
+
+private:
+    // Reflectance [0, 1]
+    Spectrum r;
+};
+
+class SpecularReflectionBxDF : public BxDF
+{
+public:
+    SpecularReflectionBxDF(const Spectrum& reflectance)
+        : r{ reflectance }
+    {
+    }
+
+    virtual BxDF_Flags Flags() const override
+    {
+        return !r.IsBlack() ? BxDF_Flags::SpecularReflection : BxDF_Flags::Unset;
     }
 
     virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
@@ -162,7 +185,7 @@ private:
     Float t;
 };
 
-constexpr size_t max_bxdf_size = std::max(
-    { sizeof(DiffuseBxDF), sizeof(UnrealBxDF), sizeof(DielectricBxDF), sizeof(ThinDielectricBxDF), sizeof(ConductorBxDF) });
+constexpr size_t max_bxdf_size = std::max({ sizeof(DiffuseBxDF), sizeof(SpecularReflectionBxDF), sizeof(UnrealBxDF),
+                                            sizeof(DielectricBxDF), sizeof(ThinDielectricBxDF), sizeof(ConductorBxDF) });
 
 } // namespace bulbit

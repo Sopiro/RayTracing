@@ -13,8 +13,8 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
-    // auto light2 = scene.CreateMaterial<DiffuseLight>(Spectrum(17.0f, 12.0f, 4.0f));
-    // auto mirror = scene.CreateMaterial<Metal>(Spectrum(.73f, .73f, .73f), 0.0f);
+    // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
+    auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
 
     // Cornell box
     {

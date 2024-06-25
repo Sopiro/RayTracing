@@ -24,7 +24,7 @@ public:
 class DiffuseMaterial : public Material
 {
 public:
-    DiffuseMaterial(const Spectrum& color);
+    DiffuseMaterial(const Spectrum& albedo);
     DiffuseMaterial(const SpectrumTexture* albedo);
 
     virtual bool TestAlpha(const Point2& uv) const override;
@@ -35,6 +35,22 @@ public:
 
 public:
     const SpectrumTexture* albedo;
+};
+
+class MirrorMaterial : public Material
+{
+public:
+    MirrorMaterial(const Spectrum& reflectance);
+    MirrorMaterial(const SpectrumTexture* reflectance);
+
+    virtual bool TestAlpha(const Point2& uv) const override;
+    virtual const SpectrumTexture* GetNormalMap() const override;
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
+    virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+
+public:
+    const SpectrumTexture* reflectance;
 };
 
 class DielectricMaterial : public Material
