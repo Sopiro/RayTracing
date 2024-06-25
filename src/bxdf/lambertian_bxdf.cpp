@@ -5,7 +5,7 @@
 namespace bulbit
 {
 
-Spectrum DiffuseBxDF::f(const Vec3& wo, const Vec3& wi) const
+Spectrum LambertianBxDF::f(const Vec3& wo, const Vec3& wi) const
 {
     if (!SameHemisphere(wo, wi))
     {
@@ -15,7 +15,7 @@ Spectrum DiffuseBxDF::f(const Vec3& wo, const Vec3& wi) const
     return r * inv_pi;
 }
 
-Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
+Float LambertianBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
     if (!(flags & BxDF_SamplingFlags::Reflection) || !SameHemisphere(wo, wi))
     {
@@ -25,7 +25,7 @@ Float DiffuseBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
     return CosineSampleHemispherePDF(AbsCosTheta(wi));
 }
 
-bool DiffuseBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
+bool LambertianBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
     if (!(flags & BxDF_SamplingFlags::Reflection))
     {

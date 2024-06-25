@@ -83,10 +83,10 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
         // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
         // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+        // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
     }
 
-    // scene.Rebuild();
-    // std::cout << "Lights: " << scene.GetAreaLights().size() << std::endl;
+    // std::cout << "Lights: " << scene.GetLights().size() << std::endl;
 
     int32 width = 500;
 
