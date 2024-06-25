@@ -1,6 +1,3 @@
-#include "bulbit/mesh.h"
-#include "bulbit/triangle.h"
-
 #include "loader.h"
 #include "scene_builder.h"
 

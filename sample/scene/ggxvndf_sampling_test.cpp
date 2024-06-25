@@ -15,6 +15,7 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
         //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
         //     ConstantFloatTexture::Create(0.1f), ConstantFloatTexture::Create(0.3f));
+        // auto mix = scene.CreateMaterial<MixtureMaterial>(mat, mat, 0.1f);
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         SetLoaderFallbackMaterial(mat);

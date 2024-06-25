@@ -1,17 +1,17 @@
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : Material{ light_source }
+    : Material{ Material::Type::light_source }
     , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
-    : Material{ light_source }
+    : Material{ Material::Type::light_source }
     , emission{ emission }
     , two_sided{ two_sided }
 {

@@ -1,11 +1,11 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 ThinDielectricMaterial::ThinDielectricMaterial(Float eta)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , eta{ eta }
 {
 }

@@ -1,5 +1,5 @@
 #include "bulbit/bsdf.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 #include "bulbit/primitive.h"
 
 namespace bulbit
@@ -27,7 +27,7 @@ Spectrum Intersection::Le(const Vec3& wo) const
     const Material* mat = primitive->GetMaterial();
     while (mat->GetType() == Material::Type::mixture)
     {
-        mat = ((MixMaterial*)mat)->ChooseMaterial(*this, wo);
+        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
     }
 
     return mat->Le(*this, wo);
@@ -38,7 +38,7 @@ bool Intersection::GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc)
     const Material* mat = primitive->GetMaterial();
     while (mat->GetType() == Material::Type::mixture)
     {
-        mat = ((MixMaterial*)mat)->ChooseMaterial(*this, wo);
+        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
     }
 
     const SpectrumTexture* normalmap = mat->GetNormalMap();

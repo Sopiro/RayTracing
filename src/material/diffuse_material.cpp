@@ -1,17 +1,17 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , albedo{ ConstantColorTexture::Create(albedo) }
 {
 }
 
 DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , albedo{ albedo }
 {
 }

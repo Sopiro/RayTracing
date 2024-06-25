@@ -12,7 +12,7 @@
 #include "bitmap.h"
 #include "texture.h"
 
-#include "material.h"
+#include "materials.h"
 
 #include "sphere.h"
 #include "triangle.h"

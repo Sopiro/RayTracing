@@ -1,28 +1,22 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 DielectricMaterial::DielectricMaterial(Float eta)
-    : Material{ normal }
-    , eta{ eta }
-    , u_roughness{ ConstantFloatTexture::Create(0) }
-    , v_roughness{ ConstantFloatTexture::Create(0) }
+    : DielectricMaterial(eta, ConstantFloatTexture::Create(0))
 {
 }
 
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness)
-    : Material{ normal }
-    , eta{ eta }
-    , u_roughness{ roughness }
-    , v_roughness{ roughness }
+    : DielectricMaterial(eta, roughness, roughness)
 
 {
 }
 
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }

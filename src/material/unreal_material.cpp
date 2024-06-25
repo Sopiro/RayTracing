@@ -1,5 +1,5 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
@@ -9,13 +9,7 @@ UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
                                const FloatTexture* roughness,
                                const SpectrumTexture* emissive,
                                const SpectrumTexture* normalmap)
-    : Material{ normal }
-    , basecolor{ basecolor }
-    , metallic{ metallic }
-    , u_roughness{ roughness }
-    , v_roughness{ roughness }
-    , emissive{ emissive }
-    , normalmap{ normalmap }
+    : UnrealMaterial(basecolor, metallic, roughness, roughness, emissive, normalmap)
 {
 }
 
@@ -25,7 +19,7 @@ UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
                                const FloatTexture* v_roughness,
                                const SpectrumTexture* emissive,
                                const SpectrumTexture* normalmap)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , basecolor{ basecolor }
     , metallic{ metallic }
     , u_roughness{ u_roughness }

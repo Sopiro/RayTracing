@@ -1,4 +1,4 @@
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 #include "bulbit/scene.h"
 
 using namespace bulbit;

@@ -1,15 +1,11 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* roughness)
-    : Material{ normal }
-    , eta{ eta }
-    , k{ k }
-    , u_roughness{ roughness }
-    , v_roughness{ roughness }
+    : ConductorMaterial(eta, k, roughness, roughness)
 {
 }
 
@@ -17,7 +13,7 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta,
                                      const SpectrumTexture* k,
                                      const FloatTexture* u_roughness,
                                      const FloatTexture* v_roughness)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , eta{ eta }
     , k{ k }
     , u_roughness{ u_roughness }
@@ -26,18 +22,14 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta,
 }
 
 ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* roughness)
-    : Material{ normal }
-    , eta{ nullptr }
-    , k{ reflectance }
-    , u_roughness{ roughness }
-    , v_roughness{ roughness }
+    : ConductorMaterial(reflectance, roughness, roughness)
 {
 }
 
 ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance,
                                      const FloatTexture* u_roughness,
                                      const FloatTexture* v_roughness)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , eta{ nullptr }
     , k{ reflectance }
     , u_roughness{ u_roughness }

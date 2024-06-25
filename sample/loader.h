@@ -1,6 +1,6 @@
 #pragma once
 
-#include "bulbit/scene.h"
+#include "bulbit/bulbit.h"
 
 namespace bulbit
 {

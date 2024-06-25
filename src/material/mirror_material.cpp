@@ -1,17 +1,17 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {
 
 MirrorMaterial::MirrorMaterial(const Spectrum& reflectance)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , reflectance{ ConstantColorTexture::Create(reflectance) }
 {
 }
 
 MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance)
-    : Material{ normal }
+    : Material{ Material::Type::normal }
     , reflectance{ reflectance }
 {
 }
