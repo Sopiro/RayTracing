@@ -24,7 +24,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
     {
         auto white = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(8.0f));
         auto tf = Transform{ Vec3(0.0f, 8.0f, 0.0f), Quat(DegToRad(180.0f), x_axis), Vec3(3.0f) };
-        CreateRectXZ(scene, tf, white, true);
+        CreateRectXZ(scene, tf, white);
     }
 
     // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");

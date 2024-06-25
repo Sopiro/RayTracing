@@ -26,16 +26,16 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         Float w = 0.4f;
         Float h = 1.2f;
         auto tf = Transform{ Point3(1.0f, h / 2.0f - 0.01f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, h, w) };
-        CreateRectYZ(scene, tf, light, true);
+        CreateRectYZ(scene, tf, light);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, -1.0f), Quat(0.0f, y_axis), Vec3(w, h, 1.0f) };
-        CreateRectXY(scene, tf, light, true);
+        CreateRectXY(scene, tf, light);
 
         tf = Transform{ Point3(0.0f, h / 2.0f - 0.01f, 1.0f), Quat(pi, y_axis), Vec3(w, h, 1.0f) };
-        CreateRectXY(scene, tf, light, true);
+        CreateRectXY(scene, tf, light);
 
         tf = Transform{ Point3(-1.0f, h / 2.0f - 0.01f, 0.0f), Quat(0.0f, y_axis), Vec3(1.0f, h, w) };
-        CreateRectYZ(scene, tf, light, true);
+        CreateRectYZ(scene, tf, light);
     }
 
     // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));

@@ -84,7 +84,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.z = 0.0f;
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(s, s, 2) };
-            CreateRectXZ(scene, tf, light, true);
+            CreateRectXZ(scene, tf, light);
         }
     }
 

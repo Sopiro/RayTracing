@@ -23,16 +23,16 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
         auto white = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(50.0f), true);
         auto tf = Transform{ Point3(0.0f, 6.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
-        CreateRectXY(scene, tf, white, true);
+        CreateRectXY(scene, tf, white);
 
         tf = Transform{ Point3(0.0f, 6.0f, 3.0f), Quat(pi - pi / 4.0f, x_axis), Vec3(size) };
-        CreateRectXY(scene, tf, white, true);
+        CreateRectXY(scene, tf, white);
 
         tf = Transform{ Point3(-3.0f, 6.0f, 0.0f), Quat(-pi / 4.0f, z_axis), Vec3(size) };
-        CreateRectYZ(scene, tf, white, true);
+        CreateRectYZ(scene, tf, white);
 
         tf = Transform{ Point3(3.0f, 6.0f, 0.0f), Quat(pi + pi / 4.0f, z_axis), Vec3(size) };
-        CreateRectYZ(scene, tf, white, true);
+        CreateRectYZ(scene, tf, white);
     }
 
     // Floor

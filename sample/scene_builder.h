@@ -9,27 +9,30 @@ class Mesh;
 class Material;
 class Scene;
 
+bool GetAreaLightSourceCreationEnabled();
+void SetAreaLightSourceCreationEnabled(bool enabled);
+
 void CreateTriangles(Scene& scene, const Mesh* mesh, bool area_light = false);
 
 void CreateRectXY(Scene& scene,
                   const Transform& transform,
                   const Material* material,
-                  bool area_light = false,
-                  const Point2& texCoord = Point2(1, 1));
+                  const Point2& tex_coord = Point2(1, 1),
+                  bool area_light = false);
 void CreateRectXZ(Scene& scene,
                   const Transform& transform,
                   const Material* material,
-                  bool area_light = false,
-                  const Point2& texCoord = Point2(1, 1));
+                  const Point2& tex_coord = Point2(1, 1),
+                  bool area_light = false);
 void CreateRectYZ(Scene& scene,
                   const Transform& transform,
                   const Material* material,
-                  bool area_light = false,
-                  const Point2& texCoord = Point2(1, 1));
+                  const Point2& tex_coord = Point2(1, 1),
+                  bool area_light = false);
 void CreateBox(Scene& scene,
                const Transform& transform,
                const Material* material,
-               bool area_light = false,
-               const Point2& texCoord = Point2(1, 1));
+               const Point2& tex_coord = Point2(1, 1),
+               bool area_light = false);
 
 } // namespace bulbit

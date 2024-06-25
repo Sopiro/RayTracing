@@ -25,20 +25,20 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     {
         auto red = scene.CreateMaterial<DiffuseLightMaterial>(ConstantColorTexture::Create(Spectrum(light, 0.0f, 0.0f)));
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
-        CreateRectYZ(scene, tf, red, true);
+        CreateRectYZ(scene, tf, red);
     }
 
     {
         auto blue = scene.CreateMaterial<DiffuseLightMaterial>(ConstantColorTexture::Create(Spectrum(0.0f, 0.0f, light)));
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
-        CreateRectYZ(scene, tf, blue, true);
+        CreateRectYZ(scene, tf, blue);
     }
 
     {
         auto white = scene.CreateMaterial<DiffuseLightMaterial>(ConstantColorTexture::Create(Spectrum(0.5f)));
 
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
-        CreateRectXZ(scene, tf, white, true);
+        CreateRectXZ(scene, tf, white);
     }
 
     // {

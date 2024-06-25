@@ -15,7 +15,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ColorImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png"));
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
-        CreateRectXZ(scene, tf, mat, false, Point2(4.0f, 4.0f));
+        CreateRectXZ(scene, tf, mat, Point2(4.0f, 4.0f));
     }
 
     Float scale = 0.3f;
@@ -81,7 +81,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             auto mat = CreateRandomUnrealMaterial(scene);
 
             auto tf = Transform{ pos, Quat(pi, x_axis), Vec3(w, w, h) };
-            CreateRectXZ(scene, tf, light, true);
+            CreateRectXZ(scene, tf, light);
         }
     }
 

@@ -40,7 +40,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.999f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        CreateRectXZ(scene, tf, light, true);
+        CreateRectXZ(scene, tf, light);
     }
 
     // Center sphere

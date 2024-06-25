@@ -76,7 +76,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        CreateRectXZ(scene, tf, light, true);
+        CreateRectXZ(scene, tf, light);
 
         // scene.CreatePrimitive<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
