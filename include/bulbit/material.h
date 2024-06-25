@@ -12,6 +12,18 @@ struct Intersection;
 class Material
 {
 public:
+    enum Type
+    {
+        normal,
+        light_source,
+        mixture,
+    };
+
+    Material(Type type)
+        : type{ type }
+    {
+    }
+
     virtual ~Material() = default;
 
     virtual bool TestAlpha(const Point2& uv) const = 0;
@@ -19,6 +31,14 @@ public:
 
     virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const = 0;
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const = 0;
+
+    Type GetType() const
+    {
+        return type;
+    }
+
+private:
+    Type type;
 };
 
 class DiffuseMaterial : public Material
@@ -157,6 +177,24 @@ public:
 
 private:
     const SpectrumTexture* emission;
+};
+
+class MixMaterial : public Material
+{
+public:
+    MixMaterial(const Material* material1, const Material* material2, const FloatTexture* mix);
+
+    virtual bool TestAlpha(const Point2& uv) const override;
+    virtual const SpectrumTexture* GetNormalMap() const override;
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
+    virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+
+    const Material* ChooseMaterial(const Intersection& isect, const Vec3& wo);
+
+private:
+    const Material* materials[2];
+    const FloatTexture* mixture_amount;
 };
 
 } // namespace bulbit

@@ -21,13 +21,14 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         for (int32 x = 0; x < cx; ++x)
         {
             Vec3 pos;
-
             pos.y = 0;
             pos.x = x * xstep - ((cx - 1) * xstep / 2);
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
+            Quat rot(DegToRad(Rand(0, 180)), UniformSampleSphere(RandVec2()));
+
             auto mat = CreateRandomUnrealMaterial(scene);
-            scene.CreatePrimitive<Sphere>(pos, r, mat);
+            scene.CreatePrimitive<Sphere>(Transform{ pos, rot }, r, mat);
         }
     }
 
@@ -93,6 +94,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
     // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

@@ -5,14 +5,16 @@ namespace bulbit
 {
 
 DielectricMaterial::DielectricMaterial(Float eta)
-    : eta{ eta }
+    : Material{ normal }
+    , eta{ eta }
     , u_roughness{ ConstantFloatTexture::Create(0) }
     , v_roughness{ ConstantFloatTexture::Create(0) }
 {
 }
 
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness)
-    : eta{ eta }
+    : Material{ normal }
+    , eta{ eta }
     , u_roughness{ roughness }
     , v_roughness{ roughness }
 
@@ -20,7 +22,8 @@ DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness)
 }
 
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness)
-    : eta{ eta }
+    : Material{ normal }
+    , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
 {

@@ -5,7 +5,8 @@ namespace bulbit
 {
 
 ThinDielectricMaterial::ThinDielectricMaterial(Float eta)
-    : eta{ eta }
+    : Material{ normal }
+    , eta{ eta }
 {
 }
 

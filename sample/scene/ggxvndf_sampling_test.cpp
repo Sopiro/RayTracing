@@ -19,8 +19,6 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(3.0f) };
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/bunny.obj", tf);
-
-        // scene.AddLight(sphere);
     }
 
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr");

@@ -5,12 +5,14 @@ namespace bulbit
 {
 
 DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo)
-    : albedo{ ConstantColorTexture::Create(albedo) }
+    : Material{ normal }
+    , albedo{ ConstantColorTexture::Create(albedo) }
 {
 }
 
 DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
-    : albedo{ albedo }
+    : Material{ normal }
+    , albedo{ albedo }
 {
 }
 

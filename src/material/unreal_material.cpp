@@ -9,7 +9,8 @@ UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
                                const FloatTexture* roughness,
                                const SpectrumTexture* emissive,
                                const SpectrumTexture* normalmap)
-    : basecolor{ basecolor }
+    : Material{ normal }
+    , basecolor{ basecolor }
     , metallic{ metallic }
     , u_roughness{ roughness }
     , v_roughness{ roughness }
@@ -24,7 +25,8 @@ UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
                                const FloatTexture* v_roughness,
                                const SpectrumTexture* emissive,
                                const SpectrumTexture* normalmap)
-    : basecolor{ basecolor }
+    : Material{ normal }
+    , basecolor{ basecolor }
     , metallic{ metallic }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }

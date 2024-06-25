@@ -4,13 +4,15 @@ namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : emission{ ConstantColorTexture::Create(color) }
+    : Material{ light_source }
+    , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
-    : emission{ emission }
+    : Material{ light_source }
+    , emission{ emission }
     , two_sided{ two_sided }
 {
 }

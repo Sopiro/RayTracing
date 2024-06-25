@@ -15,9 +15,9 @@ public:
     {
     }
 
-    RNG(uint64 seed)
+    RNG(uint64 initstate, uint64 initseq = 1)
     {
-        Seed(seed);
+        Seed(initstate, initseq);
     }
 
     // pcg32_srandom(initstate, initseq)
