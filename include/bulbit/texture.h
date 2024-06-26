@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "hash.h"
 #include "pool.h"
 #include "spectrum.h"
 
@@ -68,7 +69,7 @@ private:
     {
         size_t operator()(const Spectrum& rgb) const
         {
-            return std::hash<Float>()(rgb.r) ^ std::hash<Float>()(rgb.g) ^ std::hash<Float>()(rgb.b);
+            return Hash(rgb);
         }
     };
 
@@ -162,7 +163,7 @@ private:
     {
         size_t operator()(const std::pair<std::string, int32>& string_float) const
         {
-            return std::hash<std::string>()(string_float.first) ^ std::hash<int32>()(string_float.second);
+            return Hash(string_float.first, string_float.second);
         }
     };
 
