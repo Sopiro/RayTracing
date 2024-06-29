@@ -15,7 +15,7 @@ DirectionalLight::DirectionalLight(const Vec3& dir, const Spectrum& intensity, F
 LightSample DirectionalLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
     LightSample ls;
-    ls.wi = -dir + RandomInUnitSphere(u) * radius;
+    ls.wi = -dir + SampleInsideUnitSphere(u) * radius;
     ls.pdf = 1;
     ls.visibility = infinity;
     ls.Li = intensity;

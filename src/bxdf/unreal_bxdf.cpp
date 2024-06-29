@@ -110,7 +110,7 @@ bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxD
     else
     {
         // Sample diffuse
-        wi = CosineSampleHemisphere(u12);
+        wi = SampleCosineHemisphere(u12);
         wm = Normalize(wi + wo);
 
         flag = BxDF_Flags::DiffuseReflection;

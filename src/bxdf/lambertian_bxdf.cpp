@@ -22,7 +22,7 @@ Float LambertianBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
         return 0;
     }
 
-    return CosineSampleHemispherePDF(AbsCosTheta(wi));
+    return CosineHemispherePDF(AbsCosTheta(wi));
 }
 
 bool LambertianBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
@@ -32,8 +32,8 @@ bool LambertianBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
         return false;
     }
 
-    Vec3 wi = CosineSampleHemisphere(u12);
-    Float pdf = CosineSampleHemispherePDF(CosTheta(wi));
+    Vec3 wi = SampleCosineHemisphere(u12);
+    Float pdf = CosineHemispherePDF(CosTheta(wi));
     if (wo.z < 0)
     {
         wi.z = -wi.z;

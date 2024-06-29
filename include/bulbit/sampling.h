@@ -20,6 +20,7 @@ inline Float PowerHeuristic(Float pdf_f, Float pdf_g)
 {
     Float f2 = pdf_f * pdf_f;
     Float g2 = pdf_g * pdf_g;
+
     return f2 / (f2 + g2);
 }
 
@@ -27,10 +28,11 @@ inline Float PowerHeuristic(int32 nf, Float pdf_f, int32 ng, Float pdf_g)
 {
     Float f = nf * pdf_f;
     Float g = ng * pdf_g;
+
     return (f * f) / (f * f + g * g);
 }
 
-inline Vec3 UniformSampleHemisphere(const Point2& u)
+inline Vec3 SampleUniformHemisphere(const Point2& u)
 {
     Float z = u[0];
     Float r = std::sqrt(std::fmax(0.0f, 1 - z * z));
@@ -44,7 +46,7 @@ inline Float UniformHemispherePDF()
     return inv_two_pi;
 }
 
-inline Vec3 UniformSampleSphere(const Point2& u)
+inline Vec3 SampleUniformSphere(const Point2& u)
 {
     Float z = 1 - 2 * u[0];
     Float r = std::sqrt(std::fmax(0.0f, 1 - z * z));
@@ -62,7 +64,7 @@ inline Float UniformSampleSpherePDF()
 }
 
 // z > 0
-inline Vec3 CosineSampleHemisphere(const Point2& u)
+inline Vec3 SampleCosineHemisphere(const Point2& u)
 {
     Float z = std::sqrt(1 - u[1]);
 
@@ -74,12 +76,12 @@ inline Vec3 CosineSampleHemisphere(const Point2& u)
     return Vec3(x, y, z);
 }
 
-inline Float CosineSampleHemispherePDF(Float cos_theta)
+inline Float CosineHemispherePDF(Float cos_theta)
 {
     return cos_theta * inv_pi;
 }
 
-inline Vec3 RandomInUnitSphere(const Point2& u)
+inline Vec3 SampleInsideUnitSphere(const Point2& u)
 {
 #if 1
     Float theta = two_pi * u[0];
@@ -105,11 +107,21 @@ inline Vec3 RandomInUnitSphere(const Point2& u)
 #endif
 }
 
-inline Vec3 UniformSampleUnitDiskXY(const Point2& u)
+inline Vec3 SampleUniformUnitDiskXY(const Point2& u)
 {
     Float r = std::sqrt(u.x);
     Float theta = two_pi * u.y;
     return Vec3(r * std::cos(theta), r * std::sin(theta), 0.0f);
+}
+
+inline Float SampleExponential(Float u, Float a)
+{
+    return -std::log(1 - u) / a;
+}
+
+inline Float ExponentialPDF(Float x, Float a)
+{
+    return a * std::exp(-a * x);
 }
 
 // Importance sampling codes for microfacet functions

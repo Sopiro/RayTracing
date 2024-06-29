@@ -24,7 +24,7 @@ Spectrum BxDF::rho(std::span<const Point2> u1, std::span<const Float> uc, std::s
     Spectrum r(0);
     for (size_t i = 0; i < uc.size(); ++i)
     {
-        Vec3 wo = UniformSampleHemisphere(u1[i]);
+        Vec3 wo = SampleUniformHemisphere(u1[i]);
         if (wo.z == 0)
         {
             continue;

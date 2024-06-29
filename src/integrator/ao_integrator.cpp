@@ -18,8 +18,8 @@ Spectrum AmbientOcclusion::Li(const Ray& primary_ray, Sampler& sampler) const
         return Spectrum::black;
     }
 
-    Vec3 wi_local = CosineSampleHemisphere(sampler.Next2D());
-    Float pdf = CosineSampleHemispherePDF(wi_local.z);
+    Vec3 wi_local = SampleCosineHemisphere(sampler.Next2D());
+    Float pdf = CosineHemispherePDF(wi_local.z);
 
     if (wi_local.z <= 0)
     {

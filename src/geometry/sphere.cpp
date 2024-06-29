@@ -93,7 +93,7 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 PrimitiveSample Sphere::Sample(const Point2& u) const
 {
     PrimitiveSample sample;
-    sample.normal = UniformSampleSphere(u);
+    sample.normal = SampleUniformSphere(u);
     sample.point = transform.p + sample.normal * radius;
 
     Float area = four_pi * radius * radius;

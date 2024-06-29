@@ -35,7 +35,7 @@ PerspectiveCamera::PerspectiveCamera(const Point3& look_from,
 
 Float PerspectiveCamera::SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const
 {
-    Vec3 rd = lens_radius * UniformSampleUnitDiskXY(aperture_sample);
+    Vec3 rd = lens_radius * SampleUniformUnitDiskXY(aperture_sample);
     Vec3 offset = u * rd.x + v * rd.y;
 
     Vec3 camera_center = origin + offset;

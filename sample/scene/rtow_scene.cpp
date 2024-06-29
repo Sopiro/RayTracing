@@ -28,7 +28,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 {
                     auto mat = CreateRandomUnrealMaterial(scene);
                     scene.CreatePrimitive<Sphere>(
-                        Transform(center, Quat(DegToRad(Rand(0, 180)), UniformSampleSphere(RandVec2()))), 0.2f, mat);
+                        Transform(center, Quat(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()))), 0.2f, mat);
                 }
                 else
                 {

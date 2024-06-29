@@ -25,7 +25,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             pos.x = x * xstep - ((cx - 1) * xstep / 2);
             pos.z = z * zstep - ((cz - 1) * zstep / 2);
 
-            Quat rot(DegToRad(Rand(0, 180)), UniformSampleSphere(RandVec2()));
+            Quat rot(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()));
 
             auto mat = CreateRandomUnrealMaterial(scene);
             scene.CreatePrimitive<Sphere>(Transform{ pos, rot }, r, mat);
