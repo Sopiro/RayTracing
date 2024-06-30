@@ -69,6 +69,11 @@ inline Vec3 SphericalDirection(Float theta, Float phi)
     return Vec3(std::cos(phi) * sin_theta, std::cos(theta), std::sin(phi) * sin_theta);
 }
 
+constexpr inline Vec3 SphericalDirection(Float sin_theta, Float cos_theta, Float phi)
+{
+    return Vec3(std::cos(phi) * sin_theta, cos_theta, std::sin(phi) * sin_theta);
+}
+
 constexpr inline Vec3 SphericalDirection(Float sin_theta, Float cos_theta, Float sin_phi, Float cos_phi)
 {
     return Vec3(cos_phi * sin_theta, cos_theta, sin_phi * sin_theta);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "frame.h"
 
 namespace bulbit
 {
@@ -124,8 +125,6 @@ inline Float ExponentialPDF(Float x, Float a)
     return a * std::exp(-a * x);
 }
 
-// Importance sampling codes for microfacet functions
-
 inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 {
     Float theta = std::acos(std::sqrt((1 - u.x) / ((alpha2 - 1) * u.x + 1)));
@@ -149,9 +148,9 @@ inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
     // sample a spherical cap in (-wo.z, 1]
     Float phi = two_pi * u.x;
     Float z = std::fma((1 - u.y), (1 + wo.z), -wo.z);
-    Float sinTheta = std::sqrt(Clamp(1 - z * z, 0, 1));
-    Float x = sinTheta * std::cos(phi);
-    Float y = sinTheta * std::sin(phi);
+    Float sin_theta = std::sqrt(Clamp(1 - z * z, 0, 1));
+    Float x = sin_theta * std::cos(phi);
+    Float y = sin_theta * std::sin(phi);
     Vec3 c = Vec3(x, y, z);
     // compute halfway direction;
     Vec3 h = c + wo;
@@ -200,6 +199,43 @@ inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
     Vec3 h = Normalize(Vec3(alpha_x * Nh.x, alpha_y * Nh.y, std::fmax(0.0f, Nh.z))); // Sampled half vector
 
     return h;
+}
+
+inline Float HenyeyGreenstein(Float cos_theta, Float g)
+{
+    Float denom = 1 + Sqr(g) + 2 * g * cos_theta;
+    return inv_four_pi * (1 - Sqr(g)) / (denom * SafeSqrt(denom));
+}
+
+inline Vec3 SampleHenyeyGreenstein(Vec3 wo, Float g, Point2 u, Float* pdf)
+{
+    g = Clamp(g, -1 + epsilon, 1 - epsilon);
+
+    Float cos_theta;
+    if (std::abs(g) < 1e-3f)
+    {
+        cos_theta = 1 - 2 * u[0];
+    }
+    else
+    {
+        cos_theta = -1 / (2 * g) * (1 + Sqr(g) - Sqr((1 - Sqr(g)) / (1 + g - 2 * g * u[0])));
+    }
+
+    // Compute direction wi with respect to the default scattering coordinate
+    Float sin_theta = SafeSqrt(1 - Sqr(cos_theta));
+    Float phi = two_pi * u[1];
+    Vec3 wi_local = SphericalDirection(sin_theta, cos_theta, phi);
+
+    // Return back to the wo’s coordinate system
+    Frame frame = Frame::FromZ(wo);
+    Vec3 wi = frame.FromLocal(wi_local);
+
+    if (pdf)
+    {
+        *pdf = HenyeyGreenstein(cos_theta, g);
+    }
+
+    return wi;
 }
 
 struct Distribution1D

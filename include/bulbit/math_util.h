@@ -47,6 +47,11 @@ constexpr inline T Sqr(T v)
     return v * v;
 }
 
+inline Float SafeSqrt(Float x)
+{
+    return std::sqrt(std::max<Float>(0, x));
+}
+
 constexpr inline Float DegToRad(Float deg)
 {
     return deg * pi / 180;
