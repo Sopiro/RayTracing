@@ -11,9 +11,9 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
     Ray r = MulT(transform, ray);
 
     Vec3 oc = r.o;
-    Float a = r.d.Length2();
+    Float a = Length2(r.d);
     Float half_b = Dot(oc, r.d);
-    Float c = oc.Length2() - radius * radius;
+    Float c = Length2(oc) - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
     if (discriminant < 0)
@@ -61,9 +61,9 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
     Ray r = MulT(transform, ray);
 
     Vec3 oc = r.o;
-    Float a = r.d.Length2();
+    Float a = Length2(r.d);
     Float half_b = Dot(oc, r.d);
-    Float c = oc.Length2() - radius * radius;
+    Float c = Length2(oc) - radius * radius;
 
     Float discriminant = half_b * half_b - a * c;
     if (discriminant < 0)

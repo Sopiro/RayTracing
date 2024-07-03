@@ -35,7 +35,7 @@ constexpr inline Vec3 z_axis{ 0, 0, 1 };
 template <template <typename> class V, typename T>
 inline V<T> Normalize(const V<T>& v)
 {
-    T inv_length = T(1) / v.Length();
+    T inv_length = T(1) / Length(v);
     return v * inv_length;
 }
 
@@ -43,7 +43,7 @@ template <template <typename> class V, typename T>
 inline V<T> NormalizeSafe(const V<T>& v)
 {
     T length = v.Length();
-    if (length < std::numeric_limits<T>::epsilon)
+    if (length < std::numeric_limits<T>::epsilon())
     {
         return T::zero;
     }
