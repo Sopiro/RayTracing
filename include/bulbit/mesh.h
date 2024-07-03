@@ -2,6 +2,7 @@
 
 #include "intersectable.h"
 #include "material.h"
+#include "matrix.h"
 #include "microfacet.h"
 
 namespace bulbit

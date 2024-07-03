@@ -2,7 +2,6 @@
 
 #include "assert.h"
 #include "math.h"
-#include "math_util.h"
 
 #include <format>
 
@@ -103,7 +102,7 @@ inline RGBSpectrum operator*(const RGBSpectrum& sp, Float s)
 
 inline RGBSpectrum operator*(Float s, const RGBSpectrum& sp)
 {
-    return operator*(sp, s);
+    return RGBSpectrum(sp.r * s, sp.g * s, sp.b * s);
 }
 
 inline RGBSpectrum operator*(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
@@ -113,12 +112,12 @@ inline RGBSpectrum operator*(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
 
 inline RGBSpectrum operator/(const RGBSpectrum& sp, Float s)
 {
-    return sp * (1 / s);
+    return RGBSpectrum(sp.r / s, sp.g / s, sp.b / s);
 }
 
 inline RGBSpectrum operator/(Float s, const RGBSpectrum& sp)
 {
-    return (1 / s) * sp;
+    return RGBSpectrum(s / sp.r, s / sp.g, s / sp.b);
 }
 
 inline RGBSpectrum operator/(const RGBSpectrum& sp1, const RGBSpectrum& sp2)

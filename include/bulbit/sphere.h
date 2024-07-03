@@ -65,7 +65,7 @@ inline Float Sphere::EvaluatePDF(const Ray& ray) const
 
 inline Float Sphere::PDF(const Intersection& hit_is, const Ray& hit_ray) const
 {
-    Float distance_squared = (transform.p - hit_ray.o).Length2();
+    Float distance_squared = Length2(transform.p - hit_ray.o);
     Float cos_theta_max = std::sqrt(1 - radius * radius / distance_squared);
     Float solid_angle = two_pi * (1 - cos_theta_max);
 

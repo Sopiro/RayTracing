@@ -68,8 +68,8 @@ inline Float Triangle::EvaluatePDF(const Ray& ray) const
 
 inline Float Triangle::PDF(const Intersection& hit_is, const Ray& hit_ray) const
 {
-    Float distance_squared = hit_is.t * hit_is.t * hit_ray.d.Length2();
-    Float cosine = std::fabs(Dot(hit_ray.d, hit_is.normal) / hit_ray.d.Length());
+    Float distance_squared = hit_is.t * hit_is.t * Length2(hit_ray.d);
+    Float cosine = std::fabs(Dot(hit_ray.d, hit_is.normal) / Length(hit_ray.d));
 
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -78,7 +78,7 @@ inline Float Triangle::PDF(const Intersection& hit_is, const Ray& hit_ray) const
     Vec3 e1 = p1 - p0;
     Vec3 e2 = p2 - p0;
 
-    Float area = 0.5f * Cross(e1, e2).Length();
+    Float area = 0.5f * Length(Cross(e1, e2));
 
     return distance_squared / (cosine * area);
 }
