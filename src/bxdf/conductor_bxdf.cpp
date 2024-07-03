@@ -17,7 +17,7 @@ Spectrum ConductorBxDF::f(const Vec3& wo, const Vec3& wi) const
     Float cos_theta_i = AbsCosTheta(wi);
     if (cos_theta_i == 0 || cos_theta_o == 0)
     {
-        Spectrum::black;
+        return Spectrum::black;
     }
 
     Vec3 wm = wo + wi;
@@ -93,7 +93,7 @@ bool ConductorBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, 
     Float cos_theta_i = AbsCosTheta(wi);
     if (cos_theta_i == 0 || cos_theta_o == 0)
     {
-        false;
+        return false;
     }
 
     Float pdf = mf.PDF(wo, wm) / (4 * AbsDot(wo, wm));

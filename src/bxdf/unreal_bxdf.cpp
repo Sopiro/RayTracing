@@ -16,7 +16,7 @@ Spectrum UnrealBxDF::f(const Vec3& wo, const Vec3& wi) const
     Float cos_theta_i = AbsCosTheta(wi);
     if (cos_theta_i == 0 || cos_theta_o == 0)
     {
-        RGBSpectrum::black;
+        return Spectrum::black;
     }
 
     Vec3 wm = wo + wi;
@@ -120,7 +120,7 @@ bool UnrealBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxD
     Float cos_theta_i = AbsCosTheta(wi);
     if (cos_theta_i == 0 || cos_theta_o == 0)
     {
-        false;
+        return false;
     }
 
     Spectrum f0 = F0(basecolor, metallic);
