@@ -1,7 +1,7 @@
 #pragma once
 
 #include "matrix.h"
-#include "vector.h"
+#include "vectors.h"
 
 namespace bulbit
 {

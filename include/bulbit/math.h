@@ -4,7 +4,7 @@
 #pragma once
 
 #include "floats.h"
-#include "vector.h"
+#include "vectors.h"
 
 namespace bulbit
 {

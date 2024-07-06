@@ -1,7 +1,7 @@
 #pragma once
 
 #include "quaternion.h"
-#include "vector.h"
+#include "vectors.h"
 
 namespace bulbit
 {
