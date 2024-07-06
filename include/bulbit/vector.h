@@ -35,19 +35,9 @@ struct Vector2 : public Tuple2<Vector2, T>
         y = -y;
     }
 
-    T Length2() const
-    {
-        return x * x + y * y;
-    }
-
-    T Length() const
-    {
-        return std::sqrt(Length2());
-    }
-
     T Normalize()
     {
-        T length = Length();
+        T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
         {
             return T(0);
@@ -98,19 +88,9 @@ struct Vector3 : public Tuple3<Vector3, T>
         z = -z;
     }
 
-    T Length2() const
-    {
-        return x * x + y * y + z * z;
-    }
-
-    T Length() const
-    {
-        return std::sqrt(Length2());
-    }
-
     T Normalize()
     {
-        T length = Length();
+        T length = Length(*this);
         if (length < std::numeric_limits<T>::epsilon())
         {
             return T(0);

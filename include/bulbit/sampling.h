@@ -102,7 +102,7 @@ inline Vec3 SampleInsideUnitSphere(const Point2& u)
     {
         p = RandVec3(-1.0f, 1.0f);
     }
-    while (p.Length2() >= 1);
+    while (Length2(p) >= 1);
 
     return p;
 #endif

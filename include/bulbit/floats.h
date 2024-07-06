@@ -1,6 +1,5 @@
 #pragma once
 
-#include "common.h"
 #include "types.h"
 
 #ifdef BULBIT_DOUBLE_PRECISION

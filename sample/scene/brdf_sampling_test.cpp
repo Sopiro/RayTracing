@@ -65,7 +65,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 45;
 

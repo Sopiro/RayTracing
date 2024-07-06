@@ -26,7 +26,7 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
     Point3 lookfrom{ -21, 6, 0 };
     Point3 lookat{ 0, 1, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 54;
 

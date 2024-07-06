@@ -97,7 +97,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     Point3 lookfrom{ 0, 0.5f, 2 };
     Point3 lookat{ 0, 0.2f, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 30;
 

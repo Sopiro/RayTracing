@@ -69,7 +69,7 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
     Point3 lookfrom{ 0, 2, 15 };
     Point3 lookat{ 0, -2, 2.5f };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 28;
 
@@ -148,7 +148,7 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
     Point3 lookfrom{ 0, 2, 15 };
     Point3 lookat{ 0, -2, 2.5f };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 28;
 

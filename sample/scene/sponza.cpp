@@ -80,7 +80,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     Point3 lookfrom{ 0, 5, 6 };
     Point3 lookat{ 0, 5, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 71;
 

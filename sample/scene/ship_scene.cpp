@@ -66,7 +66,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     Point3 lookfrom{ 5, 5, 10 };
     Point3 lookat{ 0, 2.9f, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 25;
 

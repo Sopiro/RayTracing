@@ -40,7 +40,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
     Point3 lookfrom{ -4, 3.5f, -4 };
     Point3 lookat{ 0, 0, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0.02f;
     Float vFov = 30;
 

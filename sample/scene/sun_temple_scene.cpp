@@ -37,7 +37,7 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
     Point3 lookfrom{ -4.48045f, 9.22976f, -7.49469f };
     Point3 lookat{ 0, 8, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 54;
 

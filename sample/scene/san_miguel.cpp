@@ -36,7 +36,7 @@ std::unique_ptr<Camera> SanMiguel(Scene& scene)
     Point3 lookfrom{ 22.0f, 2, 5.0f };
     Point3 lookat{ 21.0f, 2, 4.5f };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 71;
 

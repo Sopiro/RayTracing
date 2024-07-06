@@ -22,7 +22,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
             auto choose_mat = Rand();
             Vec3 center(a + 0.9f * Rand(), 0.2f, b + 0.9f * Rand());
 
-            if ((center - Vec3(4, 0.2f, 0)).Length() > 0.9f)
+            if (Dist(center, Vec3(4, 0.2f, 0)) > 0.9f)
             {
                 if (choose_mat < 0.9f)
                 {

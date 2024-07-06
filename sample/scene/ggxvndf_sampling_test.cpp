@@ -38,7 +38,7 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
     Point3 lookfrom{ 0, 2, 10 };
     Point3 lookat{ 0, 1, 0 };
 
-    Float dist_to_focus = (lookfrom - lookat).Length();
+    Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0;
     Float vFov = 30;
 
