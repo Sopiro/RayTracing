@@ -14,7 +14,7 @@ public:
     Primitive(const Shape* shape, const Material* material);
 
     virtual AABB GetAABB() const override;
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
+    virtual bool Intersect(Intersection* out_isect, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
     const Material* GetMaterial() const;
@@ -36,16 +36,16 @@ inline AABB Primitive::GetAABB() const
     return shape->GetAABB();
 }
 
-inline bool Primitive::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+inline bool Primitive::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_max) const
 {
-    if (!shape->Intersect(out_is, ray, t_min, t_max))
+    if (!shape->Intersect(isect, ray, t_min, t_max))
     {
         return false;
     }
 
-    if (material->TestAlpha(out_is->uv))
+    if (material->TestAlpha(isect->uv))
     {
-        out_is->primitive = this;
+        isect->primitive = this;
         return true;
     }
     else
@@ -56,7 +56,8 @@ inline bool Primitive::Intersect(Intersection* out_is, const Ray& ray, Float t_m
 
 inline bool Primitive::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
-    return shape->IntersectAny(ray, t_min, t_max);
+    Intersection isect;
+    return Intersect(&isect, ray, t_min, t_max);
 }
 
 inline const Shape* Primitive::GetShape() const

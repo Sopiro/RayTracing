@@ -23,7 +23,7 @@ MediumSample HomogeneousMedium::SamplePoint(Point3 p) const
 
 RayMajorantIterator* HomogeneousMedium::SampleRay(Ray ray, Float t_max, Allocator& alloc) const
 {
-    return alloc.new_object<HomogeneousMajorantIterator>(0.0f, t_max, sigma_a + sigma_s);
+    return alloc.new_object<HomogeneousMajorantIterator>(Float(0), t_max, sigma_a + sigma_s);
 }
 
 } // namespace bulbit

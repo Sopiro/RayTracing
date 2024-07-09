@@ -23,9 +23,9 @@ protected:
     {
     }
 
-    bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+    bool Intersect(Intersection* out_isect, const Ray& ray, Float t_min, Float t_max) const
     {
-        return accel->Intersect(out_is, ray, t_min, t_max);
+        return accel->Intersect(out_isect, ray, t_min, t_max);
     }
 
     bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const

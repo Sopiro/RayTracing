@@ -36,7 +36,7 @@ public:
     virtual ~Intersectable() = default;
 
     virtual AABB GetAABB() const = 0;
-    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const = 0;
+    virtual bool Intersect(Intersection* out_isect, const Ray& ray, Float t_min, Float t_max) const = 0;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const = 0;
 };
 

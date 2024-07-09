@@ -23,12 +23,12 @@ OrthographicCamera::OrthographicCamera(const Point3& look_from,
     lower_left = origin - horizontal / 2 - vertical / 2;
 }
 
-Float OrthographicCamera::SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const
+Float OrthographicCamera::SampleRay(Ray* ray, const Point2& film_sample, const Point2& aperture_sample) const
 {
     Vec3 pixel_center = lower_left + horizontal * (film_sample.x / width) + vertical * (film_sample.y / height);
 
-    out_ray->o = pixel_center;
-    out_ray->d = -w;
+    ray->o = pixel_center;
+    ray->d = -w;
 
     return 1;
 }

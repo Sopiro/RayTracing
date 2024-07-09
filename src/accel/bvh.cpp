@@ -292,23 +292,23 @@ int32 BVH::FlattenBVH(BuildNode* node, int32* offset)
     return node_offset;
 }
 
-bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+bool BVH::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_max) const
 {
     struct Callback
     {
-        Intersection* is;
+        Intersection* isect;
         bool hit_closest;
         Float t;
 
         Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
         {
-            bool hit = object->Intersect(is, ray, t_min, t_max);
+            bool hit = object->Intersect(isect, ray, t_min, t_max);
 
             if (hit)
             {
-                assert(is->t <= t);
+                assert(isect->t <= t);
                 hit_closest = true;
-                t = is->t;
+                t = isect->t;
             }
 
             // Keep traverse with smaller bounds
@@ -316,7 +316,7 @@ bool BVH::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_m
         }
     } callback;
 
-    callback.is = out_is;
+    callback.isect = isect;
     callback.hit_closest = false;
     callback.t = t_max;
 
