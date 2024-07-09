@@ -194,8 +194,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
     }
 
     Mesh* m = g_scene->CreateMesh(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                  std::move(indices), LoadMaterial(mesh, scene), transform);
-    CreateTriangles(*g_scene, m);
+                                  std::move(indices), transform);
+    CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene));
 }
 
 static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

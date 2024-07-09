@@ -49,19 +49,11 @@ bool Triangle::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float
     }
 
     // Found intersection
-
     Float w = 1 - u - v;
-    Point2 uv = GetTexCoord(u, v, w);
 
-    if (mesh->material->TestAlpha(uv) == false)
-    {
-        return false;
-    }
-
-    isect->primitive = this;
     isect->t = t;
     isect->point = ray.At(t);
-    isect->uv = uv;
+    isect->uv = GetTexCoord(u, v, w);
 
     Vec3 normal = Normalize(Cross(e1, e2));
     SetFaceNormal(isect, ray.d, normal, GetNormal(u, v, w), GetTangent(u, v, w));
@@ -113,13 +105,10 @@ bool Triangle::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
         return false;
     }
 
-    Float w = 1 - u - v;
-    Point2 uv = GetTexCoord(u, v, w);
-
-    return mesh->material->TestAlpha(uv);
+    return true;
 }
 
-PrimitiveSample Triangle::Sample(const Point2& u0) const
+ShapeSample Triangle::Sample(const Point2& u0) const
 {
     const Point3& p0 = mesh->positions[v[0]];
     const Point3& p1 = mesh->positions[v[1]];
@@ -138,7 +127,7 @@ PrimitiveSample Triangle::Sample(const Point2& u0) const
         v = 1 - v;
     }
 
-    PrimitiveSample sample;
+    ShapeSample sample;
     sample.normal = Cross(e1, e2);
     sample.point = p0 + e1 * u + e2 * v;
 
@@ -156,7 +145,7 @@ PrimitiveSample Triangle::Sample(const Point2& u0) const
     Float u = 1.0 - s;
     Float v = u2 * s;
 
-    PrimitiveSample sample;
+    ShapeSample sample;
     sample.normal = Cross(e1, e2);
     sample.point = p0 + e1 * u + e2 * v;
 
@@ -169,9 +158,9 @@ PrimitiveSample Triangle::Sample(const Point2& u0) const
 #endif
 }
 
-PrimitiveSample Triangle::Sample(const Point3& ref, const Point2& u) const
+ShapeSample Triangle::Sample(const Point3& ref, const Point2& u) const
 {
-    PrimitiveSample sample = Sample(u);
+    ShapeSample sample = Sample(u);
 
     Vec3 d = sample.point - ref;
     Float distance_squared = Dot(d, d);

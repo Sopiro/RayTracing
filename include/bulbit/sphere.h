@@ -1,49 +1,43 @@
 #pragma once
 
-#include "primitive.h"
 #include "ray.h"
+#include "shape.h"
 
 namespace bulbit
 {
 
-class Sphere : public Primitive
+class Sphere : public Shape
 {
 public:
-    Sphere(const Vec3& center, Float radius, const Material* material);
-    Sphere(const Transform& transform, Float radius, const Material* material);
+    Sphere(const Vec3& center, Float radius);
+    Sphere(const Transform& transform, Float radius);
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    virtual PrimitiveSample Sample(const Point2& u) const override;
-    virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const override;
+    virtual ShapeSample Sample(const Point2& u) const override;
+    virtual ShapeSample Sample(const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const override;
-
-    virtual const Material* GetMaterial() const override;
 
     Transform transform;
     Float radius;
 
 private:
     static inline Point2 ComputeTexCoord(const Vec3& v);
-
-    const Material* material;
 };
 
-inline Sphere::Sphere(const Vec3& center, Float radius, const Material* material)
+inline Sphere::Sphere(const Vec3& center, Float radius)
     : transform{ center, identity }
     , radius{ radius }
-    , material{ material }
 {
 }
 
-inline Sphere::Sphere(const Transform& transform, Float radius, const Material* material)
+inline Sphere::Sphere(const Transform& transform, Float radius)
     : transform{ transform }
     , radius{ radius }
-    , material{ material }
 {
 }
 
@@ -70,11 +64,6 @@ inline Float Sphere::PDF(const Intersection& hit_is, const Ray& hit_ray) const
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
     return 1 / solid_angle;
-}
-
-inline const Material* Sphere::GetMaterial() const
-{
-    return material;
 }
 
 inline Point2 Sphere::ComputeTexCoord(const Vec3& v)

@@ -28,7 +28,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
             Quat rot(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()));
 
             auto mat = CreateRandomUnrealMaterial(scene);
-            scene.CreatePrimitive<Sphere>(Transform{ pos, rot }, r, mat);
+            CreateSphere(scene, Transform{ pos, rot }, r, mat);
         }
     }
 

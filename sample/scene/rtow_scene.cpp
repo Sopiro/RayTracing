@@ -27,29 +27,29 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 if (choose_mat < 0.9f)
                 {
                     auto mat = CreateRandomUnrealMaterial(scene);
-                    scene.CreatePrimitive<Sphere>(
-                        Transform(center, Quat(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()))), 0.2f, mat);
+                    CreateSphere(scene, Transform(center, Quat(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()))), 0.2f,
+                                 mat);
                 }
                 else
                 {
                     // glass
                     auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(Rand(0.001f, 0.3f)));
-                    scene.CreatePrimitive<Sphere>(center, 0.2f, glass);
+                    CreateSphere(scene, center, 0.2f, glass);
                 }
             }
         }
     }
 
     auto material1 = scene.CreateMaterial<DielectricMaterial>(1.5f);
-    scene.CreatePrimitive<Sphere>(Vec3(0, 1, 0), 1.0f, material1);
+    CreateSphere(scene, Vec3(0, 1, 0), 1.0f, material1);
 
     auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
-    scene.CreatePrimitive<Sphere>(Vec3(-4, 1, 0), 1.0f, material2);
+    CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2);
 
     auto material3 = scene.CreateMaterial<ConductorMaterial>(
         ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2), ConstantFloatTexture::Create(0.01f),
         ConstantFloatTexture::Create(0.01f));
-    scene.CreatePrimitive<Sphere>(Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3);
+    CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3);
 
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");

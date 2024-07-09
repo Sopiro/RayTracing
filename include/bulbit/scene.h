@@ -21,6 +21,8 @@ public:
     template <typename T, typename... Args>
     T* CreateLight(Args&&... args);
     template <typename T, typename... Args>
+    T* CreateShape(Args&&... args);
+    template <typename T, typename... Args>
     T* CreatePrimitive(Args&&... args);
     template <typename... Args>
     Mesh* CreateMesh(Args&&... args);
@@ -35,6 +37,7 @@ private:
 
     std::vector<Material*> materials;
     std::vector<Light*> lights;
+    std::vector<Shape*> shapes;
     std::vector<Primitive*> primitives;
     std::vector<std::unique_ptr<Mesh>> meshes;
 };
@@ -50,14 +53,19 @@ inline Scene::~Scene() noexcept
 {
     // Free all pooled resources
 
-    for (Primitive* p : primitives)
+    for (Shape* s : shapes)
     {
-        allocator.delete_object(p);
+        allocator.delete_object(s);
     }
 
     for (Material* m : materials)
     {
         allocator.delete_object(m);
+    }
+
+    for (Primitive* p : primitives)
+    {
+        allocator.delete_object(p);
     }
 
     for (Light* l : lights)
@@ -80,6 +88,14 @@ inline T* Scene::CreateLight(Args&&... args)
     T* l = allocator.new_object<T>(std::forward<Args>(args)...);
     lights.push_back(l);
     return l;
+}
+
+template <typename T, typename... Args>
+inline T* Scene::CreateShape(Args&&... args)
+{
+    T* p = allocator.new_object<T>(std::forward<Args>(args)...);
+    shapes.push_back(p);
+    return p;
 }
 
 template <typename T, typename... Args>

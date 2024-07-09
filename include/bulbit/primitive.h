@@ -1,56 +1,72 @@
 #pragma once
 
 #include "intersectable.h"
+#include "material.h"
 #include "medium.h"
+#include "shape.h"
 
 namespace bulbit
 {
 
-struct PrimitiveSample
-{
-    Point3 point;
-    Vec3 normal;
-    Float pdf;
-};
-
-// Represents a geometric primitive
 class Primitive : public Intersectable
 {
 public:
-    virtual ~Primitive() = default;
+    Primitive(const Shape* shape, const Material* material);
 
-    // Returns random point on the surface
-    virtual PrimitiveSample Sample(const Point2& u) const = 0;
+    virtual AABB GetAABB() const override;
+    virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
+    virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    // Returns random point relative to the reference point
-    virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const = 0;
+    const Material* GetMaterial() const;
+    const Shape* GetShape() const;
 
-    virtual Float EvaluatePDF(const Ray& ray) const = 0;
-    virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const = 0;
+private:
+    const Shape* shape;
+    const Material* material;
+};
 
-    virtual const Material* GetMaterial() const = 0;
+inline Primitive::Primitive(const Shape* shape, const Material* material)
+    : shape{ shape }
+    , material{ material }
+{
+}
 
-protected:
-    static inline void SetFaceNormal(
-        Intersection* isect, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
+inline AABB Primitive::GetAABB() const
+{
+    return shape->GetAABB();
+}
+
+inline bool Primitive::Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const
+{
+    if (!shape->Intersect(out_is, ray, t_min, t_max))
     {
-        if (Dot(wi, outward_normal) < 0)
-        {
-            isect->front_face = true;
-            isect->normal = outward_normal;
-            isect->shading.normal = shading_normal;
-            isect->shading.tangent = shading_tangent;
-        }
-        else
-        {
-            isect->front_face = false;
-            isect->normal = -outward_normal;
-            isect->shading.normal = -shading_normal;
-            isect->shading.tangent = -shading_tangent;
-        }
+        return false;
     }
 
-    MediumInterface medium_interface;
-};
+    if (material->TestAlpha(out_is->uv))
+    {
+        out_is->primitive = this;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+inline bool Primitive::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
+{
+    return shape->IntersectAny(ray, t_min, t_max);
+}
+
+inline const Shape* Primitive::GetShape() const
+{
+    return shape;
+}
+
+inline const Material* Primitive::GetMaterial() const
+{
+    return material;
+}
 
 } // namespace bulbit

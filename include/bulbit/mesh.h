@@ -25,12 +25,8 @@ public:
          std::vector<Vec3> tangents,
          std::vector<Point2> texCoords,
          std::vector<int32> indices,
-         const Material* material,
          const Mat4& transform);
-    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Material* material, const Mat4& transform);
-
-    const Material* GetMaterial() const;
-    void SetMaterial(const Material* material);
+    Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Mat4& transform);
 
     int32 GetTriangleCount() const;
 
@@ -44,19 +40,7 @@ private:
     std::vector<Vec3> tangents;
     std::vector<Point2> texCoords;
     std::vector<int32> indices;
-
-    const Material* material;
 };
-
-inline const Material* Mesh::GetMaterial() const
-{
-    return material;
-}
-
-inline void Mesh::SetMaterial(const Material* mat)
-{
-    material = mat;
-}
 
 inline int32 Mesh::GetTriangleCount() const
 {

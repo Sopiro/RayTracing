@@ -12,7 +12,8 @@ class Scene;
 bool GetAreaLightSourceCreationEnabled();
 void SetAreaLightSourceCreationEnabled(bool enabled);
 
-void CreateTriangles(Scene& scene, const Mesh* mesh, bool area_light = false);
+void CreateSphere(Scene& scene, Transform tf, Float radius, const Material* material, bool area_light = false);
+void CreateTriangles(Scene& scene, const Mesh* mesh, const Material* material, bool area_light = false);
 
 void CreateRectXY(Scene& scene,
                   const Transform& transform,

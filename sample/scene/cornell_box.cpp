@@ -69,8 +69,8 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
         //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
         //     ConstantFloatTexture::Create(0.3f), ConstantFloatTexture::Create(0.1f));
-        // scene.CreatePrimitive<Sphere>(Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
-        // scene.CreatePrimitive<Sphere>(Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
+        // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
+        // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
     }
 
     // Lights
@@ -78,7 +78,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
         CreateRectXZ(scene, tf, light);
 
-        // scene.CreatePrimitive<Sphere>(Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
+        // CreateSphere(scene, Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
         // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f);
         // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");

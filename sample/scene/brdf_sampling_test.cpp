@@ -49,7 +49,7 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
                                                         ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f));
 
         Float r = 0.25;
-        scene.CreatePrimitive<Sphere>(Vec3(0.5f, r, -0.5f), r, mat);
+        CreateSphere(scene, Vec3(0.5f, r, -0.5f), r, mat);
     }
 
     // scene.Rebuild();

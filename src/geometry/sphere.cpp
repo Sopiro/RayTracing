@@ -38,16 +38,9 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
     Point3 point = r.At(root);
     Vec3 normal = point / radius;
 
-    Point2 uv = ComputeTexCoord(normal);
-    if (material->TestAlpha(uv) == false)
-    {
-        return false;
-    }
-
-    isect->primitive = this;
     isect->t = root;
     isect->point = Mul(transform, point);
-    isect->uv = uv;
+    isect->uv = ComputeTexCoord(normal);
 
     Vec3 n = transform.q.Rotate(normal);
     Vec3 t = transform.q.Rotate(Normalize(Cross(y_axis, normal)));
@@ -83,16 +76,12 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
         }
     }
 
-    Point3 point = r.At(root);
-    Vec3 normal = point / radius;
-    Point2 uv = ComputeTexCoord(normal);
-
-    return material->TestAlpha(uv);
+    return true;
 }
 
-PrimitiveSample Sphere::Sample(const Point2& u) const
+ShapeSample Sphere::Sample(const Point2& u) const
 {
-    PrimitiveSample sample;
+    ShapeSample sample;
     sample.normal = SampleUniformSphere(u);
     sample.point = transform.p + sample.normal * radius;
 
@@ -103,7 +92,7 @@ PrimitiveSample Sphere::Sample(const Point2& u) const
     return sample;
 }
 
-PrimitiveSample Sphere::Sample(const Point3& ref, const Point2& u) const
+ShapeSample Sphere::Sample(const Point3& ref, const Point2& u) const
 {
     Vec3 direction = transform.p - ref;
     Float distance = direction.Normalize();
@@ -128,7 +117,7 @@ PrimitiveSample Sphere::Sample(const Point3& ref, const Point2& u) const
 
     Float solid_angle = two_pi * (1 - cos_theta_max);
 
-    PrimitiveSample sample;
+    ShapeSample sample;
     sample.point = ref + ref2p;
     sample.normal = Normalize(sample.point - transform.p);
     sample.pdf = 1 / solid_angle;

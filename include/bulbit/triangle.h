@@ -1,13 +1,13 @@
 #pragma once
 
 #include "mesh.h"
-#include "primitive.h"
 #include "ray.h"
+#include "shape.h"
 
 namespace bulbit
 {
 
-class Triangle : public Primitive
+class Triangle : public Shape
 {
 public:
     Triangle(const Mesh* mesh, size_t tri_index);
@@ -16,13 +16,11 @@ public:
     virtual bool Intersect(Intersection* out_is, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    virtual PrimitiveSample Sample(const Point2& u) const override;
-    virtual PrimitiveSample Sample(const Point3& ref, const Point2& u) const override;
+    virtual ShapeSample Sample(const Point2& u) const override;
+    virtual ShapeSample Sample(const Point3& ref, const Point2& u) const override;
 
     virtual Float EvaluatePDF(const Ray& ray) const override;
     virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const override;
-
-    virtual const Material* GetMaterial() const override;
 
 private:
     friend class Scene;
@@ -81,11 +79,6 @@ inline Float Triangle::PDF(const Intersection& hit_is, const Ray& hit_ray) const
     Float area = 0.5f * Length(Cross(e1, e2));
 
     return distance_squared / (cosine * area);
-}
-
-inline const Material* Triangle::GetMaterial() const
-{
-    return mesh->material;
 }
 
 inline Vec3 Triangle::GetNormal(Float tu, Float tv, Float tw) const

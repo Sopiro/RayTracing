@@ -17,8 +17,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
 
     {
         auto red = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(14.0f, 0.0f, 0.0f));
-        auto s = scene.CreatePrimitive<Sphere>(Vec3(0.0f, 3.0f, -4.0f), 1.0f, red);
-        scene.CreateLight<AreaLight>(s);
+        CreateSphere(scene, Vec3(0.0f, 3.0f, -4.0f), 1.0f, red);
     }
 
     {
