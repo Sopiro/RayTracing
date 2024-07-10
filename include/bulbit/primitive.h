@@ -11,23 +11,26 @@ namespace bulbit
 class Primitive : public Intersectable
 {
 public:
-    Primitive(const Shape* shape, const Material* material);
+    Primitive(const Shape* shape, const Material* material, const MediumInterface& medium_interface);
 
     virtual AABB GetAABB() const override;
     virtual bool Intersect(Intersection* out_isect, const Ray& ray, Float t_min, Float t_max) const override;
     virtual bool IntersectAny(const Ray& ray, Float t_min, Float t_max) const override;
 
-    const Material* GetMaterial() const;
     const Shape* GetShape() const;
+    const Material* GetMaterial() const;
+    const MediumInterface* GetMediumInterface() const;
 
 private:
     const Shape* shape;
     const Material* material;
+    MediumInterface medium_interface;
 };
 
-inline Primitive::Primitive(const Shape* shape, const Material* material)
+inline Primitive::Primitive(const Shape* shape, const Material* material, const MediumInterface& medium_interface)
     : shape{ shape }
     , material{ material }
+    , medium_interface{ medium_interface }
 {
 }
 
@@ -68,6 +71,11 @@ inline const Shape* Primitive::GetShape() const
 inline const Material* Primitive::GetMaterial() const
 {
     return material;
+}
+
+inline const MediumInterface* Primitive::GetMediumInterface() const
+{
+    return &medium_interface;
 }
 
 } // namespace bulbit

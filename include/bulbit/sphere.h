@@ -26,7 +26,7 @@ public:
     Float radius;
 
 private:
-    static inline Point2 ComputeTexCoord(const Vec3& v);
+    static Point2 ComputeTexCoord(const Vec3& v);
 };
 
 inline Sphere::Sphere(const Vec3& center, Float radius)

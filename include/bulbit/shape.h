@@ -8,25 +8,6 @@
 namespace bulbit
 {
 
-inline void SetFaceNormal(
-    Intersection* isect, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
-{
-    if (Dot(wi, outward_normal) < 0)
-    {
-        isect->front_face = true;
-        isect->normal = outward_normal;
-        isect->shading.normal = shading_normal;
-        isect->shading.tangent = shading_tangent;
-    }
-    else
-    {
-        isect->front_face = false;
-        isect->normal = -outward_normal;
-        isect->shading.normal = -shading_normal;
-        isect->shading.tangent = -shading_tangent;
-    }
-}
-
 struct ShapeSample
 {
     Point3 point;
@@ -47,6 +28,19 @@ public:
 
     virtual Float EvaluatePDF(const Ray& ray) const = 0;
     virtual Float PDF(const Intersection& hit_is, const Ray& hit_ray) const = 0;
+
+protected:
+    static void SetFaceNormal(
+        Intersection* isect, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
+    {
+        bool front_face = Dot(wi, outward_normal) < 0;
+        Float sign = front_face ? 1 : -1;
+
+        isect->front_face = front_face;
+        isect->normal = sign * outward_normal;
+        isect->shading.normal = sign * shading_normal;
+        isect->shading.tangent = sign * shading_tangent;
+    }
 };
 
 } // namespace bulbit

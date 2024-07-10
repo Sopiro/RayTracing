@@ -12,20 +12,20 @@ AreaLight::AreaLight(const Primitive* primitive)
 
 LightSample AreaLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
-    ShapeSample ps = primitive->GetShape()->Sample(ref.point, u);
-    Vec3 ref2p = ps.point - ref.point;
+    ShapeSample shape_sample = primitive->GetShape()->Sample(ref.point, u);
+    Vec3 ref2p = shape_sample.point - ref.point;
 
-    LightSample ls;
-    ls.visibility = ref2p.Normalize() - Ray::epsilon;
-    ls.wi = ref2p;
-    ls.pdf = ps.pdf;
+    LightSample light_sample;
+    light_sample.visibility = ref2p.Normalize() - Ray::epsilon;
+    light_sample.wi = ref2p;
+    light_sample.pdf = shape_sample.pdf;
 
-    Intersection is;
-    is.point = ps.point;
-    is.front_face = Dot(ps.normal, ref2p) < 0;
-    ls.Li = primitive->GetMaterial()->Le(is, ref2p);
+    Intersection isect;
+    isect.point = shape_sample.point;
+    isect.front_face = Dot(shape_sample.normal, ref2p) < 0;
+    light_sample.Li = primitive->GetMaterial()->Le(isect, ref2p);
 
-    return ls;
+    return light_sample;
 }
 
 Float AreaLight::EvaluatePDF(const Ray& ray) const

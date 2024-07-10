@@ -2,6 +2,7 @@
 
 #include "light.h"
 #include "material.h"
+#include "medium.h"
 #include "mesh.h"
 
 namespace bulbit
@@ -17,13 +18,15 @@ public:
     Scene& operator=(const Scene&) = delete;
 
     template <typename T, typename... Args>
-    T* CreateMaterial(Args&&... args);
-    template <typename T, typename... Args>
-    T* CreateLight(Args&&... args);
-    template <typename T, typename... Args>
     T* CreateShape(Args&&... args);
     template <typename T, typename... Args>
+    T* CreateMaterial(Args&&... args);
+    template <typename T, typename... Args>
+    T* CreateMedium(Args&&... args);
+    template <typename T, typename... Args>
     T* CreatePrimitive(Args&&... args);
+    template <typename T, typename... Args>
+    T* CreateLight(Args&&... args);
     template <typename... Args>
     Mesh* CreateMesh(Args&&... args);
 
@@ -35,10 +38,11 @@ private:
     PoolResource pool;
     Allocator allocator;
 
-    std::vector<Material*> materials;
-    std::vector<Light*> lights;
     std::vector<Shape*> shapes;
+    std::vector<Material*> materials;
+    std::vector<Medium*> mediums;
     std::vector<Primitive*> primitives;
+    std::vector<Light*> lights;
     std::vector<std::unique_ptr<Mesh>> meshes;
 };
 
@@ -72,6 +76,19 @@ inline Scene::~Scene() noexcept
     {
         allocator.delete_object(l);
     }
+
+    for (Medium* m : mediums)
+    {
+        allocator.delete_object(m);
+    }
+}
+
+template <typename T, typename... Args>
+inline T* Scene::CreateShape(Args&&... args)
+{
+    T* s = allocator.new_object<T>(std::forward<Args>(args)...);
+    shapes.push_back(s);
+    return s;
 }
 
 template <typename T, typename... Args>
@@ -83,19 +100,11 @@ inline T* Scene::CreateMaterial(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline T* Scene::CreateLight(Args&&... args)
+inline T* Scene::CreateMedium(Args&&... args)
 {
-    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
-    lights.push_back(l);
-    return l;
-}
-
-template <typename T, typename... Args>
-inline T* Scene::CreateShape(Args&&... args)
-{
-    T* p = allocator.new_object<T>(std::forward<Args>(args)...);
-    shapes.push_back(p);
-    return p;
+    T* m = allocator.new_object<T>(std::forward<Args>(args)...);
+    mediums.push_back(m);
+    return m;
 }
 
 template <typename T, typename... Args>
@@ -104,6 +113,14 @@ inline T* Scene::CreatePrimitive(Args&&... args)
     T* p = allocator.new_object<T>(std::forward<Args>(args)...);
     primitives.push_back(p);
     return p;
+}
+
+template <typename T, typename... Args>
+inline T* Scene::CreateLight(Args&&... args)
+{
+    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
+    lights.push_back(l);
+    return l;
 }
 
 template <typename... Args>

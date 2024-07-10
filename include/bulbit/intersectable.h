@@ -9,6 +9,7 @@ namespace bulbit
 class Material;
 class Primitive;
 class BSDF;
+class Medium;
 
 struct Intersection
 {
@@ -28,6 +29,7 @@ struct Intersection
 
     Spectrum Le(const Vec3& wo) const;
     bool GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc);
+    const Medium* GetMedium(const Vec3& w) const;
 };
 
 class Intersectable

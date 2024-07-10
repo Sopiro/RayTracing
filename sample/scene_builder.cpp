@@ -24,22 +24,24 @@ void SetAreaLightSourceCreationEnabled(bool enabled)
     g_create_area_light_source = enabled;
 }
 
-void CreateSphere(Scene& scene, Transform tf, Float radius, const Material* material, bool area_light)
+void CreateSphere(
+    Scene& scene, Transform tf, Float radius, const Material* material, const MediumInterface& medium_interface, bool area_light)
 {
-    const Sphere* sphere = scene.CreateShape<Sphere>(tf, radius);
-    const Primitive* primitive = scene.CreatePrimitive<Primitive>(sphere, material);
+    Sphere* sphere = scene.CreateShape<Sphere>(tf, radius);
+    Primitive* primitive = scene.CreatePrimitive<Primitive>(sphere, material, medium_interface);
     if (area_light || (g_create_area_light_source && material->GetType() == Material::Type::light_source))
     {
         scene.CreateLight<AreaLight>(primitive);
     }
 }
 
-void CreateTriangles(Scene& scene, const Mesh* mesh, const Material* material, bool area_light)
+void CreateTriangles(
+    Scene& scene, const Mesh* mesh, const Material* material, const MediumInterface& medium_interface, bool area_light)
 {
     for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
     {
-        const Triangle* triangle = scene.CreateShape<Triangle>(mesh, i);
-        const Primitive* primitive = scene.CreatePrimitive<Primitive>(triangle, material);
+        Triangle* triangle = scene.CreateShape<Triangle>(mesh, i);
+        Primitive* primitive = scene.CreatePrimitive<Primitive>(triangle, material, medium_interface);
         if (area_light || (g_create_area_light_source && material->GetType() == Material::Type::light_source))
         {
             scene.CreateLight<AreaLight>(primitive);
@@ -63,7 +65,7 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, area_light);
+    CreateTriangles(scene, m, mat, {}, area_light);
 };
 
 void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
@@ -82,7 +84,7 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, area_light);
+    CreateTriangles(scene, m, mat, {}, area_light);
 }
 
 void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
@@ -101,10 +103,15 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, area_light);
+    CreateTriangles(scene, m, mat, {}, area_light);
 }
 
-void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
+void CreateBox(Scene& scene,
+               const Transform& tf,
+               const Material* mat,
+               const Point2& tc,
+               const MediumInterface& medium_interface,
+               bool area_light)
 {
     /*
           7--------6
@@ -169,7 +176,7 @@ void CreateBox(Scene& scene, const Transform& tf, const Material* mat, const Poi
     // clang-format on
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, area_light);
+    CreateTriangles(scene, m, mat, medium_interface, area_light);
 }
 
 } // namespace bulbit
