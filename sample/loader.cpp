@@ -13,6 +13,7 @@ namespace bulbit
 static std::string g_folder;
 static Scene* g_scene = nullptr;
 static const Material* g_fallback_material = nullptr;
+static MediumInterface g_fallback_medium_interface = {};
 static int32 g_flip_normal = 1;
 
 void SetLoaderFlipNormal(bool flip_normal)
@@ -23,6 +24,11 @@ void SetLoaderFlipNormal(bool flip_normal)
 void SetLoaderFallbackMaterial(const Material* fallback_material)
 {
     g_fallback_material = fallback_material;
+}
+
+void SetLoaderFallbackMediumInterface(const MediumInterface& fallback_medium_interface)
+{
+    g_fallback_medium_interface = fallback_medium_interface;
 }
 
 Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
@@ -195,7 +201,7 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
 
     Mesh* m = g_scene->CreateMesh(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
                                   std::move(indices), transform);
-    CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene));
+    CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene), g_fallback_medium_interface);
 }
 
 static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)

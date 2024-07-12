@@ -11,6 +11,7 @@ constexpr int32 metallic_channel = 2;
 
 void SetLoaderFlipNormal(bool flip_normal);
 void SetLoaderFallbackMaterial(const Material* fallback_material);
+void SetLoaderFallbackMediumInterface(const MediumInterface& fallback_medium_interface);
 void LoadModel(Scene& scene, const std::string& filename, const Transform& transform);
 
 } // namespace bulbit
