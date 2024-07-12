@@ -29,7 +29,7 @@ void CreateSphere(
 {
     Sphere* sphere = scene.CreateShape<Sphere>(tf, radius);
     Primitive* primitive = scene.CreatePrimitive<Primitive>(sphere, material, medium_interface);
-    if (area_light || (g_create_area_light_source && material->GetType() == Material::Type::light_source))
+    if (area_light || (g_create_area_light_source && material && material->GetType() == Material::Type::light_source))
     {
         scene.CreateLight<AreaLight>(primitive);
     }
@@ -42,7 +42,7 @@ void CreateTriangles(
     {
         Triangle* triangle = scene.CreateShape<Triangle>(mesh, i);
         Primitive* primitive = scene.CreatePrimitive<Primitive>(triangle, material, medium_interface);
-        if (area_light || (g_create_area_light_source && material->GetType() == Material::Type::light_source))
+        if (area_light || (g_create_area_light_source && material && material->GetType() == Material::Type::light_source))
         {
             scene.CreateLight<AreaLight>(primitive);
         }

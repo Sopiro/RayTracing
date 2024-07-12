@@ -46,7 +46,7 @@ inline bool Primitive::Intersect(Intersection* isect, const Ray& ray, Float t_mi
         return false;
     }
 
-    if (material->TestAlpha(isect->uv))
+    if (!material || material->TestAlpha(isect->uv))
     {
         isect->primitive = this;
         return true;

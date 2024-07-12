@@ -1,3 +1,4 @@
+#include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
 
 namespace bulbit
@@ -46,7 +47,8 @@ Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) con
 
 bool DiffuseLightMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    return false;
+    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<LambertianBxDF>(Spectrum(1)));
+    return true;
 }
 
 } // namespace bulbit

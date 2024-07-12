@@ -28,7 +28,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 AttributeMacros:
   - __capability
-BinPackArguments: true
+BinPackArguments: false # Originally true
 BinPackParameters: false # Originally true
 BraceWrapping:
   AfterCaseLabel:  true # Originally false

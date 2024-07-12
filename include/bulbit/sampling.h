@@ -238,6 +238,48 @@ inline Vec3 SampleHenyeyGreenstein(Vec3 wo, Float g, Point2 u, Float* pdf)
     return wi;
 }
 
+inline int32 SampleDiscrete(std::span<const Float> weights, Float u, Float* pmf = nullptr, Float* u_remapped = nullptr)
+{
+    if (weights.empty())
+    {
+        if (pmf)
+        {
+            *pmf = 0;
+        }
+        return -1;
+    }
+
+    Float sum_weights = 0;
+    for (Float w : weights)
+    {
+        sum_weights += w;
+    }
+
+    Float up = u * sum_weights;
+    if (up == sum_weights)
+    {
+        up -= epsilon;
+    }
+
+    int32 offset = 0;
+    Float sum = 0;
+    while (sum + weights[offset] <= up)
+    {
+        sum += weights[offset++];
+    }
+
+    if (pmf)
+    {
+        *pmf = weights[offset] / sum_weights;
+    }
+    if (u_remapped)
+    {
+        *u_remapped = std::min<Float>((up - sum) / weights[offset], Float(1) - epsilon);
+    }
+
+    return offset;
+}
+
 struct Distribution1D
 {
     Distribution1D(const Float* f, int32 n)

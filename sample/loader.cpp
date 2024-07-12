@@ -12,6 +12,7 @@ namespace bulbit
 
 static std::string g_folder;
 static Scene* g_scene = nullptr;
+static bool g_force_fallback_material = false;
 static const Material* g_fallback_material = nullptr;
 static MediumInterface g_fallback_medium_interface = {};
 static int32 g_flip_normal = 1;
@@ -19,6 +20,11 @@ static int32 g_flip_normal = 1;
 void SetLoaderFlipNormal(bool flip_normal)
 {
     g_flip_normal = flip_normal ? -1 : 1;
+}
+
+void SetLoaderUseForceFallbackMaterial(bool force_use_fallback_material)
+{
+    g_force_fallback_material = force_use_fallback_material;
 }
 
 void SetLoaderFallbackMaterial(const Material* fallback_material)
@@ -112,7 +118,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     std::vector<SpectrumTexture*> emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     std::vector<SpectrumTexture*> normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
 
-    if (basecolor_textures.empty() && g_fallback_material != nullptr)
+    if (g_force_fallback_material || basecolor_textures.empty() && g_fallback_material)
     {
         return g_fallback_material;
     }
@@ -158,8 +164,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
     for (uint32 i = 0; i < vertexCount; ++i)
     {
         positions[i].Set(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-        normals[i].Set(mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal,
-                       mesh->mNormals[i].z * g_flip_normal);
+        normals[i].Set(
+            mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal, mesh->mNormals[i].z * g_flip_normal);
 
         if (mesh->HasTangentsAndBitangents())
         {
@@ -199,8 +205,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
         }
     }
 
-    Mesh* m = g_scene->CreateMesh(std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords),
-                                  std::move(indices), transform);
+    Mesh* m = g_scene->CreateMesh(
+        std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords), std::move(indices), transform);
     CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene), g_fallback_medium_interface);
 }
 
