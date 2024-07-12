@@ -151,4 +151,24 @@ private:
     bool regularize_bsdf;
 };
 
+class NaiveVolPathIntegrator : public SamplerIntegrator
+{
+public:
+    NaiveVolPathIntegrator(const Intersectable* accel,
+                           std::vector<Light*> lights,
+                           const Sampler* sampler,
+                           int32 max_bounces,
+                           Float russian_roulette_probability = 0.95f);
+    virtual ~NaiveVolPathIntegrator() = default;
+
+    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+
+private:
+    std::vector<Light*> infinite_lights;
+    std::unordered_map<const Primitive*, AreaLight*> area_lights;
+
+    int32 max_bounces;
+    Float rr_probability;
+};
+
 } // namespace bulbit

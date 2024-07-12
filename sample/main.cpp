@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     int32 samples_per_pixel = 64;
     int32 max_bounces = 50;
     IndependentSampler sampler(samples_per_pixel);
-    PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
+    NaiveVolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);
     // AmbientOcclusion renderer(&accel, scene.GetLights(), &sampler, 0.5f);
     // AlbedoIntegrator renderer(&accel, scene.GetLights(), &sampler);
