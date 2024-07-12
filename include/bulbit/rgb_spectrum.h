@@ -209,6 +209,11 @@ inline RGBSpectrum Sqrt(const RGBSpectrum& sp)
     return RGBSpectrum(std::sqrt(sp.r), std::sqrt(sp.g), std::sqrt(sp.b));
 }
 
+inline RGBSpectrum Exp(const RGBSpectrum& sp)
+{
+    return RGBSpectrum(std::exp(sp.r), std::exp(sp.g), std::exp(sp.b));
+}
+
 template <typename T>
 inline RGBSpectrum Min(const RGBSpectrum& sp, T val)
 {
