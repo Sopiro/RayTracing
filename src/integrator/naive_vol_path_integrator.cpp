@@ -24,11 +24,10 @@ NaiveVolPathIntegrator::NaiveVolPathIntegrator(
         break;
         case Light::Type::area_light:
         {
-            AreaLight* area_light = (AreaLight*)light;
-            area_lights.emplace(area_light->GetPrimitive(), area_light);
         }
         break;
         default:
+            assert(false);
             break;
         }
     }

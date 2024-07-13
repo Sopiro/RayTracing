@@ -165,7 +165,6 @@ public:
 
 private:
     std::vector<Light*> infinite_lights;
-    std::unordered_map<const Primitive*, AreaLight*> area_lights;
 
     int32 max_bounces;
     Float rr_probability;

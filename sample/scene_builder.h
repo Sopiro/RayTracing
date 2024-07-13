@@ -42,8 +42,8 @@ void CreateRectYZ(Scene& scene,
 void CreateBox(Scene& scene,
                const Transform& transform,
                const Material* material,
-               const Point2& tex_coord = Point2(1, 1),
                const MediumInterface& medium_interface = {},
+               const Point2& tex_coord = Point2(1, 1),
                bool area_light = false);
 
 } // namespace bulbit

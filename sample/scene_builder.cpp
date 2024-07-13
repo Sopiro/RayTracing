@@ -109,8 +109,8 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
 void CreateBox(Scene& scene,
                const Transform& tf,
                const Material* mat,
-               const Point2& tc,
                const MediumInterface& medium_interface,
+               const Point2& tc,
                bool area_light)
 {
     /*
