@@ -7,12 +7,19 @@
 namespace bulbit
 {
 
-NaiveVolPathIntegrator::NaiveVolPathIntegrator(
-    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, Float rr_probability
+VolPathIntegrator::VolPathIntegrator(
+    const Intersectable* accel,
+    std::vector<Light*> lights,
+    const Sampler* sampler,
+    int32 max_bounces,
+    bool regularize_bsdf,
+    Float rr_probability
 )
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
     , rr_probability{ rr_probability }
+    , regularize_bsdf{ regularize_bsdf }
+    , light_sampler{ all_lights }
 {
     for (Light* light : all_lights)
     {
@@ -25,16 +32,17 @@ NaiveVolPathIntegrator::NaiveVolPathIntegrator(
         break;
         case Light::Type::area_light:
         {
+            AreaLight* area_light = (AreaLight*)light;
+            area_lights.emplace(area_light->GetPrimitive(), area_light);
         }
         break;
         default:
-            assert(false);
             break;
         }
     }
 }
 
-Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     int32 bounce = 0;
     Spectrum L(0), throughput(1);

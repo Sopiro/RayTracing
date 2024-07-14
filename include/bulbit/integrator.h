@@ -176,4 +176,29 @@ private:
     Float rr_probability;
 };
 
+class VolPathIntegrator : public SamplerIntegrator
+{
+public:
+    VolPathIntegrator(
+        const Intersectable* accel,
+        std::vector<Light*> lights,
+        const Sampler* sampler,
+        int32 max_bounces,
+        bool regularize_bsdf = false,
+        Float russian_roulette_probability = 0.95f
+    );
+    virtual ~VolPathIntegrator() = default;
+
+    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+
+private:
+    std::vector<Light*> infinite_lights;
+    std::unordered_map<const Primitive*, AreaLight*> area_lights;
+    UniformLightSampler light_sampler;
+
+    int32 max_bounces;
+    Float rr_probability;
+    bool regularize_bsdf;
+};
+
 } // namespace bulbit
