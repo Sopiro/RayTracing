@@ -25,7 +25,8 @@ void SetAreaLightSourceCreationEnabled(bool enabled)
 }
 
 void CreateSphere(
-    Scene& scene, Transform tf, Float radius, const Material* material, const MediumInterface& medium_interface, bool area_light)
+    Scene& scene, Transform tf, Float radius, const Material* material, const MediumInterface& medium_interface, bool area_light
+)
 {
     Sphere* sphere = scene.CreateShape<Sphere>(tf, radius);
     Primitive* primitive = scene.CreatePrimitive<Primitive>(sphere, material, medium_interface);
@@ -36,7 +37,8 @@ void CreateSphere(
 }
 
 void CreateTriangles(
-    Scene& scene, const Mesh* mesh, const Material* material, const MediumInterface& medium_interface, bool area_light)
+    Scene& scene, const Mesh* mesh, const Material* material, const MediumInterface& medium_interface, bool area_light
+)
 {
     for (int32 i = 0; i < mesh->GetTriangleCount(); ++i)
     {
@@ -106,12 +108,14 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     CreateTriangles(scene, m, mat, {}, area_light);
 }
 
-void CreateBox(Scene& scene,
-               const Transform& tf,
-               const Material* mat,
-               const MediumInterface& medium_interface,
-               const Point2& tc,
-               bool area_light)
+void CreateBox(
+    Scene& scene,
+    const Transform& tf,
+    const Material* mat,
+    const MediumInterface& medium_interface,
+    const Point2& tc,
+    bool area_light
+)
 {
     /*
           7--------6

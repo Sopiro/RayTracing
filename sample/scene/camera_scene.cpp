@@ -7,8 +7,9 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
 {
     // Floor
     {
-        auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(Spectrum(0.5f)),
-                                                        ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.01f));
+        auto mat = scene.CreateMaterial<UnrealMaterial>(
+            ConstantColorTexture::Create(Spectrum(0.5f)), ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.01f)
+        );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
         CreateRectXZ(scene, tf, mat);

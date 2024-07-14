@@ -85,10 +85,10 @@ public:
     virtual Spectrum f(const Vec3& wo, const Vec3& wi) const = 0;
     virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const = 0;
 
-    virtual bool Sample_f(
-        BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const = 0;
+    virtual bool Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All)
+        const = 0;
 
-    virtual void Regularize() {};
+    virtual void Regularize(){};
 
     // Compute Hemispherical reflectance (albedo)
     Spectrum rho(Vec3 wo, std::span<const Float> uc, std::span<const Point2> u2) const;

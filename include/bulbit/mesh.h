@@ -20,12 +20,14 @@ struct Vertex
 class Mesh
 {
 public:
-    Mesh(std::vector<Point3> positions,
-         std::vector<Vec3> normals,
-         std::vector<Vec3> tangents,
-         std::vector<Point2> texCoords,
-         std::vector<int32> indices,
-         const Mat4& transform);
+    Mesh(
+        std::vector<Point3> positions,
+        std::vector<Vec3> normals,
+        std::vector<Vec3> tangents,
+        std::vector<Point2> texCoords,
+        std::vector<int32> indices,
+        const Mat4& transform
+    );
     Mesh(const std::vector<Vertex>& vertices, std::vector<int32> indices, const Mat4& transform);
 
     int32 GetTriangleCount() const;

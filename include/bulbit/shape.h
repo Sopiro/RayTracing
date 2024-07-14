@@ -31,7 +31,8 @@ public:
 
 protected:
     static void SetFaceNormal(
-        Intersection* isect, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent)
+        Intersection* isect, const Vec3& wi, const Vec3& outward_normal, const Vec3& shading_normal, const Vec3& shading_tangent
+    )
     {
         bool front_face = Dot(wi, outward_normal) < 0;
         Float sign = front_face ? 1 : -1;

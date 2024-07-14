@@ -8,7 +8,8 @@ namespace bulbit
 {
 
 NaiveVolPathIntegrator::NaiveVolPathIntegrator(
-    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, Float rr_probability)
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, Float rr_probability
+)
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
     , rr_probability{ rr_probability }
@@ -60,7 +61,8 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             Float u_event = sampler.Next1D();
 
             Sample_MajorantTransmittance(
-                medium, ray, t_max, u, rng, [&](Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj) -> bool {
+                medium, ray, t_max, u, rng,
+                [&](Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj) -> bool {
                     Float p_absorb = ms.sigma_a[0] / sigma_maj[0];
                     Float p_scatter = ms.sigma_s[0] / sigma_maj[0];
                     Float p_null = std::max<Float>(0, 1 - p_absorb - p_scatter);
@@ -115,7 +117,8 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                         assert(false);
                         return false;
                     }
-                });
+                }
+            );
         }
 
         if (terminated)

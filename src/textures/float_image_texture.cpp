@@ -51,8 +51,9 @@ FloatImageTexture::FloatImageTexture(const std::pair<std::string, int32>& filena
     {
         if (width * height > 64 * 1024)
         {
-            ParallelFor(0, width * height,
-                        [=, this](int32 i) { floats[i] = (Float)std::fmax(0, data[STBI_rgb_alpha * i + channel]); });
+            ParallelFor(0, width * height, [=, this](int32 i) {
+                floats[i] = (Float)std::fmax(0, data[STBI_rgb_alpha * i + channel]);
+            });
         }
         else
         {

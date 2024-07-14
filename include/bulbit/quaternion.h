@@ -110,8 +110,10 @@ struct Quat
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
-        return Vec3((vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
-                    (vz * w2 + (x * vy - y * vx) * w + z * dot2));
+        return Vec3(
+            (vx * w2 + (y * vz - z * vy) * w + x * dot2), (vy * w2 + (z * vx - x * vz) * w + y * dot2),
+            (vz * w2 + (x * vy - y * vx) * w + z * dot2)
+        );
     }
 
     Vec3 RotateInv(const Vec3& v) const
@@ -123,8 +125,10 @@ struct Quat
 
         Float dot2 = (x * vx + y * vy + z * vz);
 
-        return Vec3((vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
-                    (vz * w2 - (x * vy - y * vx) * w + z * dot2));
+        return Vec3(
+            (vx * w2 - (y * vz - z * vy) * w + x * dot2), (vy * w2 - (z * vx - x * vz) * w + y * dot2),
+            (vz * w2 - (x * vy - y * vx) * w + z * dot2)
+        );
     }
 
     void SetIdentity()

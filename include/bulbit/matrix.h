@@ -170,8 +170,10 @@ struct Mat3
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n", ex.x, ey.x, ez.x, ex.y,
-                           ey.y, ez.y, ex.z, ey.z, ez.z);
+        return std::format(
+            "{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\n", ex.x, ey.x, ez.x, ex.y, ey.y, ez.y, ex.z,
+            ey.z, ez.z
+        );
     }
 };
 
@@ -261,9 +263,11 @@ struct Mat4
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:."
-                           "4f}\t{:.4f}\t{:.4f}\t{:.4f}\n",
-                           ex.x, ey.x, ez.x, ew.x, ex.y, ey.y, ez.y, ew.y, ex.z, ey.z, ez.z, ew.z, ex.w, ey.w, ez.w, ew.w);
+        return std::format(
+            "{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}\n{:."
+            "4f}\t{:.4f}\t{:.4f}\t{:.4f}\n",
+            ex.x, ey.x, ez.x, ew.x, ex.y, ey.y, ez.y, ew.y, ex.z, ey.z, ez.z, ew.z, ex.w, ey.w, ez.w, ew.w
+        );
     }
 };
 

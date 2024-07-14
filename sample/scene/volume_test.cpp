@@ -12,10 +12,10 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
         // auto mat = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f));
         // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.02f));
         auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
-        // auto mat = scene.CreateMaterial<ConductorMaterial>(ConstantColorTexture::Create(0.1, 0.2, 1.9),
-        //                                                    ConstantColorTexture::Create(3, 2.5, 2),
-        //                                                    ConstantFloatTexture::Create(0.1f),
-        //                                                    ConstantFloatTexture::Create(0.3f));
+        // auto mat = scene.CreateMaterial<ConductorMaterial>(
+        //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
+        //     ConstantFloatTexture::Create(0.1f), ConstantFloatTexture::Create(0.3f)
+        // );
         // auto mix = scene.CreateMaterial<MixtureMaterial>(mat, mat, 0.1f);
 
         auto tf = Transform{ Vec3(0.0f, -1.0f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(4.0f) };

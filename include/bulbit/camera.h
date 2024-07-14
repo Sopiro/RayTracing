@@ -35,12 +35,14 @@ protected:
 class OrthographicCamera : public Camera
 {
 public:
-    OrthographicCamera(const Point3& look_from,
-                       const Point3& look_at,
-                       const Vec3& up,
-                       Float viewport_width,
-                       Float viewport_height,
-                       int32 screen_width);
+    OrthographicCamera(
+        const Point3& look_from,
+        const Point3& look_at,
+        const Vec3& up,
+        Float viewport_width,
+        Float viewport_height,
+        int32 screen_width
+    );
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
 
@@ -56,14 +58,16 @@ private:
 class PerspectiveCamera : public Camera
 {
 public:
-    PerspectiveCamera(const Point3& look_from,
-                      const Point3& look_at,
-                      const Vec3& up,
-                      int32 screen_width,
-                      int32 screen_height,
-                      Float vfov, // vertical field-of-view. in degrees.
-                      Float aperture,
-                      Float focus_dist);
+    PerspectiveCamera(
+        const Point3& look_from,
+        const Point3& look_at,
+        const Vec3& up,
+        int32 screen_width,
+        int32 screen_height,
+        Float vfov, // vertical field-of-view. in degrees.
+        Float aperture,
+        Float focus_dist
+    );
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
 

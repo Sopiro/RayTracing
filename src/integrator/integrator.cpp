@@ -64,8 +64,7 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
                     {
                         film->AddSample(x, y, L, 1.0f);
                     }
-                }
-                while (sampler->StartNextPixelSample());
+                } while (sampler->StartNextPixelSample());
             }
         }
     });

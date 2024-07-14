@@ -55,11 +55,13 @@ private:
         uint8 axis;
     };
 
-    BuildNode* BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
-                              std::span<BVHPrimitive> primitive_span,
-                              std::atomic<int32>* total_nodes,
-                              std::atomic<int32>* ordered_prims_offset,
-                              std::vector<Primitive*>& ordered_prims);
+    BuildNode* BuildRecursive(
+        ThreadLocal<Allocator>& thread_allocators,
+        std::span<BVHPrimitive> primitive_span,
+        std::atomic<int32>* total_nodes,
+        std::atomic<int32>* ordered_prims_offset,
+        std::vector<Primitive*>& ordered_prims
+    );
 
     int32 FlattenBVH(BuildNode* node, int32* offset);
 

@@ -5,12 +5,14 @@
 namespace bulbit
 {
 
-OrthographicCamera::OrthographicCamera(const Point3& look_from,
-                                       const Point3& look_at,
-                                       const Vec3& up,
-                                       Float viewport_width,
-                                       Float viewport_height,
-                                       int32 screen_width)
+OrthographicCamera::OrthographicCamera(
+    const Point3& look_from,
+    const Point3& look_at,
+    const Vec3& up,
+    Float viewport_width,
+    Float viewport_height,
+    int32 screen_width
+)
     : Camera(screen_width, int32(screen_width * viewport_height / viewport_width))
 {
     w = Normalize(look_from - look_at);

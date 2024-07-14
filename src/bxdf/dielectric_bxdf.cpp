@@ -230,8 +230,9 @@ bool DielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12,
             Float pdf = mf.PDF(wo, wm) * dwm_dwi * pt / (pr + pt);
 
             // Evaluate BRDF and return _BSDFSample_ for rough transmission
-            Spectrum ft(T * mf.D(wm) * mf.G(wo, wi) *
-                        std::abs(Dot(wi, wm) * Dot(wo, wm) / (CosTheta(wi) * CosTheta(wo) * denom)));
+            Spectrum ft(
+                T * mf.D(wm) * mf.G(wo, wi) * std::abs(Dot(wi, wm) * Dot(wo, wm) / (CosTheta(wi) * CosTheta(wo) * denom))
+            );
 
             // Handle solid angle squeezing
             ft /= Sqr(eta_p);

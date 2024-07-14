@@ -6,12 +6,14 @@
 namespace bulbit
 {
 
-PathIntegrator::PathIntegrator(const Intersectable* accel,
-                               std::vector<Light*> lights,
-                               const Sampler* sampler,
-                               int32 max_bounces,
-                               bool regularize_bsdf,
-                               Float rr_probability)
+PathIntegrator::PathIntegrator(
+    const Intersectable* accel,
+    std::vector<Light*> lights,
+    const Sampler* sampler,
+    int32 max_bounces,
+    bool regularize_bsdf,
+    Float rr_probability
+)
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
     , rr_probability{ rr_probability }

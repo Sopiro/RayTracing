@@ -75,10 +75,9 @@ class ConductorMaterial : public Material
 {
 public:
     ConductorMaterial(const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* roughness);
-    ConductorMaterial(const SpectrumTexture* eta,
-                      const SpectrumTexture* k,
-                      const FloatTexture* u_roughness,
-                      const FloatTexture* v_roughness);
+    ConductorMaterial(
+        const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* u_roughness, const FloatTexture* v_roughness
+    );
     ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* roughness);
     ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* u_roughness, const FloatTexture* v_roughness);
 
@@ -98,17 +97,21 @@ private:
 class UnrealMaterial : public Material
 {
 public:
-    UnrealMaterial(const SpectrumTexture* basecolor,
-                   const FloatTexture* metallic,
-                   const FloatTexture* roughness,
-                   const SpectrumTexture* emissive = nullptr,
-                   const SpectrumTexture* normalmap = nullptr);
-    UnrealMaterial(const SpectrumTexture* basecolor,
-                   const FloatTexture* metallic,
-                   const FloatTexture* u_roughness,
-                   const FloatTexture* v_roughness,
-                   const SpectrumTexture* emissive = nullptr,
-                   const SpectrumTexture* normalmap = nullptr);
+    UnrealMaterial(
+        const SpectrumTexture* basecolor,
+        const FloatTexture* metallic,
+        const FloatTexture* roughness,
+        const SpectrumTexture* emissive = nullptr,
+        const SpectrumTexture* normalmap = nullptr
+    );
+    UnrealMaterial(
+        const SpectrumTexture* basecolor,
+        const FloatTexture* metallic,
+        const FloatTexture* u_roughness,
+        const FloatTexture* v_roughness,
+        const SpectrumTexture* emissive = nullptr,
+        const SpectrumTexture* normalmap = nullptr
+    );
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual const SpectrumTexture* GetNormalMap() const override;

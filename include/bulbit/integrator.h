@@ -109,11 +109,13 @@ private:
 class NaivePathIntegrator : public SamplerIntegrator
 {
 public:
-    NaivePathIntegrator(const Intersectable* accel,
-                        std::vector<Light*> lights,
-                        const Sampler* sampler,
-                        int32 max_bounces,
-                        Float russian_roulette_probability = 0.95f);
+    NaivePathIntegrator(
+        const Intersectable* accel,
+        std::vector<Light*> lights,
+        const Sampler* sampler,
+        int32 max_bounces,
+        Float russian_roulette_probability = 0.95f
+    );
     virtual ~NaivePathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -131,12 +133,14 @@ private:
 class PathIntegrator : public SamplerIntegrator
 {
 public:
-    PathIntegrator(const Intersectable* accel,
-                   std::vector<Light*> lights,
-                   const Sampler* sampler,
-                   int32 max_bounces,
-                   bool regularize_bsdf = false,
-                   Float russian_roulette_probability = 0.95f);
+    PathIntegrator(
+        const Intersectable* accel,
+        std::vector<Light*> lights,
+        const Sampler* sampler,
+        int32 max_bounces,
+        bool regularize_bsdf = false,
+        Float russian_roulette_probability = 0.95f
+    );
     virtual ~PathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -154,11 +158,13 @@ private:
 class NaiveVolPathIntegrator : public SamplerIntegrator
 {
 public:
-    NaiveVolPathIntegrator(const Intersectable* accel,
-                           std::vector<Light*> lights,
-                           const Sampler* sampler,
-                           int32 max_bounces,
-                           Float russian_roulette_probability = 0.95f);
+    NaiveVolPathIntegrator(
+        const Intersectable* accel,
+        std::vector<Light*> lights,
+        const Sampler* sampler,
+        int32 max_bounces,
+        Float russian_roulette_probability = 0.95f
+    );
     virtual ~NaiveVolPathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;

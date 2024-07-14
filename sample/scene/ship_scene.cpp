@@ -37,8 +37,9 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
 
     // Floor
     {
-        auto mat = scene.CreateMaterial<UnrealMaterial>(ConstantColorTexture::Create(1.0), ConstantFloatTexture::Create(0.0f),
-                                                        ConstantFloatTexture::Create(0.1f));
+        auto mat = scene.CreateMaterial<UnrealMaterial>(
+            ConstantColorTexture::Create(1.0), ConstantFloatTexture::Create(0.0f), ConstantFloatTexture::Create(0.1f)
+        );
         Float size = 9.0f;
         Float y = 2.1f;
 

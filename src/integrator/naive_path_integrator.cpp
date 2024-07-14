@@ -6,7 +6,8 @@ namespace bulbit
 {
 
 NaivePathIntegrator::NaivePathIntegrator(
-    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 bounces, Float rr)
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 bounces, Float rr
+)
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ bounces }
     , rr_probability{ rr }

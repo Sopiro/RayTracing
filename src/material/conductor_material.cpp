@@ -9,10 +9,9 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta, const SpectrumT
 {
 }
 
-ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta,
-                                     const SpectrumTexture* k,
-                                     const FloatTexture* u_roughness,
-                                     const FloatTexture* v_roughness)
+ConductorMaterial::ConductorMaterial(
+    const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* u_roughness, const FloatTexture* v_roughness
+)
     : Material{ Material::Type::normal }
     , eta{ eta }
     , k{ k }
@@ -26,9 +25,9 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance, const F
 {
 }
 
-ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance,
-                                     const FloatTexture* u_roughness,
-                                     const FloatTexture* v_roughness)
+ConductorMaterial::ConductorMaterial(
+    const SpectrumTexture* reflectance, const FloatTexture* u_roughness, const FloatTexture* v_roughness
+)
     : Material{ Material::Type::normal }
     , eta{ nullptr }
     , k{ reflectance }
@@ -74,8 +73,10 @@ bool ConductorMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec
     Float alpha_x = u_roughness->Evaluate(isect.uv);
     Float alpha_y = v_roughness->Evaluate(isect.uv);
 
-    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent,
-                 alloc.new_object<ConductorBxDF>(eta_s, k_s, TrowbridgeReitzDistribution(alpha_x, alpha_y)));
+    *bsdf = BSDF(
+        isect.shading.normal, isect.shading.tangent,
+        alloc.new_object<ConductorBxDF>(eta_s, k_s, TrowbridgeReitzDistribution(alpha_x, alpha_y))
+    );
     return true;
 }
 

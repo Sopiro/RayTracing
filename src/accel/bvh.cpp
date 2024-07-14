@@ -29,8 +29,9 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
         return Allocator(ptr);
     });
 
-    BuildNode* root = BuildRecursive(thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes,
-                                     &ordered_prims_offset, ordered_prims);
+    BuildNode* root = BuildRecursive(
+        thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes, &ordered_prims_offset, ordered_prims
+    );
 
     assert(ordered_prims_offset.load() == primitive_count);
 
@@ -54,11 +55,13 @@ BVH::~BVH() noexcept
     delete nodes;
 }
 
-BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
-                                    std::span<BVHPrimitive> primitive_span,
-                                    std::atomic<int32>* total_nodes,
-                                    std::atomic<int32>* ordered_prims_offset,
-                                    std::vector<Primitive*>& ordered_prims)
+BVH::BuildNode* BVH::BuildRecursive(
+    ThreadLocal<Allocator>& thread_allocators,
+    std::span<BVHPrimitive> primitive_span,
+    std::atomic<int32>* total_nodes,
+    std::atomic<int32>* ordered_prims_offset,
+    std::vector<Primitive*>& ordered_prims
+)
 {
     Allocator allocator = thread_allocators.Get();
     BuildNode* node = allocator.new_object<BuildNode>();
@@ -145,7 +148,8 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         mid = primitive_count / 2;
         std::nth_element(
             primitive_span.begin(), primitive_span.begin() + mid, primitive_span.end(),
-            [axis](const BVHPrimitive& a, const BVHPrimitive& b) { return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis]; });
+            [axis](const BVHPrimitive& a, const BVHPrimitive& b) { return a.aabb.GetCenter()[axis] < b.aabb.GetCenter()[axis]; }
+        );
     }
     else
     {
@@ -244,13 +248,15 @@ BVH::BuildNode* BVH::BuildRecursive(ThreadLocal<Allocator>& thread_allocators,
         ParallelFor(0, 2, [&](int i) {
             if (i == 0)
             {
-                child1 = BuildRecursive(thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset,
-                                        ordered_prims);
+                child1 = BuildRecursive(
+                    thread_allocators, primitive_span.subspan(0, mid), total_nodes, ordered_prims_offset, ordered_prims
+                );
             }
             else
             {
-                child2 = BuildRecursive(thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset,
-                                        ordered_prims);
+                child2 = BuildRecursive(
+                    thread_allocators, primitive_span.subspan(mid), total_nodes, ordered_prims_offset, ordered_prims
+                );
             }
         });
     }

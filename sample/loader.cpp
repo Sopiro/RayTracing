@@ -165,7 +165,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
     {
         positions[i].Set(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
         normals[i].Set(
-            mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal, mesh->mNormals[i].z * g_flip_normal);
+            mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal, mesh->mNormals[i].z * g_flip_normal
+        );
 
         if (mesh->HasTangentsAndBitangents())
         {
@@ -206,7 +207,8 @@ static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Ma
     }
 
     Mesh* m = g_scene->CreateMesh(
-        std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords), std::move(indices), transform);
+        std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords), std::move(indices), transform
+    );
     CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene), g_fallback_medium_interface);
 }
 

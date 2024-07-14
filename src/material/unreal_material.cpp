@@ -4,21 +4,25 @@
 namespace bulbit
 {
 
-UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
-                               const FloatTexture* metallic,
-                               const FloatTexture* roughness,
-                               const SpectrumTexture* emissive,
-                               const SpectrumTexture* normalmap)
+UnrealMaterial::UnrealMaterial(
+    const SpectrumTexture* basecolor,
+    const FloatTexture* metallic,
+    const FloatTexture* roughness,
+    const SpectrumTexture* emissive,
+    const SpectrumTexture* normalmap
+)
     : UnrealMaterial(basecolor, metallic, roughness, roughness, emissive, normalmap)
 {
 }
 
-UnrealMaterial::UnrealMaterial(const SpectrumTexture* basecolor,
-                               const FloatTexture* metallic,
-                               const FloatTexture* u_roughness,
-                               const FloatTexture* v_roughness,
-                               const SpectrumTexture* emissive,
-                               const SpectrumTexture* normalmap)
+UnrealMaterial::UnrealMaterial(
+    const SpectrumTexture* basecolor,
+    const FloatTexture* metallic,
+    const FloatTexture* u_roughness,
+    const FloatTexture* v_roughness,
+    const SpectrumTexture* emissive,
+    const SpectrumTexture* normalmap
+)
     : Material{ Material::Type::normal }
     , basecolor{ basecolor }
     , metallic{ metallic }

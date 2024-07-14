@@ -4,12 +4,14 @@
 namespace bulbit
 {
 
-Mesh::Mesh(std::vector<Point3> _positions,
-           std::vector<Vec3> _normals,
-           std::vector<Vec3> _tangents,
-           std::vector<Point2> _texCoords,
-           std::vector<int32> _indices,
-           const Mat4& transform)
+Mesh::Mesh(
+    std::vector<Point3> _positions,
+    std::vector<Vec3> _normals,
+    std::vector<Vec3> _tangents,
+    std::vector<Point2> _texCoords,
+    std::vector<int32> _indices,
+    const Mat4& transform
+)
     : positions{ std::move(_positions) }
     , normals{ std::move(_normals) }
     , tangents{ std::move(_tangents) }

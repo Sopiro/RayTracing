@@ -4,7 +4,7 @@
 Language:        Cpp
 # BasedOnStyle:  Microsoft
 AccessModifierOffset: -4 # Originally -2
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: BlockIndent # Originally Align
 AlignArrayOfStructures: None
 AlignConsecutiveMacros: None
 AlignConsecutiveAssignments: None
@@ -12,13 +12,15 @@ AlignConsecutiveBitFields: None
 AlignConsecutiveDeclarations: None
 AlignEscapedNewlines: Right
 AlignOperands:   Align
-AlignTrailingComments: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2 
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortEnumsOnASingleLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Empty # Originally None
 AllowShortLambdasOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: WithoutElse # Originally Never
 AllowShortLoopsOnASingleLine: false
@@ -28,7 +30,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
 AttributeMacros:
   - __capability
-BinPackArguments: false # Originally true
+BinPackArguments: true
 BinPackParameters: false # Originally true
 BraceWrapping:
   AfterCaseLabel:  true # Originally false
@@ -44,7 +46,7 @@ BraceWrapping:
   BeforeCatch:     true
   BeforeElse:      true
   BeforeLambdaBody: false
-  BeforeWhile:     true
+  BeforeWhile:     false
   IndentBraces:    false
   SplitEmptyFunction: true
   SplitEmptyRecord: true

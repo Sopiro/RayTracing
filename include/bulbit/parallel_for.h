@@ -31,15 +31,16 @@ private:
     int32 chunk_size;
 };
 
-void ParallelFor(int32 begin,
-                 int32 end,
-                 std::function<void(int32 begin, int32 end)> func,
-                 ThreadPool* thread_pool = ThreadPool::global_thread_pool.get());
+void ParallelFor(
+    int32 begin,
+    int32 end,
+    std::function<void(int32 begin, int32 end)> func,
+    ThreadPool* thread_pool = ThreadPool::global_thread_pool.get()
+);
 
-inline void ParallelFor(int32 begin,
-                        int32 end,
-                        std::function<void(int32 i)> func,
-                        ThreadPool* thread_pool = ThreadPool::global_thread_pool.get())
+inline void ParallelFor(
+    int32 begin, int32 end, std::function<void(int32 i)> func, ThreadPool* thread_pool = ThreadPool::global_thread_pool.get()
+)
 {
     ParallelFor(
         begin, end,
@@ -49,7 +50,8 @@ inline void ParallelFor(int32 begin,
                 func(i);
             }
         },
-        thread_pool);
+        thread_pool
+    );
 }
 
 } // namespace bulbit

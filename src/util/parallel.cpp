@@ -166,7 +166,8 @@ void ThreadPool::ForEachThread(std::function<void(void)> func)
             func();
             latch.arrive_and_wait();
         },
-        this);
+        this
+    );
 }
 
 } // namespace bulbit
