@@ -59,7 +59,8 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         BSDF bsdf;
         if (isect.GetBSDF(&bsdf, wo, alloc) == false)
         {
-            break;
+            ray = Ray(isect.point, -wo);
+            continue;
         }
 
         BSDFSample bsdf_sample;

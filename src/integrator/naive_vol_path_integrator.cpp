@@ -60,6 +60,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             Float u = sampler.Next1D();
             Float u_event = sampler.Next1D();
 
+            // Evaluate L_n term which is the null-scattering extended source function by delta tracking
             Sample_MajorantTransmittance(
                 medium, ray, t_max, u, rng,
                 [&](Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj) -> bool {
