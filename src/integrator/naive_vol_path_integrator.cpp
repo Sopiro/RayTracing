@@ -181,6 +181,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         {
             medium = isect.GetMedium(-wo);
             ray = Ray(isect.point, -wo);
+            --bounce;
             continue;
         }
 

@@ -52,22 +52,22 @@ LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2&
     Float cos_theta = std::cos(theta), sin_theta = std::sin(theta);
     Float sin_phi = std::sin(phi), cos_phi = std::cos(phi);
 
-    LightSample ls;
-    ls.wi = Mul(transform, SphericalDirection(sin_theta, cos_theta, sin_phi, cos_phi));
+    LightSample light_sample;
+    light_sample.wi = Mul(transform, SphericalDirection(sin_theta, cos_theta, sin_phi, cos_phi));
 
     if (sin_theta == 0)
     {
-        ls.pdf = 0;
+        light_sample.pdf = 0;
     }
     else
     {
-        ls.pdf = map_pdf / (2 * pi * pi * sin_theta);
+        light_sample.pdf = map_pdf / (2 * pi * pi * sin_theta);
     }
 
-    ls.visibility = infinity;
-    ls.Li = l_map->Evaluate(uv);
+    light_sample.visibility = infinity;
+    light_sample.Li = l_map->Evaluate(uv);
 
-    return ls;
+    return light_sample;
 }
 
 Float ImageInfiniteLight::EvaluatePDF(const Ray& ray) const

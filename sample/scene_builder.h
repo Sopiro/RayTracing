@@ -32,6 +32,7 @@ void CreateRectXY(
     Scene& scene,
     const Transform& transform,
     const Material* material,
+    const MediumInterface& medium_interface = {},
     const Point2& tex_coord = Point2(1, 1),
     bool area_light = false
 );
@@ -39,6 +40,7 @@ void CreateRectXZ(
     Scene& scene,
     const Transform& transform,
     const Material* material,
+    const MediumInterface& medium_interface = {},
     const Point2& tex_coord = Point2(1, 1),
     bool area_light = false
 );
@@ -46,6 +48,7 @@ void CreateRectYZ(
     Scene& scene,
     const Transform& transform,
     const Material* material,
+    const MediumInterface& medium_interface = {},
     const Point2& tex_coord = Point2(1, 1),
     bool area_light = false
 );

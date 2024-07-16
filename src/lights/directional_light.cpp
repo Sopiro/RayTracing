@@ -14,13 +14,13 @@ DirectionalLight::DirectionalLight(const Vec3& dir, const Spectrum& intensity, F
 
 LightSample DirectionalLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
-    LightSample ls;
-    ls.wi = -dir + SampleInsideUnitSphere(u) * radius;
-    ls.pdf = 1;
-    ls.visibility = infinity;
-    ls.Li = intensity;
+    LightSample light_sample;
+    light_sample.wi = -dir + SampleInsideUnitSphere(u) * radius;
+    light_sample.pdf = 1;
+    light_sample.visibility = infinity;
+    light_sample.Li = intensity;
 
-    return ls;
+    return light_sample;
 }
 
 Float DirectionalLight::EvaluatePDF(const Ray& ray) const

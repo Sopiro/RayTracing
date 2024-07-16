@@ -16,7 +16,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
-        CreateRectXZ(scene, tf, mat, Point2(4.0f, 4.0f));
+        CreateRectXZ(scene, tf, mat, {}, Point2(4.0f, 4.0f));
     }
 
     Float scale = 0.3f;

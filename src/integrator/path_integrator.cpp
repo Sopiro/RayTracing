@@ -112,6 +112,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         if (!isect.GetBSDF(&bsdf, wo, alloc))
         {
             ray = Ray(isect.point, -wo);
+            --bounce;
             continue;
         }
 

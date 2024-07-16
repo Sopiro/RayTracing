@@ -23,7 +23,7 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
         SetLoaderFallbackMaterial(nullptr);
 
         HomogeneousMedium* hm =
-            scene.CreateMedium<HomogeneousMedium>(Spectrum(0.1, 0.2, 0.3), Spectrum(1, 2, 10), Spectrum(0.0), -0.9f);
+            scene.CreateMedium<HomogeneousMedium>(Spectrum(0.1, 0.2, 0.3), Spectrum(1, 5, 10), Spectrum(0.0), -0.9f);
         MediumInterface mi(hm, nullptr);
         SetLoaderFallbackMediumInterface(mi);
         LoadModel(scene, "res/stanford/lucy.obj", tf);

@@ -51,7 +51,14 @@ void CreateTriangles(
     }
 }
 
-void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
+void CreateRectXY(
+    Scene& scene,
+    const Transform& tf,
+    const Material* mat,
+    const MediumInterface& medium_interface,
+    const Point2& tc,
+    bool area_light
+)
 {
     Vec3 p0 = { -0.5, -0.5, 0.0 };
     Vec3 p1 = { 0.5, -0.5, 0.0 };
@@ -67,10 +74,17 @@ void CreateRectXY(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, {}, area_light);
+    CreateTriangles(scene, m, mat, medium_interface, area_light);
 };
 
-void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
+void CreateRectXZ(
+    Scene& scene,
+    const Transform& tf,
+    const Material* mat,
+    const MediumInterface& medium_interface,
+    const Point2& tc,
+    bool area_light
+)
 {
     Vec3 p0 = { -0.5, 0.0, 0.5 };
     Vec3 p1 = { 0.5, 0.0, 0.5 };
@@ -86,10 +100,17 @@ void CreateRectXZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, {}, area_light);
+    CreateTriangles(scene, m, mat, medium_interface, area_light);
 }
 
-void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const Point2& tc, bool area_light)
+void CreateRectYZ(
+    Scene& scene,
+    const Transform& tf,
+    const Material* mat,
+    const MediumInterface& medium_interface,
+    const Point2& tc,
+    bool area_light
+)
 {
     Vec3 p0 = { 0.0, -0.5, 0.5 };
     Vec3 p1 = { 0.0, -0.5, -0.5 };
@@ -105,7 +126,7 @@ void CreateRectYZ(Scene& scene, const Transform& tf, const Material* mat, const 
     auto indices = std::vector<int32>{ 0, 1, 2, 0, 2, 3 };
 
     Mesh* m = scene.CreateMesh(vertices, indices, tf);
-    CreateTriangles(scene, m, mat, {}, area_light);
+    CreateTriangles(scene, m, mat, medium_interface, area_light);
 }
 
 void CreateBox(
