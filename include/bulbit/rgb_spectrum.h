@@ -68,6 +68,16 @@ struct RGBSpectrum
 #endif
     }
 
+    Float MinComponent() const
+    {
+        return std::min({ r, g, b });
+    }
+
+    Float MaxComponent() const
+    {
+        return std::max({ r, g, b });
+    }
+
     bool IsNullish() const
     {
         return std::isnan(r) || std::isinf(r) || std::isnan(g) || std::isinf(g) || std::isnan(b) || std::isinf(b);

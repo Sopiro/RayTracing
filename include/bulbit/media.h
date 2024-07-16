@@ -73,7 +73,7 @@ constexpr inline size_t max_majorant_iterator_size = std::max({ sizeof(Homogeneo
 // bool callback(Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj);
 
 template <typename F>
-Spectrum Sample_MajorantTransmittance(const Medium* medium, Ray ray, Float t_max, Float u, RNG& rng, F callback)
+Spectrum Sample_MajorantTransmittance(const Medium* medium, int32 wavelength, Ray ray, Float t_max, Float u, RNG& rng, F callback)
 {
     t_max *= ray.d.Normalize();
 
@@ -93,7 +93,7 @@ Spectrum Sample_MajorantTransmittance(const Medium* medium, Ray ray, Float t_max
             return T_maj;
         }
 
-        if (segment.sigma_maj[0] == 0)
+        if (segment.sigma_maj[wavelength] == 0)
         {
             Float dt = segment.t_max - segment.t_min;
             if (dt == infinity)
@@ -109,7 +109,7 @@ Spectrum Sample_MajorantTransmittance(const Medium* medium, Ray ray, Float t_max
 
         while (true)
         {
-            Float t = t_min + SampleExponential(u, segment.sigma_maj[0]);
+            Float t = t_min + SampleExponential(u, segment.sigma_maj[wavelength]);
             u = rng.NextFloat();
 
             if (t < segment.t_max)

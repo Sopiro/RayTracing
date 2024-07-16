@@ -90,7 +90,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             }
             else if (has_area_light)
             {
-                // Evaluate BSDF sample MIS for area light
+                // Evaluate BSDF sample with MIS for area light
                 AreaLight* area_light = area_lights.at(isect.primitive);
 
                 Float light_pdf = isect.primitive->GetShape()->PDF(isect, ray) * light_sampler.EvaluatePMF(area_light);
