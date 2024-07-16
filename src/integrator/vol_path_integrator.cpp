@@ -46,31 +46,63 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     int32 bounce = 0;
     Spectrum L(0), throughput(1);
+
+    // Wavelength dependent rescaled path sampling probabilities
+    Spectrum r_u(1), r_l(1);
+
+    bool specular_bounce = false;
+    bool any_non_specular_bounces = false;
+
     Float eta_scale = 1;
     Ray ray = primary_ray;
     const Medium* medium = nullptr;
 
     while (true)
     {
-        bool scattered = false;
-        bool terminated = false;
-
         Intersection isect;
         bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
 
         if (medium)
         {
-            uint64 hash0 = Hash(sampler.Next1D());
-            uint64 hash1 = Hash(sampler.Next1D());
-            RNG rng(hash0, hash1);
+            bool scattered = false;
+            bool terminated = false;
 
             Float t_max = found_intersection ? isect.t : infinity;
             Float u = sampler.Next1D();
             Float u_event = sampler.Next1D();
 
-            Sample_MajorantTransmittance(
+            uint64 hash0 = Hash(sampler.Next1D());
+            uint64 hash1 = Hash(sampler.Next1D());
+            RNG rng(hash0, hash1);
+
+            // Sample the participating medium
+            // If the sampled point is inside the extent, evaluate the L_n term
+            // otherwise evaluate the L_o term
+            Spectrum T_maj = Sample_MajorantTransmittance(
                 medium, ray, t_max, u, rng,
                 [&](Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj) -> bool {
+                    if (throughput.IsBlack())
+                    {
+                        terminated = true;
+                        return false;
+                    }
+
+                    if (bounce < max_bounces && !ms.Le.IsBlack())
+                    {
+                        // Add medium emission
+                        Float p_path = sigma_maj[0] * T_maj[0];
+                        Spectrum throughput_p = throughput * T_maj / p_path;
+
+                        // Rescaled sampling probability for emission event
+                        Spectrum r_e = r_u * sigma_maj * T_maj / p_path;
+
+                        if (!r_e.IsBlack())
+                        {
+                            // Single sample wavelength-wise MIS estimator with balance heuristic
+                            L += throughput_p * ms.sigma_a * ms.Le / r_e.Average();
+                        }
+                    }
+
                     Float p_absorb = ms.sigma_a[0] / sigma_maj[0];
                     Float p_scatter = ms.sigma_s[0] / sigma_maj[0];
                     Float p_null = std::max<Float>(0, 1 - p_absorb - p_scatter);
@@ -81,10 +113,9 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     {
                     case 0:
                     {
-                        // Sampled absorption event, incorporate emission and terminate path
-                        L += throughput * ms.Le;
+                        // Sampled absorption event
+                        // Add medium emission with MIS weight of 0
                         terminated = true;
-
                         return false;
                     }
 
@@ -129,14 +160,14 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             );
         }
 
-        if (terminated)
-        {
-            break;
-        }
-        if (scattered)
-        {
-            continue;
-        }
+        // if (terminated)
+        // {
+        //     break;
+        // }
+        // if (scattered)
+        // {
+        //     continue;
+        // }
 
         if (!found_intersection)
         {
@@ -155,7 +186,7 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         Vec3 wo = Normalize(-ray.d);
 
-        // Incorporate surface emission
+        // Add surface emission
         L += throughput * isect.Le(wo);
 
         int8 mem[max_bxdf_size];

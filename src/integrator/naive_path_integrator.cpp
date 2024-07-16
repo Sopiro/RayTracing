@@ -50,14 +50,14 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         Vec3 wo = Normalize(-ray.d);
 
-        // Incorporate surface emission
+        // Add surface emission
         L += throughput * isect.Le(wo);
 
         int8 mem[max_bxdf_size];
         Resource res(mem, sizeof(mem));
         Allocator alloc(&res);
         BSDF bsdf;
-        if (isect.GetBSDF(&bsdf, wo, alloc) == false)
+        if (!isect.GetBSDF(&bsdf, wo, alloc))
         {
             ray = Ray(isect.point, -wo);
             continue;
@@ -122,7 +122,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& ray, Sampler& sampler, int32 depth) 
     Resource res(mem, sizeof(mem));
     Allocator alloc(&res);
     BSDF bsdf;
-    if (isect.GetBSDF(&bsdf, wo, alloc) == false)
+    if (!isect.GetBSDF(&bsdf, wo, alloc))
     {
         return L;
     }

@@ -148,7 +148,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
 
         Vec3 wo = Normalize(-ray.d);
 
-        // Incorporate surface emission
+        // Add surface emission
         L += throughput * isect.Le(wo);
 
         int8 mem[max_bxdf_size];
