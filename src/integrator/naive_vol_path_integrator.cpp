@@ -8,11 +8,10 @@ namespace bulbit
 {
 
 NaiveVolPathIntegrator::NaiveVolPathIntegrator(
-    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, Float rr_probability
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces
 )
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
-    , rr_probability{ rr_probability }
 {
     for (Light* light : all_lights)
     {
@@ -153,6 +152,8 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             continue;
         }
 
+        Vec3 wo = Normalize(-ray.d);
+
         if (!found_intersection)
         {
             for (Light* light : infinite_lights)
@@ -163,15 +164,16 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             break;
         }
 
+        // Add surface emission
+        if (Spectrum Le = isect.Le(wo); !Le.IsBlack())
+        {
+            L += throughput * Le / r_u.Average();
+        }
+
         if (bounce++ >= max_bounces)
         {
             break;
         }
-
-        Vec3 wo = Normalize(-ray.d);
-
-        // Add surface emission
-        L += throughput * isect.Le(wo) / r_u.Average();
 
         int8 mem[max_bxdf_size];
         Resource res(mem, sizeof(mem));
@@ -204,13 +206,13 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(rr_probability, throughput.MaxComponent() * eta_scale / r_u.Average());
-            if (sampler.Next1D() > rr)
+            Float rr = throughput.MaxComponent() * eta_scale / r_u.Average();
+            if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput *= 1 / rr;
+            throughput /= rr;
         }
     }
 

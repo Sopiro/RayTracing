@@ -6,11 +6,10 @@ namespace bulbit
 {
 
 NaivePathIntegrator::NaivePathIntegrator(
-    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 bounces, Float rr
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces
 )
     : SamplerIntegrator(accel, std::move(lights), sampler)
-    , max_bounces{ bounces }
-    , rr_probability{ rr }
+    , max_bounces{ max_bounces }
 {
     for (Light* light : all_lights)
     {
@@ -82,13 +81,13 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(rr_probability, throughput.Luminance() * eta_scale);
-            if (sampler.Next1D() > rr)
+            Float rr = throughput.Luminance() * eta_scale;
+            if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput *= 1 / rr;
+            throughput /= rr;
         }
     }
 

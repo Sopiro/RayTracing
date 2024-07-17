@@ -7,16 +7,10 @@ namespace bulbit
 {
 
 PathIntegrator::PathIntegrator(
-    const Intersectable* accel,
-    std::vector<Light*> lights,
-    const Sampler* sampler,
-    int32 max_bounces,
-    bool regularize_bsdf,
-    Float rr_probability
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, bool regularize_bsdf
 )
     : SamplerIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
-    , rr_probability{ rr_probability }
     , regularize_bsdf{ regularize_bsdf }
     , light_sampler{ all_lights }
 {
@@ -80,8 +74,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         Vec3 wo = Normalize(-ray.d);
 
-        Spectrum Le = isect.Le(wo);
-        if (!Le.IsBlack())
+        if (Spectrum Le = isect.Le(wo); !Le.IsBlack())
         {
             bool has_area_light = area_lights.contains(isect.primitive);
             if (bounce == 0 || specular_bounce || !has_area_light)
@@ -174,13 +167,13 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = std::fmin(rr_probability, throughput.Luminance() * eta_scale);
-            if (sampler.Next1D() > rr)
+            Float rr = throughput.Luminance() * eta_scale;
+            if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput *= 1 / rr;
+            throughput /= rr;
         }
     }
 

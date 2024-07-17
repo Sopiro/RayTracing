@@ -52,7 +52,7 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
 
                 do
                 {
-                    Point2 film_sample = Point2(Float(x), Float(y)) + sampler->Next2D();
+                    Point2 film_sample = Point2(x, y) + sampler->Next2D();
                     Point2 aperture_sample = sampler->Next2D();
 
                     Ray ray;
@@ -62,7 +62,7 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
 
                     if (L.IsNullish() == false)
                     {
-                        film->AddSample(x, y, L, 1.0f);
+                        film->AddSample(x, y, L, 1);
                     }
                 } while (sampler->StartNextPixelSample());
             }

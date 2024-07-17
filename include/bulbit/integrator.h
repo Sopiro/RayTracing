@@ -109,13 +109,7 @@ private:
 class NaivePathIntegrator : public SamplerIntegrator
 {
 public:
-    NaivePathIntegrator(
-        const Intersectable* accel,
-        std::vector<Light*> lights,
-        const Sampler* sampler,
-        int32 max_bounces,
-        Float russian_roulette_probability = 0.95f
-    );
+    NaivePathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
     virtual ~NaivePathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -126,7 +120,6 @@ private:
     std::vector<Light*> infinite_lights;
 
     int32 max_bounces;
-    Float rr_probability;
 };
 
 // Uni-directional path tracer
@@ -138,8 +131,7 @@ public:
         std::vector<Light*> lights,
         const Sampler* sampler,
         int32 max_bounces,
-        bool regularize_bsdf = false,
-        Float russian_roulette_probability = 0.95f
+        bool regularize_bsdf = false
     );
     virtual ~PathIntegrator() = default;
 
@@ -151,20 +143,13 @@ private:
     UniformLightSampler light_sampler;
 
     int32 max_bounces;
-    Float rr_probability;
     bool regularize_bsdf;
 };
 
 class NaiveVolPathIntegrator : public SamplerIntegrator
 {
 public:
-    NaiveVolPathIntegrator(
-        const Intersectable* accel,
-        std::vector<Light*> lights,
-        const Sampler* sampler,
-        int32 max_bounces,
-        Float russian_roulette_probability = 0.95f
-    );
+    NaiveVolPathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
     virtual ~NaiveVolPathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
@@ -173,7 +158,6 @@ private:
     std::vector<Light*> infinite_lights;
 
     int32 max_bounces;
-    Float rr_probability;
 };
 
 class VolPathIntegrator : public SamplerIntegrator
@@ -184,20 +168,30 @@ public:
         std::vector<Light*> lights,
         const Sampler* sampler,
         int32 max_bounces,
-        bool regularize_bsdf = false,
-        Float russian_roulette_probability = 0.95f
+        bool regularize_bsdf = false
     );
     virtual ~VolPathIntegrator() = default;
 
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
 
 private:
+    Spectrum SampleDirectLight(
+        const Vec3& wo,
+        const Intersection& isect,
+        const Medium* medium,
+        const BSDF* bsdf,
+        const PhaseFunction* phase,
+        int32 wavelength,
+        Sampler& sampler,
+        Spectrum throughput,
+        Spectrum r_p
+    ) const;
+
     std::vector<Light*> infinite_lights;
     std::unordered_map<const Primitive*, AreaLight*> area_lights;
     UniformLightSampler light_sampler;
 
     int32 max_bounces;
-    Float rr_probability;
     bool regularize_bsdf;
 };
 

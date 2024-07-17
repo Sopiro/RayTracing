@@ -19,6 +19,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0.2), Spectrum(0.5), Spectrum(0.0), -0.65f);
     MediumInterface mi(nullptr, hm);
+    MediumInterface mi_two_sided(hm, hm);
 
     // Cornell box
     {
@@ -83,7 +84,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        CreateRectXZ(scene, tf, light, mi);
+        CreateRectXZ(scene, tf, light, mi_two_sided);
 
         // CreateSphere(scene, Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
