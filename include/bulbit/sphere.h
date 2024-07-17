@@ -48,13 +48,13 @@ inline AABB Sphere::GetAABB() const
 
 inline Float Sphere::EvaluatePDF(const Ray& ray) const
 {
-    Intersection is;
-    if (Intersect(&is, ray, Ray::epsilon, infinity) == false)
+    Intersection isect;
+    if (Intersect(&isect, ray, Ray::epsilon, infinity) == false)
     {
         return 0.0f;
     }
 
-    return PDF(is, ray);
+    return PDF(isect, ray);
 }
 
 inline Float Sphere::PDF(const Intersection& hit_is, const Ray& hit_ray) const

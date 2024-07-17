@@ -3,7 +3,7 @@
 #include "bulbit/scene.h"
 #include "bulbit/sphere.h"
 
-std::unique_ptr<Camera> CornellBox(Scene& scene)
+std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 {
     // Materials
     auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
@@ -17,27 +17,35 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
+    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0.2), Spectrum(0.5), Spectrum(0.0), -0.65f);
+    MediumInterface mi(nullptr, hm);
+    MediumInterface mi_two_sided(hm, hm);
+
     // Cornell box
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        CreateRectXY(scene, tf, wakgood_mat);
+        CreateRectXY(scene, tf, wakgood_mat, mi);
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        CreateRectYZ(scene, tf, red);
+        CreateRectYZ(scene, tf, red, mi);
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        CreateRectYZ(scene, tf, green);
+        CreateRectYZ(scene, tf, green, mi);
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        CreateRectXZ(scene, tf, white);
+        CreateRectXZ(scene, tf, white, mi);
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        CreateRectXZ(scene, tf, white);
+        CreateRectXZ(scene, tf, white, mi);
+
+        // back
+        tf = Transform{ Vec3(0.5f, 0.5f, 0.0f), Quat(pi, y_axis), Vec3(1.0f) };
+        CreateRectXY(scene, tf, nullptr, mi);
     }
 
     // Left block
@@ -47,7 +55,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, white, mi);
     }
 
     // Right block
@@ -59,7 +67,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, white, mi);
     }
 
     // Right sphere
@@ -76,7 +84,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // Lights
     {
         auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
-        CreateRectXZ(scene, tf, light);
+        CreateRectXZ(scene, tf, light, mi_two_sided);
 
         // CreateSphere(scene, Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
@@ -103,4 +111,4 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
 }
 
-static int32 index = Sample::Register("cornell-box", CornellBox);
+static int32 index = Sample::Register("cornell-box-volume", CornellBoxVolume);
