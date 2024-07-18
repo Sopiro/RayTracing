@@ -138,9 +138,8 @@ public:
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
 
 private:
-    Spectrum SampleDirectLight(
-        const Vec3& wo, const Intersection& isect, BSDF* bsdf, Sampler& sampler, const Spectrum& throughput
-    ) const;
+    Spectrum SampleDirectLight(const Vec3& wo, const Intersection& isect, BSDF* bsdf, Sampler& sampler, const Spectrum& beta)
+        const;
 
     std::vector<Light*> infinite_lights;
     std::unordered_map<const Primitive*, AreaLight*> area_lights;
@@ -187,7 +186,7 @@ private:
         const PhaseFunction* phase,
         int32 wavelength,
         Sampler& sampler,
-        Spectrum throughput,
+        Spectrum beta,
         Spectrum r_p
     ) const;
 

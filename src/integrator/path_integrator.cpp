@@ -38,7 +38,7 @@ PathIntegrator::PathIntegrator(
 Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     int32 bounce = 0;
-    Spectrum L(0), throughput(1);
+    Spectrum L(0), beta(1);
     bool specular_bounce = false;
     bool any_non_specular_bounces = false;
     Float eta_scale = 1;
@@ -54,7 +54,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             {
                 for (Light* light : infinite_lights)
                 {
-                    L += throughput * light->Le(ray);
+                    L += beta * light->Le(ray);
                 }
             }
             else
@@ -65,7 +65,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                     Float light_pdf = light->EvaluatePDF(ray) * light_sampler.EvaluatePMF(light);
                     Float mis_weight = PowerHeuristic(1, prev_bsdf_pdf, 1, light_pdf);
 
-                    L += throughput * mis_weight * light->Le(ray);
+                    L += beta * mis_weight * light->Le(ray);
                 }
             }
 
@@ -79,7 +79,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             bool has_area_light = area_lights.contains(isect.primitive);
             if (bounce == 0 || specular_bounce || !has_area_light)
             {
-                L += throughput * Le;
+                L += beta * Le;
             }
             else if (has_area_light)
             {
@@ -89,7 +89,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
                 Float light_pdf = isect.primitive->GetShape()->PDF(isect, ray) * light_sampler.EvaluatePMF(area_light);
                 Float mis_weight = PowerHeuristic(1, prev_bsdf_pdf, 1, light_pdf);
 
-                L += throughput * mis_weight * Le;
+                L += beta * mis_weight * Le;
             }
         }
 
@@ -118,7 +118,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         // Estimate direct light
         if (IsNonSpecular(bsdf.Flags()))
         {
-            L += SampleDirectLight(wo, isect, &bsdf, sampler, throughput);
+            L += SampleDirectLight(wo, isect, &bsdf, sampler, beta);
         }
 
         BSDFSample bsdf_sample;
@@ -136,20 +136,20 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
         // Save bsdf pdf for MIS
         prev_bsdf_pdf = bsdf_sample.pdf;
-        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        beta *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         ray = Ray(isect.point, bsdf_sample.wi);
 
         // Terminate path with russian roulette
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = throughput.Luminance() * eta_scale;
+            Float rr = beta.MaxComponent() * eta_scale;
             if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput /= rr;
+            beta /= rr;
         }
     }
 
@@ -157,7 +157,7 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 }
 
 Spectrum PathIntegrator::SampleDirectLight(
-    const Vec3& wo, const Intersection& isect, BSDF* bsdf, Sampler& sampler, const Spectrum& throughput
+    const Vec3& wo, const Intersection& isect, BSDF* bsdf, Sampler& sampler, const Spectrum& beta
 ) const
 {
     Float u0 = sampler.Next1D();
@@ -186,12 +186,12 @@ Spectrum PathIntegrator::SampleDirectLight(
 
     if (sampled_light.light->IsDeltaLight())
     {
-        return throughput * light_sample.Li * f_cos / light_pdf;
+        return beta * light_sample.Li * f_cos / light_pdf;
     }
     else
     {
         Float mis_weight = PowerHeuristic(1, light_pdf, 1, bsdf_pdf);
-        return throughput * mis_weight * light_sample.Li * f_cos / light_pdf;
+        return beta * mis_weight * light_sample.Li * f_cos / light_pdf;
     }
 }
 

@@ -20,7 +20,7 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
 
         auto tf = Transform{ Vec3(0.0f, -1.0f, 0.0f), Quat(DegToRad(0.0f), y_axis), Vec3(4.0f) };
         SetLoaderUseForceFallbackMaterial(true);
-        SetLoaderFallbackMaterial(nullptr);
+        SetLoaderFallbackMaterial(mat);
 
         HomogeneousMedium* hm =
             scene.CreateMedium<HomogeneousMedium>(Spectrum(0.1, 0.2, 0.3), Spectrum(1, 5, 10), Spectrum(0.0), -0.9f);
@@ -41,7 +41,7 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 640;
+    int32 width = 576;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 0, 2, 10 };

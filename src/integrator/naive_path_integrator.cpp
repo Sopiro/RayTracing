@@ -25,7 +25,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
     // return Li(ray, sampler, 0);
 
     int32 bounce = 0;
-    Spectrum L(0), throughput(1);
+    Spectrum L(0), beta(1);
     Float eta_scale = 1;
     Ray ray = primary_ray;
 
@@ -36,7 +36,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         {
             for (Light* light : infinite_lights)
             {
-                L += throughput * light->Le(ray);
+                L += beta * light->Le(ray);
             }
 
             break;
@@ -50,7 +50,7 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         Vec3 wo = Normalize(-ray.d);
 
         // Add surface emission
-        L += throughput * isect.Le(wo);
+        L += beta * isect.Le(wo);
 
         int8 mem[max_bxdf_size];
         Resource res(mem, sizeof(mem));
@@ -74,20 +74,20 @@ Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             eta_scale *= Sqr(bsdf_sample.eta);
         }
 
-        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        beta *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         ray = Ray(isect.point, bsdf_sample.wi);
 
         // Terminate path with russian roulette
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = throughput.Luminance() * eta_scale;
+            Float rr = beta.MaxComponent() * eta_scale;
             if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput /= rr;
+            beta /= rr;
         }
     }
 

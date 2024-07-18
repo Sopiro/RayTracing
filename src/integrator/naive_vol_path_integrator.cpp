@@ -36,7 +36,7 @@ NaiveVolPathIntegrator::NaiveVolPathIntegrator(
 Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
     int32 bounce = 0;
-    Spectrum L(0), throughput(1);
+    Spectrum L(0), beta(1);
     Spectrum r_u(1); // Rescaled path sampling probability
     Float eta_scale = 1;
 
@@ -79,10 +79,10 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                     {
                         // Sampled absorption event, incorporate emission and terminate path
                         Float pdf = T_maj[wavelength] * ms.sigma_a[wavelength];
-                        throughput *= T_maj / pdf;
+                        beta *= T_maj / pdf;
                         r_u *= T_maj * ms.sigma_a / pdf;
 
-                        L += throughput * ms.sigma_a * ms.Le / r_u.Average();
+                        L += beta * ms.sigma_a * ms.Le / r_u.Average();
                         terminated = true;
 
                         return false;
@@ -107,10 +107,10 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                         }
 
                         Float pdf = T_maj[wavelength] * ms.sigma_s[wavelength];
-                        throughput *= T_maj * ms.sigma_s / pdf;
+                        beta *= T_maj * ms.sigma_s / pdf;
                         r_u *= T_maj * ms.sigma_s / pdf;
 
-                        throughput *= ps.p / ps.pdf;
+                        beta *= ps.p / ps.pdf;
                         ray.o = p;
                         ray.d = ps.wi;
                         scattered = true;
@@ -125,11 +125,11 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                         Spectrum sigma_n = Max(sigma_maj - ms.sigma_a - ms.sigma_s, 0);
 
                         Float pdf = T_maj[wavelength] * sigma_n[wavelength];
-                        throughput *= T_maj * sigma_n / pdf;
-                        if (pdf == 0) throughput = Spectrum::black;
+                        beta *= T_maj * sigma_n / pdf;
+                        if (pdf == 0) beta = Spectrum::black;
                         r_u *= T_maj * sigma_n / pdf;
 
-                        return !throughput.IsBlack() && !r_u.IsBlack();
+                        return !beta.IsBlack() && !r_u.IsBlack();
                     }
 
                     default:
@@ -139,7 +139,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                 }
             );
 
-            throughput *= T_maj / T_maj[wavelength];
+            beta *= T_maj / T_maj[wavelength];
             r_u *= T_maj / T_maj[wavelength];
         }
 
@@ -158,7 +158,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         {
             for (Light* light : infinite_lights)
             {
-                L += throughput * light->Le(ray) / r_u.Average();
+                L += beta * light->Le(ray) / r_u.Average();
             }
 
             break;
@@ -167,7 +167,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         // Add surface emission
         if (Spectrum Le = isect.Le(wo); !Le.IsBlack())
         {
-            L += throughput * Le / r_u.Average();
+            L += beta * Le / r_u.Average();
         }
 
         if (bounce++ >= max_bounces)
@@ -198,7 +198,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             eta_scale *= Sqr(bsdf_sample.eta);
         }
 
-        throughput *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
+        beta *= bsdf_sample.f * AbsDot(isect.shading.normal, bsdf_sample.wi) / bsdf_sample.pdf;
         medium = isect.GetMedium(bsdf_sample.wi);
         ray = Ray(isect.point, bsdf_sample.wi);
 
@@ -206,13 +206,13 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = throughput.MaxComponent() * eta_scale / r_u.Average();
+            Float rr = beta.MaxComponent() * eta_scale / r_u.Average();
             if (rr < 1 && sampler.Next1D() > rr)
             {
                 break;
             }
 
-            throughput /= rr;
+            beta /= rr;
         }
     }
 
