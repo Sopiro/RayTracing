@@ -50,6 +50,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         bool scattered = false;
         bool terminated = false;
 
+        Vec3 wo = Normalize(-ray.d);
         Intersection isect;
         bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
 
@@ -100,7 +101,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
                         // Sample phase function to find next path direction
                         Point2 u{ rng.NextFloat(), rng.NextFloat() };
                         PhaseFunctionSample ps;
-                        if (!ms.phase->Sample_p(&ps, -ray.d, u))
+                        if (!ms.phase->Sample_p(&ps, wo, u))
                         {
                             terminated = true;
                             return false;
@@ -152,8 +153,6 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
             continue;
         }
 
-        Vec3 wo = Normalize(-ray.d);
-
         if (!found_intersection)
         {
             for (Light* light : infinite_lights)
@@ -181,8 +180,8 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         BSDF bsdf;
         if (!isect.GetBSDF(&bsdf, wo, alloc))
         {
-            medium = isect.GetMedium(-wo);
-            ray = Ray(isect.point, -wo);
+            medium = isect.GetMedium(ray.d);
+            ray.o = isect.point;
             --bounce;
             continue;
         }
@@ -206,13 +205,13 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = beta.MaxComponent() * eta_scale / r_u.Average();
-            if (rr < 1 && sampler.Next1D() > rr)
+            Float p = beta.MaxComponent() * eta_scale / r_u.Average();
+            if (p < 1 && sampler.Next1D() > p)
             {
                 break;
             }
 
-            beta /= rr;
+            beta /= p;
         }
     }
 

@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Loading scene.." << std::endl;
     Timer timer;
-    if (!Sample::Get("volume", &scene, &camera))
+    if (!Sample::Get("cornell-box", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;
@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
     int32 max_bounces = 50;
     IndependentSampler sampler(samples_per_pixel);
     VolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
+    // PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);
     // AmbientOcclusion renderer(&accel, scene.GetLights(), &sampler, 0.5f);
     // AlbedoIntegrator renderer(&accel, scene.GetLights(), &sampler);

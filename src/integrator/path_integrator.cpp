@@ -143,13 +143,13 @@ Spectrum PathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Float rr = beta.MaxComponent() * eta_scale;
-            if (rr < 1 && sampler.Next1D() > rr)
+            Float p = beta.MaxComponent() * eta_scale;
+            if (p < 1 && sampler.Next1D() > p)
             {
                 break;
             }
 
-            beta /= rr;
+            beta /= p;
         }
     }
 

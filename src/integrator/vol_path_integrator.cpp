@@ -38,6 +38,7 @@ VolPathIntegrator::VolPathIntegrator(
 
 Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 {
+    int32 wavelength = std::min<int32>(sampler.Next1D() * 3, 2);
     int32 bounce = 0;
     Spectrum L(0), beta(1);
 
@@ -50,13 +51,14 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
     Float eta_scale = 1;
     Ray ray = primary_ray;
-    int32 wavelength = std::min<int32>(sampler.Next1D() * 3, 2);
 
     const Medium* medium = nullptr;
+
     Point3 last_scattering_vertex;
 
     while (true)
     {
+        Vec3 wo = Normalize(-ray.d);
         Intersection isect;
         bool found_intersection = Intersect(&isect, ray, Ray::epsilon, infinity);
 
@@ -131,12 +133,12 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
 
                         // Add direct light
                         Intersection medium_isect{ .point = p };
-                        L += SampleDirectLight(-ray.d, medium_isect, medium, nullptr, ms.phase, wavelength, sampler, beta, r_u);
+                        L += SampleDirectLight(wo, medium_isect, medium, nullptr, ms.phase, wavelength, sampler, beta, r_u);
                         last_scattering_vertex = p;
 
                         // Sample phase function to find next path direction
                         PhaseFunctionSample phase_sample;
-                        if (!ms.phase->Sample_p(&phase_sample, -ray.d, sampler.Next2D()))
+                        if (!ms.phase->Sample_p(&phase_sample, wo, sampler.Next2D()))
                         {
                             terminated = true;
                         }
@@ -199,8 +201,6 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
             r_u *= T_maj / T_maj[wavelength];
             r_l *= T_maj / T_maj[wavelength];
         }
-
-        Vec3 wo = Normalize(-ray.d);
 
         if (!found_intersection)
         {
@@ -298,14 +298,14 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)
         {
-            Spectrum rr_throughput = beta * eta_scale / r_u.Average();
-            Float rr = rr_throughput.MaxComponent();
-            if (rr < 1 && sampler.Next1D() > rr)
+            Spectrum rr = beta * eta_scale / r_u.Average();
+            Float p = rr.MaxComponent();
+            if (p < 1 && sampler.Next1D() > p)
             {
                 break;
             }
 
-            beta /= rr;
+            beta /= p;
         }
     }
 
