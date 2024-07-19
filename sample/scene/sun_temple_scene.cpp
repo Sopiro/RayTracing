@@ -23,7 +23,7 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
     scene.CreateLight<PointLight>(Point3(7.1504f, 1.99327f, 43.2531f), intensity * color);
     scene.CreateLight<PointLight>(Point3(0.030202f, 1.22295f, 31.5558f), intensity * color);
 
-    Vec3 blender = Quat::FromEuler(DegToRad(-85.4428f), DegToRad(-30.6847f), DegToRad(57.7338f)) * Vec3(0, 0, -1);
+    Vec3 blender = Quat::FromEuler(DegToRad(-85.4428f), DegToRad(-30.6847f), DegToRad(57.7338f)).Rotate(Vec3(0, 0, -1));
     Vec3 dir(blender.x, blender.z, -blender.y);
     scene.CreateLight<DirectionalLight>(dir, 5 * Spectrum(1.0f, 0.569847f, 0.301f), 0.01f);
 
