@@ -9,6 +9,11 @@ DielectricMaterial::DielectricMaterial(Float eta)
 {
 }
 
+DielectricMaterial::DielectricMaterial(Float eta, Float roughness)
+    : DielectricMaterial(eta, ConstantFloatTexture::Create(roughness))
+{
+}
+
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness)
     : DielectricMaterial(eta, roughness, roughness)
 

@@ -441,6 +441,7 @@ Spectrum VolPathIntegrator::SampleDirectLight(
 
     // Multiply the rescaled path probabilities for path sampling of the path
     // up to the last real-scattering vertex where direct lighting is being computed
+    // Division by the light path PDF canceled out
     r_l *= r_p * light_pdf;
     r_u *= r_p * scattering_pdf;
 

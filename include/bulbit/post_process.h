@@ -84,8 +84,8 @@ inline Spectrum Tonemap_Unreal(const Spectrum& hdr)
 inline Spectrum Tonemap_FilmicHejl2015(const Spectrum& hdr, Float whitePt)
 {
     Vec4 vh = Vec4(hdr.r, hdr.g, hdr.b, whitePt);
-    Vec4 va = 1.425f * vh + 0.05f;                          // eval filmic curve
-    Vec4 vf = (vh * va + 0.004f) / (vh * (va + 0.55f) + 0.0491f) - 0.0821f;
+    Vec4 va = Float(1.425) * vh + Float(0.05);              // eval filmic curve
+    Vec4 vf = (vh * va + Float(0.004)) / (vh * (va + Float(0.55)) + Float(0.0491)) - Float(0.0821);
     return Spectrum(vf.x / vf.w, vf.y / vf.w, vf.z / vf.w); // white point correction
 }
 

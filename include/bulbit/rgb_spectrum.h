@@ -105,12 +105,14 @@ inline RGBSpectrum operator-(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
     return RGBSpectrum(sp1.r - sp2.r, sp1.g - sp2.g, sp1.b - sp2.b);
 }
 
-inline RGBSpectrum operator*(const RGBSpectrum& sp, Float s)
+template <typename T>
+inline RGBSpectrum operator*(const RGBSpectrum& sp, T s)
 {
     return RGBSpectrum(sp.r * s, sp.g * s, sp.b * s);
 }
 
-inline RGBSpectrum operator*(Float s, const RGBSpectrum& sp)
+template <typename T>
+inline RGBSpectrum operator*(T s, const RGBSpectrum& sp)
 {
     return RGBSpectrum(sp.r * s, sp.g * s, sp.b * s);
 }
@@ -120,12 +122,14 @@ inline RGBSpectrum operator*(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
     return RGBSpectrum(sp1.r * sp2.r, sp1.g * sp2.g, sp1.b * sp2.b);
 }
 
-inline RGBSpectrum operator/(const RGBSpectrum& sp, Float s)
+template <typename T>
+inline RGBSpectrum operator/(const RGBSpectrum& sp, T s)
 {
     return RGBSpectrum(sp.r / s, sp.g / s, sp.b / s);
 }
 
-inline RGBSpectrum operator/(Float s, const RGBSpectrum& sp)
+template <typename T>
+inline RGBSpectrum operator/(T s, const RGBSpectrum& sp)
 {
     return RGBSpectrum(s / sp.r, s / sp.g, s / sp.b);
 }
@@ -145,7 +149,8 @@ inline bool operator!=(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
     return sp1.r != sp2.r || sp1.g != sp2.g || sp1.b != sp2.b;
 }
 
-inline RGBSpectrum operator+=(RGBSpectrum& sp1, Float s)
+template <typename T>
+inline RGBSpectrum operator+=(RGBSpectrum& sp1, T s)
 {
     sp1.r += s;
     sp1.g += s;
@@ -153,7 +158,8 @@ inline RGBSpectrum operator+=(RGBSpectrum& sp1, Float s)
     return sp1;
 }
 
-inline RGBSpectrum operator-=(RGBSpectrum& sp1, Float s)
+template <typename T>
+inline RGBSpectrum operator-=(RGBSpectrum& sp1, T s)
 {
     sp1.r -= s;
     sp1.g -= s;
@@ -161,7 +167,8 @@ inline RGBSpectrum operator-=(RGBSpectrum& sp1, Float s)
     return sp1;
 }
 
-inline RGBSpectrum operator*=(RGBSpectrum& sp1, Float s)
+template <typename T>
+inline RGBSpectrum operator*=(RGBSpectrum& sp1, T s)
 {
     sp1.r *= s;
     sp1.g *= s;
@@ -169,7 +176,8 @@ inline RGBSpectrum operator*=(RGBSpectrum& sp1, Float s)
     return sp1;
 }
 
-inline RGBSpectrum operator/=(RGBSpectrum& sp1, Float s)
+template <typename T>
+inline RGBSpectrum operator/=(RGBSpectrum& sp1, T s)
 {
     sp1.r /= s;
     sp1.g /= s;
@@ -209,7 +217,8 @@ inline RGBSpectrum operator/=(RGBSpectrum& sp1, const RGBSpectrum& sp2)
     return sp1;
 }
 
-inline RGBSpectrum Lerp(const RGBSpectrum& sp1, const RGBSpectrum& sp2, Float t)
+template <typename T>
+inline RGBSpectrum Lerp(const RGBSpectrum& sp1, const RGBSpectrum& sp2, T t)
 {
     return (1 - t) * sp1 + t * sp2;
 }

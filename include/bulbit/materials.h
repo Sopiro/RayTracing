@@ -41,6 +41,7 @@ class DielectricMaterial : public Material
 {
 public:
     DielectricMaterial(Float eta);
+    DielectricMaterial(Float eta, Float roughness);
     DielectricMaterial(Float eta, const FloatTexture* roughness);
     DielectricMaterial(Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness);
 

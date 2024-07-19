@@ -74,7 +74,7 @@ struct Transform
 
     Transform GetInverse() const
     {
-        return Transform{ q.RotateInv(-p), q.GetConjugate(), 1.0f / r };
+        return Transform{ q.RotateInv(-p), q.GetConjugate(), 1 / r };
     }
 };
 
@@ -116,7 +116,7 @@ inline Transform MulT(const Transform& a, const Transform& b)
 {
     Quat invQ = a.q.GetConjugate();
 
-    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (1.0f / a.r) * b.r };
+    return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (1 / a.r) * b.r };
 }
 
 inline Transform& Transform::operator*=(const Transform& other)
