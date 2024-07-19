@@ -28,7 +28,7 @@ Float UniformLightSampler::EvaluatePMF(const Light* light) const
 {
     if (lights.size() > 0)
     {
-        return 1.0f / lights.size();
+        return Float(1) / lights.size();
     }
     else
     {

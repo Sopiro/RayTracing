@@ -47,7 +47,7 @@ Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) con
 
 bool DiffuseLightMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<LambertianBxDF>(Spectrum(1)));
+    *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<LambertianBxDF>(Spectrum::black));
     return true;
 }
 

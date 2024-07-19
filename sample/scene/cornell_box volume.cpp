@@ -12,40 +12,42 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
+    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(2.0f));
+    auto plastic = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.2f));
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
-    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0.2), Spectrum(0.5), Spectrum(0.0), -0.65f);
-    MediumInterface mi(nullptr, hm);
-    MediumInterface mi_two_sided(hm, hm);
+    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(1), Spectrum(50), Spectrum(0.0), -0.9f);
+    MediumInterface mi_outside(nullptr, nullptr);
+    MediumInterface mi_inside(hm, nullptr);
+    MediumInterface mi_two_sided(nullptr, nullptr);
 
     // Cornell box
     {
         // front
         auto tf = Transform{ Vec3(0.5f, 0.5f, -1.0f), identity, Vec3(1.0f) };
-        CreateRectXY(scene, tf, wakgood_mat, mi);
+        CreateRectXY(scene, tf, wakgood_mat, mi_outside);
 
         // left
         tf = Transform{ Vec3(0.0f, 0.5f, -0.5f), identity, Vec3(1.0f) };
-        CreateRectYZ(scene, tf, red, mi);
+        CreateRectYZ(scene, tf, red, mi_outside);
 
         // right
         tf = Transform{ Vec3(1.0f, 0.5f, -0.5f), Quat(pi, y_axis), Vec3(1.0f) };
-        CreateRectYZ(scene, tf, green, mi);
+        CreateRectYZ(scene, tf, green, mi_outside);
 
         // bottom
         tf = Transform{ Vec3(0.5f, 0.0f, -0.5f), identity, Vec3(1.0f) };
-        CreateRectXZ(scene, tf, white, mi);
+        CreateRectXZ(scene, tf, white, mi_outside);
 
         // top
         tf = Transform{ Vec3(0.5f, 1.0f, -0.5f), Quat(pi, x_axis), Vec3(1.0f) };
-        CreateRectXZ(scene, tf, white, mi);
+        CreateRectXZ(scene, tf, white, mi_outside);
 
         // back
         tf = Transform{ Vec3(0.5f, 0.5f, 0.0f), Quat(pi, y_axis), Vec3(1.0f) };
-        CreateRectXY(scene, tf, nullptr, mi);
+        CreateRectXY(scene, tf, nullptr, mi_outside);
     }
 
     // Left block
@@ -54,8 +56,9 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
         Float hy = 0.28f;
         Float hz = 0.14f;
 
-        auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white, mi);
+        auto tf = Transform{ 0.33f, hy + Ray::epsilon * 2, -0.66f, Quat(DegToRad(18.0f), y_axis),
+                             Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
+        CreateBox(scene, tf, nullptr, mi_inside);
     }
 
     // Right block
@@ -66,8 +69,9 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
-        auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white, mi);
+        auto tf = Transform{ 0.66f, hy + Ray::epsilon * 2, -0.33f, Quat(DegToRad(-18.0f), y_axis),
+                             Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
+        CreateBox(scene, tf, nullptr, mi_inside);
     }
 
     // Right sphere
@@ -83,7 +87,7 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
     // Lights
     {
-        auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.25f) };
+        auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.7f) };
         CreateRectXZ(scene, tf, light, mi_two_sided);
 
         // CreateSphere(scene, Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
