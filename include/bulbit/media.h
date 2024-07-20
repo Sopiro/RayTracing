@@ -62,12 +62,12 @@ public:
     using MajorantIterator = HomogeneousMajorantIterator;
 
     HomogeneousMedium(Spectrum sigma_a, Spectrum sigma_s, Spectrum Le, Float g)
-        : sigma_a{ sigma_a }
+        : Medium(0)
+        , sigma_a{ sigma_a }
         , sigma_s{ sigma_s }
         , Le{ Le }
         , phase{ g }
     {
-        type_id = 0;
     }
 
     bool IsEmissive() const

@@ -47,9 +47,16 @@ public:
     virtual bool Next(RayMajorantSegment* next_segment) = 0;
 };
 
-class Medium
+class HomogeneousMedium;
+
+class Medium : public TypeDispatcher<HomogeneousMedium>
 {
 public:
+    Medium(size_t index)
+        : TypeDispatcher(index)
+    {
+    }
+
     bool IsEmissive() const
     {
         assert(false);
@@ -67,14 +74,6 @@ public:
         assert(false);
         return nullptr;
     }
-
-protected:
-    template <typename F>
-    friend Spectrum Sample_MajorantTransmittance(
-        const Medium* medium, int32 wavelength, Ray ray, Float t_max, Float u, RNG& rng, F callback
-    );
-
-    size_t type_id;
 };
 
 struct MediumInterface
@@ -106,13 +105,10 @@ struct MediumInterface
     Medium* outside;
 };
 
-class HomogeneousMedium;
-static TypeDispatcher<HomogeneousMedium> mediums;
-
 template <typename F>
 Spectrum Sample_MajorantTransmittance(const Medium* medium, int32 wavelength, Ray ray, Float t_max, Float u, RNG& rng, F callback)
 {
-    return mediums.Dispatch(medium->type_id, medium, [&](auto&& m) -> Spectrum {
+    return medium->Dispatch([&](auto&& m) -> Spectrum {
         using MediumType = std::remove_reference_t<decltype(m)>;
         return Sample_MajorantTransmittance<MediumType>((MediumType*)medium, wavelength, ray, t_max, u, rng, callback);
     });
