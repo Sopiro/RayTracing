@@ -14,14 +14,14 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(10000.0f));
+    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(300.0f));
     auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, 0.0f);
     auto plastic = scene.CreateMaterial<DielectricMaterial>(1.5f, 0.2f);
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
-    Medium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0), Spectrum(1.2f), Spectrum(0.0), -0.7f);
+    Medium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0), Spectrum(1.0f), Spectrum(0.0), -0.7f);
     MediumInterface mi_outside(nullptr, hm);
     MediumInterface mi_inside(hm, nullptr);
     MediumInterface mi_two_sided(hm, hm);
@@ -65,11 +65,11 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
 
     // Lights
     {
-        auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.01f) };
-        CreateRectXZ(scene, tf, light, mi_two_sided);
+        // auto tf = Transform{ 0.5f, 0.995f, -0.5f, Quat(pi, x_axis), Vec3(0.08f) };
+        // CreateRectXZ(scene, tf, light, mi_two_sided);
 
-        // CreateSphere(scene, Vec3(0.5f, 1.0f - 0.001f, -0.5f), 0.001f, light);
-        // scene.CreateLight<PointLight>(Point3(0.5f, 0.999f, -0.5f), Spectrum(0.2f));
+        CreateSphere(scene, Vec3(0.5f, 0.98f, -0.5f), 0.02f, light);
+        // scene.CreateLight<PointLight>(Point3(0.5f, 1.0f - Ray::epsilon, -0.5f), Spectrum(0.2f));
         // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f);
         // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
         // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");

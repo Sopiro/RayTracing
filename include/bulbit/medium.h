@@ -108,8 +108,8 @@ struct MediumInterface
 template <typename F>
 Spectrum Sample_MajorantTransmittance(const Medium* medium, int32 wavelength, Ray ray, Float t_max, Float u, RNG& rng, F callback)
 {
-    return medium->Dispatch([&](auto&& m) -> Spectrum {
-        using MediumType = std::remove_reference_t<decltype(m)>;
+    return medium->Dispatch([&](auto* m) -> Spectrum {
+        using MediumType = std::remove_pointer_t<decltype(m)>;
         return Sample_MajorantTransmittance<MediumType>((MediumType*)medium, wavelength, ray, t_max, u, rng, callback);
     });
 }
