@@ -85,6 +85,11 @@ public:
         return HomogeneousMajorantIterator(Float(0), t_max, sigma_a + sigma_s);
     }
 
+    RayMajorantIterator* SampleRay(Ray ray, Float t_max, Allocator& alloc) const
+    {
+        return alloc.new_object<HomogeneousMajorantIterator>(Float(0), t_max, sigma_a + sigma_s);
+    }
+
 private:
     Spectrum sigma_a, sigma_s, Le;
     HenyeyGreensteinPhaseFunction phase;

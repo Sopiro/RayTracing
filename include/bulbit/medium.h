@@ -49,31 +49,17 @@ public:
 
 class HomogeneousMedium;
 
-class Medium : public TypeDispatcher<HomogeneousMedium>
+class Medium : public DynamicDispatcher<HomogeneousMedium>
 {
 public:
-    Medium(size_t index)
-        : TypeDispatcher(index)
+    Medium(uint8 index)
+        : DynamicDispatcher(index)
     {
     }
 
-    bool IsEmissive() const
-    {
-        assert(false);
-        return false;
-    }
-
-    MediumSample SamplePoint(Point3 p) const
-    {
-        assert(false);
-        return MediumSample{ Spectrum::black, Spectrum::black, Spectrum::black, nullptr };
-    }
-
-    RayMajorantIterator* SampleRay(Ray ray, Float t_max, Allocator& alloc) const
-    {
-        assert(false);
-        return nullptr;
-    }
+    bool IsEmissive() const;
+    MediumSample SamplePoint(Point3 p) const;
+    RayMajorantIterator* SampleRay(Ray ray, Float t_max, Allocator& alloc) const;
 };
 
 struct MediumInterface
@@ -108,9 +94,8 @@ struct MediumInterface
 template <typename F>
 Spectrum Sample_MajorantTransmittance(const Medium* medium, int32 wavelength, Ray ray, Float t_max, Float u, RNG& rng, F callback)
 {
-    return medium->Dispatch([&](auto* m) -> Spectrum {
-        using MediumType = std::remove_pointer_t<decltype(m)>;
-        return Sample_MajorantTransmittance<MediumType>((MediumType*)medium, wavelength, ray, t_max, u, rng, callback);
+    return medium->Dispatch([&](auto m) -> Spectrum {
+        return Sample_MajorantTransmittance(m, wavelength, ray, t_max, u, rng, callback);
     });
 }
 
