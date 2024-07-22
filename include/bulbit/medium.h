@@ -1,11 +1,11 @@
 #pragma once
 
+#include "dynamic_dispatcher.h"
 #include "math.h"
 #include "random.h"
 #include "ray.h"
 #include "sampling.h"
 #include "spectrum.h"
-#include "type_dispatcher.h"
 
 namespace bulbit
 {
