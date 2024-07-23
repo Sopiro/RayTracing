@@ -58,12 +58,12 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 
     int32 width = 500;
 
-    Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
-    Point3 lookat{ 0.5f, 0.5f, 0 };
+    Point3 lookfrom{ 0.5f, 0.5f, 1.9f };
+    Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0;
-    Float vFov = 45;
+    Float aperture = 0.0f;
+    Float vFov = 30.0f;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, width, vFov, aperture, dist_to_focus);
 }

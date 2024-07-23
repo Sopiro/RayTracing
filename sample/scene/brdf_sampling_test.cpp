@@ -56,19 +56,19 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     // scene.Rebuild();
     // std::cout << scene.GetLights().GetCount() << std::endl;
 
-    Float aspect_ratio = 16.f / 9.f;
+    // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
-    // Float aspect_ratio = 1.f;
+    Float aspect_ratio = 1.f;
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 
-    Point3 lookfrom{ 0.5f, 0.5f, 1.25f };
+    Point3 lookfrom{ 0.5f, 0.5f, 1.9f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0;
-    Float vFov = 45;
+    Float aperture = 0.0f;
+    Float vFov = 30.0f;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
 }
