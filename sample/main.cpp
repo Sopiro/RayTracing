@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
     int32 samples_per_pixel = 64;
     int32 max_bounces = 100;
     IndependentSampler sampler(samples_per_pixel);
+    // StratifiedSampler sampler(8, 8, true);
     VolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);

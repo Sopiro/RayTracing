@@ -24,31 +24,25 @@ private:
     RNG rng;
 };
 
-inline IndependentSampler::IndependentSampler(int32 samples_per_pixel, int32 seed)
-    : Sampler(samples_per_pixel)
+class StratifiedSampler : public Sampler
 {
-    rng.Seed(seed);
-}
+public:
+    StratifiedSampler(int32 x_samples, int32 y_samples, bool jitter, int32 seed = 0);
+    virtual void StartPixelSample(const Point2i& pixel, int32 sample_index) override;
 
-inline void IndependentSampler::StartPixelSample(const Point2i& pixel, int32 sample_index)
-{
-    Sampler::StartPixelSample(pixel, sample_index);
-    rng.Seed(Hash(pixel, seed, sample_index));
-}
+    virtual Float Next1D() override;
+    virtual Point2 Next2D() override;
 
-inline Float IndependentSampler::Next1D()
-{
-    return rng.NextFloat();
-}
+    virtual std::unique_ptr<Sampler> Clone() const override;
 
-inline Point2 IndependentSampler::Next2D()
-{
-    return Point2{ rng.NextFloat(), rng.NextFloat() };
-}
+private:
+    bool jitter;
+    int32 dimension;
 
-inline std::unique_ptr<Sampler> IndependentSampler::Clone() const
-{
-    return std::make_unique<IndependentSampler>(samples_per_pixel, seed);
-}
+    int32 x_samples, y_samples;
+
+    int32 seed;
+    RNG rng;
+};
 
 } // namespace bulbit
