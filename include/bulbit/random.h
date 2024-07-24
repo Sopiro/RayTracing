@@ -89,6 +89,30 @@ public:
         return std::fmin(1 - epsilon, Float(NextUint() * 0x1p-32f));
     }
 
+    void Advance(int64_t idelta)
+    {
+        uint64_t delta = (uint64_t)idelta;
+
+        uint64_t curMult = pcg32_mult;
+        uint64_t curPlus = inc;
+
+        uint64_t accMult = 1u;
+        uint64_t accPlus = 0u;
+
+        while (delta > 0)
+        {
+            if (delta & 1)
+            {
+                accMult *= curMult;
+                accPlus = accPlus * curMult + curPlus;
+            }
+            curPlus = (curMult + 1) * curPlus;
+            curMult *= curMult;
+            delta /= 2;
+        }
+        state = accMult * state + accPlus;
+    }
+
 private:
     static inline uint64 pcg32_default_state = 0x853c49e6748fea9bULL;
     static inline uint64 pcg32_default_stream = 0xda3e39cb94b95bdbULL;

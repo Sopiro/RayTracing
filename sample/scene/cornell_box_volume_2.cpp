@@ -18,7 +18,7 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
-    Medium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0), Spectrum(1.0f), Spectrum(0.0), -0.7f);
+    Medium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0), Spectrum(0.5f), Spectrum(0.0), -0.7f);
     MediumInterface mi_outside(nullptr, hm);
     MediumInterface mi_inside(hm, nullptr);
     MediumInterface mi_two_sided(hm, hm);
@@ -78,12 +78,12 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
 
     int32 width = 1000;
 
-    Point3 lookfrom{ 0.5f, 0.5f, 1.9f };
+    Point3 lookfrom{ 0.5f, 0.5f, 2.05f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0.0f;
-    Float vFov = 30.0f;
+    Float vFov = 28.0f;
 
     // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
     // return std::make_unique<SphericalCamera>(lookfrom, width, width);

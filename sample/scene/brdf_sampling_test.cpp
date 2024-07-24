@@ -60,12 +60,12 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     int32 width = 500;
     int32 height = int32(width / aspect_ratio);
 
-    Point3 lookfrom{ 0.5f, 0.5f, 1.9f };
+    Point3 lookfrom{ 0.5f, 0.5f, 2.05f };
     Point3 lookat{ 0.5f, 0.5f, 0.0f };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0.0f;
-    Float vFov = 30.0f;
+    Float vFov = 28.0f;
 
     return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
 }
