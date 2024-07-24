@@ -60,26 +60,6 @@ public:
     virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
 };
 
-// Whitted-style raytracing
-class WhittedStyle : public SamplerIntegrator
-{
-public:
-    WhittedStyle(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_depth);
-    virtual ~WhittedStyle() = default;
-
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
-    {
-        return Li(ray, sampler, 0);
-    }
-
-private:
-    Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
-
-    std::vector<Light*> infinite_lights;
-
-    int32 max_depth;
-};
-
 // This integrator evaluates ambient occlusion
 class AmbientOcclusion : public SamplerIntegrator
 {
