@@ -1,5 +1,5 @@
 #include "bulbit/frame.h"
-#include "bulbit/integrator.h"
+#include "bulbit/integrators.h"
 
 namespace bulbit
 {

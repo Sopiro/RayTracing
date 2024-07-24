@@ -1,6 +1,4 @@
 #include "../samples.h"
-#include "bulbit/camera.h"
-#include "bulbit/scene.h"
 
 // https://developer.nvidia.com/orca/amazon-lumberyard-bistro
 std::unique_ptr<Camera> BistroScene(Scene& scene)
@@ -32,7 +30,7 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
     Float aperture = 0;
     Float vFov = 54;
 
-    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("bistro", BistroScene);

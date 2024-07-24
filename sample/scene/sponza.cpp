@@ -1,7 +1,4 @@
 #include "../samples.h"
-#include "bulbit/camera.h"
-#include "bulbit/scene.h"
-#include "bulbit/sphere.h"
 
 std::unique_ptr<Camera> Sponza(Scene& scene)
 {
@@ -84,7 +81,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     Float aperture = 0;
     Float vFov = 71;
 
-    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
     // return std::make_unique<SphericalCamera>(lookfrom, width, height);
 }
 

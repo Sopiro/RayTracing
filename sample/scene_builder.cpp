@@ -1,3 +1,4 @@
+#include "bulbit/lights.h"
 #include "bulbit/material.h"
 #include "bulbit/mesh.h"
 #include "bulbit/microfacet.h"

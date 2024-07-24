@@ -1,5 +1,5 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/integrator.h"
+#include "bulbit/integrators.h"
 #include "bulbit/material.h"
 
 namespace bulbit

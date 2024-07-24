@@ -1,5 +1,5 @@
-#include "bulbit/integrator.h"
 #include "bulbit/bitmap.h"
+#include "bulbit/integrators.h"
 
 #include "bulbit/parallel_for.h"
 
@@ -22,16 +22,12 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
     int32 num_tiles_y = (height + tile_size - 1) / tile_size;
     int32 tile_count = num_tiles_x * num_tiles_y;
 
-    int32 t = 0;
+    std::atomic<int32> t = 0;
     std::thread::id tid = std::this_thread::get_id();
     int32 worker_count = ThreadPool::global_thread_pool ? ThreadPool::global_thread_pool->WorkerCount() : 1;
 
     ParallelFor(0, tile_count, [&](int32 i) {
-        if (tid == std::this_thread::get_id())
-        {
-            // Log progress if it's calling thread
-            std::printf("\rRendering.. %d/%d", t++ * worker_count, tile_count);
-        }
+        std::printf("\rRendering.. %d/%d", t++, tile_count);
 
         int32 tile_x = i % num_tiles_x;
         int32 tile_y = i / num_tiles_x;
@@ -48,7 +44,7 @@ void SamplerIntegrator::Render(Film* film, const Camera& camera)
         {
             for (int32 x = x0; x < x1; ++x)
             {
-                sampler->StartPixel();
+                sampler->StartPixelSample();
 
                 do
                 {

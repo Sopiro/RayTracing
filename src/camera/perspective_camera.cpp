@@ -1,4 +1,4 @@
-#include "bulbit/camera.h"
+#include "bulbit/cameras.h"
 #include "bulbit/ray.h"
 #include "bulbit/sampling.h"
 
@@ -6,20 +6,19 @@ namespace bulbit
 {
 
 PerspectiveCamera::PerspectiveCamera(
+    const Vec2i& resolution,
     const Point3& look_from,
     const Point3& look_at,
     const Vec3& up,
-    int32 screen_width,
-    int32 screen_height,
     Float vfov,
     Float aperture,
     Float focus_dist
 )
-    : Camera(screen_width, screen_height)
+    : Camera(resolution)
 {
     Float theta = DegToRad(vfov);
     Float h = std::tan(theta / 2);
-    Float aspect_ratio = (Float)width / (Float)height;
+    Float aspect_ratio = (Float)resolution.x / (Float)resolution.y;
     Float viewport_height = 2 * h;
     Float viewport_width = aspect_ratio * viewport_height;
 
@@ -41,7 +40,7 @@ Float PerspectiveCamera::SampleRay(Ray* ray, const Point2& film_sample, const Po
     Vec3 offset = u * rd.x + v * rd.y;
 
     Vec3 camera_center = origin + offset;
-    Vec3 pixel_center = lower_left + horizontal * (film_sample.x / width) + vertical * (film_sample.y / height);
+    Vec3 pixel_center = lower_left + horizontal * (film_sample.x / resolution.x) + vertical * (film_sample.y / resolution.y);
 
     ray->o = camera_center;
     ray->d = Normalize(pixel_center - camera_center);

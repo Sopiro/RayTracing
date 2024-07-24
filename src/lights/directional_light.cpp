@@ -1,4 +1,4 @@
-#include "bulbit/light.h"
+#include "bulbit/lights.h"
 #include "bulbit/sampling.h"
 
 namespace bulbit

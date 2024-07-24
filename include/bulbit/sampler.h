@@ -11,7 +11,7 @@ public:
     Sampler(int32 samples_per_pixel);
     virtual ~Sampler() = default;
 
-    virtual void StartPixel();
+    virtual void StartPixelSample();
     virtual bool StartNextPixelSample();
 
     virtual Float Next1D() = 0;
@@ -30,7 +30,7 @@ inline Sampler::Sampler(int32 spp)
 {
 }
 
-inline void Sampler::StartPixel()
+inline void Sampler::StartPixelSample()
 {
     current_pixel_sample = 0;
 }

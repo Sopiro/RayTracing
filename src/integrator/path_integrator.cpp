@@ -1,6 +1,6 @@
 #include "bulbit/bxdfs.h"
-#include "bulbit/integrator.h"
-#include "bulbit/light.h"
+#include "bulbit/integrators.h"
+#include "bulbit/lights.h"
 #include "bulbit/material.h"
 
 namespace bulbit

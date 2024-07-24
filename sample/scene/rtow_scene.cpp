@@ -1,7 +1,4 @@
 #include "../samples.h"
-#include "bulbit/camera.h"
-#include "bulbit/scene.h"
-#include "bulbit/sphere.h"
 
 // The final scene of Ray Tracing in One Weekend
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
@@ -77,7 +74,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     Float aperture = 0.1f;
     Float vFov = 20;
 
-    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, width, height, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
     // return std::make_unique<SphericalCamera>(lookfrom, width, height);
 }
 

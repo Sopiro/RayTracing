@@ -2,31 +2,28 @@
 
 #include "common.h"
 
-#include "camera.h"
 #include "scene.h"
 
 #include "spectrum.h"
-#include "timer.h"
 #include "transform.h"
 
 #include "bitmap.h"
 #include "texture.h"
 
-#include "materials.h"
-
 #include "sphere.h"
 #include "triangle.h"
 
-#include "light.h"
-
-#include "independent_sampler.h"
-
-#include "integrator.h"
+#include "cameras.h"
+#include "integrators.h"
+#include "lights.h"
+#include "materials.h"
+#include "samplers.h"
 
 #include "bvh.h"
 #include "dynamic_bvh.h"
 
 #include "async_job.h"
 #include "parallel_for.h"
+#include "timer.h"
 
 #include "media.h"
