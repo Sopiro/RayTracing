@@ -5,104 +5,123 @@
 namespace bulbit
 {
 
-struct AABB
+template <typename T>
+struct BoundingBox3;
+
+using AABB = BoundingBox3<Float>;
+using AABBi = BoundingBox3<int32>;
+
+template <typename T>
+struct BoundingBox3
 {
-    AABB();
-    AABB(const Vec3& min, const Vec3& max);
+    BoundingBox3();
+    BoundingBox3(const Vector3<T>& min, const Vector3<T>& max);
 
-    Vec3 operator[](int32 i) const;
-    Vec3& operator[](int32 i);
+    Vector3<T> operator[](int32 i) const;
+    Vector3<T>& operator[](int32 i);
 
-    Vec3 GetCenter() const;
-    Vec3 GetExtents() const;
+    Vector3<T> GetCenter() const;
+    Vector3<T> GetExtents() const;
 
-    Float GetVolume() const;
-    Float GetSurfaceArea() const;
+    T GetVolume() const;
+    T GetSurfaceArea() const;
 
-    bool Contains(const AABB& other) const;
-    bool TestPoint(const Vec3& point) const;
-    bool TestOverlap(const AABB& other) const;
+    bool Contains(const BoundingBox3& other) const;
+    bool TestPoint(const Vector3<T>& point) const;
+    bool TestOverlap(const BoundingBox3& other) const;
     bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
     bool TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
-    void ComputeBoundingSphere(Point3* center, Float* radius) const;
+    void ComputeBoundingSphere(Point3* center, T* radius) const;
 
     std::string ToString() const;
 
-    Vec3 min, max;
+    Vector3<T> min, max;
 
-    static AABB Union(const AABB& b1, const AABB& b2);
-    static AABB Union(const AABB& aabb, const Vec3& p);
+    static BoundingBox3 Union(const BoundingBox3& b1, const BoundingBox3& b2);
+    static BoundingBox3 Union(const BoundingBox3& aabb, const Vector3<T>& p);
 };
 
-inline AABB AABB::Union(const AABB& aabb1, const AABB& aabb2)
+template <typename T>
+inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb1, const BoundingBox3& aabb2)
 {
-    Vec3 min = Min(aabb1.min, aabb2.min);
-    Vec3 max = Max(aabb1.max, aabb2.max);
+    Vector3<T> min = Min(aabb1.min, aabb2.min);
+    Vector3<T> max = Max(aabb1.max, aabb2.max);
 
-    return AABB{ min, max };
+    return BoundingBox3{ min, max };
 }
 
-inline AABB AABB::Union(const AABB& aabb, const Vec3& point)
+template <typename T>
+inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb, const Vector3<T>& point)
 {
-    Vec3 min = Min(aabb.min, point);
-    Vec3 max = Max(aabb.max, point);
+    Vector3<T> min = Min(aabb.min, point);
+    Vector3<T> max = Max(aabb.max, point);
 
-    return AABB{ min, max };
+    return BoundingBox3{ min, max };
 }
 
-inline AABB::AABB()
+template <typename T>
+inline BoundingBox3<T>::BoundingBox3()
     : min{ max_value }
     , max{ -max_value }
 {
 }
 
-inline AABB::AABB(const Vec3& min, const Vec3& max)
+template <typename T>
+inline BoundingBox3<T>::BoundingBox3(const Vector3<T>& min, const Vector3<T>& max)
     : min{ min }
     , max{ max }
 {
 }
 
-inline Vec3& AABB::operator[](int32 i)
+template <typename T>
+inline Vector3<T>& BoundingBox3<T>::operator[](int32 i)
 {
     assert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-inline Vec3 AABB::operator[](int32 i) const
+template <typename T>
+inline Vector3<T> BoundingBox3<T>::operator[](int32 i) const
 {
     assert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
-inline Vec3 AABB::GetCenter() const
+template <typename T>
+inline Vector3<T> BoundingBox3<T>::GetCenter() const
 {
     return (min + max) * 0.5f;
 }
 
-inline Vec3 AABB::GetExtents() const
+template <typename T>
+inline Vector3<T> BoundingBox3<T>::GetExtents() const
 {
     return (max - min);
 }
 
-inline Float AABB::GetVolume() const
+template <typename T>
+inline T BoundingBox3<T>::GetVolume() const
 {
     return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
 }
 
-inline Float AABB::GetSurfaceArea() const
+template <typename T>
+inline T BoundingBox3<T>::GetSurfaceArea() const
 {
-    Vec3 w = max - min;
+    Vector3<T> w = max - min;
     return 2 * ((w.x * w.y) + (w.y * w.z) + (w.z * w.x));
 }
 
-inline bool AABB::Contains(const AABB& other) const
+template <typename T>
+inline bool BoundingBox3<T>::Contains(const BoundingBox3& other) const
 {
     return min.x <= other.min.x && min.y <= other.min.y && max.x >= other.max.x && max.y >= other.max.y;
 }
 
-inline bool AABB::TestPoint(const Vec3& point) const
+template <typename T>
+inline bool BoundingBox3<T>::TestPoint(const Vector3<T>& point) const
 {
     if (min.x > point.x || max.x < point.x) return false;
     if (min.y > point.y || max.y < point.y) return false;
@@ -111,7 +130,8 @@ inline bool AABB::TestPoint(const Vec3& point) const
     return true;
 }
 
-inline bool AABB::TestOverlap(const AABB& other) const
+template <typename T>
+inline bool BoundingBox3<T>::TestOverlap(const BoundingBox3& other) const
 {
     if (min.x > other.max.x || max.x < other.min.x) return false;
     if (min.y > other.max.y || max.y < other.min.y) return false;
@@ -120,13 +140,116 @@ inline bool AABB::TestOverlap(const AABB& other) const
     return true;
 }
 
-inline void AABB::ComputeBoundingSphere(Point3* center, Float* radius) const
+// https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies/anoptimizedaabbhitmethod
+template <typename T>
+bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Float t_max) const
+{
+    for (int32 axis = 0; axis < 3; ++axis)
+    {
+        Float invD = 1 / ray.d[axis];
+        Float origin = ray.o[axis];
+
+        Float t0 = (min[axis] - origin) * invD;
+        Float t1 = (max[axis] - origin) * invD;
+
+        if (invD < 0)
+        {
+            std::swap(t0, t1);
+        }
+
+        t_min = t0 > t_min ? t0 : t_min;
+        t_max = t1 < t_max ? t1 : t_max;
+
+        if (t_max <= t_min)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// https://www.pbr-book.org/4ed/Shapes/Basic_Shape_Interface#Bounds3::IntersectP
+template <typename T>
+bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const
+{
+    const AABB& aabb = *this;
+
+    // Slab test for x component
+    Float t_min_x = (aabb[is_neg_dir[0]].x - o.x) * inv_dir.x;
+    Float t_max_x = (aabb[1 - is_neg_dir[0]].x - o.x) * inv_dir.x;
+
+    if (t_min > t_max_x || t_max < t_min_x)
+    {
+        return false;
+    }
+
+    if (t_min_x > t_min) t_min = t_min_x;
+    if (t_max_x < t_max) t_max = t_max_x;
+
+    // Slab test for y component
+    Float t_min_y = (aabb[is_neg_dir[1]].y - o.y) * inv_dir.y;
+    Float t_max_y = (aabb[1 - is_neg_dir[1]].y - o.y) * inv_dir.y;
+
+    if (t_min > t_max_y || t_max < t_min_y)
+    {
+        return false;
+    }
+
+    if (t_min_y > t_min) t_min = t_min_y;
+    if (t_max_y < t_max) t_max = t_max_y;
+
+    Float t_min_z = (aabb[is_neg_dir[2]].z - o.z) * inv_dir.z;
+    Float t_max_z = (aabb[1 - is_neg_dir[2]].z - o.z) * inv_dir.z;
+
+    if (t_min > t_max_z || t_max < t_min_z)
+    {
+        return false;
+    }
+
+    // if (t_max_z > t_min) t_min = t_max_z;
+    // if (t_max_z < t_max) t_max = t_max_z;
+
+    return true;
+}
+
+template <typename T>
+Float BoundingBox3<T>::Intersect(const Ray& ray, Float t_min, Float t_max) const
+{
+    for (int32 axis = 0; axis < 3; ++axis)
+    {
+        Float invD = 1 / ray.d[axis];
+        Float origin = ray.o[axis];
+
+        Float t0 = (min[axis] - origin) * invD;
+        Float t1 = (max[axis] - origin) * invD;
+
+        if (invD < 0)
+        {
+            std::swap(t0, t1);
+        }
+
+        t_min = t0 > t_min ? t0 : t_min;
+        t_max = t1 < t_max ? t1 : t_max;
+
+        if (t_max <= t_min)
+        {
+            return infinity;
+        }
+    }
+
+    return t_min;
+}
+
+template <typename T>
+inline void BoundingBox3<T>::ComputeBoundingSphere(Point3* center, T* radius) const
 {
     *center = GetCenter();
     *radius = TestPoint(*center) ? Dist(*center, max) : 0;
 }
 
-inline std::string AABB::ToString() const
+template <typename T>
+inline std::string BoundingBox3<T>::ToString() const
 {
     return std::format("min:\t{}\nmax:\t{}", min.ToString(), max.ToString());
 }
