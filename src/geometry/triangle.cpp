@@ -1,4 +1,4 @@
-#include "bulbit/triangle.h"
+#include "bulbit/shapes.h"
 
 namespace bulbit
 {

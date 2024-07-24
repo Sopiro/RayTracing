@@ -3,8 +3,7 @@
 #include "bulbit/mesh.h"
 #include "bulbit/microfacet.h"
 #include "bulbit/scene.h"
-#include "bulbit/sphere.h"
-#include "bulbit/triangle.h"
+#include "bulbit/shapes.h"
 
 #include "scene_builder.h"
 

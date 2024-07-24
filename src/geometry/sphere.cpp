@@ -1,7 +1,7 @@
-#include "bulbit/sphere.h"
 #include "bulbit/frame.h"
 #include "bulbit/material.h"
 #include "bulbit/sampling.h"
+#include "bulbit/shapes.h"
 
 namespace bulbit
 {

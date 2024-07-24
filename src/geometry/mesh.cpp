@@ -1,5 +1,5 @@
 #include "bulbit/mesh.h"
-#include "bulbit/triangle.h"
+#include "bulbit/shapes.h"
 
 namespace bulbit
 {
