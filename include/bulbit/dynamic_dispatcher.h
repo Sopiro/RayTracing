@@ -139,6 +139,6 @@ public:
         if constexpr (std::is_same_v<Type, std::nullptr_t>)
             return 0;
         else
-            return 1 + detail::IndexOf<Type, Types>::count;
+            return 1 + detail::IndexOf<Type, Types...>::count;
     }
 };
