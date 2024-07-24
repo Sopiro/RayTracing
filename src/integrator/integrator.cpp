@@ -6,13 +6,15 @@
 namespace bulbit
 {
 
-SamplerIntegrator::SamplerIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler)
+UniDirectionalRayIntegrator::UniDirectionalRayIntegrator(
+    const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler
+)
     : Integrator(accel, std::move(lights))
     , sampler_prototype{ sampler }
 {
 }
 
-void SamplerIntegrator::Render(Film* film, const Camera& camera)
+void UniDirectionalRayIntegrator::Render(Film* film, const Camera& camera)
 {
     int32 width = film->width;
     int32 height = film->height;

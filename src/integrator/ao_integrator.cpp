@@ -5,7 +5,7 @@ namespace bulbit
 {
 
 AmbientOcclusion::AmbientOcclusion(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, Float ao_range)
-    : SamplerIntegrator(accel, std::move(lights), sampler)
+    : UniDirectionalRayIntegrator(accel, std::move(lights), sampler)
     , range{ ao_range }
 {
 }

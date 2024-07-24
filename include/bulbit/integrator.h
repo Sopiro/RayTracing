@@ -36,11 +36,11 @@ protected:
     std::vector<Light*> all_lights;
 };
 
-class SamplerIntegrator : public Integrator
+class UniDirectionalRayIntegrator : public Integrator
 {
 public:
-    SamplerIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
-    virtual ~SamplerIntegrator() = default;
+    UniDirectionalRayIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
+    virtual ~UniDirectionalRayIntegrator() = default;
 
     virtual void Render(Film* film, const Camera& camera) override;
 

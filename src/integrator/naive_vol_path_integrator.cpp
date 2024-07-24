@@ -10,7 +10,7 @@ namespace bulbit
 NaiveVolPathIntegrator::NaiveVolPathIntegrator(
     const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces
 )
-    : SamplerIntegrator(accel, std::move(lights), sampler)
+    : UniDirectionalRayIntegrator(accel, std::move(lights), sampler)
     , max_bounces{ max_bounces }
 {
     for (Light* light : all_lights)

@@ -7,7 +7,7 @@
 namespace bulbit
 {
 
-class DebugIntegrator : public SamplerIntegrator
+class DebugIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     DebugIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
@@ -17,7 +17,7 @@ public:
 };
 
 // This integrator evaluates ambient occlusion
-class AmbientOcclusion : public SamplerIntegrator
+class AmbientOcclusion : public UniDirectionalRayIntegrator
 {
 public:
     AmbientOcclusion(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, Float ao_range);
@@ -30,7 +30,7 @@ private:
     Float range;
 };
 
-class AlbedoIntegrator : public SamplerIntegrator
+class AlbedoIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     AlbedoIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
@@ -42,7 +42,7 @@ private:
     std::vector<Light*> infinite_lights;
 };
 
-class NaivePathIntegrator : public SamplerIntegrator
+class NaivePathIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     NaivePathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
@@ -59,7 +59,7 @@ private:
 };
 
 // Uni-directional path tracer
-class PathIntegrator : public SamplerIntegrator
+class PathIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     PathIntegrator(
@@ -85,7 +85,7 @@ private:
     bool regularize_bsdf;
 };
 
-class NaiveVolPathIntegrator : public SamplerIntegrator
+class NaiveVolPathIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     NaiveVolPathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
@@ -99,7 +99,7 @@ private:
     int32 max_bounces;
 };
 
-class VolPathIntegrator : public SamplerIntegrator
+class VolPathIntegrator : public UniDirectionalRayIntegrator
 {
 public:
     VolPathIntegrator(
