@@ -204,4 +204,34 @@ private:
     static inline Pool<std::string, ColorImageTexture> pool;
 };
 
+class CheckerTexture : public SpectrumTexture
+{
+public:
+    static CheckerTexture* Create(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution)
+    {
+        return pool.Create({ a, b }, resolution);
+    }
+
+    CheckerTexture(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution);
+    CheckerTexture(std::pair<const SpectrumTexture*, const SpectrumTexture*> checker, const Point2& resolution);
+
+    virtual Spectrum Evaluate(const Point2& uv) const override;
+    virtual Float EvaluateAlpha(const Point2& uv) const override;
+
+private:
+    const SpectrumTexture* a;
+    const SpectrumTexture* b;
+    Point2 resolution;
+
+    struct CheckerHash
+    {
+        size_t operator()(const std::pair<const SpectrumTexture*, const SpectrumTexture*>& checker) const
+        {
+            return Hash(checker.first, checker.second);
+        }
+    };
+
+    static inline Pool<std::pair<const SpectrumTexture*, const SpectrumTexture*>, CheckerTexture, CheckerHash> pool;
+};
+
 } // namespace bulbit

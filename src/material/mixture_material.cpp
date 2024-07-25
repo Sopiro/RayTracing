@@ -40,7 +40,7 @@ bool MixtureMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3&
     return false;
 }
 
-const Material* MixtureMaterial::ChooseMaterial(const Intersection& isect, const Vec3& wo)
+const Material* MixtureMaterial::ChooseMaterial(const Intersection& isect, const Vec3& wo) const
 {
     Float m = mixture_amount->Evaluate(isect.uv);
     if (m <= 0)

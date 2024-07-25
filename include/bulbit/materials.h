@@ -174,7 +174,7 @@ public:
     virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 
-    const Material* ChooseMaterial(const Intersection& isect, const Vec3& wo);
+    const Material* ChooseMaterial(const Intersection& isect, const Vec3& wo) const;
 
 private:
     const Material* materials[2];

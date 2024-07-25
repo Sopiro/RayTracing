@@ -9,8 +9,11 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     // Floor
     {
+        auto a = ConstantColorTexture::Create(0.725, 0.71, 0.68);
+        auto b = ConstantColorTexture::Create(0.325, 0.31, 0.25);
+        auto checker = CheckerTexture::Create(a, b, Point2(20));
         auto tf = Transform{ Vec3(-0.708772, 0, -0.732108), Quat::FromEuler(0, DegToRad(46.1511), DegToRad(180)), Vec3(5.43618) };
-        auto floor = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.5));
+        auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         CreateRectXZ(scene, tf, floor);
     }
 
@@ -69,7 +72,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 1280;
+    int32 width = 1920;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 3.04068, 3.17153, 3.20454 };
