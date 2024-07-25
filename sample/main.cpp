@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Loading scene.." << std::endl;
     Timer timer;
-    if (!Sample::Get("cornell-box", &scene, &camera))
+    if (!Sample::Get("material", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;

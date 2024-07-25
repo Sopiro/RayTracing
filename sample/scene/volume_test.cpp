@@ -45,7 +45,7 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
     Point3 lookat{ 0, 1, 0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0;
+    Float aperture = 0.05f;
     Float vFov = 30;
 
     return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
