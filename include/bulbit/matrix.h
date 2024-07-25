@@ -40,6 +40,11 @@ struct Mat2
         return (&ex)[i];
     }
 
+    const Vec2& operator[](int32 i) const
+    {
+        return (&ex)[i];
+    }
+
     void SetIdentity()
     {
         // clang-format off
@@ -131,6 +136,11 @@ struct Mat3
         return (&ex)[i];
     }
 
+    const Vec3& operator[](int32 i) const
+    {
+        return (&ex)[i];
+    }
+
     void SetIdentity()
     {
         // clang-format off
@@ -217,6 +227,11 @@ struct Mat4
     Mat4(const Transform& t);
 
     Vec4& operator[](int32 i)
+    {
+        return (&ex)[i];
+    }
+
+    const Vec4& operator[](int32 i) const
     {
         return (&ex)[i];
     }
