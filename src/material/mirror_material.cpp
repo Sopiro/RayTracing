@@ -4,15 +4,15 @@
 namespace bulbit
 {
 
-MirrorMaterial::MirrorMaterial(const Spectrum& reflectance)
-    : Material{ Material::Type::normal }
-    , reflectance{ ConstantColorTexture::Create(reflectance) }
+MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap)
+    : MirrorMaterial{ ConstantColorTexture::Create(reflectance), normalmap }
 {
 }
 
-MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance)
+MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap)
     : Material{ Material::Type::normal }
     , reflectance{ reflectance }
+    , normalmap{ normalmap }
 {
 }
 
@@ -23,7 +23,7 @@ bool MirrorMaterial::TestAlpha(const Point2& uv) const
 
 const SpectrumTexture* MirrorMaterial::GetNormalMap() const
 {
-    return nullptr;
+    return normalmap;
 }
 
 Spectrum MirrorMaterial::Le(const Intersection& isect, const Vec3& wo) const

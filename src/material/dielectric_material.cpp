@@ -14,17 +14,20 @@ DielectricMaterial::DielectricMaterial(Float eta, Float roughness)
 {
 }
 
-DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness)
-    : DielectricMaterial(eta, roughness, roughness)
+DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness, const SpectrumTexture* normalmap)
+    : DielectricMaterial(eta, roughness, roughness, normalmap)
 
 {
 }
 
-DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness)
+DielectricMaterial::DielectricMaterial(
+    Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap
+)
     : Material{ Material::Type::normal }
     , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
 {
 }
 
@@ -35,7 +38,7 @@ bool DielectricMaterial::TestAlpha(const Point2& uv) const
 
 const SpectrumTexture* DielectricMaterial::GetNormalMap() const
 {
-    return nullptr;
+    return normalmap;
 }
 
 Spectrum DielectricMaterial::Le(const Intersection& isect, const Vec3& wo) const

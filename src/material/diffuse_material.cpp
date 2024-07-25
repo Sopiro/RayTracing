@@ -4,15 +4,15 @@
 namespace bulbit
 {
 
-DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo)
-    : Material{ Material::Type::normal }
-    , albedo{ ConstantColorTexture::Create(albedo) }
+DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap)
+    : DiffuseMaterial(ConstantColorTexture::Create(albedo), normalmap)
 {
 }
 
-DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo)
+DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap)
     : Material{ Material::Type::normal }
     , albedo{ albedo }
+    , normalmap{ normalmap }
 {
 }
 
@@ -23,7 +23,7 @@ bool DiffuseMaterial::TestAlpha(const Point2& uv) const
 
 const SpectrumTexture* DiffuseMaterial::GetNormalMap() const
 {
-    return nullptr;
+    return normalmap;
 }
 
 Spectrum DiffuseMaterial::Le(const Intersection& isect, const Vec3& wo) const

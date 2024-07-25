@@ -10,13 +10,18 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta, const SpectrumT
 }
 
 ConductorMaterial::ConductorMaterial(
-    const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* u_roughness, const FloatTexture* v_roughness
+    const SpectrumTexture* eta,
+    const SpectrumTexture* k,
+    const FloatTexture* u_roughness,
+    const FloatTexture* v_roughness,
+    const SpectrumTexture* normalmap
 )
     : Material{ Material::Type::normal }
     , eta{ eta }
     , k{ k }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
 {
 }
 
@@ -26,13 +31,17 @@ ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance, const F
 }
 
 ConductorMaterial::ConductorMaterial(
-    const SpectrumTexture* reflectance, const FloatTexture* u_roughness, const FloatTexture* v_roughness
+    const SpectrumTexture* reflectance,
+    const FloatTexture* u_roughness,
+    const FloatTexture* v_roughness,
+    const SpectrumTexture* normalmap
 )
     : Material{ Material::Type::normal }
     , eta{ nullptr }
     , k{ reflectance }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
 {
 }
 
@@ -43,7 +52,7 @@ bool ConductorMaterial::TestAlpha(const Point2& uv) const
 
 const SpectrumTexture* ConductorMaterial::GetNormalMap() const
 {
-    return nullptr;
+    return normalmap;
 }
 
 Spectrum ConductorMaterial::Le(const Intersection& isect, const Vec3& wo) const

@@ -2,13 +2,15 @@
 
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
+    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+
     // Materials
     auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
     auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
     auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
+    auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture, normalmap);
     auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
