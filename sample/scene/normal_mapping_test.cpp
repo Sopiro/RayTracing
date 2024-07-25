@@ -32,7 +32,7 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 30;
 
-    return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
     // return std::make_unique<SphericalCamera>(lookfrom, width, height);
 }
 

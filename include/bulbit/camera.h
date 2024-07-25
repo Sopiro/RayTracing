@@ -8,20 +8,20 @@ namespace bulbit
 class Camera
 {
 public:
-    Camera(const Vec2i& resolution)
+    Camera(const Point2i& resolution)
         : resolution{ resolution }
     {
     }
     virtual ~Camera() = default;
 
-    const Vec2i& GetScreenResolution() const;
+    const Point2i& GetScreenResolution() const;
     int32 GetScreenWidth() const;
     int32 GetScreenHeight() const;
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const = 0;
 
 protected:
-    Vec2i resolution;
+    Point2i resolution;
 };
 
 inline const Vec2i& Camera::GetScreenResolution() const

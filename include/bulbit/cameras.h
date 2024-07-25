@@ -27,7 +27,7 @@ class PerspectiveCamera : public Camera
 {
 public:
     PerspectiveCamera(
-        const Vec2i& resolution,
+        const Point2i& resolution,
         const Point3& look_from,
         const Point3& look_at,
         const Vec3& up,
@@ -52,7 +52,7 @@ private:
 class SphericalCamera : public Camera
 {
 public:
-    SphericalCamera(const Vec2i& resolution, const Point3& position);
+    SphericalCamera(const Point2i& resolution, const Point3& position);
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
 

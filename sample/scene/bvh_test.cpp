@@ -46,7 +46,7 @@ std::unique_ptr<Camera> BVHTest(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 71.f;
 
-    return std::make_unique<PerspectiveCamera>(Vec2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("bvh", BVHTest);

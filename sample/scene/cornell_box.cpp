@@ -99,7 +99,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 
     // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
     // return std::make_unique<SphericalCamera>(lookfrom, width, width);
-    return std::make_unique<PerspectiveCamera>(Vec2i(width, width), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(Point2i(width, width), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
 }
 
 static int32 index = Sample::Register("cornell-box", CornellBox);
