@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
     // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);
     // AmbientOcclusion renderer(&accel, scene.GetLights(), &sampler, 0.5f);
     // AlbedoIntegrator renderer(&accel, scene.GetLights(), &sampler);
+    // WhittedStyle renderer(&accel, scene.GetLights(), &sampler, max_bounces);
 
     Film film(camera.get());
     renderer.Render(&film, *camera);

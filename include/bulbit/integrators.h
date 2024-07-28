@@ -42,6 +42,26 @@ private:
     std::vector<Light*> infinite_lights;
 };
 
+// Whitted-style raytracing
+class WhittedStyle : public UniDirectionalRayIntegrator
+{
+public:
+    WhittedStyle(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_depth);
+    virtual ~WhittedStyle() = default;
+
+    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
+    {
+        return Li(ray, sampler, 0);
+    }
+
+private:
+    Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
+
+    std::vector<Light*> infinite_lights;
+
+    int32 max_depth;
+};
+
 class NaivePathIntegrator : public UniDirectionalRayIntegrator
 {
 public:
