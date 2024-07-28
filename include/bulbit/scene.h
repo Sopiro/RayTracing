@@ -40,7 +40,7 @@ private:
 
     std::vector<Shape*> shapes;
     std::vector<Material*> materials;
-    std::vector<Medium*> mediums;
+    std::vector<Medium*> media;
     std::vector<Primitive*> primitives;
     std::vector<Light*> lights;
     std::vector<std::unique_ptr<Mesh>> meshes;
@@ -77,7 +77,7 @@ inline Scene::~Scene() noexcept
         allocator.delete_object(l);
     }
 
-    for (Medium* m : mediums)
+    for (Medium* m : media)
     {
         allocator.delete_object(m);
     }
@@ -103,7 +103,7 @@ template <typename T, typename... Args>
 inline T* Scene::CreateMedium(Args&&... args)
 {
     T* m = allocator.new_object<T>(std::forward<Args>(args)...);
-    mediums.push_back(m);
+    media.push_back(m);
     return m;
 }
 

@@ -72,7 +72,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 1920;
+    int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
     Point3 lookfrom{ 3.04068, 3.17153, 3.20454 };

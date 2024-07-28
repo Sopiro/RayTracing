@@ -38,7 +38,6 @@ Spectrum WhittedStyle::Li(const Ray& ray, Sampler& sampler, int32 depth) const
         return L;
     }
 
-    const Material* mat = isect.primitive->GetMaterial();
     Vec3 wo = Normalize(-ray.d);
 
     // Evaluate emitted light
