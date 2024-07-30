@@ -13,9 +13,10 @@ PerspectiveCamera::PerspectiveCamera(
     Float aperture,
     Float focus_dist,
     const Vec2i& resolution,
-    const Medium* medium
+    const Medium* medium,
+    const Filter* pixel_filter
 )
-    : Camera(resolution, medium)
+    : Camera(resolution, medium, pixel_filter)
 {
     Float theta = DegToRad(vfov);
     Float h = std::tan(theta / 2);
@@ -35,13 +36,15 @@ PerspectiveCamera::PerspectiveCamera(
     lens_radius = aperture / 2;
 }
 
-Float PerspectiveCamera::SampleRay(Ray* ray, const Point2& film_sample, const Point2& aperture_sample) const
+Float PerspectiveCamera::SampleRay(Ray* ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const
 {
-    Vec3 rd = lens_radius * SampleUniformUnitDiskXY(aperture_sample);
-    Vec3 offset = u * rd.x + v * rd.y;
+    Vec2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
+    Vec3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
+                        vertical * (pixel.y + pixel_offset.y) / resolution.y;
 
-    Vec3 camera_center = origin + offset;
-    Vec3 pixel_center = lower_left + horizontal * (film_sample.x / resolution.x) + vertical * (film_sample.y / resolution.y);
+    Vec3 aperture_sample = lens_radius * SampleUniformUnitDiskXY(u1);
+    Vec3 camera_offset = u * aperture_sample.x + v * aperture_sample.y;
+    Vec3 camera_center = origin + camera_offset;
 
     ray->o = camera_center;
     ray->d = Normalize(pixel_center - camera_center);

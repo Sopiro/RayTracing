@@ -10,7 +10,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
-    auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture, normalmap);
+    auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
@@ -97,7 +97,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 28.0f;
 
-    // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
+    // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, Point2(1.1, 1.1), width);
     // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, width));
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, width));
 }

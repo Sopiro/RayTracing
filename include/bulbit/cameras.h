@@ -14,10 +14,11 @@ public:
         const Vec3& up,
         const Vec2& viewport_size,
         int32 resolution_x,
-        const Medium* medium = nullptr
+        const Medium* medium = nullptr,
+        const Filter* pixel_filter = Camera::default_filter.get()
     );
 
-    virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
+    virtual Float SampleRay(Ray* out_ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const override;
 
 private:
     Point3 origin;
@@ -39,10 +40,11 @@ public:
         Float aperture,
         Float focus_dist,
         const Point2i& resolution,
-        const Medium* medium = nullptr
+        const Medium* medium = nullptr,
+        const Filter* pixel_filter = Camera::default_filter.get()
     );
 
-    virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
+    virtual Float SampleRay(Ray* out_ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const override;
 
 private:
     Point3 origin;
@@ -58,9 +60,14 @@ private:
 class SphericalCamera : public Camera
 {
 public:
-    SphericalCamera(const Point3& position, const Point2i& resolution, const Medium* medium = nullptr);
+    SphericalCamera(
+        const Point3& position,
+        const Point2i& resolution,
+        const Medium* medium = nullptr,
+        const Filter* pixel_filter = Camera::default_filter.get()
+    );
 
-    virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
+    virtual Float SampleRay(Ray* out_ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const override;
 
 private:
     Point3 origin;

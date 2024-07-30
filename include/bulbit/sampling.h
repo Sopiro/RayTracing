@@ -111,7 +111,7 @@ inline Vec3 SampleUniformUnitDiskXY(const Point2& u)
 {
     Float r = std::sqrt(u.x);
     Float theta = two_pi * u.y;
-    return Vec3(r * std::cos(theta), r * std::sin(theta), 0.0f);
+    return Vec3(r * std::cos(theta), r * std::sin(theta), 0);
 }
 
 inline Float SampleExponential(Float u, Float a)
