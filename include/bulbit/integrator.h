@@ -44,7 +44,7 @@ public:
 
     virtual void Render(Film* film, const Camera& camera) override;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const = 0;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const = 0;
 
 private:
     const Sampler* sampler_prototype;

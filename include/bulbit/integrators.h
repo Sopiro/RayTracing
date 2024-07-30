@@ -13,7 +13,7 @@ public:
     DebugIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~DebugIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 };
 
 // This integrator evaluates ambient occlusion
@@ -23,7 +23,7 @@ public:
     AmbientOcclusion(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, Float ao_range);
     virtual ~AmbientOcclusion() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     // maximum range to consider occlusuion
@@ -36,7 +36,7 @@ public:
     AlbedoIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~AlbedoIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     std::vector<Light*> infinite_lights;
@@ -49,7 +49,7 @@ public:
     WhittedStyle(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_depth);
     virtual ~WhittedStyle() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override
     {
         return Li(ray, sampler, 0);
     }
@@ -68,7 +68,7 @@ public:
     NaivePathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
     virtual ~NaivePathIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     Spectrum Li(const Ray& ray, Sampler& sampler, int32 depth) const;
@@ -91,7 +91,7 @@ public:
     );
     virtual ~PathIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     Spectrum SampleDirectLight(const Vec3& wo, const Intersection& isect, BSDF* bsdf, Sampler& sampler, const Spectrum& beta)
@@ -111,7 +111,7 @@ public:
     NaiveVolPathIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces);
     virtual ~NaiveVolPathIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     std::vector<Light*> infinite_lights;
@@ -131,7 +131,7 @@ public:
     );
     virtual ~VolPathIntegrator() = default;
 
-    virtual Spectrum Li(const Ray& ray, Sampler& sampler) const override;
+    virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override;
 
 private:
     Spectrum SampleDirectLight(

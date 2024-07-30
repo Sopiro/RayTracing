@@ -20,7 +20,7 @@ NaivePathIntegrator::NaivePathIntegrator(
     }
 }
 
-Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
     // return Li(ray, sampler, 0);
 

@@ -9,7 +9,12 @@ class OrthographicCamera : public Camera
 {
 public:
     OrthographicCamera(
-        const Vec2& viewport_size, int32 resolution_x, const Point3& look_from, const Point3& look_at, const Vec3& up
+        const Vec2& viewport_size,
+        int32 resolution_x,
+        const Point3& look_from,
+        const Point3& look_at,
+        const Vec3& up,
+        const Medium* medium = nullptr
     );
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
@@ -33,7 +38,8 @@ public:
         const Vec3& up,
         Float vfov, // vertical field-of-view. in degrees.
         Float aperture,
-        Float focus_dist
+        Float focus_dist,
+        const Medium* medium = nullptr
     );
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
@@ -52,7 +58,7 @@ private:
 class SphericalCamera : public Camera
 {
 public:
-    SphericalCamera(const Point2i& resolution, const Point3& position);
+    SphericalCamera(const Point3& position, const Point2i& resolution, const Medium* medium = nullptr);
 
     virtual Float SampleRay(Ray* out_ray, const Point2& film_sample, const Point2& aperture_sample) const override;
 

@@ -4,8 +4,8 @@
 namespace bulbit
 {
 
-SphericalCamera::SphericalCamera(const Vec2i& resolution, const Point3& position)
-    : Camera(resolution)
+SphericalCamera::SphericalCamera(const Point3& position, const Vec2i& resolution, const Medium* medium)
+    : Camera(resolution, medium)
     , origin{ position }
 {
 }

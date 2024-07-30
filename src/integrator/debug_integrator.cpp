@@ -8,7 +8,7 @@ DebugIntegrator::DebugIntegrator(const Intersectable* accel, std::vector<Light*>
 {
 }
 
-Spectrum DebugIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+Spectrum DebugIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
     Intersection isect;
     if (!Intersect(&isect, primary_ray, Ray::epsilon, infinity))

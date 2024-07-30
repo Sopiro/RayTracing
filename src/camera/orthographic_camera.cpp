@@ -6,9 +6,14 @@ namespace bulbit
 {
 
 OrthographicCamera::OrthographicCamera(
-    const Vec2& viewport_size, int32 resolution_x, const Point3& look_from, const Point3& look_at, const Vec3& up
+    const Vec2& viewport_size,
+    int32 resolution_x,
+    const Point3& look_from,
+    const Point3& look_at,
+    const Vec3& up,
+    const Medium* medium
 )
-    : Camera(Vec2i(resolution_x, int32(resolution_x * viewport_size.y / viewport_size.x)))
+    : Camera(Vec2i(resolution_x, int32(resolution_x * viewport_size.y / viewport_size.x)), medium)
 {
     w = Normalize(look_from - look_at);
     u = Normalize(Cross(up, w));

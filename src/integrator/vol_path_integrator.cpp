@@ -36,7 +36,7 @@ VolPathIntegrator::VolPathIntegrator(
     }
 }
 
-Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
     int32 wavelength = std::min<int32>(sampler.Next1D() * 3, 2);
     int32 bounce = 0;
@@ -52,7 +52,7 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
     Float eta_scale = 1;
     Ray ray = primary_ray;
 
-    const Medium* medium = nullptr;
+    const Medium* medium = primary_medium;
 
     Point3 last_scattering_vertex;
 

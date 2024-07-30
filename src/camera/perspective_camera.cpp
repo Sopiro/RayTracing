@@ -12,9 +12,10 @@ PerspectiveCamera::PerspectiveCamera(
     const Vec3& up,
     Float vfov,
     Float aperture,
-    Float focus_dist
+    Float focus_dist,
+    const Medium* medium
 )
-    : Camera(resolution)
+    : Camera(resolution, medium)
 {
     Float theta = DegToRad(vfov);
     Float h = std::tan(theta / 2);

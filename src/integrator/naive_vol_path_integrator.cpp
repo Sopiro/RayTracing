@@ -33,7 +33,7 @@ NaiveVolPathIntegrator::NaiveVolPathIntegrator(
     }
 }
 
-Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) const
+Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
     int32 bounce = 0;
     Spectrum L(0), beta(1);
@@ -43,7 +43,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, Sampler& sampler) co
     Ray ray = primary_ray;
     int32 wavelength = std::min<int32>(2, sampler.Next1D() * 3);
 
-    const Medium* medium = nullptr;
+    const Medium* medium = primary_medium;
 
     while (true)
     {

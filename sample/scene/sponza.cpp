@@ -82,7 +82,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     Float vFov = 71;
 
     return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
-    // return std::make_unique<SphericalCamera>(lookfrom, width, height);
+    // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, height));
 }
 
 static int32 index = Sample::Register("sponza", Sponza);

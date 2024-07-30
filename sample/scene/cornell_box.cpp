@@ -98,7 +98,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     Float vFov = 28.0f;
 
     // return std::make_unique<OrthographicCamera>(lookfrom, lookat, y_axis, 1.1, 1.1, width);
-    // return std::make_unique<SphericalCamera>(lookfrom, width, width);
+    // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, width));
     return std::make_unique<PerspectiveCamera>(Point2i(width, width), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
 }
 

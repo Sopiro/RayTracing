@@ -17,7 +17,7 @@ AlbedoIntegrator::AlbedoIntegrator(const Intersectable* accel, std::vector<Light
     }
 }
 
-Spectrum AlbedoIntegrator::Li(const Ray& ray, Sampler& sampler) const
+Spectrum AlbedoIntegrator::Li(const Ray& ray, const Medium* medium, Sampler& sampler) const
 {
     Spectrum L(0);
 

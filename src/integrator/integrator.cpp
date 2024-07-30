@@ -56,7 +56,7 @@ void UniDirectionalRayIntegrator::Render(Film* film, const Camera& camera)
                     Ray ray;
                     Float weight = camera.SampleRay(&ray, film_sample, aperture_sample);
 
-                    Spectrum L = weight * Li(ray, *sampler);
+                    Spectrum L = weight * Li(ray, camera.GetMedium(), *sampler);
 
                     if (!L.IsNullish())
                     {

@@ -4,6 +4,14 @@
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 {
+    Medium* hm = nullptr;
+    // hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0), Spectrum(0.0f), Spectrum(0.0), 0.5f);
+    MediumInterface mi_outside(nullptr, hm);
+    MediumInterface mi_inside(hm, nullptr);
+    MediumInterface mi_two_sided(hm, hm);
+
+    // CreateSphere(scene, identity, 100, nullptr, mi_inside);
+
     auto ground_material = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.5f, 0.5f, 0.5f));
 
     Transform tf = identity;
@@ -25,30 +33,31 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 {
                     auto mat = CreateRandomUnrealMaterial(scene);
                     CreateSphere(
-                        scene, Transform(center, Quat(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()))), 0.2f, mat
+                        scene, Transform(center, Quat(DegToRad(Rand(0, 180)), SampleUniformSphere(RandVec2()))), 0.2f, mat,
+                        mi_outside
                     );
                 }
                 else
                 {
                     // glass
                     auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(Rand(0.001f, 0.3f)));
-                    CreateSphere(scene, center, 0.2f, glass);
+                    CreateSphere(scene, center, 0.2f, glass, mi_outside);
                 }
             }
         }
     }
 
     auto material1 = scene.CreateMaterial<DielectricMaterial>(1.5f);
-    CreateSphere(scene, Vec3(0, 1, 0), 1.0f, material1);
+    CreateSphere(scene, Vec3(0, 1, 0), 1.0f, material1, mi_outside);
 
     auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
-    CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2);
+    CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2, mi_outside);
 
     auto material3 = scene.CreateMaterial<ConductorMaterial>(
         ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2), ConstantFloatTexture::Create(0.01f),
         ConstantFloatTexture::Create(0.01f)
     );
-    CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3);
+    CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3, mi_outside);
 
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
@@ -74,8 +83,10 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     Float aperture = 0.1f;
     Float vFov = 20;
 
-    return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
-    // return std::make_unique<SphericalCamera>(lookfrom, width, height);
+    return std::make_unique<PerspectiveCamera>(
+        Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, hm
+    );
+    // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, height));
 }
 
 static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);
