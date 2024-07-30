@@ -62,7 +62,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 28.0f;
 
-    return std::make_unique<PerspectiveCamera>(Point2i(width, width), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, width));
 }
 
 static int32 index = Sample::Register("cornell-box-lucy", CornellBoxLucy);

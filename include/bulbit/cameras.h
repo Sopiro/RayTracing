@@ -9,11 +9,11 @@ class OrthographicCamera : public Camera
 {
 public:
     OrthographicCamera(
-        const Vec2& viewport_size,
-        int32 resolution_x,
         const Point3& look_from,
         const Point3& look_at,
         const Vec3& up,
+        const Vec2& viewport_size,
+        int32 resolution_x,
         const Medium* medium = nullptr
     );
 
@@ -32,13 +32,13 @@ class PerspectiveCamera : public Camera
 {
 public:
     PerspectiveCamera(
-        const Point2i& resolution,
         const Point3& look_from,
         const Point3& look_at,
         const Vec3& up,
         Float vfov, // vertical field-of-view. in degrees.
         Float aperture,
         Float focus_dist,
+        const Point2i& resolution,
         const Medium* medium = nullptr
     );
 

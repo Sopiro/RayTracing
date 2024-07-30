@@ -82,7 +82,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     Float aperture = 0.0f;
     Float vFov = 20.114292;
 
-    return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
 static int32 index = Sample::Register("material", MaterialTest);

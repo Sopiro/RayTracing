@@ -6,13 +6,13 @@ namespace bulbit
 {
 
 PerspectiveCamera::PerspectiveCamera(
-    const Vec2i& resolution,
     const Point3& look_from,
     const Point3& look_at,
     const Vec3& up,
     Float vfov,
     Float aperture,
     Float focus_dist,
+    const Vec2i& resolution,
     const Medium* medium
 )
     : Camera(resolution, medium)

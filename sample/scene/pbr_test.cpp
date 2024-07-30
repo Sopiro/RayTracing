@@ -107,7 +107,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     Float aperture = 0;
     Float vFov = 71;
 
-    return std::make_unique<PerspectiveCamera>(Point2i(width, height), lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus);
+    return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
 static int32 index = Sample::Register("pbr-spheres", PBRTest);
