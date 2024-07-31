@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Loading scene.." << std::endl;
     Timer timer;
-    if (!Sample::Get("material", &scene, &camera))
+    if (!Sample::Get("cornell-box", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;
@@ -52,11 +52,12 @@ int main(int argc, char* argv[])
     // WhittedStyle renderer(&accel, scene.GetLights(), &sampler, max_bounces);
 
     Film film(camera.get());
-    renderer.Render(&film, *camera);
+    std::unique_ptr<RenderingProgress> rendering = renderer.Render(&film, *camera);
+    rendering->WaitAndLogProgress();
 
     timer.Mark();
     t = timer.Get();
-    std::cout << "Complete: " << t << 's' << std::endl;
+    std::cout << "\nComplete: " << t << 's' << std::endl;
 
     Bitmap bitmap = film.ConvertToBitmap();
 

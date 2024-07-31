@@ -8,12 +8,14 @@
 namespace bulbit
 {
 
+class RenderingProgress;
+
 class Integrator
 {
 public:
     virtual ~Integrator() = default;
 
-    virtual void Render(Film* film, const Camera& camera) = 0;
+    virtual std::unique_ptr<RenderingProgress> Render(Film* film, const Camera& camera) = 0;
 
 protected:
     Integrator(const Intersectable* accel, std::vector<Light*> lights)
@@ -42,7 +44,7 @@ public:
     UniDirectionalRayIntegrator(const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler);
     virtual ~UniDirectionalRayIntegrator() = default;
 
-    virtual void Render(Film* film, const Camera& camera) override;
+    virtual std::unique_ptr<RenderingProgress> Render(Film* film, const Camera& camera) override;
 
     virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const = 0;
 
