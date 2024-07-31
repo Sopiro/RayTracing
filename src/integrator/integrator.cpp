@@ -16,10 +16,11 @@ UniDirectionalRayIntegrator::UniDirectionalRayIntegrator(
 {
 }
 
-std::unique_ptr<RenderingProgress> UniDirectionalRayIntegrator::Render(Film* film, const Camera& camera)
+std::unique_ptr<RenderingProgress> UniDirectionalRayIntegrator::Render(const Camera& camera)
 {
-    int32 width = film->resolution.x;
-    int32 height = film->resolution.y;
+    Point2i resolution = camera.GetScreenResolution();
+    int32 width = resolution.x;
+    int32 height = resolution.y;
 
     const int32 spp = sampler_prototype->samples_per_pixel;
     const int32 tile_size = 16;
@@ -27,7 +28,7 @@ std::unique_ptr<RenderingProgress> UniDirectionalRayIntegrator::Render(Film* fil
     int32 num_tiles_y = (height + tile_size - 1) / tile_size;
     int32 tile_count = num_tiles_x * num_tiles_y;
 
-    std::unique_ptr<RenderingProgress> progress = std::make_unique<RenderingProgress>(width, height, tile_size, tile_count);
+    std::unique_ptr<RenderingProgress> progress = std::make_unique<RenderingProgress>(resolution, tile_size, tile_count);
 
     progress->job = RunAsync([=, this, &progress, &camera]() {
         std::atomic<int32> tile_done = 0;
@@ -60,7 +61,7 @@ std::unique_ptr<RenderingProgress> UniDirectionalRayIntegrator::Render(Film* fil
 
                         if (!L.IsNullish())
                         {
-                            film->AddSample(x, y, L, 1);
+                            progress->film.AddSample(x, y, L, 1);
                         }
                     }
                 }

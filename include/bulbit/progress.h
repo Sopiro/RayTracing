@@ -8,9 +8,9 @@ namespace bulbit
 class RenderingProgress
 {
 public:
-    RenderingProgress(int32 width, int32 height, int32 tile_size, int32 tile_count)
-        : width{ width }
-        , height{ height }
+    RenderingProgress(const Point2i& resolution, int32 tile_size, int32 tile_count)
+        : film(resolution)
+        , resolution{ resolution }
         , tile_count{ tile_count }
         , tile_size{ tile_size }
         , tile_done{ 0 }
@@ -20,25 +20,29 @@ public:
 
     ~RenderingProgress() = default;
 
-    void Wait()
+    const Film& Wait()
     {
         job->Wait();
+        return film;
     }
 
-    void WaitAndLogProgress()
+    const Film& WaitAndLogProgress()
     {
         while (!job->Finished())
         {
+            using namespace std::chrono_literals;
+
             int32 t = tile_done.load();
             float p = 100.0f * t / tile_count;
             std::fprintf(stdout, "\rRendering.. %.2f%% [%d/%d]", p, t, tile_count);
-            std::this_thread::yield();
+            std::this_thread::sleep_for(50ms);
         }
 
         assert(done);
+        return film;
     }
 
-    const int32 width, height;
+    const Point2i& resolution;
     const int32 tile_size;
     const int32 tile_count;
     std::atomic<int32> tile_done;
@@ -47,6 +51,7 @@ public:
 private:
     friend class UniDirectionalRayIntegrator;
 
+    Film film;
     std::unique_ptr<AsyncJob<bool>> job;
 };
 

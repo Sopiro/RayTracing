@@ -10,7 +10,7 @@ inline Spectrum ToLinearRGB(const Spectrum& color)
 {
     Spectrum result;
 
-    for (int i = 0; i < 3; ++i)
+    for (int32 i = 0; i < 3; ++i)
     {
         Float comp = color[i];
 
@@ -31,7 +31,7 @@ inline Spectrum ToSRGB(const Spectrum& color)
 {
     Spectrum result;
 
-    for (int i = 0; i < 3; ++i)
+    for (int32 i = 0; i < 3; ++i)
     {
         Float comp = color[i];
 

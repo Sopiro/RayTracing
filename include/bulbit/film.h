@@ -11,7 +11,7 @@ namespace bulbit
 class Film
 {
 public:
-    Film(const Camera* camera);
+    Film(const Point2i& resolution);
 
     void AddSample(int32 x, int32 y, const Spectrum& L, Float weight);
     Bitmap ConvertToBitmap() const;
@@ -23,8 +23,8 @@ private:
     std::unique_ptr<Float[]> weights;
 };
 
-inline Film::Film(const Camera* camera)
-    : resolution{ camera->GetScreenResolution() }
+inline Film::Film(const Point2i& resolution)
+    : resolution{ resolution }
 {
     int32 width = resolution.x;
     int32 height = resolution.y;
@@ -57,8 +57,6 @@ inline Bitmap Film::ConvertToBitmap() const
         s = Tonemap_ACES(s);
         s = ToSRGB(s);
 
-        // int32 x = i % width;
-        // int32 y = i / width;
         bitmap.Set(i, s);
     }
 
