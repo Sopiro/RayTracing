@@ -16,8 +16,8 @@ UniDirectionalRayIntegrator::UniDirectionalRayIntegrator(
 
 void UniDirectionalRayIntegrator::Render(Film* film, const Camera& camera)
 {
-    int32 width = film->width;
-    int32 height = film->height;
+    int32 width = film->resolution.x;
+    int32 height = film->resolution.y;
 
     const int32 tile_size = 16;
     int32 num_tiles_x = (width + tile_size - 1) / tile_size;

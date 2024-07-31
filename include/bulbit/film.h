@@ -16,7 +16,7 @@ public:
     void AddSample(int32 x, int32 y, const Spectrum& L, Float weight);
     Bitmap ConvertToBitmap() const;
 
-    const int32 width, height;
+    const Point2i resolution;
 
 private:
     std::unique_ptr<Spectrum[]> samples;
@@ -24,9 +24,11 @@ private:
 };
 
 inline Film::Film(const Camera* camera)
-    : width{ camera->GetScreenWidth() }
-    , height{ camera->GetScreenHeight() }
+    : resolution{ camera->GetScreenResolution() }
 {
+    int32 width = resolution.x;
+    int32 height = resolution.y;
+
     samples = std::make_unique<Spectrum[]>(width * height);
     weights = std::make_unique<Float[]>(width * height);
 
@@ -39,12 +41,14 @@ inline Film::Film(const Camera* camera)
 
 inline void Film::AddSample(int32 x, int32 y, const Spectrum& L, Float w)
 {
-    samples[x + y * width] += L;
-    weights[x + y * width] += w;
+    samples[x + y * resolution.x] += L;
+    weights[x + y * resolution.x] += w;
 }
 
 inline Bitmap Film::ConvertToBitmap() const
 {
+    int32 width = resolution.x;
+    int32 height = resolution.y;
     Bitmap bitmap(width, height);
 
     for (int32 i = 0; i < width * height; ++i)

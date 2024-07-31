@@ -60,8 +60,7 @@ int main(int argc, char* argv[])
 
     Bitmap bitmap = film.ConvertToBitmap();
 
-    int32 width = camera->GetScreenWidth();
-    int32 height = camera->GetScreenHeight();
+    auto [width, height] = camera->GetScreenResolution();
     std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
     bitmap.WriteToFile(filename.c_str());
 
