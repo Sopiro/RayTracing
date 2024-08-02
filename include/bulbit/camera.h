@@ -11,9 +11,7 @@ class Medium;
 class Camera
 {
 public:
-    static inline std::unique_ptr<Filter> default_filter = std::make_unique<BoxFilter>(1.0f);
-    // static inline std::unique_ptr<Filter> default_filter = std::make_unique<TentFilter>(1.0f);
-    // static inline std::unique_ptr<Filter> default_filter = std::make_unique<GaussianFilter>(0.5f);
+    static inline std::unique_ptr<Filter> default_filter = std::make_unique<GaussianFilter>(0.5f);
 
     Camera(const Point2i& resolution, const Medium* medium, const Filter* pixel_filter)
         : resolution{ resolution }

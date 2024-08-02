@@ -57,7 +57,9 @@ public:
     {
         // Box Muller transform
         Float r = sigma * std::sqrt(-2 * std::log(std::max<Float>(u[0], 1e-8)));
-        return Vector2{ r * std::cos(2 * pi * u[1]), r * std::sin(2 * pi * u[1]) };
+        Float theta = 2 * pi * u[1];
+
+        return Point2{ r * std::cos(theta), r * std::sin(theta) };
     }
 
 private:
