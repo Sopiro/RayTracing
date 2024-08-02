@@ -133,4 +133,24 @@ inline Spectrum FresnelComplex(Float cos_theta_i, const Spectrum& eta, const Spe
     return result;
 }
 
+// https://www.pbr-book.org/3ed-2018/Volume_Scattering/The_BSSRDF#FresnelMoment1
+// Precomputed value of
+// F(\eta) = \int_0^{\frac{\pi}{2}} F_r(cos\theta, \eta) sin\theta cos\theta d\theta
+inline Float FresnelMoment1(Float eta)
+{
+    Float eta2 = eta * eta;
+    Float eta3 = eta2 * eta;
+    Float eta4 = eta3 * eta;
+    Float eta5 = eta4 * eta;
+
+    if (eta < 1)
+    {
+        return 0.45966f - 1.73965f * eta + 3.37668f * eta2 - 3.904945 * eta3 + 2.49277f * eta4 - 0.68441f * eta5;
+    }
+    else
+    {
+        return -4.61686f + 11.1136f * eta - 10.4646f * eta2 + 5.11455f * eta3 - 1.27198f * eta4 + 0.12746f * eta5;
+    }
+}
+
 } // namespace bulbit
