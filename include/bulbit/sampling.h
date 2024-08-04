@@ -408,4 +408,81 @@ private:
     std::unique_ptr<Distribution1D> marginal;
 };
 
+// https://sopiro.github.io/posts/wrs/
+// https://www.pbr-book.org/4ed/Sampling_Algorithms/Reservoir_Sampling
+template <typename T>
+class WeightedReservoirSampler
+{
+public:
+    WeightedReservoirSampler(uint64 seed)
+        : rng(seed)
+        , sum{ 0 }
+        , weight{ 0 }
+    {
+    }
+
+    void Seed(uint64 seed)
+    {
+        rng.Seed(seed);
+    }
+
+    bool Add(const T& sample, Float weight)
+    {
+        weight_sum += weight;
+
+        if (rng.NextFloat() < weight / weight_sum)
+        {
+            reservoir = sample;
+            reservoir_weight = weight;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool HasSample() const
+    {
+        return weight_sum > 0;
+    }
+
+    const T& GetSample() const
+    {
+        return reservoir;
+    }
+
+    Float GetSampleProbability() const
+    {
+        return reservoir_weight / weight_sum;
+    }
+
+    Float GetWeightSum() const
+    {
+        return weight_sum;
+    }
+
+    Float Reset()
+    {
+        reservoir_weight = 0;
+        weight_sum = 0;
+    }
+
+    bool Merge(const WeightedReservoirSampler& other)
+    {
+        if (other.HasSample() && Add(other.reservoir, other.weight_sum))
+        {
+            reservoir_weight = other.reservoir_weight;
+            return true;
+        }
+
+        return false;
+    }
+
+private:
+    RNG rng;
+
+    T reservoir{};
+    Float reservoir_weight;
+    Float weight_sum;
+};
+
 } // namespace bulbit
