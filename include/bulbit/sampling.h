@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "frame.h"
+#include "random.h"
 
 namespace bulbit
 {
@@ -416,8 +417,8 @@ class WeightedReservoirSampler
 public:
     WeightedReservoirSampler(uint64 seed)
         : rng(seed)
-        , sum{ 0 }
-        , weight{ 0 }
+        , weight_sum{ 0 }
+        , reservoir_weight{ 0 }
     {
     }
 

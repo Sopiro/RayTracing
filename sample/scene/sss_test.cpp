@@ -1,6 +1,6 @@
 #include "../samples.h"
 
-std::unique_ptr<Camera> MaterialTest(Scene& scene)
+std::unique_ptr<Camera> SSSTest(Scene& scene)
 {
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(Spectrum(0, 0, 0), Spectrum(10), Spectrum(0.0), -0.9f);
     MediumInterface mi(hm, nullptr);
@@ -12,21 +12,22 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
         auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
         auto checker = CheckerTexture::Create(a, b, Point2(20));
-        auto tf = Transform{ Vec3(-0.708772, 0, -0.732108), Quat::FromEuler(0, DegToRad(46.1511), DegToRad(180)), Vec3(5.43618) };
+        auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
-        CreateRectXZ(scene, tf, floor);
+        SetLoaderFallbackMaterial(floor);
+        LoadModel(scene, "res/background.obj", tf);
     }
 
     // Model
     {
         // auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
         auto normalmap = nullptr;
-        // auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.9), normalmap);
-        auto mat = scene.CreateMaterial<ConductorMaterial>(
-            ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
-            ConstantFloatTexture::Create(0.05f), ConstantFloatTexture::Create(0.4f), normalmap
-        );
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
+        auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0, 163 / 255.0, 108 / 255.0), normalmap);
+        // auto mat = scene.CreateMaterial<ConductorMaterial>(
+        //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
+        //     ConstantFloatTexture::Create(0.05f), ConstantFloatTexture::Create(0.4f), normalmap
+        // );
+        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.1f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f), normalmap);
 
@@ -36,20 +37,8 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         SetLoaderFallbackMaterial(mat);
         // SetLoaderFallbackMediumInterface(mi);
 
-        auto tf = Transform{ Vec3(0.0571719, 0.213656, 0.0682078), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
-
-        LoadModel(scene, "res/material_test_ball/models/Mesh001.obj", tf);
-        tf = Transform{ Vec3(0.156382, 0.777229, 0.161698), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
-        LoadModel(scene, "res/material_test_ball/models/Mesh002.obj", tf);
-    }
-
-    // Stand
-    {
-        auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.3));
-        SetLoaderFallbackMaterial(mat);
-
-        auto tf = Transform{ Vec3(0.110507, 0.494301, 0.126194), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
-        LoadModel(scene, "res/material_test_ball/models/Mesh000.obj", tf);
+        auto tf = Transform{ Vec3(0.2, .78, .3) * 0.5, Quat::FromEuler(0, -(3 * pi / 4), 0), Vec3(0.01) };
+        LoadModel(scene, "res/xyzrgb_dragon.ply", tf);
     }
 
     // scene.CreateLight<ImageInfiniteLight>(
@@ -75,14 +64,14 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     int32 width = 960;
     int32 height = int32(width / aspect_ratio);
 
-    Point3 lookfrom{ 3.04068, 3.17153, 3.20454 };
-    Point3 lookat{ 0.118789, 0.473398, 0.161081 };
+    Point3 lookfrom{ 0, 1.0, 3 };
+    Point3 lookat{ 0.0, 0.3, 0.0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
     Float aperture = 0.0f;
-    Float vFov = 20.114292;
+    Float vFov = 30.0;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("material", MaterialTest);
+static int32 index = Sample::Register("sss", SSSTest);
