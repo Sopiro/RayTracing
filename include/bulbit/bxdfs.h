@@ -243,7 +243,7 @@ public:
         }
 
         Vec3 wi = SampleCosineHemisphere(u12);
-        Float pdf = CosineHemispherePDF(CosTheta(wi));
+        Float pdf = CosineHemispherePDF(AbsCosTheta(wi));
         if (wo.z < 0)
         {
             wi.z = -wi.z;

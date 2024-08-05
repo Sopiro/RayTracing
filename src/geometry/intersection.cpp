@@ -60,6 +60,28 @@ bool Intersection::GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc)
     return mat->GetBSDF(bsdf, *this, wo, alloc);
 }
 
+bool Intersection::GetBSSRDF(BSSRDF** bssrdf, const Vec3& wo, Allocator& alloc)
+{
+    const Material* mat = primitive->GetMaterial();
+    if (!mat)
+    {
+        return false;
+    }
+
+    while (mat->GetType() == Material::Type::mixture)
+    {
+        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
+    }
+
+    const SpectrumTexture* normalmap = mat->GetNormalMap();
+    if (normalmap)
+    {
+        NormalMapping(this, normalmap);
+    }
+
+    return mat->GetBSSRDF(bssrdf, *this, wo, alloc);
+}
+
 const Medium* Intersection::GetMedium(const Vec3& w) const
 {
     const MediumInterface* medium_interface = primitive->GetMediumInterface();

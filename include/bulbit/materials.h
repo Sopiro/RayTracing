@@ -181,4 +181,31 @@ private:
     const FloatTexture* mixture_amount;
 };
 
+class SubsurfaceMaterial : public Material
+{
+public:
+    SubsurfaceMaterial(const Spectrum& reflectance, const Spectrum& l, Float eta, Float roughness)
+        : Material(Material::Type::normal)
+        , R{ reflectance }
+        , eta{ eta }
+        , roughness{ roughness }
+    {
+        // Eq. 6
+        Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f));
+        d = l / s;
+    }
+
+    virtual bool TestAlpha(const Point2& uv) const override;
+    virtual const SpectrumTexture* GetNormalMap() const override;
+
+    virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const override;
+    virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+    virtual bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
+
+private:
+    Spectrum R, d;
+    Float eta;
+    Float roughness;
+};
+
 } // namespace bulbit

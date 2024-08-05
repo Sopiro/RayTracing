@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bsdf.h"
+#include "bssrdf.h"
 #include "intersectable.h"
 #include "texture.h"
 
@@ -31,6 +32,10 @@ public:
 
     virtual Spectrum Le(const Intersection& isect, const Vec3& wo) const = 0;
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const = 0;
+    virtual bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+    {
+        return false;
+    }
 
     Type GetType() const
     {

@@ -294,6 +294,48 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_med
         ray = Ray(isect.point, bsdf_sample.wi);
         medium = isect.GetMedium(bsdf_sample.wi);
 
+        // Handle subsurface scattering
+        BSSRDF* bssrdf;
+        if (isect.GetBSSRDF(&bssrdf, wo, alloc) && bsdf_sample.IsTransmission())
+        {
+            Float u0 = sampler.Next1D();
+            Point2 u12 = sampler.Next2D();
+
+            BSSRDFSample bssrdf_sample;
+            if (!bssrdf->Sample_S(&bssrdf_sample, accel, wavelength, u0, u12, alloc))
+            {
+                break;
+            }
+
+            Float pdf = bssrdf_sample.pdf[wavelength] * bssrdf_sample.p;
+            beta *= bssrdf_sample.Sp / pdf;
+            r_u *= bssrdf_sample.pdf / bssrdf_sample.pdf[wavelength];
+
+            any_non_specular_bounces = true;
+            BSDF& Sw = bssrdf_sample.Sw;
+            if (regularize_bsdf)
+            {
+                Sw.Regularize();
+            }
+
+            L += SampleDirectLight(bssrdf_sample.wo, bssrdf_sample.pi, nullptr, &Sw, nullptr, wavelength, sampler, beta, r_u);
+            last_scattering_vertex = bssrdf_sample.pi.point;
+
+            if (!Sw.Sample_f(&bsdf_sample, bssrdf_sample.wo, sampler.Next1D(), sampler.Next2D()))
+            {
+                break;
+            }
+
+            beta *= bsdf_sample.f * AbsDot(bsdf_sample.wi, bssrdf_sample.pi.shading.normal) / bsdf_sample.pdf;
+            // light sampling PDF at this vertex will be incorporated into r_l when it intersects the light source
+            r_l = r_u / bsdf_sample.pdf;
+
+            specular_bounce = bsdf_sample.IsSpecular();
+
+            ray = Ray(bssrdf_sample.pi.point, bsdf_sample.wi);
+            medium = bssrdf_sample.pi.GetMedium(bsdf_sample.wi);
+        }
+
         // Terminate path with russian roulette
         constexpr int32 min_bounces = 2;
         if (bounce > min_bounces)

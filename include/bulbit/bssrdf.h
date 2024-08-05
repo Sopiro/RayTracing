@@ -11,8 +11,11 @@ namespace bulbit
 struct BSSRDFSample
 {
     Intersection pi;
+    Vec3 wo; // Dummy direction
+
     Spectrum Sp, pdf;
     Float p;
+
     BSDF Sw;
 };
 
@@ -28,7 +31,7 @@ public:
 
     virtual Spectrum S(const Intersection& pi, const Vec3& wi) const = 0;
     virtual bool Sample_S(
-        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12, Allocator& alloc
     ) = 0;
 
 protected:
@@ -51,12 +54,12 @@ public:
     Spectrum Sp(const Intersection& pi) const;
 
     virtual bool Sample_S(
-        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12, Allocator& alloc
     ) override;
 
     Spectrum PDF_Sp(const Intersection& pi) const;
 
-    virtual Float MaxSr() const = 0;
+    virtual Float MaxSr(int32 wavelength) const = 0;
     virtual Spectrum Sr(Float d) const = 0;
     virtual Float Sample_Sr(int32 wavelength, Float u) const = 0;
     virtual Spectrum PDF_Sr(Float r) const = 0;

@@ -30,16 +30,16 @@ Spectrum SeparableBSSRDF::Sp(const Intersection& pi) const
 }
 
 bool SeparableBSSRDF::Sample_S(
-    BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+    BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12, Allocator& alloc
 )
 {
     // Choose projection axis
     Frame f;
-    if (u1 < axis_sampling_probabilities[0])
+    if (u0 < axis_sampling_probabilities[0])
     {
         f = Frame::FromX(po.shading.normal);
     }
-    else if (u1 < axis_sampling_probabilities[0] + axis_sampling_probabilities[1])
+    else if (u0 < axis_sampling_probabilities[0] + axis_sampling_probabilities[1])
     {
         f = Frame::FromY(po.shading.normal);
     }
@@ -49,16 +49,16 @@ bool SeparableBSSRDF::Sample_S(
     }
 
     // Sample scattering distance
-    Float r = Sample_Sr(wavelength, u2[0]);
+    Float r = Sample_Sr(wavelength, u12[0]);
     if (r < 0)
     {
         return false;
     }
 
     // Uniform in azimuth
-    Float phi = two_pi * u2[1];
+    Float phi = two_pi * u12[1];
 
-    Float r_max = MaxSr();
+    Float r_max = MaxSr(wavelength);
     if (r > r_max)
     {
         return false;
@@ -70,19 +70,21 @@ bool SeparableBSSRDF::Sample_S(
     // Prepare ray for BSSRDF sampling
     Point3 start = po.point + r * (f.x * std::cos(phi) + f.y * std::sin(phi)) - l * f.z / 2;
     Point3 end = start + l * f.z;
-    Ray ray(start, end - start);
 
-    WeightedReservoirSampler<Intersection> wrs(Hash(ray.o, ray.d));
+    Ray ray(start, Normalize(end - start));
+
+    WeightedReservoirSampler<Intersection> wrs(Hash(start, end));
 
     Intersection isect;
-    while (accel->Intersect(&isect, ray, Ray::epsilon, 1))
+    while (l > 0 && accel->Intersect(&isect, ray, Ray::epsilon, l))
     {
         if (isect.primitive->GetMaterial() == po.primitive->GetMaterial())
         {
             wrs.Add(isect, 1);
         }
 
-        ray = Ray(isect.point, end - isect.point);
+        ray.o = isect.point;
+        l -= isect.t;
     }
 
     if (!wrs.HasSample())
@@ -90,11 +92,17 @@ bool SeparableBSSRDF::Sample_S(
         return false;
     }
 
-    bssrdf_sample->pi = wrs.GetSample();
-    bssrdf_sample->Sp = Sp(bssrdf_sample->pi);
-    bssrdf_sample->pdf = PDF_Sp(bssrdf_sample->pi);
+    const Intersection& pi = wrs.GetSample();
+
+    bssrdf_sample->pi = pi;
+    bssrdf_sample->Sp = Sp(pi);
+    bssrdf_sample->pdf = PDF_Sp(pi);
     bssrdf_sample->p = wrs.GetSampleProbability();
-    bssrdf_sample->Sw = BSDF(po.shading.normal, &sw);
+
+    Vec3 n = pi.front_face ? pi.shading.normal : -pi.shading.normal;
+    bssrdf_sample->Sw = BSDF(n, &sw);
+    bssrdf_sample->wo = n;
+
     return true;
 }
 
