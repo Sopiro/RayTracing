@@ -1,4 +1,8 @@
 #include "bulbit/bssrdf.h"
+#include "bulbit/bxdfs.h"
+#include "bulbit/hash.h"
+#include "bulbit/primitive.h"
+#include "bulbit/sampling.h"
 #include "bulbit/scattering.h"
 
 namespace bulbit
@@ -26,22 +30,95 @@ Spectrum SeparableBSSRDF::Sp(const Intersection& pi) const
 }
 
 bool SeparableBSSRDF::Sample_S(
-    BSSRDFSample* bssrdf_sample, const Intersectable* accel, Float u1, const Point2& u2, Allocator& alloc
-) const
+    BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+)
 {
-    return false;
+    // Choose projection axis
+    Frame f;
+    if (u1 < axis_sampling_probabilities[0])
+    {
+        f = Frame::FromX(po.shading.normal);
+    }
+    else if (u1 < axis_sampling_probabilities[0] + axis_sampling_probabilities[1])
+    {
+        f = Frame::FromY(po.shading.normal);
+    }
+    else
+    {
+        f = Frame::FromZ(po.shading.normal);
+    }
+
+    // Sample scattering distance
+    Float r = Sample_Sr(wavelength, u2[0]);
+    if (r < 0)
+    {
+        return false;
+    }
+
+    // Uniform in azimuth
+    Float phi = two_pi * u2[1];
+
+    Float r_max = MaxSr();
+    if (r > r_max)
+    {
+        return false;
+    }
+
+    // Compute BSSRDF sampling segment length
+    Float l = 2 * std::sqrt(Sqr(r_max) - Sqr(r));
+
+    // Prepare ray for BSSRDF sampling
+    Point3 start = po.point + r * (f.x * std::cos(phi) + f.y * std::sin(phi)) - l * f.z / 2;
+    Point3 end = start + l * f.z;
+    Ray ray(start, end - start);
+
+    WeightedReservoirSampler<Intersection> wrs(Hash(ray.o, ray.d));
+
+    Intersection isect;
+    while (accel->Intersect(&isect, ray, Ray::epsilon, 1))
+    {
+        if (isect.primitive->GetMaterial() == po.primitive->GetMaterial())
+        {
+            wrs.Add(isect, 1);
+        }
+
+        ray = Ray(isect.point, end - isect.point);
+    }
+
+    if (!wrs.HasSample())
+    {
+        return false;
+    }
+
+    bssrdf_sample->pi = wrs.GetSample();
+    bssrdf_sample->Sp = Sp(bssrdf_sample->pi);
+    bssrdf_sample->pdf = PDF_Sp(bssrdf_sample->pi);
+    bssrdf_sample->p = wrs.GetSampleProbability();
+    bssrdf_sample->Sw = BSDF(po.shading.normal, &sw);
+    return true;
 }
 
-bool SeparableBSSRDF::Sample_Sp(
-    BSSRDFSample* bssrdf_sample, const Intersectable* accel, Float u1, const Point2& u2, Allocator& alloc
-) const
+Spectrum SeparableBSSRDF::PDF_Sp(const Intersection& pi) const
 {
-    return false;
-}
+    Frame f(po.shading.normal);
 
-Float SeparableBSSRDF::PDF_Sp(const Intersection& pi) const
-{
-    return 0;
+    Vec3 d = pi.point - po.point;
+    Vec3 d_local = f.ToLocal(d);
+    Vec3 n_local = f.ToLocal(pi.normal);
+
+    // Radius projected on each sampling axis
+    Float projected_r[3] = { std::sqrt(Sqr(d_local.y) + Sqr(d_local.z)), std::sqrt(Sqr(d_local.z) + Sqr(d_local.x)),
+                             std::sqrt(Sqr(d_local.x) + Sqr(d_local.y)) };
+
+    // Combine all wavelength dependent sampling probabilities
+    Spectrum pdf(0, 0, 0);
+    for (int32 axis = 0; axis < 3; ++axis)
+    {
+        // Sum up Sr(r) * ds cos\theta * p[axis]
+        pdf += PDF_Sr(projected_r[axis]) * std::abs(n_local[axis]) * axis_sampling_probabilities[axis];
+    }
+
+    return pdf;
 }
 
 } // namespace bulbit

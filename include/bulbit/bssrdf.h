@@ -12,6 +12,7 @@ struct BSSRDFSample
 {
     Intersection pi;
     Spectrum Sp, pdf;
+    Float p;
     BSDF Sw;
 };
 
@@ -26,8 +27,9 @@ public:
     }
 
     virtual Spectrum S(const Intersection& pi, const Vec3& wi) const = 0;
-    virtual bool Sample_S(BSSRDFSample* bssrdf_sample, const Intersectable* accel, Float u1, const Point2& u2, Allocator& alloc)
-        const = 0;
+    virtual bool Sample_S(
+        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+    ) = 0;
 
 protected:
     const Intersection& po;
@@ -48,17 +50,19 @@ public:
     Spectrum Sw(const Intersection& pi, const Vec3& wi) const;
     Spectrum Sp(const Intersection& pi) const;
 
-    virtual bool Sample_S(BSSRDFSample* bssrdf_sample, const Intersectable* accel, Float u1, const Point2& u2, Allocator& alloc)
-        const override;
+    virtual bool Sample_S(
+        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u1, const Point2& u2, Allocator& alloc
+    ) override;
 
-    bool Sample_Sp(BSSRDFSample* bssrdf_sample, const Intersectable* accel, Float u1, const Point2& u2, Allocator& alloc) const;
-    Float PDF_Sp(const Intersection& pi) const;
+    Spectrum PDF_Sp(const Intersection& pi) const;
 
+    virtual Float MaxSr() const = 0;
     virtual Spectrum Sr(Float d) const = 0;
     virtual Float Sample_Sr(int32 wavelength, Float u) const = 0;
-    virtual Spectrum PDF_Sr(int32 wavelength, Float r) const = 0;
+    virtual Spectrum PDF_Sr(Float r) const = 0;
 
 private:
+    static inline Float axis_sampling_probabilities[3] = { 0.25f, 0.25f, 0.5f };
     NormalizedFresnelBxDF sw;
 };
 
