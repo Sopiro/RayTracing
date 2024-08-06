@@ -1,3 +1,4 @@
+#include "bulbit/bssrdfs.h"
 #include "bulbit/bxdfs.h"
 #include "bulbit/integrators.h"
 #include "bulbit/material.h"
@@ -249,7 +250,7 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_med
             break;
         }
 
-        int8 mem[max_bxdf_size];
+        int8 mem[std::max(max_bxdf_size, max_bssrdf_size)];
         Resource res(mem, sizeof(mem));
         Allocator alloc(&res);
         BSDF bsdf;
@@ -302,7 +303,7 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_med
             Point2 u12 = sampler.Next2D();
 
             BSSRDFSample bssrdf_sample;
-            if (!bssrdf->Sample_S(&bssrdf_sample, accel, wavelength, u0, u12, alloc))
+            if (!bssrdf->Sample_S(&bssrdf_sample, accel, wavelength, u0, u12))
             {
                 break;
             }
@@ -318,9 +319,11 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_med
                 Sw.Regularize();
             }
 
+            // Add subsurface scattered direct light
             L += SampleDirectLight(bssrdf_sample.wo, bssrdf_sample.pi, nullptr, &Sw, nullptr, wavelength, sampler, beta, r_u);
             last_scattering_vertex = bssrdf_sample.pi.point;
 
+            // Handle subsurface scattering for indirect light
             if (!Sw.Sample_f(&bsdf_sample, bssrdf_sample.wo, sampler.Next1D(), sampler.Next2D()))
             {
                 break;

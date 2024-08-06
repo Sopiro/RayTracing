@@ -24,4 +24,6 @@ private:
     Spectrum R, d;
 };
 
+constexpr size_t max_bssrdf_size = std::max({ sizeof(DisneyBSSRDF) });
+
 } // namespace bulbit

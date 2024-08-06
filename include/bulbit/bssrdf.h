@@ -14,7 +14,7 @@ struct BSSRDFSample
     Vec3 wo; // Dummy direction
 
     Spectrum Sp, pdf;
-    Float p;
+    Float p; // vertex sampling probability
 
     BSDF Sw;
 };
@@ -31,7 +31,7 @@ public:
 
     virtual Spectrum S(const Intersection& pi, const Vec3& wi) const = 0;
     virtual bool Sample_S(
-        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12, Allocator& alloc
+        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12
     ) = 0;
 
 protected:
@@ -53,9 +53,8 @@ public:
     Spectrum Sw(const Intersection& pi, const Vec3& wi) const;
     Spectrum Sp(const Intersection& pi) const;
 
-    virtual bool Sample_S(
-        BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12, Allocator& alloc
-    ) override;
+    virtual bool Sample_S(BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12)
+        override;
 
     Spectrum PDF_Sp(const Intersection& pi) const;
 
