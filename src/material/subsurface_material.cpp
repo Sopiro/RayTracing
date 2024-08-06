@@ -13,6 +13,13 @@ SubsurfaceMaterial::SubsurfaceMaterial(
 }
 
 SubsurfaceMaterial::SubsurfaceMaterial(
+    const SpectrumTexture* reflectance, const Spectrum& l, Float eta, Float roughness, const SpectrumTexture* normalmap
+)
+    : SubsurfaceMaterial(reflectance, l, eta, ConstantFloatTexture::Create(roughness), normalmap)
+{
+}
+
+SubsurfaceMaterial::SubsurfaceMaterial(
     const SpectrumTexture* reflectance,
     const Spectrum& l,
     Float eta,

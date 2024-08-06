@@ -47,7 +47,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, ss);
+        CreateBox(scene, tf, white);
     }
 
     // Right block
@@ -59,7 +59,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, ss);
+        CreateBox(scene, tf, white);
     }
 
     // Right sphere

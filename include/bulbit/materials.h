@@ -194,6 +194,13 @@ public:
         const SpectrumTexture* reflectance,
         const Spectrum& l,
         Float eta,
+        Float roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterial(
+        const SpectrumTexture* reflectance,
+        const Spectrum& l,
+        Float eta,
         const FloatTexture* roughness,
         const SpectrumTexture* normalmap = nullptr
     );
