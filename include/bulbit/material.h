@@ -16,6 +16,7 @@ public:
     enum class Type
     {
         normal,
+        subsurface,
         light_source,
         mixture,
     };

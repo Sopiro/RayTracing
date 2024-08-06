@@ -15,7 +15,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
-    auto ss = scene.CreateMaterial<SubsurfaceMaterial>(Spectrum(1.0), Spectrum(0.5, 0.25, 0.125) * 0.05, 1.0, 0.0);
+    auto ss = scene.CreateMaterial<SubsurfaceMaterial>(Spectrum(1.0), Spectrum(0.5, 0.25, 0.125) * 0.1, 1.0, 0.0);
 
     // Cornell box
     {
@@ -47,7 +47,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, ss);
     }
 
     // Right block
@@ -59,7 +59,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, ss);
     }
 
     // Right sphere

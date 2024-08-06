@@ -199,61 +199,13 @@ public:
         return BxDF_Flags(BxDF_Flags::Diffuse | BxDF_Flags::Reflection);
     }
 
-    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override
-    {
-        if (!SameHemisphere(wo, wi))
-        {
-            return Spectrum::black;
-        }
-
-        // Normalization constant
-        Float c = 1 / (pi * (1 - 2 * FresnelMoment1(1 / eta)));
-        Spectrum f(c * (1 - FresnelDielectric(CosTheta(wi), eta)));
-
-        // Handle solid angle squeezing
-        f *= Sqr(eta);
-
-        return f;
-    }
-
-    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const override
-    {
-        if (!(flags & BxDF_SamplingFlags::Reflection))
-        {
-            return 0;
-        }
-
-        if (SameHemisphere(wo, wi))
-        {
-            return CosineHemispherePDF(AbsCosTheta(wi));
-        }
-        else
-        {
-            return 0;
-        }
-    }
+    virtual Spectrum f(const Vec3& wo, const Vec3& wi) const override;
+    virtual Float PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All) const override;
 
     virtual bool Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags = BxDF_SamplingFlags::All)
-        const override
-    {
-        // Same as the Lambertian BRDF
-        if (!(flags & BxDF_SamplingFlags::Reflection))
-        {
-            return false;
-        }
+        const override;
 
-        Vec3 wi = SampleCosineHemisphere(u12);
-        Float pdf = CosineHemispherePDF(AbsCosTheta(wi));
-        if (wo.z < 0)
-        {
-            wi.z = -wi.z;
-        }
-
-        *sample = BSDFSample(f(wo, wi), wi, pdf, BxDF_Flags::DiffuseReflection);
-        return true;
-    }
-
-    virtual void Regularize() override {}
+    virtual void Regularize() override;
 
 private:
     Float eta;

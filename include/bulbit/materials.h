@@ -59,6 +59,7 @@ private:
     const SpectrumTexture* normalmap;
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
+
     Float eta;
 };
 
@@ -106,6 +107,7 @@ private:
     const SpectrumTexture* normalmap;
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
+
     const SpectrumTexture* eta;
     const SpectrumTexture* k;
 };
@@ -136,12 +138,13 @@ public:
     virtual bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 
 private:
-    const SpectrumTexture* basecolor;
-    const FloatTexture* metallic;
+    const SpectrumTexture* normalmap;
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
+
+    const SpectrumTexture* basecolor;
+    const FloatTexture* metallic;
     const SpectrumTexture* emissive;
-    const SpectrumTexture* normalmap;
 };
 
 class DiffuseLightMaterial : public Material
@@ -184,16 +187,24 @@ private:
 class SubsurfaceMaterial : public Material
 {
 public:
-    SubsurfaceMaterial(const Spectrum& reflectance, const Spectrum& l, Float eta, Float roughness)
-        : Material(Material::Type::normal)
-        , R{ reflectance }
-        , eta{ eta }
-        , roughness{ roughness }
-    {
-        // Eq. 6
-        Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f));
-        d = l / s;
-    }
+    SubsurfaceMaterial(
+        const Spectrum& reflectance, const Spectrum& l, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterial(
+        const SpectrumTexture* reflectance,
+        const Spectrum& l,
+        Float eta,
+        const FloatTexture* roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterial(
+        const SpectrumTexture* reflectance,
+        const Spectrum& l,
+        Float eta,
+        const FloatTexture* u_roughness,
+        const FloatTexture* v_roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
 
     virtual bool TestAlpha(const Point2& uv) const override;
     virtual const SpectrumTexture* GetNormalMap() const override;
@@ -203,9 +214,13 @@ public:
     virtual bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const override;
 
 private:
-    Spectrum R, d;
+    const SpectrumTexture* normalmap;
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
+
+    const SpectrumTexture* reflectance;
+    Spectrum l;
     Float eta;
-    Float roughness;
 };
 
 } // namespace bulbit

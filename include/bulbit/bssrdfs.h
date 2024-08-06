@@ -5,6 +5,8 @@
 namespace bulbit
 {
 
+// Approximate Reflectance Profiles for Efficient Subsurface Scattering
+// by Christensen and Burley
 class DisneyBSSRDF : public SeparableBSSRDF
 {
 public:

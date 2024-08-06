@@ -28,7 +28,7 @@ Float DisneyBSSRDF::Sample_Sr(int32 wavelength, Float u) const
     }
     else
     {
-        // Second exponenital
+        // Sample the second exponenital
         u = std::min<Float>((u - .25f) / .75f, 1 - epsilon); // normalize to [0,1)
         return 3 * d[wavelength] * std::log(1 / (1 - u));
     }
