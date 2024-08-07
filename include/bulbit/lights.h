@@ -4,7 +4,7 @@
 #include "light.h"
 #include "primitive.h"
 #include "spectrum.h"
-#include "texture.h"
+#include "textures.h"
 #include "transform.h"
 
 namespace bulbit

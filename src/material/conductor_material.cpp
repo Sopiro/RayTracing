@@ -16,7 +16,7 @@ ConductorMaterial::ConductorMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material(TypeIndex<ConductorMaterial>())
+    : Material(TypeIndexOf<ConductorMaterial>())
     , eta{ eta }
     , k{ k }
     , u_roughness{ u_roughness }
@@ -36,7 +36,7 @@ ConductorMaterial::ConductorMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material{ TypeIndex<ConductorMaterial>() }
+    : Material{ TypeIndexOf<ConductorMaterial>() }
     , eta{ nullptr }
     , k{ reflectance }
     , u_roughness{ u_roughness }

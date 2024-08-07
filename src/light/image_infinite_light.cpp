@@ -13,7 +13,7 @@ ImageInfiniteLight::ImageInfiniteLight(const std::string& env_map, const Transfo
 }
 
 ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& tf)
-    : Light(TypeIndex<ImageInfiniteLight>())
+    : Light(TypeIndexOf<ImageInfiniteLight>())
     , l_map{ l_map }
     , transform{ tf }
 {

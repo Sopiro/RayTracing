@@ -5,7 +5,7 @@ namespace bulbit
 {
 
 AreaLight::AreaLight(const Primitive* primitive)
-    : Light(TypeIndex<AreaLight>())
+    : Light(TypeIndexOf<AreaLight>())
     , primitive{ primitive }
 {
 }

@@ -4,7 +4,7 @@ namespace bulbit
 {
 
 PointLight::PointLight(const Point3& position, const Spectrum& intensity)
-    : Light(TypeIndex<PointLight>())
+    : Light(TypeIndexOf<PointLight>())
     , position{ position }
     , intensity{ intensity }
 {

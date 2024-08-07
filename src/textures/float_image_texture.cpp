@@ -2,7 +2,7 @@
 #include <stb_image_write.h>
 
 #include "bulbit/parallel_for.h"
-#include "bulbit/texture.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {

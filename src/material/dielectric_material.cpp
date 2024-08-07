@@ -1,5 +1,6 @@
 #include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
@@ -23,7 +24,7 @@ DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness,
 DielectricMaterial::DielectricMaterial(
     Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap
 )
-    : Material{ TypeIndex<DielectricMaterial>() }
+    : Material{ TypeIndexOf<DielectricMaterial>() }
     , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }

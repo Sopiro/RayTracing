@@ -1,5 +1,6 @@
 #include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
@@ -10,7 +11,7 @@ DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* 
 }
 
 DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap)
-    : Material{ TypeIndex<DiffuseMaterial>() }
+    : Material{ TypeIndexOf<DiffuseMaterial>() }
     , albedo{ albedo }
     , normalmap{ normalmap }
 {

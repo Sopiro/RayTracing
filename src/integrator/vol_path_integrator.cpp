@@ -20,13 +20,13 @@ VolPathIntegrator::VolPathIntegrator(
     {
         switch (light->GetTypeIndex())
         {
-        case Light::TypeIndex<UniformInfiniteLight>():
-        case Light::TypeIndex<ImageInfiniteLight>():
+        case Light::TypeIndexOf<UniformInfiniteLight>():
+        case Light::TypeIndexOf<ImageInfiniteLight>():
         {
             infinite_lights.push_back(light);
         }
         break;
-        case Light::TypeIndex<AreaLight>():
+        case Light::TypeIndexOf<AreaLight>():
         {
             AreaLight* area_light = light->Cast<AreaLight>();
             area_lights.emplace(area_light->GetPrimitive(), area_light);

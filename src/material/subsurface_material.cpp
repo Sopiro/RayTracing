@@ -1,6 +1,7 @@
 #include "bulbit/bssrdfs.h"
 #include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
@@ -38,7 +39,7 @@ SubsurfaceMaterial::SubsurfaceMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material(TypeIndex<SubsurfaceMaterial>())
+    : Material(TypeIndexOf<SubsurfaceMaterial>())
     , reflectance{ reflectance }
     , l{ l }
     , eta{ eta }

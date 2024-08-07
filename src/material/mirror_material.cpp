@@ -1,5 +1,6 @@
 #include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
@@ -10,7 +11,7 @@ MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTextur
 }
 
 MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap)
-    : Material{ TypeIndex<MirrorMaterial>() }
+    : Material{ TypeIndexOf<MirrorMaterial>() }
     , reflectance{ reflectance }
     , normalmap{ normalmap }
 {

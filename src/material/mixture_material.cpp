@@ -1,5 +1,6 @@
 #include "bulbit/hash.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
@@ -10,7 +11,7 @@ MixtureMaterial::MixtureMaterial(const Material* material1, const Material* mate
 }
 
 MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* amount)
-    : Material{ TypeIndex<MixtureMaterial>() }
+    : Material{ TypeIndexOf<MixtureMaterial>() }
     , mixture_amount{ amount }
 {
     materials[0] = material1;

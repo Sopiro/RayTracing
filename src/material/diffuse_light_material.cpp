@@ -1,18 +1,19 @@
 #include "bulbit/bxdfs.h"
 #include "bulbit/materials.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : Material{ TypeIndex<DiffuseLightMaterial>() }
+    : Material{ TypeIndexOf<DiffuseLightMaterial>() }
     , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
-    : Material{ TypeIndex<DiffuseLightMaterial>() }
+    : Material{ TypeIndexOf<DiffuseLightMaterial>() }
     , emission{ emission }
     , two_sided{ two_sided }
 {

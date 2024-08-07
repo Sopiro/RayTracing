@@ -118,7 +118,7 @@ public:
     template <typename T>
     bool Is() const
     {
-        return TypeIndex<T>() == type_index;
+        return TypeIndexOf<T>() == type_index;
     }
 
     template <typename T>
@@ -162,7 +162,7 @@ public:
     }
 
     template <typename T>
-    static constexpr int8 TypeIndex()
+    static constexpr int8 TypeIndexOf()
     {
         using Type = typename std::remove_cv_t<T>;
         if constexpr (std::is_same_v<Type, std::nullptr_t>)
