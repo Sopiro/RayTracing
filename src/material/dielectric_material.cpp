@@ -23,7 +23,7 @@ DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness,
 DielectricMaterial::DielectricMaterial(
     Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap
 )
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<DielectricMaterial, Materials>() }
     , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
@@ -58,6 +58,11 @@ bool DielectricMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Ve
         alloc.new_object<DielectricBxDF>(eta_p, TrowbridgeReitzDistribution(alpha_x, alpha_y))
     );
     return true;
+}
+
+bool DielectricMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

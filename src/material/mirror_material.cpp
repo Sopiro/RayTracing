@@ -10,7 +10,7 @@ MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTextur
 }
 
 MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap)
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<MirrorMaterial, Materials>() }
     , reflectance{ reflectance }
     , normalmap{ normalmap }
 {
@@ -36,6 +36,11 @@ bool MirrorMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
     Spectrum r = reflectance->Evaluate(isect.uv);
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<SpecularReflectionBxDF>(r));
     return true;
+}
+
+bool MirrorMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

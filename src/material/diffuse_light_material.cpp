@@ -5,14 +5,14 @@ namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : Material{ Material::Type::light_source }
+    : Material{ GetTypeIndex<DiffuseLightMaterial, Materials>() }
     , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
-    : Material{ Material::Type::light_source }
+    : Material{ GetTypeIndex<DiffuseLightMaterial, Materials>() }
     , emission{ emission }
     , two_sided{ two_sided }
 {
@@ -49,6 +49,11 @@ bool DiffuseLightMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const 
 {
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<LambertianBxDF>(Spectrum::black));
     return true;
+}
+
+bool DiffuseLightMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

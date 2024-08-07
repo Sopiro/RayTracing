@@ -1,5 +1,5 @@
 #include "bulbit/lights.h"
-#include "bulbit/material.h"
+#include "bulbit/materials.h"
 
 namespace bulbit
 {

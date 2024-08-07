@@ -23,7 +23,7 @@ UnrealMaterial::UnrealMaterial(
     const SpectrumTexture* emissive,
     const SpectrumTexture* normalmap
 )
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<UnrealMaterial, Materials>() }
     , basecolor{ basecolor }
     , metallic{ metallic }
     , u_roughness{ u_roughness }
@@ -71,6 +71,11 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
 
     *bsdf = BSDF(n, isect.shading.tangent, alloc.new_object<UnrealBxDF>(b, m, TrowbridgeReitzDistribution(alpha_x, alpha_y), t));
     return true;
+}
+
+bool UnrealMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

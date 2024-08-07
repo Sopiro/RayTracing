@@ -47,12 +47,12 @@ public:
     virtual bool Next(RayMajorantSegment* next_segment) = 0;
 };
 
-class HomogeneousMedium;
+using Media = TypePack<class HomogeneousMedium>;
 
-class Medium : public DynamicDispatcher<HomogeneousMedium>
+class Medium : public DynamicDispatcher<Media>
 {
 public:
-    Medium(uint8 index)
+    Medium(int8 index)
         : DynamicDispatcher(index)
     {
     }

@@ -5,7 +5,7 @@ namespace bulbit
 {
 
 ThinDielectricMaterial::ThinDielectricMaterial(Float eta)
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<ThinDielectricMaterial, Materials>() }
     , eta{ eta }
 {
 }
@@ -29,6 +29,11 @@ bool ThinDielectricMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, cons
 {
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<ThinDielectricBxDF>(eta));
     return true;
+}
+
+bool ThinDielectricMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

@@ -10,7 +10,7 @@ MixtureMaterial::MixtureMaterial(const Material* material1, const Material* mate
 }
 
 MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* amount)
-    : Material{ Material::Type::mixture }
+    : Material{ GetTypeIndex<MixtureMaterial, Materials>() }
     , mixture_amount{ amount }
 {
     materials[0] = material1;
@@ -61,6 +61,11 @@ const Material* MixtureMaterial::ChooseMaterial(const Intersection& isect, const
     {
         return materials[1];
     }
+}
+
+bool MixtureMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit

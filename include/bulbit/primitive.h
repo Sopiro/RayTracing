@@ -1,7 +1,7 @@
 #pragma once
 
 #include "intersectable.h"
-#include "material.h"
+#include "materials.h"
 #include "medium.h"
 #include "shape.h"
 

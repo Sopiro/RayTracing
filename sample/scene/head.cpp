@@ -15,6 +15,7 @@ std::unique_ptr<Camera> Head(Scene& scene)
     }
 
     scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr", Transform(Quat(pi / 4, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));

@@ -2,6 +2,15 @@
 
 #include <type_traits>
 
+namespace bulbit
+{
+
+template <typename... Types>
+struct TypePack
+{
+    static constexpr size_t count = sizeof...(Types);
+};
+
 namespace detail
 {
 
@@ -20,6 +29,18 @@ template <typename T, typename First, typename... Types>
 struct IndexOf<T, First, Types...>
 {
     static constexpr int value = 1 + IndexOf<T, Types...>::value;
+};
+
+template <typename T, typename... Ts>
+struct IndexOf<T, TypePack<T, Ts...>>
+{
+    static constexpr int value = 0;
+};
+
+template <typename T, typename U, typename... Ts>
+struct IndexOf<T, TypePack<U, Ts...>>
+{
+    static constexpr int value = 1 + IndexOf<T, Ts...>::value;
 };
 
 // Error case
@@ -73,13 +94,16 @@ struct ReturnTypeConst
 
 } // namespace detail
 
+template <typename TypePack>
+class DynamicDispatcher;
+
 template <typename... Types>
-class DynamicDispatcher
+class DynamicDispatcher<TypePack<Types...>>
 {
 protected:
-    const uint8_t type_index;
+    const int8 type_index;
 
-    DynamicDispatcher(uint8_t type_index)
+    DynamicDispatcher(int8 type_index)
         : type_index{ type_index }
     {
         assert(type_index < sizeof...(Types));
@@ -133,12 +157,32 @@ public:
     }
 
     template <typename T>
-    static constexpr uint8_t TypeIndex()
+    static constexpr int8 TypeIndex()
     {
         using Type = typename std::remove_cv_t<T>;
         if constexpr (std::is_same_v<Type, std::nullptr_t>)
-            return 0;
+        {
+            return -1;
+        }
         else
-            return 1 + detail::IndexOf<Type, Types...>::count;
+        {
+            return detail::IndexOf<Type, Types...>::value;
+        }
     }
 };
+
+template <typename T, typename TypePack>
+constexpr int8 GetTypeIndex()
+{
+    using Type = typename std::remove_cv_t<T>;
+    if constexpr (std::is_same_v<Type, std::nullptr_t>)
+    {
+        return -1;
+    }
+    else
+    {
+        return detail::IndexOf<T, TypePack>::value;
+    }
+}
+
+} // namespace bulbit

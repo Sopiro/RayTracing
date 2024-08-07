@@ -16,7 +16,7 @@ ConductorMaterial::ConductorMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<ConductorMaterial, Materials>() }
     , eta{ eta }
     , k{ k }
     , u_roughness{ u_roughness }
@@ -36,7 +36,7 @@ ConductorMaterial::ConductorMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material{ Material::Type::normal }
+    : Material{ GetTypeIndex<ConductorMaterial, Materials>() }
     , eta{ nullptr }
     , k{ reflectance }
     , u_roughness{ u_roughness }
@@ -87,6 +87,11 @@ bool ConductorMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec
         alloc.new_object<ConductorBxDF>(eta_s, k_s, TrowbridgeReitzDistribution(alpha_x, alpha_y))
     );
     return true;
+}
+
+bool ConductorMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+{
+    return false;
 }
 
 } // namespace bulbit
