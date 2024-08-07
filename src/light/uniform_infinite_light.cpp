@@ -4,7 +4,7 @@ namespace bulbit
 {
 
 UniformInfiniteLight::UniformInfiniteLight(const Spectrum& l, Float scale)
-    : Light(Light::Type::infinite_light)
+    : Light(TypeIndex<UniformInfiniteLight>())
     , l{ l }
     , scale{ scale }
 {

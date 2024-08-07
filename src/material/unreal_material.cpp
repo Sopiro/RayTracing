@@ -23,7 +23,7 @@ UnrealMaterial::UnrealMaterial(
     const SpectrumTexture* emissive,
     const SpectrumTexture* normalmap
 )
-    : Material{ GetTypeIndex<UnrealMaterial, Materials>() }
+    : Material{ TypeIndex<UnrealMaterial>() }
     , basecolor{ basecolor }
     , metallic{ metallic }
     , u_roughness{ u_roughness }

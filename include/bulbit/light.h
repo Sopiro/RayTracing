@@ -1,14 +1,13 @@
 #pragma once
 
-#include "intersectable.h"
-#include "primitive.h"
-#include "sampling.h"
+#include "dynamic_dispatcher.h"
+#include "ray.h"
 #include "spectrum.h"
-#include "texture.h"
-#include "transform.h"
 
 namespace bulbit
 {
+
+struct Intersection;
 
 struct LightSample
 {
@@ -27,38 +26,23 @@ struct LightSample
     Spectrum Li;
 };
 
-class Light
+using Lights =
+    TypePack<class PointLight, class DirectionalLight, class AreaLight, class UniformInfiniteLight, class ImageInfiniteLight>;
+
+class Light : public DynamicDispatcher<Lights>
 {
+protected:
+    Light(int8 type_index)
+        : DynamicDispatcher(type_index)
+    {
+    }
+
 public:
-    enum class Type
-    {
-        point_light = 0,
-        directional_light,
-        area_light,
-        infinite_light,
-    };
+    LightSample Sample_Li(const Intersection& ref, const Point2& u) const;
+    Float EvaluatePDF(const Ray& ray) const;
+    Spectrum Le(const Ray& ray) const;
 
-    Light(Type type)
-        : type{ type }
-    {
-    }
-
-    virtual ~Light() = default;
-
-    virtual LightSample Sample_Li(const Intersection& ref, const Point2& u) const = 0;
-    virtual Float EvaluatePDF(const Ray& ray) const = 0;
-
-    virtual Spectrum Le(const Ray& ray) const
-    {
-        return Spectrum::black;
-    }
-
-    bool IsDeltaLight() const
-    {
-        return type == Type::point_light || type == Type::directional_light;
-    }
-
-    const Type type;
+    bool IsDeltaLight() const;
 };
 
 } // namespace bulbit

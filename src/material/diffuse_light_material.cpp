@@ -5,14 +5,14 @@ namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : Material{ GetTypeIndex<DiffuseLightMaterial, Materials>() }
+    : Material{ TypeIndex<DiffuseLightMaterial>() }
     , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
-    : Material{ GetTypeIndex<DiffuseLightMaterial, Materials>() }
+    : Material{ TypeIndex<DiffuseLightMaterial>() }
     , emission{ emission }
     , two_sided{ two_sided }
 {

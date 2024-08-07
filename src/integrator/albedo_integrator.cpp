@@ -10,7 +10,7 @@ AlbedoIntegrator::AlbedoIntegrator(const Intersectable* accel, std::vector<Light
 {
     for (Light* light : all_lights)
     {
-        if (light->type == Light::Type::infinite_light)
+        if (light->Is<ImageInfiniteLight>() || light->Is<UniformInfiniteLight>())
         {
             infinite_lights.push_back(light);
         }

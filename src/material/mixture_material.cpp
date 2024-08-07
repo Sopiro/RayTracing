@@ -10,7 +10,7 @@ MixtureMaterial::MixtureMaterial(const Material* material1, const Material* mate
 }
 
 MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* amount)
-    : Material{ GetTypeIndex<MixtureMaterial, Materials>() }
+    : Material{ TypeIndex<MixtureMaterial>() }
     , mixture_amount{ amount }
 {
     materials[0] = material1;

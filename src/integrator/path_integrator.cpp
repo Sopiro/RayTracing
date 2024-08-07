@@ -16,16 +16,17 @@ PathIntegrator::PathIntegrator(
 {
     for (Light* light : all_lights)
     {
-        switch (light->type)
+        switch (light->GetTypeIndex())
         {
-        case Light::Type::infinite_light:
+        case Light::TypeIndex<UniformInfiniteLight>():
+        case Light::TypeIndex<ImageInfiniteLight>():
         {
             infinite_lights.push_back(light);
         }
         break;
-        case Light::Type::area_light:
+        case Light::TypeIndex<AreaLight>():
         {
-            AreaLight* area_light = (AreaLight*)light;
+            AreaLight* area_light = light->Cast<AreaLight>();
             area_lights.emplace(area_light->GetPrimitive(), area_light);
         }
         break;

@@ -10,7 +10,7 @@ DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* 
 }
 
 DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap)
-    : Material{ GetTypeIndex<DiffuseMaterial, Materials>() }
+    : Material{ TypeIndex<DiffuseMaterial>() }
     , albedo{ albedo }
     , normalmap{ normalmap }
 {

@@ -18,8 +18,6 @@ struct ShapeSample
 class Shape : public Intersectable
 {
 public:
-    virtual AABB GetAABB() const = 0;
-
     // Returns random point on the surface
     virtual ShapeSample Sample(const Point2& u) const = 0;
 

@@ -5,7 +5,7 @@ namespace bulbit
 {
 
 ThinDielectricMaterial::ThinDielectricMaterial(Float eta)
-    : Material{ GetTypeIndex<ThinDielectricMaterial, Materials>() }
+    : Material{ TypeIndex<ThinDielectricMaterial>() }
     , eta{ eta }
 {
 }

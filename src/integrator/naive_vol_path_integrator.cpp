@@ -16,20 +16,9 @@ NaiveVolPathIntegrator::NaiveVolPathIntegrator(
 {
     for (Light* light : all_lights)
     {
-        switch (light->type)
-        {
-        case Light::Type::infinite_light:
+        if (light->Is<ImageInfiniteLight>() || light->Is<UniformInfiniteLight>())
         {
             infinite_lights.push_back(light);
-        }
-        break;
-        case Light::Type::area_light:
-        {
-        }
-        break;
-        default:
-            assert(false);
-            break;
         }
     }
 }

@@ -110,6 +110,11 @@ protected:
     }
 
 public:
+    int8 GetTypeIndex()
+    {
+        return type_index;
+    }
+
     template <typename T>
     bool Is() const
     {
@@ -170,19 +175,5 @@ public:
         }
     }
 };
-
-template <typename T, typename TypePack>
-constexpr int8 GetTypeIndex()
-{
-    using Type = typename std::remove_cv_t<T>;
-    if constexpr (std::is_same_v<Type, std::nullptr_t>)
-    {
-        return -1;
-    }
-    else
-    {
-        return detail::IndexOf<T, TypePack>::value;
-    }
-}
 
 } // namespace bulbit

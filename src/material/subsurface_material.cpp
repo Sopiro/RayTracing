@@ -38,7 +38,7 @@ SubsurfaceMaterial::SubsurfaceMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material(GetTypeIndex<SubsurfaceMaterial, Materials>())
+    : Material(TypeIndex<SubsurfaceMaterial>())
     , reflectance{ reflectance }
     , l{ l }
     , eta{ eta }

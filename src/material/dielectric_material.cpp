@@ -23,7 +23,7 @@ DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness,
 DielectricMaterial::DielectricMaterial(
     Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap
 )
-    : Material{ GetTypeIndex<DielectricMaterial, Materials>() }
+    : Material{ TypeIndex<DielectricMaterial>() }
     , eta{ eta }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }

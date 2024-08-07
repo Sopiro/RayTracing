@@ -4,6 +4,7 @@
 #include "material.h"
 #include "medium.h"
 #include "mesh.h"
+#include "shapes.h"
 
 namespace bulbit
 {

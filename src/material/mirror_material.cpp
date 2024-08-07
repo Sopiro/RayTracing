@@ -10,7 +10,7 @@ MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTextur
 }
 
 MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap)
-    : Material{ GetTypeIndex<MirrorMaterial, Materials>() }
+    : Material{ TypeIndex<MirrorMaterial>() }
     , reflectance{ reflectance }
     , normalmap{ normalmap }
 {
