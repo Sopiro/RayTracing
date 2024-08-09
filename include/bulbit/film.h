@@ -13,7 +13,7 @@ class Film
 public:
     Film(const Point2i& resolution);
 
-    void AddSample(int32 x, int32 y, const Spectrum& L, Float weight);
+    void AddSample(const Point2i& pixel, const Spectrum& L, Float weight);
     Bitmap ConvertToBitmap() const;
 
     const Point2i resolution;
@@ -39,10 +39,10 @@ inline Film::Film(const Point2i& resolution)
     }
 }
 
-inline void Film::AddSample(int32 x, int32 y, const Spectrum& L, Float w)
+inline void Film::AddSample(const Point2i& pixel, const Spectrum& L, Float w)
 {
-    samples[x + y * resolution.x] += L;
-    weights[x + y * resolution.x] += w;
+    samples[pixel.x + pixel.y * resolution.x] += L;
+    weights[pixel.x + pixel.y * resolution.x] += w;
 }
 
 inline Bitmap Film::ConvertToBitmap() const

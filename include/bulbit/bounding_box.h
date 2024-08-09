@@ -13,8 +13,10 @@ struct BoundingBox3;
 using AABB2 = BoundingBox2<Float>;
 using AABB2i = BoundingBox2<int32>;
 
-using AABB = BoundingBox3<Float>;
-using AABBi = BoundingBox3<int32>;
+using AABB3 = BoundingBox3<Float>;
+using AABB3i = BoundingBox3<int32>;
+
+using AABB = AABB3;
 
 template <typename T>
 struct BoundingBox2
@@ -489,6 +491,150 @@ template <typename T>
 inline std::string BoundingBox3<T>::ToString() const
 {
     return std::format("min:\t{}\nmax:\t{}", min.ToString(), max.ToString());
+}
+
+// Iterators
+
+class IteratorB2i : public std::forward_iterator_tag
+{
+public:
+    IteratorB2i(const AABB2i& b, const Point2i& p)
+        : p{ p }
+        , bounds{ &b }
+    {
+    }
+
+    IteratorB2i operator++()
+    {
+        advance();
+        return *this;
+    }
+
+    IteratorB2i operator++(int32)
+    {
+        IteratorB2i old = *this;
+        advance();
+        return old;
+    }
+
+    bool operator==(const IteratorB2i& bi) const
+    {
+        return p == bi.p && bounds == bi.bounds;
+    }
+
+    bool operator!=(const IteratorB2i& bi) const
+    {
+        return p != bi.p || bounds != bi.bounds;
+    }
+
+    Point2i operator*() const
+    {
+        return p;
+    }
+
+private:
+    void advance()
+    {
+        ++p.x;
+        if (p.x == bounds->max.x)
+        {
+            p.x = bounds->min.x;
+            ++p.y;
+        }
+    }
+
+    Point2i p;
+    const AABB2i* bounds;
+};
+
+class IteratorB3i : public std::forward_iterator_tag
+{
+public:
+    IteratorB3i(const AABB3i& b, const Point3i& p)
+        : p{ p }
+        , bounds{ &b }
+    {
+    }
+
+    IteratorB3i operator++()
+    {
+        advance();
+        return *this;
+    }
+
+    IteratorB3i operator++(int32)
+    {
+        IteratorB3i old = *this;
+        advance();
+        return old;
+    }
+
+    bool operator==(const IteratorB3i& bi) const
+    {
+        return p == bi.p && bounds == bi.bounds;
+    }
+
+    bool operator!=(const IteratorB3i& bi) const
+    {
+        return p != bi.p || bounds != bi.bounds;
+    }
+
+    Point3i operator*() const
+    {
+        return p;
+    }
+
+private:
+    void advance()
+    {
+        ++p.x;
+        if (p.x == bounds->max.x)
+        {
+            p.x = bounds->min.x;
+            ++p.y;
+
+            if (p.y == bounds->max.y)
+            {
+                p.y = bounds->min.y;
+                ++p.z;
+            }
+        }
+    }
+
+    Point3i p;
+    const AABB3i* bounds;
+};
+
+inline IteratorB2i begin(const AABB2i& b)
+{
+    return IteratorB2i(b, b.min);
+}
+
+inline IteratorB2i end(const AABB2i& b)
+{
+    Point2i end(b.min.x, b.max.y);
+    if (b.min.x >= b.max.x || b.min.y >= b.max.y)
+    {
+        end = b.min;
+    }
+
+    return IteratorB2i(b, end);
+}
+
+inline IteratorB3i begin(const AABB3i& b)
+{
+    return IteratorB3i(b, b.min);
+}
+
+inline IteratorB3i end(const AABB3i& b)
+{
+    Point3i end(b.min.x, b.min.y, b.max.z);
+    if (b.min.x >= b.max.x || b.min.y >= b.max.y || b.min.z >= b.max.z)
+    {
+        end = b.min;
+    }
+
+    return IteratorB3i(b, end);
 }
 
 } // namespace bulbit

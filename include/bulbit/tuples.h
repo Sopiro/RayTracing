@@ -265,7 +265,7 @@ struct Tuple3
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}", x, y, z);
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}", Float(x), Float(y), Float(z));
     }
 
     T x{}, y{}, z{};
@@ -408,7 +408,7 @@ struct Tuple4
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", Float(x), Float(y), Float(z), Float(w));
     }
 
     T x{}, y{}, z{}, w{};
