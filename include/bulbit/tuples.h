@@ -129,7 +129,7 @@ struct Tuple2
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}", x, y);
+        return std::format("{:.4f}\t{:.4f}", float(x), float(y));
     }
 
     T x{}, y{};
@@ -265,7 +265,7 @@ struct Tuple3
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}", Float(x), Float(y), Float(z));
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z));
     }
 
     T x{}, y{}, z{};
@@ -408,7 +408,7 @@ struct Tuple4
 
     std::string ToString() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", Float(x), Float(y), Float(z), Float(w));
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", float(x), float(y), float(z), float(w));
     }
 
     T x{}, y{}, z{}, w{};

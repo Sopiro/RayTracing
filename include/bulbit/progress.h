@@ -23,13 +23,13 @@ public:
 
     ~RenderingProgress() = default;
 
-    const Film& Wait()
+    const Film& Wait() const
     {
         job->Wait();
         return film;
     }
 
-    const Film& WaitAndLogProgress()
+    const Film& WaitAndLogProgress() const
     {
         while (!job->Finished())
         {
@@ -42,6 +42,36 @@ public:
         }
 
         assert(done);
+        return film;
+    }
+
+    const Point2i& GetResolution() const
+    {
+        return resolution;
+    }
+
+    int32 GetTileCount() const
+    {
+        return tile_count;
+    }
+
+    int32 GetTileSize() const
+    {
+        return tile_size;
+    }
+
+    int32 GetNumTileDone() const
+    {
+        return tile_done.load();
+    }
+
+    int32 IsDone() const
+    {
+        return done.load();
+    }
+
+    const Film& GetFilm() const
+    {
         return film;
     }
 
