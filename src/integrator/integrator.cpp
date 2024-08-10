@@ -41,11 +41,11 @@ std::unique_ptr<RenderingProgress> UniDirectionalRayIntegrator::Render(const Cam
                         Ray ray;
                         Float weight = camera.SampleRay(&ray, pixel, sampler->Next2D(), sampler->Next2D());
 
-                        Spectrum L = weight * Li(ray, camera.GetMedium(), *sampler);
+                        Spectrum L = Li(ray, camera.GetMedium(), *sampler);
 
                         if (!L.IsNullish())
                         {
-                            progress->film.AddSample(pixel, L, 1);
+                            progress->film.AddSample(pixel, weight * L, 1);
                         }
                     }
                 }
