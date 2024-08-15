@@ -12,7 +12,7 @@ DynamicBVH::DynamicBVH()
     , nodeCapacity{ 32 }
 {
     nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
-    memset(nodes, 0, nodeCapacity * sizeof(Node));
+    memset((void*)nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
     for (int32 i = 0; i < nodeCapacity - 1; ++i)
@@ -191,13 +191,20 @@ NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
     NodeIndex bestSibling = root;
     Float bestCost = SAH(AABB::Union(nodes[root].aabb, aabb));
 
-    GrowableArray<std::pair<NodeIndex, Float>, 256> stack;
+    // Candidate node with inherited cost
+    struct Candidate
+    {
+        NodeIndex node;
+        Float inheritedCost;
+    };
+
+    GrowableArray<Candidate, 256> stack;
     stack.Emplace(root, 0.0f);
 
     while (stack.Count() != 0)
     {
-        NodeIndex current = stack.Back().first;
-        Float inheritedCost = stack.Back().second;
+        NodeIndex current = stack.Back().node;
+        Float inheritedCost = stack.Back().inheritedCost;
         stack.Pop();
 
         AABB combined = AABB::Union(nodes[current].aabb, aabb);
@@ -225,11 +232,11 @@ NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
 #else
     // O(log n)
     // This method is faster when inserting a new node, but builds a slightly bad quality tree.
-    NodeProxy bestSibling = root;
+    NodeIndex bestSibling = root;
     while (nodes[bestSibling].IsLeaf() == false)
     {
-        NodeProxy child1 = nodes[bestSibling].child1;
-        NodeProxy child2 = nodes[bestSibling].child2;
+        NodeIndex child1 = nodes[bestSibling].child1;
+        NodeIndex child2 = nodes[bestSibling].child2;
 
         Float area = SAH(nodes[bestSibling].aabb);
         AABB combined = AABB::Union(nodes[bestSibling].aabb, aabb);
@@ -597,7 +604,7 @@ void DynamicBVH::Reset()
 {
     root = null_node;
     nodeCount = 0;
-    memset(nodes, 0, nodeCapacity * sizeof(Node));
+    memset((void*)nodes, 0, nodeCapacity * sizeof(Node));
 
     // Build a linked list for the free list.
     for (int32 i = 0; i < nodeCapacity - 1; ++i)
@@ -622,7 +629,7 @@ NodeIndex DynamicBVH::AllocateNode()
         nodeCapacity *= 2;
         nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
         memcpy(nodes, oldNodes, nodeCount * sizeof(Node));
-        memset(nodes + nodeCount, 0, nodeCount * sizeof(Node));
+        memset((void*)(nodes + nodeCount), 0, nodeCount * sizeof(Node));
         free(oldNodes);
 
         // Build a linked list for the free list.
