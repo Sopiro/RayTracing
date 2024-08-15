@@ -130,7 +130,6 @@ public:
 private:
     std::unique_ptr<Float[]> floats;
 
-    int32 channel;
     int32 width, height;
     TexCoordFilter texcoord_filter;
 

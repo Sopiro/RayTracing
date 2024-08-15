@@ -23,6 +23,7 @@ constexpr Float max_value = std::numeric_limits<Float>::max();
 
 inline bool IsNullish(int32 v)
 {
+    BulbitNotUsed(v);
     return false;
 }
 

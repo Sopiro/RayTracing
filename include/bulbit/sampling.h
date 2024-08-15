@@ -463,7 +463,7 @@ public:
         return weight_sum;
     }
 
-    Float Reset()
+    void Reset()
     {
         reservoir_weight = 0;
         weight_sum = 0;
