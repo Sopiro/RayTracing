@@ -124,16 +124,16 @@ private:
 };
 
 // Global thread-local RNG
-inline thread_local RNG rng;
+inline thread_local RNG g_rng;
 
 inline void Srand(uint32 new_seed)
 {
-    rng.Seed(new_seed);
+    g_rng.Seed(new_seed);
 }
 
 inline Float Rand()
 {
-    return rng.NextFloat();
+    return g_rng.NextFloat();
 }
 
 inline Float Rand(Float min, Float max)

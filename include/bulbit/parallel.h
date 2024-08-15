@@ -55,9 +55,9 @@ public:
 
     void ForEachThread(std::function<void(void)> func);
 
-    size_t WorkerCount() const
+    int32 WorkerCount() const
     {
-        return threads.size() + 1;
+        return int32(threads.size() + 1);
     }
 
 private:

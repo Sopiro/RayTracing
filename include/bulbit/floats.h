@@ -19,7 +19,7 @@ constexpr Float inv_two_pi = Float(1 / (2 * pi));
 constexpr Float inv_four_pi = Float(1 / (4 * pi));
 constexpr Float epsilon = std::numeric_limits<Float>::epsilon();
 constexpr Float infinity = std::numeric_limits<Float>::infinity();
-constexpr Float max_value = std::numeric_limits<Float>::max();
+constexpr Float max_float = std::numeric_limits<Float>::max();
 
 inline bool IsNullish(int32 v)
 {

@@ -125,7 +125,7 @@ Spectrum Sample_MajorantTransmittance(
             Float dt = segment.t_max - segment.t_min;
             if (dt == infinity)
             {
-                dt = max_value;
+                dt = max_float;
             }
 
             T_maj *= Exp(-dt * segment.sigma_maj);
@@ -163,7 +163,7 @@ Spectrum Sample_MajorantTransmittance(
                 Float dt = segment.t_max - t_min;
                 if (dt == infinity)
                 {
-                    dt = max_value;
+                    dt = max_float;
                 }
 
                 T_maj *= Exp(-dt * segment.sigma_maj);

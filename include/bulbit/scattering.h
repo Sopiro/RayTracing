@@ -145,7 +145,7 @@ inline Float FresnelMoment1(Float eta)
 
     if (eta < 1)
     {
-        return 0.45966f - 1.73965f * eta + 3.37668f * eta2 - 3.904945 * eta3 + 2.49277f * eta4 - 0.68441f * eta5;
+        return 0.45966f - 1.73965f * eta + 3.37668f * eta2 - 3.904945f * eta3 + 2.49277f * eta4 - 0.68441f * eta5;
     }
     else
     {

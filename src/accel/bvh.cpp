@@ -67,7 +67,7 @@ BVH::BuildNode* BVH::BuildRecursive(
     BuildNode* node = allocator.new_object<BuildNode>();
 
     total_nodes->fetch_add(1);
-    size_t primitive_count = primitive_span.size();
+    int32 primitive_count = int32(primitive_span.size());
 
     AABB span_bounds;
     for (const BVHPrimitive& prim : primitive_span)
@@ -78,9 +78,9 @@ BVH::BuildNode* BVH::BuildRecursive(
     if (span_bounds.GetSurfaceArea() == 0 || primitive_count == 1)
     {
         int32 offset = ordered_prims_offset->fetch_add(primitive_count);
-        for (size_t i = 0; i < primitive_count; ++i)
+        for (int32 i = 0; i < primitive_count; ++i)
         {
-            int32 index = primitive_span[i].index;
+            int32 index = int32(primitive_span[i].index);
             ordered_prims[offset + i] = primitives[index];
         }
 
@@ -113,9 +113,9 @@ BVH::BuildNode* BVH::BuildRecursive(
     if (extent == 0)
     {
         int32 offset = ordered_prims_offset->fetch_add(primitive_count);
-        for (size_t i = 0; i < primitive_count; ++i)
+        for (int32 i = 0; i < primitive_count; ++i)
         {
-            int32 index = primitive_span[i].index;
+            int32 index = int32(primitive_span[i].index);
             ordered_prims[offset + i] = primitives[index];
         }
 
@@ -159,14 +159,14 @@ BVH::BuildNode* BVH::BuildRecursive(
             AABB bounds;
         };
 
-        constexpr int bucket_size = 12;
+        constexpr int32 bucket_size = 12;
         constexpr int32 split_planes = bucket_size - 1;
         BVHSplitBucket buckets[bucket_size];
 
         // Fill the buckets for
         for (const BVHPrimitive& primitive : primitive_span)
         {
-            int32 bucket_index = bucket_size * (primitive.aabb.GetCenter() - centroid_bounds.min)[axis] / extent;
+            int32 bucket_index = int32(bucket_size * (primitive.aabb.GetCenter() - centroid_bounds.min)[axis] / extent);
             if (bucket_index == bucket_size)
             {
                 bucket_index = bucket_index - 1;
@@ -209,12 +209,12 @@ BVH::BuildNode* BVH::BuildRecursive(
         constexpr Float traverse_cost = 0.5f;
         min_cost = traverse_cost + min_cost / span_bounds.GetSurfaceArea();
 
-        const Float direct_leaf_cost = primitive_count;
+        const Float direct_leaf_cost = Float(primitive_count);
 
         if (min_cost < direct_leaf_cost)
         {
             auto mid_iter = std::partition(primitive_span.begin(), primitive_span.end(), [=](const BVHPrimitive& prim) {
-                int32 bucket_index = bucket_size * (prim.aabb.GetCenter() - centroid_bounds.min)[axis] / extent;
+                int32 bucket_index = int32(bucket_size * (prim.aabb.GetCenter() - centroid_bounds.min)[axis] / extent);
                 if (bucket_index == bucket_size)
                 {
                     bucket_index = bucket_size - 1;
@@ -223,14 +223,14 @@ BVH::BuildNode* BVH::BuildRecursive(
                 return bucket_index <= min_cost_split_bucket;
             });
 
-            mid = mid_iter - primitive_span.begin();
+            mid = int32(mid_iter - primitive_span.begin());
         }
         else
         {
             int32 offset = ordered_prims_offset->fetch_add(primitive_count);
-            for (size_t i = 0; i < primitive_count; ++i)
+            for (int32 i = 0; i < primitive_count; ++i)
             {
-                int32 index = primitive_span[i].index;
+                int32 index = int32(primitive_span[i].index);
                 ordered_prims[offset + i] = primitives[index];
             }
 
@@ -282,12 +282,12 @@ int32 BVH::FlattenBVH(BuildNode* node, int32* offset)
     {
         // Leaf node
         linear_node->primitives_offset = node->offset;
-        linear_node->primitive_count = node->count;
+        linear_node->primitive_count = uint16(node->count);
     }
     else
     {
         // Internal node
-        linear_node->axis = node->axis;
+        linear_node->axis = uint8(node->axis);
         linear_node->primitive_count = 0;
 
         // Order matters!

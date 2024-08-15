@@ -15,7 +15,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
-    auto ss = scene.CreateMaterial<SubsurfaceMaterial>(Spectrum(1.0), Spectrum(0.5, 0.25, 0.125) * 0.03, 1.0, 0.0);
+    auto ss = scene.CreateMaterial<SubsurfaceMaterial>(Spectrum(1.0), Spectrum(0.5, 0.25, 0.125) * 0.03, 1.0f, 0.0f);
 
     // Cornell box
     {

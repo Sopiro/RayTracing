@@ -71,8 +71,8 @@ inline BoundingBox2<T> BoundingBox2<T>::Union(const BoundingBox2& aabb, const Ve
 
 template <typename T>
 inline BoundingBox2<T>::BoundingBox2()
-    : min{ max_value }
-    , max{ -max_value }
+    : min{ max_float }
+    , max{ -max_float }
 {
 }
 
@@ -301,8 +301,8 @@ inline BoundingBox3<T> BoundingBox3<T>::Union(const BoundingBox3& aabb, const Ve
 
 template <typename T>
 inline BoundingBox3<T>::BoundingBox3()
-    : min{ max_value }
-    , max{ -max_value }
+    : min{ max_float }
+    , max{ -max_float }
 {
 }
 

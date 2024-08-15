@@ -56,8 +56,8 @@ public:
     virtual Point2 Sample(const Point2& u) const override
     {
         // Box Muller transform
-        Float r = sigma * std::sqrt(-2 * std::log(std::max<Float>(u[0], 1e-8)));
-        Float theta = 2 * pi * u[1];
+        Float r = sigma * std::sqrt(-2 * std::log(std::max<Float>(u[0], Float(1e-8))));
+        Float theta = two_pi * u[1];
 
         return Point2{ r * std::cos(theta), r * std::sin(theta) };
     }

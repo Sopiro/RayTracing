@@ -40,7 +40,7 @@ VolPathIntegrator::VolPathIntegrator(
 
 Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
-    int32 wavelength = std::min<int32>(sampler.Next1D() * 3, 2);
+    int32 wavelength = std::min<int32>(int32(sampler.Next1D() * 3), 2);
     int32 bounce = 0;
     Spectrum L(0), beta(1);
 

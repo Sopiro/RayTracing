@@ -33,7 +33,7 @@ protected:
     )
     {
         bool front_face = Dot(wi, outward_normal) < 0;
-        Float sign = front_face ? 1 : -1;
+        Float sign = front_face ? 1.0f : -1.0f;
 
         isect->front_face = front_face;
         isect->normal = sign * outward_normal;

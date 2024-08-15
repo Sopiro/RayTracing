@@ -23,7 +23,7 @@ void StratifiedSampler::StartPixelSample(const Point2i& pixel, int32 sample_inde
 
 Float StratifiedSampler::Next1D()
 {
-    uint64_t hash = Hash(seed, current_pixel, dimension);
+    uint32_t hash = uint32_t(Hash(seed, current_pixel, dimension));
     int32 stratum = PermutationElement(current_sample_index, samples_per_pixel, hash);
 
     dimension += 1;
@@ -35,7 +35,7 @@ Float StratifiedSampler::Next1D()
 
 Point2 StratifiedSampler::Next2D()
 {
-    uint64_t hash = Hash(seed, current_pixel, dimension);
+    uint32_t hash = uint32_t(Hash(seed, current_pixel, dimension));
     int32 stratum = PermutationElement(current_sample_index, samples_per_pixel, hash);
 
     dimension += 2;

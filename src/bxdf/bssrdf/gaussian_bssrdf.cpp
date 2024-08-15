@@ -15,7 +15,7 @@ Spectrum GaussianBSSRDF::Sr(Float r) const
 
 Float GaussianBSSRDF::Sample_Sr(int32 wavelength, Float u) const
 {
-    return sigma[wavelength] * std::sqrt(-2 * std::log(std::max<Float>(u, 1e-8)));
+    return sigma[wavelength] * std::sqrt(-2 * std::log(std::max<Float>(u, Float(1e-8))));
 }
 
 Spectrum GaussianBSSRDF::PDF_Sr(Float r) const

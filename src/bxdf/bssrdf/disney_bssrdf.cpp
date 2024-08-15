@@ -5,7 +5,7 @@ namespace bulbit
 
 Float DisneyBSSRDF::MaxSr(int32 wavelength) const
 {
-    return 0.5 * Sample_Sr(wavelength, 0.999f) + 0.5 * Sample_Sr(wavelength, 0.249f);
+    return 0.5f * Sample_Sr(wavelength, 0.999f) + 0.5f * Sample_Sr(wavelength, 0.249f);
 }
 
 Spectrum DisneyBSSRDF::Sr(Float r) const

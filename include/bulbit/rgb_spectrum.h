@@ -1,6 +1,5 @@
 #pragma once
 
-#include "assert.h"
 #include "math.h"
 
 #include <format>
@@ -113,7 +112,7 @@ inline RGBSpectrum operator-(const RGBSpectrum& sp1, const RGBSpectrum& sp2)
 template <typename T>
 inline RGBSpectrum operator*(const RGBSpectrum& sp, T s)
 {
-    return RGBSpectrum(sp.r * s, sp.g * s, sp.b * s);
+    return RGBSpectrum(sp.r * Float(s), sp.g * Float(s), sp.b * Float(s));
 }
 
 template <typename T>
@@ -241,13 +240,13 @@ inline RGBSpectrum Exp(const RGBSpectrum& sp)
 template <typename T>
 inline RGBSpectrum Min(const RGBSpectrum& sp, T val)
 {
-    return RGBSpectrum(std::min<Float>(val, sp.r), std::min<Float>(val, sp.g), std::min<Float>(val, sp.b));
+    return RGBSpectrum(std::min(Float(val), sp.r), std::min(Float(val), sp.g), std::min(Float(val), sp.b));
 }
 
 template <typename T>
 inline RGBSpectrum Max(const RGBSpectrum& sp, T val)
 {
-    return RGBSpectrum(std::max<Float>(val, sp.r), std::max<Float>(val, sp.g), std::max<Float>(val, sp.b));
+    return RGBSpectrum(std::max(Float(val), sp.r), std::max(Float(val), sp.g), std::max(Float(val), sp.b));
 }
 
 template <typename U, typename V>

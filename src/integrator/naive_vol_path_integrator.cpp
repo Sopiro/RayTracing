@@ -31,7 +31,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, const Medium* primar
     Float eta_scale = 1;
 
     Ray ray = primary_ray;
-    int32 wavelength = std::min<int32>(2, sampler.Next1D() * 3);
+    int32 wavelength = std::min<int32>(int32(sampler.Next1D() * 3), 2);
 
     const Medium* medium = primary_medium;
 

@@ -34,7 +34,7 @@ set_target_properties(bulbit PROPERTIES
 )
 
 if(MSVC)
-    target_compile_options(bulbit PRIVATE /W4 /WX)
+    target_compile_options(bulbit PRIVATE /W4 /WX /wd4458 /wd4459)
 else()
     target_compile_options(bulbit PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-missing-field-initializers)
 endif()

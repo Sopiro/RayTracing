@@ -58,9 +58,9 @@ inline void Bitmap::Set(int32 x, int32 y, const Spectrum& color)
 
 inline void Bitmap::Set(int32 i, const Spectrum& color)
 {
-    pixels[i * color_channels + 0] = int32(std::min(Clamp(color.r, 0, 1) * 256.0, 255.0));
-    pixels[i * color_channels + 1] = int32(std::min(Clamp(color.g, 0, 1) * 256.0, 255.0));
-    pixels[i * color_channels + 2] = int32(std::min(Clamp(color.b, 0, 1) * 256.0, 255.0));
+    pixels[i * color_channels + 0] = uint8(std::min(Clamp(color.r, 0, 1) * 256.0, 255.0));
+    pixels[i * color_channels + 1] = uint8(std::min(Clamp(color.g, 0, 1) * 256.0, 255.0));
+    pixels[i * color_channels + 2] = uint8(std::min(Clamp(color.b, 0, 1) * 256.0, 255.0));
 }
 
 inline void Bitmap::WriteToFile(const char* filename) const
