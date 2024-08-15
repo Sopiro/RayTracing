@@ -49,7 +49,7 @@ void ThreadPool::Worker()
 
 void ThreadPool::WorkOrWait(std::unique_lock<std::mutex>* lock)
 {
-    assert(lock->owns_lock() == true);
+    BulbitAssert(lock->owns_lock() == true);
 
     // Pick one job that still has work left
     ParallelJob* job = job_list;
@@ -65,7 +65,7 @@ void ThreadPool::WorkOrWait(std::unique_lock<std::mutex>* lock)
         job->RunStep(lock);
 
         // Detach from this job
-        assert(lock->owns_lock() == false);
+        BulbitAssert(lock->owns_lock() == false);
         lock->lock();
         job->active_workers--;
 
@@ -104,7 +104,7 @@ bool ThreadPool::WorkOrReturn()
     job->active_workers++;
     job->RunStep(&lock);
 
-    assert(lock.owns_lock() == false);
+    BulbitAssert(lock.owns_lock() == false);
     lock.lock();
     job->active_workers--;
 

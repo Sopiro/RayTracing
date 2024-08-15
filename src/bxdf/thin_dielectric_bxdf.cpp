@@ -6,16 +6,25 @@ namespace bulbit
 
 Spectrum ThinDielectricBxDF::f(const Vec3& wo, const Vec3& wi) const
 {
+    BulbitNotUsed(wo);
+    BulbitNotUsed(wi);
+
     return Spectrum::black;
 }
 
 Float ThinDielectricBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 {
+    BulbitNotUsed(wo);
+    BulbitNotUsed(wi);
+    BulbitNotUsed(flags);
+
     return 0;
 }
 
 bool ThinDielectricBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
+    BulbitNotUsed(u12);
+
     Float R = FresnelDielectric(AbsCosTheta(wo), eta);
     Float T = 1 - R;
 

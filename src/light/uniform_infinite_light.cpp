@@ -12,6 +12,8 @@ UniformInfiniteLight::UniformInfiniteLight(const Spectrum& l, Float scale)
 
 LightSample UniformInfiniteLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
+    BulbitNotUsed(ref);
+
     LightSample light_sample;
     light_sample.wi = SampleUniformSphere(u);
     light_sample.pdf = UniformSampleSpherePDF();
@@ -23,11 +25,13 @@ LightSample UniformInfiniteLight::Sample_Li(const Intersection& ref, const Point
 
 Float UniformInfiniteLight::EvaluatePDF(const Ray& ray) const
 {
+    BulbitNotUsed(ray);
     return UniformSampleSpherePDF();
 }
 
 Spectrum UniformInfiniteLight::Le(const Ray& ray) const
 {
+    BulbitNotUsed(ray);
     return scale * l;
 }
 

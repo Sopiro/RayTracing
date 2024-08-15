@@ -26,7 +26,7 @@ FloatImageTexture::FloatImageTexture(const std::pair<std::string, int32>& filena
     std::string filename = filename_channel.first;
     int32 channel = filename_channel.second;
 
-    assert(0 <= channel && channel <= 3);
+    BulbitAssert(0 <= channel && channel <= 3);
 
     stbi_set_flip_vertically_on_load(true);
     stbi_ldr_to_hdr_scale(1.0f);

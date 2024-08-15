@@ -108,36 +108,36 @@ inline Float DynamicBVH::SAH(const AABB& aabb)
 
 inline bool DynamicBVH::TestOverlap(NodeIndex nodeA, NodeIndex nodeB) const
 {
-    assert(0 <= nodeA && nodeA < nodeCapacity);
-    assert(0 <= nodeB && nodeB < nodeCapacity);
+    BulbitAssert(0 <= nodeA && nodeA < nodeCapacity);
+    BulbitAssert(0 <= nodeB && nodeB < nodeCapacity);
 
     return nodes[nodeA].aabb.TestOverlap(nodes[nodeB].aabb);
 }
 
 inline const AABB& DynamicBVH::GetAABB(NodeIndex node) const
 {
-    assert(0 <= node && node < nodeCapacity);
+    BulbitAssert(0 <= node && node < nodeCapacity);
 
     return nodes[node].aabb;
 }
 
 inline void DynamicBVH::ClearMoved(NodeIndex node) const
 {
-    assert(0 <= node && node < nodeCapacity);
+    BulbitAssert(0 <= node && node < nodeCapacity);
 
     nodes[node].moved = false;
 }
 
 inline bool DynamicBVH::WasMoved(NodeIndex node) const
 {
-    assert(0 <= node && node < nodeCapacity);
+    BulbitAssert(0 <= node && node < nodeCapacity);
 
     return nodes[node].moved;
 }
 
 inline const Primitive* DynamicBVH::GetData(NodeIndex node) const
 {
-    assert(0 <= node && node < nodeCapacity);
+    BulbitAssert(0 <= node && node < nodeCapacity);
 
     return nodes[node].primitive;
 }

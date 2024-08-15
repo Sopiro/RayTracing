@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <assert.h>
 #include <cmath>
 #include <cstring>
 #include <format>
@@ -16,6 +15,7 @@
 #include <thread>
 #include <vector>
 
+#include "asserts.h"
 #include "math.h"
 
 using Resource = std::pmr::monotonic_buffer_resource;

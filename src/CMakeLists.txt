@@ -27,7 +27,14 @@ target_include_directories(bulbit
 )
 
 set_target_properties(bulbit PROPERTIES
+    CMAKE_COMPILE_WARNING_AS_ERROR ON
     CXX_STANDARD 20
     CXX_STANDARD_REQUIRED YES
     CXX_EXTENSIONS NO
 )
+
+if(MSVC)
+    target_compile_options(bulbit PRIVATE /W4 /WX)
+else()
+    target_compile_options(bulbit PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-missing-field-initializers)
+endif()

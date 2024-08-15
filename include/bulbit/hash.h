@@ -94,6 +94,7 @@ inline void hashRecursiveCopy(char* buf, Args...);
 template <>
 inline void hashRecursiveCopy(char* buf)
 {
+    BulbitNotUsed(buf);
 }
 
 template <typename T, typename... Args>

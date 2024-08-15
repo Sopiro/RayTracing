@@ -45,7 +45,7 @@ public:
 
     GrowableArray& operator=(const GrowableArray& other)
     {
-        assert(this != &other);
+        BulbitAssert(this != &other);
 
         if (array != stackArray)
         {
@@ -91,7 +91,7 @@ public:
 
     GrowableArray& operator=(GrowableArray&& other) noexcept
     {
-        assert(this != &other);
+        BulbitAssert(this != &other);
 
         if (array != stackArray)
         {
@@ -150,7 +150,7 @@ public:
 
     T Pop()
     {
-        assert(count > 0);
+        BulbitAssert(count > 0);
         --count;
         return array[count];
     }
@@ -163,7 +163,7 @@ public:
     // O(n)
     void Insert(int32 index, const T& data)
     {
-        assert(index <= count);
+        BulbitAssert(index <= count);
 
         if (count == capacity)
         {

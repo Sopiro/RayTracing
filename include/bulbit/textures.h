@@ -32,6 +32,7 @@ public:
 
     virtual Spectrum Evaluate(const Point2& uv) const override
     {
+        BulbitNotUsed(uv);
         return color;
     }
 
@@ -64,6 +65,7 @@ public:
 
     virtual Float Evaluate(const Point2& uv) const override
     {
+        BulbitNotUsed(uv);
         return value;
     }
 
@@ -96,7 +98,7 @@ inline void FilterTexCoord(int32* u, int32* v, int32 width, int32 height, TexCoo
     }
     break;
     default:
-        assert(false);
+        BulbitAssert(false);
         break;
     }
 }

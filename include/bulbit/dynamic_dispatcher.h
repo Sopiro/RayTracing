@@ -106,7 +106,7 @@ protected:
     DynamicDispatcher(int8 type_index)
         : type_index{ type_index }
     {
-        assert(type_index < sizeof...(Types));
+        BulbitAssert(type_index < sizeof...(Types));
     }
 
 public:
@@ -124,14 +124,14 @@ public:
     template <typename T>
     T* Cast()
     {
-        assert(Is<T>());
+        BulbitAssert(Is<T>());
         return reinterpret_cast<T*>(this);
     }
 
     template <typename T>
     const T* Cast() const
     {
-        assert(Is<T>());
+        BulbitAssert(Is<T>());
         return reinterpret_cast<const T*>(this);
     }
 

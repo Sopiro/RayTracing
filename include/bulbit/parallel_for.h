@@ -10,12 +10,12 @@ class ParallelForLoop : public ParallelJob
 {
 public:
     ParallelForLoop(int32 begin_index, int32 end_index, int32 chunk_size, std::function<void(int32, int32)> func)
-        : next_index{ begin_index }
+        : func{ std::move(func) }
+        , next_index{ begin_index }
         , end_index{ end_index }
         , chunk_size{ chunk_size }
-        , func{ std::move(func) }
     {
-        assert(begin_index < end_index);
+        BulbitAssert(begin_index < end_index);
     }
 
     virtual bool HaveWork() const override

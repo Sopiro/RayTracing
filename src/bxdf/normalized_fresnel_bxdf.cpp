@@ -39,6 +39,8 @@ Float NormalizedFresnelBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) con
 
 bool NormalizedFresnelBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
+    BulbitNotUsed(u0);
+
     // Same as the Lambertian BRDF
     if (!(flags & BxDF_SamplingFlags::Reflection))
     {

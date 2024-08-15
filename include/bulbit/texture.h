@@ -27,6 +27,7 @@ public:
 
     virtual Float EvaluateAlpha(const Point2& uv) const
     {
+        BulbitNotUsed(uv);
         return 1;
     };
 };

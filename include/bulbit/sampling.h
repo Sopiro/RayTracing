@@ -127,6 +127,8 @@ inline Float ExponentialPDF(Float x, Float a)
 
 inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 {
+    BulbitNotUsed(wo);
+
     Float theta = std::acos(std::sqrt((1 - u.x) / ((alpha2 - 1) * u.x + 1)));
     Float phi = two_pi * u.y;
 
@@ -417,8 +419,8 @@ class WeightedReservoirSampler
 public:
     WeightedReservoirSampler(uint64 seed)
         : rng(seed)
-        , weight_sum{ 0 }
         , reservoir_weight{ 0 }
+        , weight_sum{ 0 }
     {
     }
 

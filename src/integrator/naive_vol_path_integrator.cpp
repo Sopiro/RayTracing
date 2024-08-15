@@ -124,7 +124,7 @@ Spectrum NaiveVolPathIntegrator::Li(const Ray& primary_ray, const Medium* primar
                     }
 
                     default:
-                        assert(false);
+                        BulbitAssert(false);
                         return false;
                     }
                 }

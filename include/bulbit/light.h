@@ -18,6 +18,7 @@ struct LightSample
         , pdf{ pdf }
         , visibility{ visibility }
     {
+        BulbitNotUsed(li);
     }
 
     Vec3 wi;

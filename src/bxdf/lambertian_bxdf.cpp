@@ -27,6 +27,8 @@ Float LambertianBxDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 
 bool LambertianBxDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
+    BulbitNotUsed(u0);
+
     if (!(flags & BxDF_SamplingFlags::Reflection))
     {
         return false;

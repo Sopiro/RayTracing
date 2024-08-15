@@ -51,6 +51,8 @@ public:
 
     virtual Spectrum Li(const Ray& ray, const Medium* medium, Sampler& sampler) const override
     {
+        BulbitNotUsed(medium);
+
         return Li(ray, sampler, 0);
     }
 

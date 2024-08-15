@@ -87,9 +87,9 @@ class ConductorBxDF : public BxDF
 {
 public:
     ConductorBxDF(Spectrum eta, Spectrum k, TrowbridgeReitzDistribution mf)
-        : eta{ eta }
+        : mf{ mf }
+        , eta{ eta }
         , k{ k }
-        , mf{ mf }
     {
     }
 

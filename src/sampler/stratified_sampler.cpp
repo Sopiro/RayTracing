@@ -6,10 +6,10 @@ namespace bulbit
 
 StratifiedSampler::StratifiedSampler(int32 x_samples, int32 y_samples, bool jitter, int32 seed)
     : Sampler(x_samples * y_samples)
+    , jitter(jitter)
     , x_samples(x_samples)
     , y_samples(y_samples)
     , seed(seed)
-    , jitter(jitter)
 {
 }
 

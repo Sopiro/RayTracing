@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asserts.h"
 #include "floats.h"
 
 namespace bulbit
@@ -16,7 +17,7 @@ struct Tuple2
         : x(x)
         , y(y)
     {
-        // assert(!IsNullish());
+        // BulbitAssert(!IsNullish());
     }
 
     bool IsNullish() const
@@ -26,13 +27,13 @@ struct Tuple2
 
     T operator[](int32 i) const
     {
-        assert(i >= 0 && i <= 1);
+        BulbitAssert(i >= 0 && i <= 1);
         return (&x)[i];
     }
 
     T& operator[](int32 i)
     {
-        assert(i >= 0 && i <= 1);
+        BulbitAssert(i >= 0 && i <= 1);
         return (&x)[i];
     }
 
@@ -54,14 +55,14 @@ struct Tuple2
     template <typename U>
     auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y };
     }
 
     template <typename U>
     auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y };
     }
 
@@ -74,14 +75,14 @@ struct Tuple2
     template <typename U>
     auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        assert(d != 0 && !bulbit::IsNullish(d));
+        BulbitAssert(d != 0 && !bulbit::IsNullish(d));
         return { x / d, y / d };
     }
 
     template <typename U>
     Child<T>& operator+=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x += c.x;
         y += c.y;
         return static_cast<Child<T>&>(*this);
@@ -90,7 +91,7 @@ struct Tuple2
     template <typename U>
     Child<T>& operator-=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x -= c.x;
         y -= c.y;
         return static_cast<Child<T>&>(*this);
@@ -99,7 +100,7 @@ struct Tuple2
     template <typename U>
     Child<T>& operator*=(U s)
     {
-        assert(!bulbit::IsNullish(s));
+        BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
         y *= s;
         return static_cast<Child<T>&>(*this);
@@ -108,8 +109,8 @@ struct Tuple2
     template <typename U>
     Child<T>& operator/=(U d)
     {
-        assert(d != 0);
-        assert(!IsNullish(d));
+        BulbitAssert(d != 0);
+        BulbitAssert(!IsNullish(d));
         x /= d;
         y /= d;
         return static_cast<Child<T>&>(*this);
@@ -147,7 +148,7 @@ struct Tuple3
         , y(y)
         , z(z)
     {
-        // assert(!IsNullish());
+        // BulbitAssert(!IsNullish());
     }
 
     bool IsNullish() const
@@ -157,13 +158,13 @@ struct Tuple3
 
     T operator[](int32 i) const
     {
-        assert(i >= 0 && i <= 2);
+        BulbitAssert(i >= 0 && i <= 2);
         return (&x)[i];
     }
 
     T& operator[](int32 i)
     {
-        assert(i >= 0 && i <= 2);
+        BulbitAssert(i >= 0 && i <= 2);
         return (&x)[i];
     }
 
@@ -185,14 +186,14 @@ struct Tuple3
     template <typename U>
     auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z };
     }
 
     template <typename U>
     auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z };
     }
 
@@ -205,14 +206,14 @@ struct Tuple3
     template <typename U>
     auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        assert(d != 0);
+        BulbitAssert(d != 0);
         return { x / d, y / d, z / d };
     }
 
     template <typename U>
     Child<T>& operator+=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x += c.x;
         y += c.y;
         z += c.z;
@@ -222,7 +223,7 @@ struct Tuple3
     template <typename U>
     Child<T>& operator-=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x -= c.x;
         y -= c.y;
         z -= c.z;
@@ -232,7 +233,7 @@ struct Tuple3
     template <typename U>
     Child<T>& operator*=(U s)
     {
-        assert(!bulbit::IsNullish(s));
+        BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
         y *= s;
         z *= s;
@@ -242,7 +243,7 @@ struct Tuple3
     template <typename U>
     Child<T>& operator/=(U d)
     {
-        assert(d != 0);
+        BulbitAssert(d != 0);
         x /= d;
         y /= d;
         z /= d;
@@ -284,7 +285,7 @@ struct Tuple4
         , z(z)
         , w(w)
     {
-        // assert(!IsNullish());
+        // BulbitAssert(!IsNullish());
     }
 
     bool IsNullish() const
@@ -294,19 +295,19 @@ struct Tuple4
 
     T operator[](int32 i) const
     {
-        assert(i >= 0 && i <= 3);
+        BulbitAssert(i >= 0 && i <= 3);
         return (&x)[i];
     }
 
     T& operator[](int32 i)
     {
-        assert(i >= 0 && i <= 3);
+        BulbitAssert(i >= 0 && i <= 3);
         return (&x)[i];
     }
 
     bool operator==(Child<T> c) const
     {
-        return x == c.x && y == c.y && z == c.z || w == c.w;
+        return x == c.x && y == c.y && z == c.z && w == c.w;
     }
 
     bool operator!=(Child<T> c) const
@@ -322,14 +323,14 @@ struct Tuple4
     template <typename U>
     auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z, w + c.w };
     }
 
     template <typename U>
     auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z, z - c.w };
     }
 
@@ -342,14 +343,14 @@ struct Tuple4
     template <typename U>
     auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
-        assert(d != 0);
+        BulbitAssert(d != 0);
         return { x / d, y / d, z / d, w / d };
     }
 
     template <typename U>
     Child<T>& operator+=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x += c.x;
         y += c.y;
         z += c.z;
@@ -360,7 +361,7 @@ struct Tuple4
     template <typename U>
     Child<T>& operator-=(Child<U> c)
     {
-        assert(!c.IsNullish());
+        BulbitAssert(!c.IsNullish());
         x -= c.x;
         y -= c.y;
         z -= c.z;
@@ -371,7 +372,7 @@ struct Tuple4
     template <typename U>
     Child<T>& operator*=(U s)
     {
-        assert(!bulbit::IsNullish(s));
+        BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
         y *= s;
         z *= s;
@@ -382,7 +383,7 @@ struct Tuple4
     template <typename U>
     Child<T>& operator/=(U d)
     {
-        assert(d != 0);
+        BulbitAssert(d != 0);
         x /= d;
         y /= d;
         z /= d;

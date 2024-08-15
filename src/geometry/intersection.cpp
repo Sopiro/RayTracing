@@ -7,7 +7,7 @@ namespace bulbit
 
 static void NormalMapping(Intersection* isect, const SpectrumTexture* normalmap)
 {
-    assert(normalmap != nullptr);
+    BulbitAssert(normalmap != nullptr);
 
     Spectrum sp = normalmap->Evaluate(isect->uv);
     Vec3 sn(sp.r * 2 - 1, sp.g * 2 - 1, sp.b * 2 - 1);

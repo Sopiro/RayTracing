@@ -77,16 +77,20 @@ public:
 
     MediumSample SamplePoint(Point3 p) const
     {
+        BulbitNotUsed(p);
         return MediumSample{ sigma_a, sigma_s, Le, &phase };
     }
 
     HomogeneousMajorantIterator SampleRay(Ray ray, Float t_max) const
     {
+        BulbitNotUsed(ray);
+        BulbitNotUsed(t_max);
         return HomogeneousMajorantIterator(Float(0), t_max, sigma_a + sigma_s);
     }
 
     RayMajorantIterator* SampleRay(Ray ray, Float t_max, Allocator& alloc) const
     {
+        BulbitNotUsed(ray);
         return alloc.new_object<HomogeneousMajorantIterator>(Float(0), t_max, sigma_a + sigma_s);
     }
 

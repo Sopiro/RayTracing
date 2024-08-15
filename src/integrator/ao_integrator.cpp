@@ -12,6 +12,8 @@ AmbientOcclusion::AmbientOcclusion(const Intersectable* accel, std::vector<Light
 
 Spectrum AmbientOcclusion::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
+    BulbitNotUsed(primary_medium);
+
     Intersection isect;
     if (!Intersect(&isect, primary_ray, Ray::epsilon, infinity))
     {
@@ -19,7 +21,7 @@ Spectrum AmbientOcclusion::Li(const Ray& primary_ray, const Medium* primary_medi
     }
 
     Vec3 wi_local = SampleCosineHemisphere(sampler.Next2D());
-    Float pdf = CosineHemispherePDF(wi_local.z);
+    // Float pdf = CosineHemispherePDF(wi_local.z);
 
     if (wi_local.z <= 0)
     {

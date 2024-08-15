@@ -86,14 +86,14 @@ inline BoundingBox2<T>::BoundingBox2(const Vector2<T>& min, const Vector2<T>& ma
 template <typename T>
 inline Vector2<T>& BoundingBox2<T>::operator[](int32 i)
 {
-    assert(i == 0 || i == 1);
+    BulbitAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
 template <typename T>
 inline Vector2<T> BoundingBox2<T>::operator[](int32 i) const
 {
-    assert(i == 0 || i == 1);
+    BulbitAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
@@ -316,14 +316,14 @@ inline BoundingBox3<T>::BoundingBox3(const Vector3<T>& min, const Vector3<T>& ma
 template <typename T>
 inline Vector3<T>& BoundingBox3<T>::operator[](int32 i)
 {
-    assert(i == 0 || i == 1);
+    BulbitAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 
 template <typename T>
 inline Vector3<T> BoundingBox3<T>::operator[](int32 i) const
 {
-    assert(i == 0 || i == 1);
+    BulbitAssert(i == 0 || i == 1);
     return (i == 0) ? min : max;
 }
 

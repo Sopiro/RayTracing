@@ -7,15 +7,15 @@ namespace bulbit
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
     : Material{ TypeIndexOf<DiffuseLightMaterial>() }
-    , emission{ ConstantColorTexture::Create(color) }
     , two_sided{ two_sided }
+    , emission{ ConstantColorTexture::Create(color) }
 {
 }
 
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
     : Material{ TypeIndexOf<DiffuseLightMaterial>() }
-    , emission{ emission }
     , two_sided{ two_sided }
+    , emission{ emission }
 {
 }
 
@@ -31,6 +31,8 @@ const SpectrumTexture* DiffuseLightMaterial::GetNormalMap() const
 
 Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
+    BulbitNotUsed(wo);
+
     if (!TestAlpha(isect.uv))
     {
         return Spectrum::black;
@@ -48,12 +50,18 @@ Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) con
 
 bool DiffuseLightMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(wo);
+
     *bsdf = BSDF(isect.shading.normal, isect.shading.tangent, alloc.new_object<LambertianBxDF>(Spectrum::black));
     return true;
 }
 
 bool DiffuseLightMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(bssrdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
     return false;
 }
 

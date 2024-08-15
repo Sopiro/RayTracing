@@ -8,8 +8,8 @@ namespace bulbit
 
 DynamicBVH::DynamicBVH()
     : root{ null_node }
-    , nodeCapacity{ 32 }
     , nodeCount{ 0 }
+    , nodeCapacity{ 32 }
 {
     nodes = (Node*)malloc(nodeCapacity * sizeof(Node));
     memset(nodes, 0, nodeCapacity * sizeof(Node));
@@ -70,7 +70,7 @@ DynamicBVH::DynamicBVH(DynamicBVH&& other) noexcept
 
 DynamicBVH& DynamicBVH::operator=(DynamicBVH&& other) noexcept
 {
-    assert(this != &other);
+    BulbitAssert(this != &other);
 
     free(nodes);
 
@@ -174,8 +174,8 @@ bool DynamicBVH::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 
 NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
 {
-    assert(0 <= leaf && leaf < nodeCapacity);
-    assert(nodes[leaf].IsLeaf());
+    BulbitAssert(0 <= leaf && leaf < nodeCapacity);
+    BulbitAssert(nodes[leaf].IsLeaf());
 
     if (root == null_node)
     {
@@ -326,14 +326,14 @@ NodeIndex DynamicBVH::InsertLeaf(NodeIndex leaf)
 
 void DynamicBVH::RemoveLeaf(NodeIndex leaf)
 {
-    assert(0 <= leaf && leaf < nodeCapacity);
-    assert(nodes[leaf].IsLeaf());
+    BulbitAssert(0 <= leaf && leaf < nodeCapacity);
+    BulbitAssert(nodes[leaf].IsLeaf());
 
     NodeIndex parent = nodes[leaf].parent;
 
     if (parent == null_node) // node is root
     {
-        assert(root == leaf);
+        BulbitAssert(root == leaf);
         root = null_node;
         return;
     }
@@ -416,8 +416,8 @@ NodeIndex DynamicBVH::CreateNode(const Primitive* primitive, const AABB& aabb)
 
 bool DynamicBVH::MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, bool force_move)
 {
-    assert(0 <= node && node < nodeCapacity);
-    assert(nodes[node].IsLeaf());
+    BulbitAssert(0 <= node && node < nodeCapacity);
+    BulbitAssert(nodes[node].IsLeaf());
 
     const AABB& treeAABB = nodes[node].aabb;
     if (treeAABB.Contains(aabb) && force_move == false)
@@ -458,8 +458,8 @@ bool DynamicBVH::MoveNode(NodeIndex node, AABB aabb, const Vec3& displacement, b
 
 void DynamicBVH::RemoveNode(NodeIndex node)
 {
-    assert(0 <= node && node < nodeCapacity);
-    assert(nodes[node].IsLeaf());
+    BulbitAssert(0 <= node && node < nodeCapacity);
+    BulbitAssert(nodes[node].IsLeaf());
 
     RemoveLeaf(node);
     FreeNode(node);
@@ -615,7 +615,7 @@ NodeIndex DynamicBVH::AllocateNode()
 {
     if (freeList == null_node)
     {
-        assert(nodeCount == nodeCapacity);
+        BulbitAssert(nodeCount == nodeCapacity);
 
         // Grow the node pool
         Node* oldNodes = nodes;
@@ -650,8 +650,8 @@ NodeIndex DynamicBVH::AllocateNode()
 
 void DynamicBVH::FreeNode(NodeIndex node)
 {
-    assert(0 <= node && node <= nodeCapacity);
-    assert(0 < nodeCount);
+    BulbitAssert(0 <= node && node <= nodeCapacity);
+    BulbitAssert(0 < nodeCount);
 
     nodes[node].parent = node;
     nodes[node].next = freeList;

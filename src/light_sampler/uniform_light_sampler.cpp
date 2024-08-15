@@ -10,6 +10,8 @@ UniformLightSampler::UniformLightSampler(std::span<Light*> lights)
 
 bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& isect, Float u) const
 {
+    BulbitNotUsed(isect);
+
     size_t count = lights.size();
     if (count == 0)
     {
@@ -26,6 +28,8 @@ bool UniformLightSampler::Sample(SampledLight* sl, const Intersection& isect, Fl
 
 Float UniformLightSampler::EvaluatePMF(const Light* light) const
 {
+    BulbitNotUsed(light);
+
     if (lights.size() > 0)
     {
         return Float(1) / lights.size();

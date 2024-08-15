@@ -25,15 +25,16 @@ DielectricMaterial::DielectricMaterial(
     Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap
 )
     : Material{ TypeIndexOf<DielectricMaterial>() }
-    , eta{ eta }
+    , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
-    , normalmap{ normalmap }
+    , eta{ eta }
 {
 }
 
 bool DielectricMaterial::TestAlpha(const Point2& uv) const
 {
+    BulbitNotUsed(uv);
     return true;
 }
 
@@ -44,11 +45,15 @@ const SpectrumTexture* DielectricMaterial::GetNormalMap() const
 
 Spectrum DielectricMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
 bool DielectricMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(wo);
+
     Float alpha_x = u_roughness->Evaluate(isect.uv);
     Float alpha_y = v_roughness->Evaluate(isect.uv);
 
@@ -63,6 +68,10 @@ bool DielectricMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Ve
 
 bool DielectricMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(bssrdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
     return false;
 }
 

@@ -12,6 +12,8 @@ PointLight::PointLight(const Point3& position, const Spectrum& intensity)
 
 LightSample PointLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
+    BulbitNotUsed(u);
+
     Vec3 d = position - ref.point;
     Float distance = d.Normalize();
 
@@ -26,7 +28,8 @@ LightSample PointLight::Sample_Li(const Intersection& ref, const Point2& u) cons
 
 Float PointLight::EvaluatePDF(const Ray& ray) const
 {
-    assert(false);
+    BulbitAssert(false);
+    BulbitNotUsed(ray);
     return 0;
 }
 

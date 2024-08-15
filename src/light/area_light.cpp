@@ -35,7 +35,7 @@ Float AreaLight::EvaluatePDF(const Ray& ray) const
 
 Spectrum AreaLight::Le(const Ray& ray) const
 {
-    assert(false);
+    BulbitAssert(false);
 
     Intersection isect;
     if (!primitive->Intersect(&isect, ray, epsilon, infinity))

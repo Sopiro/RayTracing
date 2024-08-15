@@ -14,6 +14,8 @@ DirectionalLight::DirectionalLight(const Vec3& dir, const Spectrum& intensity, F
 
 LightSample DirectionalLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
+    BulbitNotUsed(ref);
+
     LightSample light_sample;
     light_sample.wi = -dir + SampleInsideUnitSphere(u) * radius;
     light_sample.pdf = 1;
@@ -25,7 +27,8 @@ LightSample DirectionalLight::Sample_Li(const Intersection& ref, const Point2& u
 
 Float DirectionalLight::EvaluatePDF(const Ray& ray) const
 {
-    assert(false);
+    BulbitAssert(false);
+    BulbitNotUsed(ray);
     return 0;
 }
 

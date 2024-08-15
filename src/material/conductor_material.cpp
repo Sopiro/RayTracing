@@ -17,11 +17,11 @@ ConductorMaterial::ConductorMaterial(
     const SpectrumTexture* normalmap
 )
     : Material(TypeIndexOf<ConductorMaterial>())
-    , eta{ eta }
-    , k{ k }
+    , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
-    , normalmap{ normalmap }
+    , eta{ eta }
+    , k{ k }
 {
 }
 
@@ -37,16 +37,17 @@ ConductorMaterial::ConductorMaterial(
     const SpectrumTexture* normalmap
 )
     : Material{ TypeIndexOf<ConductorMaterial>() }
-    , eta{ nullptr }
-    , k{ reflectance }
+    , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
-    , normalmap{ normalmap }
+    , eta{ nullptr }
+    , k{ reflectance }
 {
 }
 
 bool ConductorMaterial::TestAlpha(const Point2& uv) const
 {
+    BulbitNotUsed(uv);
     return true;
 }
 
@@ -57,11 +58,15 @@ const SpectrumTexture* ConductorMaterial::GetNormalMap() const
 
 Spectrum ConductorMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
 bool ConductorMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(wo);
+
     Spectrum eta_s, k_s;
     if (eta)
     {
@@ -91,6 +96,10 @@ bool ConductorMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec
 
 bool ConductorMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(bssrdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
     return false;
 }
 

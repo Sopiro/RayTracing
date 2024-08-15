@@ -86,7 +86,7 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
 
 static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 {
-    assert(mesh->mMaterialIndex >= 0);
+    BulbitAssert(mesh->mMaterialIndex >= 0);
 
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
@@ -145,8 +145,8 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 
 static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
 {
-    assert(mesh->HasPositions());
-    assert(mesh->HasNormals());
+    BulbitAssert(mesh->HasPositions());
+    BulbitAssert(mesh->HasNormals());
 
     std::vector<Point3> positions;
     std::vector<Vec3> normals;

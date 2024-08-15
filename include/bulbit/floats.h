@@ -42,7 +42,7 @@ inline bool IsNullish(const T& v)
     {                                                                                                                            \
         std::cout << #v;                                                                                                         \
         std::cout << " null" << std::endl;                                                                                       \
-        assert(false);                                                                                                           \
+        BulbitAssert(false);                                                                                                     \
     }
 
 } // namespace bulbit

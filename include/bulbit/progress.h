@@ -9,11 +9,11 @@ class RenderingProgress
 {
 public:
     RenderingProgress(const Point2i& resolution, int32 tile_size)
-        : film(resolution)
-        , resolution{ resolution }
+        : resolution{ resolution }
         , tile_size{ tile_size }
         , tile_done{ 0 }
         , done{ false }
+        , film(resolution)
     {
         int32 num_tiles_x = (resolution.x + tile_size - 1) / tile_size;
         int32 num_tiles_y = (resolution.y + tile_size - 1) / tile_size;
@@ -41,7 +41,7 @@ public:
             std::this_thread::sleep_for(50ms);
         }
 
-        assert(done);
+        BulbitAssert(done);
         return film;
     }
 

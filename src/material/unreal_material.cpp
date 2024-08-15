@@ -24,12 +24,12 @@ UnrealMaterial::UnrealMaterial(
     const SpectrumTexture* normalmap
 )
     : Material{ TypeIndexOf<UnrealMaterial>() }
-    , basecolor{ basecolor }
-    , metallic{ metallic }
+    , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
+    , basecolor{ basecolor }
+    , metallic{ metallic }
     , emissive{ emissive }
-    , normalmap{ normalmap }
 {
 }
 
@@ -45,6 +45,7 @@ const SpectrumTexture* UnrealMaterial::GetNormalMap() const
 
 Spectrum UnrealMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
+    BulbitNotUsed(wo);
     return emissive ? emissive->Evaluate(isect.uv) : Spectrum::black;
 }
 
@@ -75,6 +76,10 @@ bool UnrealMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& 
 
 bool UnrealMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(bssrdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
     return false;
 }
 

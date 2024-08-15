@@ -12,9 +12,9 @@ VolPathIntegrator::VolPathIntegrator(
     const Intersectable* accel, std::vector<Light*> lights, const Sampler* sampler, int32 max_bounces, bool regularize_bsdf
 )
     : UniDirectionalRayIntegrator(accel, std::move(lights), sampler)
+    , light_sampler{ all_lights }
     , max_bounces{ max_bounces }
     , regularize_bsdf{ regularize_bsdf }
-    , light_sampler{ all_lights }
 {
     for (Light* light : all_lights)
     {
@@ -181,7 +181,7 @@ Spectrum VolPathIntegrator::Li(const Ray& primary_ray, const Medium* primary_med
                     }
 
                     default:
-                        assert(false);
+                        BulbitAssert(false);
                         return false;
                     }
                 }
@@ -398,8 +398,8 @@ Spectrum VolPathIntegrator::SampleDirectLight(
     }
     else
     {
-        assert(medium != nullptr);
-        assert(phase != nullptr);
+        BulbitAssert(medium != nullptr);
+        BulbitAssert(phase != nullptr);
         scattering_f = Spectrum(phase->p(wo, wi));
         scattering_pdf = phase->PDF(wo, wi);
     }
@@ -437,6 +437,8 @@ Spectrum VolPathIntegrator::SampleDirectLight(
             Spectrum T_maj = Sample_MajorantTransmittance(
                 medium, wavelength, light_ray, t_max, u, rng,
                 [&](Point3 p, MediumSample ms, Spectrum sigma_maj, Spectrum T_maj) -> bool {
+                    BulbitNotUsed(p);
+
                     // Estimate transmittance along the light ray by ratio tracking
                     Spectrum sigma_n = Max<Float>(sigma_maj - ms.sigma_a - ms.sigma_s, 0);
                     Float pdf = T_maj[wavelength] * sigma_maj[wavelength];

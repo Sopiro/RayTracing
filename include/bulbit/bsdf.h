@@ -35,14 +35,14 @@ private:
 };
 
 inline BSDF::BSDF(Vec3 n, BxDF* bxdf)
-    : bxdf{ bxdf }
-    , frame{ Frame::FromZ(n) }
+    : frame{ Frame::FromZ(n) }
+    , bxdf{ bxdf }
 {
 }
 
 inline BSDF::BSDF(Vec3 n, Vec3 t, BxDF* bxdf)
-    : bxdf{ bxdf }
-    , frame{ Frame::FromXZ(t, n) }
+    : frame{ Frame::FromXZ(t, n) }
+    , bxdf{ bxdf }
 {
 }
 
@@ -74,7 +74,7 @@ inline Float BSDF::PDF(Vec3 wo, Vec3 wi, BxDF_SamplingFlags flags) const
 
 inline bool BSDF::Sample_f(BSDFSample* sample, Vec3 wo, Float u0, Point2 u12, BxDF_SamplingFlags flags) const
 {
-    assert(sample != nullptr);
+    BulbitAssert(sample != nullptr);
 
     wo = WorldToLocal(wo);
     if (wo.z == 0 || !(bxdf->Flags() & flags))

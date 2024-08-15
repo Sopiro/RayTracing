@@ -40,17 +40,18 @@ SubsurfaceMaterial::SubsurfaceMaterial(
     const SpectrumTexture* normalmap
 )
     : Material(TypeIndexOf<SubsurfaceMaterial>())
+    , normalmap{ normalmap }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
     , reflectance{ reflectance }
     , l{ l }
     , eta{ eta }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
-    , normalmap{ normalmap }
 {
 }
 
 bool SubsurfaceMaterial::TestAlpha(const Point2& uv) const
 {
+    BulbitNotUsed(uv);
     return true;
 }
 const SpectrumTexture* SubsurfaceMaterial::GetNormalMap() const
@@ -60,11 +61,15 @@ const SpectrumTexture* SubsurfaceMaterial::GetNormalMap() const
 
 Spectrum SubsurfaceMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
 bool SubsurfaceMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(wo);
+
     Float alpha_x = u_roughness->Evaluate(isect.uv);
     Float alpha_y = v_roughness->Evaluate(isect.uv);
 

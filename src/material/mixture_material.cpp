@@ -25,19 +25,29 @@ bool MixtureMaterial::TestAlpha(const Point2& uv) const
 
 const SpectrumTexture* MixtureMaterial::GetNormalMap() const
 {
-    assert(false);
+    BulbitAssert(false);
     return nullptr;
 }
 
 Spectrum MixtureMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
-    assert(false);
+    BulbitAssert(false);
+
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+
     return Spectrum::black;
 }
 
 bool MixtureMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    assert(false);
+    BulbitAssert(false);
+
+    BulbitNotUsed(bsdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
+
     return false;
 }
 
@@ -66,6 +76,10 @@ const Material* MixtureMaterial::ChooseMaterial(const Intersection& isect, const
 
 bool MixtureMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
+    BulbitNotUsed(bssrdf);
+    BulbitNotUsed(isect);
+    BulbitNotUsed(wo);
+    BulbitNotUsed(alloc);
     return false;
 }
 

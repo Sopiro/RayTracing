@@ -28,6 +28,8 @@ OrthographicCamera::OrthographicCamera(
 
 Float OrthographicCamera::SampleRay(Ray* ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const
 {
+    BulbitNotUsed(u1);
+
     Vec2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
     Vec3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
                         vertical * (pixel.y + pixel_offset.y) / resolution.y;

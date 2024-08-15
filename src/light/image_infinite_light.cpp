@@ -14,8 +14,8 @@ ImageInfiniteLight::ImageInfiniteLight(const std::string& env_map, const Transfo
 
 ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& tf)
     : Light(TypeIndexOf<ImageInfiniteLight>())
-    , l_map{ l_map }
     , transform{ tf }
+    , l_map{ l_map }
 {
     int32 width = l_map->GetWidth();
     int32 height = l_map->GetHeight();
@@ -38,6 +38,8 @@ ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Tra
 
 LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2& u) const
 {
+    BulbitNotUsed(ref);
+
     Float map_pdf;
     Point2 uv = distribution->SampleContinuous(&map_pdf, u);
 

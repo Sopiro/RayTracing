@@ -22,6 +22,7 @@ NaivePathIntegrator::NaivePathIntegrator(
 
 Spectrum NaivePathIntegrator::Li(const Ray& primary_ray, const Medium* primary_medium, Sampler& sampler) const
 {
+    BulbitNotUsed(primary_medium);
     // return Li(ray, sampler, 0);
 
     int32 bounce = 0;

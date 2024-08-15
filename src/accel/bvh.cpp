@@ -33,7 +33,7 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
         thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes, &ordered_prims_offset, ordered_prims
     );
 
-    assert(ordered_prims_offset.load() == primitive_count);
+    BulbitAssert(ordered_prims_offset.load() == primitive_count);
 
     primitives.swap(ordered_prims);
 
@@ -47,7 +47,7 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
     // Flatten out to linear BVH representation
     FlattenBVH(root, &offset);
 
-    assert(offset == total_nodes);
+    BulbitAssert(offset == total_nodes);
 }
 
 BVH::~BVH() noexcept
@@ -67,7 +67,7 @@ BVH::BuildNode* BVH::BuildRecursive(
     BuildNode* node = allocator.new_object<BuildNode>();
 
     total_nodes->fetch_add(1);
-    int32 primitive_count = primitive_span.size();
+    size_t primitive_count = primitive_span.size();
 
     AABB span_bounds;
     for (const BVHPrimitive& prim : primitive_span)
@@ -312,7 +312,7 @@ bool BVH::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_ma
 
             if (hit)
             {
-                assert(isect->t <= t);
+                BulbitAssert(isect->t <= t);
                 hit_closest = true;
                 t = isect->t;
             }
