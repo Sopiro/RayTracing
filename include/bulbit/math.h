@@ -1,58 +1,17 @@
-// Simple linear math library
-// Highly inspired by Box2d, glm math codes
-
 #pragma once
 
 #include "floats.h"
+#include "matrix.h"
+#include "quaternion.h"
+#include "transform.h"
 #include "vectors.h"
 
 namespace bulbit
 {
 
-enum Identity
-{
-    identity
-};
-
-using Vec2f = Vector2<Float>;
-using Vec2i = Vector2<int32>;
-using Vec2 = Vec2f;
-using Point2 = Vec2f;
-using Point2i = Vec2i;
-
-using Vec3f = Vector3<Float>;
-using Vec3i = Vector3<int32>;
-using Vec3 = Vec3f;
-using Point3 = Vec3f;
-using Point3i = Vec3i;
-
-using Vec4f = Vector4<Float>;
-using Vec4i = Vector4<int32>;
-using Vec4 = Vec4f;
-
 constexpr inline Vec3 x_axis{ 1, 0, 0 };
 constexpr inline Vec3 y_axis{ 0, 1, 0 };
 constexpr inline Vec3 z_axis{ 0, 0, 1 };
-
-template <template <typename> class V, typename T>
-inline V<T> Normalize(const V<T>& v)
-{
-    T inv_length = T(1) / Length(v);
-    return v * inv_length;
-}
-
-template <template <typename> class V, typename T>
-inline V<T> NormalizeSafe(const V<T>& v)
-{
-    T length = v.Length();
-    if (length < std::numeric_limits<T>::epsilon())
-    {
-        return T::zero;
-    }
-
-    T inv_length = T(1) / length;
-    return v * inv_length;
-}
 
 template <typename T>
 constexpr inline T Sqr(T v)
@@ -90,18 +49,27 @@ constexpr inline Float RadToDeg(Float rad)
 template <typename T, typename U, typename V>
 constexpr inline T Clamp(T v, U l, V r)
 {
-    if (v < l)
+    return v < l ? T(l) : (v > r ? T(r) : v);
+}
+
+template <template <typename> class V, typename T>
+constexpr inline V<T> Normalize(const V<T>& v)
+{
+    T inv_length = T(1) / Length(v);
+    return v * inv_length;
+}
+
+template <template <typename> class V, typename T>
+constexpr inline V<T> NormalizeSafe(const V<T>& v)
+{
+    T length = v.Length();
+    if (length < std::numeric_limits<T>::epsilon())
     {
-        return T(l);
+        return T::zero;
     }
-    else if (v > r)
-    {
-        return T(r);
-    }
-    else
-    {
-        return v;
-    }
+
+    T inv_length = T(1) / length;
+    return v * inv_length;
 }
 
 template <typename T>

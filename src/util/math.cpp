@@ -1,4 +1,5 @@
-#include "bulbit/math.h"
+#include "bulbit/matrix.h"
+#include "bulbit/quaternion.h"
 #include "bulbit/transform.h"
 
 namespace bulbit
@@ -102,9 +103,9 @@ Mat3 Mat3::Translate(const Vec2& v)
 Mat4::Mat4(const Transform& t)
     : Mat4(Mat3(t.q), t.p)
 {
-    ex *= t.r.x;
-    ey *= t.r.y;
-    ez *= t.r.z;
+    ex *= t.s.x;
+    ey *= t.s.y;
+    ez *= t.s.z;
 }
 
 Mat4 Mat4::Scale(Float x, Float y, Float z)

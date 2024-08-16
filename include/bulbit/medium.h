@@ -1,7 +1,6 @@
 #pragma once
 
 #include "dynamic_dispatcher.h"
-#include "math.h"
 #include "random.h"
 #include "ray.h"
 #include "sampling.h"

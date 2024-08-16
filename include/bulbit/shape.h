@@ -2,7 +2,6 @@
 
 #include "bounding_box.h"
 #include "intersectable.h"
-#include "math.h"
 #include "ray.h"
 
 namespace bulbit

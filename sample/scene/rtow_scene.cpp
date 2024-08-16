@@ -15,7 +15,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     auto ground_material = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.5f, 0.5f, 0.5f));
 
     Transform tf = identity;
-    tf.r *= 30;
+    tf.s *= 30;
     CreateRectXZ(scene, tf, ground_material);
 
     Srand(7777);

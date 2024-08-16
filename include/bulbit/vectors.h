@@ -1,9 +1,33 @@
 #pragma once
 
+#include "floats.h"
 #include "tuples.h"
 
 namespace bulbit
 {
+
+template <typename T>
+struct Vector2;
+template <typename T>
+struct Vector3;
+template <typename T>
+struct Vector4;
+
+using Vec2f = Vector2<Float>;
+using Vec2i = Vector2<int32>;
+using Vec2 = Vec2f;
+using Point2 = Vec2f;
+using Point2i = Vec2i;
+
+using Vec3f = Vector3<Float>;
+using Vec3i = Vector3<int32>;
+using Vec3 = Vec3f;
+using Point3 = Vec3f;
+using Point3i = Vec3i;
+
+using Vec4f = Vector4<Float>;
+using Vec4i = Vector4<int32>;
+using Vec4 = Vec4f;
 
 template <typename T>
 struct Vector2 : public Tuple2<Vector2, T>

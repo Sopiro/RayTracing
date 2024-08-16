@@ -1,7 +1,7 @@
 #pragma once
 
 #include "asserts.h"
-#include "floats.h"
+#include "types.h"
 
 namespace bulbit
 {

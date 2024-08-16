@@ -10,6 +10,11 @@ namespace bulbit
 struct Quat;
 struct Transform;
 
+enum Identity
+{
+    identity
+};
+
 struct Mat2
 {
     Vec2 ex, ey;
