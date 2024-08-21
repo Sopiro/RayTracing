@@ -12,7 +12,8 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
         auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
         auto checker = CheckerTexture::Create(a, b, Point2(20));
-        auto tf = Transform{ Vec3(-0.708772, 0, -0.732108), Quat::FromEuler(0, DegToRad(46.1511), DegToRad(180)), Vec3(5.43618) };
+        auto tf =
+            Transform{ Vec3(-0.708772, 0, -0.732108), Quat::FromEuler({ 0, DegToRad(46.1511), DegToRad(180) }), Vec3(5.43618) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         CreateRectXZ(scene, tf, floor);
     }
@@ -36,10 +37,10 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         SetLoaderFallbackMaterial(mat);
         // SetLoaderFallbackMediumInterface(mi);
 
-        auto tf = Transform{ Vec3(0.0571719, 0.213656, 0.0682078), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
+        auto tf = Transform{ Vec3(0.0571719, 0.213656, 0.0682078), Quat::FromEuler({ 0, 0, 0 }), Vec3(0.482906) };
 
         LoadModel(scene, "res/material_test_ball/models/Mesh001.obj", tf);
-        tf = Transform{ Vec3(0.156382, 0.777229, 0.161698), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
+        tf = Transform{ Vec3(0.156382, 0.777229, 0.161698), Quat::FromEuler({ 0, 0, 0 }), Vec3(0.482906) };
         LoadModel(scene, "res/material_test_ball/models/Mesh002.obj", tf);
     }
 
@@ -48,7 +49,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.3));
         SetLoaderFallbackMaterial(mat);
 
-        auto tf = Transform{ Vec3(0.110507, 0.494301, 0.126194), Quat::FromEuler(0, 0, 0), Vec3(0.482906) };
+        auto tf = Transform{ Vec3(0.110507, 0.494301, 0.126194), Quat::FromEuler({ 0, 0, 0 }), Vec3(0.482906) };
         LoadModel(scene, "res/material_test_ball/models/Mesh000.obj", tf);
     }
 

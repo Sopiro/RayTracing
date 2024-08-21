@@ -9,7 +9,7 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
         auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
         auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
         auto checker = CheckerTexture::Create(a, b, Point2(20));
-        auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(3) };
+        auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
         LoadModel(scene, "res/background.obj", tf);
@@ -22,27 +22,27 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
         Spectrum r(0, 163 / 255.0, 108 / 255.0);
         Spectrum ssc(1);
 
-        auto tf = Transform{ Vec3(-2 * d, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(1) };
+        auto tf = Transform{ Vec3(-2 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
         auto mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.001, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
-        tf = Transform{ Vec3(-1 * d, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(1) };
+        tf = Transform{ Vec3(-1 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
         mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.005, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
-        tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(1) };
+        tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
         mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.008, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
-        tf = Transform{ Vec3(1 * d, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(1) };
+        tf = Transform{ Vec3(1 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
         mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.01, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
-        tf = Transform{ Vec3(2 * d, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(1) };
+        tf = Transform{ Vec3(2 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
         mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.02, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);

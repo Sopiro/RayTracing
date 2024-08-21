@@ -12,7 +12,7 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
         auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
         auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
         auto checker = CheckerTexture::Create(a, b, Point2(20));
-        auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler(0, 0, 0), Vec3(3) };
+        auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
         LoadModel(scene, "res/background.obj", tf);
@@ -41,7 +41,7 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
         SetLoaderFallbackMaterial(mat);
         // SetLoaderFallbackMediumInterface(mi);
 
-        auto tf = Transform{ Vec3(0.2, .78, .3) * 0.5, Quat::FromEuler(0, -(3 * pi / 4), 0), Vec3(0.01) };
+        auto tf = Transform{ Vec3(0.2, .78, .3) * 0.5, Quat::FromEuler({ 0, -(3 * pi / 4), 0 }), Vec3(0.01) };
         LoadModel(scene, "res/xyzrgb_dragon.ply", tf);
         // auto tf = Transform{ Vec3(0), Quat::FromEuler(0, 0, 0), Vec3(1) };
         // LoadModel(scene, "res/stanford/bunny.obj", tf);

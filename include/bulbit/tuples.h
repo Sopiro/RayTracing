@@ -11,7 +11,7 @@ struct Tuple2
 {
     static const int32 dimensions = 2;
 
-    Tuple2() = default;
+    constexpr Tuple2() = default;
 
     constexpr Tuple2(T x, T y)
         : x(x)
@@ -37,50 +37,50 @@ struct Tuple2
         return (&x)[i];
     }
 
-    bool operator==(Child<T> c) const
+    constexpr bool operator==(Child<T> c) const
     {
         return x == c.x && y == c.y;
     }
 
-    bool operator!=(Child<T> c) const
+    constexpr bool operator!=(Child<T> c) const
     {
         return x != c.x || y != c.y;
     }
 
-    Child<T> operator-() const
+    constexpr Child<T> operator-() const
     {
         return { -x, -y };
     }
 
     template <typename U>
-    auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y };
     }
 
     template <typename U>
-    auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y };
     }
 
     template <typename U>
-    auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y };
     }
 
     template <typename U>
-    auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         BulbitAssert(d != 0 && !bulbit::IsNullish(d));
         return { x / d, y / d };
     }
 
     template <typename U>
-    Child<T>& operator+=(Child<U> c)
+    constexpr Child<T>& operator+=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x += c.x;
@@ -89,7 +89,7 @@ struct Tuple2
     }
 
     template <typename U>
-    Child<T>& operator-=(Child<U> c)
+    constexpr Child<T>& operator-=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x -= c.x;
@@ -98,7 +98,7 @@ struct Tuple2
     }
 
     template <typename U>
-    Child<T>& operator*=(U s)
+    constexpr Child<T>& operator*=(U s)
     {
         BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
@@ -107,7 +107,7 @@ struct Tuple2
     }
 
     template <typename U>
-    Child<T>& operator/=(U d)
+    constexpr Child<T>& operator/=(U d)
     {
         BulbitAssert(d != 0);
         BulbitAssert(!IsNullish(d));
@@ -116,13 +116,13 @@ struct Tuple2
         return static_cast<Child<T>&>(*this);
     }
 
-    void SetZero()
+    constexpr void SetZero()
     {
         x = T(0);
         y = T(0);
     }
 
-    void Set(T nx, T ny)
+    constexpr void Set(T nx, T ny)
     {
         x = nx;
         y = ny;
@@ -141,7 +141,7 @@ struct Tuple3
 {
     static const int32 dimensions = 3;
 
-    Tuple3() = default;
+    constexpr Tuple3() = default;
 
     constexpr Tuple3(T x, T y, T z)
         : x(x)
@@ -168,50 +168,50 @@ struct Tuple3
         return (&x)[i];
     }
 
-    bool operator==(Child<T> c) const
+    constexpr bool operator==(Child<T> c) const
     {
         return x == c.x && y == c.y && z == c.z;
     }
 
-    bool operator!=(Child<T> c) const
+    constexpr bool operator!=(Child<T> c) const
     {
         return x != c.x || y != c.y || z != c.z;
     }
 
-    Child<T> operator-() const
+    constexpr Child<T> operator-() const
     {
         return { -x, -y, -z };
     }
 
     template <typename U>
-    auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z };
     }
 
     template <typename U>
-    auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z };
     }
 
     template <typename U>
-    auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y, s * z };
     }
 
     template <typename U>
-    auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         BulbitAssert(d != 0);
         return { x / d, y / d, z / d };
     }
 
     template <typename U>
-    Child<T>& operator+=(Child<U> c)
+    constexpr Child<T>& operator+=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x += c.x;
@@ -221,7 +221,7 @@ struct Tuple3
     }
 
     template <typename U>
-    Child<T>& operator-=(Child<U> c)
+    constexpr Child<T>& operator-=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x -= c.x;
@@ -231,7 +231,7 @@ struct Tuple3
     }
 
     template <typename U>
-    Child<T>& operator*=(U s)
+    constexpr Child<T>& operator*=(U s)
     {
         BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
@@ -241,7 +241,7 @@ struct Tuple3
     }
 
     template <typename U>
-    Child<T>& operator/=(U d)
+    constexpr Child<T>& operator/=(U d)
     {
         BulbitAssert(d != 0);
         x /= d;
@@ -250,14 +250,14 @@ struct Tuple3
         return static_cast<Child<T>&>(*this);
     }
 
-    void SetZero()
+    constexpr void SetZero()
     {
         x = T(0);
         y = T(0);
         z = T(0);
     }
 
-    void Set(T nx, T ny, T nz)
+    constexpr void Set(T nx, T ny, T nz)
     {
         x = nx;
         y = ny;
@@ -277,7 +277,7 @@ struct Tuple4
 {
     static const int32 dimensions = 4;
 
-    Tuple4() = default;
+    constexpr Tuple4() = default;
 
     constexpr Tuple4(T x, T y, T z, T w)
         : x(x)
@@ -305,50 +305,50 @@ struct Tuple4
         return (&x)[i];
     }
 
-    bool operator==(Child<T> c) const
+    constexpr bool operator==(Child<T> c) const
     {
         return x == c.x && y == c.y && z == c.z && w == c.w;
     }
 
-    bool operator!=(Child<T> c) const
+    constexpr bool operator!=(Child<T> c) const
     {
         return x != c.x || y != c.y || z != c.z || w != c.w;
     }
 
-    Child<T> operator-() const
+    constexpr Child<T> operator-() const
     {
         return { -x, -y, -z, -w };
     }
 
     template <typename U>
-    auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
+    constexpr auto operator+(Child<U> c) const -> Child<decltype(T{} + U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x + c.x, y + c.y, z + c.z, w + c.w };
     }
 
     template <typename U>
-    auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
+    constexpr auto operator-(Child<U> c) const -> Child<decltype(T{} - U{})>
     {
         BulbitAssert(!c.IsNullish());
         return { x - c.x, y - c.y, z - c.z, z - c.w };
     }
 
     template <typename U>
-    auto operator*(U s) const -> Child<decltype(T{} * U{})>
+    constexpr auto operator*(U s) const -> Child<decltype(T{} * U{})>
     {
         return { s * x, s * y, s * z, s * w };
     }
 
     template <typename U>
-    auto operator/(U d) const -> Child<decltype(T{} / U{})>
+    constexpr auto operator/(U d) const -> Child<decltype(T{} / U{})>
     {
         BulbitAssert(d != 0);
         return { x / d, y / d, z / d, w / d };
     }
 
     template <typename U>
-    Child<T>& operator+=(Child<U> c)
+    constexpr Child<T>& operator+=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x += c.x;
@@ -359,7 +359,7 @@ struct Tuple4
     }
 
     template <typename U>
-    Child<T>& operator-=(Child<U> c)
+    constexpr Child<T>& operator-=(Child<U> c)
     {
         BulbitAssert(!c.IsNullish());
         x -= c.x;
@@ -370,7 +370,7 @@ struct Tuple4
     }
 
     template <typename U>
-    Child<T>& operator*=(U s)
+    constexpr Child<T>& operator*=(U s)
     {
         BulbitAssert(!bulbit::IsNullish(s));
         x *= s;
@@ -381,7 +381,7 @@ struct Tuple4
     }
 
     template <typename U>
-    Child<T>& operator/=(U d)
+    constexpr Child<T>& operator/=(U d)
     {
         BulbitAssert(d != 0);
         x /= d;
@@ -391,7 +391,7 @@ struct Tuple4
         return static_cast<Child<T>&>(*this);
     }
 
-    void SetZero()
+    constexpr void SetZero()
     {
         x = T(0);
         y = T(0);
@@ -399,7 +399,7 @@ struct Tuple4
         w = T(0);
     }
 
-    void Set(T nx, T ny, T nz, T nw)
+    constexpr void Set(T nx, T ny, T nz, T nw)
     {
         x = nx;
         y = ny;

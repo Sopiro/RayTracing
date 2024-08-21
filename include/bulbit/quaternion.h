@@ -8,14 +8,14 @@ namespace bulbit
 
 struct Quat
 {
-    Quat() = default;
+    constexpr Quat() = default;
 
-    Quat(Identity)
+    constexpr Quat(Identity)
         : Quat(1)
     {
     }
 
-    Quat(Float x, Float y, Float z, Float w)
+    constexpr Quat(Float x, Float y, Float z, Float w)
         : x{ x }
         , y{ y }
         , z{ z }
@@ -23,7 +23,7 @@ struct Quat
     {
     }
 
-    explicit Quat(Float w)
+    explicit constexpr Quat(Float w)
         : x{ 0 }
         , y{ 0 }
         , z{ 0 }
@@ -31,46 +31,84 @@ struct Quat
     {
     }
 
-    Quat(const Mat3& m);
+    Quat(const Mat3& m)
+    {
+        // https://math.stackexchange.com/questions/893984/conversion-of-rotation-matrix-to-quaternion
+        if (m.ez.z < 0)
+        {
+            if (m.ex.x > m.ey.y)
+            {
+                Float t = 1 + m.ex.x - m.ey.y - m.ez.z;
+                *this = Quat(t, m.ex.y + m.ey.x, m.ez.x + m.ex.z, m.ey.z - m.ez.y) * (0.5f / std::sqrt(t));
+            }
+            else
+            {
+                Float t = 1 - m.ex.x + m.ey.y - m.ez.z;
+                *this = Quat(m.ex.y + m.ey.x, t, m.ey.z + m.ez.y, m.ez.x - m.ex.z) * (0.5f / std::sqrt(t));
+            }
+        }
+        else
+        {
+            if (m.ex.x < -m.ey.y)
+            {
+                Float t = 1 - m.ex.x - m.ey.y + m.ez.z;
+                *this = Quat(m.ez.x + m.ex.z, m.ey.z + m.ez.y, t, m.ex.y - m.ey.x) * (0.5f / std::sqrt(t));
+            }
+            else
+            {
+                Float t = 1 + m.ex.x + m.ey.y + m.ez.z;
+                *this = Quat(m.ey.z - m.ez.y, m.ez.x - m.ex.z, m.ex.y - m.ey.x, t) * (0.5f / std::sqrt(t));
+            }
+        }
+    }
 
-    Quat(const Vec3& front, const Vec3& up);
+    Quat(const Vec3& front, const Vec3& up)
+    {
+        Mat3 rotation;
+
+        rotation.ez = -front;
+        rotation.ex = Cross(up, rotation.ez);
+        rotation.ex.Normalize();
+        rotation.ey = Cross(rotation.ez, rotation.ex);
+
+        *this = Quat(rotation);
+    }
 
     // Axis must be normalized
     Quat(Float angle, const Vec3& unitAxis)
     {
-        Float halfAngle = angle * 0.5f;
+        Float halg_angle = angle * 0.5f;
 
-        Float s = std::sin(halfAngle);
+        Float s = std::sin(halg_angle);
         x = unitAxis.x * s;
         y = unitAxis.y * s;
         z = unitAxis.z * s;
-        w = std::cos(halfAngle);
+        w = std::cos(halg_angle);
     }
 
-    Quat operator-()
+    constexpr Quat operator-() const
     {
         return Quat(-x, -y, -z, -w);
     }
 
-    Quat operator*(Float s) const
+    constexpr Quat operator*(Float s) const
     {
         return Quat(x * s, y * s, z * s, w * s);
     }
 
-    bool IsIdentity() const
+    constexpr bool IsIdentity() const
     {
         return x == 0 && y == 0 && z == 0 && w == 1;
     }
 
-    // Magnitude
-    Float Length() const
-    {
-        return std::sqrt(x * x + y * y + z * z + w * w);
-    }
-
-    Float Length2() const
+    constexpr Float Length2() const
     {
         return x * x + y * y + z * z + w * w;
+    }
+
+    Float Length() const
+    {
+        return std::sqrt(Length2());
     }
 
     Float Normalize()
@@ -90,18 +128,18 @@ struct Quat
         return length;
     }
 
-    Quat GetConjugate() const
+    constexpr Quat GetConjugate() const
     {
         return Quat(-x, -y, -z, w);
     }
 
-    Vec3 GetImaginaryPart() const
+    constexpr Vec3 GetImaginaryPart() const
     {
         return Vec3(x, y, z);
     }
 
     // Optimized qvq'
-    Vec3 Rotate(const Vec3& v) const
+    constexpr Vec3 Rotate(const Vec3& v) const
     {
         Float vx = 2 * v.x;
         Float vy = 2 * v.y;
@@ -116,7 +154,7 @@ struct Quat
         );
     }
 
-    Vec3 RotateInv(const Vec3& v) const
+    constexpr Vec3 RotateInv(const Vec3& v) const
     {
         Float vx = 2 * v.x;
         Float vy = 2 * v.y;
@@ -131,7 +169,7 @@ struct Quat
         );
     }
 
-    void SetIdentity()
+    constexpr void SetIdentity()
     {
         x = 0;
         y = 0;
@@ -140,7 +178,7 @@ struct Quat
     }
 
     // Computes rotation of x-axis
-    Vec3 GetBasisX() const
+    constexpr Vec3 GetBasisX() const
     {
         Float x2 = x * 2;
         Float w2 = w * 2;
@@ -149,7 +187,7 @@ struct Quat
     }
 
     // Computes rotation of y-axis
-    Vec3 GetBasisY() const
+    constexpr Vec3 GetBasisY() const
     {
         Float y2 = y * 2;
         Float w2 = w * 2;
@@ -158,7 +196,7 @@ struct Quat
     }
 
     // Computes rotation of z-axis
-    Vec3 GetBasisZ() const
+    constexpr Vec3 GetBasisZ() const
     {
         Float z2 = z * 2;
         Float w2 = w * 2;
@@ -166,19 +204,41 @@ struct Quat
         return Vec3((y * w2) + x * z2, (-x * w2) + y * z2, (w * w2) - 1 + z * z2);
     }
 
-    std::string ToString() const
+    Vec3 ToEuler() const
     {
-        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+        // Roll (x-axis)
+        Float sinr_cosp = 2 * (w * x + y * z);
+        Float cosr_cosp = 1 - 2 * (x * x + y * y);
+        Float roll = std::atan2(sinr_cosp, cosr_cosp);
+
+        // Pitch (y-axis)
+        Float sinp = 2 * (w * y - z * x);
+        Float pitch;
+        if (std::abs(sinp) >= 1)
+        {
+            pitch = std::copysign(pi / 2, sinp); // use 90 degrees if out of range
+        }
+        else
+        {
+            pitch = std::asin(sinp);
+        }
+
+        // Yaw (z-axis)
+        Float siny_cosp = 2 * (w * z + x * y);
+        Float cosy_cosp = 1 - 2 * (y * y + z * z);
+        Float yaw = std::atan2(siny_cosp, cosy_cosp);
+
+        return Vec3{ roll, pitch, yaw };
     }
 
-    static inline Quat FromEuler(Float x, Float y, Float z)
+    static Quat FromEuler(const Vec3& euler_angles)
     {
-        Float cr = std::cos(x * 0.5f);
-        Float sr = std::sin(x * 0.5f);
-        Float cp = std::cos(y * 0.5f);
-        Float sp = std::sin(y * 0.5f);
-        Float cy = std::cos(z * 0.5f);
-        Float sy = std::sin(z * 0.5f);
+        Float cr = std::cos(euler_angles.x * 0.5f);
+        Float sr = std::sin(euler_angles.x * 0.5f);
+        Float cp = std::cos(euler_angles.y * 0.5f);
+        Float sp = std::sin(euler_angles.y * 0.5f);
+        Float cy = std::cos(euler_angles.z * 0.5f);
+        Float sy = std::sin(euler_angles.z * 0.5f);
 
         Quat q;
         q.w = cr * cp * cy + sr * sp * sy;
@@ -189,23 +249,28 @@ struct Quat
         return q;
     }
 
+    std::string ToString() const
+    {
+        return std::format("{:.4f}\t{:.4f}\t{:.4f}\t{:.4f}", x, y, z, w);
+    }
+
     Float x, y, z, w;
 };
 
 // Quat inline functions begin
 
-inline bool operator==(const Quat& a, const Quat& b)
+constexpr inline bool operator==(const Quat& a, const Quat& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
 }
 
-inline Float Dot(const Quat& a, const Quat& b)
+constexpr inline Float Dot(const Quat& a, const Quat& b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
 // Quaternion multiplication
-inline Quat operator*(const Quat& a, const Quat& b)
+constexpr inline Quat operator*(const Quat& a, const Quat& b)
 {
     // clang-format off
     return Quat(a.w * b.x + b.w * a.x + a.y * b.z - b.y * a.z,
@@ -215,12 +280,12 @@ inline Quat operator*(const Quat& a, const Quat& b)
     // clang-format on
 }
 
-inline Quat operator+(const Quat& a, const Quat& b)
+constexpr inline Quat operator+(const Quat& a, const Quat& b)
 {
     return Quat(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
 }
 
-inline Quat operator-(const Quat& a, const Quat& b)
+constexpr inline Quat operator-(const Quat& a, const Quat& b)
 {
     return Quat(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
 }

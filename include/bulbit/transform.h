@@ -12,44 +12,44 @@ struct Transform
     Quat q; // orientation
     Vec3 s; // scale
 
-    Transform() = default;
+    constexpr Transform() = default;
 
-    Transform(Identity)
-        : p{ 0.0f }
+    constexpr Transform(Identity)
+        : p{ 0 }
         , q{ identity }
-        , s{ 1.0f }
+        , s{ 1 }
     {
     }
 
-    Transform(const Vec3& position)
+    constexpr Transform(const Vec3& position)
         : p{ position }
         , q{ identity }
-        , s{ 1.0f }
+        , s{ 1 }
     {
     }
 
-    Transform(const Quat& orientation)
-        : p{ 0.0f }
+    constexpr Transform(const Quat& orientation)
+        : p{ 0 }
         , q{ orientation }
-        , s{ 1.0f }
+        , s{ 1 }
     {
     }
 
-    Transform(const Vec3& position, const Quat& orientation)
+    constexpr Transform(const Vec3& position, const Quat& orientation)
         : p{ position }
         , q{ orientation }
-        , s{ 1.0f }
+        , s{ 1 }
     {
     }
 
-    Transform(const Vec3& position, const Quat& orientation, const Vec3& scale)
+    constexpr Transform(const Vec3& position, const Quat& orientation, const Vec3& scale)
         : p{ position }
         , q{ orientation }
         , s{ scale }
     {
     }
 
-    Transform(Float x, Float y, Float z, const Quat& orientation = Quat(1.0f), const Vec3& scale = Vec3(1.0f))
+    constexpr Transform(Float x, Float y, Float z, const Quat& orientation = Quat(1), const Vec3& scale = Vec3(1))
         : p{ x, y, z }
         , q{ orientation }
         , s{ scale }
@@ -71,70 +71,70 @@ struct Transform
         p.z = m[3][2];
     }
 
-    void Set(const Vec3& position, const Quat& orientation, const Vec3& scale)
+    constexpr void Set(const Vec3& position, const Quat& orientation, const Vec3& scale)
     {
         p = position;
         q = orientation;
         s = scale;
     }
 
-    void SetIdentity()
+    constexpr void SetIdentity()
     {
         p.SetZero();
         q.SetIdentity();
-        s.Set(1.0f, 1.0f, 1.0f);
+        s.Set(1, 1, 1);
     }
 
-    Transform& operator*=(const Transform& other);
+    constexpr Transform& operator*=(const Transform& other);
 
-    Transform GetInverse() const
+    constexpr Transform GetInverse() const
     {
         return Transform{ q.RotateInv(-p), q.GetConjugate(), 1 / s };
     }
 };
 
-inline bool operator==(const Transform& a, const Transform& b)
+constexpr inline bool operator==(const Transform& a, const Transform& b)
 {
     return a.p == b.p && a.q == b.q;
 }
 
-inline Vec3 operator*(const Transform& t, const Vec3& v)
+constexpr inline Vec3 operator*(const Transform& t, const Vec3& v)
 {
     return t.q.Rotate(t.s * v) + t.p;
 }
 
 // A * V
-inline Vec3 Mul(const Transform& t, const Vec3& v)
+constexpr inline Vec3 Mul(const Transform& t, const Vec3& v)
 {
     return t.q.Rotate(t.s * v) + t.p;
 }
 
 // A^T * V
-inline Vec3 MulT(const Transform& t, const Vec3& v)
+constexpr inline Vec3 MulT(const Transform& t, const Vec3& v)
 {
     return t.q.RotateInv(Float(1) / t.s * v - t.p);
 }
 
-inline Transform operator*(const Transform& a, const Transform& b)
+constexpr inline Transform operator*(const Transform& a, const Transform& b)
 {
     return Transform{ a.q.Rotate(b.p) + a.p, a.q * b.q, a.s * b.s };
 }
 
 // A * B
-inline Transform Mul(const Transform& a, const Transform& b)
+constexpr inline Transform Mul(const Transform& a, const Transform& b)
 {
     return Transform{ a.q.Rotate(b.p) + a.p, a.q * b.q, a.s * b.s };
 }
 
 // A^T * B
-inline Transform MulT(const Transform& a, const Transform& b)
+constexpr inline Transform MulT(const Transform& a, const Transform& b)
 {
     Quat invQ = a.q.GetConjugate();
 
     return Transform{ invQ.Rotate(b.p - a.p), invQ * b.q, (1 / a.s) * b.s };
 }
 
-inline Transform& Transform::operator*=(const Transform& other)
+constexpr inline Transform& Transform::operator*=(const Transform& other)
 {
     *this = Mul(*this, other);
     return *this;
