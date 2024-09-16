@@ -10,7 +10,7 @@ bool Sphere::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t
 {
     Ray r = MulT(transform, ray);
 
-    Vec3 oc = r.o;
+    Point3 oc = r.o;
     Float a = Length2(r.d);
     Float half_b = Dot(oc, r.d);
     Float c = Length2(oc) - radius * radius;
@@ -53,7 +53,7 @@ bool Sphere::IntersectAny(const Ray& ray, Float t_min, Float t_max) const
 {
     Ray r = MulT(transform, ray);
 
-    Vec3 oc = r.o;
+    Point3 oc = r.o;
     Float a = Length2(r.d);
     Float half_b = Dot(oc, r.d);
     Float c = Length2(oc) - radius * radius;

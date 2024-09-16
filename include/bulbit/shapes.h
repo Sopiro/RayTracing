@@ -10,7 +10,7 @@ namespace bulbit
 class Sphere : public Shape
 {
 public:
-    Sphere(const Vec3& center, Float radius);
+    Sphere(const Point3& center, Float radius);
     Sphere(const Transform& transform, Float radius);
 
     virtual AABB GetAABB() const override;
@@ -30,7 +30,7 @@ private:
     static Point2 ComputeTexCoord(const Vec3& v);
 };
 
-inline Sphere::Sphere(const Vec3& center, Float radius)
+inline Sphere::Sphere(const Point3& center, Float radius)
     : transform{ center, identity }
     , radius{ radius }
 {

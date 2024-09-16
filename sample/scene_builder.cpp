@@ -61,10 +61,10 @@ void CreateRectXY(
     bool area_light
 )
 {
-    Vec3 p0 = { -0.5, -0.5, 0.0 };
-    Vec3 p1 = { 0.5, -0.5, 0.0 };
-    Vec3 p2 = { 0.5, 0.5, 0.0 };
-    Vec3 p3 = { -0.5, 0.5, 0.0 };
+    Point3 p0 = { -0.5, -0.5, 0.0 };
+    Point3 p1 = { 0.5, -0.5, 0.0 };
+    Point3 p2 = { 0.5, 0.5, 0.0 };
+    Point3 p3 = { -0.5, 0.5, 0.0 };
 
     Vertex v0{ p0, z_axis, x_axis, Point2(0.0, 0.0) };
     Vertex v1{ p1, z_axis, x_axis, Point2(tc.x, 0.0) };
@@ -87,10 +87,10 @@ void CreateRectXZ(
     bool area_light
 )
 {
-    Vec3 p0 = { -0.5, 0.0, 0.5 };
-    Vec3 p1 = { 0.5, 0.0, 0.5 };
-    Vec3 p2 = { 0.5, 0.0, -0.5 };
-    Vec3 p3 = { -0.5, 0.0, -0.5 };
+    Point3 p0 = { -0.5, 0.0, 0.5 };
+    Point3 p1 = { 0.5, 0.0, 0.5 };
+    Point3 p2 = { 0.5, 0.0, -0.5 };
+    Point3 p3 = { -0.5, 0.0, -0.5 };
 
     Vertex v0{ p0, y_axis, x_axis, Point2(0.0, 0.0) };
     Vertex v1{ p1, y_axis, x_axis, Point2(tc.x, 0.0) };
@@ -113,10 +113,10 @@ void CreateRectYZ(
     bool area_light
 )
 {
-    Vec3 p0 = { 0.0, -0.5, 0.5 };
-    Vec3 p1 = { 0.0, -0.5, -0.5 };
-    Vec3 p2 = { 0.0, 0.5, -0.5 };
-    Vec3 p3 = { 0.0, 0.5, 0.5 };
+    Point3 p0 = { 0.0, -0.5, 0.5 };
+    Point3 p1 = { 0.0, -0.5, -0.5 };
+    Point3 p2 = { 0.0, 0.5, -0.5 };
+    Point3 p3 = { 0.0, 0.5, 0.5 };
 
     Vertex v0{ p0, x_axis, -z_axis, Point2(0.0, 0.0) };
     Vertex v1{ p1, x_axis, -z_axis, Point2(tc.x, 0.0) };
@@ -147,15 +147,15 @@ void CreateBox(
         |/       |/
         0--------1
     */
-    Vec3 p0 = { -0.5, -0.5, 0.5 };
-    Vec3 p1 = { 0.5, -0.5, 0.5 };
-    Vec3 p2 = { 0.5, 0.5, 0.5 };
-    Vec3 p3 = { -0.5, 0.5, 0.5 };
+    Point3 p0 = { -0.5, -0.5, 0.5 };
+    Point3 p1 = { 0.5, -0.5, 0.5 };
+    Point3 p2 = { 0.5, 0.5, 0.5 };
+    Point3 p3 = { -0.5, 0.5, 0.5 };
 
-    Vec3 p4 = { -0.5, -0.5, -0.5 };
-    Vec3 p5 = { 0.5, -0.5, -0.5 };
-    Vec3 p6 = { 0.5, 0.5, -0.5 };
-    Vec3 p7 = { -0.5, 0.5, -0.5 };
+    Point3 p4 = { -0.5, -0.5, -0.5 };
+    Point3 p5 = { 0.5, -0.5, -0.5 };
+    Point3 p6 = { 0.5, 0.5, -0.5 };
+    Point3 p7 = { -0.5, 0.5, -0.5 };
 
     Vertex v00 = { p0, z_axis, x_axis, Point2(0.0, 0.0) };
     Vertex v01 = { p1, z_axis, x_axis, Point2(tc.x, 0.0) };

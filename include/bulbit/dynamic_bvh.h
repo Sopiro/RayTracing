@@ -64,7 +64,7 @@ public:
     template <typename T>
     void Traverse(T* callback) const;
     template <typename T>
-    void Query(const Vec3& point, T* callback) const;
+    void Query(const Point3& point, T* callback) const;
     template <typename T>
     void Query(const AABB& aabb, T* callback) const;
     template <typename T>
@@ -185,7 +185,7 @@ void DynamicBVH::Traverse(T* callback) const
 }
 
 template <typename T>
-void DynamicBVH::Query(const Vec3& point, T* callback) const
+void DynamicBVH::Query(const Point3& point, T* callback) const
 {
     if (root == null_node)
     {

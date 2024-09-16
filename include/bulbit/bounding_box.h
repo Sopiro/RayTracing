@@ -268,7 +268,7 @@ struct BoundingBox3
     bool TestPoint(const Vector3<T>& point) const;
     bool TestOverlap(const BoundingBox3& other) const;
     bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
-    bool TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
+    bool TestRay(Point3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     void ComputeBoundingSphere(Point3* center, T* radius) const;
@@ -410,7 +410,7 @@ inline bool BoundingBox3<T>::TestRay(const Ray& ray, Float t_min, Float t_max) c
 
 // https://www.pbr-book.org/4ed/Shapes/Basic_Shape_Interface#Bounds3::IntersectP
 template <typename T>
-inline bool BoundingBox3<T>::TestRay(Vec3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const
+inline bool BoundingBox3<T>::TestRay(Point3 o, Float t_min, Float t_max, Vec3 inv_dir, const int is_neg_dir[3]) const
 {
     const BoundingBox3<Float>& aabb = *this;
 
