@@ -38,7 +38,7 @@ struct BoundingBox2
     bool TestOverlap(const BoundingBox2& other) const;
 
     bool TestRay(const Ray& ray, Float t_min, Float t_max) const;
-    bool TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const;
+    bool TestRay(Point2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const;
     Float Intersect(const Ray& ray, Float t_min, Float t_max) const;
 
     void ComputeBoundingCircle(Point2* center, T* radius) const;
@@ -177,7 +177,7 @@ inline bool BoundingBox2<T>::TestRay(const Ray& ray, Float t_min, Float t_max) c
 
 // https://www.pbr-book.org/4ed/Shapes/Basic_Shape_Interface#Bounds3::IntersectP
 template <typename T>
-inline bool BoundingBox2<T>::TestRay(Vec2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const
+inline bool BoundingBox2<T>::TestRay(Point2 o, Float t_min, Float t_max, Vec2 inv_dir, const int is_neg_dir[2]) const
 {
     const BoundingBox2<Float>& aabb = *this;
 

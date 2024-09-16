@@ -33,7 +33,7 @@ protected:
     const Filter* filter;
 };
 
-inline const Vec2i& Camera::GetScreenResolution() const
+inline const Point2i& Camera::GetScreenResolution() const
 {
     return resolution;
 }

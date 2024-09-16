@@ -12,7 +12,7 @@ public:
         const Point3& look_from,
         const Point3& look_at,
         const Vec3& up,
-        const Vec2& viewport_size,
+        const Point2& viewport_size,
         int32 resolution_x,
         const Medium* medium = nullptr,
         const Filter* pixel_filter = Camera::default_filter.get()

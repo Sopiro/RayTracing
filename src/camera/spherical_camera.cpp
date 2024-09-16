@@ -5,7 +5,7 @@ namespace bulbit
 {
 
 SphericalCamera::SphericalCamera(
-    const Point3& position, const Vec2i& resolution, const Medium* medium, const Filter* pixel_filter
+    const Point3& position, const Point2i& resolution, const Medium* medium, const Filter* pixel_filter
 )
     : Camera(resolution, medium, pixel_filter)
     , origin{ position }

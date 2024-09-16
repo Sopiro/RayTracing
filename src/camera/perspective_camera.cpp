@@ -12,7 +12,7 @@ PerspectiveCamera::PerspectiveCamera(
     Float vfov,
     Float aperture,
     Float focus_dist,
-    const Vec2i& resolution,
+    const Point2i& resolution,
     const Medium* medium,
     const Filter* pixel_filter
 )
@@ -38,13 +38,13 @@ PerspectiveCamera::PerspectiveCamera(
 
 Float PerspectiveCamera::SampleRay(Ray* ray, const Point2i& pixel, const Point2& u0, const Point2& u1) const
 {
-    Vec2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
-    Vec3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
-                        vertical * (pixel.y + pixel_offset.y) / resolution.y;
+    Point2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
+    Point3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
+                          vertical * (pixel.y + pixel_offset.y) / resolution.y;
 
-    Vec3 aperture_sample = lens_radius * SampleUniformUnitDiskXY(u1);
-    Vec3 camera_offset = u * aperture_sample.x + v * aperture_sample.y;
-    Vec3 camera_center = origin + camera_offset;
+    Point3 aperture_sample = lens_radius * SampleUniformUnitDiskXY(u1);
+    Point3 camera_offset = u * aperture_sample.x + v * aperture_sample.y;
+    Point3 camera_center = origin + camera_offset;
 
     ray->o = camera_center;
     ray->d = Normalize(pixel_center - camera_center);

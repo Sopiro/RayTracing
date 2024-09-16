@@ -9,12 +9,12 @@ OrthographicCamera::OrthographicCamera(
     const Point3& look_from,
     const Point3& look_at,
     const Vec3& up,
-    const Vec2& viewport_size,
+    const Point2& viewport_size,
     int32 resolution_x,
     const Medium* medium,
     const Filter* pixel_filter
 )
-    : Camera(Vec2i(resolution_x, int32(resolution_x * viewport_size.y / viewport_size.x)), medium, pixel_filter)
+    : Camera(Point2i(resolution_x, int32(resolution_x * viewport_size.y / viewport_size.x)), medium, pixel_filter)
 {
     w = Normalize(look_from - look_at);
     u = Normalize(Cross(up, w));
@@ -30,9 +30,9 @@ Float OrthographicCamera::SampleRay(Ray* ray, const Point2i& pixel, const Point2
 {
     BulbitNotUsed(u1);
 
-    Vec2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
-    Vec3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
-                        vertical * (pixel.y + pixel_offset.y) / resolution.y;
+    Point2 pixel_offset = filter->Sample(u0) + Point2(Float(0.5), Float(0.5));
+    Point3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
+                          vertical * (pixel.y + pixel_offset.y) / resolution.y;
 
     ray->o = pixel_center;
     ray->d = -w;

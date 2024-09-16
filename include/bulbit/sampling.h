@@ -125,7 +125,7 @@ inline Float ExponentialPDF(Float x, Float a)
     return a * std::exp(-a * x);
 }
 
-inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
+inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Point2 u)
 {
     BulbitNotUsed(wo);
 
@@ -145,7 +145,7 @@ inline Vec3 Sample_GGX(Vec3 wo, Float alpha2, Vec2 u)
 // "Sampling Visible GGX Normals with Spherical Caps" by Dupuy & Benyoub
 // https://gist.github.com/jdupuy/4c6e782b62c92b9cb3d13fbb0a5bd7a0
 // https://cdrdv2-public.intel.com/782052/sampling-visible-ggx-normals.pdf
-inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
+inline Vec3 SampleVNDFHemisphere(Vec3 wo, Point2 u)
 {
     // sample a spherical cap in (-wo.z, 1]
     Float phi = two_pi * u.x;
@@ -161,7 +161,7 @@ inline Vec3 SampleVNDFHemisphere(Vec3 wo, Vec2 u)
     return h;
 }
 
-inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
+inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha_x, Float alpha_y, Point2 u)
 {
     // warp to the hemisphere configuration
     Vec3 woStd = Normalize(Vec3(wo.x * alpha_x, wo.y * alpha_y, wo.z));
@@ -175,7 +175,7 @@ inline Vec3 Sample_GGX_VNDF_Dupuy_Benyoub(Vec3 wo, Float alpha_x, Float alpha_y,
 
 // Source: "Sampling the GGX Distribution of Visible Normals" by Heitz
 // https://jcgt.org/published/0007/04/01/
-inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Vec2 u)
+inline Vec3 Sample_GGX_VNDF_Heitz(Vec3 wo, Float alpha_x, Float alpha_y, Point2 u)
 {
     // Section 3.2: transforming the view direction to the hemisphere configuration
     Vec3 Vh{ alpha_x * wo.x, alpha_y * wo.y, wo.z };
