@@ -25,14 +25,14 @@ static void NormalMapping(Intersection* isect, const SpectrumTexture* normalmap)
 Spectrum Intersection::Le(const Vec3& wo) const
 {
     const Material* mat = primitive->GetMaterial();
-    while (mat->Is<MixtureMaterial>())
-    {
-        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
-    }
-
     if (!mat)
     {
         return Spectrum::black;
+    }
+
+    while (mat->Is<MixtureMaterial>())
+    {
+        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
     }
 
     return mat->Le(*this, wo);
@@ -41,14 +41,14 @@ Spectrum Intersection::Le(const Vec3& wo) const
 bool Intersection::GetBSDF(BSDF* bsdf, const Vec3& wo, Allocator& alloc)
 {
     const Material* mat = primitive->GetMaterial();
-    while (mat->Is<MixtureMaterial>())
-    {
-        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
-    }
-
     if (!mat)
     {
         return false;
+    }
+
+    while (mat->Is<MixtureMaterial>())
+    {
+        mat = ((MixtureMaterial*)mat)->ChooseMaterial(*this, wo);
     }
 
     const SpectrumTexture* normalmap = mat->GetNormalMap();

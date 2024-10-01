@@ -14,6 +14,8 @@ MixtureMaterial::MixtureMaterial(const Material* material1, const Material* mate
     : Material{ TypeIndexOf<MixtureMaterial>() }
     , mixture_amount{ amount }
 {
+    BulbitAssert(material1 != nullptr);
+    BulbitAssert(material2 != nullptr);
     materials[0] = material1;
     materials[1] = material2;
 }
