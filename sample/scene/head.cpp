@@ -15,8 +15,8 @@ std::unique_ptr<Camera> Head(Scene& scene)
         LoadModel(scene, "res/head/head.obj", tf);
     }
 
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr", Transform(Quat(pi / 4, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr", Transform(Quat(-pi / 2, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
@@ -25,6 +25,7 @@ std::unique_ptr<Camera> Head(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
+    scene.CreateLight<ImageInfiniteLight>("res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     // Float aspect_ratio = 16.f / 9.f;
