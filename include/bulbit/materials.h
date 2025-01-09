@@ -196,25 +196,25 @@ class SubsurfaceMaterial : public Material
 {
 public:
     SubsurfaceMaterial(
-        const Spectrum& reflectance, const Spectrum& l, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
+        const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterial(
         const SpectrumTexture* reflectance,
-        const Spectrum& l,
+        const Spectrum& mfp,
         Float eta,
         Float roughness,
         const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterial(
         const SpectrumTexture* reflectance,
-        const Spectrum& l,
+        const Spectrum& mfp,
         Float eta,
         const FloatTexture* roughness,
         const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterial(
         const SpectrumTexture* reflectance,
-        const Spectrum& l,
+        const Spectrum& mfp,
         Float eta,
         const FloatTexture* u_roughness,
         const FloatTexture* v_roughness,

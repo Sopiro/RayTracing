@@ -7,33 +7,33 @@ namespace bulbit
 {
 
 SubsurfaceMaterial::SubsurfaceMaterial(
-    const Spectrum& reflectance, const Spectrum& l, Float eta, Float roughness, const SpectrumTexture* normalmap
+    const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(ConstantColorTexture::Create(reflectance), l, eta, ConstantFloatTexture::Create(roughness), normalmap)
+    : SubsurfaceMaterial(ConstantColorTexture::Create(reflectance), mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
 {
 }
 
 SubsurfaceMaterial::SubsurfaceMaterial(
-    const SpectrumTexture* reflectance, const Spectrum& l, Float eta, Float roughness, const SpectrumTexture* normalmap
+    const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(reflectance, l, eta, ConstantFloatTexture::Create(roughness), normalmap)
+    : SubsurfaceMaterial(reflectance, mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
 {
 }
 
 SubsurfaceMaterial::SubsurfaceMaterial(
     const SpectrumTexture* reflectance,
-    const Spectrum& l,
+    const Spectrum& mfp,
     Float eta,
     const FloatTexture* roughness,
     const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(reflectance, l, eta, roughness, roughness, normalmap)
+    : SubsurfaceMaterial(reflectance, mfp, eta, roughness, roughness, normalmap)
 {
 }
 
 SubsurfaceMaterial::SubsurfaceMaterial(
     const SpectrumTexture* reflectance,
-    const Spectrum& l,
+    const Spectrum& mfp,
     Float eta,
     const FloatTexture* u_roughness,
     const FloatTexture* v_roughness,
@@ -44,7 +44,7 @@ SubsurfaceMaterial::SubsurfaceMaterial(
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
     , reflectance{ reflectance }
-    , l{ l }
+    , l{ mfp }
     , eta{ eta }
 {
 }

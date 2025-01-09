@@ -15,9 +15,13 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
     auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
-    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(
-        Spectrum(1), (Spectrum(1) - Spectrum(0.5, 0.25, 0.125)) * 100, Spectrum(0.0), -0.9f
-    );
+    Spectrum sigma_a(0);
+    Spectrum sigma_s(50, 75, 87.5f);
+
+    auto ss = scene.CreateMaterial<SubsurfaceMaterial>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+    auto mat = nullptr;
+    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.0f);
+
     MediumInterface mi_outside(nullptr, nullptr);
     MediumInterface mi_inside(hm, nullptr);
     MediumInterface mi_two_sided(nullptr, nullptr);
@@ -57,7 +61,7 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
         auto tf = Transform{ 0.33f, hy + Ray::epsilon * 2, -0.66f, Quat(DegToRad(18.0f), y_axis),
                              Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, nullptr, mi_inside);
+        CreateBox(scene, tf, mat, mi_inside);
     }
 
     // Right block
@@ -70,7 +74,7 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
         auto tf = Transform{ 0.66f, hy + Ray::epsilon * 2, -0.33f, Quat(DegToRad(-18.0f), y_axis),
                              Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, nullptr, mi_inside);
+        CreateBox(scene, tf, mat, mi_inside);
     }
 
     // Right sphere
