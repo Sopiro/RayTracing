@@ -66,7 +66,7 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
     Point3 lookat{ 0.0, 0.5, 0.0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0.0f;
+    Float aperture = 0.01f;
     Float vFov = 30.0;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));

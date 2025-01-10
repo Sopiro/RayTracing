@@ -6,7 +6,7 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     // Ajax
 
     Spectrum sigma_a = Spectrum(1.2, 2.0, 3.5);
-    Spectrum sigma_s = Spectrum(80, 100, 120) * 2;
+    Spectrum sigma_s = Spectrum(80, 100, 120) * 5;
 
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.9f);
     MediumInterface mi(hm, nullptr);
@@ -59,7 +59,7 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     Point3 lookat{ 0, 0, 0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0.0f;
+    Float aperture = 0.02f;
     Float vFov = 30;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
