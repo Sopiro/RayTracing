@@ -6,9 +6,9 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     // Ajax
 
     Spectrum sigma_a = Spectrum(1.2, 2.0, 3.5);
-    Spectrum sigma_s = Spectrum(800, 1000, 1200);
+    Spectrum sigma_s = Spectrum(80, 100, 120) * 2;
 
-    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.8f);
+    HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.9f);
     MediumInterface mi(hm, nullptr);
 
     // auto mat = scene.CreateMaterial<DielectricMaterial>(1.33f, 0.1f);
@@ -28,9 +28,24 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+
+    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(3.0f));
+    tf = Transform{ 0, 1.0f, 0, Quat(pi, x_axis), Vec3(1.0f) };
+    CreateRectXZ(scene, tf, light);
+
+    // Floor
+    {
+        auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
+        auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
+        auto checker = CheckerTexture::Create(a, b, Point2(20));
+        auto tf = Transform{ Vec3(0, -0.2f, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
+        auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
+        SetLoaderFallbackMaterial(floor);
+        LoadModel(scene, "res/background.obj", tf);
+    }
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
