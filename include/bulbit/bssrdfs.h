@@ -47,6 +47,6 @@ private:
     Spectrum sigma;
 };
 
-constexpr size_t max_bssrdf_size = std::max({ sizeof(DisneyBSSRDF), sizeof(GaussianBSSRDF) });
+constexpr size_t max_bssrdf_size = std::max({ sizeof(DisneyBSSRDF), sizeof(GaussianBSSRDF), sizeof(RandomWalkBSSRDF) });
 
 } // namespace bulbit

@@ -13,6 +13,7 @@ Spectrum RandomWalkBSSRDF::S(const Intersection& pi, const Vec3& wi) const
 
     return Spectrum::black;
 }
+
 bool RandomWalkBSSRDF::Sample_S(
     BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12
 )
@@ -21,13 +22,12 @@ bool RandomWalkBSSRDF::Sample_S(
 
     RNG rng(Hash(po, u0, u12));
 
-    Point3 p = po.point;
-
     Frame f(po.normal);
-    Vec3 wo = SampleCosineHemisphere({ rng.NextFloat(), rng.NextFloat() });
-    wo = -Normalize(f.FromLocal(wo));
+    Vec3 wi = SampleCosineHemisphere({ rng.NextFloat(), rng.NextFloat() });
+    wi = -Normalize(f.FromLocal(wi));
 
     Intersection isect;
+    Ray ray(po.point, wi);
 
     int32 bounce = 0;
     const int32 max_bounces = 64;
@@ -36,7 +36,7 @@ bool RandomWalkBSSRDF::Sample_S(
     {
         Float l = SampleExponential(rng.NextFloat(), sigma_t[0]);
 
-        bool found_intersection = accel->Intersect(&isect, Ray{ p, wo }, Ray::epsilon, l);
+        bool found_intersection = accel->Intersect(&isect, ray, Ray::epsilon, l);
         if (found_intersection)
         {
             if (isect.primitive->GetMaterial() == po.primitive->GetMaterial())
@@ -47,9 +47,9 @@ bool RandomWalkBSSRDF::Sample_S(
             return false;
         }
 
-        p += l * wo;
-
-        wo = SampleUniformSphere({ rng.NextFloat(), rng.NextFloat() });
+        // Random walk forward
+        ray.o += l * ray.d;
+        ray.d = SampleUniformSphere({ rng.NextFloat(), rng.NextFloat() });
     }
 
     if (bounce >= max_bounces)
