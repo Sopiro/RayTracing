@@ -18,8 +18,6 @@ bool RandomWalkBSSRDF::Sample_S(
     BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12
 )
 {
-    BulbitNotUsed(wavelength);
-
     RNG rng(Hash(po, u0, u12));
 
     Frame f(po.normal);
@@ -35,7 +33,7 @@ bool RandomWalkBSSRDF::Sample_S(
 
     while (bounce++ < max_bounces)
     {
-        Float l = SampleExponential(rng.NextFloat(), sigma_t[0]);
+        Float l = SampleExponential(rng.NextFloat(), sigma_t[wavelength]);
 
         bool found_intersection = accel->Intersect(&isect, ray, Ray::epsilon, l);
         if (found_intersection)
@@ -67,8 +65,11 @@ bool RandomWalkBSSRDF::Sample_S(
     }
 
     bssrdf_sample->pi = isect;
-    bssrdf_sample->Sp = weight * Sp;
-    bssrdf_sample->pdf = Spectrum(1);
+    bssrdf_sample->Sp = Spectrum(0);
+    bssrdf_sample->Sp[wavelength] = weight * Sp[wavelength];
+
+    bssrdf_sample->pdf = Spectrum(0);
+    bssrdf_sample->pdf[wavelength] = 1;
     bssrdf_sample->p = 1;
 
     Vec3 n = -isect.shading.normal;

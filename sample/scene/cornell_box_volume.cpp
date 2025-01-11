@@ -16,8 +16,8 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
     auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
 
     Spectrum sigma_a(0);
-    // Spectrum sigma_s(50, 75, 87.5f);
-    Spectrum sigma_s(100);
+    Spectrum sigma_s(20, 100, 200);
+    // Spectrum sigma_s(100);
 
     auto diffusion =
         scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
