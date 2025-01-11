@@ -29,8 +29,9 @@ bool RandomWalkBSSRDF::Sample_S(
     Intersection isect;
     Ray ray(po.point, wi);
 
+    Float weight = 1;
     int32 bounce = 0;
-    const int32 max_bounces = 64;
+    const int32 max_bounces = 256;
 
     while (bounce++ < max_bounces)
     {
@@ -47,6 +48,14 @@ bool RandomWalkBSSRDF::Sample_S(
             return false;
         }
 
+        // Stochastically terminate path with russian roulette
+        const Float rr = 0.995f;
+        if (rng.NextFloat() > rr)
+        {
+            return false;
+        }
+        weight /= rr;
+
         // Random walk forward
         ray.o += l * ray.d;
         ray.d = SampleUniformSphere({ rng.NextFloat(), rng.NextFloat() });
@@ -58,7 +67,7 @@ bool RandomWalkBSSRDF::Sample_S(
     }
 
     bssrdf_sample->pi = isect;
-    bssrdf_sample->Sp = Sp;
+    bssrdf_sample->Sp = weight * Sp;
     bssrdf_sample->pdf = Spectrum(1);
     bssrdf_sample->p = 1;
 
