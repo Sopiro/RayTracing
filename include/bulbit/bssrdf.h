@@ -3,6 +3,7 @@
 #include "bsdf.h"
 #include "bxdfs.h"
 #include "intersectable.h"
+#include "media.h"
 #include "scattering.h"
 
 namespace bulbit
@@ -65,6 +66,27 @@ public:
 
 private:
     static inline Float axis_sampling_probabilities[3] = { 0.25f, 0.25f, 0.5f };
+    NormalizedFresnelBxDF sw;
+};
+
+class RandomWalkBSSRDF : public BSSRDF
+{
+public:
+    RandomWalkBSSRDF(const Spectrum& sigma_a, const Spectrum& sigma_s, const Intersection& po, const Vec3& wo, Float eta)
+        : BSSRDF(po, wo, eta)
+        , sigma_a{ sigma_a }
+        , sigma_s{ sigma_s }
+        , sigma_t{ sigma_a + sigma_s }
+        , sw(eta)
+    {
+    }
+
+    virtual Spectrum S(const Intersection& pi, const Vec3& wi) const override;
+    virtual bool Sample_S(BSSRDFSample* bssrdf_sample, const Intersectable* accel, int32 wavelength, Float u0, const Point2& u12)
+        override;
+
+private:
+    Spectrum sigma_a, sigma_s, sigma_t;
     NormalizedFresnelBxDF sw;
 };
 

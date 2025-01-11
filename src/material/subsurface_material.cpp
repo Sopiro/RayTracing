@@ -85,12 +85,12 @@ bool SubsurfaceMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Ve
 
 bool SubsurfaceMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    Spectrum R = reflectance->Evaluate(isect.uv);
-    Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f)); // Eq. 6
-    Spectrum d = l / s;
+    // Spectrum R = reflectance->Evaluate(isect.uv);
+    // Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f)); // Eq. 6
+    // Spectrum d = l / s;
 
-    // *bssrdf = alloc.new_object<GaussianBSSRDF>(R, d, isect, wo, eta);
-    *bssrdf = alloc.new_object<DisneyBSSRDF>(R, d, isect, wo, eta);
+    // *bssrdf = alloc.new_object<DisneyBSSRDF>(R, d, isect, wo, eta);
+    *bssrdf = alloc.new_object<RandomWalkBSSRDF>(Spectrum(0), Spectrum(100), isect, wo, eta);
     return true;
 }
 
