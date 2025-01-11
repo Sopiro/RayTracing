@@ -238,6 +238,52 @@ private:
     Float eta;
 };
 
+class SubsurfaceMaterialRandomWalk : public Material
+{
+public:
+    SubsurfaceMaterialRandomWalk(
+        const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterialRandomWalk(
+        const SpectrumTexture* reflectance,
+        const Spectrum& mfp,
+        Float eta,
+        Float roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterialRandomWalk(
+        const SpectrumTexture* reflectance,
+        const Spectrum& mfp,
+        Float eta,
+        const FloatTexture* roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
+    SubsurfaceMaterialRandomWalk(
+        const SpectrumTexture* reflectance,
+        const Spectrum& mfp,
+        Float eta,
+        const FloatTexture* u_roughness,
+        const FloatTexture* v_roughness,
+        const SpectrumTexture* normalmap = nullptr
+    );
+
+    bool TestAlpha(const Point2& uv) const;
+    const SpectrumTexture* GetNormalMap() const;
+
+    Spectrum Le(const Intersection& isect, const Vec3& wo) const;
+    bool GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
+    bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
+
+private:
+    const SpectrumTexture* normalmap;
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
+
+    const SpectrumTexture* reflectance;
+    Spectrum l; // Mean free path
+    Float eta;
+};
+
 inline bool Material::TestAlpha(const Point2& uv) const
 {
     return Dispatch([&](auto mat) { return mat->TestAlpha(uv); });

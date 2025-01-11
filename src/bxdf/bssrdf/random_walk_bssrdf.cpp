@@ -58,7 +58,7 @@ bool RandomWalkBSSRDF::Sample_S(
     }
 
     bssrdf_sample->pi = isect;
-    bssrdf_sample->Sp = Spectrum(1);
+    bssrdf_sample->Sp = Sp;
     bssrdf_sample->pdf = Spectrum(1);
     bssrdf_sample->p = 1;
 
