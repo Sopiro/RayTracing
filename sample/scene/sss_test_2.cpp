@@ -23,27 +23,27 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
         Spectrum ssc(1);
 
         auto tf = Transform{ Vec3(-2 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
-        auto mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.001, 1.5f, 0.0f);
+        auto mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(r, ssc * 0.001, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
         tf = Transform{ Vec3(-1 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
-        mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.005, 1.5f, 0.0f);
+        mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(r, ssc * 0.005, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
         tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
-        mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.008, 1.5f, 0.0f);
+        mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(r, ssc * 0.008, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
         tf = Transform{ Vec3(1 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
-        mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.01, 1.5f, 0.0f);
+        mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(r, ssc * 0.01, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
 
         tf = Transform{ Vec3(2 * d, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(1) };
-        mat = scene.CreateMaterial<SubsurfaceMaterial>(r, ssc * 0.02, 1.5f, 0.0f);
+        mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(r, ssc * 0.02, 1.5f, 0.0f);
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/lucy.obj", tf);
     }

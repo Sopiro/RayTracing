@@ -192,27 +192,27 @@ private:
     const FloatTexture* mixture_amount;
 };
 
-class SubsurfaceMaterial : public Material
+class SubsurfaceMaterialDiffusion : public Material
 {
 public:
-    SubsurfaceMaterial(
+    SubsurfaceMaterialDiffusion(
         const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
     );
-    SubsurfaceMaterial(
+    SubsurfaceMaterialDiffusion(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,
         Float roughness,
         const SpectrumTexture* normalmap = nullptr
     );
-    SubsurfaceMaterial(
+    SubsurfaceMaterialDiffusion(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,
         const FloatTexture* roughness,
         const SpectrumTexture* normalmap = nullptr
     );
-    SubsurfaceMaterial(
+    SubsurfaceMaterialDiffusion(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,

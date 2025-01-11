@@ -6,32 +6,34 @@
 namespace bulbit
 {
 
-SubsurfaceMaterial::SubsurfaceMaterial(
+SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(ConstantColorTexture::Create(reflectance), mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
+    : SubsurfaceMaterialDiffusion(
+          ConstantColorTexture::Create(reflectance), mfp, eta, ConstantFloatTexture::Create(roughness), normalmap
+      )
 {
 }
 
-SubsurfaceMaterial::SubsurfaceMaterial(
+SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(reflectance, mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
+    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
 {
 }
 
-SubsurfaceMaterial::SubsurfaceMaterial(
+SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,
     const FloatTexture* roughness,
     const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterial(reflectance, mfp, eta, roughness, roughness, normalmap)
+    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, roughness, roughness, normalmap)
 {
 }
 
-SubsurfaceMaterial::SubsurfaceMaterial(
+SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,
@@ -39,7 +41,7 @@ SubsurfaceMaterial::SubsurfaceMaterial(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material(TypeIndexOf<SubsurfaceMaterial>())
+    : Material(TypeIndexOf<SubsurfaceMaterialDiffusion>())
     , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
@@ -49,24 +51,24 @@ SubsurfaceMaterial::SubsurfaceMaterial(
 {
 }
 
-bool SubsurfaceMaterial::TestAlpha(const Point2& uv) const
+bool SubsurfaceMaterialDiffusion::TestAlpha(const Point2& uv) const
 {
     BulbitNotUsed(uv);
     return true;
 }
-const SpectrumTexture* SubsurfaceMaterial::GetNormalMap() const
+const SpectrumTexture* SubsurfaceMaterialDiffusion::GetNormalMap() const
 {
     return normalmap;
 }
 
-Spectrum SubsurfaceMaterial::Le(const Intersection& isect, const Vec3& wo) const
+Spectrum SubsurfaceMaterialDiffusion::Le(const Intersection& isect, const Vec3& wo) const
 {
     BulbitNotUsed(isect);
     BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
-bool SubsurfaceMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceMaterialDiffusion::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     BulbitNotUsed(wo);
 
@@ -83,14 +85,13 @@ bool SubsurfaceMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Ve
     return true;
 }
 
-bool SubsurfaceMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceMaterialDiffusion::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
-    // Spectrum R = reflectance->Evaluate(isect.uv);
-    // Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f)); // Eq. 6
-    // Spectrum d = l / s;
+    Spectrum R = reflectance->Evaluate(isect.uv);
+    Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f)); // Eq. 6
+    Spectrum d = l / s;
 
-    // *bssrdf = alloc.new_object<DisneyBSSRDF>(R, d, isect, wo, eta);
-    *bssrdf = alloc.new_object<RandomWalkBSSRDF>(Spectrum(0), Spectrum(100), isect, wo, eta);
+    *bssrdf = alloc.new_object<DisneyBSSRDF>(R, d, isect, wo, eta);
     return true;
 }
 

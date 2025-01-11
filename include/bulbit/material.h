@@ -20,7 +20,7 @@ using Materials = TypePack<
     class UnrealMaterial,
     class DiffuseLightMaterial,
     class MixtureMaterial,
-    class SubsurfaceMaterial>;
+    class SubsurfaceMaterialDiffusion>;
 
 class Material : public DynamicDispatcher<Materials>
 {
