@@ -60,7 +60,7 @@ inline Vec3 SampleUniformSphere(const Point2& u)
     return Vec3(x, y, z);
 }
 
-inline Float UniformSampleSpherePDF()
+inline Float UniformSpherePDF()
 {
     return inv_four_pi;
 }

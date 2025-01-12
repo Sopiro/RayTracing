@@ -38,12 +38,7 @@ bool RandomWalkBSSRDF::Sample_S(
         bool found_intersection = accel->Intersect(&isect, ray, Ray::epsilon, l);
         if (found_intersection)
         {
-            if (isect.primitive->GetMaterial() == po.primitive->GetMaterial())
-            {
-                break;
-            }
-
-            return false;
+            break;
         }
 
         // Stochastically terminate path with russian roulette
