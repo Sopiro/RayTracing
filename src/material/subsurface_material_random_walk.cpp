@@ -93,7 +93,7 @@ bool SubsurfaceMaterialRandomWalk::GetBSSRDF(BSSRDF** bssrdf, const Intersection
     Spectrum R = reflectance->Evaluate(isect.uv);
     Spectrum sigma_t = 1 / l;
 
-    *bssrdf = alloc.new_object<RandomWalkBSSRDF>(R, Spectrum(0), sigma_t, isect, wo, eta, 0.0f);
+    *bssrdf = alloc.new_object<RandomWalkBSSRDF>(R, Spectrum(0), sigma_t, isect, wo, eta, g);
     return true;
 }
 
