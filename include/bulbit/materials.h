@@ -242,13 +242,19 @@ class SubsurfaceMaterialRandomWalk : public Material
 {
 public:
     SubsurfaceMaterialRandomWalk(
-        const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
+        const Spectrum& reflectance,
+        const Spectrum& mfp,
+        Float eta,
+        Float roughness,
+        Float g = 0,
+        const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterialRandomWalk(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,
         Float roughness,
+        Float g = 0,
         const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterialRandomWalk(
@@ -256,6 +262,7 @@ public:
         const Spectrum& mfp,
         Float eta,
         const FloatTexture* roughness,
+        Float g = 0,
         const SpectrumTexture* normalmap = nullptr
     );
     SubsurfaceMaterialRandomWalk(
@@ -264,6 +271,7 @@ public:
         Float eta,
         const FloatTexture* u_roughness,
         const FloatTexture* v_roughness,
+        Float g = 0,
         const SpectrumTexture* normalmap = nullptr
     );
 
@@ -282,6 +290,7 @@ private:
     const SpectrumTexture* reflectance;
     Spectrum l; // Mean free path
     Float eta;
+    Float g;
 };
 
 inline bool Material::TestAlpha(const Point2& uv) const

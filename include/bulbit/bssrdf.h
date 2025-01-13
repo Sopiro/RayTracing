@@ -73,14 +73,21 @@ class RandomWalkBSSRDF : public BSSRDF
 {
 public:
     RandomWalkBSSRDF(
-        const Spectrum& Sp, const Spectrum& sigma_a, const Spectrum& sigma_s, const Intersection& po, const Vec3& wo, Float eta
+        const Spectrum& R,
+        const Spectrum& sigma_a,
+        const Spectrum& sigma_s,
+        const Intersection& po,
+        const Vec3& wo,
+        Float eta,
+        Float g
     )
         : BSSRDF(po, wo, eta)
-        , Sp{ Sp }
+        , R{ R }
         , sigma_a{ sigma_a }
         , sigma_s{ sigma_s }
         , sigma_t{ sigma_a + sigma_s }
-        , sw(eta)
+        , phase_function{ g }
+        , sw{ eta }
     {
     }
 
@@ -89,8 +96,9 @@ public:
         override;
 
 private:
-    Spectrum Sp;
+    Spectrum R;
     Spectrum sigma_a, sigma_s, sigma_t;
+    HenyeyGreensteinPhaseFunction phase_function;
     NormalizedFresnelBxDF sw;
 };
 

@@ -56,7 +56,13 @@ bool RandomWalkBSSRDF::Sample_S(
 
         // Random walk forward
         ray.o += l * ray.d;
-        ray.d = SampleUniformSphere({ rng.NextFloat(), rng.NextFloat() });
+
+        PhaseFunctionSample sample;
+        if (!phase_function.Sample_p(&sample, -ray.d, { rng.NextFloat(), rng.NextFloat() }))
+        {
+            return false;
+        }
+        ray.d = sample.wi;
     }
 
     if (bounce >= max_bounces)
@@ -66,7 +72,7 @@ bool RandomWalkBSSRDF::Sample_S(
 
     bssrdf_sample->pi = pi;
     bssrdf_sample->Sp = Spectrum(0);
-    bssrdf_sample->Sp[wavelength] = weight * Sp[wavelength];
+    bssrdf_sample->Sp[wavelength] = weight * R[wavelength];
 
     bssrdf_sample->pdf = Spectrum(0);
     bssrdf_sample->pdf[wavelength] = 1;
