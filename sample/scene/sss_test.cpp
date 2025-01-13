@@ -51,7 +51,7 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
@@ -63,9 +63,16 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     {
-        // auto tf = Transform{ 0, 3.0f, 0, Quat(pi, x_axis), Vec3(3.0f) };
-        // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(2.0f));
-        // CreateRectXZ(scene, tf, light);
+        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(5.0f));
+        auto tf = Transform{ 0, 2.0f, 0, Quat(pi, x_axis), Vec3(1.5f) };
+        CreateRectXZ(scene, tf, light);
+    }
+
+    {
+        // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(3.0f));
+        // auto tf1 = Transform{ -1, 1.0f, -1, Quat(-pi / 4.0f, y_axis), Vec3(1.0f) };
+        // auto tf2 = Transform{ 0, 0, 0, Quat(-pi / 4.0f, z_axis), Vec3(1.5f) };
+        // CreateRectYZ(scene, tf1 * tf2, light);
     }
 
     Float aspect_ratio = 16.f / 9.f;

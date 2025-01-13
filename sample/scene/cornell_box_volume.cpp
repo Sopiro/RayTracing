@@ -23,6 +23,8 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
         scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
     auto random_walk =
         scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+
+    auto boundary = scene.CreateMaterial<DielectricMaterial>(1.0f);
     auto mat = random_walk;
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.0f);
 

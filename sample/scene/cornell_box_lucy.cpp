@@ -42,15 +42,32 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
 
     {
         // Lucy
-        Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.85f) };
-        auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f)
-        );
+        Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.7f) };
+        // auto mat = scene.CreateMaterial<UnrealMaterial>(
+        //     ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f)
+        // );
+
+        Spectrum sigma_a(0);
+        Spectrum sigma_s(20, 100, 200);
+
+        auto diffusion =
+            scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+        auto random_walk =
+            scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+        auto mat = random_walk;
+        HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.0f);
+
+        MediumInterface mi_outside(nullptr, nullptr);
+        MediumInterface mi_inside(hm, nullptr);
+        MediumInterface mi_two_sided(nullptr, nullptr);
 
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
+        // SetLoaderFallbackMaterial(mat)
+        SetLoaderUseForceFallbackMaterial(true);
         SetLoaderFallbackMaterial(mat);
-        LoadModel(scene, "res/stanford/lucy.obj", transform);
+        // SetLoaderFallbackMediumInterface(mi_inside);
+        LoadModel(scene, "res/stanford/bunny.obj", transform);
     }
 
     int32 width = 500;

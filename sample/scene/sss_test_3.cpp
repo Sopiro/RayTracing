@@ -12,9 +12,9 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     MediumInterface mi(hm, nullptr);
 
     // auto mat = scene.CreateMaterial<DielectricMaterial>(1.33f, 0.1f);
-    auto mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
-    SetLoaderFallbackMaterial(nullptr);
-    SetLoaderFallbackMediumInterface(mi);
+    auto mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.33f, 0.0f);
+    SetLoaderFallbackMaterial(mat);
+    // SetLoaderFallbackMediumInterface(mi);
 
     auto tf = Transform{ Vec3(0.0f, -0.2f, 0.0f), Quat(DegToRad(180.0f), y_axis), Vec3(0.4f) };
     LoadModel(scene, "res/ajax/ajax.obj", tf);
