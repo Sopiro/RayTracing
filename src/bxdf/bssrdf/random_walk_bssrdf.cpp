@@ -20,11 +20,13 @@ bool RandomWalkBSSRDF::Sample_S(
 {
     RNG rng(Hash(po, u0, u12));
 
-    Frame f(po.normal);
+    Vec3 n = po.front_face ? po.normal : -po.normal;
+
+    Frame f(n);
     Vec3 wi = SampleCosineHemisphere({ rng.NextFloat(), rng.NextFloat() });
     wi = -Normalize(f.FromLocal(wi));
 
-    Intersection isect;
+    Intersection pi;
     Ray ray(po.point, wi);
 
     Float weight = 1;
@@ -35,10 +37,13 @@ bool RandomWalkBSSRDF::Sample_S(
     {
         Float l = SampleExponential(rng.NextFloat(), sigma_t[wavelength]);
 
-        bool found_intersection = accel->Intersect(&isect, ray, Ray::epsilon, l);
+        bool found_intersection = accel->Intersect(&pi, ray, Ray::epsilon, l);
         if (found_intersection)
         {
-            break;
+            if (pi.primitive->GetMaterial() == po.primitive->GetMaterial())
+            {
+                break;
+            }
         }
 
         // Stochastically terminate path with russian roulette
@@ -59,7 +64,7 @@ bool RandomWalkBSSRDF::Sample_S(
         return false;
     }
 
-    bssrdf_sample->pi = isect;
+    bssrdf_sample->pi = pi;
     bssrdf_sample->Sp = Spectrum(0);
     bssrdf_sample->Sp[wavelength] = weight * Sp[wavelength];
 
@@ -67,7 +72,7 @@ bool RandomWalkBSSRDF::Sample_S(
     bssrdf_sample->pdf[wavelength] = 1;
     bssrdf_sample->p = 1;
 
-    Vec3 n = -isect.shading.normal;
+    n = pi.front_face ? pi.shading.normal : -pi.shading.normal;
     bssrdf_sample->Sw = BSDF(n, &sw);
     bssrdf_sample->wo = n;
     return true;
