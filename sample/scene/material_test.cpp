@@ -23,9 +23,31 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     int32 w = 3;
     int32 h = 1;
 
-    Vec3 o(0, 0, 0);
-    Vec3 x(0.9, 0, 0);
+    Vec3 o(0, 0, 0.4);
+    Vec3 x(0.8, 0, 0);
     Vec3 y(0, 0, 1);
+
+    const int32 count = 3;
+
+    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+
+    const Material* outers[count];
+    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.1f));
+    outers[1] = scene.CreateMaterial<ConductorMaterial>(
+        ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2), ConstantFloatTexture::Create(0.05f),
+        ConstantFloatTexture::Create(0.4f), normalmap
+    );
+    outers[2] = scene.CreateMaterial<UnrealMaterial>(
+        ConstantColorTexture::Create(80 / 255.0, 1.0, 175 / 255.0), ConstantFloatTexture::Create(0),
+        ConstantFloatTexture::Create(0)
+    );
+
+    const Material* inners[count];
+    inners[0] = scene.CreateMaterial<ConductorMaterial>(
+        ConstantColorTexture::Create(0.7f), ConstantFloatTexture::Create(0.05f), ConstantFloatTexture::Create(0.4f)
+    );
+    inners[1] = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f));
+    inners[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.7));
 
     for (int32 j = 0; j < h; ++j)
     {
@@ -35,30 +57,16 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
             int32 sign_j = std::pow<int32>(-1, j);
             Vec3 p = o + (sign_j * y * ((j + 1) / 2)) + (sign_i * x * ((i + 1) / 2));
 
-            // auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
-            auto normalmap = nullptr;
-            // auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.9), normalmap);
-            // auto mat = scene.CreateMaterial<ConductorMaterial>(
-            //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
-            //     ConstantFloatTexture::Create(0.05f), ConstantFloatTexture::Create(0.4f), normalmap
-            // );
-            // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
-            // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
-
-            // Srand(1213212);
-            // auto mat = CreateRandomUnrealMaterial(scene);
-
             // SetLoaderFallbackMediumInterface(mi);
 
             auto tf = Transform{ p, Quat::FromEuler({ 0, 0, 0 }), Vec3(scale) };
 
             // https://github.com/lighttransport/lighttransportequation-orb
-            auto mat = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f), normalmap);
-            SetLoaderFallbackMaterial(mat);
+            SetLoaderFallbackMaterial(outers[std::min(i + j * w, count)]);
             LoadModel(scene, "res/mori_knob/base.obj", tf);
             LoadModel(scene, "res/mori_knob/outer.obj", tf);
-            SetLoaderFallbackMaterial(scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f)));
 
+            SetLoaderFallbackMaterial(inners[std::min(i + j * w, count)]);
             LoadModel(scene, "res/mori_knob/inner.obj", tf);
             LoadModel(scene, "res/mori_knob/equation.obj", tf);
         }
@@ -79,7 +87,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
-    Float aspect_ratio = 16.f / 9.f;
+    Float aspect_ratio = 21.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
@@ -87,11 +95,11 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     int32 width = 1600;
     int32 height = int32(width / aspect_ratio);
 
-    Point3 lookfrom{ 0, 1.0, 3 };
-    Point3 lookat{ 0.0, 0.3, 0.0 };
+    Point3 lookfrom = Point3{ 0, 1.0, 2.28 };
+    Point3 lookat = Point3{ 0.0, 0.1, 0.0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
-    Float aperture = 0.0f;
+    Float aperture = 0.01f;
     Float vFov = 30.0;
 
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
