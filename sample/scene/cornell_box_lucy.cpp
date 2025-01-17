@@ -44,7 +44,7 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
         // Lucy
         Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.7f) };
         // auto mat = scene.CreateMaterial<UnrealMaterial>(
-        //     ConstantColorTexture::Create(1.0f), ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f)
+        //     ColorConstantTexture::Create(1.0f), FloatConstantTexture::Create(1.0f), FloatConstantTexture::Create(0.2f)
         // );
 
         Spectrum sigma_a(0);

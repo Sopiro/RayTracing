@@ -6,8 +6,8 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
 
     // Floor
     {
-        auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
-        auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
+        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
+        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
         auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);

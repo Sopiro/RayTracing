@@ -128,13 +128,13 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
     // clang-format off
     auto mat = g_scene->CreateMaterial<UnrealMaterial>(
         basecolor_textures.empty() ? 
-            ConstantColorTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)     : basecolor_textures[0],
+            ColorConstantTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)     : basecolor_textures[0],
         metallic_textures.empty() ? 
-            ConstantFloatTexture::Create(metallic)                                              : metallic_textures[0],
+            FloatConstantTexture::Create(metallic)                                              : metallic_textures[0],
         roughness_textures.empty() ? 
-            ConstantFloatTexture::Create(roughness)                                             : roughness_textures[0],
+            FloatConstantTexture::Create(roughness)                                             : roughness_textures[0],
         emissive_textures.empty() ? 
-            ConstantColorTexture::Create(emissive_color.r, emissive_color.g, emissive_color.b)  : emissive_textures[0],
+            ColorConstantTexture::Create(emissive_color.r, emissive_color.g, emissive_color.b)  : emissive_textures[0],
         normalmap_textures.empty() ? 
             nullptr                                                                             : normalmap_textures[0]
     );

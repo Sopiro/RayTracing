@@ -7,25 +7,25 @@
 namespace bulbit
 {
 
-class ConstantColorTexture : public SpectrumTexture
+class ColorConstantTexture : public SpectrumTexture
 {
 public:
-    static ConstantColorTexture* Create(const Spectrum& rgb)
+    static ColorConstantTexture* Create(const Spectrum& rgb)
     {
         return pool.Create(rgb);
     }
 
-    static ConstantColorTexture* Create(Float rgb)
+    static ColorConstantTexture* Create(Float rgb)
     {
         return Create(Spectrum(rgb));
     }
 
-    static ConstantColorTexture* Create(Float red, Float green, Float blue)
+    static ColorConstantTexture* Create(Float red, Float green, Float blue)
     {
         return Create(Spectrum(red, green, blue));
     }
 
-    ConstantColorTexture(const Spectrum& rgb)
+    ColorConstantTexture(const Spectrum& rgb)
         : color{ rgb }
     {
     }
@@ -47,18 +47,18 @@ private:
         }
     };
 
-    static inline Pool<Spectrum, ConstantColorTexture, ColorHash> pool;
+    static inline Pool<Spectrum, ColorConstantTexture, ColorHash> pool;
 };
 
-class ConstantFloatTexture : public FloatTexture
+class FloatConstantTexture : public FloatTexture
 {
 public:
-    static ConstantFloatTexture* Create(Float value)
+    static FloatConstantTexture* Create(Float value)
     {
         return pool.Create(value);
     }
 
-    ConstantFloatTexture(Float value)
+    FloatConstantTexture(Float value)
         : value{ value }
     {
     }
@@ -72,7 +72,7 @@ public:
 private:
     Float value;
 
-    static inline Pool<Float, ConstantFloatTexture> pool;
+    static inline Pool<Float, FloatConstantTexture> pool;
 };
 
 enum TexCoordFilter

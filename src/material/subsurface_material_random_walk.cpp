@@ -10,7 +10,7 @@ SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
     const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, Float g, const SpectrumTexture* normalmap
 )
     : SubsurfaceMaterialRandomWalk(
-          ConstantColorTexture::Create(reflectance), mfp, eta, ConstantFloatTexture::Create(roughness), g, normalmap
+          ColorConstantTexture::Create(reflectance), mfp, eta, FloatConstantTexture::Create(roughness), g, normalmap
       )
 {
 }
@@ -18,7 +18,7 @@ SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
 SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
     const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, Float g, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterialRandomWalk(reflectance, mfp, eta, ConstantFloatTexture::Create(roughness), g, normalmap)
+    : SubsurfaceMaterialRandomWalk(reflectance, mfp, eta, FloatConstantTexture::Create(roughness), g, normalmap)
 {
 }
 

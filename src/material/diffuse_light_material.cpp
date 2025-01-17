@@ -8,7 +8,7 @@ namespace bulbit
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
     : Material{ TypeIndexOf<DiffuseLightMaterial>() }
     , two_sided{ two_sided }
-    , emission{ ConstantColorTexture::Create(color) }
+    , emission{ ColorConstantTexture::Create(color) }
 {
 }
 

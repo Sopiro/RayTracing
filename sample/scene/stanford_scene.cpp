@@ -8,7 +8,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             ColorImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
             FloatImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel),
             FloatImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel),
-            ConstantColorTexture::Create(Spectrum(0.0f)),
+            ColorConstantTexture::Create(Spectrum(0.0f)),
             ColorImageTexture::Create("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png")
         );
 
@@ -52,8 +52,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
-            ConstantFloatTexture::Create(1.0f), ConstantFloatTexture::Create(0.2f)
+            ColorConstantTexture::Create(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
+            FloatConstantTexture::Create(1.0f), FloatConstantTexture::Create(0.2f)
         );
 
         SetLoaderFallbackMaterial(mat);

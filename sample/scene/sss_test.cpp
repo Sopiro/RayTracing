@@ -9,8 +9,8 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
 
     // Floor
     {
-        auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
-        auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
+        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
+        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
         auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
@@ -28,10 +28,10 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
         );
         // auto mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(0.01), 1.0, 0.0);
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
-        //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
-        //     ConstantFloatTexture::Create(0.05f), ConstantFloatTexture::Create(0.4f), normalmap
+        //     ColorConstantTexture::Create(0.1, 0.2, 1.9), ColorConstantTexture::Create(3, 2.5, 2),
+        //     FloatConstantTexture::Create(0.05f), FloatConstantTexture::Create(0.4f), normalmap
         // );
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.1f));
+        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.1f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f), normalmap);
 

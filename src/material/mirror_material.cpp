@@ -6,7 +6,7 @@ namespace bulbit
 {
 
 MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap)
-    : MirrorMaterial{ ConstantColorTexture::Create(reflectance), normalmap }
+    : MirrorMaterial{ ColorConstantTexture::Create(reflectance), normalmap }
 {
 }
 

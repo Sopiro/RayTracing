@@ -64,11 +64,11 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 
     // Right sphere
     {
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(0.0f));
+        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
-        //     ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2),
-        //     ConstantFloatTexture::Create(0.3f), ConstantFloatTexture::Create(0.1f));
+        //     ColorConstantTexture::Create(0.1, 0.2, 1.9), ColorConstantTexture::Create(3, 2.5, 2),
+        //     FloatConstantTexture::Create(0.3f), FloatConstantTexture::Create(0.1f));
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
     }

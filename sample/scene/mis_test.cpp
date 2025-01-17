@@ -11,23 +11,23 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
     // plates
     {
         auto m1 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.005f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.005f))
         );
 
         auto m2 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.02f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.02f))
         );
 
         auto m3 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.05f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.05f))
         );
 
         auto m4 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.1f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.1f))
         );
 
         SetLoaderFallbackMaterial(m1);
@@ -89,23 +89,23 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
     // plates
     {
         auto m1 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.005f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.005f))
         );
 
         auto m2 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.02f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.02f))
         );
 
         auto m3 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.05f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.05f))
         );
 
         auto m4 = scene.CreateMaterial<UnrealMaterial>(
-            ConstantColorTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), ConstantFloatTexture::Create(1.0f),
-            ConstantFloatTexture::Create(std::sqrt(0.1f))
+            ColorConstantTexture::Create(Spectrum(0.07f, 0.09f, 0.13f)), FloatConstantTexture::Create(1.0f),
+            FloatConstantTexture::Create(std::sqrt(0.1f))
         );
 
         SetLoaderFallbackMaterial(m1);

@@ -10,7 +10,7 @@ SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
     : SubsurfaceMaterialDiffusion(
-          ConstantColorTexture::Create(reflectance), mfp, eta, ConstantFloatTexture::Create(roughness), normalmap
+          ColorConstantTexture::Create(reflectance), mfp, eta, FloatConstantTexture::Create(roughness), normalmap
       )
 {
 }
@@ -18,7 +18,7 @@ SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
 SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
 )
-    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, ConstantFloatTexture::Create(roughness), normalmap)
+    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, FloatConstantTexture::Create(roughness), normalmap)
 {
 }
 

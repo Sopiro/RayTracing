@@ -40,7 +40,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 else
                 {
                     // glass
-                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, ConstantFloatTexture::Create(Rand(0.001f, 0.3f)));
+                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(Rand(0.001f, 0.3f)));
                     CreateSphere(scene, center, 0.2f, glass, mi_outside);
                 }
             }
@@ -54,8 +54,8 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2, mi_outside);
 
     auto material3 = scene.CreateMaterial<ConductorMaterial>(
-        ConstantColorTexture::Create(0.1, 0.2, 1.9), ConstantColorTexture::Create(3, 2.5, 2), ConstantFloatTexture::Create(0.01f),
-        ConstantFloatTexture::Create(0.01f)
+        ColorConstantTexture::Create(0.1, 0.2, 1.9), ColorConstantTexture::Create(3, 2.5, 2), FloatConstantTexture::Create(0.01f),
+        FloatConstantTexture::Create(0.01f)
     );
     CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3, mi_outside);
 
