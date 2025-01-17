@@ -40,7 +40,7 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     {
         auto a = ConstantColorTexture::Create(0.75, 0.75, 0.75);
         auto b = ConstantColorTexture::Create(0.3, 0.3, 0.3);
-        auto checker = CheckerTexture::Create(a, b, Point2(20));
+        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, -0.2f, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);

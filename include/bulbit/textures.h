@@ -178,16 +178,16 @@ private:
     static inline Pool<std::string, ColorImageTexture> pool;
 };
 
-class CheckerTexture : public SpectrumTexture
+class ColorCheckerTexture : public SpectrumTexture
 {
 public:
-    static CheckerTexture* Create(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution)
+    static ColorCheckerTexture* Create(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution)
     {
         return pool.Create({ a, b }, resolution);
     }
 
-    CheckerTexture(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution);
-    CheckerTexture(std::pair<const SpectrumTexture*, const SpectrumTexture*> checker, const Point2& resolution);
+    ColorCheckerTexture(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution);
+    ColorCheckerTexture(std::pair<const SpectrumTexture*, const SpectrumTexture*> checker, const Point2& resolution);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
     virtual Float EvaluateAlpha(const Point2& uv) const override;
@@ -205,7 +205,36 @@ private:
         }
     };
 
-    static inline Pool<std::pair<const SpectrumTexture*, const SpectrumTexture*>, CheckerTexture, CheckerHash> pool;
+    static inline Pool<std::pair<const SpectrumTexture*, const SpectrumTexture*>, ColorCheckerTexture, CheckerHash> pool;
+};
+
+class FloatCheckerTexture : public FloatTexture
+{
+public:
+    static FloatCheckerTexture* Create(const FloatTexture* a, const FloatTexture* b, const Point2& resolution)
+    {
+        return pool.Create({ a, b }, resolution);
+    }
+
+    FloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution);
+    FloatCheckerTexture(std::pair<const FloatTexture*, const FloatTexture*> checker, const Point2& resolution);
+
+    virtual Float Evaluate(const Point2& uv) const override;
+
+private:
+    const FloatTexture* a;
+    const FloatTexture* b;
+    Point2 resolution;
+
+    struct CheckerHash
+    {
+        size_t operator()(const std::pair<const FloatTexture*, const FloatTexture*>& checker) const
+        {
+            return Hash(checker.first, checker.second);
+        }
+    };
+
+    static inline Pool<std::pair<const FloatTexture*, const FloatTexture*>, FloatCheckerTexture, CheckerHash> pool;
 };
 
 } // namespace bulbit
