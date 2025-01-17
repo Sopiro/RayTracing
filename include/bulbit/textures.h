@@ -39,7 +39,7 @@ public:
 private:
     Spectrum color;
 
-    struct ColorHash
+    struct Hasher
     {
         size_t operator()(const Spectrum& rgb) const
         {
@@ -47,7 +47,7 @@ private:
         }
     };
 
-    static inline Pool<Spectrum, ColorConstantTexture, ColorHash> pool;
+    static inline Pool<Spectrum, ColorConstantTexture, Hasher> pool;
 };
 
 class FloatConstantTexture : public FloatTexture
@@ -133,7 +133,7 @@ private:
     int32 width, height;
     TexCoordFilter texcoord_filter;
 
-    struct StringIntHash
+    struct Hasher
     {
         size_t operator()(const std::pair<std::string, int32>& string_float) const
         {
@@ -141,7 +141,7 @@ private:
         }
     };
 
-    static inline Pool<std::pair<std::string, int32>, FloatImageTexture, StringIntHash> pool;
+    static inline Pool<std::pair<std::string, int32>, FloatImageTexture, Hasher> pool;
 };
 
 class ColorImageTexture : public SpectrumTexture
@@ -197,7 +197,7 @@ private:
     const SpectrumTexture* b;
     Point2 resolution;
 
-    struct CheckerHash
+    struct Hasher
     {
         size_t operator()(const std::pair<const SpectrumTexture*, const SpectrumTexture*>& checker) const
         {
@@ -205,7 +205,7 @@ private:
         }
     };
 
-    static inline Pool<std::pair<const SpectrumTexture*, const SpectrumTexture*>, ColorCheckerTexture, CheckerHash> pool;
+    static inline Pool<std::pair<const SpectrumTexture*, const SpectrumTexture*>, ColorCheckerTexture, Hasher> pool;
 };
 
 class FloatCheckerTexture : public FloatTexture
@@ -226,7 +226,7 @@ private:
     const FloatTexture* b;
     Point2 resolution;
 
-    struct CheckerHash
+    struct Hasher
     {
         size_t operator()(const std::pair<const FloatTexture*, const FloatTexture*>& checker) const
         {
@@ -234,7 +234,7 @@ private:
         }
     };
 
-    static inline Pool<std::pair<const FloatTexture*, const FloatTexture*>, FloatCheckerTexture, CheckerHash> pool;
+    static inline Pool<std::pair<const FloatTexture*, const FloatTexture*>, FloatCheckerTexture, Hasher> pool;
 };
 
 } // namespace bulbit

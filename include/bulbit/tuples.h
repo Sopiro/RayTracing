@@ -153,7 +153,7 @@ struct Tuple3
 
     bool IsNullish() const
     {
-        return IsNullish(x) || IsNullish(y) || IsNullish(z);
+        return bulbit::IsNullish(x) || bulbit::IsNullish(y) || bulbit::IsNullish(z);
     }
 
     T operator[](int32 i) const

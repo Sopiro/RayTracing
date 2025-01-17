@@ -33,7 +33,7 @@ BVH::BVH(const std::vector<Primitive*>& _primitives)
         thread_allocators, std::span<BVHPrimitive>(bvh_primitives), &total_nodes, &ordered_prims_offset, ordered_prims
     );
 
-    BulbitAssert(ordered_prims_offset.load() == primitive_count);
+    BulbitAssert(size_t(ordered_prims_offset.load()) == primitive_count);
 
     primitives.swap(ordered_prims);
 

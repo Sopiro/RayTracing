@@ -118,7 +118,7 @@ inline T& ThreadLocal<T>::Get()
     mutex.lock_shared();
     while (true)
     {
-        BulbitAssert(tries < hash_table.size());
+        BulbitAssert(size_t(tries) < hash_table.size());
 
         if (hash_table[hash].has_value())
         {

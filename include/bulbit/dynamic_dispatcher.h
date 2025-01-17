@@ -106,7 +106,7 @@ protected:
     DynamicDispatcher(int8 type_index)
         : type_index{ type_index }
     {
-        BulbitAssert(type_index < sizeof...(Types));
+        BulbitAssert(size_t(type_index) < sizeof...(Types));
     }
 
 public:
