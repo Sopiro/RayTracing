@@ -5,21 +5,29 @@
 namespace bulbit
 {
 
-MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap)
-    : MirrorMaterial{ ColorConstantTexture::Create(reflectance), normalmap }
+MirrorMaterial::MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap, const FloatTexture* alpha)
+    : MirrorMaterial{ ColorConstantTexture::Create(reflectance), normalmap, alpha }
 {
 }
 
-MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap)
+MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap, const FloatTexture* alpha)
     : Material{ TypeIndexOf<MirrorMaterial>() }
-    , normalmap{ normalmap }
     , reflectance{ reflectance }
+    , normalmap{ normalmap }
+    , alpha{ alpha }
 {
 }
 
 bool MirrorMaterial::TestAlpha(const Point2& uv) const
 {
-    return reflectance->EvaluateAlpha(uv) > epsilon;
+    if (alpha)
+    {
+        return alpha->Evaluate(uv) > epsilon;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 const SpectrumTexture* MirrorMaterial::GetNormalMap() const

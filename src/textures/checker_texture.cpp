@@ -34,21 +34,6 @@ Spectrum ColorCheckerTexture::Evaluate(const Point2& uv) const
     }
 }
 
-Float ColorCheckerTexture::EvaluateAlpha(const Point2& uv) const
-{
-    Point2i scale = uv * resolution;
-    int32 c = scale.x + scale.y;
-
-    if (c % 2)
-    {
-        return a->EvaluateAlpha(uv);
-    }
-    else
-    {
-        return b->EvaluateAlpha(uv);
-    }
-}
-
 FloatCheckerTexture::FloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution)
     : a{ a }
     , b{ b }

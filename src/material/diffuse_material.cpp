@@ -5,21 +5,29 @@
 namespace bulbit
 {
 
-DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap)
-    : DiffuseMaterial(ColorConstantTexture::Create(albedo), normalmap)
+DiffuseMaterial::DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap, const FloatTexture* alpha)
+    : DiffuseMaterial(ColorConstantTexture::Create(albedo), normalmap, alpha)
 {
 }
 
-DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap)
+DiffuseMaterial::DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap, const FloatTexture* alpha)
     : Material{ TypeIndexOf<DiffuseMaterial>() }
-    , normalmap{ normalmap }
     , albedo{ albedo }
+    , normalmap{ normalmap }
+    , alpha{ alpha }
 {
 }
 
 bool DiffuseMaterial::TestAlpha(const Point2& uv) const
 {
-    return albedo->EvaluateAlpha(uv) > epsilon;
+    if (alpha)
+    {
+        return alpha->Evaluate(uv) > epsilon;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 const SpectrumTexture* DiffuseMaterial::GetNormalMap() const

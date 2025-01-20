@@ -1,6 +1,7 @@
 #include <stb_image.h>
 #include <stb_image_write.h>
 
+#include "bulbit/image.h"
 #include "bulbit/parallel_for.h"
 #include "bulbit/textures.h"
 
@@ -37,11 +38,22 @@ FloatImageTexture::FloatImageTexture(const std::pair<std::string, int32>& filena
 
     if (!data)
     {
-        std::cerr << "ERROR: Could not load texture '" << filename << std::endl;
+        std::cout << "Failed to load texture: " << filename << std::endl;
         width = 1;
         height = 1;
         floats = std::make_unique<Float[]>(width * height);
         floats[0] = 0;
+        return;
+    }
+
+    if (components_per_pixel <= channel)
+    {
+        std::cout << "Request channel is not available: " << channel << std::endl;
+        width = 1;
+        height = 1;
+        floats = std::make_unique<Float[]>(width * height);
+        floats[0] = 0;
+        stbi_image_free(data);
         return;
     }
 

@@ -106,46 +106,4 @@ Spectrum ColorImageTexture::Evaluate(const Point2& uv) const
 #endif
 }
 
-Float ColorImageTexture::EvaluateAlpha(const Point2& uv) const
-{
-    if (alpha == nullptr)
-    {
-        return 1;
-    }
-
-#if 0
-    // Nearest sampling
-    Float w = uv.x * width + 0.5f;
-    Float h = uv.y * height + 0.5f;
-
-    int32 i = int32(w);
-    int32 j = int32(h);
-
-    FilterTexCoord(&i, &j);
-
-    return alpha[i + j * width];
-#else
-    // Bilinear sampling
-    Float w = uv.x * width + 0.5f;
-    Float h = uv.y * height + 0.5f;
-
-    int32 i0 = int32(w), i1 = int32(w) + 1;
-    int32 j0 = int32(h), j1 = int32(h) + 1;
-
-    FilterTexCoord(&i0, &j0, width, height, texcoord_filter);
-    FilterTexCoord(&i1, &j1, width, height, texcoord_filter);
-
-    Float fu = w - std::floor(w);
-    Float fv = h - std::floor(h);
-
-    Float sp00 = alpha[i0 + j0 * width], sp10 = alpha[i1 + j0 * width];
-    Float sp01 = alpha[i0 + j1 * width], sp11 = alpha[i1 + j1 * width];
-
-    // clang-format off
-    return (1-fu) * (1-fv) * sp00 + (1-fu) * (fv) * sp01 +
-           (  fu) * (1-fv) * sp10 + (  fu) * (fv) * sp11;
-    // clang-format on
-#endif
-}
-
 } // namespace bulbit

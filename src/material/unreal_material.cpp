@@ -9,9 +9,11 @@ UnrealMaterial::UnrealMaterial(
     const FloatTexture* metallic,
     const FloatTexture* roughness,
     const SpectrumTexture* emissive,
-    const SpectrumTexture* normalmap
+    const SpectrumTexture* normalmap,
+    const FloatTexture* alpha
+
 )
-    : UnrealMaterial(basecolor, metallic, roughness, roughness, emissive, normalmap)
+    : UnrealMaterial(basecolor, metallic, roughness, roughness, emissive, normalmap, alpha)
 {
 }
 
@@ -21,21 +23,31 @@ UnrealMaterial::UnrealMaterial(
     const FloatTexture* u_roughness,
     const FloatTexture* v_roughness,
     const SpectrumTexture* emissive,
-    const SpectrumTexture* normalmap
+    const SpectrumTexture* normalmap,
+    const FloatTexture* alpha
+
 )
     : Material{ TypeIndexOf<UnrealMaterial>() }
-    , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
     , basecolor{ basecolor }
     , metallic{ metallic }
     , emissive{ emissive }
+    , normalmap{ normalmap }
+    , alpha{ alpha }
 {
 }
 
 bool UnrealMaterial::TestAlpha(const Point2& uv) const
 {
-    return basecolor->EvaluateAlpha(uv) > epsilon;
+    if (alpha)
+    {
+        return alpha->Evaluate(uv) > epsilon;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 const SpectrumTexture* UnrealMaterial::GetNormalMap() const

@@ -57,9 +57,9 @@ static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat,
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        // std::cout << str.C_Str() << std::endl;
+        std::string filename = g_folder + str.C_Str();
 
-        SpectrumTexture* texture = ColorImageTexture::Create(g_folder + str.C_Str(), srgb);
+        SpectrumTexture* texture = ColorImageTexture::Create(filename, srgb);
         textures.push_back(texture);
     }
 
@@ -75,9 +75,31 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
     {
         aiString str;
         mat->GetTexture(type, i, &str);
-        // std::cout << str.C_Str() << std::endl;
+        std::string filename = g_folder + str.C_Str();
 
-        FloatTexture* texture = FloatImageTexture::Create(g_folder + str.C_Str(), channel, srgb);
+        FloatTexture* texture = FloatImageTexture::Create(filename, channel, srgb);
+        textures.push_back(texture);
+    }
+
+    return textures;
+}
+
+static std::vector<FloatTexture*> LoadAlphaTextures(const aiMaterial* mat, aiTextureType type, int32 channel, bool srgb)
+{
+    std::vector<FloatTexture*> textures;
+    textures.reserve(mat->GetTextureCount(type));
+
+    for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
+    {
+        aiString str;
+        mat->GetTexture(type, i, &str);
+        std::string filename = g_folder + str.C_Str();
+
+        FloatImageTexture* texture = FloatImageTexture::Create(filename, channel, srgb);
+        if (texture->GetWidth() == 1 && texture->GetHeight() == 1)
+        {
+            return {};
+        }
         textures.push_back(texture);
     }
 
@@ -117,6 +139,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
         LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, roughness_channel, false);
     std::vector<SpectrumTexture*> emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, false);
     std::vector<SpectrumTexture*> normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, false);
+    std::vector<FloatTexture*> alpha_textures = LoadAlphaTextures(material, aiTextureType_DIFFUSE, alpha_channel, false);
 
     if (g_force_fallback_material || basecolor_textures.empty() && g_fallback_material)
     {
@@ -127,16 +150,18 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 
     // clang-format off
     auto mat = g_scene->CreateMaterial<UnrealMaterial>(
-        basecolor_textures.empty() ? 
-            ColorConstantTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)     : basecolor_textures[0],
-        metallic_textures.empty() ? 
-            FloatConstantTexture::Create(metallic)                                              : metallic_textures[0],
-        roughness_textures.empty() ? 
-            FloatConstantTexture::Create(roughness)                                             : roughness_textures[0],
-        emissive_textures.empty() ? 
-            ColorConstantTexture::Create(emissive_color.r, emissive_color.g, emissive_color.b)  : emissive_textures[0],
-        normalmap_textures.empty() ? 
-            nullptr                                                                             : normalmap_textures[0]
+        basecolor_textures.empty() ? ColorConstantTexture::Create(diffuse_color.r, diffuse_color.g, diffuse_color.b)
+        : basecolor_textures[0],
+        metallic_textures.empty() ? FloatConstantTexture::Create(metallic)
+        : metallic_textures[0],
+        roughness_textures.empty() ? FloatConstantTexture::Create(roughness)
+        : roughness_textures[0],
+        emissive_textures.empty() ? ColorConstantTexture::Create(emissive_color.r, emissive_color.g, emissive_color.b)
+        : emissive_textures[0],
+        normalmap_textures.empty() ? nullptr
+        : normalmap_textures[0],
+        alpha_textures.empty() ? nullptr
+        : alpha_textures[0]
     );
     // clang-format on
 

@@ -14,22 +14,7 @@ public:
     virtual T Evaluate(const Point2& uv) const = 0;
 };
 
-class FloatTexture : public Texture<Float>
-{
-public:
-    virtual ~FloatTexture() = default;
-};
-
-class SpectrumTexture : public Texture<Spectrum>
-{
-public:
-    virtual ~SpectrumTexture() = default;
-
-    virtual Float EvaluateAlpha(const Point2& uv) const
-    {
-        BulbitNotUsed(uv);
-        return 1;
-    };
-};
+using FloatTexture = Texture<Float>;
+using SpectrumTexture = Texture<Spectrum>;
 
 } // namespace bulbit

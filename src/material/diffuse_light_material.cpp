@@ -5,23 +5,29 @@
 namespace bulbit
 {
 
-DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided)
-    : Material{ TypeIndexOf<DiffuseLightMaterial>() }
-    , two_sided{ two_sided }
-    , emission{ ColorConstantTexture::Create(color) }
+DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided, const FloatTexture* alpha)
+    : DiffuseLightMaterial(ColorConstantTexture::Create(color), two_sided, alpha)
 {
 }
 
-DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided)
+DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided, const FloatTexture* alpha)
     : Material{ TypeIndexOf<DiffuseLightMaterial>() }
     , two_sided{ two_sided }
     , emission{ emission }
+    , alpha{ alpha }
 {
 }
 
 bool DiffuseLightMaterial::TestAlpha(const Point2& uv) const
 {
-    return emission->EvaluateAlpha(uv) > epsilon;
+    if (alpha)
+    {
+        return alpha->Evaluate(uv) > epsilon;
+    }
+    else
+    {
+        return true;
+    }
 }
 
 const SpectrumTexture* DiffuseLightMaterial::GetNormalMap() const

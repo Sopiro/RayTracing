@@ -8,8 +8,10 @@ namespace bulbit
 class DiffuseMaterial : public Material
 {
 public:
-    DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap = nullptr);
-    DiffuseMaterial(const SpectrumTexture* albedo, const SpectrumTexture* normalmap = nullptr);
+    DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr);
+    DiffuseMaterial(
+        const SpectrumTexture* albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
+    );
 
     bool TestAlpha(const Point2& uv) const;
     const SpectrumTexture* GetNormalMap() const;
@@ -19,15 +21,19 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 public:
-    const SpectrumTexture* normalmap;
     const SpectrumTexture* albedo;
+
+    const SpectrumTexture* normalmap;
+    const FloatTexture* alpha;
 };
 
 class MirrorMaterial : public Material
 {
 public:
-    MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr);
-    MirrorMaterial(const SpectrumTexture* reflectance, const SpectrumTexture* normalmap = nullptr);
+    MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr);
+    MirrorMaterial(
+        const SpectrumTexture* reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
+    );
 
     bool TestAlpha(const Point2& uv) const;
     const SpectrumTexture* GetNormalMap() const;
@@ -37,8 +43,10 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 public:
-    const SpectrumTexture* normalmap;
     const SpectrumTexture* reflectance;
+
+    const SpectrumTexture* normalmap;
+    const FloatTexture* alpha;
 };
 
 class DielectricMaterial : public Material
@@ -125,7 +133,8 @@ public:
         const FloatTexture* metallic,
         const FloatTexture* roughness,
         const SpectrumTexture* emissive = nullptr,
-        const SpectrumTexture* normalmap = nullptr
+        const SpectrumTexture* normalmap = nullptr,
+        const FloatTexture* alpha = nullptr
     );
     UnrealMaterial(
         const SpectrumTexture* basecolor,
@@ -133,7 +142,8 @@ public:
         const FloatTexture* u_roughness,
         const FloatTexture* v_roughness,
         const SpectrumTexture* emissive = nullptr,
-        const SpectrumTexture* normalmap = nullptr
+        const SpectrumTexture* normalmap = nullptr,
+        const FloatTexture* alpha = nullptr
     );
 
     bool TestAlpha(const Point2& uv) const;
@@ -144,20 +154,22 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const SpectrumTexture* normalmap;
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
 
     const SpectrumTexture* basecolor;
     const FloatTexture* metallic;
     const SpectrumTexture* emissive;
+
+    const SpectrumTexture* normalmap;
+    const FloatTexture* alpha;
 };
 
 class DiffuseLightMaterial : public Material
 {
 public:
-    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false);
-    DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided = false);
+    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false, const FloatTexture* alpha = nullptr);
+    DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided = false, const FloatTexture* alpha = nullptr);
 
     bool TestAlpha(const Point2& uv) const;
     const SpectrumTexture* GetNormalMap() const;
@@ -170,6 +182,7 @@ public:
 
 private:
     const SpectrumTexture* emission;
+    const FloatTexture* alpha;
 };
 
 class MixtureMaterial : public Material

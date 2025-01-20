@@ -156,7 +156,6 @@ public:
     ColorImageTexture(const std::string& filename, bool srgb);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
-    virtual Float EvaluateAlpha(const Point2& uv) const override;
 
     int32 GetWidth() const
     {
@@ -190,7 +189,6 @@ public:
     ColorCheckerTexture(std::pair<const SpectrumTexture*, const SpectrumTexture*> checker, const Point2& resolution);
 
     virtual Spectrum Evaluate(const Point2& uv) const override;
-    virtual Float EvaluateAlpha(const Point2& uv) const override;
 
 private:
     const SpectrumTexture* a;
