@@ -1,7 +1,7 @@
 #pragma once
 
-#include "bitmap.h"
 #include "camera.h"
+#include "image.h"
 #include "post_process.h"
 #include "spectrum.h"
 
@@ -14,7 +14,7 @@ public:
     Film(const Point2i& resolution);
 
     void AddSample(const Point2i& pixel, const Spectrum& L, Float weight);
-    Bitmap ConvertToBitmap() const;
+    Image3 ConvertToImage() const;
 
     const Point2i resolution;
 
@@ -45,22 +45,19 @@ inline void Film::AddSample(const Point2i& pixel, const Spectrum& L, Float w)
     weights[pixel.x + pixel.y * resolution.x] += w;
 }
 
-inline Bitmap Film::ConvertToBitmap() const
+inline Image3 Film::ConvertToImage() const
 {
     int32 width = resolution.x;
     int32 height = resolution.y;
-    Bitmap bitmap(width, height);
+    Image3 image(width, height);
 
     for (int32 i = 0; i < width * height; ++i)
     {
         Spectrum s = samples[i] / weights[i];
-        s = Tonemap_ACES(s);
-        s = ToSRGB(s);
-
-        bitmap.Set(i, s);
+        image[i] = Vec3(s.r, s.g, s.b);
     }
 
-    return bitmap;
+    return image;
 }
 
 } // namespace bulbit

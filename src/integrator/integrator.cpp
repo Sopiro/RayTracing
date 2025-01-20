@@ -1,4 +1,3 @@
-#include "bulbit/bitmap.h"
 #include "bulbit/integrators.h"
 
 #include "bulbit/async_job.h"

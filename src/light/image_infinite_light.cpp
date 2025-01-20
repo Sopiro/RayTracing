@@ -1,4 +1,3 @@
-#include "bulbit/bitmap.h"
 #include "bulbit/frame.h"
 #include "bulbit/lights.h"
 

@@ -58,11 +58,11 @@ int main(int argc, char* argv[])
     t = timer.Get();
     std::cout << "\nComplete: " << t << 's' << std::endl;
 
-    Bitmap bitmap = film.ConvertToBitmap();
+    Image3 image = film.ConvertToImage();
 
     auto [width, height] = camera->GetScreenResolution();
-    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.png", width, height, samples_per_pixel, max_bounces, t);
-    bitmap.WriteToFile(filename.c_str());
+    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.hdr", width, height, samples_per_pixel, max_bounces, t);
+    WriteImage(image, filename.c_str());
 
 #if _DEBUG
     return 0;
