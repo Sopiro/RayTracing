@@ -38,15 +38,15 @@ UnrealMaterial::UnrealMaterial(
 {
 }
 
-bool UnrealMaterial::TestAlpha(const Point2& uv) const
+Float UnrealMaterial::GetAlpha(const Intersection& isect) const
 {
     if (alpha)
     {
-        return alpha->Evaluate(uv) > epsilon;
+        return alpha->Evaluate(isect.uv);
     }
     else
     {
-        return true;
+        return 1;
     }
 }
 

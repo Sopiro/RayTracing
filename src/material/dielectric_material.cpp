@@ -32,10 +32,10 @@ DielectricMaterial::DielectricMaterial(
 {
 }
 
-bool DielectricMaterial::TestAlpha(const Point2& uv) const
+Float DielectricMaterial::GetAlpha(const Intersection& isect) const
 {
-    BulbitNotUsed(uv);
-    return true;
+    BulbitNotUsed(isect);
+    return 1;
 }
 
 const SpectrumTexture* DielectricMaterial::GetNormalMap() const

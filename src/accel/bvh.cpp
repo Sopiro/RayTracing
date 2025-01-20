@@ -302,19 +302,21 @@ bool BVH::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_ma
 {
     struct Callback
     {
-        Intersection* isect;
+        Intersection* closest;
         bool hit_closest;
         Float t;
 
-        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, Intersectable* object)
+        Float RayCastCallback(const Ray& ray, Float t_min, Float t_max, const Intersectable* object)
         {
-            bool hit = object->Intersect(isect, ray, t_min, t_max);
+            Intersection isect;
+            bool hit = object->Intersect(&isect, ray, t_min, t_max);
 
             if (hit)
             {
-                BulbitAssert(isect->t <= t);
+                BulbitAssert(closest->t <= t);
                 hit_closest = true;
-                t = isect->t;
+                t = isect.t;
+                *closest = isect;
             }
 
             // Keep traverse with smaller bounds
@@ -322,7 +324,7 @@ bool BVH::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_ma
         }
     } callback;
 
-    callback.isect = isect;
+    callback.closest = isect;
     callback.hit_closest = false;
     callback.t = t_max;
 

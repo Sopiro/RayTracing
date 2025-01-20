@@ -18,15 +18,15 @@ MirrorMaterial::MirrorMaterial(const SpectrumTexture* reflectance, const Spectru
 {
 }
 
-bool MirrorMaterial::TestAlpha(const Point2& uv) const
+Float MirrorMaterial::GetAlpha(const Intersection& isect) const
 {
     if (alpha)
     {
-        return alpha->Evaluate(uv) > epsilon;
+        return alpha->Evaluate(isect.uv);
     }
     else
     {
-        return true;
+        return 1;
     }
 }
 

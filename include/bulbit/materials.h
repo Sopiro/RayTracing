@@ -13,7 +13,7 @@ public:
         const SpectrumTexture* albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -35,7 +35,7 @@ public:
         const SpectrumTexture* reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -59,7 +59,7 @@ public:
         Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -79,7 +79,7 @@ class ThinDielectricMaterial : public Material
 public:
     ThinDielectricMaterial(Float eta);
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -109,7 +109,7 @@ public:
         const SpectrumTexture* normalmap = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -146,7 +146,7 @@ public:
         const FloatTexture* alpha = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -168,10 +168,10 @@ private:
 class DiffuseLightMaterial : public Material
 {
 public:
-    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false, const FloatTexture* alpha = nullptr);
+    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false, Float alpha = 1);
     DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided = false, const FloatTexture* alpha = nullptr);
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -191,7 +191,7 @@ public:
     MixtureMaterial(const Material* material1, const Material* material2, Float mix);
     MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* mix);
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -234,7 +234,7 @@ public:
         const SpectrumTexture* normalmap = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -288,7 +288,7 @@ public:
         const SpectrumTexture* normalmap = nullptr
     );
 
-    bool TestAlpha(const Point2& uv) const;
+    Float GetAlpha(const Intersection& isect) const;
     const SpectrumTexture* GetNormalMap() const;
 
     Spectrum Le(const Intersection& isect, const Vec3& wo) const;
@@ -306,9 +306,9 @@ private:
     Float g;
 };
 
-inline bool Material::TestAlpha(const Point2& uv) const
+inline Float Material::GetAlpha(const Intersection& isect) const
 {
-    return Dispatch([&](auto mat) { return mat->TestAlpha(uv); });
+    return Dispatch([&](auto mat) { return mat->GetAlpha(isect); });
 }
 
 inline const SpectrumTexture* Material::GetNormalMap() const

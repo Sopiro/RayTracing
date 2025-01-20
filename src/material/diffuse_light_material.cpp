@@ -5,8 +5,8 @@
 namespace bulbit
 {
 
-DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided, const FloatTexture* alpha)
-    : DiffuseLightMaterial(ColorConstantTexture::Create(color), two_sided, alpha)
+DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided, Float alpha)
+    : DiffuseLightMaterial(ColorConstantTexture::Create(color), two_sided, FloatConstantTexture::Create(alpha))
 {
 }
 
@@ -18,11 +18,11 @@ DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool
 {
 }
 
-bool DiffuseLightMaterial::TestAlpha(const Point2& uv) const
+Float DiffuseLightMaterial::GetAlpha(const Intersection& isect) const
 {
     if (alpha)
     {
-        return alpha->Evaluate(uv) > epsilon;
+        return alpha->Evaluate(isect.uv);
     }
     else
     {
@@ -39,7 +39,8 @@ Spectrum DiffuseLightMaterial::Le(const Intersection& isect, const Vec3& wo) con
 {
     BulbitNotUsed(wo);
 
-    if (!TestAlpha(isect.uv))
+    Float alpha = GetAlpha(isect);
+    if (alpha < 1 && HashFloat(isect, wo) > alpha)
     {
         return Spectrum::black;
     }

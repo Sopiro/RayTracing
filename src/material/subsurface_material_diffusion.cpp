@@ -51,10 +51,10 @@ SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
 {
 }
 
-bool SubsurfaceMaterialDiffusion::TestAlpha(const Point2& uv) const
+Float SubsurfaceMaterialDiffusion::GetAlpha(const Intersection& isect) const
 {
-    BulbitNotUsed(uv);
-    return true;
+    BulbitNotUsed(isect);
+    return 1;
 }
 const SpectrumTexture* SubsurfaceMaterialDiffusion::GetNormalMap() const
 {

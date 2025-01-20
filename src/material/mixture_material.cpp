@@ -20,9 +20,16 @@ MixtureMaterial::MixtureMaterial(const Material* material1, const Material* mate
     materials[1] = material2;
 }
 
-bool MixtureMaterial::TestAlpha(const Point2& uv) const
+Float MixtureMaterial::GetAlpha(const Intersection& isect) const
 {
-    return materials[0]->TestAlpha(uv) || materials[1]->TestAlpha(uv);
+    if (HashFloat(isect.t, isect.point, isect.normal) > mixture_amount->Evaluate(isect.uv))
+    {
+        return materials[0]->GetAlpha(isect);
+    }
+    else
+    {
+        return materials[1]->GetAlpha(isect);
+    }
 }
 
 const SpectrumTexture* MixtureMaterial::GetNormalMap() const

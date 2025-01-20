@@ -9,6 +9,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
     auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
+    auto box = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f), nullptr, FloatConstantTexture::Create(0.3f));
     auto wakgood_texture = ColorImageTexture::Create("res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
@@ -47,7 +48,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         Float hz = 0.14f;
 
         auto tf = Transform{ 0.33f, hy, -0.66f, Quat(DegToRad(18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, box);
     }
 
     // Right block
@@ -59,7 +60,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
 
         auto tf = Transform{ 0.66f, hy, -0.33f, Quat(DegToRad(-18.0f), y_axis), Vec3(hx * 2.0f, hy * 2.0f, hz * 2.0f) };
-        CreateBox(scene, tf, white);
+        CreateBox(scene, tf, box);
     }
 
     // Right sphere

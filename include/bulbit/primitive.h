@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hash.h"
 #include "intersectable.h"
 #include "materials.h"
 #include "medium.h"
@@ -46,15 +47,29 @@ inline bool Primitive::Intersect(Intersection* isect, const Ray& ray, Float t_mi
         return false;
     }
 
-    if (!material || material->TestAlpha(isect->uv))
+    // Intersects medium boundary
+    if (!material)
     {
         isect->primitive = this;
         return true;
     }
-    else
+
+    // Alpha testing
+    Float alpha = material->GetAlpha(*isect);
+    if (alpha < 1)
     {
-        return false;
+        // Avoid hash call as far as possible
+        Float p = alpha <= 0 ? 1 : HashFloat(ray, isect->point);
+        if (p > alpha)
+        {
+            // Recursively handle the case of sphere hit
+            Ray new_ray(isect->point, ray.d);
+            return Intersect(isect, new_ray, Ray::epsilon, t_max - isect->t);
+        }
     }
+
+    isect->primitive = this;
+    return true;
 }
 
 inline bool Primitive::IntersectAny(const Ray& ray, Float t_min, Float t_max) const

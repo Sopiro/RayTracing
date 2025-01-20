@@ -54,10 +54,10 @@ SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
 {
 }
 
-bool SubsurfaceMaterialRandomWalk::TestAlpha(const Point2& uv) const
+Float SubsurfaceMaterialRandomWalk::GetAlpha(const Intersection& isect) const
 {
-    BulbitNotUsed(uv);
-    return true;
+    BulbitNotUsed(isect);
+    return 1;
 }
 const SpectrumTexture* SubsurfaceMaterialRandomWalk::GetNormalMap() const
 {

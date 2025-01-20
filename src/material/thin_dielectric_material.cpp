@@ -10,10 +10,10 @@ ThinDielectricMaterial::ThinDielectricMaterial(Float eta)
 {
 }
 
-bool ThinDielectricMaterial::TestAlpha(const Point2& uv) const
+Float ThinDielectricMaterial::GetAlpha(const Intersection& isect) const
 {
-    BulbitNotUsed(uv);
-    return true;
+    BulbitNotUsed(isect);
+    return 1;
 }
 
 const SpectrumTexture* ThinDielectricMaterial::GetNormalMap() const
