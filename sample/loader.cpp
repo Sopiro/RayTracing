@@ -84,28 +84,6 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
     return textures;
 }
 
-static std::vector<FloatTexture*> LoadAlphaTextures(const aiMaterial* mat, aiTextureType type, int32 channel, bool srgb)
-{
-    std::vector<FloatTexture*> textures;
-    textures.reserve(mat->GetTextureCount(type));
-
-    for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
-    {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        std::string filename = g_folder + str.C_Str();
-
-        FloatImageTexture* texture = CreateFloatImageTexture(filename, channel, srgb);
-        if (texture->GetWidth() == 1 && texture->GetHeight() == 1)
-        {
-            return {};
-        }
-        textures.push_back(texture);
-    }
-
-    return textures;
-}
-
 static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 {
     BulbitAssert(mesh->mMaterialIndex >= 0);
@@ -139,7 +117,7 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
         LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, roughness_channel, true);
     std::vector<SpectrumTexture*> emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, true);
     std::vector<SpectrumTexture*> normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, true);
-    std::vector<FloatTexture*> alpha_textures = LoadAlphaTextures(material, aiTextureType_DIFFUSE, alpha_channel, true);
+    std::vector<FloatTexture*> alpha_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, alpha_channel, true);
 
     if (g_force_fallback_material || basecolor_textures.empty() && g_fallback_material)
     {

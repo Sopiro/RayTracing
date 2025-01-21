@@ -24,14 +24,12 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_
 
     if (!data)
     {
-        throw std::runtime_error("Failed to read image: " + filename.string());
+        return {};
     }
 
     if (channel < 0 || channel >= components_per_pixel)
     {
-        throw std::runtime_error(
-            "Requested channel is not supported, available channels:" + std::to_string(components_per_pixel)
-        );
+        return {};
     }
 
     Image1 image(width, height);
@@ -40,13 +38,13 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_
     {
         if (width * height > 64 * 1024)
         {
-            ParallelFor(0, width * height, [&](int32 i) { image[i] = Float(std::fmax(0, data[STBI_rgb * i + channel])); });
+            ParallelFor(0, width * height, [&](int32 i) { image[i] = Float(std::fmax(0, data[STBI_rgb_alpha * i + channel])); });
         }
         else
         {
             for (int32 i = 0; i < width * height; ++i)
             {
-                image[i] = Float(std::fmax(0, data[STBI_rgb * i + channel]));
+                image[i] = Float(std::fmax(0, data[STBI_rgb_alpha * i + channel]));
             }
         }
     }
@@ -73,7 +71,7 @@ Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color)
 
     if (!data)
     {
-        throw std::runtime_error("Failed to read image: " + filename.string());
+        return {};
     }
 
     Image3 image(width, height);
@@ -111,7 +109,7 @@ Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color)
 
     if (!data)
     {
-        throw std::runtime_error("Failed to read image: " + filename.string());
+        return {};
     }
 
     Image4 image(width, height);

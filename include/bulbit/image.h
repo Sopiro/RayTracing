@@ -11,11 +11,23 @@ namespace bulbit
 template <typename T>
 struct Image
 {
+    Image()
+        : width{ 0 }
+        , height{ 0 }
+        , data{ nullptr }
+    {
+    }
+
     Image(int32 width, int32 height)
         : width{ width }
         , height{ height }
     {
         data = std::make_unique<T[]>(width * height);
+    }
+
+    operator bool() const
+    {
+        return bool(data);
     }
 
     T& operator[](int32 i)
