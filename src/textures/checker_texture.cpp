@@ -1,66 +1,16 @@
-#include "bulbit/textures.h"
+#include "bulbit/texture.h"
 
 namespace bulbit
 {
 
-ColorCheckerTexture::ColorCheckerTexture(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution)
-    : a{ a }
-    , b{ b }
-    , resolution{ resolution }
+FloatCheckerTexture* CreateFloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution)
 {
+    return texture_pool.pool_c1f.Create({ a, b, resolution }, a, b, resolution);
 }
 
-ColorCheckerTexture::ColorCheckerTexture(
-    std::pair<const SpectrumTexture*, const SpectrumTexture*> checker, const Point2& resolution
-)
-    : a{ checker.first }
-    , b{ checker.second }
-    , resolution{ resolution }
+SpectrumCheckerTexture* CreateSpectrumCheckerTexture(const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution)
 {
-}
-
-Spectrum ColorCheckerTexture::Evaluate(const Point2& uv) const
-{
-    Point2i scale = uv * resolution;
-    int32 c = scale.x + scale.y;
-
-    if (c % 2)
-    {
-        return a->Evaluate(uv);
-    }
-    else
-    {
-        return b->Evaluate(uv);
-    }
-}
-
-FloatCheckerTexture::FloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution)
-    : a{ a }
-    , b{ b }
-    , resolution{ resolution }
-{
-}
-
-FloatCheckerTexture::FloatCheckerTexture(std::pair<const FloatTexture*, const FloatTexture*> checker, const Point2& resolution)
-    : a{ checker.first }
-    , b{ checker.second }
-    , resolution{ resolution }
-{
-}
-
-Float FloatCheckerTexture::Evaluate(const Point2& uv) const
-{
-    Point2i scale = uv * resolution;
-    int32 c = scale.x + scale.y;
-
-    if (c % 2)
-    {
-        return a->Evaluate(uv);
-    }
-    else
-    {
-        return b->Evaluate(uv);
-    }
+    return texture_pool.pool_c3f.Create({ a, b, resolution }, a, b, resolution);
 }
 
 } // namespace bulbit

@@ -7,11 +7,11 @@ namespace bulbit
 {
 
 ImageInfiniteLight::ImageInfiniteLight(const std::string& env_map, const Transform& tf)
-    : ImageInfiniteLight(ColorImageTexture::Create(env_map, false), tf)
+    : ImageInfiniteLight(CreateSpectrumImageTexture(env_map), tf)
 {
 }
 
-ImageInfiniteLight::ImageInfiniteLight(const ColorImageTexture* l_map, const Transform& tf)
+ImageInfiniteLight::ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& tf)
     : Light(TypeIndexOf<ImageInfiniteLight>())
     , transform{ tf }
     , l_map{ l_map }

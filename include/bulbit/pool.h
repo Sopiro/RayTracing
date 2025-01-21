@@ -53,7 +53,7 @@ inline Type* Pool<Key, Type, Hash>::Create(const Key& key, Args&&... args)
     }
 
     // Create new object using pool allocator
-    Type* object = allocator.new_object<Type>(key, std::forward<Args>(args)...);
+    Type* object = allocator.new_object<Type>(std::forward<Args>(args)...);
 
     objects.emplace(key, object);
     ++count;

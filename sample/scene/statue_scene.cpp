@@ -4,7 +4,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
 {
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ColorConstantTexture::Create(1.0), FloatConstantTexture::Create(1.0f), FloatConstantTexture::Create(0.1f)
+            CreateSpectrumConstantTexture(1.0), CreateFloatConstantTexture(1.0f), CreateFloatConstantTexture(0.1f)
         );
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
@@ -21,19 +21,19 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     Float size = 2.0f;
 
     {
-        auto red = scene.CreateMaterial<DiffuseLightMaterial>(ColorConstantTexture::Create(Spectrum(light, 0.0f, 0.0f)));
+        auto red = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(light, 0.0f, 0.0f)));
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
         CreateRectYZ(scene, tf, red);
     }
 
     {
-        auto blue = scene.CreateMaterial<DiffuseLightMaterial>(ColorConstantTexture::Create(Spectrum(0.0f, 0.0f, light)));
+        auto blue = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(0.0f, 0.0f, light)));
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
         CreateRectYZ(scene, tf, blue);
     }
 
     {
-        auto white = scene.CreateMaterial<DiffuseLightMaterial>(ColorConstantTexture::Create(Spectrum(0.5f)));
+        auto white = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(0.5f)));
 
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
         CreateRectXZ(scene, tf, white);
@@ -61,7 +61,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ColorConstantTexture::Create(1.0f), FloatConstantTexture::Create(0.0f), FloatConstantTexture::Create(0.01f)
+            CreateSpectrumConstantTexture(1.0f), CreateFloatConstantTexture(0.0f), CreateFloatConstantTexture(0.01f)
         );
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
         CreateRectXZ(scene, tf, mat);

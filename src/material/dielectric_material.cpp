@@ -6,12 +6,12 @@ namespace bulbit
 {
 
 DielectricMaterial::DielectricMaterial(Float eta)
-    : DielectricMaterial(eta, FloatConstantTexture::Create(0))
+    : DielectricMaterial(eta, CreateFloatConstantTexture(0))
 {
 }
 
 DielectricMaterial::DielectricMaterial(Float eta, Float roughness)
-    : DielectricMaterial(eta, FloatConstantTexture::Create(roughness))
+    : DielectricMaterial(eta, CreateFloatConstantTexture(roughness))
 {
 }
 

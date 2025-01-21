@@ -6,7 +6,7 @@ namespace bulbit
 {
 
 MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, Float mix)
-    : MixtureMaterial(material1, material2, FloatConstantTexture::Create(mix))
+    : MixtureMaterial(material1, material2, CreateFloatConstantTexture(mix))
 {
 }
 

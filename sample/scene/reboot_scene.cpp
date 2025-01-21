@@ -5,7 +5,7 @@ std::unique_ptr<Camera> RebootScene(Scene& scene)
     // https://sketchfab.com/3d-models/reboot-dramatic-54ec601a3c4e4f6d8600fd28174c527c
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ColorConstantTexture::Create(0.0f), FloatConstantTexture::Create(0.0f), FloatConstantTexture::Create(0.001f)
+            CreateSpectrumConstantTexture(0.0f), CreateFloatConstantTexture(0.0f), CreateFloatConstantTexture(0.001f)
         );
 
         auto tf = Transform{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(0.01f) };

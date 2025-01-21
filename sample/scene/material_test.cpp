@@ -9,9 +9,9 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     // Floor
     {
-        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
-        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
-        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
+        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
+        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -29,22 +29,21 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.08f));
+    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.08f));
     outers[1] = scene.CreateMaterial<ConductorMaterial>(
-        ColorConstantTexture::Create(0.1, 0.2, 1.9), ColorConstantTexture::Create(3, 2.5, 2), FloatConstantTexture::Create(0.05f),
-        FloatConstantTexture::Create(0.4f), normalmap
+        CreateSpectrumConstantTexture(0.1, 0.2, 1.9), CreateSpectrumConstantTexture(3, 2.5, 2), CreateFloatConstantTexture(0.05f),
+        CreateFloatConstantTexture(0.4f), normalmap
     );
     outers[2] = scene.CreateMaterial<UnrealMaterial>(
-        ColorConstantTexture::Create(80 / 255.0, 1.0, 175 / 255.0), FloatConstantTexture::Create(0),
-        FloatConstantTexture::Create(0)
+        CreateSpectrumConstantTexture(80 / 255.0, 1.0, 175 / 255.0), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
     );
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<ConductorMaterial>(
-        ColorConstantTexture::Create(0.7f), FloatConstantTexture::Create(0.05f), FloatConstantTexture::Create(0.4f)
+        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.05f), CreateFloatConstantTexture(0.4f)
     );
     inners[1] = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f));
     inners[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.7));
@@ -114,9 +113,9 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     // Floor
     {
-        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
-        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
-        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
+        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
+        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -134,16 +133,16 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.02f));
-    outers[1] = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.0f));
-    outers[2] = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.05f));
+    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.02f));
+    outers[1] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
+    outers[2] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.05f));
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        ColorConstantTexture::Create(0.66), FloatConstantTexture::Create(0), FloatConstantTexture::Create(0)
+        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];
@@ -213,9 +212,9 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     // Floor
     {
-        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
-        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
-        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
+        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
+        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -233,7 +232,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
 
     const Material* skins[count];
     skins[1] = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
@@ -315,9 +314,9 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     // Floor
     {
-        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
-        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
-        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
+        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
+        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -335,20 +334,20 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
-    auto a = scene.CreateMaterial<DielectricMaterial>(1.5f, FloatConstantTexture::Create(0.0f));
+    auto a = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
     auto b =
-        scene.CreateMaterial<ConductorMaterial>(ColorConstantTexture::Create(0.7, 0.3, 0.2), FloatConstantTexture::Create(0.1f));
-    auto checker = FloatCheckerTexture::Create(FloatConstantTexture::Create(0), FloatConstantTexture::Create(1), Point2(20));
+        scene.CreateMaterial<ConductorMaterial>(CreateSpectrumConstantTexture(0.7, 0.3, 0.2), CreateFloatConstantTexture(0.1f));
+    auto checker = CreateFloatCheckerTexture(CreateFloatConstantTexture(0), CreateFloatConstantTexture(1), Point2(20));
     outers[1] = scene.CreateMaterial<MixtureMaterial>(a, b, checker);
 
     auto c = scene.CreateMaterial<ConductorMaterial>(
-        ColorConstantTexture::Create(0.7f), FloatConstantTexture::Create(0.05f), FloatConstantTexture::Create(0.4f)
+        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.05f), CreateFloatConstantTexture(0.4f)
     );
     auto d = scene.CreateMaterial<ConductorMaterial>(
-        ColorConstantTexture::Create(0.7f), FloatConstantTexture::Create(0.4f), FloatConstantTexture::Create(0.05f)
+        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.4f), CreateFloatConstantTexture(0.05f)
     );
     outers[0] = scene.CreateMaterial<MixtureMaterial>(c, d, checker);
 
@@ -358,7 +357,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        ColorConstantTexture::Create(0.66), FloatConstantTexture::Create(0), FloatConstantTexture::Create(0)
+        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];
@@ -428,9 +427,9 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     // Floor
     {
-        auto a = ColorConstantTexture::Create(0.75, 0.75, 0.75);
-        auto b = ColorConstantTexture::Create(0.3, 0.3, 0.3);
-        auto checker = ColorCheckerTexture::Create(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
+        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
+        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -448,16 +447,16 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = ColorImageTexture::Create("res/bistro/Concrete_Normal.png");
+    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f), nullptr, FloatConstantTexture::Create(0.4));
-    outers[1] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f), nullptr, FloatConstantTexture::Create(0.4));
-    outers[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f), nullptr, FloatConstantTexture::Create(0.4));
+    outers[0] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f), nullptr, CreateFloatConstantTexture(0.4));
+    outers[1] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f), nullptr, CreateFloatConstantTexture(0.4));
+    outers[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f), nullptr, CreateFloatConstantTexture(0.4));
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        ColorConstantTexture::Create(0.66), FloatConstantTexture::Create(0), FloatConstantTexture::Create(0)
+        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];

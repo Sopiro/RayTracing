@@ -6,7 +6,7 @@ namespace bulbit
 {
 
 DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided, Float alpha)
-    : DiffuseLightMaterial(ColorConstantTexture::Create(color), two_sided, FloatConstantTexture::Create(alpha))
+    : DiffuseLightMaterial(CreateSpectrumConstantTexture(color), two_sided, CreateFloatConstantTexture(alpha))
 {
 }
 

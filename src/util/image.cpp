@@ -13,9 +13,10 @@
 namespace bulbit
 {
 
-Image1 ReadImage1(const std::filesystem::path& filename, int32 channel)
+Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_non_color)
 {
     stbi_set_flip_vertically_on_load(true);
+    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;
@@ -39,13 +40,13 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel)
     {
         if (width * height > 64 * 1024)
         {
-            ParallelFor(0, width * height, [&](int32 i) { image(i) = Float(std::fmax(0, data[STBI_rgb * i + channel])); });
+            ParallelFor(0, width * height, [&](int32 i) { image[i] = Float(std::fmax(0, data[STBI_rgb * i + channel])); });
         }
         else
         {
             for (int32 i = 0; i < width * height; ++i)
             {
-                image(i) = Float(std::fmax(0, data[STBI_rgb * i + channel]));
+                image[i] = Float(std::fmax(0, data[STBI_rgb * i + channel]));
             }
         }
     }
@@ -53,7 +54,7 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel)
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image(i) = Float(std::fmax(0, data[STBI_rgb_alpha * i + channel]));
+            image[i] = Float(std::fmax(0, data[STBI_rgb_alpha * i + channel]));
         }
     }
 
@@ -61,9 +62,10 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel)
     return image;
 }
 
-Image3 ReadImage3(const std::filesystem::path& filename)
+Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color)
 {
     stbi_set_flip_vertically_on_load(true);
+    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;
@@ -79,18 +81,18 @@ Image3 ReadImage3(const std::filesystem::path& filename)
     if (width * height > 64 * 1024)
     {
         ParallelFor(0, width * height, [&](int32 i) {
-            image(i).x = Float(std::fmax(0, data[STBI_rgb * i + 0]));
-            image(i).y = Float(std::fmax(0, data[STBI_rgb * i + 1]));
-            image(i).z = Float(std::fmax(0, data[STBI_rgb * i + 2]));
+            image[i][0] = Float(std::fmax(0, data[STBI_rgb * i + 0]));
+            image[i][1] = Float(std::fmax(0, data[STBI_rgb * i + 1]));
+            image[i][2] = Float(std::fmax(0, data[STBI_rgb * i + 2]));
         });
     }
     else
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image(i).x = Float(std::fmax(0, data[STBI_rgb * i + 0]));
-            image(i).y = Float(std::fmax(0, data[STBI_rgb * i + 1]));
-            image(i).z = Float(std::fmax(0, data[STBI_rgb * i + 2]));
+            image[i][0] = Float(std::fmax(0, data[STBI_rgb * i + 0]));
+            image[i][1] = Float(std::fmax(0, data[STBI_rgb * i + 1]));
+            image[i][2] = Float(std::fmax(0, data[STBI_rgb * i + 2]));
         }
     }
 
@@ -98,9 +100,10 @@ Image3 ReadImage3(const std::filesystem::path& filename)
     return image;
 }
 
-Image4 ReadImage4(const std::filesystem::path& filename)
+Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color)
 {
     stbi_set_flip_vertically_on_load(true);
+    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;
@@ -116,18 +119,18 @@ Image4 ReadImage4(const std::filesystem::path& filename)
     if (width * height > 64 * 1024)
     {
         ParallelFor(0, width * height, [&](int32 i) {
-            image(i).x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
-            image(i).y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
-            image(i).z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
+            image[i].x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
+            image[i].y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
+            image[i].z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
         });
     }
     else
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image(i).x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
-            image(i).y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
-            image(i).z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
+            image[i].x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
+            image[i].y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
+            image[i].z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
         }
     }
 
@@ -135,7 +138,7 @@ Image4 ReadImage4(const std::filesystem::path& filename)
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image(i).w = Float(std::fmax(0, data[STBI_rgb_alpha * i + 3]));
+            image[i].w = Float(std::fmax(0, data[STBI_rgb_alpha * i + 3]));
         }
     }
 
@@ -150,7 +153,7 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
     std::string extension = filename.extension().string();
     if (extension == ".hdr")
     {
-        stbi_write_hdr(filename.string().c_str(), image.width, image.height, 3, &image[0].x);
+        stbi_write_hdr(filename.string().c_str(), image.width, image.height, 3, &image[0].r);
     }
     else if (extension == ".jpg")
     {
@@ -158,9 +161,9 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
 
         for (int32 i = 0; i < image.width * image.height; ++i)
         {
-            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i].x, 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i].y, 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i].z, 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i][0], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i][1], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i][2], 0.0f, 1.0f) * 256.0, 255.0));
         }
 
         stbi_write_jpg(filename.string().c_str(), image.width, image.height, 3, &pixels[0], 100);
@@ -171,9 +174,9 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
 
         for (int32 i = 0; i < image.width * image.height; ++i)
         {
-            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i].x, 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i].y, 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i].z, 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i][0], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i][1], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i][2], 0.0f, 1.0f) * 256.0, 255.0));
         }
 
         stbi_write_png(filename.string().c_str(), image.width, image.height, 3, &pixels[0], image.width * 3);

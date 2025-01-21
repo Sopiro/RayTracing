@@ -5,7 +5,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            ColorConstantTexture::Create(Spectrum(0.5f)), FloatConstantTexture::Create(0.0f), FloatConstantTexture::Create(0.01f)
+            CreateSpectrumConstantTexture(Spectrum(0.5f)), CreateFloatConstantTexture(0.0f), CreateFloatConstantTexture(0.01f)
         );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
