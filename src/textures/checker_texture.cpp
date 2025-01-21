@@ -1,4 +1,4 @@
-#include "bulbit/texture.h"
+#include "bulbit/textures.h"
 
 namespace bulbit
 {

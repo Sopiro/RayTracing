@@ -119,18 +119,18 @@ Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color)
     if (width * height > 64 * 1024)
     {
         ParallelFor(0, width * height, [&](int32 i) {
-            image[i].x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
-            image[i].y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
-            image[i].z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
+            image[i][0] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
+            image[i][1] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
+            image[i][2] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
         });
     }
     else
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image[i].x = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
-            image[i].y = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
-            image[i].z = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
+            image[i][0] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 0]));
+            image[i][1] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 1]));
+            image[i][2] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 2]));
         }
     }
 
@@ -138,7 +138,7 @@ Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color)
     {
         for (int32 i = 0; i < width * height; ++i)
         {
-            image[i].w = Float(std::fmax(0, data[STBI_rgb_alpha * i + 3]));
+            image[i][3] = Float(std::fmax(0, data[STBI_rgb_alpha * i + 3]));
         }
     }
 
@@ -183,7 +183,7 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
     }
     else
     {
-        throw std::runtime_error("Faild to write image, type not supported: " + extension);
+        std::cout << "Faild to write image, type not supported: " << extension << std::endl;
     }
 }
 
