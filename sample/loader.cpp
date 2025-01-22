@@ -48,7 +48,7 @@ Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
     return t;
 }
 
-static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool srgb)
+static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool non_color)
 {
     std::vector<SpectrumTexture*> textures;
     textures.reserve(mat->GetTextureCount(type));
@@ -59,14 +59,14 @@ static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat,
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        SpectrumTexture* texture = CreateSpectrumImageTexture(ReadImage3(filename, srgb));
+        SpectrumTexture* texture = CreateSpectrumImageTexture(ReadImage3(filename, non_color));
         textures.push_back(texture);
     }
 
     return textures;
 }
 
-static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, int32 channel, bool srgb)
+static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, int32 channel, bool non_color)
 {
     std::vector<FloatTexture*> textures;
     textures.reserve(mat->GetTextureCount(type));
@@ -77,7 +77,7 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        FloatTexture* texture = CreateFloatImageTexture(ReadImage1(filename, channel, srgb));
+        FloatTexture* texture = CreateFloatImageTexture(ReadImage1(filename, channel, non_color));
         textures.push_back(texture);
     }
 

@@ -73,9 +73,9 @@ using Image1 = Image1f;
 using Image3 = Image3f;
 using Image4 = Image4f;
 
-Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_non_color = false);
-Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color = false);
-Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color = false);
+Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool non_color = false);
+Image3 ReadImage3(const std::filesystem::path& filename, bool non_color = false);
+Image4 ReadImage4(const std::filesystem::path& filename, bool non_color = false);
 
 void WriteImage(const Image3& image, const std::filesystem::path& filename);
 

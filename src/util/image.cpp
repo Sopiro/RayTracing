@@ -13,10 +13,10 @@
 namespace bulbit
 {
 
-Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_non_color)
+Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool non_color)
 {
     stbi_set_flip_vertically_on_load(true);
-    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
+    stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;
@@ -60,10 +60,10 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_
     return image;
 }
 
-Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color)
+Image3 ReadImage3(const std::filesystem::path& filename, bool non_color)
 {
     stbi_set_flip_vertically_on_load(true);
-    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
+    stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;
@@ -98,10 +98,10 @@ Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color)
     return image;
 }
 
-Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color)
+Image4 ReadImage4(const std::filesystem::path& filename, bool non_color)
 {
     stbi_set_flip_vertically_on_load(true);
-    stbi_ldr_to_hdr_gamma(is_non_color ? 1.0f : 2.2f);
+    stbi_ldr_to_hdr_gamma(non_color ? 1.0f : 2.2f);
 
     int32 width, height;
     int32 components_per_pixel;

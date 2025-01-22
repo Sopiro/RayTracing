@@ -134,7 +134,7 @@ namespace detail
 {
 
 template <typename T>
-using key_1d = T;
+using key_0d = T;
 
 template <typename T>
 using key_2d = std::pair<const T*, int32>;
@@ -143,9 +143,9 @@ template <typename T>
 using key_c = std::tuple<const Texture<T>*, const Texture<T>*, Point2>;
 
 template <typename T>
-struct hasher_1d
+struct hasher_0d
 {
-    size_t operator()(key_1d<T> key) const
+    size_t operator()(key_0d<T> key) const
     {
         return Hash(key);
     }
@@ -154,10 +154,11 @@ struct hasher_1d
 template <typename T>
 struct hasher_2d
 {
-    size_t operator()(const key_2d<T>& image) const
+    size_t operator()(key_2d<T> image) const
     {
         const T* buffer = image.first;
         int32 size = image.second;
+
         return HashBuffer(buffer, size);
     }
 };
@@ -175,25 +176,34 @@ struct hasher_c
     }
 };
 
+template <typename T>
+using Pool0d = Pool<detail::key_0d<T>, ConstantTexture<T>, detail::hasher_0d<T>>;
+
+template <typename T>
+using Pool2d = Pool<detail::key_2d<T>, ImageTexture<T>, detail::hasher_2d<T>>;
+
+template <typename T>
+using PoolC = Pool<detail::key_c<T>, CheckerTexture<T>, detail::hasher_c<T>>;
+
 }; // namespace detail
 
 class TexturePool
 {
 public:
     template <typename T>
-    auto& GetPool1d()
+    auto& GetPool0d()
     {
         if constexpr (std::is_same_v<T, Float>)
         {
-            return pool_1d1f;
+            return pool_0d1f;
         }
         else if constexpr (std::is_same_v<T, Spectrum>)
         {
-            return pool_1d3f;
+            return pool_0d3f;
         }
         else
         {
-            static_assert(false, "Unsupported type for 1d");
+            static_assert(false, "Unsupported type for 0d");
         }
     }
 
@@ -219,11 +229,11 @@ public:
     {
         if constexpr (std::is_same_v<T, Float>)
         {
-            return pool_c1f;
+            return pool_C1f;
         }
         else if constexpr (std::is_same_v<T, Spectrum>)
         {
-            return pool_c3f;
+            return pool_C3f;
         }
         else
         {
@@ -232,14 +242,14 @@ public:
     }
 
 private:
-    Pool<detail::key_1d<Float>, ConstantTexture<Float>, detail::hasher_1d<Float>> pool_1d1f;
-    Pool<detail::key_1d<Spectrum>, ConstantTexture<Spectrum>, detail::hasher_1d<Spectrum>> pool_1d3f;
+    detail::Pool0d<Float> pool_0d1f;
+    detail::Pool0d<Spectrum> pool_0d3f;
 
-    Pool<detail::key_2d<Float>, ImageTexture<Float>, detail::hasher_2d<Float>> pool_2d1f;
-    Pool<detail::key_2d<Spectrum>, ImageTexture<Spectrum>, detail::hasher_2d<Spectrum>> pool_2d3f;
+    detail::Pool2d<Float> pool_2d1f;
+    detail::Pool2d<Spectrum> pool_2d3f;
 
-    Pool<detail::key_c<Float>, CheckerTexture<Float>, detail::hasher_c<Float>> pool_c1f;
-    Pool<detail::key_c<Spectrum>, CheckerTexture<Spectrum>, detail::hasher_c<Spectrum>> pool_c3f;
+    detail::PoolC<Float> pool_C1f;
+    detail::PoolC<Spectrum> pool_C3f;
 };
 
 inline TexturePool texture_pool;
