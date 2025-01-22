@@ -313,7 +313,7 @@ bool BVH::Intersect(Intersection* isect, const Ray& ray, Float t_min, Float t_ma
 
             if (hit)
             {
-                BulbitAssert(closest->t <= t);
+                BulbitAssert(isect.t <= t);
                 hit_closest = true;
                 t = isect.t;
                 *closest = isect;

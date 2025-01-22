@@ -49,36 +49,33 @@ public:
 
     T Evaluate(const Point2& uv) const
     {
-        Float width = image.width;
-        Float height = image.height;
-
 #if 0
         // Nearest sampling
-        Float w = uv.x * width + 0.5f;
-        Float h = uv.y * height + 0.5f;
+        Float w = uv.x * image.width + 0.5f;
+        Float h = uv.y * image.height + 0.5f;
 
         int32 i = int32(w);
         int32 j = int32(h);
 
         FilterTexCoord(&i, &j);
 
-        return image[i + j * width];
+        return image[i + j * image.width];
 #else
         // Bilinear sampling
-        Float w = uv.x * width + 0.5f;
-        Float h = uv.y * height + 0.5f;
+        Float w = uv.x * image.width + 0.5f;
+        Float h = uv.y * image.height + 0.5f;
 
         int32 i0 = int32(w), i1 = int32(w) + 1;
         int32 j0 = int32(h), j1 = int32(h) + 1;
 
-        FilterTexCoord(&i0, &j0, width, height, texcoord_filter);
-        FilterTexCoord(&i1, &j1, width, height, texcoord_filter);
+        FilterTexCoord(&i0, &j0, image.width, image.height, texcoord_filter);
+        FilterTexCoord(&i1, &j1, image.width, image.height, texcoord_filter);
 
         Float fu = w - std::floor(w);
         Float fv = h - std::floor(h);
 
-        T v00 = image[i0 + j0 * width], v10 = image[i1 + j0 * width];
-        T v01 = image[i0 + j1 * width], v11 = image[i1 + j1 * width];
+        T v00 = image[i0 + j0 * image.width], v10 = image[i1 + j0 * image.width];
+        T v01 = image[i0 + j1 * image.width], v11 = image[i1 + j1 * image.width];
 
         // clang-format off
     return (1-fu) * (1-fv) * v00 + (1-fu) * (fv) * v01 +
