@@ -68,14 +68,14 @@ private:
 
 using Image1f = Image<Float>;
 using Image3f = Image<RGBSpectrum>;
-using Image4f = Image<Vec4>;
+using Image4f = Image<Vec4f>;
 using Image1 = Image1f;
 using Image3 = Image3f;
 using Image4 = Image4f;
 
-Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_non_color);
-Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color);
-Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color);
+Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool is_non_color = false);
+Image3 ReadImage3(const std::filesystem::path& filename, bool is_non_color = false);
+Image4 ReadImage4(const std::filesystem::path& filename, bool is_non_color = false);
 
 void WriteImage(const Image3& image, const std::filesystem::path& filename);
 

@@ -29,7 +29,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
     outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.08f));
@@ -133,7 +133,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
     outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.02f));
@@ -232,7 +232,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* skins[count];
     skins[1] = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
@@ -334,7 +334,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
     auto a = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
@@ -447,7 +447,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
     outers[0] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f), nullptr, CreateFloatConstantTexture(0.4));

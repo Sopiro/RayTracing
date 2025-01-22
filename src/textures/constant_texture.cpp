@@ -5,24 +5,24 @@ namespace bulbit
 
 FloatConstantTexture* CreateFloatConstantTexture(Float value)
 {
-    return texture_pool.pool_1f.Create(value, value);
+    return texture_pool.GetPool1d<Float>().Create(value, value);
 }
 
 SpectrumConstantTexture* CreateSpectrumConstantTexture(const Spectrum& value)
 {
-    return texture_pool.pool_3f.Create(value, value);
+    return texture_pool.GetPool1d<Spectrum>().Create(value, value);
 }
 
 SpectrumConstantTexture* CreateSpectrumConstantTexture(Float value)
 {
     Spectrum sp{ value, value, value };
-    return texture_pool.pool_3f.Create(sp, sp);
+    return texture_pool.GetPool1d<Spectrum>().Create(sp, sp);
 }
 
 SpectrumConstantTexture* CreateSpectrumConstantTexture(Float r, Float g, Float b)
 {
     Spectrum sp{ r, g, b };
-    return texture_pool.pool_3f.Create(sp, sp);
+    return texture_pool.GetPool1d<Spectrum>().Create(sp, sp);
 }
 
 } // namespace bulbit

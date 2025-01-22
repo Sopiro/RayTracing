@@ -133,62 +133,42 @@ using SpectrumCheckerTexture = CheckerTexture<Spectrum>;
 namespace detail
 {
 
-using key_2d1f = std::tuple<std::string, int32, bool>;
-using key_2d3f = std::tuple<std::string, bool>;
-using key_c1f = std::tuple<const Texture<Float>*, const Texture<Float>*, Point2>;
-using key_c3f = std::tuple<const Texture<Spectrum>*, const Texture<Spectrum>*, Point2>;
+template <typename T>
+using key_1d = T;
 
-struct hasher_1d3f
+template <typename T>
+using key_2d = std::pair<const T*, int32>;
+
+template <typename T>
+using key_c = std::tuple<const Texture<T>*, const Texture<T>*, Point2>;
+
+template <typename T>
+struct hasher_1d
 {
-    size_t operator()(const Spectrum& key) const
+    size_t operator()(key_1d<T> key) const
     {
         return Hash(key);
     }
 };
 
-struct hasher_2d1f
+template <typename T>
+struct hasher_2d
 {
-    size_t operator()(const key_2d1f& key) const
+    size_t operator()(const key_2d<T>& image) const
     {
-        const std::string& filename = std::get<0>(key);
-        int32 channel = std::get<1>(key);
-        bool is_non_color = std::get<2>(key);
-
-        size_t string_hash = HashBuffer(filename.data(), filename.size());
-        return Hash(string_hash, channel, is_non_color);
+        const T* buffer = image.first;
+        int32 size = image.second;
+        return HashBuffer(buffer, size);
     }
 };
 
-struct hasher_2d3f
+template <typename T>
+struct hasher_c
 {
-    size_t operator()(const key_2d3f& key) const
+    size_t operator()(key_c<T> key) const
     {
-        const std::string& filename = std::get<0>(key);
-        bool is_non_color = std::get<1>(key);
-
-        size_t string_hash = HashBuffer(filename.data(), filename.size());
-        return Hash(string_hash, is_non_color);
-    }
-};
-
-struct hasher_c1f
-{
-    size_t operator()(const key_c1f& key) const
-    {
-        const FloatTexture* a = std::get<0>(key);
-        const FloatTexture* b = std::get<1>(key);
-        Point2 resolution = std::get<2>(key);
-
-        return Hash(a, b, resolution);
-    }
-};
-
-struct hasher_c3f
-{
-    size_t operator()(const key_c3f& key) const
-    {
-        const SpectrumTexture* a = std::get<0>(key);
-        const SpectrumTexture* b = std::get<1>(key);
+        const Texture<T>* a = std::get<0>(key);
+        const Texture<T>* b = std::get<1>(key);
         Point2 resolution = std::get<2>(key);
 
         return Hash(a, b, resolution);
@@ -197,16 +177,69 @@ struct hasher_c3f
 
 }; // namespace detail
 
-struct TexturePool
+class TexturePool
 {
-    Pool<Float, ConstantTexture<Float>> pool_1f;
-    Pool<Spectrum, ConstantTexture<Spectrum>, detail::hasher_1d3f> pool_3f;
+public:
+    template <typename T>
+    auto& GetPool1d()
+    {
+        if constexpr (std::is_same_v<T, Float>)
+        {
+            return pool_1d1f;
+        }
+        else if constexpr (std::is_same_v<T, Spectrum>)
+        {
+            return pool_1d3f;
+        }
+        else
+        {
+            static_assert(false, "Unsupported type for 1d");
+        }
+    }
 
-    Pool<detail::key_2d1f, ImageTexture<Float>, detail::hasher_2d1f> pool_2d1f;
-    Pool<detail::key_2d3f, ImageTexture<Spectrum>, detail::hasher_2d3f> pool_2d3f;
+    template <typename T>
+    auto& GetPool2d()
+    {
+        if constexpr (std::is_same_v<T, Float>)
+        {
+            return pool_2d1f;
+        }
+        else if constexpr (std::is_same_v<T, Spectrum>)
+        {
+            return pool_2d3f;
+        }
+        else
+        {
+            static_assert(false, "Unsupported type for 2d");
+        }
+    }
 
-    Pool<detail::key_c1f, CheckerTexture<Float>, detail::hasher_c1f> pool_c1f;
-    Pool<detail::key_c3f, CheckerTexture<Spectrum>, detail::hasher_c3f> pool_c3f;
+    template <typename T>
+    auto& GetPoolC()
+    {
+        if constexpr (std::is_same_v<T, Float>)
+        {
+            return pool_c1f;
+        }
+        else if constexpr (std::is_same_v<T, Spectrum>)
+        {
+            return pool_c3f;
+        }
+        else
+        {
+            static_assert(false, "Unsupported type for checker");
+        }
+    }
+
+private:
+    Pool<detail::key_1d<Float>, ConstantTexture<Float>, detail::hasher_1d<Float>> pool_1d1f;
+    Pool<detail::key_1d<Spectrum>, ConstantTexture<Spectrum>, detail::hasher_1d<Spectrum>> pool_1d3f;
+
+    Pool<detail::key_2d<Float>, ImageTexture<Float>, detail::hasher_2d<Float>> pool_2d1f;
+    Pool<detail::key_2d<Spectrum>, ImageTexture<Spectrum>, detail::hasher_2d<Spectrum>> pool_2d3f;
+
+    Pool<detail::key_c<Float>, CheckerTexture<Float>, detail::hasher_c<Float>> pool_c1f;
+    Pool<detail::key_c<Spectrum>, CheckerTexture<Spectrum>, detail::hasher_c<Spectrum>> pool_c3f;
 };
 
 inline TexturePool texture_pool;
@@ -216,8 +249,8 @@ SpectrumConstantTexture* CreateSpectrumConstantTexture(const Spectrum& value);
 SpectrumConstantTexture* CreateSpectrumConstantTexture(Float value);
 SpectrumConstantTexture* CreateSpectrumConstantTexture(Float r, Float g, Float b);
 
-FloatImageTexture* CreateFloatImageTexture(std::string filename, int32 channel, bool is_non_color = false);
-SpectrumImageTexture* CreateSpectrumImageTexture(std::string filename, bool is_non_color = false);
+FloatImageTexture* CreateFloatImageTexture(Image1 image);
+SpectrumImageTexture* CreateSpectrumImageTexture(Image3 image);
 
 FloatCheckerTexture* CreateFloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution);
 SpectrumCheckerTexture* CreateSpectrumCheckerTexture(

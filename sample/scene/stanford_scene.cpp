@@ -5,11 +5,15 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumImageTexture("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
-            CreateFloatImageTexture("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel, true),
-            CreateFloatImageTexture("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true),
+            CreateSpectrumImageTexture(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg")),
+            CreateFloatImageTexture(
+                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel, true)
+            ),
+            CreateFloatImageTexture(
+                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
+            ),
             CreateSpectrumConstantTexture(Spectrum(0.0f)),
-            CreateSpectrumImageTexture("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true)
+            CreateSpectrumImageTexture(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true))
         );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };

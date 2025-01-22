@@ -3,12 +3,13 @@
 namespace bulbit
 {
 
-FloatImageTexture* CreateFloatImageTexture(std::string filename, int32 channel, bool is_non_color)
+FloatImageTexture* CreateFloatImageTexture(Image1 image)
 {
-    Image1 image = ReadImage1(filename, channel, is_non_color);
     if (image)
     {
-        return texture_pool.pool_2d1f.Create({ filename, channel, is_non_color }, std::move(image), TexCoordFilter::repeat);
+        return texture_pool.GetPool2d<Float>().Create(
+            { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
+        );
     }
     else
     {
@@ -16,12 +17,13 @@ FloatImageTexture* CreateFloatImageTexture(std::string filename, int32 channel, 
     }
 }
 
-SpectrumImageTexture* CreateSpectrumImageTexture(std::string filename, bool is_non_color)
+SpectrumImageTexture* CreateSpectrumImageTexture(Image3 image)
 {
-    Image3 image = ReadImage3(filename, is_non_color);
     if (image)
     {
-        return texture_pool.pool_2d3f.Create({ filename, is_non_color }, std::move(image), TexCoordFilter::repeat);
+        return texture_pool.GetPool2d<Spectrum>().Create(
+            { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
+        );
     }
     else
     {

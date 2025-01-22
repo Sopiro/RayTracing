@@ -59,7 +59,7 @@ static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat,
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        SpectrumTexture* texture = CreateSpectrumImageTexture(filename, srgb);
+        SpectrumTexture* texture = CreateSpectrumImageTexture(ReadImage3(filename, srgb));
         textures.push_back(texture);
     }
 
@@ -77,7 +77,7 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        FloatTexture* texture = CreateFloatImageTexture(filename, channel, srgb);
+        FloatTexture* texture = CreateFloatImageTexture(ReadImage1(filename, channel, srgb));
         textures.push_back(texture);
     }
 

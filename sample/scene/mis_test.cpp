@@ -77,7 +77,7 @@ static int32 index1 = Sample::Register("mis", MISTest);
 std::unique_ptr<Camera> MISTestWak(Scene& scene)
 {
     {
-        auto floor = scene.CreateMaterial<DiffuseMaterial>(CreateSpectrumImageTexture("res/wakdu.jpg"));
+        auto floor = scene.CreateMaterial<DiffuseMaterial>(CreateSpectrumImageTexture(ReadImage3("res/wakdu.jpg")));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
         CreateRectXZ(scene, tf, floor);

@@ -2,7 +2,7 @@
 
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
-    auto normalmap = CreateSpectrumImageTexture("res/bistro/Concrete_Normal.png", true);
+    // auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     // Materials
     auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
@@ -10,7 +10,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
     auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
     auto box = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = CreateSpectrumImageTexture("res/wakdu.jpg");
+    auto wakgood_texture = CreateSpectrumImageTexture(ReadImage3("res/wakdu.jpg"));
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0f));
     // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
