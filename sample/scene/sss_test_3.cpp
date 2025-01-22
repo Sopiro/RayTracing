@@ -12,7 +12,7 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     MediumInterface mi(hm, nullptr);
 
     // auto mat = CreateDielectricMaterial(scene, 1.33f, 0.1f);
-    auto mat = CreateSubsurfaceMaterialDiffusion(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.33f, 0.0f);
+    auto mat = CreateSubsurfaceDiffusionMaterial(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.33f, 0.0f);
     SetLoaderFallbackMaterial(mat);
     // SetLoaderFallbackMediumInterface(mi);
 

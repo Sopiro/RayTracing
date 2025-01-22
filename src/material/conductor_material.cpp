@@ -4,11 +4,6 @@
 namespace bulbit
 {
 
-ConductorMaterial::ConductorMaterial(const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* roughness)
-    : ConductorMaterial(eta, k, roughness, roughness)
-{
-}
-
 ConductorMaterial::ConductorMaterial(
     const SpectrumTexture* eta,
     const SpectrumTexture* k,
@@ -22,11 +17,6 @@ ConductorMaterial::ConductorMaterial(
     , v_roughness{ v_roughness }
     , eta{ eta }
     , k{ k }
-{
-}
-
-ConductorMaterial::ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* roughness)
-    : ConductorMaterial(reflectance, roughness, roughness)
 {
 }
 

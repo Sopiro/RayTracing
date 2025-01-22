@@ -7,19 +7,6 @@ namespace bulbit
 UnrealMaterial::UnrealMaterial(
     const SpectrumTexture* basecolor,
     const FloatTexture* metallic,
-    const FloatTexture* roughness,
-    const SpectrumTexture* emissive,
-    const SpectrumTexture* normalmap,
-    const FloatTexture* alpha
-
-)
-    : UnrealMaterial(basecolor, metallic, roughness, roughness, emissive, normalmap, alpha)
-{
-}
-
-UnrealMaterial::UnrealMaterial(
-    const SpectrumTexture* basecolor,
-    const FloatTexture* metallic,
     const FloatTexture* u_roughness,
     const FloatTexture* v_roughness,
     const SpectrumTexture* emissive,

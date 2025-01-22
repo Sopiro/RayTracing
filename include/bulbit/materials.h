@@ -50,7 +50,6 @@ public:
 class DielectricMaterial : public Material
 {
 public:
-    DielectricMaterial(Float eta, const FloatTexture* roughness, const SpectrumTexture* normalmap = nullptr);
     DielectricMaterial(
         Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap = nullptr
     );
@@ -63,11 +62,11 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const SpectrumTexture* normalmap;
+    Float eta;
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
 
-    Float eta;
+    const SpectrumTexture* normalmap;
 };
 
 class ThinDielectricMaterial : public Material
@@ -89,7 +88,6 @@ private:
 class ConductorMaterial : public Material
 {
 public:
-    ConductorMaterial(const SpectrumTexture* eta, const SpectrumTexture* k, const FloatTexture* roughness);
     ConductorMaterial(
         const SpectrumTexture* eta,
         const SpectrumTexture* k,
@@ -97,7 +95,6 @@ public:
         const FloatTexture* v_roughness,
         const SpectrumTexture* normalmap = nullptr
     );
-    ConductorMaterial(const SpectrumTexture* reflectance, const FloatTexture* roughness);
     ConductorMaterial(
         const SpectrumTexture* reflectance,
         const FloatTexture* u_roughness,
@@ -124,14 +121,6 @@ private:
 class UnrealMaterial : public Material
 {
 public:
-    UnrealMaterial(
-        const SpectrumTexture* basecolor,
-        const FloatTexture* metallic,
-        const FloatTexture* roughness,
-        const SpectrumTexture* emissive = nullptr,
-        const SpectrumTexture* normalmap = nullptr,
-        const FloatTexture* alpha = nullptr
-    );
     UnrealMaterial(
         const SpectrumTexture* basecolor,
         const FloatTexture* metallic,
@@ -199,10 +188,10 @@ private:
     const FloatTexture* mixture_amount;
 };
 
-class SubsurfaceMaterialDiffusion : public Material
+class SubsurfaceDiffusionMaterial : public Material
 {
 public:
-    SubsurfaceMaterialDiffusion(
+    SubsurfaceDiffusionMaterial(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,
@@ -228,10 +217,10 @@ private:
     Float eta;
 };
 
-class SubsurfaceMaterialRandomWalk : public Material
+class SubsurfaceRandomWalkMaterial : public Material
 {
 public:
-    SubsurfaceMaterialRandomWalk(
+    SubsurfaceRandomWalkMaterial(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
         Float eta,

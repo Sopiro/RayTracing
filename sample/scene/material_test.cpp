@@ -33,20 +33,11 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     const Material* outers[count];
     outers[0] = CreateDielectricMaterial(scene, 1.5f, 0.08f);
-    outers[1] = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>({ 0.1, 0.2, 1.9 }), scene.CreateConstantTexture<Spectrum>({ 3, 2.5, 2 }),
-        scene.CreateConstantTexture<Float>(0.05f), scene.CreateConstantTexture<Float>(0.4f), normalmap
-    );
-    outers[2] = scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>({ 80 / 255.0, 1.0, 175 / 255.0 }), scene.CreateConstantTexture<Float>(0),
-        scene.CreateConstantTexture<Float>(0)
-    );
+    outers[1] = CreateConductorMaterial(scene, { 0.1, 0.2, 1.9 }, { 3, 2.5, 2 }, 0.05f, 0.4f, normalmap);
+    outers[2] = CreateUnrealMaterial(scene, { 80 / 255.0, 1.0, 175 / 255.0 }, 0, 0);
 
     const Material* inners[count];
-    inners[0] = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.05f),
-        scene.CreateConstantTexture<Float>(0.4f)
-    );
+    inners[0] = CreateConductorMaterial(scene, Spectrum{ 0.7f }, (0.05f), (0.4f));
     inners[1] = CreateMirrorMaterial(scene, Spectrum(0.7f));
     inners[2] = CreateDiffuseMaterial(scene, Spectrum(0.7));
 
@@ -143,10 +134,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
     outers[2] = CreateDielectricMaterial(scene, 1.5f, 0.05f);
 
     const Material* inners[count];
-    inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
-        scene.CreateConstantTexture<Float>(0)
-    );
+    inners[0] = CreateUnrealMaterial(scene, Spectrum{ 0.66 }, (0), (0));
     inners[1] = inners[0];
     inners[2] = inners[0];
 
@@ -238,13 +226,13 @@ std::unique_ptr<Camera> Skins(Scene& scene)
     auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* skins[count];
-    skins[1] = CreateSubsurfaceMaterialDiffusion(
+    skins[1] = CreateSubsurfaceDiffusionMaterial(
         scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.8, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
-    skins[0] = CreateSubsurfaceMaterialDiffusion(
+    skins[0] = CreateSubsurfaceDiffusionMaterial(
         scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.55, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
-    skins[2] = CreateSubsurfaceMaterialDiffusion(
+    skins[2] = CreateSubsurfaceDiffusionMaterial(
         scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.1, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
 
@@ -341,22 +329,14 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const Material* outers[count];
     auto a = CreateDielectricMaterial(scene, 1.5f, 0.0f);
-    auto b = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>({ 0.7, 0.3, 0.2 }), scene.CreateConstantTexture<Float>(0.1f)
-    );
+    auto b = CreateConductorMaterial(scene, { 0.7, 0.3, 0.2 }, (0.1f));
     auto checker = scene.CreateCheckerTexture<Float>(
         scene.CreateConstantTexture<Float>(0), scene.CreateConstantTexture<Float>(1), Point2(20)
     );
     outers[1] = scene.CreateMaterial<MixtureMaterial>(a, b, checker);
 
-    auto c = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.05f),
-        scene.CreateConstantTexture<Float>(0.4f)
-    );
-    auto d = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.4f),
-        scene.CreateConstantTexture<Float>(0.05f)
-    );
+    auto c = CreateConductorMaterial(scene, Spectrum{ 0.7f }, (0.05f), (0.4f));
+    auto d = CreateConductorMaterial(scene, Spectrum{ 0.7f }, (0.4f), (0.05f));
     outers[0] = scene.CreateMaterial<MixtureMaterial>(c, d, checker);
 
     auto e = CreateDiffuseMaterial(scene, Spectrum(0.7, 0.9, 0.5));
@@ -364,10 +344,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
     outers[2] = scene.CreateMaterial<MixtureMaterial>(e, f, checker);
 
     const Material* inners[count];
-    inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
-        scene.CreateConstantTexture<Float>(0)
-    );
+    inners[0] = CreateUnrealMaterial(scene, Spectrum{ 0.66 }, 0, 0);
     inners[1] = inners[0];
     inners[2] = inners[0];
 
@@ -464,10 +441,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
     outers[2] = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f), nullptr, 0.4f);
 
     const Material* inners[count];
-    inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
-        scene.CreateConstantTexture<Float>(0)
-    );
+    inners[0] = CreateUnrealMaterial(scene, Spectrum{ 0.66 }, (0), (0));
     inners[1] = inners[0];
     inners[2] = inners[0];
 

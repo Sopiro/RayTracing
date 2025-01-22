@@ -12,6 +12,9 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
             scene.CreateImageTexture<Float>(
                 ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
             ),
+            scene.CreateImageTexture<Float>(
+                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
+            ),
             scene.CreateConstantTexture<Spectrum>(Spectrum(0.0f)),
             scene.CreateImageTexture<Spectrum>(
                 ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true)
@@ -57,10 +60,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Armadillo
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
-        auto mat = scene.CreateMaterial<UnrealMaterial>(
-            scene.CreateConstantTexture<Spectrum>(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
-            scene.CreateConstantTexture<Float>(1.0f), scene.CreateConstantTexture<Float>(0.2f)
-        );
+        auto mat =
+            CreateUnrealMaterial(scene, (Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f), (1.0f), (0.2f));
 
         SetLoaderFallbackMaterial(mat);
         LoadModel(scene, "res/stanford/arma.obj", tf);

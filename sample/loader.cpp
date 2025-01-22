@@ -134,6 +134,8 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
         : metallic_textures[0],
         roughness_textures.empty() ? g_scene->CreateConstantTexture<Float>(roughness)
         : roughness_textures[0],
+        roughness_textures.empty() ? g_scene->CreateConstantTexture<Float>(roughness)
+        : roughness_textures[0],
         emissive_textures.empty() ? g_scene->CreateConstantTexture<Spectrum>({emissive_color.r, emissive_color.g, emissive_color.b})
         : emissive_textures[0],
         normalmap_textures.empty() ? nullptr

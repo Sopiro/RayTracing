@@ -53,10 +53,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     auto material2 = CreateDiffuseMaterial(scene, Spectrum(0.4f, 0.2f, 0.1f));
     CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2, mi_outside);
 
-    auto material3 = scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>({ 0.1, 0.2, 1.9 }), scene.CreateConstantTexture<Spectrum>({ 3, 2.5, 2 }),
-        scene.CreateConstantTexture<Float>(0.01f), scene.CreateConstantTexture<Float>(0.01f)
-    );
+    auto material3 = CreateConductorMaterial(scene, { 0.1, 0.2, 1.9 }, { 3, 2.5, 2 }, 0.01f);
     CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3, mi_outside);
 
     // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr");

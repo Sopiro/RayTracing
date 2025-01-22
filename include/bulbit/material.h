@@ -20,8 +20,8 @@ using Materials = TypePack<
     class UnrealMaterial,
     class DiffuseLightMaterial,
     class MixtureMaterial,
-    class SubsurfaceMaterialDiffusion,
-    class SubsurfaceMaterialRandomWalk>;
+    class SubsurfaceDiffusionMaterial,
+    class SubsurfaceRandomWalkMaterial>;
 
 class Material : public DynamicDispatcher<Materials>
 {

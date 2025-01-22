@@ -73,12 +73,96 @@ inline DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, 
     );
 }
 
-inline DielectricMaterial* CreateDielectricMaterial(Scene& scene, Float eta, Float roughness = 0)
+inline DielectricMaterial* CreateDielectricMaterial(
+    Scene& scene, Float eta, Float roughness = 0, const SpectrumTexture* normalmap = nullptr
+)
 {
-    return scene.CreateMaterial<DielectricMaterial>(eta, scene.CreateConstantTexture<Float>(roughness));
+    return scene.CreateMaterial<DielectricMaterial>(
+        eta, scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap
+    );
 }
 
-inline SubsurfaceMaterialDiffusion* CreateSubsurfaceMaterialDiffusion(
+inline ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness, const SpectrumTexture* normalmap = nullptr
+)
+{
+    return scene.CreateMaterial<ConductorMaterial>(
+        scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
+        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap
+    );
+}
+
+inline ConductorMaterial* CreateConductorMaterial(
+    Scene& scene,
+    const Spectrum& eta,
+    const Spectrum& k,
+    Float roughness_u,
+    Float roughness_v,
+    const SpectrumTexture* normalmap = nullptr
+)
+{
+    return scene.CreateMaterial<ConductorMaterial>(
+        scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
+        scene.CreateConstantTexture<Float>(roughness_u), scene.CreateConstantTexture<Float>(roughness_v), normalmap
+    );
+}
+
+inline ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap = nullptr
+)
+{
+    return scene.CreateMaterial<ConductorMaterial>(
+        scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness),
+        scene.CreateConstantTexture<Float>(roughness), normalmap
+    );
+}
+
+inline ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& reflectance, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap = nullptr
+)
+{
+    return scene.CreateMaterial<ConductorMaterial>(
+        scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness_u),
+        scene.CreateConstantTexture<Float>(roughness_v), normalmap
+    );
+}
+
+inline UnrealMaterial* CreateUnrealMaterial(
+    Scene& scene,
+    const Spectrum& basecolor,
+    Float metallic,
+    Float roughness,
+    const Spectrum& emission = Spectrum::black,
+    const SpectrumTexture* normalmap = nullptr,
+    const FloatTexture* alpha = nullptr
+)
+{
+    return scene.CreateMaterial<UnrealMaterial>(
+        scene.CreateConstantTexture<Spectrum>(basecolor), scene.CreateConstantTexture<Float>(metallic),
+        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness),
+        scene.CreateConstantTexture<Spectrum>(emission), normalmap, alpha
+    );
+}
+
+inline UnrealMaterial* CreateUnrealMaterial(
+    Scene& scene,
+    const Spectrum& basecolor,
+    Float metallic,
+    Float u_roughness,
+    Float v_roughness,
+    const Spectrum& emission = Spectrum::black,
+    const SpectrumTexture* normalmap = nullptr,
+    const FloatTexture* alpha = nullptr
+)
+{
+    return scene.CreateMaterial<UnrealMaterial>(
+        scene.CreateConstantTexture<Spectrum>(basecolor), scene.CreateConstantTexture<Float>(metallic),
+        scene.CreateConstantTexture<Float>(u_roughness), scene.CreateConstantTexture<Float>(v_roughness),
+        scene.CreateConstantTexture<Spectrum>(emission), normalmap, alpha
+    );
+}
+
+inline SubsurfaceDiffusionMaterial* CreateSubsurfaceDiffusionMaterial(
     Scene& scene,
     const Spectrum& reflectance,
     const Spectrum& mfp,
@@ -87,13 +171,13 @@ inline SubsurfaceMaterialDiffusion* CreateSubsurfaceMaterialDiffusion(
     const SpectrumTexture* normalmap = nullptr
 )
 {
-    return scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
+    return scene.CreateMaterial<SubsurfaceDiffusionMaterial>(
         scene.CreateConstantTexture<Spectrum>(reflectance), mfp, eta, scene.CreateConstantTexture<Float>(roughness),
         scene.CreateConstantTexture<Float>(roughness), normalmap
     );
 }
 
-inline SubsurfaceMaterialRandomWalk* CreateSubsurfaceMaterialRandomWalk(
+inline SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
     Scene& scene,
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
@@ -103,13 +187,13 @@ inline SubsurfaceMaterialRandomWalk* CreateSubsurfaceMaterialRandomWalk(
     const SpectrumTexture* normalmap = nullptr
 )
 {
-    return scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(
+    return scene.CreateMaterial<SubsurfaceRandomWalkMaterial>(
         reflectance, mfp, eta, scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), g,
         normalmap
     );
 }
 
-inline SubsurfaceMaterialRandomWalk* CreateSubsurfaceMaterialRandomWalk(
+inline SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
     Scene& scene,
     const Spectrum& reflectance,
     const Spectrum& mfp,
@@ -119,7 +203,7 @@ inline SubsurfaceMaterialRandomWalk* CreateSubsurfaceMaterialRandomWalk(
     const SpectrumTexture* normalmap = nullptr
 )
 {
-    return scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(
+    return scene.CreateMaterial<SubsurfaceRandomWalkMaterial>(
         scene.CreateConstantTexture<Spectrum>(reflectance), mfp, eta, scene.CreateConstantTexture<Float>(roughness),
         scene.CreateConstantTexture<Float>(roughness), g, normalmap
     );

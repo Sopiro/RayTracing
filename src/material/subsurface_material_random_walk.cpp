@@ -6,7 +6,7 @@
 namespace bulbit
 {
 
-SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
+SubsurfaceRandomWalkMaterial::SubsurfaceRandomWalkMaterial(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,
@@ -15,7 +15,7 @@ SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
     Float g,
     const SpectrumTexture* normalmap
 )
-    : Material(TypeIndexOf<SubsurfaceMaterialRandomWalk>())
+    : Material(TypeIndexOf<SubsurfaceRandomWalkMaterial>())
     , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
@@ -26,24 +26,24 @@ SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
 {
 }
 
-Float SubsurfaceMaterialRandomWalk::GetAlpha(const Intersection& isect) const
+Float SubsurfaceRandomWalkMaterial::GetAlpha(const Intersection& isect) const
 {
     BulbitNotUsed(isect);
     return 1;
 }
-const SpectrumTexture* SubsurfaceMaterialRandomWalk::GetNormalMap() const
+const SpectrumTexture* SubsurfaceRandomWalkMaterial::GetNormalMap() const
 {
     return normalmap;
 }
 
-Spectrum SubsurfaceMaterialRandomWalk::Le(const Intersection& isect, const Vec3& wo) const
+Spectrum SubsurfaceRandomWalkMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
     BulbitNotUsed(isect);
     BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
-bool SubsurfaceMaterialRandomWalk::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceRandomWalkMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     BulbitNotUsed(wo);
 
@@ -60,7 +60,7 @@ bool SubsurfaceMaterialRandomWalk::GetBSDF(BSDF* bsdf, const Intersection& isect
     return true;
 }
 
-bool SubsurfaceMaterialRandomWalk::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceRandomWalkMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     Spectrum R = reflectance->Evaluate(isect.uv);
     Spectrum sigma_t = 1 / l;

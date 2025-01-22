@@ -6,7 +6,7 @@
 namespace bulbit
 {
 
-SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
+SubsurfaceDiffusionMaterial::SubsurfaceDiffusionMaterial(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,
@@ -14,7 +14,7 @@ SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const FloatTexture* v_roughness,
     const SpectrumTexture* normalmap
 )
-    : Material(TypeIndexOf<SubsurfaceMaterialDiffusion>())
+    : Material(TypeIndexOf<SubsurfaceDiffusionMaterial>())
     , normalmap{ normalmap }
     , u_roughness{ u_roughness }
     , v_roughness{ v_roughness }
@@ -24,24 +24,24 @@ SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
 {
 }
 
-Float SubsurfaceMaterialDiffusion::GetAlpha(const Intersection& isect) const
+Float SubsurfaceDiffusionMaterial::GetAlpha(const Intersection& isect) const
 {
     BulbitNotUsed(isect);
     return 1;
 }
-const SpectrumTexture* SubsurfaceMaterialDiffusion::GetNormalMap() const
+const SpectrumTexture* SubsurfaceDiffusionMaterial::GetNormalMap() const
 {
     return normalmap;
 }
 
-Spectrum SubsurfaceMaterialDiffusion::Le(const Intersection& isect, const Vec3& wo) const
+Spectrum SubsurfaceDiffusionMaterial::Le(const Intersection& isect, const Vec3& wo) const
 {
     BulbitNotUsed(isect);
     BulbitNotUsed(wo);
     return Spectrum::black;
 }
 
-bool SubsurfaceMaterialDiffusion::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceDiffusionMaterial::GetBSDF(BSDF* bsdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     BulbitNotUsed(wo);
 
@@ -58,7 +58,7 @@ bool SubsurfaceMaterialDiffusion::GetBSDF(BSDF* bsdf, const Intersection& isect,
     return true;
 }
 
-bool SubsurfaceMaterialDiffusion::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
+bool SubsurfaceDiffusionMaterial::GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const
 {
     Spectrum R = reflectance->Evaluate(isect.uv);
     Spectrum s = Spectrum(1.9f) - R + 3.5f * Sqr(R - Spectrum(0.8f)); // Eq. 6

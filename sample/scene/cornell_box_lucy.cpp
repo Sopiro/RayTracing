@@ -43,17 +43,14 @@ std::unique_ptr<Camera> CornellBoxLucy(Scene& scene)
     {
         // Lucy
         Transform transform{ Point3(0.5f, 0.0f, -0.5f), identity, Vec3(0.7f) };
-        // auto mat = scene.CreateMaterial<UnrealMaterial>(
-        //     scene.CreateConstantTexture<Spectrum>(1.0f), scene.CreateConstantTexture<Float>(1.0f),
-        //     scene.CreateConstantTexture<Float>(0.2f)
-        // );
+        // auto mat = CreateUnrealMaterial(scene, 1.0f, 1.0f, 0.2f);
 
         Spectrum sigma_a(0);
         Spectrum sigma_s(20, 100, 200);
 
-        auto diffusion = CreateSubsurfaceMaterialDiffusion(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+        auto diffusion = CreateSubsurfaceDiffusionMaterial(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
         auto random_walk =
-            CreateSubsurfaceMaterialRandomWalk(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+            CreateSubsurfaceRandomWalkMaterial(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
         auto mat = random_walk;
         HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.0f);
 

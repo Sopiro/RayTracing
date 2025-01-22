@@ -23,14 +23,11 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
         // auto normalmap = scene.CreateImageTexture<Spectrum>("res/bistro/Concrete_Normal.png", true);
         auto normalmap = nullptr;
         // auto mat = CreateDiffuseMaterial(scene, Spectrum(0, 163 / 255.0, 108 / 255.0), normalmap);
-        auto mat = CreateSubsurfaceMaterialDiffusion(
+        auto mat = CreateSubsurfaceDiffusionMaterial(
             scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.6, Spectrum(0.5, 0.25, 0.125) * 0.03, 1.5f, 0.05f
         );
-        // auto mat = CreateSubsurfaceMaterialDiffusion(scene, Spectrum(1.0), Spectrum(0.01), 1.0, 0.0);
-        // auto mat = scene.CreateMaterial<ConductorMaterial>(
-        //     scene.CreateConstantTexture<Spectrum>(0.1, 0.2, 1.9), scene.CreateConstantTexture<Spectrum>(3, 2.5, 2),
-        //     scene.CreateConstantTexture<Float>(0.05f), scene.CreateConstantTexture<Float>(0.4f), normalmap
-        // );
+        // auto mat = CreateSubsurfaceDiffusionMaterial(scene, Spectrum(1.0), Spectrum(0.01), 1.0, 0.0);
+        // auto mat = CreateConductorMaterial(scene, Spectrum(0.1, 0.2, 1.9), Spectrum(3, 2.5, 2), (0.05f), (0.4f), normalmap);
         // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.1f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = CreateMirrorMaterial(scene, Spectrum(0.7f), normalmap);
