@@ -12,7 +12,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
 
     // CreateSphere(scene, identity, 100, nullptr, mi_inside);
 
-    auto ground_material = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.5f, 0.5f, 0.5f));
+    auto ground_material = CreateDiffuseMaterial(scene, Spectrum(0.5f, 0.5f, 0.5f));
 
     Transform tf = identity;
     tf.s *= 30;
@@ -40,34 +40,34 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
                 else
                 {
                     // glass
-                    auto glass = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(Rand(0.001f, 0.3f)));
+                    auto glass = CreateDielectricMaterial(scene, 1.5f, Rand(0.001f, 0.3f));
                     CreateSphere(scene, center, 0.2f, glass, mi_outside);
                 }
             }
         }
     }
 
-    auto material1 = scene.CreateMaterial<DielectricMaterial>(1.5f);
+    auto material1 = CreateDielectricMaterial(scene, 1.5f);
     CreateSphere(scene, Vec3(0, 1, 0), 1.0f, material1, mi_outside);
 
-    auto material2 = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f, 0.2f, 0.1f));
+    auto material2 = CreateDiffuseMaterial(scene, Spectrum(0.4f, 0.2f, 0.1f));
     CreateSphere(scene, Vec3(-4, 1, 0), 1.0f, material2, mi_outside);
 
     auto material3 = scene.CreateMaterial<ConductorMaterial>(
-        CreateSpectrumConstantTexture(0.1, 0.2, 1.9), CreateSpectrumConstantTexture(3, 2.5, 2), CreateFloatConstantTexture(0.01f),
-        CreateFloatConstantTexture(0.01f)
+        scene.CreateConstantTexture<Spectrum>({ 0.1, 0.2, 1.9 }), scene.CreateConstantTexture<Spectrum>({ 3, 2.5, 2 }),
+        scene.CreateConstantTexture<Float>(0.01f), scene.CreateConstantTexture<Float>(0.01f)
     );
     CreateSphere(scene, Transform(Vec3(4, 1, 0), Quat(DegToRad(0), Normalize(Vec3(1, 0, 0)))), 1.0f, material3, mi_outside);
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/pizzo_pernice_1k.hdr");
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/harties_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/earthmap.jpg");
+    // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/pizzo_pernice_1k.hdr");
+    CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/harties_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/earthmap.jpg");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

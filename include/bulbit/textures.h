@@ -252,19 +252,4 @@ private:
     detail::PoolC<Spectrum> pool_C3f;
 };
 
-inline TexturePool texture_pool;
-
-FloatConstantTexture* CreateFloatConstantTexture(Float value);
-SpectrumConstantTexture* CreateSpectrumConstantTexture(const Spectrum& value);
-SpectrumConstantTexture* CreateSpectrumConstantTexture(Float value);
-SpectrumConstantTexture* CreateSpectrumConstantTexture(Float r, Float g, Float b);
-
-FloatImageTexture* CreateFloatImageTexture(Image1 image);
-SpectrumImageTexture* CreateSpectrumImageTexture(Image3 image);
-
-FloatCheckerTexture* CreateFloatCheckerTexture(const FloatTexture* a, const FloatTexture* b, const Point2& resolution);
-SpectrumCheckerTexture* CreateSpectrumCheckerTexture(
-    const SpectrumTexture* a, const SpectrumTexture* b, const Point2& resolution
-);
-
 } // namespace bulbit

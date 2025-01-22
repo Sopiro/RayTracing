@@ -4,7 +4,8 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
 {
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(1.0), CreateFloatConstantTexture(1.0f), CreateFloatConstantTexture(0.1f)
+            scene.CreateConstantTexture<Spectrum>(Spectrum{ 1.0 }), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(0.1f)
         );
         // auto mat = scene.CreateMaterial<Dielectric>(1.5f);
 
@@ -21,19 +22,19 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     Float size = 2.0f;
 
     {
-        auto red = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(light, 0.0f, 0.0f)));
+        auto red = CreateDiffuseLightMaterial(scene, Spectrum(light, 0.0f, 0.0f));
         auto tf = Transform{ Point3(-distance, 0.0f, 0.0f), identity, Vec3(1.0f, size, size) };
         CreateRectYZ(scene, tf, red);
     }
 
     {
-        auto blue = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(0.0f, 0.0f, light)));
+        auto blue = CreateDiffuseLightMaterial(scene, Spectrum(0.0f, 0.0f, light));
         auto tf = Transform{ Point3(distance, 0.0f, 0.0f), Quat(pi, y_axis), Vec3(1.0f, size, size) };
         CreateRectYZ(scene, tf, blue);
     }
 
     {
-        auto white = scene.CreateMaterial<DiffuseLightMaterial>(CreateSpectrumConstantTexture(Spectrum(0.5f)));
+        auto white = CreateDiffuseLightMaterial(scene, Spectrum(0.5f));
 
         auto tf = Transform{ Point3(0.0f, 4.0f, 0.0f), Quat(pi, x_axis), Vec3(8.0f, 1.0f, 8.0f) };
         CreateRectXZ(scene, tf, white);
@@ -61,7 +62,8 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(1.0f), CreateFloatConstantTexture(0.0f), CreateFloatConstantTexture(0.01f)
+            scene.CreateConstantTexture<Spectrum>(Spectrum{ 1.0f }), scene.CreateConstantTexture<Float>(0.0f),
+            scene.CreateConstantTexture<Float>(0.01f)
         );
         auto tf = Transform{ Point3(0.0f, -2.0f, 0.0f), identity, Vec3(8.0f, 1.0f, 8.0f) };
         CreateRectXZ(scene, tf, mat);
@@ -75,8 +77,8 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
         CreateRectXY(scene, tf, mat);
     }
 
-    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

@@ -8,7 +8,6 @@ namespace bulbit
 class DiffuseMaterial : public Material
 {
 public:
-    DiffuseMaterial(const Spectrum& albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr);
     DiffuseMaterial(
         const SpectrumTexture* albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
     );
@@ -30,7 +29,6 @@ public:
 class MirrorMaterial : public Material
 {
 public:
-    MirrorMaterial(const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr);
     MirrorMaterial(
         const SpectrumTexture* reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
     );
@@ -52,8 +50,6 @@ public:
 class DielectricMaterial : public Material
 {
 public:
-    DielectricMaterial(Float eta);
-    DielectricMaterial(Float eta, Float roughness);
     DielectricMaterial(Float eta, const FloatTexture* roughness, const SpectrumTexture* normalmap = nullptr);
     DielectricMaterial(
         Float eta, const FloatTexture* u_roughness, const FloatTexture* v_roughness, const SpectrumTexture* normalmap = nullptr
@@ -168,7 +164,6 @@ private:
 class DiffuseLightMaterial : public Material
 {
 public:
-    DiffuseLightMaterial(const Spectrum& color, bool two_sided = false, Float alpha = 1);
     DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided = false, const FloatTexture* alpha = nullptr);
 
     Float GetAlpha(const Intersection& isect) const;
@@ -188,7 +183,6 @@ private:
 class MixtureMaterial : public Material
 {
 public:
-    MixtureMaterial(const Material* material1, const Material* material2, Float mix);
     MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* mix);
 
     Float GetAlpha(const Intersection& isect) const;
@@ -208,23 +202,6 @@ private:
 class SubsurfaceMaterialDiffusion : public Material
 {
 public:
-    SubsurfaceMaterialDiffusion(
-        const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap = nullptr
-    );
-    SubsurfaceMaterialDiffusion(
-        const SpectrumTexture* reflectance,
-        const Spectrum& mfp,
-        Float eta,
-        Float roughness,
-        const SpectrumTexture* normalmap = nullptr
-    );
-    SubsurfaceMaterialDiffusion(
-        const SpectrumTexture* reflectance,
-        const Spectrum& mfp,
-        Float eta,
-        const FloatTexture* roughness,
-        const SpectrumTexture* normalmap = nullptr
-    );
     SubsurfaceMaterialDiffusion(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,
@@ -254,30 +231,6 @@ private:
 class SubsurfaceMaterialRandomWalk : public Material
 {
 public:
-    SubsurfaceMaterialRandomWalk(
-        const Spectrum& reflectance,
-        const Spectrum& mfp,
-        Float eta,
-        Float roughness,
-        Float g = 0,
-        const SpectrumTexture* normalmap = nullptr
-    );
-    SubsurfaceMaterialRandomWalk(
-        const SpectrumTexture* reflectance,
-        const Spectrum& mfp,
-        Float eta,
-        Float roughness,
-        Float g = 0,
-        const SpectrumTexture* normalmap = nullptr
-    );
-    SubsurfaceMaterialRandomWalk(
-        const SpectrumTexture* reflectance,
-        const Spectrum& mfp,
-        Float eta,
-        const FloatTexture* roughness,
-        Float g = 0,
-        const SpectrumTexture* normalmap = nullptr
-    );
     SubsurfaceMaterialRandomWalk(
         const SpectrumTexture* reflectance,
         const Spectrum& mfp,

@@ -6,9 +6,9 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
     Transform tf{ Vec3::zero, Quat(DegToRad(0.0f), y_axis), Vec3(1.0f) };
     LoadModel(scene, "res/breakfast_room/breakfast_room.obj", tf);
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr");
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr");
+    CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
 
     scene.CreateLight<DirectionalLight>(Normalize(-Vec3(15.0f, 5.0f, 5.0f)), Vec3(8.0f), 0.02f);
 

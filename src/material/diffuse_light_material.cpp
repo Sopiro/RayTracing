@@ -5,11 +5,6 @@
 namespace bulbit
 {
 
-DiffuseLightMaterial::DiffuseLightMaterial(const Spectrum& color, bool two_sided, Float alpha)
-    : DiffuseLightMaterial(CreateSpectrumConstantTexture(color), two_sided, CreateFloatConstantTexture(alpha))
-{
-}
-
 DiffuseLightMaterial::DiffuseLightMaterial(const SpectrumTexture* emission, bool two_sided, const FloatTexture* alpha)
     : Material{ TypeIndexOf<DiffuseLightMaterial>() }
     , two_sided{ two_sided }

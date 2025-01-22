@@ -3,7 +3,7 @@
 std::unique_ptr<Camera> MISTest(Scene& scene)
 {
     {
-        auto floor_mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.4f));
+        auto floor_mat = CreateDiffuseMaterial(scene, Spectrum(0.4f));
         SetLoaderFallbackMaterial(floor_mat);
         LoadModel(scene, "res/veach_mi/floor.obj", Transform{ identity });
     }
@@ -11,23 +11,23 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
     // plates
     {
         auto m1 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.005f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.005f))
         );
 
         auto m2 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.02f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.02f))
         );
 
         auto m3 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.05f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.05f))
         );
 
         auto m4 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.1f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.1f))
         );
 
         SetLoaderFallbackMaterial(m1);
@@ -42,11 +42,11 @@ std::unique_ptr<Camera> MISTest(Scene& scene)
 
     // Lights
     {
-        auto light1 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(800.f));
-        auto light3 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(901.803f));
-        auto light2 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(100.f));
-        auto light4 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(11.1111f));
-        auto light5 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(1.23457f));
+        auto light1 = CreateDiffuseLightMaterial(scene, Spectrum(800.f));
+        auto light3 = CreateDiffuseLightMaterial(scene, Spectrum(901.803f));
+        auto light2 = CreateDiffuseLightMaterial(scene, Spectrum(100.f));
+        auto light4 = CreateDiffuseLightMaterial(scene, Spectrum(11.1111f));
+        auto light5 = CreateDiffuseLightMaterial(scene, Spectrum(1.23457f));
 
         CreateSphere(scene, Vec3(10, 10, 4), 0.5f, light1);
         CreateSphere(scene, Vec3(-3.75f, 0, 0), 0.03333f, light3);
@@ -77,7 +77,7 @@ static int32 index1 = Sample::Register("mis", MISTest);
 std::unique_ptr<Camera> MISTestWak(Scene& scene)
 {
     {
-        auto floor = scene.CreateMaterial<DiffuseMaterial>(CreateSpectrumImageTexture(ReadImage3("res/wakdu.jpg")));
+        auto floor = scene.CreateMaterial<DiffuseMaterial>(scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg")));
         Float s = 20.0f;
         auto tf = Transform{ Vec3(0.0f, -4.0f, -4.0f), identity, Vec3(s, 1.0f, s) };
         CreateRectXZ(scene, tf, floor);
@@ -89,23 +89,23 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
     // plates
     {
         auto m1 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.005f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.005f))
         );
 
         auto m2 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.02f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.02f))
         );
 
         auto m3 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.05f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.05f))
         );
 
         auto m4 = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(0.07f, 0.09f, 0.13f)), CreateFloatConstantTexture(1.0f),
-            CreateFloatConstantTexture(std::sqrt(0.1f))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.07f, 0.09f, 0.13f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(std::sqrt(0.1f))
         );
 
         SetLoaderFallbackMaterial(m1);
@@ -120,11 +120,11 @@ std::unique_ptr<Camera> MISTestWak(Scene& scene)
 
     // Lights
     {
-        auto light1 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(800));
-        auto light3 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(901.803f, 0, 0));
-        auto light2 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(100, 100 / 5, 0));
-        auto light4 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(11.1111f, 11.1111f, 0));
-        auto light5 = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(0, 1.23457f, 0));
+        auto light1 = CreateDiffuseLightMaterial(scene, Spectrum(800));
+        auto light3 = CreateDiffuseLightMaterial(scene, Spectrum(901.803f, 0, 0));
+        auto light2 = CreateDiffuseLightMaterial(scene, Spectrum(100, 100 / 5, 0));
+        auto light4 = CreateDiffuseLightMaterial(scene, Spectrum(11.1111f, 11.1111f, 0));
+        auto light5 = CreateDiffuseLightMaterial(scene, Spectrum(0, 1.23457f, 0));
 
         CreateSphere(scene, Vec3(10, 10, 4), 0.5f, light1);
         CreateSphere(scene, Vec3(-3.75f, 0, 0), 0.03333f, light3);

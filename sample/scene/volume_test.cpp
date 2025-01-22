@@ -6,12 +6,12 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
     {
         Srand(123123);
         // auto mat = CreateRandomUnrealMaterial(scene);
-        // auto mat = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f));
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.02f));
+        // auto mat = CreateMirrorMaterial(scene, Spectrum(0.7f));
+        // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.02f));
         auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
-        //     CreateSpectrumConstantTexture(0.1, 0.2, 1.9), CreateSpectrumConstantTexture(3, 2.5, 2),
-        //     CreateFloatConstantTexture(0.1f), CreateFloatConstantTexture(0.3f)
+        //     scene.CreateConstantTexture<Spectrum>(0.1, 0.2, 1.9), scene.CreateConstantTexture<Spectrum>(3, 2.5, 2),
+        //     scene.CreateConstantTexture<Float>(0.1f), scene.CreateConstantTexture<Float>(0.3f)
         // );
         // auto mix = scene.CreateMaterial<MixtureMaterial>(mat, mat, 0.1f);
 
@@ -26,11 +26,11 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
         LoadModel(scene, "res/stanford/lucy.obj", tf);
     }
 
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     // Float aspect_ratio = 16.f / 9.f;

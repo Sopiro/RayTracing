@@ -3,13 +3,13 @@
 std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
 {
     // Materials
-    auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
-    auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
-    auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
-    auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = CreateSpectrumImageTexture(ReadImage3("res/wakdu.jpg"));
+    auto red = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f));
+    auto green = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f));
+    auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
+    auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
+    auto wakgood_texture = scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg"));
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(15.0));
+    auto light = CreateDiffuseLightMaterial(scene, Spectrum(15.0));
 
     // Cornell box
     {
@@ -43,7 +43,8 @@ std::unique_ptr<Camera> BRDFSamplingTest(Scene& scene)
     // Center sphere
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(1.0f)), CreateFloatConstantTexture(1.0f), CreateFloatConstantTexture(0.2f)
+            scene.CreateConstantTexture<Spectrum>(Spectrum(1.0f)), scene.CreateConstantTexture<Float>(1.0f),
+            scene.CreateConstantTexture<Float>(0.2f)
         );
 
         Float r = 0.25;

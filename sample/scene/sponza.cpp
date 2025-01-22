@@ -43,9 +43,9 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     //     scene.AddLight(sphere);
     // }
 
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
+    CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
 
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
 

@@ -7,34 +7,6 @@ namespace bulbit
 {
 
 SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
-    const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, Float g, const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialRandomWalk(
-          CreateSpectrumConstantTexture(reflectance), mfp, eta, CreateFloatConstantTexture(roughness), g, normalmap
-      )
-{
-}
-
-SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
-    const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, Float g, const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialRandomWalk(reflectance, mfp, eta, CreateFloatConstantTexture(roughness), g, normalmap)
-{
-}
-
-SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
-    const SpectrumTexture* reflectance,
-    const Spectrum& mfp,
-    Float eta,
-    const FloatTexture* roughness,
-    Float g,
-    const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialRandomWalk(reflectance, mfp, eta, roughness, roughness, g, normalmap)
-{
-}
-
-SubsurfaceMaterialRandomWalk::SubsurfaceMaterialRandomWalk(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,

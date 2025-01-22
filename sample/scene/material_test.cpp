@@ -9,9 +9,9 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -29,24 +29,26 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.08f));
+    outers[0] = CreateDielectricMaterial(scene, 1.5f, 0.08f);
     outers[1] = scene.CreateMaterial<ConductorMaterial>(
-        CreateSpectrumConstantTexture(0.1, 0.2, 1.9), CreateSpectrumConstantTexture(3, 2.5, 2), CreateFloatConstantTexture(0.05f),
-        CreateFloatConstantTexture(0.4f), normalmap
+        scene.CreateConstantTexture<Spectrum>({ 0.1, 0.2, 1.9 }), scene.CreateConstantTexture<Spectrum>({ 3, 2.5, 2 }),
+        scene.CreateConstantTexture<Float>(0.05f), scene.CreateConstantTexture<Float>(0.4f), normalmap
     );
     outers[2] = scene.CreateMaterial<UnrealMaterial>(
-        CreateSpectrumConstantTexture(80 / 255.0, 1.0, 175 / 255.0), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
+        scene.CreateConstantTexture<Spectrum>({ 80 / 255.0, 1.0, 175 / 255.0 }), scene.CreateConstantTexture<Float>(0),
+        scene.CreateConstantTexture<Float>(0)
     );
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<ConductorMaterial>(
-        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.05f), CreateFloatConstantTexture(0.4f)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.05f),
+        scene.CreateConstantTexture<Float>(0.4f)
     );
-    inners[1] = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.7f));
-    inners[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.7));
+    inners[1] = CreateMirrorMaterial(scene, Spectrum(0.7f));
+    inners[2] = CreateDiffuseMaterial(scene, Spectrum(0.7));
 
     for (int32 j = 0; j < h; ++j)
     {
@@ -71,19 +73,19 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>(
+    // CreateImageInfiniteLight(scene,
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/solitude_night_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
@@ -113,9 +115,9 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -133,16 +135,17 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.02f));
-    outers[1] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
-    outers[2] = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.05f));
+    outers[0] = CreateDielectricMaterial(scene, 1.5f, 0.02f);
+    outers[1] = CreateDielectricMaterial(scene, 1.5f, 0.0f);
+    outers[2] = CreateDielectricMaterial(scene, 1.5f, 0.05f);
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
+        scene.CreateConstantTexture<Float>(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];
@@ -170,19 +173,19 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>(
+    // CreateImageInfiniteLight(scene,
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/solitude_night_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
@@ -212,9 +215,9 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -232,17 +235,17 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* skins[count];
-    skins[1] = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
-        Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.8, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
+    skins[1] = CreateSubsurfaceMaterialDiffusion(
+        scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.8, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
-    skins[0] = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
-        Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.55, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
+    skins[0] = CreateSubsurfaceMaterialDiffusion(
+        scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.55, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
-    skins[2] = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(
-        Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.1, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
+    skins[2] = CreateSubsurfaceMaterialDiffusion(
+        scene, Spectrum(255 / 255.0, 195 / 255.0, 170 / 255.0) * 0.1, Spectrum(0.5, 0.25, 0.125) * 0.05, 1.5f, 0.05f
     );
 
     for (int32 j = 0; j < h; ++j)
@@ -268,22 +271,22 @@ std::unique_ptr<Camera> Skins(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>(
+    // CreateImageInfiniteLight(scene,
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/solitude_night_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(5.0f));
+    auto light = CreateDiffuseLightMaterial(scene, Spectrum(5.0f));
     auto tf = Transform{ 0.0f, 0.8f, -0.5f, Quat::FromEuler({ 0, 0, 0 }), Vec3(3, 0.5, 1) };
     CreateRectXY(scene, tf, light);
 
@@ -314,9 +317,9 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -334,30 +337,36 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
-    auto a = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
-    auto b =
-        scene.CreateMaterial<ConductorMaterial>(CreateSpectrumConstantTexture(0.7, 0.3, 0.2), CreateFloatConstantTexture(0.1f));
-    auto checker = CreateFloatCheckerTexture(CreateFloatConstantTexture(0), CreateFloatConstantTexture(1), Point2(20));
+    auto a = CreateDielectricMaterial(scene, 1.5f, 0.0f);
+    auto b = scene.CreateMaterial<ConductorMaterial>(
+        scene.CreateConstantTexture<Spectrum>({ 0.7, 0.3, 0.2 }), scene.CreateConstantTexture<Float>(0.1f)
+    );
+    auto checker = scene.CreateCheckerTexture<Float>(
+        scene.CreateConstantTexture<Float>(0), scene.CreateConstantTexture<Float>(1), Point2(20)
+    );
     outers[1] = scene.CreateMaterial<MixtureMaterial>(a, b, checker);
 
     auto c = scene.CreateMaterial<ConductorMaterial>(
-        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.05f), CreateFloatConstantTexture(0.4f)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.05f),
+        scene.CreateConstantTexture<Float>(0.4f)
     );
     auto d = scene.CreateMaterial<ConductorMaterial>(
-        CreateSpectrumConstantTexture(0.7f), CreateFloatConstantTexture(0.4f), CreateFloatConstantTexture(0.05f)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.7f }), scene.CreateConstantTexture<Float>(0.4f),
+        scene.CreateConstantTexture<Float>(0.05f)
     );
     outers[0] = scene.CreateMaterial<MixtureMaterial>(c, d, checker);
 
-    auto e = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.7, 0.9, 0.5));
-    auto f = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.6, 0.5, 0.4));
+    auto e = CreateDiffuseMaterial(scene, Spectrum(0.7, 0.9, 0.5));
+    auto f = CreateMirrorMaterial(scene, Spectrum(0.6, 0.5, 0.4));
     outers[2] = scene.CreateMaterial<MixtureMaterial>(e, f, checker);
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
+        scene.CreateConstantTexture<Float>(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];
@@ -385,19 +394,19 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>(
+    // CreateImageInfiniteLight(scene,
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/solitude_night_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
@@ -427,9 +436,9 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -447,16 +456,17 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = CreateSpectrumImageTexture(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
 
     const Material* outers[count];
-    outers[0] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f), nullptr, CreateFloatConstantTexture(0.4));
-    outers[1] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f), nullptr, CreateFloatConstantTexture(0.4));
-    outers[2] = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f), nullptr, CreateFloatConstantTexture(0.4));
+    outers[0] = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f), nullptr, 0.4f);
+    outers[1] = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f), nullptr, 0.4f);
+    outers[2] = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f), nullptr, 0.4f);
 
     const Material* inners[count];
     inners[0] = scene.CreateMaterial<UnrealMaterial>(
-        CreateSpectrumConstantTexture(0.66), CreateFloatConstantTexture(0), CreateFloatConstantTexture(0)
+        scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.66 }), scene.CreateConstantTexture<Float>(0),
+        scene.CreateConstantTexture<Float>(0)
     );
     inners[1] = inners[0];
     inners[2] = inners[0];
@@ -484,19 +494,19 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>(
+    // CreateImageInfiniteLight(scene,
     //     "res/material_test_ball/envmap.hdr", Transform(Quat::FromEuler(0, DegToRad(-67.26139831542969), 0))
     // );
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/solitude_night_1k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_loft_hall_1k.hdr", Transform(Quat(pi, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;

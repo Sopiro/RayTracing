@@ -3,28 +3,26 @@
 std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 {
     // Materials
-    auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
-    auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
-    auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
-    auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = CreateSpectrumImageTexture(ReadImage3("res/wakdu.jpg"));
+    auto red = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f));
+    auto green = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f));
+    auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
+    auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
+    auto wakgood_texture = scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg"));
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(2.0f));
-    auto plastic = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.2f));
-    // auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(17.0f, 12.0f, 4.0f));
-    auto mirror = scene.CreateMaterial<MirrorMaterial>(Spectrum(0.73f));
-    auto mix = scene.CreateMaterial<MixtureMaterial>(red, blue, 0.5f);
+    auto light = CreateDiffuseLightMaterial(scene, Spectrum(2.0f));
+    auto plastic = CreateDielectricMaterial(scene, 1.5f, 0.2f);
+    // auto light = CreateDiffuseLightMaterial(scene, Spectrum(17.0f, 12.0f, 4.0f));
+    auto mirror = CreateMirrorMaterial(scene, Spectrum(0.73f));
+    auto mix = CreateMixtureMaterial(scene, red, blue, 0.5f);
 
     Spectrum sigma_a(0);
     Spectrum sigma_s(20, 100, 200);
     // Spectrum sigma_s(100);
 
-    auto diffusion =
-        scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
-    auto random_walk =
-        scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+    auto diffusion = CreateSubsurfaceMaterialDiffusion(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
+    auto random_walk = CreateSubsurfaceMaterialRandomWalk(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.0f, 0.0f);
 
-    auto boundary = scene.CreateMaterial<DielectricMaterial>(1.0f);
+    auto boundary = CreateDielectricMaterial(scene, 1.0f);
     auto mat = random_walk;
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.0f);
 
@@ -85,11 +83,11 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
     // Right sphere
     {
-        // auto mat = scene.CreateMaterial<DielectricMaterial>(1.5f, CreateFloatConstantTexture(0.0f));
+        // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = scene.CreateMaterial<ConductorMaterial>(
-        //     CreateSpectrumConstantTexture(0.1, 0.2, 1.9), CreateSpectrumConstantTexture(3, 2.5, 2),
-        //     CreateFloatConstantTexture(0.3f), CreateFloatConstantTexture(0.1f));
+        //     scene.CreateConstantTexture<Spectrum>(0.1, 0.2, 1.9), scene.CreateConstantTexture<Spectrum>(3, 2.5, 2),
+        //     scene.CreateConstantTexture<Float>(0.3f), scene.CreateConstantTexture<Float>(0.1f));
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
     }
@@ -102,10 +100,10 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
         // CreateSphere(scene, Vec3(0.5f, 0.9f, -0.5f), 0.05f, light);
         // scene.CreateLight<PointLight>(Point3(0.5f, 0.9f, -0.5f), Spectrum(0.25f));
         // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(1, 1, 1)), Vec3(5.0f), 0.05f);
-        // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
-        // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr");
-        // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-        // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
+        // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
+        // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
+        // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+        // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
     }
 
     // std::cout << "Lights: " << scene.GetLights().size() << std::endl;

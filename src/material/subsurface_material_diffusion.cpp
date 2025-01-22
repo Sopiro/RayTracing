@@ -7,33 +7,6 @@ namespace bulbit
 {
 
 SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
-    const Spectrum& reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialDiffusion(
-          CreateSpectrumConstantTexture(reflectance), mfp, eta, CreateFloatConstantTexture(roughness), normalmap
-      )
-{
-}
-
-SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
-    const SpectrumTexture* reflectance, const Spectrum& mfp, Float eta, Float roughness, const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, CreateFloatConstantTexture(roughness), normalmap)
-{
-}
-
-SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
-    const SpectrumTexture* reflectance,
-    const Spectrum& mfp,
-    Float eta,
-    const FloatTexture* roughness,
-    const SpectrumTexture* normalmap
-)
-    : SubsurfaceMaterialDiffusion(reflectance, mfp, eta, roughness, roughness, normalmap)
-{
-}
-
-SubsurfaceMaterialDiffusion::SubsurfaceMaterialDiffusion(
     const SpectrumTexture* reflectance,
     const Spectrum& mfp,
     Float eta,

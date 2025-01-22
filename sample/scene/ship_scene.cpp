@@ -18,7 +18,7 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     {
         Float size = 0.5;
 
-        auto white = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(50.0f), true);
+        auto white = CreateDiffuseLightMaterial(scene, Spectrum(50.0f), true);
         auto tf = Transform{ Point3(0.0f, 6.0f, -3.0f), Quat(pi / 4.0f, x_axis), Vec3(size) };
         CreateRectXY(scene, tf, white);
 
@@ -35,7 +35,8 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(1.0), CreateFloatConstantTexture(0.0f), CreateFloatConstantTexture(0.1f)
+            scene.CreateConstantTexture<Spectrum>(Spectrum{ 1.0 }), scene.CreateConstantTexture<Float>(0.0f),
+            scene.CreateConstantTexture<Float>(0.1f)
         );
         Float size = 9.0f;
         Float y = 2.1f;

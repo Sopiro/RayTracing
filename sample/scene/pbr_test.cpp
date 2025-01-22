@@ -31,7 +31,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
 
     // Ground
     {
-        auto mat = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.9f));
+        auto mat = CreateDiffuseMaterial(scene, Spectrum(0.9f));
         auto tf1 = Transform{ Vec3(0.5f, -r, -0.5f), identity, Vec3(50.0f) };
         CreateRectXZ(scene, tf1, mat);
     }
@@ -70,7 +70,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         Float xgap = 0.16f;
         Float xstep = 2.0f * s + xgap;
 
-        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(5.0f), true);
+        auto light = CreateDiffuseLightMaterial(scene, Spectrum(5.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {
@@ -85,13 +85,13 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr"));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr"));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
-    // scene.CreateLight<ImageInfiniteLight>("res/solitude_night_4k/solitude_night_4k.hdr"));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunset.hdr"));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

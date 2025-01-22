@@ -59,7 +59,6 @@ private:
 class ImageInfiniteLight : public Light
 {
 public:
-    ImageInfiniteLight(const std::string& env_map, const Transform& transform = identity);
     ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& transform = identity);
 
     LightSample Sample_Li(const Intersection& ref, const Point2& u) const;

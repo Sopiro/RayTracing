@@ -59,7 +59,7 @@ static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat,
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        SpectrumTexture* texture = CreateSpectrumImageTexture(ReadImage3(filename, non_color));
+        SpectrumTexture* texture = g_scene->CreateImageTexture<Spectrum>(ReadImage3(filename, non_color));
         textures.push_back(texture);
     }
 
@@ -77,7 +77,7 @@ static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, ai
         mat->GetTexture(type, i, &str);
         std::string filename = g_folder + str.C_Str();
 
-        FloatTexture* texture = CreateFloatImageTexture(ReadImage1(filename, channel, non_color));
+        FloatTexture* texture = g_scene->CreateImageTexture<Float>(ReadImage1(filename, channel, non_color));
         textures.push_back(texture);
     }
 
@@ -128,13 +128,13 @@ static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
 
     // clang-format off
     auto mat = g_scene->CreateMaterial<UnrealMaterial>(
-        basecolor_textures.empty() ? CreateSpectrumConstantTexture(diffuse_color.r, diffuse_color.g, diffuse_color.b)
+        basecolor_textures.empty() ? g_scene->CreateConstantTexture<Spectrum>({diffuse_color.r, diffuse_color.g, diffuse_color.b})
         : basecolor_textures[0],
-        metallic_textures.empty() ? CreateFloatConstantTexture(metallic)
+        metallic_textures.empty() ? g_scene->CreateConstantTexture<Float>(metallic)
         : metallic_textures[0],
-        roughness_textures.empty() ? CreateFloatConstantTexture(roughness)
+        roughness_textures.empty() ? g_scene->CreateConstantTexture<Float>(roughness)
         : roughness_textures[0],
-        emissive_textures.empty() ? CreateSpectrumConstantTexture(emissive_color.r, emissive_color.g, emissive_color.b)
+        emissive_textures.empty() ? g_scene->CreateConstantTexture<Spectrum>({emissive_color.r, emissive_color.g, emissive_color.b})
         : emissive_textures[0],
         normalmap_textures.empty() ? nullptr
         : normalmap_textures[0],

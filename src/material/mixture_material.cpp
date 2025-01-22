@@ -5,11 +5,6 @@
 namespace bulbit
 {
 
-MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, Float mix)
-    : MixtureMaterial(material1, material2, CreateFloatConstantTexture(mix))
-{
-}
-
 MixtureMaterial::MixtureMaterial(const Material* material1, const Material* material2, const FloatTexture* amount)
     : Material{ TypeIndexOf<MixtureMaterial>() }
     , mixture_amount{ amount }

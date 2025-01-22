@@ -6,6 +6,7 @@
 #include "mesh.h"
 #include "primitive.h"
 #include "shapes.h"
+#include "textures.h"
 
 namespace bulbit
 {
@@ -22,15 +23,25 @@ public:
     template <typename T, typename... Args>
     T* CreateShape(Args&&... args);
     template <typename T, typename... Args>
-    T* CreateMaterial(Args&&... args);
-    template <typename T, typename... Args>
-    T* CreateMedium(Args&&... args);
-    template <typename T, typename... Args>
     T* CreatePrimitive(Args&&... args);
-    template <typename T, typename... Args>
-    T* CreateLight(Args&&... args);
     template <typename... Args>
     Mesh* CreateMesh(Args&&... args);
+
+    template <typename T, typename... Args>
+    T* CreateLight(Args&&... args);
+
+    template <typename T, typename... Args>
+    T* CreateMedium(Args&&... args);
+
+    template <typename T, typename... Args>
+    ConstantTexture<T>* CreateConstantTexture(T value);
+    template <typename T, typename... Args>
+    ImageTexture<T>* CreateImageTexture(Image<T> image);
+    template <typename T, typename... Args>
+    CheckerTexture<T>* CreateCheckerTexture(const Texture<T>* a, const Texture<T>* b, const Point2& resolution);
+
+    template <typename T, typename... Args>
+    T* CreateMaterial(Args&&... args);
 
     const std::vector<Primitive*>& GetPrimitives() const;
     const std::vector<Light*>& GetLights() const;
@@ -41,11 +52,12 @@ private:
     Allocator allocator;
 
     std::vector<Shape*> shapes;
-    std::vector<Material*> materials;
-    std::vector<Medium*> media;
     std::vector<Primitive*> primitives;
-    std::vector<Light*> lights;
     std::vector<std::unique_ptr<Mesh>> meshes;
+    std::vector<Light*> lights;
+    std::vector<Medium*> media;
+    TexturePool texture_pool;
+    std::vector<Material*> materials;
 };
 
 inline Scene::Scene()
@@ -94,11 +106,28 @@ inline T* Scene::CreateShape(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline T* Scene::CreateMaterial(Args&&... args)
+inline T* Scene::CreatePrimitive(Args&&... args)
 {
-    T* m = allocator.new_object<T>(std::forward<Args>(args)...);
-    materials.push_back(m);
+    T* p = allocator.new_object<T>(std::forward<Args>(args)...);
+    primitives.push_back(p);
+    return p;
+}
+
+template <typename... Args>
+inline Mesh* Scene::CreateMesh(Args&&... args)
+{
+    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(std::forward<Args>(args)...);
+    Mesh* m = mesh.get();
+    meshes.push_back(std::move(mesh));
     return m;
+}
+
+template <typename T, typename... Args>
+inline T* Scene::CreateLight(Args&&... args)
+{
+    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
+    lights.push_back(l);
+    return l;
 }
 
 template <typename T, typename... Args>
@@ -110,27 +139,37 @@ inline T* Scene::CreateMedium(Args&&... args)
 }
 
 template <typename T, typename... Args>
-inline T* Scene::CreatePrimitive(Args&&... args)
+inline ConstantTexture<T>* Scene::CreateConstantTexture(T value)
 {
-    T* p = allocator.new_object<T>(std::forward<Args>(args)...);
-    primitives.push_back(p);
-    return p;
+    return texture_pool.GetPool0d<T>().Create(value, value);
 }
 
 template <typename T, typename... Args>
-inline T* Scene::CreateLight(Args&&... args)
+inline ImageTexture<T>* Scene::CreateImageTexture(Image<T> image)
 {
-    T* l = allocator.new_object<T>(std::forward<Args>(args)...);
-    lights.push_back(l);
-    return l;
+    if (image)
+    {
+        return texture_pool.GetPool2d<T>().Create(
+            { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
+        );
+    }
+    else
+    {
+        return nullptr;
+    }
 }
 
-template <typename... Args>
-inline Mesh* Scene::CreateMesh(Args&&... args)
+template <typename T, typename... Args>
+inline CheckerTexture<T>* Scene::CreateCheckerTexture(const Texture<T>* a, const Texture<T>* b, const Point2& resolution)
 {
-    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(std::forward<Args>(args)...);
-    Mesh* m = mesh.get();
-    meshes.push_back(std::move(mesh));
+    return texture_pool.GetPoolC<T>().Create({ a, b, resolution }, a, b, resolution);
+}
+
+template <typename T, typename... Args>
+inline T* Scene::CreateMaterial(Args&&... args)
+{
+    T* m = allocator.new_object<T>(std::forward<Args>(args)...);
+    materials.push_back(m);
     return m;
 }
 

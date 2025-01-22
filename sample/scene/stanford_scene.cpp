@@ -5,15 +5,17 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumImageTexture(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg")),
-            CreateFloatImageTexture(
+            scene.CreateImageTexture<Spectrum>(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg")),
+            scene.CreateImageTexture<Float>(
                 ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel, true)
             ),
-            CreateFloatImageTexture(
+            scene.CreateImageTexture<Float>(
                 ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
             ),
-            CreateSpectrumConstantTexture(Spectrum(0.0f)),
-            CreateSpectrumImageTexture(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true))
+            scene.CreateConstantTexture<Spectrum>(Spectrum(0.0f)),
+            scene.CreateImageTexture<Spectrum>(
+                ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true)
+            )
         );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
@@ -56,8 +58,8 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     {
         auto tf = Transform{ Vec3(-gap * 3.0f, 0.0f, 0.0f), Quat(0.0f, y_axis), Vec3(scale) };
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            CreateSpectrumConstantTexture(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
-            CreateFloatConstantTexture(1.0f), CreateFloatConstantTexture(0.2f)
+            scene.CreateConstantTexture<Spectrum>(Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f),
+            scene.CreateConstantTexture<Float>(1.0f), scene.CreateConstantTexture<Float>(0.2f)
         );
 
         SetLoaderFallbackMaterial(mat);
@@ -71,7 +73,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         Float xgap = 0.015f;
         Float xstep = 2.0f * w + xgap;
 
-        auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(3.0f), true);
+        auto light = CreateDiffuseLightMaterial(scene, Spectrum(3.0f), true);
 
         for (int32 x = 0; x < cx; ++x)
         {
@@ -88,7 +90,7 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
         }
     }
 
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr"));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

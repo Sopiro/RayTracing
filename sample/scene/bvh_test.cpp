@@ -2,12 +2,12 @@
 
 std::unique_ptr<Camera> BVHTest(Scene& scene)
 {
-    auto gray = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.8f, 0.8f, 0.8f));
-    auto red = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.65f, .05f, .05f));
-    auto green = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.12f, .45f, .15f));
-    auto blue = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.22f, .23f, .75f));
-    auto white = scene.CreateMaterial<DiffuseMaterial>(Spectrum(.73f, .73f, .73f));
-    auto black = scene.CreateMaterial<DiffuseMaterial>(Spectrum(0.0f));
+    auto gray = CreateDiffuseMaterial(scene, Spectrum(0.8f, 0.8f, 0.8f));
+    auto red = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f));
+    auto green = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f));
+    auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
+    auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
+    auto black = CreateDiffuseMaterial(scene, Spectrum(0.0f));
 
     Float n = 100.0f;
     Float w = 7.0f;
@@ -30,7 +30,7 @@ std::unique_ptr<Camera> BVHTest(Scene& scene)
         }
     }
 
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr");
+    CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

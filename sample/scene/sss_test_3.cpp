@@ -11,36 +11,36 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     HomogeneousMedium* hm = scene.CreateMedium<HomogeneousMedium>(sigma_a, sigma_s, Spectrum(0.0), 0.9f);
     MediumInterface mi(hm, nullptr);
 
-    // auto mat = scene.CreateMaterial<DielectricMaterial>(1.33f, 0.1f);
-    auto mat = scene.CreateMaterial<SubsurfaceMaterialDiffusion>(Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.33f, 0.0f);
+    // auto mat = CreateDielectricMaterial(scene, 1.33f, 0.1f);
+    auto mat = CreateSubsurfaceMaterialDiffusion(scene, Spectrum(1.0), Spectrum(1) / (sigma_a + sigma_s), 1.33f, 0.0f);
     SetLoaderFallbackMaterial(mat);
     // SetLoaderFallbackMediumInterface(mi);
 
     auto tf = Transform{ Vec3(0.0f, -0.2f, 0.0f), Quat(DegToRad(180.0f), y_axis), Vec3(0.4f) };
     LoadModel(scene, "res/ajax/ajax.obj", tf);
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/sunset.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
-    auto light = scene.CreateMaterial<DiffuseLightMaterial>(Spectrum(3.0f));
+    auto light = CreateDiffuseLightMaterial(scene, Spectrum(3.0f));
     tf = Transform{ 0, 1.0f, 0, Quat(pi, x_axis), Vec3(1.0f) };
     CreateRectXZ(scene, tf, light);
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(0.75, 0.75, 0.75);
-        auto b = CreateSpectrumConstantTexture(0.3, 0.3, 0.3);
-        auto checker = CreateSpectrumCheckerTexture(a, b, Point2(20));
+        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
+        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
+        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
         auto tf = Transform{ Vec3(0, -0.2f, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);

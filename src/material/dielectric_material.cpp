@@ -5,16 +5,6 @@
 namespace bulbit
 {
 
-DielectricMaterial::DielectricMaterial(Float eta)
-    : DielectricMaterial(eta, CreateFloatConstantTexture(0))
-{
-}
-
-DielectricMaterial::DielectricMaterial(Float eta, Float roughness)
-    : DielectricMaterial(eta, CreateFloatConstantTexture(roughness))
-{
-}
-
 DielectricMaterial::DielectricMaterial(Float eta, const FloatTexture* roughness, const SpectrumTexture* normalmap)
     : DielectricMaterial(eta, roughness, roughness, normalmap)
 

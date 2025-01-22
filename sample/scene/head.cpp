@@ -5,10 +5,9 @@ std::unique_ptr<Camera> Head(Scene& scene)
     SetLoaderUseForceFallbackMaterial(true);
     // Head
     {
-        auto head_albedo = CreateSpectrumImageTexture(ReadImage3("res/head/lambertian.jpg"));
-        auto mat = scene.CreateMaterial<SubsurfaceMaterialRandomWalk>(
-            head_albedo, Spectrum(0.0012953, 0.00095238, 0.00067114), 1.33f, 0.1f
-        );
+        auto head_albedo = scene.CreateImageTexture<Spectrum>(ReadImage3("res/head/lambertian.jpg"));
+        auto mat =
+            CreateSubsurfaceMaterialRandomWalk(scene, head_albedo, Spectrum(0.0012953, 0.00095238, 0.00067114), 1.33f, 0.1f);
         // auto mat = scene.CreateMaterial<DiffuseMaterial>(head_albedo);
         SetLoaderFallbackMaterial(mat);
 
@@ -16,17 +15,17 @@ std::unique_ptr<Camera> Head(Scene& scene)
         LoadModel(scene, "res/head/head.obj", tf);
     }
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/sunset.hdr", Transform(Quat(-pi / 2, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
-    // scene.CreateLight<ImageInfiniteLight>("res/sunflowers/sunflowers_puresky_4k.hdr");
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
-    scene.CreateLight<ImageInfiniteLight>("res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/material-test.hdr", Transform(Quat(pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/sunset.hdr", Transform(Quat(-pi / 2, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/aerodynamics_workshop_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/photo_studio_01_1k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/HDR/white_cliff_top_1k.hdr", Transform(Quat(pi, y_axis)));
+    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
+    CreateImageInfiniteLight(scene, "res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
     // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
 
     // Float aspect_ratio = 16.f / 9.f;

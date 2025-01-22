@@ -6,7 +6,7 @@ std::unique_ptr<Camera> SunTempleScene(Scene& scene)
     Transform tf{ Vec3::zero, identity, Vec3(1.0f) };
     LoadModel(scene, "res/sun_temple/sun_temple.gltf", tf);
 
-    // scene.CreateLight<ImageInfiniteLight>("res/HDR/SunTemple_Skybox.hdr"));
+    // CreateImageInfiniteLight(scene, "res/HDR/SunTemple_Skybox.hdr"));
 
     Float intensity = 30;
     Spectrum color(1.0f, 0.392f, 0.122f);
