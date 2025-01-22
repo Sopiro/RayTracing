@@ -1,0 +1,102 @@
+#pragma once
+
+#include "bulbit/lights.h"
+#include "bulbit/materials.h"
+#include "bulbit/scene.h"
+
+namespace bulbit
+{
+
+DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp);
+DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap, Float alpha);
+
+DielectricMaterial* CreateDielectricMaterial(
+    Scene& scene, Float eta, Float roughness = 0, const SpectrumTexture* normalmap = nullptr
+);
+
+ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness, const SpectrumTexture* normalmap = nullptr
+);
+ConductorMaterial* CreateConductorMaterial(
+    Scene& scene,
+    const Spectrum& eta,
+    const Spectrum& k,
+    Float roughness_u,
+    Float roughness_v,
+    const SpectrumTexture* normalmap = nullptr
+);
+ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap = nullptr
+);
+ConductorMaterial* CreateConductorMaterial(
+    Scene& scene, const Spectrum& reflectance, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap = nullptr
+);
+
+UnrealMaterial* CreateUnrealMaterial(
+    Scene& scene,
+    const Spectrum& basecolor,
+    Float metallic,
+    Float roughness,
+    const Spectrum& emission = Spectrum::black,
+    const SpectrumTexture* normalmap = nullptr,
+    const FloatTexture* alpha = nullptr
+);
+UnrealMaterial* CreateUnrealMaterial(
+    Scene& scene,
+    const Spectrum& basecolor,
+    Float metallic,
+    Float u_roughness,
+    Float v_roughness,
+    const Spectrum& emission = Spectrum::black,
+    const SpectrumTexture* normalmap = nullptr,
+    const FloatTexture* alpha = nullptr
+);
+
+SubsurfaceDiffusionMaterial* CreateSubsurfaceDiffusionMaterial(
+    Scene& scene,
+    const Spectrum& reflectance,
+    const Spectrum& mfp,
+    Float eta,
+    Float roughness,
+    const SpectrumTexture* normalmap = nullptr
+);
+
+SubsurfaceDiffusionMaterial* CreateSubsurfaceDiffusionMaterial(
+    Scene& scene,
+    const SpectrumTexture* reflectance,
+    const Spectrum& mfp,
+    Float eta,
+    Float roughness,
+    const SpectrumTexture* normalmap = nullptr
+);
+
+SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
+    Scene& scene,
+    const SpectrumTexture* reflectance,
+    const Spectrum& mfp,
+    Float eta,
+    Float roughness,
+    Float g = 0,
+    const SpectrumTexture* normalmap = nullptr
+);
+SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
+    Scene& scene,
+    const Spectrum& reflectance,
+    const Spectrum& mfp,
+    Float eta,
+    Float roughness,
+    Float g = 0,
+    const SpectrumTexture* normalmap = nullptr
+);
+
+MixtureMaterial* CreateMixtureMaterial(Scene& scene, const Material* material1, const Material* material2, Float amount);
+
+MirrorMaterial* CreateMirrorMaterial(
+    Scene& scene, const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
+);
+
+DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& color, bool two_sided = false, Float alpha = 1);
+
+ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf = identity);
+
+} // namespace bulbit
