@@ -203,7 +203,7 @@ public:
             }
             else
             {
-                throw std::invalid_argument("Invalid arguments for ConstantTexture");
+                static_assert(false, "Invalid arguments for ConstantTexture");
             }
         }
         else if constexpr (std::is_same_v<TextureType<T>, ImageTexture<T>>)
@@ -211,7 +211,7 @@ public:
             // For ImageTexture
             if constexpr (sizeof...(Args) == 1)
             {
-                auto& image = std::get<0>(std::forward_as_tuple(args...));
+                Image<T>& image = std::get<0>(std::forward_as_tuple(args...));
                 if (image)
                 {
                     return GetPool<TextureType, T>().Create(
@@ -225,7 +225,7 @@ public:
             }
             else
             {
-                throw std::invalid_argument("Invalid arguments for ImageTexture");
+                static_assert(false, "Invalid arguments for ImageTexture");
             }
         }
         else if constexpr (std::is_same_v<TextureType<T>, CheckerTexture<T>>)
@@ -233,28 +233,20 @@ public:
             // For CheckerTexture
             if constexpr (sizeof...(Args) == 3)
             {
-                using FirstArg = std::decay_t<decltype(std::get<0>(std::forward_as_tuple(args...)))>;
-                using SecondArg = std::decay_t<decltype(std::get<1>(std::forward_as_tuple(args...)))>;
-                using ThirdArg = std::decay_t<decltype(std::get<2>(std::forward_as_tuple(args...)))>;
+                const Texture<T>* a = std::get<0>(std::forward_as_tuple(args...));
+                const Texture<T>* b = std::get<1>(std::forward_as_tuple(args...));
+                const Point2& resolution = std::get<2>(std::forward_as_tuple(args...));
 
-                if constexpr (std::is_same_v<FirstArg, const Texture<T>*> && std::is_same_v<SecondArg, const Texture<T>*> &&
-                              std::is_same_v<ThirdArg, Point2>)
-                {
-                    return GetPool<TextureType, T>().Create(std::forward<Args>(args)...);
-                }
-                else
-                {
-                    throw std::invalid_argument("Invalid arguments for CheckerTexture");
-                }
+                return GetPool<CheckerTexture, T>().Create({ a, b, resolution }, a, b, resolution);
             }
             else
             {
-                throw std::invalid_argument("Invalid arguments for CheckerTexture");
+                static_assert(false, "Invalid arguments for CheckerTexture");
             }
         }
         else
         {
-            throw std::invalid_argument("Unsupported texture type");
+            static_assert(false, "Unsupported texture type");
         }
     }
 

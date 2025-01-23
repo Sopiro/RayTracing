@@ -4,10 +4,23 @@
 namespace bulbit
 {
 
-DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap, Float alpha)
+DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, Float reflectance, const SpectrumTexture* normalmap, Float alpha)
 {
     return scene.CreateMaterial<DiffuseMaterial>(
-        CreateSpectrumConstantTexture(scene, sp), normalmap, CreateFloatConstantTexture(scene, alpha)
+        CreateSpectrumConstantTexture(scene, reflectance), normalmap, CreateFloatConstantTexture(scene, alpha)
+    );
+}
+DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& reflectance, const SpectrumTexture* normalmap, Float alpha)
+{
+    return scene.CreateMaterial<DiffuseMaterial>(
+        CreateSpectrumConstantTexture(scene, reflectance), normalmap, CreateFloatConstantTexture(scene, alpha)
+    );
+}
+
+DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const std::string& filename, const SpectrumTexture* normalmap, Float alpha)
+{
+    return scene.CreateMaterial<DiffuseMaterial>(
+        CreateSpectrumImageTexture(scene, filename), normalmap, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -170,10 +183,17 @@ MirrorMaterial* CreateMirrorMaterial(Scene& scene, const Spectrum& reflectance, 
     );
 }
 
-DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& color, bool two_sided, Float alpha)
+DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, Float emission, bool two_sided, Float alpha)
 {
     return scene.CreateMaterial<DiffuseLightMaterial>(
-        CreateSpectrumConstantTexture(scene, color), two_sided, CreateFloatConstantTexture(scene, alpha)
+        CreateSpectrumConstantTexture(scene, emission), two_sided, CreateFloatConstantTexture(scene, alpha)
+    );
+}
+
+DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& emission, bool two_sided, Float alpha)
+{
+    return scene.CreateMaterial<DiffuseLightMaterial>(
+        CreateSpectrumConstantTexture(scene, emission), two_sided, CreateFloatConstantTexture(scene, alpha)
     );
 }
 

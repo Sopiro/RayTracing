@@ -8,7 +8,13 @@ namespace bulbit
 {
 
 DiffuseMaterial* CreateDiffuseMaterial(
-    Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
+    Scene& scene, Float reflectance, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
+);
+DiffuseMaterial* CreateDiffuseMaterial(
+    Scene& scene, const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
+);
+DiffuseMaterial* CreateDiffuseMaterial(
+    Scene& scene, const std::string& filename, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
 );
 
 DielectricMaterial* CreateDielectricMaterial(
@@ -107,7 +113,8 @@ MirrorMaterial* CreateMirrorMaterial(
     Scene& scene, const Spectrum& reflectance, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
 );
 
-DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& color, bool two_sided = false, Float alpha = 1);
+DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, Float emission, bool two_sided = false, Float alpha = 1);
+DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& emission, bool two_sided = false, Float alpha = 1);
 
 const Material* CreateRandomUnrealMaterial(Scene& scene);
 
