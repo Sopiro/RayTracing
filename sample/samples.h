@@ -5,7 +5,6 @@
 #include "loader.h"
 #include "material_builder.h"
 #include "scene_builder.h"
-#include "util.h"
 
 #include <unordered_map>
 

@@ -15,12 +15,12 @@ SubsurfaceDiffusionMaterial::SubsurfaceDiffusionMaterial(
     const SpectrumTexture* normalmap
 )
     : Material(TypeIndexOf<SubsurfaceDiffusionMaterial>())
-    , normalmap{ normalmap }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
     , reflectance{ reflectance }
     , l{ mfp }
     , eta{ eta }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
 {
 }
 

@@ -9,14 +9,16 @@ ConductorMaterial::ConductorMaterial(
     const SpectrumTexture* k,
     const FloatTexture* u_roughness,
     const FloatTexture* v_roughness,
-    const SpectrumTexture* normalmap
+    const SpectrumTexture* normalmap,
+    const FloatTexture* alpha
 )
     : Material(TypeIndexOf<ConductorMaterial>())
-    , normalmap{ normalmap }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
     , eta{ eta }
     , k{ k }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
+    , alpha{ alpha }
 {
 }
 
@@ -24,21 +26,29 @@ ConductorMaterial::ConductorMaterial(
     const SpectrumTexture* reflectance,
     const FloatTexture* u_roughness,
     const FloatTexture* v_roughness,
-    const SpectrumTexture* normalmap
+    const SpectrumTexture* normalmap,
+    const FloatTexture* alpha
 )
     : Material{ TypeIndexOf<ConductorMaterial>() }
-    , normalmap{ normalmap }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
     , eta{ nullptr }
     , k{ reflectance }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
+    , normalmap{ normalmap }
+    , alpha{ alpha }
 {
 }
 
 Float ConductorMaterial::GetAlpha(const Intersection& isect) const
 {
-    BulbitNotUsed(isect);
-    return 1;
+    if (alpha)
+    {
+        return alpha->Evaluate(isect.uv);
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 const SpectrumTexture* ConductorMaterial::GetNormalMap() const

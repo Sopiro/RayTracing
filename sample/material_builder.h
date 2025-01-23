@@ -7,15 +7,21 @@
 namespace bulbit
 {
 
-DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp);
-DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap, Float alpha);
+DiffuseMaterial* CreateDiffuseMaterial(
+    Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
+);
 
 DielectricMaterial* CreateDielectricMaterial(
     Scene& scene, Float eta, Float roughness = 0, const SpectrumTexture* normalmap = nullptr
 );
 
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness, const SpectrumTexture* normalmap = nullptr
+    Scene& scene,
+    const Spectrum& eta,
+    const Spectrum& k,
+    Float roughness,
+    const SpectrumTexture* normalmap = nullptr,
+    Float alpha = 1
 );
 ConductorMaterial* CreateConductorMaterial(
     Scene& scene,
@@ -23,13 +29,19 @@ ConductorMaterial* CreateConductorMaterial(
     const Spectrum& k,
     Float roughness_u,
     Float roughness_v,
-    const SpectrumTexture* normalmap = nullptr
+    const SpectrumTexture* normalmap = nullptr,
+    Float alpha = 1
 );
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap = nullptr
+    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap = nullptr, Float alpha = 1
 );
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& reflectance, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap = nullptr
+    Scene& scene,
+    const Spectrum& reflectance,
+    Float roughness_u,
+    Float roughness_v,
+    const SpectrumTexture* normalmap = nullptr,
+    Float alpha = 1
 );
 
 UnrealMaterial* CreateUnrealMaterial(
@@ -96,6 +108,8 @@ MirrorMaterial* CreateMirrorMaterial(
 );
 
 DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& color, bool two_sided = false, Float alpha = 1);
+
+const Material* CreateRandomUnrealMaterial(Scene& scene);
 
 ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf = identity);
 

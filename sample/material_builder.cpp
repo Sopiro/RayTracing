@@ -3,11 +3,6 @@
 namespace bulbit
 {
 
-DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp)
-{
-    return scene.CreateMaterial<DiffuseMaterial>(scene.CreateConstantTexture(sp));
-}
-
 DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap, Float alpha)
 {
     return scene.CreateMaterial<DiffuseMaterial>(
@@ -23,42 +18,50 @@ DielectricMaterial* CreateDielectricMaterial(Scene& scene, Float eta, Float roug
 }
 
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness, const SpectrumTexture* normalmap
+    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness, const SpectrumTexture* normalmap, Float alpha
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
         scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
-        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap
+        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap,
+        scene.CreateConstantTexture<Float>(alpha)
     );
 }
 
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& eta, const Spectrum& k, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap
+    Scene& scene,
+    const Spectrum& eta,
+    const Spectrum& k,
+    Float roughness_u,
+    Float roughness_v,
+    const SpectrumTexture* normalmap,
+    Float alpha
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
         scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
-        scene.CreateConstantTexture<Float>(roughness_u), scene.CreateConstantTexture<Float>(roughness_v), normalmap
+        scene.CreateConstantTexture<Float>(roughness_u), scene.CreateConstantTexture<Float>(roughness_v), normalmap,
+        scene.CreateConstantTexture<Float>(alpha)
     );
 }
 
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap
+    Scene& scene, const Spectrum& reflectance, Float roughness, const SpectrumTexture* normalmap, Float alpha
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
         scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness),
-        scene.CreateConstantTexture<Float>(roughness), normalmap
+        scene.CreateConstantTexture<Float>(roughness), normalmap, scene.CreateConstantTexture<Float>(alpha)
     );
 }
 
 ConductorMaterial* CreateConductorMaterial(
-    Scene& scene, const Spectrum& reflectance, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap
+    Scene& scene, const Spectrum& reflectance, Float roughness_u, Float roughness_v, const SpectrumTexture* normalmap, Float alpha
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
         scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness_u),
-        scene.CreateConstantTexture<Float>(roughness_v), normalmap
+        scene.CreateConstantTexture<Float>(roughness_v), normalmap, scene.CreateConstantTexture<Float>(alpha)
     );
 }
 
@@ -171,6 +174,20 @@ DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& c
     return scene.CreateMaterial<DiffuseLightMaterial>(
         scene.CreateConstantTexture<Spectrum>(color), two_sided, scene.CreateConstantTexture<Float>(alpha)
     );
+}
+
+const Material* CreateRandomUnrealMaterial(Scene& scene)
+{
+    // clang-format off
+    Spectrum basecolor = Spectrum(Rand(0.0f, 1.0f), Rand(0.0f, 1.0f), Rand(0.0f, 1.0f)) * 0.7f;
+    return CreateUnrealMaterial(scene, 
+        basecolor,
+        Rand() > 0.5f ? 1.0f : 0.0f,
+        (Float)std::sqrt(Rand(0.1f, 1.0f)),
+        (Float)std::sqrt(Rand(0.1f, 1.0f)),
+        basecolor * (Rand() < 0.08f ? Rand(0.0f, 0.3f) : 0.0f)
+    );
+    // clang-format on
 }
 
 ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf)

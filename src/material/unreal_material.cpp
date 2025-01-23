@@ -15,10 +15,10 @@ UnrealMaterial::UnrealMaterial(
 
 )
     : Material{ TypeIndexOf<UnrealMaterial>() }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
     , basecolor{ basecolor }
     , metallic{ metallic }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
     , emissive{ emissive }
     , normalmap{ normalmap }
     , alpha{ alpha }

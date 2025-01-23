@@ -16,13 +16,13 @@ SubsurfaceRandomWalkMaterial::SubsurfaceRandomWalkMaterial(
     const SpectrumTexture* normalmap
 )
     : Material(TypeIndexOf<SubsurfaceRandomWalkMaterial>())
-    , normalmap{ normalmap }
-    , u_roughness{ u_roughness }
-    , v_roughness{ v_roughness }
     , reflectance{ reflectance }
     , l{ mfp }
     , eta{ eta }
+    , u_roughness{ u_roughness }
+    , v_roughness{ v_roughness }
     , g{ g }
+    , normalmap{ normalmap }
 {
 }
 

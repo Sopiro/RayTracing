@@ -9,7 +9,7 @@ class DiffuseMaterial : public Material
 {
 public:
     DiffuseMaterial(
-        const SpectrumTexture* albedo, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
+        const SpectrumTexture* reflectance, const SpectrumTexture* normalmap = nullptr, const FloatTexture* alpha = nullptr
     );
 
     Float GetAlpha(const Intersection& isect) const;
@@ -20,7 +20,7 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 public:
-    const SpectrumTexture* albedo;
+    const SpectrumTexture* reflectance;
 
     const SpectrumTexture* normalmap;
     const FloatTexture* alpha;
@@ -93,13 +93,15 @@ public:
         const SpectrumTexture* k,
         const FloatTexture* u_roughness,
         const FloatTexture* v_roughness,
-        const SpectrumTexture* normalmap = nullptr
+        const SpectrumTexture* normalmap = nullptr,
+        const FloatTexture* alpha = nullptr
     );
     ConductorMaterial(
         const SpectrumTexture* reflectance,
         const FloatTexture* u_roughness,
         const FloatTexture* v_roughness,
-        const SpectrumTexture* normalmap = nullptr
+        const SpectrumTexture* normalmap = nullptr,
+        const FloatTexture* alpha = nullptr
     );
 
     Float GetAlpha(const Intersection& isect) const;
@@ -110,12 +112,14 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const SpectrumTexture* normalmap;
+    const SpectrumTexture* eta;
+    const SpectrumTexture* k;
+
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
 
-    const SpectrumTexture* eta;
-    const SpectrumTexture* k;
+    const SpectrumTexture* normalmap;
+    const FloatTexture* alpha;
 };
 
 class UnrealMaterial : public Material
@@ -139,11 +143,10 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const FloatTexture* u_roughness;
-    const FloatTexture* v_roughness;
-
     const SpectrumTexture* basecolor;
     const FloatTexture* metallic;
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
     const SpectrumTexture* emissive;
 
     const SpectrumTexture* normalmap;
@@ -208,13 +211,15 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const SpectrumTexture* normalmap;
+    const SpectrumTexture* reflectance;
+
+    Spectrum l; // Mean free path
+    Float eta;
+
     const FloatTexture* u_roughness;
     const FloatTexture* v_roughness;
 
-    const SpectrumTexture* reflectance;
-    Spectrum l; // Mean free path
-    Float eta;
+    const SpectrumTexture* normalmap;
 };
 
 class SubsurfaceRandomWalkMaterial : public Material
@@ -238,14 +243,14 @@ public:
     bool GetBSSRDF(BSSRDF** bssrdf, const Intersection& isect, const Vec3& wo, Allocator& alloc) const;
 
 private:
-    const SpectrumTexture* normalmap;
-    const FloatTexture* u_roughness;
-    const FloatTexture* v_roughness;
-
     const SpectrumTexture* reflectance;
     Spectrum l; // Mean free path
     Float eta;
+    const FloatTexture* u_roughness;
+    const FloatTexture* v_roughness;
     Float g;
+
+    const SpectrumTexture* normalmap;
 };
 
 inline Float Material::GetAlpha(const Intersection& isect) const
