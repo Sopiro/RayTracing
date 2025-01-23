@@ -190,54 +190,57 @@ using PoolC = Pool<detail::key_c<T>, CheckerTexture<T>, detail::hasher_c<T>>;
 class TexturePool
 {
 public:
-    template <typename T>
-    auto& GetPool0d()
+    template <template <typename> class TextureType, typename T>
+    auto& GetPool()
     {
-        if constexpr (std::is_same_v<T, Float>)
+        if constexpr (std::is_same_v<TextureType<T>, ConstantTexture<T>>)
         {
-            return pool_0d1f;
+            if constexpr (std::is_same_v<T, Float>)
+            {
+                return pool_0d1f;
+            }
+            else if constexpr (std::is_same_v<T, Spectrum>)
+            {
+                return pool_0d3f;
+            }
+            else
+            {
+                static_assert(false, "Unsupported type for ConstantTexture");
+            }
         }
-        else if constexpr (std::is_same_v<T, Spectrum>)
+        else if constexpr (std::is_same_v<TextureType<T>, ImageTexture<T>>)
         {
-            return pool_0d3f;
+            if constexpr (std::is_same_v<T, Float>)
+            {
+                return pool_2d1f;
+            }
+            else if constexpr (std::is_same_v<T, Spectrum>)
+            {
+                return pool_2d3f;
+            }
+            else
+            {
+                static_assert(false, "Unsupported type for ImageTexture");
+            }
+        }
+        else if constexpr (std::is_same_v<TextureType<T>, CheckerTexture<T>>)
+        {
+            if constexpr (std::is_same_v<T, Float>)
+            {
+                return pool_C1f;
+            }
+            else if constexpr (std::is_same_v<T, Spectrum>)
+            {
+                return pool_C3f;
+            }
+            else
+            {
+                static_assert(false, "Unsupported type for CheckerTexture");
+            }
         }
         else
         {
-            static_assert(false, "Unsupported type for 0d");
-        }
-    }
-
-    template <typename T>
-    auto& GetPool2d()
-    {
-        if constexpr (std::is_same_v<T, Float>)
-        {
-            return pool_2d1f;
-        }
-        else if constexpr (std::is_same_v<T, Spectrum>)
-        {
-            return pool_2d3f;
-        }
-        else
-        {
-            static_assert(false, "Unsupported type for 2d");
-        }
-    }
-
-    template <typename T>
-    auto& GetPoolC()
-    {
-        if constexpr (std::is_same_v<T, Float>)
-        {
-            return pool_C1f;
-        }
-        else if constexpr (std::is_same_v<T, Spectrum>)
-        {
-            return pool_C3f;
-        }
-        else
-        {
-            static_assert(false, "Unsupported type for checker");
+            static_assert(false, "Unsupported texture type");
         }
     }
 

@@ -141,7 +141,7 @@ inline T* Scene::CreateMedium(Args&&... args)
 template <typename T, typename... Args>
 inline ConstantTexture<T>* Scene::CreateConstantTexture(T value)
 {
-    return texture_pool.GetPool0d<T>().Create(value, value);
+    return texture_pool.GetPool<ConstantTexture, T>().Create(value, value);
 }
 
 template <typename T, typename... Args>
@@ -149,7 +149,7 @@ inline ImageTexture<T>* Scene::CreateImageTexture(Image<T> image)
 {
     if (image)
     {
-        return texture_pool.GetPool2d<T>().Create(
+        return texture_pool.GetPool<ImageTexture, T>().Create(
             { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
         );
     }
@@ -162,7 +162,7 @@ inline ImageTexture<T>* Scene::CreateImageTexture(Image<T> image)
 template <typename T, typename... Args>
 inline CheckerTexture<T>* Scene::CreateCheckerTexture(const Texture<T>* a, const Texture<T>* b, const Point2& resolution)
 {
-    return texture_pool.GetPoolC<T>().Create({ a, b, resolution }, a, b, resolution);
+    return texture_pool.GetPool<CheckerTexture, T>().Create({ a, b, resolution }, a, b, resolution);
 }
 
 template <typename T, typename... Args>
