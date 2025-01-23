@@ -250,6 +250,16 @@ public:
         }
     }
 
+    void Clear()
+    {
+        pool_0d1f.Clear();
+        pool_0d3f.Clear();
+        pool_2d1f.Clear();
+        pool_2d3f.Clear();
+        pool_C1f.Clear();
+        pool_C3f.Clear();
+    }
+
 private:
     template <template <typename> class TextureType, typename T>
     auto& GetPool()

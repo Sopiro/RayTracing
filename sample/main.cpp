@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Loading scene.." << std::endl;
     Timer timer;
-    if (!Sample::Get("cornell-box-volume", &scene, &camera))
+    if (!Sample::Get("sss", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;
@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
     int32 samples_per_pixel = 64;
     int32 max_bounces = 100;
 
-    // IndependentSampler sampler(samples_per_pixel);
-    StratifiedSampler sampler(std::sqrt(samples_per_pixel), std::sqrt(samples_per_pixel), true);
+    IndependentSampler sampler(samples_per_pixel);
+    // StratifiedSampler sampler(std::sqrt(samples_per_pixel), std::sqrt(samples_per_pixel), true);
 
     VolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
