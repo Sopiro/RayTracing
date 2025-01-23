@@ -33,13 +33,8 @@ public:
     template <typename T, typename... Args>
     T* CreateMedium(Args&&... args);
 
-    template <typename T, typename... Args>
-    ConstantTexture<T>* CreateConstantTexture(T value);
-    template <typename T, typename... Args>
-    ImageTexture<T>* CreateImageTexture(Image<T> image);
-    template <typename T, typename... Args>
-    CheckerTexture<T>* CreateCheckerTexture(const Texture<T>* a, const Texture<T>* b, const Point2& resolution);
-
+    template <template <typename> class TextureType, typename T, typename... Args>
+    TextureType<T>* CreateTexture(Args&&... args);
     template <typename T, typename... Args>
     T* CreateMaterial(Args&&... args);
 
@@ -54,8 +49,11 @@ private:
     std::vector<Shape*> shapes;
     std::vector<Primitive*> primitives;
     std::vector<std::unique_ptr<Mesh>> meshes;
+
     std::vector<Light*> lights;
+
     std::vector<Medium*> media;
+
     TexturePool texture_pool;
     std::vector<Material*> materials;
 };
@@ -138,31 +136,10 @@ inline T* Scene::CreateMedium(Args&&... args)
     return m;
 }
 
-template <typename T, typename... Args>
-inline ConstantTexture<T>* Scene::CreateConstantTexture(T value)
+template <template <typename> class TextureType, typename T, typename... Args>
+inline TextureType<T>* Scene::CreateTexture(Args&&... args)
 {
-    return texture_pool.GetPool<ConstantTexture, T>().Create(value, value);
-}
-
-template <typename T, typename... Args>
-inline ImageTexture<T>* Scene::CreateImageTexture(Image<T> image)
-{
-    if (image)
-    {
-        return texture_pool.GetPool<ImageTexture, T>().Create(
-            { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
-        );
-    }
-    else
-    {
-        return nullptr;
-    }
-}
-
-template <typename T, typename... Args>
-inline CheckerTexture<T>* Scene::CreateCheckerTexture(const Texture<T>* a, const Texture<T>* b, const Point2& resolution)
-{
-    return texture_pool.GetPool<CheckerTexture, T>().Create({ a, b, resolution }, a, b, resolution);
+    return texture_pool.CreateTexture<TextureType, T>(std::forward<Args>(args)...);
 }
 
 template <typename T, typename... Args>

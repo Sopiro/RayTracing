@@ -7,7 +7,7 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
     auto green = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f));
     auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
     auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg"));
+    auto wakgood_texture = CreateSpectrumImageTexture(scene, "res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = CreateDiffuseLightMaterial(scene, Spectrum(2.0f));
     auto plastic = CreateDielectricMaterial(scene, 1.5f, 0.2f);
@@ -83,11 +83,9 @@ std::unique_ptr<Camera> CornellBoxVolume(Scene& scene)
 
     // Right sphere
     {
-        // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.0f));
+        // auto mat = CreateDielectricMaterial(scene, 1.5f, CreateFloatConstantTexture(scene, 0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
-        // auto mat = CreateConductorMaterial(scene,
-        //     scene.CreateConstantTexture<Spectrum>(0.1, 0.2, 1.9), scene.CreateConstantTexture<Spectrum>(3, 2.5, 2),
-        //     scene.CreateConstantTexture<Float>(0.3f), scene.CreateConstantTexture<Float>(0.1f));
+        // auto mat = CreateConductorMaterial(scene, { 0.1, 0.2, 1.9 }, { 3, 2.5, 2 }, 0.3f, 0.1f);
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
     }

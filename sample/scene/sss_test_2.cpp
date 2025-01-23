@@ -6,9 +6,9 @@ std::unique_ptr<Camera> SSSTest2(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>(Spectrum{ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, Spectrum{ 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, Spectrum{ 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);

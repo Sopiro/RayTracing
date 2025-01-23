@@ -9,9 +9,9 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -29,7 +29,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
     outers[0] = CreateDielectricMaterial(scene, 1.5f, 0.08f);
@@ -106,9 +106,9 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -126,7 +126,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
     outers[0] = CreateDielectricMaterial(scene, 1.5f, 0.02f);
@@ -203,9 +203,9 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -223,7 +223,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     const Material* skins[count];
     skins[1] = CreateSubsurfaceDiffusionMaterial(
@@ -305,9 +305,9 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -325,14 +325,13 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
     auto a = CreateDielectricMaterial(scene, 1.5f, 0.0f);
     auto b = CreateConductorMaterial(scene, { 0.7, 0.3, 0.2 }, (0.1f));
-    auto checker = scene.CreateCheckerTexture<Float>(
-        scene.CreateConstantTexture<Float>(0), scene.CreateConstantTexture<Float>(1), Point2(20)
-    );
+    auto checker =
+        CreateFloatCheckerTexture(scene, CreateFloatConstantTexture(scene, 0), CreateFloatConstantTexture(scene, 1), Point2(20));
     outers[1] = scene.CreateMaterial<MixtureMaterial>(a, b, checker);
 
     auto c = CreateConductorMaterial(scene, Spectrum{ 0.7f }, (0.05f), (0.4f));
@@ -413,9 +412,9 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -433,7 +432,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     const int32 count = 3;
 
-    auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     const Material* outers[count];
     outers[0] = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f), nullptr, 0.4f);

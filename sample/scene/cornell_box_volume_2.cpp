@@ -9,7 +9,7 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
     auto green = CreateDiffuseMaterial(scene, Spectrum(.12f, .45f, .15f));
     auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
     auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg"));
+    auto wakgood_texture = CreateSpectrumImageTexture(scene, "res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = CreateDiffuseLightMaterial(scene, Spectrum(300.0f));
     auto glass = CreateDielectricMaterial(scene, 1.5f, 0.0f);

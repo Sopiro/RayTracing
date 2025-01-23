@@ -9,9 +9,9 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
 
     // Floor
     {
-        auto a = scene.CreateConstantTexture<Spectrum>({ 0.75, 0.75, 0.75 });
-        auto b = scene.CreateConstantTexture<Spectrum>({ 0.3, 0.3, 0.3 });
-        auto checker = scene.CreateCheckerTexture<Spectrum>(a, b, Point2(20));
+        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
+        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
+        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -20,7 +20,7 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
 
     // Model
     {
-        // auto normalmap = scene.CreateImageTexture<Spectrum>("res/bistro/Concrete_Normal.png", true);
+        // auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
         auto normalmap = nullptr;
         // auto mat = CreateDiffuseMaterial(scene, Spectrum(0, 163 / 255.0, 108 / 255.0), normalmap);
         auto mat = CreateSubsurfaceRandomWalkMaterial(
@@ -28,7 +28,7 @@ std::unique_ptr<Camera> SSSTest(Scene& scene)
         );
         // auto mat = CreateSubsurfaceDiffusionMaterial(scene, Spectrum(1.0), Spectrum(0.01), 1.0, 0.0);
         // auto mat = CreateConductorMaterial(scene, Spectrum(0.1, 0.2, 1.9), Spectrum(3, 2.5, 2), (0.05f), (0.4f), normalmap);
-        // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.1f));
+        // auto mat = CreateDielectricMaterial(scene, 1.5f, CreateFloatConstantTexture(scene, 0.1f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = CreateMirrorMaterial(scene, Spectrum(0.7f), normalmap);
 

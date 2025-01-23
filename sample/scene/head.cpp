@@ -5,7 +5,7 @@ std::unique_ptr<Camera> Head(Scene& scene)
     SetLoaderUseForceFallbackMaterial(true);
     // Head
     {
-        auto head_albedo = scene.CreateImageTexture<Spectrum>(ReadImage3("res/head/lambertian.jpg"));
+        auto head_albedo = CreateSpectrumImageTexture(scene, "res/head/lambertian.jpg");
         auto mat =
             CreateSubsurfaceRandomWalkMaterial(scene, head_albedo, Spectrum(0.0012953, 0.00095238, 0.00067114), 1.33f, 0.1f);
         // auto mat = scene.CreateMaterial<DiffuseMaterial>(head_albedo);

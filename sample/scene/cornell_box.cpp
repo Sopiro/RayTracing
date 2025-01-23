@@ -2,7 +2,7 @@
 
 std::unique_ptr<Camera> CornellBox(Scene& scene)
 {
-    // auto normalmap = scene.CreateImageTexture<Spectrum>(ReadImage3("res/bistro/Concrete_Normal.png", true));
+    // auto normalmap = CreateSpectrumImageTexture(scene, "res/bistro/Concrete_Normal.png", true);
 
     // Materials
     auto red = CreateDiffuseMaterial(scene, Spectrum(.65f, .05f, .05f));
@@ -10,7 +10,7 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
     auto blue = CreateDiffuseMaterial(scene, Spectrum(.22f, .23f, .75f));
     auto white = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
     auto box = CreateDiffuseMaterial(scene, Spectrum(.73f, .73f, .73f));
-    auto wakgood_texture = scene.CreateImageTexture<Spectrum>(ReadImage3("res/wakdu.jpg"));
+    auto wakgood_texture = CreateSpectrumImageTexture(scene, "res/wakdu.jpg");
     auto wakgood_mat = scene.CreateMaterial<DiffuseMaterial>(wakgood_texture);
     auto light = CreateDiffuseLightMaterial(scene, Spectrum(15.0f));
     // auto light = CreateDiffuseLightMaterial(scene, Spectrum(17.0f, 12.0f, 4.0f));
@@ -65,11 +65,11 @@ std::unique_ptr<Camera> CornellBox(Scene& scene)
 
     // Right sphere
     {
-        // auto mat = CreateDielectricMaterial(scene, 1.5f, scene.CreateConstantTexture<Float>(0.0f));
+        // auto mat = CreateDielectricMaterial(scene, 1.5f, CreateFloatConstantTexture(scene, 0.0f));
         // auto mat = scene.CreateMaterial<ThinDielectricMaterial>(1.5f);
         // auto mat = CreateConductorMaterial(scene,
-        //     scene.CreateConstantTexture<Spectrum>(0.1, 0.2, 1.9), scene.CreateConstantTexture<Spectrum>(3, 2.5, 2),
-        //     scene.CreateConstantTexture<Float>(0.3f), scene.CreateConstantTexture<Float>(0.1f));
+        //     CreateSpectrumConstantTexture(scene, 0.1, 0.2, 1.9), CreateSpectrumConstantTexture(scene, 3, 2.5, 2),
+        //     CreateFloatConstantTexture(scene, 0.3f), CreateFloatConstantTexture(scene, 0.1f));
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(0), x_axis)), 0.15f, mat);
         // CreateSphere(scene, Transform(Vec3(0.65f, 0.15f, -0.3f), Quat(DegToRad(45), y_axis)), 0.15f, wakgood_mat);
     }

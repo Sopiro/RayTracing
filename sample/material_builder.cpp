@@ -1,4 +1,5 @@
 #include "material_builder.h"
+#include "texture_builder.h"
 
 namespace bulbit
 {
@@ -6,14 +7,14 @@ namespace bulbit
 DiffuseMaterial* CreateDiffuseMaterial(Scene& scene, const Spectrum& sp, const SpectrumTexture* normalmap, Float alpha)
 {
     return scene.CreateMaterial<DiffuseMaterial>(
-        scene.CreateConstantTexture(sp), normalmap, scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, sp), normalmap, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
 DielectricMaterial* CreateDielectricMaterial(Scene& scene, Float eta, Float roughness, const SpectrumTexture* normalmap)
 {
     return scene.CreateMaterial<DielectricMaterial>(
-        eta, scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap
+        eta, CreateFloatConstantTexture(scene, roughness), CreateFloatConstantTexture(scene, roughness), normalmap
     );
 }
 
@@ -22,9 +23,9 @@ ConductorMaterial* CreateConductorMaterial(
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
-        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), normalmap,
-        scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, eta), CreateSpectrumConstantTexture(scene, k),
+        CreateFloatConstantTexture(scene, roughness), CreateFloatConstantTexture(scene, roughness), normalmap,
+        CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -39,9 +40,9 @@ ConductorMaterial* CreateConductorMaterial(
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(eta), scene.CreateConstantTexture<Spectrum>(k),
-        scene.CreateConstantTexture<Float>(roughness_u), scene.CreateConstantTexture<Float>(roughness_v), normalmap,
-        scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, eta), CreateSpectrumConstantTexture(scene, k),
+        CreateFloatConstantTexture(scene, roughness_u), CreateFloatConstantTexture(scene, roughness_v), normalmap,
+        CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -50,8 +51,8 @@ ConductorMaterial* CreateConductorMaterial(
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness),
-        scene.CreateConstantTexture<Float>(roughness), normalmap, scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, reflectance), CreateFloatConstantTexture(scene, roughness),
+        CreateFloatConstantTexture(scene, roughness), normalmap, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -60,8 +61,8 @@ ConductorMaterial* CreateConductorMaterial(
 )
 {
     return scene.CreateMaterial<ConductorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(reflectance), scene.CreateConstantTexture<Float>(roughness_u),
-        scene.CreateConstantTexture<Float>(roughness_v), normalmap, scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, reflectance), CreateFloatConstantTexture(scene, roughness_u),
+        CreateFloatConstantTexture(scene, roughness_v), normalmap, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -76,9 +77,9 @@ UnrealMaterial* CreateUnrealMaterial(
 )
 {
     return scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>(basecolor), scene.CreateConstantTexture<Float>(metallic),
-        scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness),
-        scene.CreateConstantTexture<Spectrum>(emission), normalmap, alpha
+        CreateSpectrumConstantTexture(scene, basecolor), CreateFloatConstantTexture(scene, metallic),
+        CreateFloatConstantTexture(scene, roughness), CreateFloatConstantTexture(scene, roughness),
+        CreateSpectrumConstantTexture(scene, emission), normalmap, alpha
     );
 }
 
@@ -94,9 +95,9 @@ UnrealMaterial* CreateUnrealMaterial(
 )
 {
     return scene.CreateMaterial<UnrealMaterial>(
-        scene.CreateConstantTexture<Spectrum>(basecolor), scene.CreateConstantTexture<Float>(metallic),
-        scene.CreateConstantTexture<Float>(u_roughness), scene.CreateConstantTexture<Float>(v_roughness),
-        scene.CreateConstantTexture<Spectrum>(emission), normalmap, alpha
+        CreateSpectrumConstantTexture(scene, basecolor), CreateFloatConstantTexture(scene, metallic),
+        CreateFloatConstantTexture(scene, u_roughness), CreateFloatConstantTexture(scene, v_roughness),
+        CreateSpectrumConstantTexture(scene, emission), normalmap, alpha
     );
 }
 
@@ -105,8 +106,8 @@ SubsurfaceDiffusionMaterial* CreateSubsurfaceDiffusionMaterial(
 )
 {
     return scene.CreateMaterial<SubsurfaceDiffusionMaterial>(
-        scene.CreateConstantTexture<Spectrum>(reflectance), mfp, eta, scene.CreateConstantTexture<Float>(roughness),
-        scene.CreateConstantTexture<Float>(roughness), normalmap
+        CreateSpectrumConstantTexture(scene, reflectance), mfp, eta, CreateFloatConstantTexture(scene, roughness),
+        CreateFloatConstantTexture(scene, roughness), normalmap
     );
 }
 
@@ -120,7 +121,7 @@ SubsurfaceDiffusionMaterial* CreateSubsurfaceDiffusionMaterial(
 )
 {
     return scene.CreateMaterial<SubsurfaceDiffusionMaterial>(
-        reflectance, mfp, eta, scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness),
+        reflectance, mfp, eta, CreateFloatConstantTexture(scene, roughness), CreateFloatConstantTexture(scene, roughness),
         normalmap
     );
 }
@@ -136,7 +137,7 @@ SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
 )
 {
     return scene.CreateMaterial<SubsurfaceRandomWalkMaterial>(
-        reflectance, mfp, eta, scene.CreateConstantTexture<Float>(roughness), scene.CreateConstantTexture<Float>(roughness), g,
+        reflectance, mfp, eta, CreateFloatConstantTexture(scene, roughness), CreateFloatConstantTexture(scene, roughness), g,
         normalmap
     );
 }
@@ -152,27 +153,27 @@ SubsurfaceRandomWalkMaterial* CreateSubsurfaceRandomWalkMaterial(
 )
 {
     return scene.CreateMaterial<SubsurfaceRandomWalkMaterial>(
-        scene.CreateConstantTexture<Spectrum>(reflectance), mfp, eta, scene.CreateConstantTexture<Float>(roughness),
-        scene.CreateConstantTexture<Float>(roughness), g, normalmap
+        CreateSpectrumConstantTexture(scene, reflectance), mfp, eta, CreateFloatConstantTexture(scene, roughness),
+        CreateFloatConstantTexture(scene, roughness), g, normalmap
     );
 }
 
 MixtureMaterial* CreateMixtureMaterial(Scene& scene, const Material* material1, const Material* material2, Float amount)
 {
-    return scene.CreateMaterial<MixtureMaterial>(material1, material2, scene.CreateConstantTexture<Float>(amount));
+    return scene.CreateMaterial<MixtureMaterial>(material1, material2, CreateFloatConstantTexture(scene, amount));
 }
 
 MirrorMaterial* CreateMirrorMaterial(Scene& scene, const Spectrum& reflectance, const SpectrumTexture* normalmap, Float alpha)
 {
     return scene.CreateMaterial<MirrorMaterial>(
-        scene.CreateConstantTexture<Spectrum>(reflectance), normalmap, scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, reflectance), normalmap, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
 DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& color, bool two_sided, Float alpha)
 {
     return scene.CreateMaterial<DiffuseLightMaterial>(
-        scene.CreateConstantTexture<Spectrum>(color), two_sided, scene.CreateConstantTexture<Float>(alpha)
+        CreateSpectrumConstantTexture(scene, color), two_sided, CreateFloatConstantTexture(scene, alpha)
     );
 }
 
@@ -192,7 +193,7 @@ const Material* CreateRandomUnrealMaterial(Scene& scene)
 
 ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf)
 {
-    return scene.CreateLight<ImageInfiniteLight>(scene.CreateImageTexture<Spectrum>(ReadImage3(filename, false)), tf);
+    return scene.CreateLight<ImageInfiniteLight>(CreateSpectrumImageTexture(scene, filename, false), tf);
 }
 
 } // namespace bulbit

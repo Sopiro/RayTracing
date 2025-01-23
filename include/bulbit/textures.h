@@ -190,6 +190,75 @@ using PoolC = Pool<detail::key_c<T>, CheckerTexture<T>, detail::hasher_c<T>>;
 class TexturePool
 {
 public:
+    template <template <typename> class TextureType, typename T, typename... Args>
+    TextureType<T>* CreateTexture(Args&&... args)
+    {
+        if constexpr (std::is_same_v<TextureType<T>, ConstantTexture<T>>)
+        {
+            // For ConstantTexture
+            if constexpr (sizeof...(Args) == 1)
+            {
+                T value = std::get<0>(std::forward_as_tuple(args...));
+                return GetPool<TextureType, T>().Create(value, value);
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid arguments for ConstantTexture");
+            }
+        }
+        else if constexpr (std::is_same_v<TextureType<T>, ImageTexture<T>>)
+        {
+            // For ImageTexture
+            if constexpr (sizeof...(Args) == 1)
+            {
+                auto& image = std::get<0>(std::forward_as_tuple(args...));
+                if (image)
+                {
+                    return GetPool<TextureType, T>().Create(
+                        { &image[0], image.width * image.height }, std::move(image), TexCoordFilter::repeat
+                    );
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid arguments for ImageTexture");
+            }
+        }
+        else if constexpr (std::is_same_v<TextureType<T>, CheckerTexture<T>>)
+        {
+            // For CheckerTexture
+            if constexpr (sizeof...(Args) == 3)
+            {
+                using FirstArg = std::decay_t<decltype(std::get<0>(std::forward_as_tuple(args...)))>;
+                using SecondArg = std::decay_t<decltype(std::get<1>(std::forward_as_tuple(args...)))>;
+                using ThirdArg = std::decay_t<decltype(std::get<2>(std::forward_as_tuple(args...)))>;
+
+                if constexpr (std::is_same_v<FirstArg, const Texture<T>*> && std::is_same_v<SecondArg, const Texture<T>*> &&
+                              std::is_same_v<ThirdArg, Point2>)
+                {
+                    return GetPool<TextureType, T>().Create(std::forward<Args>(args)...);
+                }
+                else
+                {
+                    throw std::invalid_argument("Invalid arguments for CheckerTexture");
+                }
+            }
+            else
+            {
+                throw std::invalid_argument("Invalid arguments for CheckerTexture");
+            }
+        }
+        else
+        {
+            throw std::invalid_argument("Unsupported texture type");
+        }
+    }
+
+private:
     template <template <typename> class TextureType, typename T>
     auto& GetPool()
     {
@@ -244,7 +313,6 @@ public:
         }
     }
 
-private:
     detail::Pool0d<Float> pool_0d1f;
     detail::Pool0d<Spectrum> pool_0d3f;
 

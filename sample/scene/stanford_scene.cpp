@@ -5,20 +5,18 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     // Floor
     {
         auto mat = scene.CreateMaterial<UnrealMaterial>(
-            scene.CreateImageTexture<Spectrum>(ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg")),
-            scene.CreateImageTexture<Float>(
-                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel, true)
+            CreateSpectrumImageTexture(scene, "res/dark_wooden_planks_4k/textures/dark_wooden_planks_diff_4k.jpg"),
+            CreateFloatImageTexture(
+                scene, "res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", metallic_channel, true
             ),
-            scene.CreateImageTexture<Float>(
-                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
+            CreateFloatImageTexture(
+                scene, "res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true
             ),
-            scene.CreateImageTexture<Float>(
-                ReadImage1("res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true)
+            CreateFloatImageTexture(
+                scene, "res/dark_wooden_planks_4k/textures/dark_wooden_planks_arm_4k.jpg", roughness_channel, true
             ),
-            scene.CreateConstantTexture<Spectrum>(Spectrum(0.0f)),
-            scene.CreateImageTexture<Spectrum>(
-                ReadImage3("res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true)
-            )
+            CreateSpectrumConstantTexture(scene, Spectrum(0.0f)),
+            CreateSpectrumImageTexture(scene, "res/dark_wooden_planks_4k/textures/dark_wooden_planks_nor_gl_4k.png", true)
         );
 
         auto tf = Transform{ Vec3::zero, identity, Vec3(8.0f) };
