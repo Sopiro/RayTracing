@@ -7,6 +7,8 @@
 namespace bulbit
 {
 
+using Spectrum = struct RGBSpectrum;
+
 struct RGBSpectrum
 {
     Float r, g, b;

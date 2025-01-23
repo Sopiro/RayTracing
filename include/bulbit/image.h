@@ -1,7 +1,7 @@
 #pragma once
 
 #include "math.h"
-#include "rgb_spectrum.h"
+#include "spectrum.h"
 
 #include <filesystem>
 
