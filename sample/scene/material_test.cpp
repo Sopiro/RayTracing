@@ -9,9 +9,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
-        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
-        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
+        auto checker = CreateSpectrumCheckerTexture(scene, 0.75, 0.3, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -106,9 +104,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
-        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
-        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
+        auto checker = CreateSpectrumCheckerTexture(scene, 0.75, 0.3, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -203,9 +199,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
-        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
-        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
+        auto checker = CreateSpectrumCheckerTexture(scene, 0.75, 0.3, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -305,9 +299,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
-        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
-        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
+        auto checker = CreateSpectrumCheckerTexture(scene, 0.75, 0.3, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);
@@ -412,9 +404,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
 
     // Floor
     {
-        auto a = CreateSpectrumConstantTexture(scene, { 0.75, 0.75, 0.75 });
-        auto b = CreateSpectrumConstantTexture(scene, { 0.3, 0.3, 0.3 });
-        auto checker = CreateSpectrumCheckerTexture(scene, a, b, Point2(20));
+        auto checker = CreateSpectrumCheckerTexture(scene, 0.75, 0.3, Point2(20));
         auto tf = Transform{ Vec3(0, 0, 0), Quat::FromEuler({ 0, 0, 0 }), Vec3(3) };
         auto floor = scene.CreateMaterial<DiffuseMaterial>(checker);
         SetLoaderFallbackMaterial(floor);

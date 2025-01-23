@@ -16,6 +16,7 @@ CheckerTexture<Float>* CreateFloatCheckerTexture(Scene& scene, Float a, Float b,
 CheckerTexture<Float>* CreateFloatCheckerTexture(
     Scene& scene, const Texture<Float>* a, const Texture<Float>* b, const Point2& resolution
 );
+CheckerTexture<Spectrum>* CreateSpectrumCheckerTexture(Scene& scene, Float a, Float b, const Point2& resolution);
 CheckerTexture<Spectrum>* CreateSpectrumCheckerTexture(
     Scene& scene, const Spectrum& a, const Spectrum& b, const Point2& resolution
 );
