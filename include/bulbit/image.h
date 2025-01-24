@@ -1,5 +1,6 @@
 #pragma once
 
+#include "color.h"
 #include "math.h"
 #include "post_process.h"
 #include "spectrum.h"

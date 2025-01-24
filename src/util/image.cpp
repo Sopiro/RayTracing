@@ -185,7 +185,8 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename, Tone
     }
     else
     {
-        std::cout << "Faild to write image, type not supported: " << extension << std::endl;
+        std::cout << "Faild to write image, extention not supported: " << extension << std::endl;
+        std::cout << "Supported extensions: .jpg .png .hdr" << std::endl;
     }
 }
 

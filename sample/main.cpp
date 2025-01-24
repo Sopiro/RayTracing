@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
     Image3 image = film.ConvertToImage();
 
     auto [width, height] = camera->GetScreenResolution();
-    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.jpg", width, height, samples_per_pixel, max_bounces, t);
+    std::string filename = std::format("render_{}x{}_s{}_d{}_t{}s.hdr", width, height, samples_per_pixel, max_bounces, t);
     WriteImage(image, filename.c_str());
 
 #if _DEBUG
