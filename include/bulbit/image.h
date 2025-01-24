@@ -1,6 +1,7 @@
 #pragma once
 
 #include "math.h"
+#include "post_process.h"
 #include "spectrum.h"
 
 #include <filesystem>
@@ -60,9 +61,7 @@ struct Image
         return data[y * width + x];
     }
 
-    const int32 width, height;
-
-private:
+    int32 width, height;
     std::unique_ptr<T[]> data;
 };
 
@@ -77,6 +76,15 @@ Image1 ReadImage1(const std::filesystem::path& filename, int32 channel, bool non
 Image3 ReadImage3(const std::filesystem::path& filename, bool non_color = false);
 Image4 ReadImage4(const std::filesystem::path& filename, bool non_color = false);
 
-void WriteImage(const Image3& image, const std::filesystem::path& filename);
+using ToneMappingCallback = Vec3(const Vec3&);
+
+inline ToneMappingCallback* default_tonemapping_callback = [](const Vec3& RGB) -> Vec3 {
+    return sRGB_from_RGB(Tonemap_ACES(RGB));
+};
+
+// Tone mapping runs only when saving to LDR file
+void WriteImage(
+    const Image3& image, const std::filesystem::path& filename, ToneMappingCallback* callback = default_tonemapping_callback
+);
 
 } // namespace bulbit

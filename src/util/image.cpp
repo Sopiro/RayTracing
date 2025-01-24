@@ -144,7 +144,7 @@ Image4 ReadImage4(const std::filesystem::path& filename, bool non_color)
     return image;
 }
 
-void WriteImage(const Image3& image, const std::filesystem::path& filename)
+void WriteImage(const Image3& image, const std::filesystem::path& filename, ToneMappingCallback* callback)
 {
     stbi_flip_vertically_on_write(true);
 
@@ -159,9 +159,11 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
 
         for (int32 i = 0; i < image.width * image.height; ++i)
         {
-            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i][0], 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i][1], 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i][2], 0.0f, 1.0f) * 256.0, 255.0));
+            Vec3 mapped = callback({ image[i].r, image[i].g, image[i].b });
+
+            pixels[i * 3 + 0] = uint8(std::min(std::clamp(mapped[0], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 1] = uint8(std::min(std::clamp(mapped[1], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 2] = uint8(std::min(std::clamp(mapped[2], 0.0f, 1.0f) * 256.0, 255.0));
         }
 
         stbi_write_jpg(filename.string().c_str(), image.width, image.height, 3, &pixels[0], 100);
@@ -172,9 +174,11 @@ void WriteImage(const Image3& image, const std::filesystem::path& filename)
 
         for (int32 i = 0; i < image.width * image.height; ++i)
         {
-            pixels[i * 3 + 0] = uint8(std::min(std::clamp(image[i][0], 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 1] = uint8(std::min(std::clamp(image[i][1], 0.0f, 1.0f) * 256.0, 255.0));
-            pixels[i * 3 + 2] = uint8(std::min(std::clamp(image[i][2], 0.0f, 1.0f) * 256.0, 255.0));
+            Vec3 mapped = callback({ image[i].r, image[i].g, image[i].b });
+
+            pixels[i * 3 + 0] = uint8(std::min(std::clamp(mapped[0], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 1] = uint8(std::min(std::clamp(mapped[1], 0.0f, 1.0f) * 256.0, 255.0));
+            pixels[i * 3 + 2] = uint8(std::min(std::clamp(mapped[2], 0.0f, 1.0f) * 256.0, 255.0));
         }
 
         stbi_write_png(filename.string().c_str(), image.width, image.height, 3, &pixels[0], image.width * 3);
