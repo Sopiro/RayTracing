@@ -2,7 +2,6 @@
 
 #include "camera.h"
 #include "image.h"
-#include "post_process.h"
 #include "spectrum.h"
 
 namespace bulbit

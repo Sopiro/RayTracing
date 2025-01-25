@@ -2,8 +2,8 @@
 
 #include "color.h"
 #include "math.h"
-#include "post_process.h"
 #include "spectrum.h"
+#include "tone_mapping.h"
 
 #include <filesystem>
 

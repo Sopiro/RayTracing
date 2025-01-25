@@ -7,7 +7,6 @@
 
 #include "bulbit/image.h"
 #include "bulbit/parallel_for.h"
-#include "bulbit/post_process.h"
 #include "bulbit/spectrum.h"
 
 namespace bulbit
