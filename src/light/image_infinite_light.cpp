@@ -6,10 +6,11 @@
 namespace bulbit
 {
 
-ImageInfiniteLight::ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& tf)
+ImageInfiniteLight::ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& tf, Float l_scale)
     : Light(TypeIndexOf<ImageInfiniteLight>())
-    , transform{ tf }
     , l_map{ l_map }
+    , l_scale{ l_scale }
+    , transform{ tf }
 {
     int32 width = l_map->GetWidth();
     int32 height = l_map->GetHeight();
@@ -61,7 +62,7 @@ LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2&
     }
 
     light_sample.visibility = infinity;
-    light_sample.Li = l_map->Evaluate(uv);
+    light_sample.Li = l_scale * l_map->Evaluate(uv);
 
     return light_sample;
 }
@@ -86,7 +87,7 @@ Spectrum ImageInfiniteLight::Le(const Ray& ray) const
     Float theta = SphericalTheta(w), phi = SphericalPhi(w);
     Point2 uv(phi * inv_two_pi, 1 - theta * inv_pi);
 
-    return l_map->Evaluate(uv);
+    return l_scale * l_map->Evaluate(uv);
 }
 
 } // namespace bulbit

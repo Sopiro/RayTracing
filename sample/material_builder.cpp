@@ -211,9 +211,9 @@ const Material* CreateRandomUnrealMaterial(Scene& scene)
     // clang-format on
 }
 
-ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf)
+ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf, Float scale)
 {
-    return scene.CreateLight<ImageInfiniteLight>(CreateSpectrumImageTexture(scene, filename, false), tf);
+    return scene.CreateLight<ImageInfiniteLight>(CreateSpectrumImageTexture(scene, filename, false), tf, scale);
 }
 
 } // namespace bulbit

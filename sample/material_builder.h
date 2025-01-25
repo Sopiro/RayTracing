@@ -118,6 +118,6 @@ DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& e
 
 const Material* CreateRandomUnrealMaterial(Scene& scene);
 
-ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf = identity);
+ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf = identity, Float scale = 1);
 
 } // namespace bulbit

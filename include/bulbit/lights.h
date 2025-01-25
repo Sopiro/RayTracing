@@ -59,7 +59,7 @@ private:
 class ImageInfiniteLight : public Light
 {
 public:
-    ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& transform = identity);
+    ImageInfiniteLight(const SpectrumImageTexture* l_map, const Transform& transform = identity, Float l_scale = 1);
 
     LightSample Sample_Li(const Intersection& ref, const Point2& u) const;
     Float EvaluatePDF(const Ray& ray) const;
@@ -67,10 +67,12 @@ public:
     Spectrum Le(const Ray& ray) const;
 
 private:
-    Transform transform;
+    const SpectrumImageTexture* l_map; // Environment(Radiance) map
+    Float l_scale;
 
     std::unique_ptr<Distribution2D> distribution;
-    const SpectrumImageTexture* l_map; // Environment(Radiance) map
+
+    Transform transform;
 };
 
 class UniformInfiniteLight : public Light
