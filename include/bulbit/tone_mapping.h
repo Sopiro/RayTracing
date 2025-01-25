@@ -31,21 +31,21 @@ inline Vec3 Tonemap_ACES(const Vec3& RGB)
 // https://www.khronos.org/news/press/khronos-pbr-neutral-tone-mapper-released-for-true-to-life-color-rendering-of-3d-products
 inline Vec3 ToneMap_PBRNeutral(Vec3 RGB)
 {
-    const Float startCompression = 0.8 - 0.04;
-    const Float desaturation = 0.15;
+    const Float startCompression = 0.8f - 0.04f;
+    const Float desaturation = 0.15f;
 
     Float x = std::min(RGB.x, std::min(RGB.y, RGB.z));
-    Float offset = x < 0.08 ? x - 6.25 * x * x : 0.04;
+    Float offset = x < 0.08f ? x - 6.25f * x * x : 0.04f;
     RGB -= Vec3(offset);
 
     Float peak = std::max(RGB.x, std::max(RGB.y, RGB.z));
     if (peak < startCompression) return RGB;
 
-    const Float d = 1. - startCompression;
-    Float newPeak = 1. - d * d / (peak + d - startCompression);
+    const Float d = 1.f - startCompression;
+    Float newPeak = 1.f - d * d / (peak + d - startCompression);
     RGB *= newPeak / peak;
 
-    Float g = 1. - 1. / (desaturation * (peak - newPeak) + 1.);
+    Float g = 1.f - 1.f / (desaturation * (peak - newPeak) + 1.f);
     return Lerp(RGB, newPeak * Vec3(1, 1, 1), g);
 }
 
