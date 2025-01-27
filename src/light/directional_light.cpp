@@ -4,11 +4,11 @@
 namespace bulbit
 {
 
-DirectionalLight::DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius)
+DirectionalLight::DirectionalLight(const Vec3& direction, const Spectrum& intensity, Float visible_radius)
     : Light(TypeIndexOf<DirectionalLight>())
-    , dir{ Normalize(dir) }
+    , dir{ Normalize(direction) }
     , intensity{ intensity }
-    , radius{ radius }
+    , radius{ visible_radius }
 {
 }
 

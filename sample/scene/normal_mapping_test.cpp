@@ -13,7 +13,7 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
 
-    // scene.CreateLight<DirectionalLight>(Normalize(-Vec3(-1, 10, 0)), Vec3(1.0f), 0.01f);
+    // CreateDirectionalLight(scene,  Normalize(-Vec3(-1, 10, 0)), Vec3(1.0f), 0.01f);
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3. / 2;

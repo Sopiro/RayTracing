@@ -27,7 +27,7 @@ std::unique_ptr<Camera> Head(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;

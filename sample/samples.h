@@ -2,6 +2,7 @@
 
 #include "bulbit/bulbit.h"
 
+#include "light_builder.h"
 #include "loader.h"
 #include "material_builder.h"
 #include "scene_builder.h"

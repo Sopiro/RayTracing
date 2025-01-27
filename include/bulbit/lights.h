@@ -26,7 +26,7 @@ private:
 class DirectionalLight : public Light
 {
 public:
-    DirectionalLight(const Vec3& dir, const Spectrum& intensity, Float radius);
+    DirectionalLight(const Vec3& direction, const Spectrum& intensity, Float visible_radius);
 
     LightSample Sample_Li(const Intersection& ref, const Point2& u) const;
     Float EvaluatePDF(const Ray& ray) const;

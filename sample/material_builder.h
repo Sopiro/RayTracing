@@ -1,6 +1,5 @@
 #pragma once
 
-#include "bulbit/lights.h"
 #include "bulbit/materials.h"
 #include "bulbit/scene.h"
 
@@ -117,7 +116,5 @@ DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, Float emission, b
 DiffuseLightMaterial* CreateDiffuseLightMaterial(Scene& scene, const Spectrum& emission, bool two_sided = false, Float alpha = 1);
 
 const Material* CreateRandomUnrealMaterial(Scene& scene);
-
-ImageInfiniteLight* CreateImageInfiniteLight(Scene& scene, std::string filename, const Transform& tf = identity, Float scale = 1);
 
 } // namespace bulbit

@@ -31,7 +31,7 @@ std::unique_ptr<Camera> VolumeTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     // Float aspect_ratio = 16.f / 9.f;
     Float aspect_ratio = 9.f / 16.f;

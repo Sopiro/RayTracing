@@ -12,9 +12,7 @@ std::unique_ptr<Camera> BistroScene(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/harties_4k.hdr");
     CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
     CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
-    scene.CreateLight<DirectionalLight>(
-        Quat(DegToRad(119), -x_axis).Rotate(Vec3(0, 0, -1)), 15 * Vec3(0.734f, 0.583f, 0.377f), 0.02f
-    );
+    CreateDirectionalLight(scene, Quat(DegToRad(119), -x_axis).Rotate(Vec3(0, 0, -1)), 15 * Vec3(0.734f, 0.583f, 0.377f), 0.02f);
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

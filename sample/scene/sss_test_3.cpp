@@ -30,7 +30,7 @@ std::unique_ptr<Camera> SSSTest3(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi / 2, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/Background_05.hdr", Transform(Quat(pi / 2, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     auto light = CreateDiffuseLightMaterial(scene, Spectrum(3.0f));
     tf = Transform{ 0, 1.0f, 0, Quat(pi, x_axis), Vec3(1.0f) };

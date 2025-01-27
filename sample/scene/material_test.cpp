@@ -75,7 +75,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
@@ -170,7 +170,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
@@ -266,7 +266,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     auto light = CreateDiffuseLightMaterial(scene, Spectrum(5.0f));
     auto tf = Transform{ 0.0f, 0.8f, -0.5f, Quat::FromEuler({ 0, 0, 0 }), Vec3(3, 0.5, 1) };
@@ -375,7 +375,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
@@ -470,7 +470,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
-    // scene.CreateLight<UniformInfiniteLight>(Spectrum(1));
+    // CreateUniformInfiniteLight(scene, Spectrum(1));
 
     Float aspect_ratio = 21.f / 9.f;
     // Float aspect_ratio = 9.f / 16.f;
