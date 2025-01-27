@@ -8,7 +8,7 @@ namespace bulbit
 
 ThreadPool::ThreadPool(int32 worker_count)
 {
-    worker_count = std::max(worker_count, 1);
+    worker_count = std::max(worker_count, 2);
 
     // Calling thread also participates in executing parallel work,
     // so we launches one fewer than the requested number of threads.

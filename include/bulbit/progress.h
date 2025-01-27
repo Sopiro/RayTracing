@@ -31,7 +31,7 @@ public:
 
     const Film& WaitAndLogProgress() const
     {
-        while (!job->Finished())
+        while (!IsDone())
         {
             using namespace std::chrono_literals;
 

@@ -10,7 +10,6 @@ class IndependentSampler : public Sampler
 {
 public:
     IndependentSampler(int32 samples_per_pixel, int32 seed = 0);
-    virtual ~IndependentSampler() = default;
 
     virtual void StartPixelSample(const Point2i& pixel, int32 sample_index) override;
 
