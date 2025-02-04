@@ -17,7 +17,7 @@ private:
     using TypePack = TypePack<Types...>;
 
     std::array<std::vector<uint8>, TypePack::count> vectors;
-    std::array<size_t, TypePack::count> counts = { 0 };
+    std::array<size_t, TypePack::count> counts;
 
     template <typename T>
     static constexpr int32 TypeIndexOf()
@@ -28,21 +28,34 @@ private:
 public:
     struct Index
     {
-        const int32 type_index;
-        const int32 element_index;
+        int32 type_index;
+        int32 element_index;
+
+        Index()
+            : type_index{ -1 }
+            , element_index{ -1 }
+        {
+        }
 
         Index(int32 type_index, int32 element_index)
             : type_index{ type_index }
             , element_index{ element_index }
         {
         }
+
+        operator bool() const
+        {
+            return type_index >= 0 && element_index >= 0;
+        }
+        bool operator==(const Index& o) const = default;
+        bool operator!=(const Index& o) const = default;
     };
 
     template <typename T>
     struct TypedIndex
     {
         static constexpr int32 type_index = TypeIndexOf<T>();
-        const int32 element_index;
+        int32 element_index;
 
         TypedIndex(int32 element_index)
             : element_index{ element_index }
@@ -55,6 +68,12 @@ public:
         }
     };
 
+    PolymorphicVector()
+        : vectors{}
+        , counts{ 0 }
+    {
+    }
+
     template <typename T>
     TypedIndex<T> push_back(const T& value)
     {
@@ -66,16 +85,13 @@ public:
     {
         constexpr int32 type_index = TypeIndexOf<T>();
         auto& vector = vectors[type_index];
-        auto& count = counts[type_index];
-
-        constexpr size_t align = alignof(T);
-        const size_t offset = AlignOffset(vector.size(), align);
+        const size_t offset = vector.size();
 
         vector.resize(offset + sizeof(T));
         new (&vector[offset]) T(std::forward<Args>(args)...);
-        count++;
+        counts[type_index]++;
 
-        return TypedIndex<T>{ int32(count - 1) };
+        return { static_cast<int32>(counts[type_index] - 1) };
     }
 
     Base* operator[](const Index& index)
@@ -90,7 +106,7 @@ public:
 
     const Base* operator[](const Index& index) const
     {
-        return operator[](index);
+        return const_cast<PolymorphicVector*>(this)->operator[](index);
     }
 
     template <typename T>
@@ -102,18 +118,7 @@ public:
     template <typename T>
     const T* operator[](const TypedIndex<T>& index) const
     {
-        return operator[](index);
-    }
-
-private:
-    static size_t AlignOffset(size_t offset, size_t alignment)
-    {
-#if 0 
-        const size_t mod = offset % alignment;
-        return mod == 0 ? offset : offset + (alignment - mod);
-#else
-        return (offset + alignment - 1) & ~(alignment - 1);
-#endif
+        return const_cast<PolymorphicVector*>(this)->operator[](index);
     }
 };
 
