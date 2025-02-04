@@ -18,7 +18,7 @@ VolPathIntegrator::VolPathIntegrator(
 {
     for (Light* light : all_lights)
     {
-        switch (light->GetTypeIndex())
+        switch (light->type_index)
         {
         case Light::TypeIndexOf<UniformInfiniteLight>():
         case Light::TypeIndexOf<ImageInfiniteLight>():

@@ -25,6 +25,9 @@ using Materials = TypePack<
 
 class Material : public DynamicDispatcher<Materials>
 {
+public:
+    using Types = Materials;
+
 protected:
     Material(int8 type_index)
         : DynamicDispatcher{ type_index }

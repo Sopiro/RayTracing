@@ -51,6 +51,8 @@ using Media = TypePack<class HomogeneousMedium>;
 class Medium : public DynamicDispatcher<Media>
 {
 public:
+    using Types = Media;
+
     Medium(int8 index)
         : DynamicDispatcher(index)
     {

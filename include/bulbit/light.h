@@ -32,6 +32,9 @@ using Lights =
 
 class Light : public DynamicDispatcher<Lights>
 {
+public:
+    using Types = Lights;
+
 protected:
     Light(int8 type_index)
         : DynamicDispatcher(type_index)

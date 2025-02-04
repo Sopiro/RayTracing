@@ -100,20 +100,8 @@ class DynamicDispatcher;
 template <typename... Types>
 class DynamicDispatcher<TypePack<Types...>>
 {
-protected:
-    const int8 type_index;
-
-    DynamicDispatcher(int8 type_index)
-        : type_index{ type_index }
-    {
-        BulbitAssert(size_t(type_index) < sizeof...(Types));
-    }
-
 public:
-    int8 GetTypeIndex()
-    {
-        return type_index;
-    }
+    const int32 type_index;
 
     template <typename T>
     bool Is() const
@@ -162,7 +150,7 @@ public:
     }
 
     template <typename T>
-    static constexpr int8 TypeIndexOf()
+    static constexpr int32 TypeIndexOf()
     {
         using Type = typename std::remove_cv_t<T>;
         if constexpr (std::is_same_v<Type, std::nullptr_t>)
@@ -173,6 +161,13 @@ public:
         {
             return detail::IndexOf<Type, Types...>::value;
         }
+    }
+
+protected:
+    DynamicDispatcher(int32 type_index)
+        : type_index{ type_index }
+    {
+        BulbitAssert(size_t(type_index) < sizeof...(Types));
     }
 };
 
