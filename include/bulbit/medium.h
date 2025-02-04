@@ -53,7 +53,7 @@ class Medium : public DynamicDispatcher<Media>
 public:
     using Types = Media;
 
-    Medium(int8 index)
+    Medium(int32 index)
         : DynamicDispatcher(index)
     {
     }

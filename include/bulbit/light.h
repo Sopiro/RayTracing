@@ -36,7 +36,7 @@ public:
     using Types = Lights;
 
 protected:
-    Light(int8 type_index)
+    Light(int32 type_index)
         : DynamicDispatcher(type_index)
     {
     }

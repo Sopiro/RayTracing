@@ -29,7 +29,7 @@ public:
     using Types = Materials;
 
 protected:
-    Material(int8 type_index)
+    Material(int32 type_index)
         : DynamicDispatcher{ type_index }
     {
     }

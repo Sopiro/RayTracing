@@ -5,11 +5,16 @@
 namespace bulbit
 {
 
-template <typename Base>
-class PolymorphicVector
+// Primary template with Base and TypePack defaulting to Base::Types
+template <typename Base, typename TypePack = typename Base::Types>
+class PolymorphicVector;
+
+// Specialization for TypePack<Types...>
+template <typename Base, typename... Types>
+class PolymorphicVector<Base, TypePack<Types...>>
 {
 private:
-    using TypePack = typename Base::Types;
+    using TypePack = TypePack<Types...>;
 
     std::array<std::vector<uint8>, TypePack::count> vectors;
     std::array<size_t, TypePack::count> counts = { 0 };
@@ -21,12 +26,13 @@ private:
     }
 
 public:
-    struct Index : public DynamicDispatcher<TypePack>
+    struct Index
     {
+        const int32 type_index;
         const int32 element_index;
 
         Index(int32 type_index, int32 element_index)
-            : DynamicDispatcher<TypePack>{ type_index }
+            : type_index{ type_index }
             , element_index{ element_index }
         {
         }
@@ -74,13 +80,12 @@ public:
 
     Base* operator[](const Index& index)
     {
-        return index.Dispatch([&](auto dummy) {
-            const int32 type_index = dummy->type_index;
-            auto& vector = vectors[type_index];
-            const size_t offset = index.element_index * sizeof(*dummy);
-            using T = std::remove_pointer_t<decltype(dummy)>;
-            return reinterpret_cast<Base*>(&vector[offset]);
-        });
+        using Handler = Base* (*)(uint8*, int32);
+        static constexpr Handler handlers[] = { [](uint8* v, int32 element_index) -> Base* {
+            return reinterpret_cast<Types*>(v) + element_index;
+        }... };
+
+        return handlers[index.type_index](vectors[index.type_index].data(), index.element_index);
     }
 
     const Base* operator[](const Index& index) const
@@ -91,13 +96,11 @@ public:
     template <typename T>
     T* operator[](const TypedIndex<T>& index)
     {
-        auto& vector = vectors[index.type_index];
-        const size_t offset = index.element_index * sizeof(T);
-        return reinterpret_cast<T*>(&vector[offset]);
+        return reinterpret_cast<T*>(vectors[index.type_index].data()) + index.element_index;
     }
 
     template <typename T>
-    const Base* operator[](const TypedIndex<T>& index) const
+    const T* operator[](const TypedIndex<T>& index) const
     {
         return operator[](index);
     }
@@ -105,8 +108,12 @@ public:
 private:
     static size_t AlignOffset(size_t offset, size_t alignment)
     {
+#if 0 
         const size_t mod = offset % alignment;
         return mod == 0 ? offset : offset + (alignment - mod);
+#else
+        return (offset + alignment - 1) & ~(alignment - 1);
+#endif
     }
 };
 
