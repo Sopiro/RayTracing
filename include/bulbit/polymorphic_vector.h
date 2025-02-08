@@ -68,10 +68,143 @@ public:
         }
     };
 
+    // Iterator classes
+    class iterator
+    {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Base*;
+        using difference_type = std::ptrdiff_t;
+        using pointer = Base**;
+        using reference = Base*&;
+
+        iterator(PolymorphicVector* pv, int32 type_index, int32 element_index)
+            : pv{ pv }
+            , ti{ type_index }
+            , ei{ element_index }
+        {
+            advance();
+        }
+
+        Base* operator*() const
+        {
+            if (!pv || ti >= TypePack::count) return nullptr;
+            return (*pv)[Index{ ti, ei }];
+        }
+
+        iterator& operator++()
+        {
+            if (!pv || ti >= TypePack::count) return *this;
+            ++ei;
+            advance();
+            return *this;
+        }
+
+        iterator operator++(int)
+        {
+            iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        bool operator==(const iterator& other) const
+        {
+            return pv == other.pv && ti == other.ti && ei == other.ei;
+        }
+
+        bool operator!=(const iterator& other) const
+        {
+            return !(*this == other);
+        }
+
+    private:
+        void advance()
+        {
+            while (ti < TypePack::count && ei >= pv->counts[ti])
+            {
+                ++ti;
+                ei = 0;
+            }
+        }
+
+        PolymorphicVector* pv;
+        int ti, ei;
+    };
+
+    class const_iterator
+    {
+    public:
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = const Base*;
+        using difference_type = std::ptrdiff_t;
+        using pointer = const Base**;
+        using reference = const Base*&;
+
+        const_iterator(const PolymorphicVector* pv, int type_index, int element_index)
+            : pv{ pv }
+            , ti{ type_index }
+            , ei{ element_index }
+        {
+            advance();
+        }
+
+        const Base* operator*() const
+        {
+            if (!pv || ti >= TypePack::count) return nullptr;
+            return (*pv)[Index{ ti, ei }];
+        }
+
+        const_iterator& operator++()
+        {
+            if (!pv || ti >= TypePack::count) return *this;
+            ++ei;
+            advance();
+            return *this;
+        }
+
+        const_iterator operator++(int)
+        {
+            const_iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        bool operator==(const const_iterator& other) const
+        {
+            return pv == other.pv && ti == other.ti && ei == other.ei;
+        }
+
+        bool operator!=(const const_iterator& other) const
+        {
+            return !(*this == other);
+        }
+
+    private:
+        void advance()
+        {
+            while (ti < TypePack::count && ei >= pv->counts[ti])
+            {
+                ++ti;
+                ei = 0;
+            }
+        }
+
+        const PolymorphicVector* pv;
+        int32 ti, ei;
+    };
+
     PolymorphicVector()
         : vectors{}
         , counts{ 0 }
     {
+    }
+
+    // Reserve space for 'capacity' elements of type T
+    template <typename T>
+    void reserve(size_t capacity)
+    {
+        constexpr int32 type_index = TypeIndexOf<T>();
+        vectors[type_index].reserve(capacity * sizeof(T));
     }
 
     template <typename T>
@@ -119,6 +252,27 @@ public:
     const T* operator[](const TypedIndex<T>& index) const
     {
         return const_cast<PolymorphicVector*>(this)->operator[](index);
+    }
+
+    // Iterator functions
+    iterator begin()
+    {
+        return iterator(this, 0, 0);
+    }
+
+    iterator end()
+    {
+        return iterator(this, TypePack::count, 0);
+    }
+
+    const_iterator begin() const
+    {
+        return const_iterator(this, 0, 0);
+    }
+
+    const_iterator end() const
+    {
+        return const_iterator(this, TypePack::count, 0);
     }
 };
 
