@@ -208,6 +208,28 @@ public:
     }
 
     template <typename T>
+    void resize(size_t size)
+    {
+        constexpr int32 type_index = TypeIndexOf<T>();
+        vectors[type_index].resize(size);
+    }
+
+    template <typename T>
+    void shrink_to_fit(size_t size)
+    {
+        constexpr int32 type_index = TypeIndexOf<T>();
+        vectors[type_index].shrink_to_fit();
+    }
+
+    void clear()
+    {
+        for (auto v : vectors)
+        {
+            v.clear();
+        }
+    }
+
+    template <typename T>
     TypedIndex<T> push_back(const T& value)
     {
         return emplace_back<T>(value);
