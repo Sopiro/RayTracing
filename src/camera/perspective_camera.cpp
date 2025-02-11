@@ -42,7 +42,7 @@ Float PerspectiveCamera::SampleRay(Ray* ray, const Point2i& pixel, const Point2&
     Point3 pixel_center = lower_left + horizontal * (pixel.x + pixel_offset.x) / resolution.x +
                           vertical * (pixel.y + pixel_offset.y) / resolution.y;
 
-    Point3 aperture_sample = lens_radius * SampleUniformUnitDiskXY(u1);
+    Point2 aperture_sample = lens_radius * SampleUniformUnitDiskConcentric(u1);
     Point3 camera_offset = u * aperture_sample.x + v * aperture_sample.y;
     Point3 camera_center = origin + camera_offset;
 

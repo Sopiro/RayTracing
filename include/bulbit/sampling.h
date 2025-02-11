@@ -65,24 +65,6 @@ inline Float UniformSpherePDF()
     return inv_four_pi;
 }
 
-// z > 0
-inline Vec3 SampleCosineHemisphere(const Point2& u)
-{
-    Float z = std::sqrt(1 - u[1]);
-
-    Float phi = two_pi * u[0];
-    Float su2 = std::sqrt(u[1]);
-    Float x = std::cos(phi) * su2;
-    Float y = std::sin(phi) * su2;
-
-    return Vec3(x, y, z);
-}
-
-inline Float CosineHemispherePDF(Float cos_theta)
-{
-    return cos_theta * inv_pi;
-}
-
 inline Vec3 SampleInsideUnitSphere(const Point2& u)
 {
 #if 1
@@ -108,11 +90,60 @@ inline Vec3 SampleInsideUnitSphere(const Point2& u)
 #endif
 }
 
-inline Vec3 SampleUniformUnitDiskXY(const Point2& u)
+inline Point2 SampleUniformUnitDisk(const Point2& u)
 {
     Float r = std::sqrt(u.x);
     Float theta = two_pi * u.y;
-    return Vec3(r * std::cos(theta), r * std::sin(theta), 0);
+    return r * Point2(std::cos(theta), std::sin(theta));
+}
+
+// https://pbr-book.org/4ed/Sampling_Algorithms/Sampling_Multidimensional_Functions#SampleUniformDiskConcentric
+inline Point2 SampleUniformUnitDiskConcentric(const Point2& u)
+{
+    Point2 uo = 2 * u - Vec2(1, 1);
+    if (uo.x == 0 && uo.y == 0)
+    {
+        return Point2::zero;
+    }
+
+    Float theta, r;
+    if (std::abs(uo.x) > std::abs(uo.y))
+    {
+        r = uo.x;
+        theta = (4 / pi) * (uo.y / uo.x);
+    }
+    else
+    {
+        r = uo.y;
+        theta = (2 / pi) - (4 / pi) * (uo.x / uo.y);
+    }
+    return r * Point2(std::cos(theta), std::sin(theta));
+}
+
+// z > 0
+inline Vec3 SampleCosineHemisphere(Point2 u)
+{
+#if 0
+    Float z = std::sqrt(1 - u[1]);
+
+    Float phi = two_pi * u[0];
+    Float su2 = std::sqrt(u[1]);
+    Float x = std::cos(phi) * su2;
+    Float y = std::sin(phi) * su2;
+
+    return Vec3(x, y, z);
+#else
+    // The malley's method
+    Point2 d = SampleUniformUnitDiskConcentric(u);
+    Float z = SafeSqrt(1 - Sqr(d.x) - Sqr(d.y));
+
+    return Vec3(d.x, d.y, z);
+#endif
+}
+
+inline Float CosineHemispherePDF(Float cos_theta)
+{
+    return cos_theta * inv_pi;
 }
 
 inline Float SampleExponential(Float u, Float a)
