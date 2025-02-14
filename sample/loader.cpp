@@ -1,25 +1,33 @@
 #include "loader.h"
 #include "scene_builder.h"
 
-#include <assimp/Importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
+#define TINYGLTF_NO_STB_IMAGE
+#define TINYGLTF_IMPLEMENTATION
+#include "tiny_gltf.h"
 
-#include <filesystem>
+#include "material_builder.h"
+#include "texture_builder.h"
 
 namespace bulbit
 {
 
-static std::string g_folder;
-static Scene* g_scene = nullptr;
 static bool g_force_fallback_material = false;
 static const Material* g_fallback_material = nullptr;
 static MediumInterface g_fallback_medium_interface = {};
-static int32 g_flip_normal = 1;
+static bool g_flip_normal = false;
+static bool g_flip_texcoord = false;
+
+static std::string g_folder;
+static std::vector<const Material*> g_materials;
 
 void SetLoaderFlipNormal(bool flip_normal)
 {
-    g_flip_normal = flip_normal ? -1 : 1;
+    g_flip_normal = flip_normal;
+}
+
+void SetLoaderFlipTexcoord(bool flip_texcoord)
+{
+    g_flip_texcoord = flip_texcoord;
 }
 
 void SetLoaderUseForceFallbackMaterial(bool force_use_fallback_material)
@@ -37,233 +45,362 @@ void SetLoaderFallbackMediumInterface(const MediumInterface& fallback_medium_int
     g_fallback_medium_interface = fallback_medium_interface;
 }
 
-Mat4 ConvertAssimpMatrix(const aiMatrix4x4& aiMat)
+static void LoadMaterials(Scene& scene, tinygltf::Model& model)
 {
-    Mat4 t;
-    t.ex.Set(aiMat.a1, aiMat.b1, aiMat.c1, aiMat.d1);
-    t.ey.Set(aiMat.a2, aiMat.b2, aiMat.c2, aiMat.d2);
-    t.ez.Set(aiMat.a3, aiMat.b3, aiMat.c3, aiMat.d3);
-    t.ew.Set(aiMat.a4, aiMat.b4, aiMat.c4, aiMat.d4);
-
-    return t;
-}
-
-static std::vector<SpectrumTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, bool non_color)
-{
-    std::vector<SpectrumTexture*> textures;
-    textures.reserve(mat->GetTextureCount(type));
-
-    for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
+    for (int32 i = 0; i < int32(model.materials.size()); i++)
     {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        std::string filename = g_folder + str.C_Str();
+        tinygltf::Material& gltf_material = model.materials[i];
+        tinygltf::PbrMetallicRoughness& pbr = gltf_material.pbrMetallicRoughness;
 
-        SpectrumTexture* texture = g_scene->CreateTexture<ImageTexture, Spectrum>(ReadImage3(filename, non_color));
-        textures.push_back(texture);
-    }
+        SpectrumTexture *basecolor_texture, *normal_texture, *emission_texture;
+        FloatTexture *metallic_texture, *roughness_texture, *alpha_texture;
 
-    return textures;
-}
+        Spectrum basecolor_factor = { Float(pbr.baseColorFactor[0]), Float(pbr.baseColorFactor[1]),
+                                      Float(pbr.baseColorFactor[2]) };
+        Float metallic_factor = Float(pbr.metallicFactor);
+        Float roughness_factor = Float(pbr.roughnessFactor);
+        Spectrum emission_factor = { Float(gltf_material.emissiveFactor[0]), Float(gltf_material.emissiveFactor[1]),
+                                     Float(gltf_material.emissiveFactor[2]) };
 
-static std::vector<FloatTexture*> LoadMaterialTextures(const aiMaterial* mat, aiTextureType type, int32 channel, bool non_color)
-{
-    std::vector<FloatTexture*> textures;
-    textures.reserve(mat->GetTextureCount(type));
-
-    for (uint32 i = 0; i < mat->GetTextureCount(type); ++i)
-    {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        std::string filename = g_folder + str.C_Str();
-
-        FloatTexture* texture = g_scene->CreateTexture<ImageTexture, Float>(ReadImage1(filename, channel, non_color));
-        textures.push_back(texture);
-    }
-
-    return textures;
-}
-
-static const Material* LoadMaterial(const aiMesh* mesh, const aiScene* scene)
-{
-    BulbitAssert(mesh->mMaterialIndex >= 0);
-
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
-    aiString name;
-    ai_int illum_model;
-    aiColor3D diffuse_color;
-    aiColor3D specular_color;
-    aiColor3D emissive_color;
-    ai_real metallic = 0;
-    ai_real roughness = 1;
-    ai_real aniso = 0;
-    ai_real ior;
-
-    material->Get(AI_MATKEY_NAME, name);
-    material->Get(AI_MATKEY_SHADING_MODEL, illum_model);
-    material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_color);
-    material->Get(AI_MATKEY_COLOR_SPECULAR, specular_color);
-    material->Get(AI_MATKEY_COLOR_EMISSIVE, emissive_color);
-    material->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
-    material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
-    material->Get(AI_MATKEY_ANISOTROPY_FACTOR, aniso);
-    material->Get(AI_MATKEY_REFRACTI, ior);
-
-    std::vector<SpectrumTexture*> basecolor_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, false);
-    std::vector<FloatTexture*> metallic_textures =
-        LoadMaterialTextures(material, aiTextureType_METALNESS, metallic_channel, true);
-    std::vector<FloatTexture*> roughness_textures =
-        LoadMaterialTextures(material, aiTextureType_DIFFUSE_ROUGHNESS, roughness_channel, true);
-    std::vector<SpectrumTexture*> emissive_textures = LoadMaterialTextures(material, aiTextureType_EMISSIVE, true);
-    std::vector<SpectrumTexture*> normalmap_textures = LoadMaterialTextures(material, aiTextureType_NORMALS, true);
-    std::vector<FloatTexture*> alpha_textures = LoadMaterialTextures(material, aiTextureType_DIFFUSE, alpha_channel, true);
-
-    if (g_force_fallback_material || basecolor_textures.empty() && g_fallback_material)
-    {
-        return g_fallback_material;
-    }
-
-    // Create material from scene
-
-    // clang-format off
-    auto mat = g_scene->CreateMaterial<UnrealMaterial>(
-        basecolor_textures.empty()
-            ? g_scene->CreateTexture<ConstantTexture, Spectrum>(Spectrum{ diffuse_color.r, diffuse_color.g, diffuse_color.b })
-            : basecolor_textures[0],
-        metallic_textures.empty() 
-            ? g_scene->CreateTexture<ConstantTexture, Float>(metallic) 
-            : metallic_textures[0],
-        roughness_textures.empty()
-            ? g_scene->CreateTexture<ConstantTexture, Float>(roughness) 
-            : roughness_textures[0],
-        roughness_textures.empty()
-            ? g_scene->CreateTexture<ConstantTexture, Float>(roughness) 
-            : roughness_textures[0],
-        emissive_textures.empty()
-            ? g_scene->CreateTexture<ConstantTexture, Spectrum>(Spectrum{ emissive_color.r, emissive_color.g, emissive_color.b })
-            : emissive_textures[0],
-        normalmap_textures.empty() 
-            ? nullptr 
-            : normalmap_textures[0],
-        alpha_textures.empty()
-            ? nullptr 
-            : alpha_textures[0]
-    );
-    // clang-format on
-
-    return mat;
-}
-
-static void ProcessAssimpMesh(const aiMesh* mesh, const aiScene* scene, const Mat4& transform)
-{
-    BulbitAssert(mesh->HasPositions());
-    BulbitAssert(mesh->HasNormals());
-
-    std::vector<Point3> positions;
-    std::vector<Vec3> normals;
-    std::vector<Vec3> tangents;
-    std::vector<Point2> texCoords;
-
-    uint32 vertexCount = mesh->mNumVertices;
-
-    positions.resize(vertexCount);
-    normals.resize(vertexCount);
-    tangents.resize(vertexCount);
-    texCoords.resize(vertexCount);
-
-    // Process vertices
-    for (uint32 i = 0; i < vertexCount; ++i)
-    {
-        positions[i].Set(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-        normals[i].Set(
-            mesh->mNormals[i].x * g_flip_normal, mesh->mNormals[i].y * g_flip_normal, mesh->mNormals[i].z * g_flip_normal
-        );
-
-        if (mesh->HasTangentsAndBitangents())
+        // basecolor, alpha
         {
-            tangents[i].Set(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
-        }
-        else
-        {
-            Vec3 biTangent;
-            CoordinateSystem(normals[i], &tangents[i], &biTangent);
-        }
-
-        if (mesh->HasTextureCoords(0))
-        {
-            texCoords[i].Set(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
-        }
-        else
-        {
-            texCoords[i].SetZero();
-        }
-    }
-
-    // Process indices
-    const int32 vertices_per_face = 3;
-
-    std::vector<int32> indices;
-    indices.reserve(mesh->mNumFaces * vertices_per_face);
-
-    for (uint32 i = 0; i < mesh->mNumFaces; ++i)
-    {
-        aiFace face = mesh->mFaces[i];
-        if (face.mNumIndices == vertices_per_face)
-        {
-            for (uint32 j = 0; j < face.mNumIndices; ++j)
+            if (pbr.baseColorTexture.index > -1)
             {
-                indices.emplace_back(face.mIndices[j]);
+                tinygltf::Texture& texture = model.textures[pbr.baseColorTexture.index];
+                tinygltf::Image& image = model.images[texture.source];
+
+                basecolor_texture = CreateSpectrumImageTexture(scene, g_folder + image.uri);
+                alpha_texture = CreateFloatImageTexture(scene, g_folder + image.uri, alpha_channel, true);
+            }
+            else
+            {
+                basecolor_texture = CreateSpectrumConstantTexture(scene, basecolor_factor);
+                alpha_texture = nullptr;
             }
         }
-    }
 
-    Mesh* m = g_scene->CreateMesh(
-        std::move(positions), std::move(normals), std::move(tangents), std::move(texCoords), std::move(indices), transform
-    );
-    CreateTriangles(*g_scene, m, LoadMaterial(mesh, scene), g_fallback_medium_interface);
+        // metallic, roughness
+        {
+            if (pbr.metallicRoughnessTexture.index > -1)
+            {
+                tinygltf::Texture& texture = model.textures[pbr.metallicRoughnessTexture.index];
+                tinygltf::Image& image = model.images[texture.source];
+
+                metallic_texture = CreateFloatImageTexture(scene, g_folder + image.uri, metallic_channel, true);
+                roughness_texture = CreateFloatImageTexture(scene, g_folder + image.uri, roughness_channel, true);
+            }
+            else
+            {
+                metallic_texture = CreateFloatConstantTexture(scene, metallic_factor);
+                roughness_texture = CreateFloatConstantTexture(scene, roughness_factor);
+            }
+        }
+
+        // normal
+        {
+            if (gltf_material.normalTexture.index > -1)
+            {
+                tinygltf::Texture& texture = model.textures[gltf_material.normalTexture.index];
+                tinygltf::Image& image = model.images[texture.source];
+
+                normal_texture = CreateSpectrumImageTexture(scene, g_folder + image.uri, true);
+            }
+            else
+            {
+                normal_texture = nullptr;
+            }
+        }
+
+        // emission
+        {
+            if (gltf_material.emissiveTexture.index > -1)
+            {
+                tinygltf::Texture& texture = model.textures[gltf_material.emissiveTexture.index];
+                tinygltf::Image& image = model.images[texture.source];
+
+                emission_texture = CreateSpectrumImageTexture(scene, g_folder + image.uri);
+            }
+            else
+            {
+                emission_texture = CreateSpectrumConstantTexture(scene, emission_factor);
+            }
+        }
+
+        g_materials.push_back(scene.CreateMaterial<UnrealMaterial>(
+            basecolor_texture, metallic_texture, roughness_texture, roughness_texture, emission_texture, normal_texture,
+            alpha_texture
+        ));
+    }
 }
 
-static void ProcessAssimpNode(const aiNode* node, const aiScene* scene, const Mat4& parent_transform)
+static bool LoadMesh(Scene& scene, tinygltf::Model& model, tinygltf::Mesh& mesh, const Mat4& transform)
 {
-    Mat4 transform = Mul(parent_transform, ConvertAssimpMatrix(node->mTransformation));
-
-    // Process all the node's meshes
-    for (uint32 i = 0; i < node->mNumMeshes; ++i)
+    for (int32 prim = 0; prim < mesh.primitives.size(); ++prim)
     {
-        const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        ProcessAssimpMesh(mesh, scene, transform);
+        tinygltf::Primitive& primitive = mesh.primitives[prim];
+
+        if (primitive.mode != TINYGLTF_MODE_TRIANGLES)
+        {
+            continue;
+        }
+
+        int32 position_index = primitive.attributes.contains("POSITION") ? primitive.attributes["POSITION"] : -1;
+        int32 normal_index = primitive.attributes.contains("NORMAL") ? primitive.attributes["NORMAL"] : -1;
+        int32 tangent_index = primitive.attributes.contains("TANGENT") ? primitive.attributes["TANGENT"] : -1;
+        int32 texcoord_index = primitive.attributes.contains("TEXCOORD_0") ? primitive.attributes["TEXCOORD_0"] : -1;
+        int32 indices_index = int32(primitive.indices);
+
+        if (position_index == -1 || normal_index == -1 || texcoord_index == -1)
+        {
+            return false;
+        }
+
+        // position
+        tinygltf::Accessor& position_accessor = model.accessors[position_index];
+        tinygltf::BufferView& position_buffer_view = model.bufferViews[position_accessor.bufferView];
+        tinygltf::Buffer& position_buffer = model.buffers[position_buffer_view.buffer];
+
+        // normal
+        tinygltf::Accessor& normal_accessor = model.accessors[normal_index];
+        tinygltf::BufferView& normal_buffer_view = model.bufferViews[normal_accessor.bufferView];
+        tinygltf::Buffer& normal_buffer = model.buffers[normal_buffer_view.buffer];
+
+        // texcoord
+        tinygltf::Accessor& texcoord_accessor = model.accessors[texcoord_index];
+        tinygltf::BufferView& texcoord_buffer_view = model.bufferViews[texcoord_accessor.bufferView];
+        tinygltf::Buffer& texcoord_buffer = model.buffers[texcoord_buffer_view.buffer];
+
+        // indices
+        tinygltf::Accessor& indices_accessor = model.accessors[indices_index];
+        tinygltf::BufferView& indices_buffer_view = model.bufferViews[indices_accessor.bufferView];
+        tinygltf::Buffer& indices_buffer = model.buffers[indices_buffer_view.buffer];
+
+        std::vector<Vec3> positions(position_accessor.count);
+        std::vector<Vec3> normals(normal_accessor.count);
+        std::vector<Vec3> tangents(normal_accessor.count);
+        std::vector<Vec2> texcoords(texcoord_accessor.count);
+        std::vector<int32> indices(indices_accessor.count);
+
+        size_t position_size = tinygltf::GetComponentSizeInBytes(position_accessor.componentType) *
+                               tinygltf::GetNumComponentsInType(position_accessor.type);
+        memcpy(
+            positions.data(), position_buffer.data.data() + position_buffer_view.byteOffset + position_accessor.byteOffset,
+            position_accessor.count * position_size
+        );
+
+        size_t normal_size = tinygltf::GetComponentSizeInBytes(normal_accessor.componentType) *
+                             tinygltf::GetNumComponentsInType(normal_accessor.type);
+        memcpy(
+            normals.data(), normal_buffer.data.data() + normal_buffer_view.byteOffset + normal_accessor.byteOffset,
+            normal_accessor.count * normal_size
+        );
+
+        size_t texcoord_size = tinygltf::GetComponentSizeInBytes(texcoord_accessor.componentType) *
+                               tinygltf::GetNumComponentsInType(texcoord_accessor.type);
+        memcpy(
+            texcoords.data(), texcoord_buffer.data.data() + texcoord_buffer_view.byteOffset + texcoord_accessor.byteOffset,
+            texcoord_accessor.count * texcoord_size
+        );
+
+        if (tangent_index != -1)
+        {
+            // tangent
+            tinygltf::Accessor& tangent_accessor = model.accessors[tangent_index];
+            tinygltf::BufferView& tangent_buffer_view = model.bufferViews[tangent_accessor.bufferView];
+            tinygltf::Buffer& tangent_buffer = model.buffers[tangent_buffer_view.buffer];
+
+            size_t tangent_size = tinygltf::GetNumComponentsInType(tangent_accessor.type) *
+                                  tinygltf::GetComponentSizeInBytes(tangent_accessor.componentType);
+
+            std::vector<Vec4> temp(tangent_accessor.count);
+            memcpy(
+                temp.data(), tangent_buffer.data.data() + tangent_buffer_view.byteOffset + tangent_accessor.byteOffset,
+                tangent_accessor.count * tangent_size
+            );
+
+            for (size_t i = 0; i < tangent_accessor.count; ++i)
+            {
+                tangents[i].Set(temp[i].x, temp[i].y, temp[i].z);
+            }
+        }
+        else
+        {
+            for (size_t i = 0; i < normals.size(); ++i)
+            {
+                Vec3 bitangent;
+                CoordinateSystem(normals[i], &tangents[i], &bitangent);
+            }
+        }
+
+        if (tinygltf::GetNumComponentsInType(indices_accessor.type) != 1)
+        {
+            return false;
+        }
+
+        size_t indices_size = tinygltf::GetComponentSizeInBytes(indices_accessor.componentType);
+        switch (indices_size)
+        {
+        case sizeof(uint8_t):
+        {
+            std::vector<uint8_t> temp(indices_accessor.count);
+            memcpy(
+                temp.data(), indices_buffer.data.data() + indices_buffer_view.byteOffset + indices_accessor.byteOffset,
+                indices_accessor.count * indices_size
+            );
+            for (size_t i = 0; i < indices_accessor.count; ++i)
+            {
+                indices[i] = int32_t(temp[i]);
+            }
+        }
+        break;
+        case sizeof(uint16_t):
+        {
+            std::vector<uint16_t> temp(indices_accessor.count);
+            memcpy(
+                temp.data(), indices_buffer.data.data() + indices_buffer_view.byteOffset + indices_accessor.byteOffset,
+                indices_accessor.count * indices_size
+            );
+            for (size_t i = 0; i < indices_accessor.count; ++i)
+            {
+                indices[i] = int32_t(temp[i]);
+            }
+        }
+        break;
+        case sizeof(uint32_t):
+        {
+            std::vector<uint32_t> temp(indices_accessor.count);
+            memcpy(
+                temp.data(), indices_buffer.data.data() + indices_buffer_view.byteOffset + indices_accessor.byteOffset,
+                indices_accessor.count * indices_size
+            );
+            for (size_t i = 0; i < indices_accessor.count; ++i)
+            {
+                indices[i] = int32_t(temp[i]);
+            }
+        }
+        break;
+
+        default:
+            return false;
+        }
+
+        // post-processes
+        {
+            if (g_flip_normal)
+            {
+                for (size_t i = 0; i < normals.size(); ++i)
+                {
+                    normals[i].Negate();
+                }
+            }
+
+            if (!g_flip_texcoord)
+            {
+                for (size_t i = 0; i < texcoords.size(); ++i)
+                {
+                    texcoords[i].y = -texcoords[i].y;
+                }
+            }
+        }
+
+        Mesh* m = scene.CreateMesh(
+            std::move(positions), std::move(normals), std::move(tangents), std::move(texcoords), std::move(indices), transform
+        );
+        CreateTriangles(
+            scene, m, g_force_fallback_material ? g_fallback_material : g_materials[primitive.material],
+            g_fallback_medium_interface
+        );
     }
 
-    // Do the same for each of its children
-    for (uint32 i = 0; i < node->mNumChildren; ++i)
+    return true;
+}
+
+static void ProcessNode(Scene& my_scene, tinygltf::Model& model, tinygltf::Node& node, Mat4 parent)
+{
+    Mat4 transform =
+        node.matrix.empty()
+            ? identity
+            : Mat4(
+                  Vec4(float(node.matrix[0]), float(node.matrix[1]), float(node.matrix[2]), float(node.matrix[3])),
+                  Vec4(float(node.matrix[4]), float(node.matrix[5]), float(node.matrix[6]), float(node.matrix[7])),
+                  Vec4(float(node.matrix[8]), float(node.matrix[9]), float(node.matrix[10]), float(node.matrix[11])),
+                  Vec4(float(node.matrix[12]), float(node.matrix[13]), float(node.matrix[14]), float(node.matrix[15]))
+              );
+
+    transform = Mul(parent, transform);
+
+    if ((node.mesh >= 0) && (node.mesh < model.meshes.size()))
     {
-        ProcessAssimpNode(node->mChildren[i], scene, transform);
+        LoadMesh(my_scene, model, model.meshes[node.mesh], transform);
+    }
+
+    // Recursively process child nodes
+    for (size_t i = 0; i < node.children.size(); i++)
+    {
+        BulbitAssert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
+        ProcessNode(my_scene, model, model.nodes[node.children[i]], transform);
     }
 }
 
-void LoadModel(Scene& scene, const std::string& filename, const Transform& transform)
+static void LoadScene(Scene& my_scene, tinygltf::Model& model, const Transform& transform)
 {
-    g_folder = std::filesystem::path(filename).remove_filename().string();
-    g_scene = &scene;
-
-    Assimp::Importer importer;
-
-    // clang-format off
-    const aiScene* assimp_scene = importer.ReadFile(
-        filename, 
-        aiProcessPreset_TargetRealtime_MaxQuality
-    );
-    // clang-format on
-
-    if (assimp_scene == nullptr)
+    const tinygltf::Scene& scene = model.scenes[model.defaultScene];
+    for (size_t i = 0; i < scene.nodes.size(); ++i)
     {
-        std::cout << "Faild to load model: " << filename << std::endl;
-        std::cout << "Assimp error: " << importer.GetErrorString() << std::endl;
+        BulbitAssert((scene.nodes[i] >= 0) && (scene.nodes[i] < model.nodes.size()));
+        ProcessNode(my_scene, model, model.nodes[scene.nodes[i]], Mat4(transform));
+    }
+}
+
+void LoadModel(Scene& scene, std::filesystem::path filename, const Transform& transform)
+{
+    std::cout << "Loading.. " << filename.string() << std::endl;
+
+    tinygltf::TinyGLTF gltf;
+    gltf.SetImageLoader(
+        [](tinygltf::Image* image, const int, std::string*, const std::string*, int, int, const unsigned char*, int,
+           void*) -> bool {
+            image->image.clear();
+            image->width = 0;
+            image->height = 0;
+            image->component = 0;
+            image->bits = 0;
+            return true;
+        },
+        nullptr
+    );
+    tinygltf::Model model;
+
+    std::string err, warn;
+
+    bool success;
+    if (filename.extension() == ".gltf")
+    {
+        success = gltf.LoadASCIIFromFile(&model, &err, &warn, filename.string());
+    }
+    else if (filename.extension() == ".glb")
+    {
+        success = gltf.LoadBinaryFromFile(&model, &err, &warn, filename.string());
+    }
+    else
+    {
+        std::cout << "Failed to load model: " << filename.string() << std::endl;
         return;
     }
 
-    ProcessAssimpNode(assimp_scene->mRootNode, assimp_scene, Mat4(transform));
+    if (!success)
+    {
+        std::cout << "gltf warning: " << warn << std::endl;
+        std::cout << "gltf error: " << err << std::endl;
+        return;
+    }
+
+    g_folder = filename.remove_filename().string();
+    if (!g_force_fallback_material)
+    {
+        LoadMaterials(scene, model);
+    }
+    LoadScene(scene, model, transform);
 }
 
 } // namespace bulbit

@@ -28,7 +28,12 @@ ImageInfiniteLight::ImageInfiniteLight(const SpectrumImageTexture* l_map, const 
         }
     }
 
-    distribution.reset(new Distribution2D(image.get(), width, height));
+    distribution = std::make_unique<Distribution2D>(image.get(), width, height);
+}
+
+void ImageInfiniteLight::Destroy()
+{
+    distribution.reset();
 }
 
 LightSample ImageInfiniteLight::Sample_Li(const Intersection& ref, const Point2& u) const

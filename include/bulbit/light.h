@@ -42,6 +42,8 @@ protected:
     }
 
 public:
+    ~Light();
+
     LightSample Sample_Li(const Intersection& ref, const Point2& u) const;
     Float EvaluatePDF(const Ray& ray) const;
     Spectrum Le(const Ray& ray) const;
