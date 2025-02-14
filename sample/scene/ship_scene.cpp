@@ -69,4 +69,4 @@ std::unique_ptr<Camera> ShipScene(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("ship", ShipScene);
+static int32 sample_index = Sample::Register("ship", ShipScene);

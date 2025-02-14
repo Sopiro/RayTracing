@@ -86,4 +86,4 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("rtow", RaytracigInOneWeekend);
+static int32 sample_index = Sample::Register("rtow", RaytracigInOneWeekend);

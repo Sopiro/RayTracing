@@ -490,7 +490,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("material", MaterialTest);
+static int32 sample_index = Sample::Register("material", MaterialTest);
 static int32 index2 = Sample::Register("material2", Dielectrics);
 static int32 index3 = Sample::Register("material3", Skins);
 static int32 index4 = Sample::Register("material4", Mixtures);

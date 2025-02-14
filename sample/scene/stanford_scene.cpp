@@ -108,4 +108,4 @@ std::unique_ptr<Camera> StanfordScene(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("stanford", StanfordScene);
+static int32 sample_index = Sample::Register("stanford", StanfordScene);

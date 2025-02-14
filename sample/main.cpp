@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
     std::cout << "Loading scene.." << std::endl;
     Timer timer;
-    if (!Sample::Get("cornell-box", &scene, &camera))
+    if (!Sample::Get("bistro", &scene, &camera))
     {
         std::cout << "sample not found!" << std::endl;
         return 0;
@@ -38,14 +38,14 @@ int main(int argc, char* argv[])
     t = timer.Get();
     std::cout << "Acceleration structure build: " << t << "s" << std::endl;
 
-    int32 samples_per_pixel = 64;
+    int32 samples_per_pixel = 1024;
     int32 max_bounces = 100;
 
     IndependentSampler sampler(samples_per_pixel);
     // StratifiedSampler sampler(std::sqrt(samples_per_pixel), std::sqrt(samples_per_pixel), true);
 
-    VolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
-    // PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
+    // VolPathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
+    PathIntegrator renderer(&accel, scene.GetLights(), &sampler, max_bounces);
     // DebugIntegrator renderer(&accel, scene.GetLights(), &sampler);
     // AmbientOcclusion renderer(&accel, scene.GetLights(), &sampler, 0.5f);
     // AlbedoIntegrator renderer(&accel, scene.GetLights(), &sampler);

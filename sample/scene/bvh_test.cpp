@@ -49,4 +49,4 @@ std::unique_ptr<Camera> BVHTest(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("bvh", BVHTest);
+static int32 sample_index = Sample::Register("bvh", BVHTest);

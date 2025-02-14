@@ -36,4 +36,4 @@ std::unique_ptr<Camera> NormalMappingTest(Scene& scene)
     // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("normal-mapping", NormalMappingTest);
+static int32 sample_index = Sample::Register("normal-mapping", NormalMappingTest);

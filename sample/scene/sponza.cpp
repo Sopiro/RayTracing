@@ -88,4 +88,4 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // return std::make_unique<SphericalCamera>(lookfrom, Point2i(width, height));
 }
 
-static int32 index = Sample::Register("sponza", Sponza);
+static int32 sample_index = Sample::Register("sponza", Sponza);

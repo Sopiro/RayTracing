@@ -89,4 +89,4 @@ std::unique_ptr<Camera> CornellBoxVolume2(Scene& scene)
     return std::make_unique<PerspectiveCamera>(lookfrom, lookat, y_axis, vFov, aperture, dist_to_focus, Point2i(width, width));
 }
 
-static int32 index = Sample::Register("cornell-box-volume2", CornellBoxVolume2);
+static int32 sample_index = Sample::Register("cornell-box-volume2", CornellBoxVolume2);

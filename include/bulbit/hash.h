@@ -8,7 +8,6 @@
 
 #include <cstdint>
 #include <cstring>
-#include <string.h>
 
 #include "types.h"
 
