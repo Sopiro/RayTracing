@@ -88,7 +88,7 @@ std::unique_ptr<Camera> PBRTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/sunset.hdr"));
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr"));
     // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr"));
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr"));
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr"));
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr"));
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi / 2, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");

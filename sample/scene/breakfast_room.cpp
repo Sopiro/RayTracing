@@ -8,7 +8,7 @@ std::unique_ptr<Camera> BreakfastRoom(Scene& scene)
 
     // CreateImageInfiniteLight(scene, "res/HDR/kloppenheim_07_puresky_1k.hdr");
     CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
 
     CreateDirectionalLight(scene, Normalize(-Vec3(15.0f, 5.0f, 5.0f)), Vec3(8.0f), 0.02f);
 

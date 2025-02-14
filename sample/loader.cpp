@@ -220,7 +220,14 @@ static bool LoadMesh(Scene& scene, tinygltf::Model& model, tinygltf::Mesh& mesh,
 
             for (size_t i = 0; i < tangent_accessor.count; ++i)
             {
-                tangents[i].Set(temp[i].x, temp[i].y, temp[i].z);
+                if (temp[i].w == 1)
+                {
+                    tangents[i].Set(temp[i].x, temp[i].y, temp[i].z);
+                }
+                else
+                {
+                    tangents[i].Set(-temp[i].x, -temp[i].y, -temp[i].z);
+                }
             }
         }
         else

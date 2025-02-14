@@ -62,7 +62,7 @@ std::unique_ptr<Camera> RaytracigInOneWeekend(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/pizzo_pernice_1k.hdr");
     CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(pi, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/harties_4k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/earthmap.jpg");
 

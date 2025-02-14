@@ -72,7 +72,7 @@ std::unique_ptr<Camera> StatueScene(Scene& scene)
     }
 
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
 
     // Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

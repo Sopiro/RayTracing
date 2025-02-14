@@ -73,7 +73,7 @@ std::unique_ptr<Camera> MaterialTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // CreateUniformInfiniteLight(scene, Spectrum(1));
 
@@ -168,7 +168,7 @@ std::unique_ptr<Camera> Dielectrics(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // CreateUniformInfiniteLight(scene, Spectrum(1));
 
@@ -264,7 +264,7 @@ std::unique_ptr<Camera> Skins(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // CreateUniformInfiniteLight(scene, Spectrum(1));
 
@@ -373,7 +373,7 @@ std::unique_ptr<Camera> Mixtures(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // CreateUniformInfiniteLight(scene, Spectrum(1));
 
@@ -468,7 +468,7 @@ std::unique_ptr<Camera> MaterialTest5(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/peppermint_powerplant_4k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr", Transform(Quat(0, y_axis)));
     // CreateImageInfiniteLight(scene, "res/HDR/solitude_night_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
     // CreateUniformInfiniteLight(scene, Spectrum(1));
 

@@ -34,7 +34,7 @@ std::unique_ptr<Camera> CameraScene(Scene& scene)
         CreateRectYZ(scene, tf, light);
     }
 
-    // scene.SetEnvironmentMap(ImageTexture::Create("res/sunflowers/sunflowers_puresky_4k.hdr", false, true));
+    // scene.SetEnvironmentMap(ImageTexture::Create("res/HDR/sunflowers_puresky_1k.hdr", false, true));
 
     Float aspect_ratio = 16.f / 9.f;
     // Float aspect_ratio = 3.f / 2.f;

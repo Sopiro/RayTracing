@@ -20,7 +20,7 @@ std::unique_ptr<Camera> GGXVNDFSamplingTest(Scene& scene)
     // CreateImageInfiniteLight(scene, "res/HDR/scythian_tombs_2_4k.hdr");
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(scene, "res/HDR/sunflowers_puresky_1k.hdr");
     CreateImageInfiniteLight(scene, "res/HDR/san_giuseppe_bridge_4k.hdr", Transform(Quat(-pi, y_axis)));
 
     Float aspect_ratio = 16.f / 9.f;

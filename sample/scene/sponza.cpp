@@ -5,7 +5,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
     // LoadModel(scene, "res/sponza2/sponza.obj", transform);
 
-    Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(1.0f) };
+    Transform transform{ Vec3::zero, Quat(DegToRad(90.0f), y_axis), Vec3(0.01f) };
     LoadModel(scene, "res/sponza/glTF/Sponza.gltf", transform);
 
     // auto light = scene.CreateMaterial<DiffuseLight>(Spectrum(1.0f));
@@ -44,7 +44,10 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // }
 
     // CreateImageInfiniteLight(scene, "res/HDR/quarry_04_puresky_1k.hdr");
-    // CreateImageInfiniteLight(scene, "res/sunflowers/sunflowers_puresky_4k.hdr");
+    // CreateImageInfiniteLight(
+    //     scene, "res/HDR/sunflowers_puresky_1k.hdr", Transform(Quat::FromEuler({ DegToRad(0), DegToRad(0), DegToRad(-30)
+    //     })), 1.0f
+    // );
     // CreateImageInfiniteLight(scene, "res/solitude_night_4k/solitude_night_4k.hdr");
 
     Spectrum sky_color(147 / 255.0f, 209 / 255.0f, 255 / 255.0f);
@@ -56,7 +59,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // Float aspect_ratio = 3.f / 2.f;
     // Float aspect_ratio = 4.f / 3.f;
     // Float aspect_ratio = 1.f;
-    int32 width = 960;
+    int32 width = 1600;
     int32 height = int32(width / aspect_ratio);
 
     // Point3 lookfrom{ 0.0f, 2.5f, 4.5f };
@@ -74,7 +77,7 @@ std::unique_ptr<Camera> Sponza(Scene& scene)
     // Point3 lookfrom{ 0, 1, 6 };
     // Point3 lookat{ 0, 1, 0 };
 
-    Point3 lookfrom{ 0, 5, 6 };
+    Point3 lookfrom{ -2, 6, 10 };
     Point3 lookat{ 0, 5, 0 };
 
     Float dist_to_focus = Dist(lookfrom, lookat);
