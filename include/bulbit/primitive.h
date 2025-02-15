@@ -63,7 +63,8 @@ inline bool Primitive::Intersect(Intersection* isect, const Ray& ray, Float t_mi
         if (p > alpha)
         {
             // Recursively handle the case of sphere hit
-            Ray new_ray(isect->point, ray.d);
+            // Somehow, normalization is needed due to floating point error..
+            Ray new_ray(isect->point, Normalize(ray.d));
             return Intersect(isect, new_ray, Ray::epsilon, t_max - isect->t);
         }
     }

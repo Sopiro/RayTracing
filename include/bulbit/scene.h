@@ -20,12 +20,12 @@ public:
     Scene(const Scene&) = delete;
     Scene& operator=(const Scene&) = delete;
 
+    template <typename... Args>
+    Mesh* CreateMesh(Args&&... args);
     template <typename ShapeType, typename... Args>
     ShapeType* CreateShape(Args&&... args);
     template <typename PrimitiveType, typename... Args>
     PrimitiveType* CreatePrimitive(Args&&... args);
-    template <typename... Args>
-    Mesh* CreateMesh(Args&&... args);
 
     template <typename LightType, typename... Args>
     LightType* CreateLight(Args&&... args);
@@ -46,9 +46,9 @@ private:
     PoolResource pool;
     Allocator allocator;
 
+    std::vector<Mesh*> meshes;
     std::vector<Shape*> shapes;
     std::vector<Primitive*> primitives;
-    std::vector<std::unique_ptr<Mesh>> meshes;
 
     std::vector<Light*> lights;
 
@@ -67,16 +67,14 @@ inline Scene::Scene()
 
 inline Scene::~Scene() noexcept
 {
-    // Free all pooled resources
+    for (Mesh* m : meshes)
+    {
+        delete m;
+    }
 
     for (Shape* s : shapes)
     {
         allocator.delete_object(s);
-    }
-
-    for (Material* m : materials)
-    {
-        allocator.delete_object(m);
     }
 
     for (Primitive* p : primitives)
@@ -93,6 +91,19 @@ inline Scene::~Scene() noexcept
     {
         allocator.delete_object(m);
     }
+
+    for (Material* m : materials)
+    {
+        allocator.delete_object(m);
+    }
+}
+
+template <typename... Args>
+inline Mesh* Scene::CreateMesh(Args&&... args)
+{
+    Mesh* mesh = new Mesh(std::forward<Args>(args)...);
+    meshes.push_back(mesh);
+    return mesh;
 }
 
 template <typename ShapeType, typename... Args>
@@ -109,15 +120,6 @@ inline PrimitiveType* Scene::CreatePrimitive(Args&&... args)
     PrimitiveType* primitive = allocator.new_object<PrimitiveType>(std::forward<Args>(args)...);
     primitives.push_back(primitive);
     return primitive;
-}
-
-template <typename... Args>
-inline Mesh* Scene::CreateMesh(Args&&... args)
-{
-    std::unique_ptr<Mesh> mesh = std::make_unique<Mesh>(std::forward<Args>(args)...);
-    Mesh* ptr = mesh.get();
-    meshes.push_back(std::move(mesh));
-    return ptr;
 }
 
 template <typename LightType, typename... Args>
